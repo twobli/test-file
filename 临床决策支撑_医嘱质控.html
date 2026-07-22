@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>医嘱质控 - 临床决策支撑</title>
+<style>
+:root{
+  --primary:#1a73e8;--primary-dark:#1557b0;--primary-light:#e8f0fe;
+  --success:#34a853;--success-light:#e6f4ea;--warning:#fbbc04;--warning-light:#fef7e0;
+  --danger:#ea4335;--danger-light:#fce8e6;--purple:#7c3aed;--purple-light:#f1ebff;
+  --teal:#0891b2;--teal-light:#e0f7fb;--gray-50:#f8f9fa;--gray-100:#f5f7fa;
+  --gray-200:#e8ecf0;--gray-300:#dadce0;--gray-400:#bdc1c6;--gray-500:#9aa0a6;
+  --gray-600:#80868b;--gray-700:#5f6368;--gray-800:#3c4043;--gray-900:#202124;
+  --sidebar-width:220px;--header-height:56px;--radius:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --transition:all .2s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','PingFang SC','Microsoft YaHei',Arial,sans-serif;font-size:14px;color:#333;background:var(--gray-50);min-height:100vh;line-height:1.6}
+a{text-decoration:none;color:inherit}.header{height:var(--header-height);background:linear-gradient(135deg,#1a56db 0%,#2563eb 52%,#1d4ed8 100%);color:#fff;display:flex;align-items:center;padding:0 24px;position:fixed;inset:0 0 auto 0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;white-space:nowrap}.header-nav{display:flex;gap:4px;margin-left:40px}.header-nav a{color:rgba(255,255,255,.85);padding:6px 14px;border-radius:6px;font-size:13px;transition:var(--transition);white-space:nowrap}.header-nav a:hover,.header-nav a.active{background:rgba(255,255,255,.15);color:#fff}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px}.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px}.btn-logout:hover{background:rgba(255,255,255,.35)}
+.sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100vh - var(--header-height));background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:999;padding:8px 0}.menu-group-title{padding:12px 20px 6px;font-size:11px;color:var(--gray-500);letter-spacing:1px;font-weight:600}.menu-item,.sub-menu-item{display:flex;align-items:center;color:var(--gray-700);transition:var(--transition);border-left:3px solid transparent;cursor:pointer}.menu-item{padding:10px 20px;font-size:13px}.sub-menu-item{padding:8px 20px 8px 36px;font-size:12px}.menu-item:hover,.sub-menu-item:hover{background:var(--gray-50);color:var(--primary)}.menu-item.active,.sub-menu-item.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+.main-content{margin-left:var(--sidebar-width);margin-top:var(--header-height);padding:24px;min-height:calc(100vh - var(--header-height))}.breadcrumb{font-size:13px;color:var(--gray-600);margin-bottom:16px;display:flex;align-items:center;gap:8px}.breadcrumb a{color:var(--primary)}.breadcrumb .sep{color:var(--gray-400)}
+.page-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.page-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:4px}.page-subtitle{color:var(--gray-600);font-size:13px}.title-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;transition:var(--transition);text-decoration:none;gap:6px;white-space:nowrap}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#2d9249}.btn-danger{background:var(--danger);color:#fff}.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--gray-700)}.btn-outline:hover{background:var(--gray-50);border-color:var(--gray-400)}.btn-sm{padding:5px 10px;font-size:12px}.btn-block{width:100%}
+.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:500;line-height:1.5}.tag-blue{background:var(--primary-light);color:var(--primary)}.tag-green{background:var(--success-light);color:#137333}.tag-orange{background:var(--warning-light);color:#b06000}.tag-red{background:var(--danger-light);color:#c5221f}.tag-purple{background:var(--purple-light);color:var(--purple)}.tag-teal{background:var(--teal-light);color:var(--teal)}.tag-gray{background:#f1f3f4;color:var(--gray-700)}
+.module-nav{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;margin-bottom:16px}.module-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:12px;text-align:left;color:inherit;min-height:88px;transition:var(--transition);cursor:default}.module-card.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.08)}.module-card.done{border-color:rgba(52,168,83,.35);background:#fbfffc}.module-index{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--gray-100);color:var(--gray-600);font-size:12px;font-weight:700;margin-bottom:8px}.module-card.active .module-index{background:var(--primary);color:#fff}.module-card.done .module-index{background:var(--success);color:#fff}.module-card strong{display:block;font-size:14px;color:var(--gray-900)}.module-card span{font-size:11px;color:var(--gray-500);display:block;margin-top:2px}
+.workspace{display:grid;grid-template-columns:300px minmax(560px,1fr) 360px;gap:16px;align-items:start}.panel{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow)}.panel-header{padding:14px 16px;border-bottom:1px solid var(--gray-100);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.panel-title{font-size:15px;font-weight:700;color:var(--gray-900)}.panel-desc{font-size:12px;color:var(--gray-500);margin-top:2px}.panel-body{padding:16px}.left-stack,.center-stack,.right-stack{display:flex;flex-direction:column;gap:16px}
+.profile{display:flex;gap:12px;align-items:center}.avatar{width:46px;height:46px;border-radius:12px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}.profile-name{font-size:15px;font-weight:800;color:var(--gray-900)}.profile-meta{font-size:12px;color:var(--gray-600);margin-top:2px}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}.info-item{border:1px solid var(--gray-200);border-radius:8px;padding:9px 10px;background:#fff}.info-item span{font-size:11px;color:var(--gray-500);display:block}.info-item strong{font-size:13px;color:var(--gray-900);display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.case-summary-block{margin-top:14px;border-top:1px solid var(--gray-100);padding-top:14px}.case-summary-title{font-size:13px;font-weight:800;color:var(--gray-900);margin-bottom:8px}.case-summary-list{display:flex;flex-direction:column;gap:8px}.case-summary-item{border:1px solid var(--gray-200);border-radius:8px;padding:9px 10px;background:#fff}.case-summary-item span{font-size:11px;color:var(--gray-500);display:block}.case-summary-item strong{font-size:12px;color:var(--gray-900);display:block;margin-top:3px;line-height:1.55}
+.report-preview{padding:18px 20px;background:#fff}.report-section{border-bottom:1px solid var(--gray-100);padding:15px 0}.report-section:first-child{padding-top:0}.report-section:last-child{border-bottom:0;padding-bottom:0}.report-section h3{font-size:15px;color:var(--gray-900);margin-bottom:8px}.report-section p,.report-section li{font-size:13px;color:var(--gray-700);line-height:1.75}.report-section ul{padding-left:18px}.report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.report-meta div{border:1px solid var(--gray-200);border-radius:8px;padding:8px 10px;background:var(--gray-50)}.report-meta span{font-size:11px;color:var(--gray-500);display:block}.report-meta strong{font-size:13px;color:var(--gray-900);display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.report-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.report-section-head h3{margin:0}.source-tags{display:flex;gap:6px;flex-wrap:wrap}.report-note{border:1px solid var(--gray-200);border-radius:8px;background:var(--gray-50);padding:10px;font-size:12px;color:var(--gray-700);line-height:1.65}
+.order-list,.rule-list,.trace-list{display:flex;flex-direction:column;gap:8px}.order-item,.rule-item,.trace-item{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff}.order-item strong,.rule-item strong,.trace-item strong{font-size:13px;color:var(--gray-900);display:block}.order-item span,.rule-item span,.trace-item span{font-size:12px;color:var(--gray-600);display:block;margin-top:4px;line-height:1.6}.trace-item.done{border-color:rgba(52,168,83,.35);background:#fbfffc}.trace-item.warn{border-color:rgba(251,188,4,.45);background:#fffdf6}.rule-item.score-high{border-color:rgba(52,168,83,.35);background:#fbfffc}.rule-item.score-mid{border-color:rgba(26,115,232,.25);background:#fbfdff}.rule-item.score-low{border-color:rgba(251,188,4,.45);background:#fffdf6}.rule-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.rule-action{margin-top:8px}.qc-item-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.qc-item-title{font-size:14px;font-weight:800;color:var(--gray-900);line-height:1.45}.qc-item-sub{font-size:12px;color:var(--gray-500);margin-top:2px}.score-pill{flex:0 0 auto;text-align:right}.score-pill strong{font-size:24px;line-height:1;color:var(--primary);display:block}.score-pill span{font-size:11px;color:var(--gray-500);display:block;margin-top:2px}.score-bar{height:8px;background:var(--gray-100);border-radius:999px;overflow:hidden;margin:10px 0}.score-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--success))}.score-mid .score-fill{background:linear-gradient(90deg,#4f86f7,var(--teal))}.score-low .score-fill{background:linear-gradient(90deg,var(--warning),#f97316)}.qc-reason{font-size:13px;color:var(--gray-700);line-height:1.7}.qc-evidence{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.qc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}.qc-stat{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff;text-align:center}.qc-stat strong{font-size:22px;line-height:1;color:var(--gray-900);display:block}.qc-stat span{font-size:12px;color:var(--gray-600);display:block;margin-top:5px}.empty{padding:20px;text-align:center;color:var(--gray-500);background:var(--gray-50);border-radius:8px}.toast{position:fixed;right:24px;bottom:24px;background:var(--gray-900);color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:13px;display:none;z-index:2000;max-width:380px}
+@media(max-width:1500px){.workspace{grid-template-columns:280px minmax(520px,1fr)}.right-stack{grid-column:1/-1}.module-nav{grid-template-columns:repeat(3,minmax(0,1fr))}.report-meta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1100px){.sidebar{width:64px}.menu-group-title,.menu-item span,.sub-menu-item{display:none}.main-content{margin-left:64px}.workspace,.module-nav,.qc-grid{grid-template-columns:1fr}.right-stack{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html" class="active">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+
+<aside class="sidebar">
+  <div class="menu-group">
+    <div class="menu-group-title">专家系统</div>
+    <a class="menu-item active" href="临床决策支撑.html"><span>临床决策支撑</span></a>
+    <a class="sub-menu-item" href="临床决策支撑.html" onclick="persist()">病例采集确认</a>
+    <a class="sub-menu-item" href="临床决策支撑_辅助临床诊断.html" onclick="persist()">辅助临床诊断</a>
+    <a class="sub-menu-item" href="临床决策支撑_相似病历推荐.html" onclick="persist()">相似病历推荐</a>
+    <a class="sub-menu-item" href="临床决策支撑_治疗方案推荐.html" onclick="persist()">治疗方案推荐</a>
+    <a class="sub-menu-item" href="临床决策支撑_报告与质控.html" onclick="persist()">医学报告</a>
+    <a class="sub-menu-item active" href="临床决策支撑_医嘱质控.html">医嘱质控</a>
+    <a class="menu-item" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
+  </div>
+</aside>
+
+<main class="main-content">
+  <div class="breadcrumb"><a href="app-center.html">应用中心</a><span class="sep">></span><a href="临床决策支撑.html">临床决策支撑</a><span class="sep">></span><span>医嘱质控</span></div>
+  <div class="page-title-row">
+    <div>
+      <h1 class="page-title">医嘱质控</h1>
+      <div class="page-subtitle">基于患者病史、诊断、检查结果、历史用药情况和已生成医学报告，对医生在治疗方案推荐中已选择的项目逐项给出合理性评分。</div>
+    </div>
+    <div class="title-actions">
+      <a class="btn btn-outline" href="临床决策支撑_报告与质控.html" onclick="persist()">返回医学报告</a>
+      <button class="btn btn-outline" onclick="rerunQuality()">重新评估</button>
+      <button class="btn btn-success" onclick="archiveCase()">完成评估归档</button>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <div class="module-card done"><div class="module-index">1</div><strong>病例采集确认</strong><span>采集病例字段</span></div>
+    <div class="module-card done"><div class="module-index">2</div><strong>辅助临床诊断</strong><span>形成诊断依据</span></div>
+    <div class="module-card done"><div class="module-index">3</div><strong>相似病历推荐</strong><span>形成既往参考</span></div>
+    <div class="module-card done"><div class="module-index">4</div><strong>治疗方案推荐</strong><span id="planStatusText">方案已确认</span></div>
+    <div class="module-card done"><div class="module-index">5</div><strong>医学报告</strong><span id="reportStepText">待生成报告</span></div>
+    <div class="module-card active"><div class="module-index">6</div><strong>医嘱质控</strong><span id="qcStepText">待评估</span></div>
+  </div>
+
+  <div class="workspace">
+    <div class="left-stack">
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">当前病例</div><div class="panel-desc">由病例采集确认页传入的病例信息</div></div></div>
+        <div class="panel-body" id="profilePanel"></div>
+      </section>
+
+    </div>
+
+    <div class="center-stack">
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">医嘱合理性评估工作台</div><div class="panel-desc">按医生已勾选的检查检验、用药、手术/处置和随访项目逐项计算合理性百分比</div></div></div>
+        <div class="panel-body">
+          <div class="qc-grid">
+            <div class="qc-stat"><strong id="avgScore">0%</strong><span>平均合理性</span></div>
+            <div class="qc-stat"><strong id="maxScore">0%</strong><span>最高合理性</span></div>
+            <div class="qc-stat"><strong id="minScore">0%</strong><span>最低合理性</span></div>
+            <div class="qc-stat"><strong id="itemCount">0</strong><span>评估项目</span></div>
+          </div>
+          <button class="btn btn-primary btn-block" onclick="rerunQuality()">重新生成合理性评分</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">逐项合理性研判</div><div class="panel-desc">每个已选项目展示合理性百分比、病例依据和推断逻辑</div></div></div>
+        <div class="panel-body"><div class="rule-list" id="ruleList"></div></div>
+      </section>
+    </div>
+
+    <div class="right-stack">
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">评估对象概览</div><div class="panel-desc">来自治疗方案推荐中医生已勾选的项目</div></div></div>
+        <div class="panel-body">
+          <div class="order-list" id="targetList"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">说明书与适应症知识</div><div class="panel-desc">支持查阅药品说明书、检查和检验的适应症知识</div></div></div>
+        <div class="panel-body">
+          <div class="trace-list" id="knowledgeList"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var questionDefs=[
+  {key:'mainComplaint',label:'主诉'},
+  {key:'chronicHistory',label:'慢病史'},
+  {key:'eyeHistory',label:'眼病史'},
+  {key:'imagingFindings',label:'医学影像'},
+  {key:'physicalExam',label:'体格检查'},
+  {key:'labResults',label:'检验结果'}
+];
+var categoryDefs=[
+  {key:'checks',label:'检查检验'},
+  {key:'medication',label:'用药方案'},
+  {key:'procedures',label:'手术/处置'},
+  {key:'followup',label:'随访方案'}
+];
+var caseData=null;
+var qcRules=[];
+
+document.addEventListener('DOMContentLoaded',function(){
+  try{var user=JSON.parse(localStorage.getItem('life_med_user'));if(user&&user.name)document.getElementById('headerUserName').textContent=user.name;}catch(e){}
+  caseData=normalizeCase(loadCase());
+  qcRules=buildQcRules();
+  renderAll();
+});
+
+function loadCase(){
+  try{var saved=JSON.parse(localStorage.getItem('clinical_decision_case'));if(saved&&saved.id)return saved;}catch(e){}
+  return {
+    id:'CASE-20260717-001',source:'AI筛查转入',status:'已确认方案',patientName:'张某某',gender:'女',age:62,patientId:'P20260717008',dept:'眼科',visitType:'门诊复诊',visitDate:'2026-07-17',pastHistory:'2型糖尿病15年，高血压8年。',medicationHistory:'长期口服降糖药和降压药，近期血糖控制欠佳；未规律接受眼底专科治疗。',
+    mainComplaint:'双眼视物模糊2月，眼前黑影飘动1周。',chronicHistory:'2型糖尿病15年，高血压8年，近半年血糖控制欠佳。',eyeHistory:'去年体检提示轻度非增殖期糖尿病视网膜病变。',imagingFindings:'AI眼底筛查DR阳性，OCT提示黄斑区水肿。',physicalExam:'视力右眼0.5左眼0.6，眼底散在出血点。',labResults:'HbA1c 8.9%，空腹血糖9.6mmol/L，eGFR 76。',
+    diagnoses:[{name:'糖尿病视网膜病变，重度NPDR并黄斑水肿可能',probability:91,reason:'慢性糖尿病、血糖控制欠佳、眼底出血渗出及OCT黄斑水肿共同支持。'}],
+    selectedPlan:{checks:['完善FFA明确是否存在新生血管及无灌注区。','复查OCT量化黄斑中心凹厚度。'],medication:['优先强化血糖、血压和血脂综合管理。'],procedures:['评估玻璃体腔抗VEGF治疗适应症。'],followup:['眼底病专科3个月随访。']},
+    planConfirmed:true,reportGenerated:true,qualityRules:[],knowledge:[]
+  };
+}
+
+function normalizeCase(c){
+  c.pastHistory=c.pastHistory||c.chronicHistory||'';
+  c.medicationHistory=c.medicationHistory||c.pastMedicationHistory||'';
+  c.diagnoses=c.diagnoses&&c.diagnoses.length?c.diagnoses:[{name:'待运行辅助诊断',probability:0,reason:'请先完成辅助诊断。'}];
+  if(!c.selectedPlan&&c.confirmedPlan)c.selectedPlan=c.confirmedPlan;
+  if(!c.selectedPlan&&c.treatment)c.selectedPlan=c.treatment;
+  c.selectedPlan=c.selectedPlan||{checks:[],medication:[],procedures:[],followup:[]};
+  categoryDefs.forEach(function(cat){if(!Array.isArray(c.selectedPlan[cat.key]))c.selectedPlan[cat.key]=[];});
+  c.qualityRules=c.qualityRules||[];
+  c.knowledge=c.knowledge||[];
+  c.similar=c.similar||[];
+  return c;
+}
+
+function renderAll(){
+  renderProfile();
+  renderTargetsOverview();
+  renderKnowledge();
+  qcRules=buildQcRules();
+  renderQc();
+  document.getElementById('planStatusText').textContent=caseData.planConfirmed?'方案已确认':'方案待确认';
+  document.getElementById('reportStepText').textContent=caseData.reportGenerated?'报告已生成':'待生成报告';
+  document.getElementById('qcStepText').textContent=qcRules.length?'已生成评分':'待评估';
+}
+function renderProfile(){
+  var name=caseData.patientName||'—';
+  var firstChar=(name||'患').substr(0,1);
+  var pastHistory=caseData.pastHistory||caseData.chronicHistory||'待传入';
+  var medicationHistory=caseData.medicationHistory||caseData.pastMedicationHistory||'待传入';
+  var summaryHtml=questionDefs.map(function(q){
+    return '<div class="case-summary-item"><span>'+q.label+'</span><strong>'+escapeHtml(caseData[q.key]||'待采集')+'</strong></div>';
+  }).join('');
+  document.getElementById('profilePanel').innerHTML=
+    '<div class="profile">'+
+      '<div class="avatar">'+escapeHtml(firstChar)+'</div>'+
+      '<div><div class="profile-name">'+escapeHtml(name)+'</div>'+
+      '<div class="profile-meta">由病例采集确认模块传入</div></div>'+
+    '</div>'+
+    '<div class="info-grid">'+
+      '<div class="info-item"><span>姓名</span><strong>'+escapeHtml(caseData.patientName||'待传入')+'</strong></div>'+
+      '<div class="info-item"><span>年龄</span><strong>'+escapeHtml(caseData.age?caseData.age+'岁':'待传入')+'</strong></div>'+
+      '<div class="info-item"><span>性别</span><strong>'+escapeHtml(caseData.gender||'待传入')+'</strong></div>'+
+      '<div class="info-item"><span>既往病史</span><strong>'+escapeHtml(pastHistory)+'</strong></div>'+
+      '<div class="info-item"><span>过往用药史</span><strong>'+escapeHtml(medicationHistory)+'</strong></div>'+
+    '</div>'+
+    '<div class="case-summary-block"><div class="case-summary-title">病例摘要</div><div class="case-summary-list">'+summaryHtml+'</div></div>';
+}
+function renderTargetsOverview(){
+  var primary=caseData.diagnoses[0]||{};
+  var blocks=categoryDefs.map(function(cat){
+    var items=caseData.selectedPlan[cat.key]||[];
+    return '<div class="order-item"><strong>'+escapeHtml(cat.label)+'（'+items.length+'项）</strong><span>'+(items.length?items.map(escapeHtml).join('<br>'):'当前暂无已选项目')+'</span></div>';
+  });
+  blocks.push('<div class="order-item"><strong>合理性判断依据</strong><span>诊断：'+escapeHtml(primary.name||'待形成诊断')+'<br>病史：'+escapeHtml(caseData.pastHistory||caseData.chronicHistory||'待补充')+'<br>检查结果：'+escapeHtml((caseData.imagingFindings||caseData.physicalExam||caseData.labResults)||'待补充')+'<br>历史用药：'+escapeHtml(caseData.medicationHistory||'待补充')+'<br>医学报告：'+escapeHtml(caseData.reportGenerated?'已生成，可作为本次评估来源':'待生成，当前按病例与方案链路评估')+'</span></div>');
+  document.getElementById('targetList').innerHTML=blocks.join('');
+}
+function renderKnowledge(){
+  var items=buildKnowledgeItems();
+  document.getElementById('knowledgeList').innerHTML=items.length?items.map(function(item){
+    return '<div class="trace-item done"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><strong>'+escapeHtml(item.title)+'</strong><span class="tag tag-blue">'+escapeHtml(item.source)+'</span></div><span>'+escapeHtml(item.summary)+'</span><div class="rule-meta"><span class="tag tag-gray">'+escapeHtml(item.scene)+'</span></div></div>';
+  }).join(''):'<div class="empty">当前暂无可查阅的说明书或适应症知识。</div>';
+}
+function buildKnowledgeItems(){
+  var items=[];
+  function add(key,title,source,summary,scene){
+    if(items.some(function(item){return item.key===key;}))return;
+    items.push({key:key,title:title,source:source,summary:summary,scene:scene});
+  }
+  (caseData.selectedPlan.medication||[]).forEach(function(item){
+    if(item.indexOf('抗VEGF')>-1)add('med-antivegf','抗VEGF治疗说明书要点','药品说明书','适用于黄斑水肿、新生血管等眼底病变场景，使用前需要结合OCT、FFA等影像或检查依据判断适应症。','对应医嘱：'+item);
+    if(item.indexOf('血糖')>-1||item.indexOf('降糖')>-1)add('med-glycemic','降糖治疗说明书要点','药品说明书','适用于糖尿病或血糖控制欠佳患者，下达相关医嘱时应同步核对HbA1c、空腹血糖和既往用药史。','对应医嘱：'+item);
+    if(item.indexOf('血压')>-1||item.indexOf('降压')>-1)add('med-pressure','降压治疗说明书要点','药品说明书','适用于合并高血压或血压控制不佳患者，需结合既往病史、当前血压风险和药物禁忌综合判断。','对应医嘱：'+item);
+    if(item.indexOf('血脂')>-1)add('med-lipid','调脂治疗说明书要点','药品说明书','适用于慢病风险因素管理场景，建议结合糖尿病、高血压等基础病史及既往用药情况判断。','对应医嘱：'+item);
+  });
+  (caseData.selectedPlan.checks||[]).forEach(function(item){
+    if(item.indexOf('OCT')>-1)add('check-oct','OCT适应症知识','检查适应症','适用于黄斑水肿、视网膜结构评估及疗效随访，需要与视物模糊、黄斑异常等线索结合判断。','对应医嘱：'+item);
+    if(item.indexOf('FFA')>-1)add('check-ffa','FFA适应症知识','检查适应症','适用于评估无灌注区、新生血管和渗漏范围，常用于糖尿病视网膜病变分级与处置前评估。','对应医嘱：'+item);
+    if(item.indexOf('HbA1c')>-1||item.indexOf('空腹血糖')>-1)add('lab-glucose','血糖相关检验适应症知识','检验适应症','适用于糖尿病诊断、控制评估及治疗调整前的基线判断，应与慢病史和当前用药医嘱联动查看。','对应医嘱：'+item);
+    if(item.indexOf('肾功能')>-1||item.indexOf('肌酐')>-1||item.indexOf('eGFR')>-1||item.indexOf('尿微量白蛋白')>-1||item.indexOf('血钾')>-1)add('lab-renal','肾功能/电解质检验适应症知识','检验适应症','适用于高血压、糖尿病及相关药物使用前后的肾功能和电解质风险评估。','对应医嘱：'+item);
+  });
+  (caseData.selectedPlan.procedures||[]).forEach(function(item){
+    if(item.indexOf('抗VEGF')>-1||item.indexOf('玻璃体腔')>-1)add('procedure-antivegf','玻璃体腔抗VEGF适应症知识','处置适应症','适用于黄斑水肿、新生血管或活动性视网膜病变的治疗评估，需结合OCT、FFA和眼底检查结果综合判断。','对应医嘱：'+item);
+  });
+  (caseData.selectedPlan.followup||[]).forEach(function(item){
+    add('followup-retina','眼底病随访间隔知识','随访适应症','随访间隔应结合疾病分级、黄斑水肿活动性、治疗方式和慢病控制情况确定，便于持续观察视力和影像变化。','对应医嘱：'+item);
+  });
+  return items;
+}
+function renderQc(){
+  var scores=qcRules.map(function(item){return item.score;});
+  var avg=scores.length?Math.round(scores.reduce(function(sum,score){return sum+score;},0)/scores.length):0;
+  var max=scores.length?Math.max.apply(null,scores):0;
+  var min=scores.length?Math.min.apply(null,scores):0;
+  document.getElementById('avgScore').textContent=avg+'%';
+  document.getElementById('maxScore').textContent=max+'%';
+  document.getElementById('minScore').textContent=min+'%';
+  document.getElementById('itemCount').textContent=qcRules.length;
+  document.getElementById('ruleList').innerHTML=qcRules.length?qcRules.map(function(item){
+    var evidenceHtml=item.evidence.map(function(e){return '<span class="tag tag-gray">'+escapeHtml(e)+'</span>';}).join('');
+    var action=item.action==='removeAmoxicillin'?'<div class="rule-action"><button class="btn btn-danger btn-sm" onclick="removeAmoxicillin()">移除该项目</button></div>':'';
+    return '<div class="rule-item '+scoreClass(item.score)+'">'+
+      '<div class="qc-item-head">'+
+        '<div><div class="qc-item-title">'+escapeHtml(item.title)+'</div><div class="qc-item-sub">'+escapeHtml(item.category)+'</div></div>'+
+        '<div class="score-pill"><strong>'+item.score+'%</strong><span>合理性</span></div>'+
+      '</div>'+
+      '<div class="score-bar"><div class="score-fill" style="width:'+item.score+'%"></div></div>'+
+      '<div class="qc-reason">'+escapeHtml(item.reason)+'</div>'+
+      '<div class="qc-evidence">'+evidenceHtml+'</div>'+
+      '<div class="rule-meta"><span class="tag tag-blue">'+escapeHtml(item.basis)+'</span><span class="tag tag-gray">'+escapeHtml(item.suggestion)+'</span></div>'+
+      action+
+    '</div>';
+  }).join(''):'<div class="empty">当前没有医生已勾选的方案项目，无法生成合理性评分。</div>';
+}
+function buildQcRules(){
+  var assessments=[];
+  categoryDefs.forEach(function(cat){
+    (caseData.selectedPlan[cat.key]||[]).forEach(function(item){
+      assessments.push(buildOrderAssessment(cat,item));
+    });
+  });
+  return assessments;
+}
+function buildOrderAssessment(cat,item){
+  var diagnosis=(caseData.diagnoses&&caseData.diagnoses[0])||{};
+  var diagnosisName=diagnosis.name||'';
+  var historyText=(caseData.chronicHistory||'')+'；'+(caseData.pastHistory||'')+'；'+(caseData.medicationHistory||'');
+  var clinicalText=[
+    caseData.mainComplaint,caseData.chronicHistory,caseData.eyeHistory,caseData.imagingFindings,
+    caseData.physicalExam,caseData.labResults,caseData.pastHistory,caseData.medicationHistory,diagnosisName
+  ].join('；');
+  var isDiabetes=/糖尿病|血糖|HbA1c/.test(clinicalText);
+  var isHypertension=/高血压|血压/.test(clinicalText);
+  var hasRetinaEvidence=/DR|黄斑|OCT|FFA|视网膜|眼底|出血|渗出|水肿|新生血管/.test(clinicalText);
+  var hasMacularEvidence=/黄斑|中心凹|水肿|OCT/.test(clinicalText);
+  var hasComplaintEvidence=/视物模糊|黑影|视力/.test(clinicalText);
+  var hasDiagnosisBasis=diagnosisName&&diagnosisName.indexOf('待运行')===-1;
+  var score=62;
+  var scoreCap=96;
+  var evidence=[];
+  var reason='系统将该项目与病例摘要、辅助诊断、治疗方案和医学报告链路进行匹配，当前能够形成基础合理性判断。';
+  var suggestion='由医生结合实际病情复核后采纳';
+  var basis='病例信息 + 治疗方案';
+  var action='';
+  function add(label,delta){score+=delta;evidence.push(label+' +'+delta+'%');}
+  function minus(label,delta){score-=delta;evidence.push(label+' -'+delta+'%');}
+
+  if(hasDiagnosisBasis)add('辅助诊断已形成',7);else minus('诊断结论待完善',12);
+  if(caseData.reportGenerated)add('医学报告已生成',4);else evidence.push('医学报告待生成');
+
+  if(cat.key==='checks'){
+    basis='病例摘要 + 辅助诊断 + 检查/检验适应症知识';
+    if(item.indexOf('OCT')>-1||item.indexOf('中心凹')>-1){
+      scoreCap=95;
+      if(hasMacularEvidence)add('黄斑/OCT线索明确',18);
+      if(hasComplaintEvidence)add('主诉支持结构评估',6);
+      if(hasRetinaEvidence)add('眼底病变证据支持',8);
+      reason='该项目用于观察黄斑结构并量化中心凹厚度；当前病例存在视物模糊、OCT提示黄斑水肿和糖尿病视网膜病变线索，因此该检查与诊断和报告链路高度匹配。';
+      suggestion='可作为黄斑水肿程度、后续疗效对比和报告影像依据';
+    }else if(item.indexOf('FFA')>-1||item.indexOf('荧光')>-1){
+      scoreCap=94;
+      if(hasRetinaEvidence)add('眼底血管病变线索明确',18);
+      if(/新生血管|无灌注|渗漏|出血/.test(clinicalText+item))add('血管评估目的明确',8);
+      reason='该项目用于判断无灌注区、新生血管和渗漏范围；当前糖尿病视网膜病变及眼底出血/渗出线索能够支撑该检查。';
+      suggestion='可用于分级、治疗适应症判断和报告中的病变范围说明';
+    }else if(item.indexOf('HbA1c')>-1||item.indexOf('空腹血糖')>-1||item.indexOf('血糖')>-1){
+      scoreCap=93;
+      if(isDiabetes)add('糖尿病病史明确',20);
+      if(/血糖控制欠佳|HbA1c|空腹血糖/.test(clinicalText))add('检验异常线索明确',7);
+      reason='该检验用于评估血糖控制水平；患者有长期糖尿病史且既往检验提示控制欠佳，因此作为治疗调整依据较充分。';
+      suggestion='可作为慢病控制评估和用药调整前的基线资料';
+    }else if(item.indexOf('肾功能')>-1||item.indexOf('肌酐')>-1||item.indexOf('eGFR')>-1||item.indexOf('尿微量白蛋白')>-1||item.indexOf('血钾')>-1){
+      scoreCap=88;
+      if(isDiabetes||isHypertension)add('慢病风险因素支持',14);
+      if(caseData.medicationHistory)add('历史用药需评估风险',7);
+      reason='该检验用于评估慢病及用药相关风险；患者存在糖尿病/高血压和长期用药史，进行肾功能或电解质评估具有临床依据。';
+      suggestion='可用于用药风险、慢病并发症和后续处置安全性判断';
+    }else{
+      scoreCap=76;
+      if(hasDiagnosisBasis)add('可关联当前诊断',6);
+      reason='该检查/检验项目与当前病例存在一定关联，但系统未识别到更明确的专属适应症线索。';
+      suggestion='建议在医嘱说明中补充选择该项目的具体目的';
+    }
+  }
+
+  if(cat.key==='medication'){
+    basis='病例摘要 + 诊断结果 + 历史用药 + 药品说明书';
+    if(historyText.indexOf('青霉素过敏')>-1&&item.indexOf('阿莫西林')>-1){
+      score=18;
+      evidence=['过敏史冲突 -45%','药品禁忌 -25%'];
+      reason='患者存在青霉素过敏史，而该用药项目包含阿莫西林，药物禁忌与患者历史信息冲突，合理性很低。';
+      suggestion='建议替换为无交叉过敏风险的替代方案';
+      action='removeAmoxicillin';
+    }else if(item.indexOf('综合管理')>-1){
+      scoreCap=91;
+      if(isDiabetes)add('糖尿病管理需求明确',12);
+      if(isHypertension)add('血压管理需求明确',8);
+      reason='该项目覆盖血糖、血压和血脂综合管理，与当前糖尿病、高血压和眼底病变背景一致。';
+      suggestion='建议拆分为可执行的具体药物或管理医嘱';
+    }else if(item.indexOf('抗VEGF')>-1){
+      scoreCap=92;
+      if(hasRetinaEvidence)add('眼底病变证据支持',17);
+      if(hasMacularEvidence)add('黄斑水肿线索支持',9);
+      reason='抗VEGF方向与黄斑水肿、新生血管或活动性视网膜病变相关；当前病例存在黄斑水肿和糖网线索，因此具有较高合理性。';
+      suggestion='需结合影像检查和药品说明书进一步确认适应症';
+    }else if(item.indexOf('血糖')>-1||item.indexOf('降糖')>-1){
+      scoreCap=91;
+      if(isDiabetes)add('糖尿病病史明确',20);
+      if(/血糖控制欠佳|HbA1c/.test(clinicalText))add('检验结果支持调整',8);
+      reason='患者糖尿病病史长且血糖控制欠佳，强化血糖管理与当前病情和报告结论相匹配。';
+      suggestion='结合历史用药与当前检验结果制定具体用药策略';
+    }else if(item.indexOf('血压')>-1||item.indexOf('降压')>-1){
+      scoreCap=89;
+      if(isHypertension)add('高血压病史明确',18);
+      reason='患者存在高血压病史，血压管理有助于降低眼底病变进展及慢病风险。';
+      suggestion='结合当前血压水平和既往用药方案细化医嘱';
+    }else if(item.indexOf('血脂')>-1||item.indexOf('调脂')>-1){
+      scoreCap=84;
+      if(isDiabetes||isHypertension)add('慢病综合风险支持',14);
+      reason='调脂管理可作为糖尿病、高血压等慢病综合风险管理的一部分，与当前慢病背景有一定匹配度。';
+      suggestion='建议补充血脂检验结果后确定具体方案';
+    }else{
+      scoreCap=76;
+      reason='该用药项目与当前病例存在基础关联，但系统未识别到足够明确的药品适应症或禁忌信息。';
+      suggestion='建议补充药品名称、剂量和适应症依据后再定稿';
+    }
+  }
+
+  if(cat.key==='procedures'){
+    basis='病例摘要 + 辅助诊断 + 检查结果 + 处置适应症知识';
+    if(item.indexOf('抗VEGF')>-1||item.indexOf('玻璃体腔')>-1){
+      scoreCap=91;
+      if(hasRetinaEvidence)add('眼底病变证据支持',15);
+      if(hasMacularEvidence)add('黄斑水肿线索支持',10);
+      reason='该处置用于评估玻璃体腔抗VEGF治疗适应症；当前黄斑水肿和糖尿病视网膜病变线索能够支撑进入适应症评估。';
+      suggestion='建议结合OCT量化结果和FFA血管评估结果后确定是否实施';
+    }else{
+      scoreCap=78;
+      if(hasDiagnosisBasis)add('诊断链路支持',6);
+      reason='该处置项目与当前诊断链路存在一定关联，但仍需要更明确的适应症材料支撑。';
+      suggestion='建议补充处置目的和必要的影像/检验依据';
+    }
+  }
+
+  if(cat.key==='followup'){
+    basis='病例摘要 + 疾病分级 + 治疗方案 + 随访适应症知识';
+    scoreCap=86;
+    if(hasRetinaEvidence)add('眼底病变需动态观察',15);
+    if(isDiabetes)add('慢病长期管理需求',8);
+    reason='眼底病变和糖尿病慢病管理需要持续随访，当前随访项目能够承接检查、治疗和报告结论。';
+    suggestion='建议根据分级、治疗方式和影像变化细化随访周期';
+  }
+
+  score=Math.max(5,Math.min(scoreCap,Math.round(score)));
+  return {
+    title:item,
+    category:cat.label,
+    score:score,
+    reason:reason,
+    suggestion:suggestion,
+    basis:basis,
+    evidence:evidence.length?evidence:['基础病例链路 +0%'],
+    action:action
+  };
+}
+function scoreClass(score){return score>=88?'score-high':(score>=70?'score-mid':'score-low');}
+function rerunQuality(){
+  qcRules=buildQcRules();
+  caseData.qualityRules=qcRules;
+  persist();
+  renderQc();
+  toast('已根据当前病例及已选项目重新生成合理性评分。');
+}
+function archiveCase(){
+  qcRules=buildQcRules();
+  caseData.qualityRules=qcRules;
+  caseData.reportGenerated=true;
+  caseData.status='已完成医嘱合理性评估';
+  persist();
+  renderAll();
+  toast('已完成医嘱合理性评估归档，病例闭环结束。');
+}
+function removeAmoxicillin(){
+  categoryDefs.forEach(function(cat){caseData.selectedPlan[cat.key]=(caseData.selectedPlan[cat.key]||[]).filter(function(item){return item.indexOf('阿莫西林')===-1;});});
+  caseData.orderDraft=(caseData.orderDraft||'').split('；').filter(function(item){return item.indexOf('阿莫西林')===-1;}).join('；');
+  caseData.recommendedOrders=(caseData.recommendedOrders||'').split('；').filter(function(item){return item.indexOf('阿莫西林')===-1;}).join('；');
+  persist();renderAll();toast('已移除与过敏史冲突的阿莫西林医嘱。');
+}
+function persist(){localStorage.setItem('clinical_decision_case',JSON.stringify(caseData));}
+function escapeHtml(text){var div=document.createElement('div');div.appendChild(document.createTextNode(text==null?'':String(text)));return div.innerHTML;}
+function toast(message){var el=document.getElementById('toast');el.textContent=message;el.style.display='block';clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(function(){el.style.display='none';},2400);}
+function logout(){if(confirm('确定要退出登录吗？')){localStorage.removeItem('life_med_user');window.location.href='login.html';}}
+</script>
+</body>
+</html>

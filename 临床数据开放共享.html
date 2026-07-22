@@ -1,609 +1,729 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>临床数据开放共享</title><style>
-/* ===== 生命医学主题库 - 通用样式 ===== */
-:root {
-    --primary: #1a73e8;
-    --primary-dark: #1557b0;
-    --primary-light: #e8f0fe;
-    --success: #34a853;
-    --warning: #fbbc04;
-    --danger: #ea4335;
-    --gray-50: #f8f9fa;
-    --gray-100: #f5f7fa;
-    --gray-200: #e8ecf0;
-    --gray-300: #dadce0;
-    --gray-400: #bdc1c6;
-    --gray-500: #9aa0a6;
-    --gray-600: #80868b;
-    --gray-700: #5f6368;
-    --gray-800: #3c4043;
-    --gray-900: #202124;
-    --text: #333333;
-    --text-secondary: #999999;
-    --bg: #ffffff;
-    --sidebar-width: 220px;
-    --header-height: 56px;
-    --radius: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
-    --transition: all 0.2s ease;
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>临床数据开放共享</title>
+<style>
+:root{
+  --primary:#1a73e8;--primary-dark:#1557b0;--primary-light:#e8f0fe;
+  --success:#34a853;--warning:#fbbc04;--danger:#ea4335;
+  --gray-50:#f8f9fa;--gray-100:#f5f7fa;--gray-200:#e8ecf0;--gray-300:#dadce0;
+  --gray-500:#9aa0a6;--gray-600:#80868b;--gray-700:#5f6368;--gray-800:#3c4043;--gray-900:#202124;
+  --sidebar-width:220px;--header-height:56px;--radius:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-lg:0 12px 34px rgba(15,23,42,.18);--transition:all .18s ease;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-serif; font-size: 14px; color: var(--text); background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
-.header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
-.header .header-nav { display: flex; gap: 4px; margin-left: 40px; }
-.header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); }
-.header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
-.header .header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; }
-.header .header-right .user-info { cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: var(--transition); }
-.header .header-right .user-info:hover { background: rgba(255,255,255,0.15); }
-.header .header-right .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: var(--transition); }
-.header .header-right .btn-logout:hover { background: rgba(255,255,255,0.35); }
-.sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 8px 0; }
-.sidebar .menu-group { margin-bottom: 4px; }
-.sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.sidebar .menu-item { display: flex; align-items: center; padding: 10px 20px; color: var(--gray-700); text-decoration: none; font-size: 13px; transition: var(--transition); border-left: 3px solid transparent; cursor: pointer; }
-.sidebar .menu-item:hover { background: var(--gray-50); color: var(--primary); }
-.sidebar .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-.sidebar .menu-item .menu-icon { width: 20px; margin-right: 10px; text-align: center; font-size: 14px; }
-.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
-.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.breadcrumb span.sep { color: var(--gray-400); }
-.page-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 20px; }
-.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 20px; }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
-.card-title { font-size: 16px; font-weight: 600; color: var(--gray-800); }
-.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
-.stat-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
-.stat-card .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.stat-card .stat-info .stat-value { font-size: 26px; font-weight: 700; color: var(--gray-900); }
-.stat-card .stat-info .stat-label { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-.stat-card.blue .stat-icon { background: #e8f0fe; }
-.stat-card.green .stat-icon { background: #e6f4ea; }
-.stat-card.orange .stat-icon { background: #fef7e0; }
-.stat-card.red .stat-icon { background: #fce8e6; }
-.stat-card.purple .stat-icon { background: #f3e8fd; }
-.filter-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px 18px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 16px; }
-.filter-bar label { font-size: 13px; color: var(--gray-700); white-space: nowrap; }
-.filter-bar input, .filter-bar select { padding: 7px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.filter-bar input:focus, .filter-bar select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.filter-bar input { min-width: 180px; }
-.btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; gap: 6px; white-space: nowrap; }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-dark); }
-.btn-success { background: var(--success); color: #fff; }
-.btn-success:hover { background: #2d9249; }
-.btn-warning { background: var(--warning); color: #202124; }
-.btn-warning:hover { background: #e5ac00; }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-danger:hover { background: #d33426; }
-.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
-.btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-.btn-lg { padding: 10px 24px; font-size: 15px; }
-.btn-sort { padding: 5px 14px; font-size: 12px; border: 1px solid var(--gray-300); background: #fff; border-radius: 6px; cursor: pointer; font-family: inherit; transition: var(--transition); display: inline-flex; align-items: center; gap: 4px; }
-.btn-sort:hover { background: var(--gray-50); border-color: var(--primary); color: var(--primary); }
-.btn-sort.active { background: var(--primary-light); color: var(--primary); border-color: var(--primary); font-weight: 600; }
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-table th { background: var(--gray-100); padding: 10px 14px; text-align: left; font-weight: 600; color: var(--gray-700); border-bottom: 2px solid var(--gray-200); white-space: nowrap; }
-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); color: var(--gray-800); }
-table tbody tr:hover { background: var(--gray-50); }
-table tbody tr:nth-child(even) { background: rgba(245,247,250,0.5); }
-table tbody tr:nth-child(even):hover { background: var(--gray-50); }
-.tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
-.tag-blue { background: #e8f0fe; color: #1a73e8; }
-.tag-green { background: #e6f4ea; color: #137333; }
-.tag-orange { background: #fef7e0; color: #b06000; }
-.tag-red { background: #fce8e6; color: #c5221f; }
-.tag-gray { background: #f1f3f4; color: #5f6368; }
-.pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 16px; padding: 12px 0; }
-.pagination button { padding: 6px 12px; border: 1px solid var(--gray-300); background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; transition: var(--transition); }
-.pagination button:hover:not(:disabled) { background: var(--gray-50); }
-.pagination button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-.pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
-.tabs { display: flex; border-bottom: 2px solid var(--gray-200); margin-bottom: 20px; gap: 0; }
-.tab-btn { padding: 10px 20px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; font-size: 14px; font-family: inherit; color: var(--gray-600); transition: var(--transition); font-weight: 500; }
-.tab-btn:hover { color: var(--primary); }
-.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s; }
-.modal { background: #fff; border-radius: 12px; box-shadow: var(--shadow-lg); width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto; animation: slideUp 0.25s; }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--gray-200); }
-.modal-header h3 { font-size: 17px; color: var(--gray-900); font-weight: 600; }
-.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray-500); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
-.modal-close:hover { background: var(--gray-50); color: var(--gray-700); }
-.modal-body { padding: 24px; }
-.modal-footer { padding: 14px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; }
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-.form-group label .required { color: var(--danger); margin-left: 2px; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 9px 13px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.form-group textarea { resize: vertical; min-height: 80px; }
-.form-row { display: flex; gap: 16px; }
-.form-row .form-group { flex: 1; }
-.progress-bar { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
-.progress-bar-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.4s ease; }
-.upload-zone { border: 2px dashed var(--gray-300); border-radius: var(--radius); padding: 40px; text-align: center; cursor: pointer; transition: var(--transition); background: var(--gray-50); }
-.upload-zone:hover { border-color: var(--primary); background: var(--primary-light); }
-.upload-zone .upload-icon { font-size: 36px; margin-bottom: 10px; }
-.upload-zone p { color: var(--gray-600); font-size: 13px; }
-.upload-zone .upload-hint { color: var(--gray-400); font-size: 11px; margin-top: 6px; }
-.upload-file-list { margin-top: 12px; }
-.upload-file-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #fff; border: 1px solid var(--gray-200); border-radius: 6px; margin-bottom: 6px; }
-.upload-file-item .file-info { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.upload-file-item .file-info .file-name { color: var(--gray-800); }
-.upload-file-item .file-info .file-size { color: var(--gray-500); font-size: 12px; }
-.upload-file-item .file-remove { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 4px; }
-.upload-file-item .file-remove:hover { background: #fce8e6; }
-.alert { padding: 12px 16px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; }
-.alert-info { background: #e8f0fe; color: #1a56db; border: 1px solid #d2e3fc; }
-.alert-success { background: #e6f4ea; color: #137333; border: 1px solid #ceead6; }
-.alert-warning { background: #fef7e0; color: #b06000; border: 1px solid #feefc3; }
-.alert-danger { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c2; }
-.steps { display: flex; margin-bottom: 24px; }
-.step { flex: 1; text-align: center; position: relative; font-size: 12px; color: var(--gray-500); }
-.step::before { content: ''; position: absolute; top: 14px; left: 50%; right: -50%; height: 2px; background: var(--gray-200); z-index: 0; }
-.step:last-child::before { display: none; }
-.step .step-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--gray-200); margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; position: relative; z-index: 1; }
-.step.active .step-circle { background: var(--primary); color: #fff; }
-.step.active { color: var(--primary); font-weight: 600; }
-.step.done .step-circle { background: var(--success); color: #fff; }
-.step.done { color: var(--success); }
-.step.done::before { background: var(--success); }
-/* detail info table */
-.detail-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-.detail-table td { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); }
-.detail-table td:first-child { font-weight: 600; color: var(--gray-700); width: 120px; background: var(--gray-50); }
-.detail-table td:last-child { color: var(--gray-800); }
-/* description box */
-.detail-desc { background: var(--gray-50); border-radius: 6px; padding: 14px 16px; line-height: 1.8; color: var(--gray-800); font-size: 13px; white-space: pre-wrap; margin-bottom: 16px; }
-/* section label */
-.section-label { font-size: 14px; font-weight: 600; color: var(--gray-800); margin: 20px 0 10px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
-/* success overlay */
-.success-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: flex; align-items: center; justify-content: center; }
-.success-box { background: #fff; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.18); animation: slideUp 0.25s; }
-.success-box .success-icon { width: 64px; height: 64px; border-radius: 50%; background: #e6f4ea; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
-.success-box h3 { font-size: 18px; color: var(--success); margin-bottom: 8px; }
-.success-box p { font-size: 14px; color: var(--gray-600); margin-bottom: 20px; }
-/* match count */
-.match-count { font-size: 12px; color: var(--gray-600); margin-left: auto; white-space: nowrap; }
-.match-count strong { color: var(--primary); }
-/* checkbox group */
-.checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; font-size: 13px; }
-.checkbox-group input[type="checkbox"] { margin-top: 2px; }
-.checkbox-group label { color: var(--gray-700); cursor: pointer; }
-/* file download link */
-.file-download-link { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: 6px; margin-bottom: 6px; text-decoration: none; color: var(--primary); transition: var(--transition); }
-.file-download-link:hover { background: var(--primary-light); border-color: var(--primary); }
-.file-download-link .dl-icon { font-size: 18px; }
-.file-download-link .dl-name { flex: 1; font-size: 13px; }
-.file-download-link .dl-size { font-size: 12px; color: var(--gray-500); }
-/* action buttons in table */
-table .btn-action { display: inline-flex; align-items: center; padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; border: 1px solid var(--gray-300); background: #fff; font-family: inherit; transition: var(--transition); margin-right: 4px; }
-table .btn-action:hover { background: var(--gray-50); }
-table .btn-action.btn-detail { color: var(--primary); border-color: var(--primary); }
-table .btn-action.btn-detail:hover { background: var(--primary-light); }
-table .btn-action.btn-apply { color: var(--success); border-color: var(--success); }
-table .btn-action.btn-apply:hover { background: #e6f4ea; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@media (max-width: 1024px) { .sidebar { width: 60px; } .sidebar .menu-item span { display: none; } .sidebar .menu-group-title { display: none; } .main-content { margin-left: 60px; } }
-</style></head><body>
-<div class="header"><a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a><div class="header-nav">
-<a href="眼底图像输入.html">AI眼底疾病筛查</a><a href="临床数据开放共享.html">生命医学开放数据平台</a>
-<a href="基础课程.html">生命医学AI教育平台</a><a href="临床决策支撑.html">眼病/慢病专家系统</a>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:var(--gray-50);color:#333;font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.6}
+a{text-decoration:none;color:inherit}
+.header{height:var(--header-height);background:linear-gradient(135deg,#1a56db,#2563eb 52%,#1d4ed8);color:#fff;display:flex;align-items:center;padding:0 24px;position:fixed;top:0;left:0;right:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{font-size:18px;font-weight:800;white-space:nowrap}
+.header-nav{display:flex;gap:4px;margin-left:40px}
+.header-nav a{color:rgba(255,255,255,.86);padding:6px 14px;border-radius:6px;font-size:13px;transition:var(--transition)}
+.header-nav a:hover,.header-nav a.active{background:rgba(255,255,255,.15);color:#fff}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px}
+.user-info{padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.1)}
+.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:0;padding:6px 16px;border-radius:6px;cursor:pointer}
+.sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100vh - var(--header-height));background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:999;padding:8px 0}
+.menu-group-title{padding:12px 20px 6px;font-size:11px;color:var(--gray-500);letter-spacing:1px;font-weight:700}
+.menu-item{display:flex;align-items:center;padding:10px 20px;color:var(--gray-700);font-size:13px;border-left:3px solid transparent;transition:var(--transition)}
+.menu-item:hover{background:var(--gray-50);color:var(--primary)}
+.menu-item.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:700}
+.sub-menu-item{display:flex;align-items:center;padding:8px 20px 8px 38px;color:var(--gray-600);font-size:12px;border-left:3px solid transparent;transition:var(--transition);cursor:pointer}
+.sub-menu-item:hover{background:var(--gray-50);color:var(--primary)}
+.sub-menu-item.active{background:#f3f7ff;color:var(--primary);border-left-color:var(--primary);font-weight:700}
+.main-content{margin-left:var(--sidebar-width);margin-top:var(--header-height);padding:24px;min-height:calc(100vh - var(--header-height))}
+.breadcrumb{font-size:13px;color:var(--gray-600);margin-bottom:20px;display:flex;gap:8px;align-items:center}
+.breadcrumb a{color:var(--primary)}
+.page-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.page-title{font-size:22px;font-weight:800;color:var(--gray-900)}
+.page-subtitle{margin-top:6px;color:var(--gray-600);font-size:13px}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--gray-100)}
+.card-title{font-size:16px;font-weight:700;color:var(--gray-800)}
+.rule-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.rule-card{border:1px solid var(--gray-200);border-radius:10px;padding:14px;background:linear-gradient(180deg,#fff,#fafcff)}
+.rule-card strong{display:block;color:var(--gray-900);font-size:13px;margin-bottom:6px}
+.rule-card span{display:block;color:var(--gray-600);font-size:12px;line-height:1.7}
+.scenario-card{display:none}
+.scenario-card.active{display:block}
+.scenario-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}
+.flow-node{border:1px solid var(--gray-200);border-radius:10px;background:#fff;padding:14px;min-height:110px}
+.flow-node .step-no{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--primary-light);color:var(--primary);font-weight:800;font-size:12px;margin-bottom:8px}
+.flow-node strong{display:block;color:var(--gray-900);font-size:13px;margin-bottom:4px}
+.flow-node span{display:block;color:var(--gray-600);font-size:12px;line-height:1.7}
+.role-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;border:1px solid var(--gray-200);border-radius:10px;background:var(--gray-50);margin-bottom:12px}
+.role-strip strong{color:var(--gray-900)}
+.role-strip span{color:var(--gray-600);font-size:12px}
+.tabs{display:flex;align-items:center;gap:8px;margin-bottom:16px;border-bottom:1px solid var(--gray-200)}
+.tab-btn{padding:9px 14px;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--gray-600);font-family:inherit;font-weight:700;cursor:pointer}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.badge-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:999px;background:var(--gray-100);font-size:11px;margin-left:4px;color:var(--gray-700)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 18px;background:var(--gray-50);border-radius:var(--radius);margin-bottom:16px}
+.filter-bar label{font-size:13px;color:var(--gray-700);white-space:nowrap}
+.filter-bar input,.filter-bar select{height:34px;padding:0 12px;border:1px solid var(--gray-300);border-radius:6px;font:inherit;font-size:13px;outline:none;background:#fff}
+.filter-bar input{min-width:220px}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
+.match-count{margin-left:auto;color:var(--gray-600);font-size:12px}
+.match-count strong{color:var(--primary)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:0 14px;border:0;border-radius:6px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:var(--transition);white-space:nowrap}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:#fff}.btn-warning{background:var(--warning);color:#202124}.btn-danger{background:var(--danger);color:#fff}
+.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--gray-700)}
+.btn-outline:hover{background:var(--gray-50);border-color:var(--gray-400)}
+.btn-sm{min-height:28px;padding:0 10px;font-size:12px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--gray-100);padding:10px 14px;text-align:left;font-weight:700;color:var(--gray-700);border-bottom:2px solid var(--gray-200);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-800);vertical-align:top}
+tbody tr:hover{background:var(--gray-50)}
+.dataset-name{font-weight:700;color:var(--gray-900)}
+.dataset-meta{margin-top:3px;color:var(--gray-600);font-size:12px}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.tag-blue{background:#e8f0fe;color:#1a73e8}.tag-green{background:#e6f4ea;color:#137333}.tag-orange{background:#fef7e0;color:#b06000}
+.tag-red{background:#fce8e6;color:#c5221f}.tag-gray{background:#f1f3f4;color:#5f6368}.tag-purple{background:#f3e8fd;color:#7e22ce}
+.action-cell{display:flex;flex-wrap:wrap;gap:6px;min-width:260px}
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;padding:12px 0}
+.pagination button{padding:6px 12px;border:1px solid var(--gray-300);background:#fff;border-radius:6px;cursor:pointer;font:inherit;font-size:13px}
+.pagination button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.pagination button:disabled{opacity:.5;cursor:not-allowed}
+.empty{padding:28px;text-align:center;color:var(--gray-600);background:var(--gray-50);border-radius:8px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:12px;box-shadow:var(--shadow-lg);width:min(760px,96vw);max-height:88vh;overflow-y:auto;animation:slideUp .22s}
+.modal.wide{width:min(940px,96vw)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--gray-200)}
+.modal-header h3{font-size:17px;color:var(--gray-900)}
+.modal-close{width:32px;height:32px;border:0;background:transparent;border-radius:6px;font-size:20px;color:var(--gray-500);cursor:pointer}
+.modal-close:hover{background:var(--gray-50);color:var(--gray-700)}
+.modal-body{padding:24px}.modal-footer{padding:14px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:10px}
+.form-row{display:flex;gap:16px}.form-row .form-group{flex:1}
+.form-group{margin-bottom:16px}.form-group label{display:block;font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:6px}
+.required{color:var(--danger)}.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 13px;border:1px solid var(--gray-300);border-radius:6px;font:inherit;font-size:13px;outline:none}
+.form-group textarea{resize:vertical;min-height:82px}.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
+.radio-row{display:flex;gap:22px;flex-wrap:wrap;padding:8px 0}.radio-row label{display:flex;align-items:center;gap:6px;font-weight:500;cursor:pointer}
+.upload-zone{border:2px dashed var(--gray-300);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;background:var(--gray-50);transition:var(--transition)}
+.upload-zone:hover{border-color:var(--primary);background:var(--primary-light)}.upload-zone p{color:var(--gray-600);font-size:13px}.upload-hint{color:var(--gray-500);font-size:11px;margin-top:4px}
+.upload-file-list{margin-top:10px}.upload-file-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fff;border:1px solid var(--gray-200);border-radius:6px;margin-bottom:6px}
+.file-remove{border:0;background:transparent;color:var(--danger);cursor:pointer;padding:3px 6px}
+.detail-table{width:100%;margin-bottom:16px}.detail-table td:first-child{width:128px;font-weight:700;color:var(--gray-700);background:var(--gray-50)}
+.detail-desc{background:var(--gray-50);border-radius:6px;padding:14px 16px;color:var(--gray-800);white-space:pre-wrap;margin-bottom:16px}
+.section-label{font-size:14px;font-weight:800;color:var(--gray-800);margin:18px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--gray-200)}
+.file-download-link{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--gray-200);border-radius:6px;margin-bottom:6px;color:var(--primary)}
+.file-download-link.locked{color:var(--gray-600);background:var(--gray-50)}
+.success-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;display:none;align-items:center;justify-content:center}
+.success-box{background:#fff;border-radius:12px;padding:36px;text-align:center;box-shadow:var(--shadow-lg);width:min(420px,92vw)}
+.success-icon{width:60px;height:60px;border-radius:50%;background:#e6f4ea;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.success-box h3{color:var(--success);font-size:18px;margin-bottom:8px}.success-box p{color:var(--gray-600);margin-bottom:18px}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(max-width:1024px){.sidebar{width:60px}.sidebar .menu-item,.sidebar .sub-menu-item{font-size:0;padding:12px}.menu-group-title{display:none}.main-content{margin-left:60px}.rule-grid,.scenario-flow{grid-template-columns:1fr 1fr}.form-row{flex-direction:column}.match-count{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html" class="active">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span class="user-info" id="headerUserName">张教授</span><button class="btn-logout" onclick="logout()">退出</button></div>
 </div>
-<div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
-<div class="sidebar" id="sidebar">
-    <div class="menu-group"><div class="menu-group-title">开放数据平台</div>
-        <a class="menu-item active" href="临床数据开放共享.html">临床数据开放共享</a>
-        <a class="menu-item" href="科技文献检索推荐.html">科技文献检索推荐</a>
-        <a class="menu-item" href="智能教学服务.html">智能教学服务</a>
-        <a class="menu-item" href="知识图谱查询与推理.html">知识图谱查询与推理</a>
+<div class="sidebar">
+  <div class="menu-group">
+    <div class="menu-group-title">开放数据平台</div>
+    <a class="menu-item active" href="临床数据开放共享.html">临床数据开放共享</a>
+    <a class="sub-menu-item active" data-workspace="all" onclick="switchMainTab('all')">数据集总览</a>
+    <a class="sub-menu-item" data-workspace="mine" onclick="switchMainTab('mine')">我的发布</a>
+    <a class="sub-menu-item" data-workspace="review" onclick="switchMainTab('review')">待我审核</a>
+    <a class="sub-menu-item" data-workspace="applications" onclick="switchMainTab('applications')">我的申请</a>
+    <a class="sub-menu-item" data-workspace="audit" onclick="switchMainTab('audit')">授权使用记录</a>
+    <a class="menu-item" href="科技文献检索推荐.html">科技文献检索推荐</a>
+    <a class="menu-item" href="智能教学服务.html">智能教学服务</a>
+    <a class="menu-item" href="知识图谱查询与推理.html">知识图谱查询与推理</a>
+  </div>
+</div>
+
+<main class="main-content">
+  <div class="breadcrumb"><a href="app-center.html">应用中心</a><span class="sep">></span><a href="#">开放数据平台</a><span class="sep">></span><span>临床数据开放共享</span></div>
+  <div class="page-title-row">
+    <div>
+      <h1 class="page-title">临床数据开放共享</h1>
     </div>
-</div>
-<div class="main-content"><div class="breadcrumb"><a href="#">开放数据平台</a><span class="sep">></span><span>临床数据开放共享</span></div><h1 class="page-title">临床数据开放共享</h1><div class="card"><div class="card-header"><span class="card-title">数据概览</span></div><div class="stat-grid"><div class="stat-card blue"><div class="stat-icon">📊</div><div class="stat-info"><div class="stat-value">12,856</div><div class="stat-label">开放数据集总数</div></div></div><div class="stat-card green"><div class="stat-icon">🏥</div><div class="stat-info"><div class="stat-value">368</div><div class="stat-label">合作医疗机构</div></div></div><div class="stat-card orange"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-value">2.4M</div><div class="stat-label">临床病例记录</div></div></div><div class="stat-card purple"><div class="stat-icon">🔬</div><div class="stat-info"><div class="stat-value">89</div><div class="stat-label">研究项目</div></div></div></div></div><div class="card"><div class="card-header"><span class="card-title">数据集列表</span><button class="btn btn-primary btn-sm" onclick="openAddModal()">添加数据集</button></div><div class="filter-bar"><label>关键词搜索</label><input id="searchInput" placeholder="按数据集名称、发布人、分类搜索..." oninput="filterDatasets()"><button class="btn btn-sort" id="btnSort" onclick="toggleSort()">最新更新</button><span class="match-count" id="matchCount"></span></div><div class="table-wrap"><table><thead><tr><th>数据集名称</th><th>发布人</th><th>分类</th><th>更新时间</th><th>是否公开</th><th>操作</th></tr></thead><tbody id="datasetTableBody"></tbody></table></div><div class="pagination" id="pagination"></div></div></div>
+    <button class="btn btn-primary" onclick="openDatasetModal()">发布数据集</button>
+  </div>
 
-<!-- 查看详情弹窗 -->
-<div class="modal-overlay" id="detailModal" style="display:none;"><div class="modal"><div class="modal-header"><h3 id="detailModalTitle">数据集详情</h3><button class="modal-close" onclick="closeModal('detailModal')">x</button></div><div class="modal-body" id="detailModalBody"></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('detailModal')">关闭</button></div></div></div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">权限闭环与业务规则</span><span class="tag tag-blue" id="roleLabel">当前用户：张教授 / 医学教授</span></div>
+    <div class="role-strip">
+      <div><strong>数据权限不按职称自动继承</strong><br><span>当前用户发布的数据集，无论公开或非公开，都可查看详情、修改、删除；当前用户申请他人非公开数据集时，仍需由对应发布者审核。</span></div>
+    </div>
+    <div class="scenario-flow">
+      <div class="flow-node"><div class="step-no">1</div><strong>发布数据集</strong><span>发布者选择公开或非公开，并维护描述、附件、说明文档、脱敏承诺和更新版本。</span></div>
+      <div class="flow-node"><div class="step-no">2</div><strong>查看与维护</strong><span>发布者始终可查看自己发布的数据集详情，并执行修改、删除、查看申请等维护动作。</span></div>
+      <div class="flow-node"><div class="step-no">3</div><strong>申请他人数据</strong><span>公开数据可直接查看下载；非公开数据必须提交用途、机构和联系方式，职称不自动放行。</span></div>
+      <div class="flow-node"><div class="step-no">4</div><strong>发布者审核</strong><span>别人申请我的数据集，进入“待我审核”；我申请别人数据集，进入“我的申请”。通过后才开放下载。</span></div>
+    </div>
+  </div>
 
-<!-- 申请弹窗 -->
-<div class="modal-overlay" id="applyModal" style="display:none;"><div class="modal"><div class="modal-header"><h3 id="applyModalTitle">数据使用申请</h3><button class="modal-close" onclick="closeModal('applyModal')">x</button></div><div class="modal-body"><div id="applyModalContent"></div></div></div></div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">共享规则</span></div>
+    <div class="rule-grid">
+      <div class="rule-card"><strong>公开数据</strong><span>任何登录用户可查看详情并下载附件，发布者仍可维护版本和更新说明。</span></div>
+      <div class="rule-card"><strong>非公开数据</strong><span>仅展示基础摘要和申请入口；申请通过后才显示附件下载能力。</span></div>
+      <div class="rule-card"><strong>发布者审核</strong><span>申请提交后进入发布者待审核列表；发布者可通过或驳回并填写意见。</span></div>
+      <div class="rule-card"><strong>数据维护</strong><span>数据发布者可编辑、删除自己的数据集；更新时间来自编辑或重新发布动作。</span></div>
+    </div>
+  </div>
 
-<!-- 添加数据集弹窗 -->
-<div class="modal-overlay" id="addModal" style="display:none;"><div class="modal"><div class="modal-header"><h3>添加数据集</h3><button class="modal-close" onclick="closeModal('addModal')">x</button></div><div class="modal-body"><form id="addDatasetForm" onsubmit="submitAddDataset(event)"><div class="form-row"><div class="form-group"><label>数据集名称 <span class="required">*</span></label><input type="text" id="addName" required placeholder="请输入数据集名称"></div><div class="form-group"><label>分类 <span class="required">*</span></label><select id="addCategory" required><option value="">请选择分类</option><option value="临床数据">临床数据</option><option value="影像数据">影像数据</option><option value="基因数据">基因数据</option><option value="其他">其他</option></select></div></div><div class="form-group"><label>公开状态 <span class="required">*</span></label><div style="display:flex;gap:24px;padding:9px 0;"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;"><input type="radio" name="addPublic" value="公开" checked> 公开</label><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;"><input type="radio" name="addPublic" value="不公开"> 不公开</label></div></div><div class="form-group"><label>数据集描述</label><textarea id="addDesc" rows="4" placeholder="请输入数据集的详细描述..."></textarea></div><div class="section-label">上传数据集文件</div><div class="upload-zone" id="dataUploadZone" onclick="document.getElementById('dataFileInput').click()"><div class="upload-icon">📁</div><p>点击或拖拽上传数据集文件</p><p class="upload-hint">支持 .zip / .csv / .dcm / .nii 等格式，可上传多个文件</p></div><input type="file" id="dataFileInput" multiple style="display:none;" onchange="handleFileSelect(this, 'dataFileList')"><div class="upload-file-list" id="dataFileList"></div><div class="section-label" style="margin-top:20px;">上传说明文档</div><div class="upload-zone" id="docUploadZone" onclick="document.getElementById('docFileInput').click()"><div class="upload-icon">📄</div><p>点击或拖拽上传说明文档</p><p class="upload-hint">支持 .pdf / .docx / .txt 等格式，可上传多个文件</p></div><input type="file" id="docFileInput" multiple style="display:none;" onchange="handleFileSelect(this, 'docFileList')"><div class="upload-file-list" id="docFileList"></div><div class="checkbox-group" style="margin-top:20px;"><input type="checkbox" id="addAgree" required><label for="addAgree">我承诺所上传数据集已获得合法授权，符合《数据安全法》《个人信息保护法》等相关法律法规要求 <span class="required" style="color:var(--danger);">*</span></label></div><div class="modal-footer" style="padding:14px 0 0;border-top:none;"><button type="button" class="btn btn-outline" onclick="closeModal('addModal')">取消</button><button type="submit" class="btn btn-primary">提交</button></div></form></div></div></div>
+  <div class="card" id="card-dataset-list">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="all" onclick="switchMainTab('all')">全部数据集<span class="badge-count" id="countAll">0</span></button>
+      <button class="tab-btn" data-tab="mine" onclick="switchMainTab('mine')">我的发布<span class="badge-count" id="countMine">0</span></button>
+      <button class="tab-btn" data-tab="review" onclick="switchMainTab('review')">待我审核<span class="badge-count" id="countReview">0</span></button>
+      <button class="tab-btn" data-tab="applications" onclick="switchMainTab('applications')">我的申请<span class="badge-count" id="countApplications">0</span></button>
+      <button class="tab-btn" data-tab="audit" onclick="switchMainTab('audit')">授权记录<span class="badge-count" id="countAudit">0</span></button>
+    </div>
 
-<!-- 提交成功提示 -->
-<div class="success-overlay" id="successOverlay" style="display:none;"><div class="success-box"><div class="success-icon">✅</div><h3 id="successTitle">操作成功</h3><p id="successMsg"></p><button class="btn btn-primary" onclick="closeSuccess()">确定</button></div></div>
+    <div id="datasetPanel">
+      <div class="card-header"><span class="card-title">数据集列表</span><button class="btn btn-primary btn-sm" onclick="openDatasetModal()">添加数据集</button></div>
+      <div class="filter-bar">
+        <label>关键词搜索</label>
+        <input id="searchInput" placeholder="按数据集名称、发布人、分类搜索..." oninput="filterDatasets()">
+        <select id="categoryFilter" onchange="filterDatasets()">
+          <option value="">分类：全部</option><option value="临床数据">临床数据</option><option value="影像数据">影像数据</option><option value="基因数据">基因数据</option><option value="其他">其他</option>
+        </select>
+        <select id="accessFilter" onchange="filterDatasets()">
+          <option value="">权限：全部</option><option value="public">公开</option><option value="private">不公开</option>
+        </select>
+        <button class="btn btn-outline btn-sm" id="btnSort" onclick="toggleSort()">最新更新 ↓</button>
+        <span class="match-count" id="matchCount"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>数据集名称</th><th>发布人</th><th>分类</th><th>更新时间</th><th>开放方式</th><th>我的权限</th><th>操作</th></tr></thead>
+          <tbody id="datasetTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <div id="reviewPanel" style="display:none">
+      <div class="card-header"><span class="card-title">待我审核的数据申请</span><span class="page-subtitle">只显示当前用户发布的数据集收到的申请</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>申请数据集</th><th>申请人</th><th>所属机构</th><th>用途</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody id="reviewTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="applicationPanel" style="display:none">
+      <div class="card-header"><span class="card-title">我的数据使用申请</span><span class="page-subtitle">申请被驳回后可修改理由重新提交</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>数据集</th><th>发布人</th><th>申请用途</th><th>提交时间</th><th>审核状态</th><th>审核意见</th><th>操作</th></tr></thead>
+          <tbody id="applicationTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="auditPanel" style="display:none">
+      <div class="card-header"><span class="card-title">授权使用记录</span><span class="page-subtitle">记录我发起的申请，以及别人申请我发布数据集的审核结果</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>数据集</th><th>发布者</th><th>申请人</th><th>所属机构</th><th>状态</th><th>提交时间</th><th>审核意见</th></tr></thead>
+          <tbody id="auditLogBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="detailModal"><div class="modal wide"><div class="modal-header"><h3 id="detailModalTitle">数据集详情</h3><button class="modal-close" onclick="closeModal('detailModal')">x</button></div><div class="modal-body" id="detailModalBody"></div><div class="modal-footer" id="detailModalFooter"></div></div></div>
+<div class="modal-overlay" id="applyModal"><div class="modal"><div class="modal-header"><h3 id="applyModalTitle">数据使用申请</h3><button class="modal-close" onclick="closeModal('applyModal')">x</button></div><div class="modal-body" id="applyModalBody"></div></div></div>
+<div class="modal-overlay" id="datasetModal"><div class="modal wide"><div class="modal-header"><h3 id="datasetModalTitle">发布数据集</h3><button class="modal-close" onclick="closeModal('datasetModal')">x</button></div><div class="modal-body"><form id="datasetForm" onsubmit="submitDataset(event)"><input type="hidden" id="editDatasetId"><div class="form-row"><div class="form-group"><label>数据集名称 <span class="required">*</span></label><input id="datasetName" required placeholder="请输入数据集名称"></div><div class="form-group"><label>分类 <span class="required">*</span></label><select id="datasetCategory" required><option value="">请选择分类</option><option value="临床数据">临床数据</option><option value="影像数据">影像数据</option><option value="基因数据">基因数据</option><option value="其他">其他</option></select></div></div><div class="form-row"><div class="form-group"><label>开放方式 <span class="required">*</span></label><div class="radio-row"><label><input type="radio" name="datasetPublic" value="public" checked> 公开：所有用户可查看下载</label><label><input type="radio" name="datasetPublic" value="private"> 不公开：需申请并审核</label></div></div><div class="form-group"><label>数据状态</label><select id="datasetStatus"><option value="已发布">已发布</option><option value="草稿">草稿</option></select></div></div><div class="form-group"><label>数据集描述 <span class="required">*</span></label><textarea id="datasetDesc" required placeholder="说明数据来源、样本量、格式、脱敏方式、适用用途等..."></textarea></div><div class="section-label">上传数据集文件</div><div class="upload-zone" id="dataUploadZone" onclick="document.getElementById('dataFileInput').click()"><p>点击或拖拽上传数据集文件</p><div class="upload-hint">支持 .zip / .csv / .dcm / .nii / .vcf 等格式，可上传多个文件</div></div><input type="file" id="dataFileInput" multiple style="display:none" onchange="handleFileSelect(this,'data')"><div class="upload-file-list" id="dataFileList"></div><div class="section-label">上传说明文档</div><div class="upload-zone" id="docUploadZone" onclick="document.getElementById('docFileInput').click()"><p>点击或拖拽上传说明文档</p><div class="upload-hint">支持 .pdf / .docx / .txt 等格式</div></div><input type="file" id="docFileInput" multiple style="display:none" onchange="handleFileSelect(this,'doc')"><div class="upload-file-list" id="docFileList"></div><div class="form-group" style="margin-top:18px"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="datasetAgree" required style="width:auto;margin-top:3px"> 我承诺所上传数据已完成必要脱敏与授权，符合数据安全、个人信息保护和医学伦理要求 <span class="required">*</span></label></div><div class="modal-footer" style="padding:14px 0 0;border-top:none"><button type="button" class="btn btn-outline" onclick="closeModal('datasetModal')">取消</button><button type="submit" class="btn btn-primary">保存并发布</button></div></form></div></div></div>
+<div class="modal-overlay" id="reviewModal"><div class="modal"><div class="modal-header"><h3 id="reviewModalTitle">审核申请</h3><button class="modal-close" onclick="closeModal('reviewModal')">x</button></div><div class="modal-body" id="reviewModalBody"></div></div></div>
+<div class="success-overlay" id="successOverlay"><div class="success-box"><div class="success-icon">✓</div><h3 id="successTitle">操作成功</h3><p id="successMsg"></p><button class="btn btn-primary" onclick="closeSuccess()">确定</button></div></div>
 
 <script>
-// ===== 数据集 Mock 数据 =====
-var allDatasets = [
-    { id:1, name:'DR筛查数据集', author:'张伟', category:'影像数据', updateTime:'2025-06-15 14:30', isPublic:true, desc:'本数据集包含5000例糖尿病视网膜病变（DR）的眼底彩照影像及对应的专家标注信息，涵盖轻度、中度、重度NPDR及PDR四个分级。数据来源于北京协和医院眼科，采集时间为2019-2023年。\n\n数据格式：JPEG影像 + JSON标注\n样本量：5,000例\n标注方式：三位资深眼科专家交叉标注', attachments:[{name:'dr_screening_images.zip',size:'2.3 GB',url:'data/dr_screening_images.zip'},{name:'dr_annotations.json',size:'156 MB',url:'data/dr_annotations.json'},{name:'dr_README.pdf',size:'1.2 MB',url:'data/dr_README.pdf'}] },
-    { id:2, name:'青光眼OCT数据集', author:'李芳', category:'影像数据', updateTime:'2025-06-10 09:15', isPublic:true, desc:'本数据集包含3200例青光眼患者的OCT影像数据，包括RNFL厚度、GCL+IPL厚度、视盘参数等关键指标。数据来源于中山眼科中心，已做脱敏处理。\n\n数据格式：DICOM影像\n样本量：3,200例', attachments:[{name:'glaucoma_oct_dicom.zip',size:'8.5 GB',url:'data/glaucoma_oct_dicom.zip'},{name:'glaucoma_metadata.csv',size:'32 MB',url:'data/glaucoma_metadata.csv'}] },
-    { id:3, name:'AMD多模态数据集', author:'王强', category:'影像数据', updateTime:'2025-05-28 16:45', isPublic:true, desc:'涵盖2100例年龄相关性黄斑变性（AMD）患者的多模态影像数据，包含眼底彩照、OCT、OCTA及荧光血管造影图像。数据来源于上海眼病防治中心。\n\n数据格式：DICOM + JPEG\n样本量：2,100例', attachments:[{name:'amd_multimodal.zip',size:'12.1 GB',url:'data/amd_multimodal.zip'}] },
-    { id:4, name:'儿童眼底筛查数据集', author:'陈敏', category:'临床数据', updateTime:'2025-06-20 11:00', isPublic:true, desc:'包含8000例0-6岁儿童眼底筛查数据，涵盖早产儿视网膜病变、先天性白内障、视网膜母细胞瘤等常见儿童眼病。数据来源于华西医院。\n\n数据格式：彩照 + 诊断报告\n样本量：8,000例', attachments:[{name:'pediatric_screening.zip',size:'6.8 GB',url:'data/pediatric_screening.zip'},{name:'pediatric_reports.pdf',size:'45 MB',url:'data/pediatric_reports.pdf'}] },
-    { id:5, name:'高血压视网膜病变数据集', author:'刘洋', category:'临床数据', updateTime:'2025-04-12 08:30', isPublic:false, desc:'收集4500例高血压患者的眼底彩照及临床指标数据（血压、血脂、血糖等），用于研究高血压视网膜病变与全身指标的相关性。数据来源于解放军总医院。\n\n数据格式：彩照 + CSV临床数据\n样本量：4,500例\n\n注意：本数据集为不公开数据，需提交申请经审核后方可使用。', attachments:[{name:'hypertensive_retinopathy.zip',size:'4.2 GB',url:'data/hypertensive_retinopathy.zip'},{name:'clinical_indicators.csv',size:'18 MB',url:'data/clinical_indicators.csv'}] },
-    { id:6, name:'糖尿病基因关联数据集', author:'赵静', category:'基因数据', updateTime:'2025-06-18 13:20', isPublic:true, desc:'包含2000例2型糖尿病患者的全基因组关联分析（GWAS）数据，涵盖500万个SNP位点及对应的表型数据。\n\n数据格式：VCF + CSV\n样本量：2,000例', attachments:[{name:'diabetes_gwas_vcf.zip',size:'15.3 GB',url:'data/diabetes_gwas_vcf.zip'},{name:'phenotype_data.csv',size:'8 MB',url:'data/phenotype_data.csv'}] },
-    { id:7, name:'肺部CT结节标注数据集', author:'周磊', category:'影像数据', updateTime:'2025-06-22 17:00', isPublic:true, desc:'1280例胸部CT影像的肺结节标注数据集，包含结节的精确轮廓和良恶性判别。\n\n数据格式：DICOM + NIfTI\n样本量：1,280例', attachments:[{name:'lung_nodule_ct.zip',size:'22.6 GB',url:'data/lung_nodule_ct.zip'}] },
-    { id:8, name:'肿瘤基因表达数据集', author:'孙悦', category:'基因数据', updateTime:'2025-06-25 10:45', isPublic:false, desc:'收集乳腺癌、肺癌、结直肠癌等常见肿瘤的RNA-seq表达谱数据及临床预后信息。\n\n数据格式：FASTQ + CSV\n样本量：3,500例', attachments:[{name:'tumor_rnaseq.tar.gz',size:'45.8 GB',url:'data/tumor_rnaseq.tar.gz'},{name:'clinical_outcome.csv',size:'12 MB',url:'data/clinical_outcome.csv'}] },
-    { id:9, name:'心血管疾病风险预测数据集', author:'吴明', category:'临床数据', updateTime:'2025-05-30 09:00', isPublic:true, desc:'收集10000例心血管疾病患者的电子健康档案（EHR）数据，用于风险预测模型训练。\n\n数据格式：CSV\n样本量：10,000例', attachments:[{name:'cardiovascular_ehr.csv',size:'256 MB',url:'data/cardiovascular_ehr.csv'},{name:'data_dictionary.pdf',size:'3.5 MB',url:'data/data_dictionary.pdf'}] },
-    { id:10, name:'脑MRI分割标注数据集', author:'黄薇', category:'影像数据', updateTime:'2025-06-08 14:15', isPublic:true, desc:'500例脑部MRI影像，包含灰质、白质、脑脊液的手动分割标注，适用于脑组织分割算法研究。\n\n数据格式：NIfTI\n样本量：500例', attachments:[{name:'brain_mri_segmentation.zip',size:'18.2 GB',url:'data/brain_mri_segmentation.zip'}] }
-];
-
-var currentSortOrder = 'desc'; // 'desc' or 'asc'
+var currentUser = { name:'张教授', role:'医学教授', org:'深圳市眼科医院' };
+var currentTab = 'all';
+var currentSortOrder = 'desc';
 var currentPage = 1;
 var pageSize = 8;
-
-// ===== 初始化 =====
-document.addEventListener('DOMContentLoaded', function() {
-    try {
-        var user = JSON.parse(localStorage.getItem('life_med_user'));
-        if (user && user.name) {
-            document.getElementById('headerUserName').textContent = user.name;
-        }
-    } catch(e) {}
-
-    var path = window.location.pathname.replace(/\\/g, '/');
-    var currentPageName = path.split('/').pop();
-    var menuItems = document.querySelectorAll('.sidebar .menu-item');
-    menuItems.forEach(function(item) {
-        var href = item.getAttribute('href');
-        if (href && (href === currentPageName || href.endsWith('/' + currentPageName))) {
-            item.classList.add('active');
-        }
-    });
-    renderTable();
-});
-
-// ===== 搜索过滤 =====
-function filterDatasets() {
-    currentPage = 1;
-    renderTable();
-}
-
-function getFilteredDatasets() {
-    var keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-    if (!keyword) return allDatasets.slice();
-    return allDatasets.filter(function(ds) {
-        return ds.name.toLowerCase().indexOf(keyword) !== -1
-            || ds.author.toLowerCase().indexOf(keyword) !== -1
-            || ds.category.toLowerCase().indexOf(keyword) !== -1;
-    });
-}
-
-// ===== 排序 =====
-function toggleSort() {
-    currentSortOrder = (currentSortOrder === 'desc') ? 'asc' : 'desc';
-    var btn = document.getElementById('btnSort');
-    if (currentSortOrder === 'desc') {
-        btn.textContent = '最新更新 ↓';
-        btn.classList.add('active');
-    } else {
-        btn.textContent = '最新更新 ↑';
-        btn.classList.add('active');
-    }
-    currentPage = 1;
-    renderTable();
-}
-
-function getSortedDatasets(list) {
-    return list.slice().sort(function(a, b) {
-        var tA = new Date(a.updateTime).getTime();
-        var tB = new Date(b.updateTime).getTime();
-        return currentSortOrder === 'desc' ? tB - tA : tA - tB;
-    });
-}
-
-// ===== 渲染表格 =====
-function renderTable() {
-    var filtered = getFilteredDatasets();
-    var sorted = getSortedDatasets(filtered);
-    var total = sorted.length;
-
-    // 更新匹配数量
-    var allTotal = allDatasets.length;
-    if (filtered.length === allTotal && !document.getElementById('searchInput').value.trim()) {
-        document.getElementById('matchCount').textContent = '';
-    } else {
-        document.getElementById('matchCount').innerHTML = '匹配 <strong>' + total + '</strong> 条结果';
-    }
-
-    // 分页
-    var totalPages = Math.ceil(total / pageSize);
-    if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
-    var start = (currentPage - 1) * pageSize;
-    var pageData = sorted.slice(start, start + pageSize);
-
-    // 渲染表格行
-    var tbody = document.getElementById('datasetTableBody');
-    var html = '';
-    for (var i = 0; i < pageData.length; i++) {
-        var ds = pageData[i];
-        var publicTag = ds.isPublic
-            ? '<span class="tag tag-green">公开</span>'
-            : '<span class="tag tag-gray">不公开</span>';
-        html += '<tr>';
-        html += '<td>' + escapeHtml(ds.name) + '</td>';
-        html += '<td>' + escapeHtml(ds.author) + '</td>';
-        html += '<td><span class="tag tag-blue">' + escapeHtml(ds.category) + '</span></td>';
-        html += '<td>' + ds.updateTime + '</td>';
-        html += '<td>' + publicTag + '</td>';
-        html += '<td>';
-        html += '<button class="btn-action btn-detail" onclick="openDetail(' + ds.id + ')">查看详情</button>';
-        if (!ds.isPublic) {
-            html += '<button class="btn-action btn-apply" onclick="openApply(' + ds.id + ')">申请</button>';
-        }
-        html += '</td>';
-        html += '</tr>';
-    }
-    tbody.innerHTML = html;
-
-    // 渲染分页
-    var pagDiv = document.getElementById('pagination');
-    var pagHtml = '';
-    if (totalPages > 1) {
-        pagHtml += '<button' + (currentPage === 1 ? ' disabled' : '') + ' onclick="goPage(' + (currentPage - 1) + ')">上一页</button>';
-        for (var p = 1; p <= totalPages; p++) {
-            pagHtml += '<button class="' + (p === currentPage ? 'active' : '') + '" onclick="goPage(' + p + ')">' + p + '</button>';
-        }
-        pagHtml += '<button' + (currentPage === totalPages ? ' disabled' : '') + ' onclick="goPage(' + (currentPage + 1) + ')">下一页</button>';
-    }
-    pagDiv.innerHTML = pagHtml;
-}
-
-function goPage(p) {
-    currentPage = p;
-    renderTable();
-    document.getElementById('card-dataset-list').scrollIntoView({behavior:'smooth'});
-}
-
-function escapeHtml(text) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(text));
-    return div.innerHTML;
-}
-
-// ===== 查看详情弹窗 =====
-function openDetail(id) {
-    var ds = findDataset(id);
-    if (!ds) return;
-    document.getElementById('detailModalTitle').textContent = ds.name;
-    var publicText = ds.isPublic ? '公开' : '不公开';
-    var body = document.getElementById('detailModalBody');
-    var html = '';
-    html += '<table class="detail-table">';
-    html += '<tr><td>数据集名称</td><td>' + escapeHtml(ds.name) + '</td></tr>';
-    html += '<tr><td>发布人</td><td>' + escapeHtml(ds.author) + '</td></tr>';
-    html += '<tr><td>分类</td><td>' + escapeHtml(ds.category) + '</td></tr>';
-    html += '<tr><td>更新时间</td><td>' + ds.updateTime + '</td></tr>';
-    html += '<tr><td>公开状态</td><td>' + publicText + '</td></tr>';
-    html += '</table>';
-
-    html += '<div class="section-label">数据集详细描述</div>';
-    html += '<div class="detail-desc">' + escapeHtml(ds.desc) + '</div>';
-
-    if (ds.attachments && ds.attachments.length > 0) {
-        html += '<div class="section-label">附件下载列表</div>';
-        for (var i = 0; i < ds.attachments.length; i++) {
-            var att = ds.attachments[i];
-            html += '<a class="file-download-link" href="' + att.url + '" download>';
-            html += '<span class="dl-icon">📥</span>';
-            html += '<span class="dl-name">' + escapeHtml(att.name) + '</span>';
-            html += '<span class="dl-size">' + escapeHtml(att.size) + '</span>';
-            html += '</a>';
-        }
-    }
-    body.innerHTML = html;
-    openModal('detailModal');
-}
-
-// ===== 申请弹窗 =====
-function openApply(id) {
-    var ds = findDataset(id);
-    if (!ds) return;
-    document.getElementById('applyModalTitle').textContent = '数据使用申请 - ' + ds.name;
-    var content = document.getElementById('applyModalContent');
-    var html = '<form id="applyForm" onsubmit="submitApply(event, ' + ds.id + ')">';
-    html += '<div class="form-group"><label>数据集</label><input type="text" value="' + escapeHtml(ds.name) + '" readonly style="background:#f5f7fa;"></div>';
-    html += '<div class="form-row">';
-    html += '<div class="form-group"><label>姓名 <span class="required">*</span></label><input type="text" id="applyName" required placeholder="请输入您的姓名"></div>';
-    html += '<div class="form-group"><label>联系方式 <span class="required">*</span></label><input type="text" id="applyContact" required placeholder="请输入邮箱或手机号"></div>';
-    html += '</div>';
-    html += '<div class="form-group"><label>申请原因 <span class="required">*</span></label><textarea id="applyReason" rows="4" required placeholder="请简要说明申请该数据集的目的和用途..."></textarea></div>';
-    html += '<div style="margin-top:16px;padding:14px 16px;background:var(--gray-50);border-radius:8px;">';
-    html += '<div class="checkbox-group"><input type="checkbox" id="applyAgree1" required><label for="applyAgree1">我已阅读并同意《数据集使用协议》 <span class="required" style="color:var(--danger);">*</span></label></div>';
-    html += '<div class="checkbox-group"><input type="checkbox" id="applyAgree2" required><label for="applyAgree2">我已阅读并同意《数据安全保密承诺书》 <span class="required" style="color:var(--danger);">*</span></label></div>';
-    html += '</div>';
-    html += '<div class="modal-footer" style="padding:16px 0 0;border-top:none;">';
-    html += '<button type="button" class="btn btn-outline" onclick="closeModal(\'applyModal\')">取消</button>';
-    html += '<button type="submit" class="btn btn-primary">提交申请</button>';
-    html += '</div>';
-    html += '</form>';
-    content.innerHTML = html;
-    openModal('applyModal');
-}
-
-function submitApply(event, id) {
-    event.preventDefault();
-    var ds = findDataset(id);
-    closeModal('applyModal');
-    showSuccess('申请已提交', '您对"' + ds.name + '"的使用申请已成功提交，请等待管理员审核。');
-}
-
-// ===== 添加数据集 =====
 var dataUploadFiles = [];
 var docUploadFiles = [];
 
-function openAddModal() {
-    document.getElementById('addDatasetForm').reset();
-    document.getElementById('dataFileList').innerHTML = '';
-    document.getElementById('docFileList').innerHTML = '';
-    dataUploadFiles = [];
-    docUploadFiles = [];
-    openModal('addModal');
-}
+var allDatasets = [
+  {id:1,name:'DR筛查数据集',author:'张教授',org:'深圳市眼科医院',category:'影像数据',updateTime:'2026-07-01 10:30',isPublic:true,status:'已发布',desc:'5000例糖尿病视网膜病变眼底彩照及专家标注，已完成患者身份脱敏，可用于教学、模型训练与筛查算法验证。',attachments:[{name:'dr_screening_images.zip',size:'2.3 GB',url:'data/dr_screening_images.zip'},{name:'dr_annotations.json',size:'156 MB',url:'data/dr_annotations.json'}]},
+  {id:2,name:'青光眼OCT随访数据集',author:'张教授',org:'深圳市眼科医院',category:'影像数据',updateTime:'2026-06-28 16:20',isPublic:false,status:'已发布',desc:'3200例青光眼患者OCT随访数据，包含RNFL厚度、GCL+IPL厚度、视野MD值等字段。因包含纵向随访信息，需申请后使用。',attachments:[{name:'glaucoma_oct_followup.zip',size:'8.5 GB',url:'data/glaucoma_oct_followup.zip'},{name:'glaucoma_metadata.csv',size:'32 MB',url:'data/glaucoma_metadata.csv'}]},
+  {id:3,name:'AMD多模态数据集',author:'王强',org:'上海眼病防治中心',category:'影像数据',updateTime:'2026-06-25 09:40',isPublic:true,status:'已发布',desc:'2100例AMD患者多模态影像，包含眼底彩照、OCT、OCTA及荧光血管造影图像。',attachments:[{name:'amd_multimodal.zip',size:'12.1 GB',url:'data/amd_multimodal.zip'}]},
+  {id:4,name:'儿童眼底筛查数据集',author:'陈敏',org:'华西医院',category:'临床数据',updateTime:'2026-06-20 11:00',isPublic:true,status:'已发布',desc:'8000例0-6岁儿童眼底筛查数据，涵盖早产儿视网膜病变、先天性白内障等常见儿童眼病。',attachments:[{name:'pediatric_screening.zip',size:'6.8 GB',url:'data/pediatric_screening.zip'}]},
+  {id:5,name:'高血压视网膜病变数据集',author:'刘洋医师',org:'解放军总医院',category:'临床数据',updateTime:'2026-06-12 08:30',isPublic:false,status:'已发布',desc:'由主治医师刘洋发布的4500例高血压患者眼底彩照及临床指标数据，用于高血压视网膜病变与全身指标相关性研究。非公开数据需向发布者申请。',attachments:[{name:'hypertensive_retinopathy.zip',size:'4.2 GB',url:'data/hypertensive_retinopathy.zip'}]},
+  {id:6,name:'糖尿病基因关联数据集',author:'赵静',org:'中山大学公共卫生学院',category:'基因数据',updateTime:'2026-06-18 13:20',isPublic:true,status:'已发布',desc:'2000例2型糖尿病患者GWAS数据，涵盖SNP位点与表型数据。',attachments:[{name:'diabetes_gwas_vcf.zip',size:'15.3 GB',url:'data/diabetes_gwas_vcf.zip'}]},
+  {id:7,name:'肺部CT结节标注数据集',author:'周磊',org:'北京协和医院',category:'影像数据',updateTime:'2026-06-22 17:00',isPublic:true,status:'已发布',desc:'1280例胸部CT影像肺结节标注数据集，包含结节轮廓和良恶性判别。',attachments:[{name:'lung_nodule_ct.zip',size:'22.6 GB',url:'data/lung_nodule_ct.zip'}]},
+  {id:8,name:'肿瘤基因表达数据集',author:'孙悦',org:'复旦大学附属肿瘤医院',category:'基因数据',updateTime:'2026-06-25 10:45',isPublic:false,status:'已发布',desc:'常见肿瘤RNA-seq表达谱数据及临床预后信息。非公开数据，需说明科研用途并经发布者审核。',attachments:[{name:'tumor_rnaseq.tar.gz',size:'45.8 GB',url:'data/tumor_rnaseq.tar.gz'}]}
+];
 
-function handleFileSelect(input, listId) {
-    var files = input.files;
-    if (listId === 'dataFileList') {
-        dataUploadFiles = dataUploadFiles.concat(Array.from(files));
-        renderFileList(dataUploadFiles, 'dataFileList', 'dataUploadFiles');
-    } else {
-        docUploadFiles = docUploadFiles.concat(Array.from(files));
-        renderFileList(docUploadFiles, 'docFileList', 'docUploadFiles');
-    }
-    input.value = '';
-}
+var applications = [
+  {id:101,datasetId:2,applicant:'李明华',contact:'limh@hospital.cn',org:'北京大学医学部',purpose:'青光眼进展预测模型验证，需要OCT纵向随访字段。',status:'待审核',submitTime:'2026-07-08 10:20',reviewOpinion:''},
+  {id:102,datasetId:2,applicant:'王雪',contact:'wangx@research.cn',org:'南方医科大学',purpose:'研究RNFL厚度与视野缺损的关联。',status:'已通过',submitTime:'2026-07-05 15:30',reviewOpinion:'同意用于课题范围内分析，下载后不得二次分发。'},
+  {id:103,datasetId:5,applicant:'张教授',contact:'zhang@eye.org',org:'深圳市眼科医院',purpose:'开展高血压眼底改变和慢病风险模型对照研究。',status:'已驳回',submitTime:'2026-07-06 09:10',reviewOpinion:'请补充伦理批件编号和数据使用周期。'},
+  {id:104,datasetId:8,applicant:'张教授',contact:'zhang@eye.org',org:'深圳市眼科医院',purpose:'与眼病慢病基因风险模型进行外部对照。',status:'待审核',submitTime:'2026-07-09 09:42',reviewOpinion:''}
+];
 
-function renderFileList(files, listId, varName) {
-    var container = document.getElementById(listId);
-    var html = '';
-    for (var i = 0; i < files.length; i++) {
-        var f = files[i];
-        var sizeStr = formatFileSize(f.size);
-        html += '<div class="upload-file-item">';
-        html += '<div class="file-info"><span class="file-name">' + escapeHtml(f.name) + '</span><span class="file-size">' + sizeStr + '</span></div>';
-        html += '<button class="file-remove" onclick="removeUploadFile(' + i + ', \'' + varName + '\', \'' + listId + '\')">x</button>';
-        html += '</div>';
-    }
-    container.innerHTML = html;
-}
-
-function removeUploadFile(index, varName, listId) {
-    if (varName === 'dataUploadFiles') {
-        dataUploadFiles.splice(index, 1);
-        renderFileList(dataUploadFiles, listId, varName);
-    } else {
-        docUploadFiles.splice(index, 1);
-        renderFileList(docUploadFiles, listId, varName);
-    }
-}
-
-function formatFileSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-    if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
-    return (bytes / 1073741824).toFixed(1) + ' GB';
-}
-
-function submitAddDataset(event) {
-    event.preventDefault();
-    var name = document.getElementById('addName').value.trim();
-    var category = document.getElementById('addCategory').value;
-    var publicRadio = document.querySelector('input[name="addPublic"]:checked');
-    var isPublic = publicRadio ? publicRadio.value === '公开' : true;
-    var desc = document.getElementById('addDesc').value.trim();
-
-    // 生成新ID
-    var newId = 1;
-    for (var i = 0; i < allDatasets.length; i++) {
-        if (allDatasets[i].id >= newId) newId = allDatasets[i].id + 1;
-    }
-
-    // 生成更新时间
-    var now = new Date();
-    var updateTime = now.getFullYear() + '-' +
-        String(now.getMonth() + 1).padStart(2, '0') + '-' +
-        String(now.getDate()).padStart(2, '0') + ' ' +
-        String(now.getHours()).padStart(2, '0') + ':' +
-        String(now.getMinutes()).padStart(2, '0');
-
-    // 构建附件列表
-    var attachments = [];
-    for (var j = 0; j < dataUploadFiles.length; j++) {
-        attachments.push({
-            name: dataUploadFiles[j].name,
-            size: formatFileSize(dataUploadFiles[j].size),
-            url: 'data/' + dataUploadFiles[j].name
-        });
-    }
-    for (var k = 0; k < docUploadFiles.length; k++) {
-        attachments.push({
-            name: docUploadFiles[k].name,
-            size: formatFileSize(docUploadFiles[k].size),
-            url: 'data/' + docUploadFiles[k].name
-        });
-    }
-
-    var newDs = {
-        id: newId,
-        name: name,
-        author: '管理员', // 默认当前用户为发布人
-        category: category,
-        updateTime: updateTime,
-        isPublic: isPublic,
-        desc: desc || '暂无描述',
-        attachments: attachments
-    };
-
-    allDatasets.unshift(newDs);
-    closeModal('addModal');
-    showSuccess('添加成功', '数据集"' + name + '"已成功添加。');
-    renderTable();
-}
-
-function findDataset(id) {
-    for (var i = 0; i < allDatasets.length; i++) {
-        if (allDatasets[i].id === id) return allDatasets[i];
-    }
-    return null;
-}
-
-// ===== 弹窗控制 =====
-function navigateTo(url) { window.location.href = url; }
-function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
-function openModal(id) { var el = document.getElementById(id); if(el) el.style.display = 'flex'; }
-function closeModal(id) { var el = document.getElementById(id); if(el) el.style.display = 'none'; }
-function switchTab(group, name) {
-    var btns = document.querySelectorAll('[data-tab-group="' + group + '"]');
-    var contents = document.querySelectorAll('[data-tab-content="' + group + '"]');
-    btns.forEach(function(b) { b.classList.remove('active'); });
-    contents.forEach(function(c) { c.classList.remove('active'); });
-    var btn = document.querySelector('[data-tab-group="' + group + '"][data-tab="' + name + '"]');
-    var content = document.querySelector('[data-tab-content="' + group + '"][data-tab="' + name + '"]');
-    if (btn) btn.classList.add('active');
-    if (content) content.classList.add('active');
-}
-function showSuccess(title, msg) {
-    document.getElementById('successTitle').textContent = title;
-    document.getElementById('successMsg').textContent = msg;
-    document.getElementById('successOverlay').style.display = 'flex';
-}
-function closeSuccess() {
-    document.getElementById('successOverlay').style.display = 'none';
-}
-// 点击遮罩关闭
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal-overlay')) {
-        e.target.style.display = 'none';
-    }
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('headerUserName').textContent = currentUser.name;
+  document.getElementById('roleLabel').textContent = '当前用户：' + currentUser.name + ' / ' + currentUser.role;
+  setupDropUpload();
+  renderAll();
 });
-// 拖拽上传支持
-['dataUploadZone', 'docUploadZone'].forEach(function(zoneId) {
-    var zone = document.getElementById(zoneId);
+
+function renderAll(){
+  updateCounts();
+  if (currentTab === 'review') renderReviewTable();
+  else if (currentTab === 'applications') renderApplicationTable();
+  else if (currentTab === 'audit') renderAuditLog();
+  else renderTable();
+}
+
+function switchMainTab(tab){
+  currentTab = tab;
+  currentPage = 1;
+  document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.toggle('active', btn.dataset.tab === tab); });
+  document.querySelectorAll('.sub-menu-item').forEach(function(item){ item.classList.toggle('active', item.dataset.workspace === tab); });
+  document.getElementById('datasetPanel').style.display = (tab === 'all' || tab === 'mine') ? '' : 'none';
+  document.getElementById('reviewPanel').style.display = tab === 'review' ? '' : 'none';
+  document.getElementById('applicationPanel').style.display = tab === 'applications' ? '' : 'none';
+  document.getElementById('auditPanel').style.display = tab === 'audit' ? '' : 'none';
+  renderAll();
+}
+
+function renderAuditLog(){
+  var body = document.getElementById('auditLogBody');
+  if (!body) return;
+  var html = '';
+  getRelatedApplications().forEach(function(app){
+    var ds = findDataset(app.datasetId);
+    if (!ds) return;
+    html += '<tr><td><div class="dataset-name">' + escapeHtml(ds.name) + '</div><div class="dataset-meta">' + escapeHtml(ds.category) + '</div></td><td>' + escapeHtml(ds.author) + '</td><td>' + escapeHtml(app.applicant) + '</td><td>' + escapeHtml(app.org) + '</td><td>' + renderAppStatus(app.status) + '</td><td>' + app.submitTime + '</td><td>' + escapeHtml(app.reviewOpinion || '-') + '</td></tr>';
+  });
+  body.innerHTML = html || '<tr><td colspan="7"><div class="empty">暂无与你相关的授权申请记录</div></td></tr>';
+}
+
+function updateCounts(){
+  document.getElementById('countAll').textContent = allDatasets.length;
+  document.getElementById('countMine').textContent = allDatasets.filter(isOwner).length;
+  document.getElementById('countReview').textContent = applications.filter(function(app){ var ds = findDataset(app.datasetId); return ds && isOwner(ds) && app.status === '待审核'; }).length;
+  document.getElementById('countApplications').textContent = applications.filter(function(app){ return app.applicant === currentUser.name; }).length;
+  document.getElementById('countAudit').textContent = getRelatedApplications().length;
+}
+
+function getRelatedApplications(){
+  return applications.filter(function(app){
+    var ds = findDataset(app.datasetId);
+    return ds && (isOwner(ds) || app.applicant === currentUser.name);
+  });
+}
+
+function getFilteredDatasets(){
+  var keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+  var category = document.getElementById('categoryFilter').value;
+  var access = document.getElementById('accessFilter').value;
+  return allDatasets.filter(function(ds){
+    if (currentTab === 'mine' && !isOwner(ds)) return false;
+    if (keyword && (ds.name + ds.author + ds.category + ds.org).toLowerCase().indexOf(keyword) === -1) return false;
+    if (category && ds.category !== category) return false;
+    if (access === 'public' && !ds.isPublic) return false;
+    if (access === 'private' && ds.isPublic) return false;
+    return true;
+  });
+}
+
+function getSortedDatasets(list){
+  return list.slice().sort(function(a,b){
+    var tA = new Date(a.updateTime).getTime();
+    var tB = new Date(b.updateTime).getTime();
+    return currentSortOrder === 'desc' ? tB - tA : tA - tB;
+  });
+}
+
+function renderTable(){
+  var sorted = getSortedDatasets(getFilteredDatasets());
+  document.getElementById('matchCount').innerHTML = '当前显示 <strong>' + sorted.length + '</strong> 条';
+  var totalPages = Math.ceil(sorted.length / pageSize) || 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+  var pageData = sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  var html = '';
+  pageData.forEach(function(ds){
+    var relation = getRelation(ds);
+    html += '<tr>';
+    html += '<td><div class="dataset-name">' + escapeHtml(ds.name) + '</div><div class="dataset-meta">' + escapeHtml(ds.org) + ' · ' + escapeHtml(ds.status) + '</div></td>';
+    html += '<td>' + escapeHtml(ds.author) + '</td>';
+    html += '<td><span class="tag tag-blue">' + escapeHtml(ds.category) + '</span></td>';
+    html += '<td>' + ds.updateTime + '</td>';
+    html += '<td>' + (ds.isPublic ? '<span class="tag tag-green">公开</span>' : '<span class="tag tag-gray">不公开</span>') + '</td>';
+    html += '<td>' + renderRelationTag(relation) + '</td>';
+    html += '<td><div class="action-cell">' + renderDatasetActions(ds, relation) + '</div></td>';
+    html += '</tr>';
+  });
+  document.getElementById('datasetTableBody').innerHTML = html || '<tr><td colspan="7"><div class="empty">暂无符合条件的数据集</div></td></tr>';
+  renderPagination(totalPages);
+}
+
+function renderDatasetActions(ds, relation){
+  var html = '<button class="btn btn-outline btn-sm" onclick="openDetail(' + ds.id + ')">查看详情</button>';
+  if (isOwner(ds)) {
+    var pending = applications.filter(function(app){ return app.datasetId === ds.id && app.status === '待审核'; }).length;
+    html += '<button class="btn btn-outline btn-sm" onclick="openDatasetModal(' + ds.id + ')">修改</button>';
+    html += '<button class="btn btn-danger btn-sm" onclick="deleteDataset(' + ds.id + ')">删除</button>';
+    if (!ds.isPublic) html += '<button class="btn btn-warning btn-sm" onclick="switchMainTab(\'review\')">审核' + (pending ? '(' + pending + ')' : '') + '</button>';
+    return html;
+  }
+  if (ds.isPublic || relation === 'approved') {
+    html += '<button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载</button>';
+  } else if (relation === 'none') {
+    html += '<button class="btn btn-primary btn-sm" onclick="openApply(' + ds.id + ')">申请</button>';
+  } else if (relation === 'pending') {
+    html += '<button class="btn btn-outline btn-sm" onclick="withdrawApplication(' + ds.id + ')">撤回申请</button>';
+  } else if (relation === 'rejected') {
+    html += '<button class="btn btn-primary btn-sm" onclick="openApply(' + ds.id + ')">重新申请</button>';
+  }
+  return html;
+}
+
+function renderRelationTag(relation){
+  var map = {
+    owner:'<span class="tag tag-purple">我发布的</span>',
+    public:'<span class="tag tag-green">可直接使用</span>',
+    approved:'<span class="tag tag-green">已获授权</span>',
+    pending:'<span class="tag tag-orange">申请待审核</span>',
+    rejected:'<span class="tag tag-red">申请被驳回</span>',
+    none:'<span class="tag tag-gray">需申请</span>'
+  };
+  return map[relation] || map.none;
+}
+
+function renderPagination(totalPages){
+  var pagHtml = '';
+  if (totalPages > 1) {
+    pagHtml += '<button' + (currentPage === 1 ? ' disabled' : '') + ' onclick="goPage(' + (currentPage - 1) + ')">上一页</button>';
+    for (var p = 1; p <= totalPages; p++) pagHtml += '<button class="' + (p === currentPage ? 'active' : '') + '" onclick="goPage(' + p + ')">' + p + '</button>';
+    pagHtml += '<button' + (currentPage === totalPages ? ' disabled' : '') + ' onclick="goPage(' + (currentPage + 1) + ')">下一页</button>';
+  }
+  document.getElementById('pagination').innerHTML = pagHtml;
+}
+
+function renderReviewTable(){
+  var rows = applications.filter(function(app){ var ds = findDataset(app.datasetId); return ds && isOwner(ds) && app.status === '待审核'; });
+  var html = '';
+  rows.forEach(function(app){
+    var ds = findDataset(app.datasetId);
+    html += '<tr><td><div class="dataset-name">' + escapeHtml(ds.name) + '</div><div class="dataset-meta">' + escapeHtml(ds.category) + '</div></td><td>' + escapeHtml(app.applicant) + '</td><td>' + escapeHtml(app.org) + '</td><td>' + escapeHtml(app.purpose) + '</td><td>' + app.submitTime + '</td><td>' + renderAppStatus(app.status) + '</td><td><div class="action-cell">';
+    html += '<button class="btn btn-outline btn-sm" onclick="openReview(' + app.id + ')">查看</button>';
+    if (app.status === '待审核') html += '<button class="btn btn-success btn-sm" onclick="approveApplication(' + app.id + ')">通过</button><button class="btn btn-danger btn-sm" onclick="openReview(' + app.id + ', true)">驳回</button>';
+    html += '</div></td></tr>';
+  });
+  document.getElementById('reviewTableBody').innerHTML = html || '<tr><td colspan="7"><div class="empty">暂无需要你审核的申请</div></td></tr>';
+}
+
+function renderApplicationTable(){
+  var rows = applications.filter(function(app){ return app.applicant === currentUser.name; });
+  var html = '';
+  rows.forEach(function(app){
+    var ds = findDataset(app.datasetId);
+    if (!ds) return;
+    html += '<tr><td><div class="dataset-name">' + escapeHtml(ds.name) + '</div><div class="dataset-meta">' + escapeHtml(ds.category) + '</div></td><td>' + escapeHtml(ds.author) + '</td><td>' + escapeHtml(app.purpose) + '</td><td>' + app.submitTime + '</td><td>' + renderAppStatus(app.status) + '</td><td>' + escapeHtml(app.reviewOpinion || '-') + '</td><td><div class="action-cell">';
+    html += '<button class="btn btn-outline btn-sm" onclick="openDetail(' + ds.id + ')">查看数据集</button>';
+    if (app.status === '已通过') html += '<button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载</button>';
+    if (app.status === '已驳回') html += '<button class="btn btn-primary btn-sm" onclick="openApply(' + ds.id + ')">重新申请</button>';
+    if (app.status === '待审核') html += '<button class="btn btn-outline btn-sm" onclick="withdrawApplication(' + ds.id + ')">撤回</button>';
+    html += '</div></td></tr>';
+  });
+  document.getElementById('applicationTableBody').innerHTML = html || '<tr><td colspan="7"><div class="empty">你还没有提交过非公开数据申请</div></td></tr>';
+}
+
+function openDetail(id){
+  var ds = findDataset(id);
+  if (!ds) return;
+  var relation = getRelation(ds);
+  var canUse = ds.isPublic || isOwner(ds) || relation === 'approved';
+  document.getElementById('detailModalTitle').textContent = ds.name;
+  var html = '<table class="detail-table">';
+  html += '<tr><td>数据集名称</td><td>' + escapeHtml(ds.name) + '</td></tr><tr><td>发布人</td><td>' + escapeHtml(ds.author) + '（' + escapeHtml(ds.org) + '）</td></tr><tr><td>分类</td><td>' + escapeHtml(ds.category) + '</td></tr><tr><td>更新时间</td><td>' + ds.updateTime + '</td></tr><tr><td>开放方式</td><td>' + (ds.isPublic ? '公开' : '不公开，需申请') + '</td></tr><tr><td>我的权限</td><td>' + stripTags(renderRelationTag(relation)) + '</td></tr></table>';
+  html += '<div class="section-label">数据集描述</div><div class="detail-desc">' + escapeHtml(ds.desc) + '</div>';
+  html += '<div class="section-label">附件列表</div>';
+  ds.attachments.forEach(function(att){
+    if (canUse) html += '<a class="file-download-link" href="' + att.url + '" download><span>下载</span><span style="flex:1">' + escapeHtml(att.name) + '</span><span>' + escapeHtml(att.size) + '</span></a>';
+    else html += '<div class="file-download-link locked"><span>锁定</span><span style="flex:1">' + escapeHtml(att.name) + '</span><span>申请通过后可下载</span></div>';
+  });
+  document.getElementById('detailModalBody').innerHTML = html;
+  var footer = '<button class="btn btn-outline" onclick="closeModal(\'detailModal\')">关闭</button>';
+  if (!isOwner(ds) && !ds.isPublic && relation !== 'approved' && relation !== 'pending') footer += '<button class="btn btn-primary" onclick="closeModal(\'detailModal\');openApply(' + ds.id + ')">申请使用</button>';
+  if (canUse) footer += '<button class="btn btn-success" onclick="downloadDataset(' + ds.id + ')">下载附件</button>';
+  document.getElementById('detailModalFooter').innerHTML = footer;
+  openModal('detailModal');
+}
+
+function openApply(id){
+  var ds = findDataset(id);
+  if (!ds) return;
+  if (isOwner(ds)) {
+    showSuccess('无需申请','你是该数据集发布者，可直接在“我的发布”中查看、修改或删除。');
+    switchMainTab('mine');
+    return;
+  }
+  if (ds.isPublic) {
+    showSuccess('无需申请','该数据集为公开数据，可直接查看详情并下载附件。');
+    return;
+  }
+  var old = getMyApplication(ds.id);
+  if (old && old.status === '已通过') {
+    showSuccess('已获授权','该数据集已通过发布者审核，可直接查看详情并下载附件。');
+    return;
+  }
+  if (old && old.status === '待审核') {
+    showSuccess('申请待审核','你的申请已提交给数据发布者，审核完成后会同步到“我的申请”。');
+    return;
+  }
+  document.getElementById('applyModalTitle').textContent = (old && old.status === '已驳回' ? '重新申请 - ' : '数据使用申请 - ') + ds.name;
+  var html = '<form onsubmit="submitApply(event,' + ds.id + ')"><div class="form-group"><label>申请数据集</label><input value="' + escapeHtml(ds.name) + '" readonly style="background:#f5f7fa"></div><div class="form-row"><div class="form-group"><label>姓名 <span class="required">*</span></label><input id="applyName" required value="' + escapeHtml(currentUser.name) + '"></div><div class="form-group"><label>联系方式 <span class="required">*</span></label><input id="applyContact" required placeholder="请输入邮箱或手机号" value="' + (old ? escapeHtml(old.contact) : '') + '"></div></div><div class="form-group"><label>所属机构 <span class="required">*</span></label><input id="applyOrg" required value="' + escapeHtml(currentUser.org) + '"></div><div class="form-group"><label>申请用途 <span class="required">*</span></label><textarea id="applyPurpose" required placeholder="说明课题名称、使用范围、使用周期、是否二次共享等...">' + (old ? escapeHtml(old.purpose) : '') + '</textarea></div>';
+  if (old && old.status === '已驳回') html += '<div class="form-group"><label>原审核意见</label><div class="detail-desc">' + escapeHtml(old.reviewOpinion) + '</div></div>';
+  html += '<div class="form-group"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" required style="width:auto;margin-top:3px"> 我承诺仅在申请用途范围内使用数据，不进行二次分发或反向识别 <span class="required">*</span></label></div><div class="modal-footer" style="padding:14px 0 0;border-top:none"><button type="button" class="btn btn-outline" onclick="closeModal(\'applyModal\')">取消</button><button type="submit" class="btn btn-primary">提交申请</button></div></form>';
+  document.getElementById('applyModalBody').innerHTML = html;
+  openModal('applyModal');
+}
+
+function submitApply(event,id){
+  event.preventDefault();
+  var ds = findDataset(id);
+  if (!ds) return;
+  if (isOwner(ds) || ds.isPublic) {
+    closeModal('applyModal');
+    showSuccess('无需申请', isOwner(ds) ? '你是该数据集发布者，可直接维护和使用。' : '该数据集为公开数据，可直接查看和下载。');
+    renderAll();
+    return;
+  }
+  var old = getMyApplication(id);
+  if (old && old.status === '已通过') {
+    closeModal('applyModal');
+    showSuccess('已获授权','该数据集已通过发布者审核，可直接查看详情并下载附件。');
+    renderAll();
+    return;
+  }
+  if (old && old.status === '待审核') {
+    closeModal('applyModal');
+    showSuccess('申请待审核','你的申请已提交给数据发布者，请等待审核结果。');
+    renderAll();
+    return;
+  }
+  if (old) {
+    old.contact = document.getElementById('applyContact').value.trim();
+    old.org = document.getElementById('applyOrg').value.trim();
+    old.purpose = document.getElementById('applyPurpose').value.trim();
+    old.status = '待审核';
+    old.submitTime = nowText();
+    old.reviewOpinion = '';
+  } else {
+    applications.unshift({id:nextApplicationId(),datasetId:id,applicant:currentUser.name,contact:document.getElementById('applyContact').value.trim(),org:document.getElementById('applyOrg').value.trim(),purpose:document.getElementById('applyPurpose').value.trim(),status:'待审核',submitTime:nowText(),reviewOpinion:''});
+  }
+  closeModal('applyModal');
+  showSuccess('申请已提交','申请已发送给数据发布者审核。审核通过后，你可以在“我的申请”中下载该数据集。');
+  renderAll();
+}
+
+function openDatasetModal(id){
+  dataUploadFiles = [];
+  docUploadFiles = [];
+  document.getElementById('datasetForm').reset();
+  document.getElementById('dataFileList').innerHTML = '';
+  document.getElementById('docFileList').innerHTML = '';
+  document.getElementById('editDatasetId').value = id || '';
+  document.getElementById('datasetModalTitle').textContent = id ? '修改数据集' : '发布数据集';
+  if (id) {
+    var ds = findDataset(id);
+    if (!ds || !isOwner(ds)) return;
+    document.getElementById('datasetName').value = ds.name;
+    document.getElementById('datasetCategory').value = ds.category;
+    document.getElementById('datasetDesc').value = ds.desc;
+    document.getElementById('datasetStatus').value = ds.status;
+    document.querySelector('input[name="datasetPublic"][value="' + (ds.isPublic ? 'public' : 'private') + '"]').checked = true;
+    document.getElementById('datasetAgree').checked = true;
+    renderExistingFiles(ds.attachments);
+  }
+  openModal('datasetModal');
+}
+
+function submitDataset(event){
+  event.preventDefault();
+  var id = parseInt(document.getElementById('editDatasetId').value,10);
+  var name = document.getElementById('datasetName').value.trim();
+  var category = document.getElementById('datasetCategory').value;
+  var isPublic = document.querySelector('input[name="datasetPublic"]:checked').value === 'public';
+  var desc = document.getElementById('datasetDesc').value.trim();
+  var attachments = buildAttachments();
+  if (!id && !attachments.length) {
+    alert('请至少上传一个数据集文件或说明文档');
+    return;
+  }
+  if (id) {
+    var ds = findDataset(id);
+    if (!ds || !isOwner(ds)) return;
+    ds.name = name; ds.category = category; ds.isPublic = isPublic; ds.desc = desc; ds.status = document.getElementById('datasetStatus').value; ds.updateTime = nowText();
+    if (attachments.length) ds.attachments = ds.attachments.concat(attachments);
+    showSuccess('修改成功','数据集已更新，列表中的更新时间已同步刷新。');
+  } else {
+    allDatasets.unshift({id:nextDatasetId(),name:name,author:currentUser.name,org:currentUser.org,category:category,updateTime:nowText(),isPublic:isPublic,status:document.getElementById('datasetStatus').value,desc:desc,attachments:attachments});
+    showSuccess('发布成功', isPublic ? '公开数据集已发布，所有用户可查看并下载。' : '非公开数据集已发布，其他用户需提交申请并由你审核。');
+  }
+  closeModal('datasetModal');
+  switchMainTab('mine');
+}
+
+function deleteDataset(id){
+  var ds = findDataset(id);
+  if (!ds || !isOwner(ds)) return;
+  if (!confirm('确定删除数据集“' + ds.name + '”吗？相关申请记录也会移除。')) return;
+  allDatasets = allDatasets.filter(function(item){ return item.id !== id; });
+  applications = applications.filter(function(app){ return app.datasetId !== id; });
+  showSuccess('删除成功','数据集已从列表中移除。');
+  renderAll();
+}
+
+function openReview(appId, rejectMode){
+  var app = findApplication(appId);
+  var ds = app ? findDataset(app.datasetId) : null;
+  if (!app || !ds || !isOwner(ds)) return;
+  document.getElementById('reviewModalTitle').textContent = (rejectMode ? '驳回申请 - ' : '审核申请 - ') + ds.name;
+  var html = '<table class="detail-table"><tr><td>数据集</td><td>' + escapeHtml(ds.name) + '</td></tr><tr><td>申请人</td><td>' + escapeHtml(app.applicant) + '</td></tr><tr><td>所属机构</td><td>' + escapeHtml(app.org) + '</td></tr><tr><td>联系方式</td><td>' + escapeHtml(app.contact) + '</td></tr><tr><td>提交时间</td><td>' + app.submitTime + '</td></tr><tr><td>状态</td><td>' + stripTags(renderAppStatus(app.status)) + '</td></tr></table><div class="section-label">申请用途</div><div class="detail-desc">' + escapeHtml(app.purpose) + '</div>';
+  if (app.status !== '待审核') html += '<div class="section-label">审核意见</div><div class="detail-desc">' + escapeHtml(app.reviewOpinion || '-') + '</div>';
+  if (app.status === '待审核') {
+    html += '<div class="form-group"><label>' + (rejectMode ? '驳回原因' : '审核意见') + '</label><textarea id="reviewOpinion" placeholder="' + (rejectMode ? '请说明驳回原因，便于申请人补充材料后重新提交' : '可填写数据使用边界、下载注意事项等') + '"></textarea></div><div class="modal-footer" style="padding:14px 0 0;border-top:none"><button type="button" class="btn btn-outline" onclick="closeModal(\'reviewModal\')">取消</button>';
+    html += rejectMode ? '<button type="button" class="btn btn-danger" onclick="rejectApplication(' + app.id + ')">确认驳回</button>' : '<button type="button" class="btn btn-success" onclick="approveApplication(' + app.id + ')">通过申请</button><button type="button" class="btn btn-danger" onclick="openReview(' + app.id + ', true)">驳回</button>';
+    html += '</div>';
+  } else {
+    html += '<div class="modal-footer" style="padding:14px 0 0;border-top:none"><button type="button" class="btn btn-outline" onclick="closeModal(\'reviewModal\')">关闭</button></div>';
+  }
+  document.getElementById('reviewModalBody').innerHTML = html;
+  openModal('reviewModal');
+}
+
+function approveApplication(appId){
+  var app = findApplication(appId);
+  var ds = app ? findDataset(app.datasetId) : null;
+  if (!app || !ds || !isOwner(ds) || app.status !== '待审核') return;
+  var opinionEl = document.getElementById('reviewOpinion');
+  app.status = '已通过';
+  app.reviewOpinion = opinionEl && opinionEl.value.trim() ? opinionEl.value.trim() : '审核通过，请在授权范围内使用，不得二次分发。';
+  closeModal('reviewModal');
+  showSuccess('已通过申请','申请人现在可以查看并下载该非公开数据集。');
+  renderAll();
+}
+
+function rejectApplication(appId){
+  var app = findApplication(appId);
+  var ds = app ? findDataset(app.datasetId) : null;
+  if (!app || !ds || !isOwner(ds) || app.status !== '待审核') return;
+  var reason = document.getElementById('reviewOpinion').value.trim();
+  if (!reason) { alert('请填写驳回原因'); return; }
+  app.status = '已驳回';
+  app.reviewOpinion = reason;
+  closeModal('reviewModal');
+  showSuccess('已驳回申请','申请人可在“我的申请”中查看原因并重新申请。');
+  renderAll();
+}
+
+function withdrawApplication(datasetId){
+  var app = getMyApplication(datasetId);
+  if (!app || app.status !== '待审核') return;
+  if (!confirm('确定撤回该申请吗？')) return;
+  applications = applications.filter(function(item){ return item.id !== app.id; });
+  showSuccess('申请已撤回','你可以后续重新提交申请。');
+  renderAll();
+}
+
+function downloadDataset(id){
+  var ds = findDataset(id);
+  if (!ds) return;
+  if (!canUseDataset(ds)) {
+    showSuccess('暂无下载权限','非公开数据集需提交申请并经发布者审核通过后才能下载。');
+    return;
+  }
+  showSuccess('开始下载','已校验权限，正在准备“' + ds.name + '”的数据包。');
+}
+
+function filterDatasets(){ currentPage = 1; renderTable(); }
+function toggleSort(){ currentSortOrder = currentSortOrder === 'desc' ? 'asc' : 'desc'; document.getElementById('btnSort').textContent = currentSortOrder === 'desc' ? '最新更新 ↓' : '最新更新 ↑'; renderTable(); }
+function goPage(p){ currentPage = p; renderTable(); document.getElementById('card-dataset-list').scrollIntoView({behavior:'smooth'}); }
+
+function getRelation(ds){
+  if (isOwner(ds)) return 'owner';
+  if (ds.isPublic) return 'public';
+  var app = getMyApplication(ds.id);
+  if (!app) return 'none';
+  if (app.status === '已通过') return 'approved';
+  if (app.status === '待审核') return 'pending';
+  if (app.status === '已驳回') return 'rejected';
+  return 'none';
+}
+function canUseDataset(ds){ return isOwner(ds) || ds.isPublic || getRelation(ds) === 'approved'; }
+function isOwner(ds){ return ds.author === currentUser.name; }
+function getMyApplication(datasetId){ return applications.find(function(app){ return app.datasetId === datasetId && app.applicant === currentUser.name; }); }
+function findDataset(id){ return allDatasets.find(function(ds){ return ds.id === id; }); }
+function findApplication(id){ return applications.find(function(app){ return app.id === id; }); }
+function renderAppStatus(status){ var cls = status === '已通过' ? 'tag-green' : (status === '已驳回' ? 'tag-red' : 'tag-orange'); return '<span class="tag ' + cls + '">' + status + '</span>'; }
+function nextDatasetId(){ return allDatasets.reduce(function(max,ds){ return Math.max(max,ds.id); },0) + 1; }
+function nextApplicationId(){ return applications.reduce(function(max,app){ return Math.max(max,app.id); },100) + 1; }
+function nowText(){ var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function escapeHtml(text){ var div = document.createElement('div'); div.appendChild(document.createTextNode(text == null ? '' : String(text))); return div.innerHTML; }
+function stripTags(html){ return html.replace(/<[^>]+>/g,''); }
+
+function handleFileSelect(input,type){
+  var files = Array.from(input.files || []);
+  if (type === 'data') dataUploadFiles = dataUploadFiles.concat(files);
+  else docUploadFiles = docUploadFiles.concat(files);
+  renderUploadFiles();
+  input.value = '';
+}
+function renderUploadFiles(){
+  renderFileList(dataUploadFiles,'dataFileList','data');
+  renderFileList(docUploadFiles,'docFileList','doc');
+}
+function renderFileList(files,listId,type){
+  var html = '';
+  files.forEach(function(file,index){
+    html += '<div class="upload-file-item"><span>' + escapeHtml(file.name) + ' · ' + formatFileSize(file.size) + '</span><button type="button" class="file-remove" onclick="removeUploadFile(\'' + type + '\',' + index + ')">删除</button></div>';
+  });
+  document.getElementById(listId).innerHTML = html;
+}
+function removeUploadFile(type,index){ if (type === 'data') dataUploadFiles.splice(index,1); else docUploadFiles.splice(index,1); renderUploadFiles(); }
+function buildAttachments(){
+  var files = dataUploadFiles.concat(docUploadFiles);
+  return files.map(function(file){ return {name:file.name,size:formatFileSize(file.size),url:'data/' + file.name}; });
+}
+function renderExistingFiles(files){
+  document.getElementById('dataFileList').innerHTML = files.map(function(file){ return '<div class="upload-file-item"><span>' + escapeHtml(file.name) + ' · ' + escapeHtml(file.size) + '</span><span class="tag tag-gray">已上传</span></div>'; }).join('');
+}
+function formatFileSize(bytes){ if (!bytes && bytes !== 0) return '未知大小'; if (bytes < 1024) return bytes + ' B'; if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB'; if (bytes < 1073741824) return (bytes/1048576).toFixed(1) + ' MB'; return (bytes/1073741824).toFixed(1) + ' GB'; }
+function setupDropUpload(){
+  [{id:'dataUploadZone',type:'data'},{id:'docUploadZone',type:'doc'}].forEach(function(item){
+    var zone = document.getElementById(item.id);
     if (!zone) return;
-    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.style.borderColor = 'var(--primary)'; zone.style.background = 'var(--primary-light)'; });
-    zone.addEventListener('dragleave', function(e) { e.preventDefault(); zone.style.borderColor = 'var(--gray-300)'; zone.style.background = 'var(--gray-50)'; });
-    zone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        zone.style.borderColor = 'var(--gray-300)';
-        zone.style.background = 'var(--gray-50)';
-        var files = e.dataTransfer.files;
-        if (files.length === 0) return;
-        var inputId = zoneId === 'dataUploadZone' ? 'dataFileInput' : 'docFileInput';
-        var listId = zoneId === 'dataUploadZone' ? 'dataFileList' : 'docFileList';
-        if (listId === 'dataFileList') {
-            dataUploadFiles = dataUploadFiles.concat(Array.from(files));
-            renderFileList(dataUploadFiles, 'dataFileList', 'dataUploadFiles');
-        } else {
-            docUploadFiles = docUploadFiles.concat(Array.from(files));
-            renderFileList(docUploadFiles, 'docFileList', 'docUploadFiles');
-        }
-    });
-});
-</script></body></html>
+    zone.addEventListener('dragover',function(e){ e.preventDefault(); zone.style.borderColor = 'var(--primary)'; zone.style.background = 'var(--primary-light)'; });
+    zone.addEventListener('dragleave',function(e){ e.preventDefault(); zone.style.borderColor = 'var(--gray-300)'; zone.style.background = 'var(--gray-50)'; });
+    zone.addEventListener('drop',function(e){ e.preventDefault(); zone.style.borderColor = 'var(--gray-300)'; zone.style.background = 'var(--gray-50)'; var files = Array.from(e.dataTransfer.files || []); if (item.type === 'data') dataUploadFiles = dataUploadFiles.concat(files); else docUploadFiles = docUploadFiles.concat(files); renderUploadFiles(); });
+  });
+}
+
+function openModal(id){ document.getElementById(id).style.display = 'flex'; }
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+function showSuccess(title,msg){ document.getElementById('successTitle').textContent = title; document.getElementById('successMsg').textContent = msg; document.getElementById('successOverlay').style.display = 'flex'; }
+function closeSuccess(){ document.getElementById('successOverlay').style.display = 'none'; }
+function logout(){ if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
+document.addEventListener('click',function(e){ if (e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; });
+</script>
+</body>
+</html>

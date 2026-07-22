@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>平台价值详情 - 生命医学主题库</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#fff;
+      --text:#111827;
+      --muted:#5b667a;
+      --soft:#8a97ad;
+      --line:#e3e9f3;
+      --blue:#2563eb;
+      --teal:#0f9a83;
+      --shadow:0 12px 32px rgba(20,40,80,.08);
+      --radius:12px;
+      --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75}
+    a{text-decoration:none;color:inherit}
+    .topbar{
+      height:64px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;padding:0 36px;
+      position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+    .brand-mark{
+      width:34px;height:34px;border-radius:10px;background:#eaf2ff;color:var(--blue);
+      display:grid;place-items:center;font-weight:900;
+    }
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .btn{
+      min-height:38px;padding:0 16px;border-radius:10px;border:1px solid var(--line);
+      display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+      background:#fff;color:#374151;
+    }
+    .btn.primary{border:0;color:#fff;background:linear-gradient(135deg,var(--blue),var(--teal))}
+    .hero{
+      background:
+        radial-gradient(circle at 72% 18%,rgba(37,99,235,.14),transparent 28%),
+        linear-gradient(135deg,#edf4ff 0%,#f9fbff 58%,#eef8f6 100%);
+      border-bottom:1px solid var(--line);
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+    .hero-inner{padding:58px 0 48px;display:grid;grid-template-columns:1.15fr .85fr;gap:42px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:13px;font-weight:800;margin-bottom:16px}
+    h1{font-size:42px;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px}
+    .lead{font-size:16px;color:var(--muted);max-width:720px}
+    .hero-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .metric{
+      min-height:106px;background:rgba(255,255,255,.78);border:1px solid rgba(148,163,184,.24);
+      border-radius:14px;padding:18px;box-shadow:0 8px 24px rgba(37,99,235,.06);
+    }
+    .metric strong{display:block;font-size:28px;line-height:1;color:#0f172a;margin-bottom:8px}
+    .metric span{font-size:13px;color:var(--soft)}
+    main{padding:34px 0 60px}
+    .layout{display:grid;grid-template-columns:250px 1fr;gap:24px;align-items:start}
+    .side{
+      position:sticky;top:84px;background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);padding:10px;box-shadow:var(--shadow);
+    }
+    .side a{
+      display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:9px;
+      color:#4b5563;font-size:14px;font-weight:700;
+    }
+    .side a.active,.side a:hover{background:#eef5ff;color:var(--blue)}
+    .content{display:grid;gap:20px}
+    .panel{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:28px;
+    }
+    .panel h2{font-size:22px;margin-bottom:14px}
+    .panel p{color:var(--muted);font-size:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .mini-card{border:1px solid var(--line);border-radius:10px;padding:18px;background:#fbfdff}
+    .mini-card h3{font-size:15px;margin-bottom:8px}
+    .mini-card p{font-size:13px}
+    .list{display:grid;gap:10px;margin-top:12px}
+    .list li{
+      list-style:none;display:flex;gap:10px;align-items:flex-start;
+      color:var(--muted);font-size:14px;
+    }
+    .list li::before{
+      content:"";width:7px;height:7px;border-radius:50%;background:var(--blue);
+      margin-top:10px;flex:0 0 auto;
+    }
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px}
+    .flow-step{
+      min-height:94px;border:1px solid #dce7f8;background:#f8fbff;border-radius:10px;padding:14px;
+      position:relative;
+    }
+    .flow-step b{display:block;color:var(--blue);font-size:13px;margin-bottom:6px}
+    .flow-step span{font-size:13px;color:var(--muted)}
+    .module-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .module-links a{
+      display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;
+      background:#eef5ff;color:var(--blue);font-size:13px;font-weight:700;
+    }
+    @media(max-width:900px){
+      .topbar{padding:0 18px}
+      .hero-inner{grid-template-columns:1fr}
+      .layout{grid-template-columns:1fr}
+      .side{position:static;display:grid;grid-template-columns:repeat(2,1fr)}
+      .grid-3,.flow{grid-template-columns:1fr}
+      h1{font-size:32px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="brand"><span class="brand-mark">医</span><span>生命医学主题库</span></a>
+    <div class="top-actions">
+      <a class="btn" href="index.html#value">返回平台价值</a>
+      <a class="btn primary" href="login.html">进入平台</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <div class="eyebrow" id="eyebrow">平台价值</div>
+        <h1 id="pageTitle">支撑智慧医疗</h1>
+        <p class="lead" id="pageLead"></p>
+      </div>
+      <div class="hero-metrics" id="metrics"></div>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap layout">
+      <nav class="side" id="moduleNav"></nav>
+      <div class="content">
+        <section class="panel">
+          <h2>价值定位</h2>
+          <p id="positionText"></p>
+          <div class="module-links" id="tags"></div>
+        </section>
+        <section class="panel">
+          <h2>核心能力</h2>
+          <div class="grid-3" id="capabilities"></div>
+        </section>
+        <section class="panel">
+          <h2>建设路径</h2>
+          <div class="flow" id="flow"></div>
+        </section>
+        <section class="panel">
+          <h2>对应系统与页面</h2>
+          <ul class="list" id="systems"></ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var modules = {
+      "smart-care": {
+        title: "支撑智慧医疗",
+        lead: "以眼病与慢病真实世界数据为底座，服务社区筛查、健康管理、专科辅助诊疗和风险提示，提升早筛早治效率。",
+        position: "围绕深圳医学健康领域真实需求，建设覆盖多中心病例、医学影像、病历随访和知识图谱的数据底座，为AI眼底筛查、患者导诊和眼病/慢病专家系统提供支撑。系统侧重点是健康管理与风险提示，避免将筛查结果直接表述为临床诊断结论。",
+        metrics: [["10万+","自采多中心病例"],["1922万+","标准化医学影像"],["50+","合作医院与机构"],["4类","智慧医疗应用入口"]],
+        tags: ["AI眼底筛查","患者导诊","临床决策","风险提示"],
+        caps: [["辅助筛查","支持眼底图像输入、质量质控、常见疾病筛查、多任务联合筛查和结构化报告输出。"],["就医引导","面向公众提供就诊流程、健康咨询、智能导诊、快速找医生和用药说明知识服务。"],["专科辅助","结合相似病例、知识库和指南知识，辅助医生进行病情理解、方案参考和医嘱质控。"]],
+        flow: [["数据接入","多中心病例、眼底影像、OCT和随访数据接入。"],["模型筛查","图像质量评价、疾病分类、病灶识别和多任务模型协同。"],["风险提示","输出结构化报告、健康建议和就医引导。"],["闭环管理","沉淀随访反馈，支撑模型和知识库持续优化。"]],
+        systems: ["AI眼底疾病筛查系统：眼底图像输入、图像质控、常见疾病筛查、多任务联合筛查、输出筛查报告。","眼病/慢病专家系统：临床决策支撑、患者咨询/导诊机器人。","病历随访与医学影像存储转码：支撑后续健康管理闭环。"]
+      },
+      "industry": {
+        title: "赋能区域健康产业",
+        lead: "对接医院、学校、政府与企业应用场景，把数据资源、算法能力和工具平台转化为AI医疗设备、健康管理服务和数据产品。",
+        position: "PPT中强调生命医学主题库要支撑深圳医学健康领域大众科普、科研发展与产业转化。该模块聚焦数据服务产品化、AI医疗设备赋能、健康管理服务落地和医工结合创新。",
+        metrics: [["政产学研医","协同对象"],["25+","优质数据集"],["25+","知识图谱"],["多场景","医院/学校/政府/企业"]],
+        tags: ["产业转化","AI医疗设备","数据服务","健康管理"],
+        caps: [["数据产品化","将临床库、影像库、知识图谱和公开数据资源包装为可申请、可审核、可追溯的数据服务。"],["设备赋能","为筛查设备、远程诊疗系统和AI辅助诊断软件提供算法和数据支撑。"],["服务落地","支撑健康科普、慢病管理、区域筛查和医学教育内容服务。"]],
+        flow: [["资源沉淀","形成数据集、图谱、算法和工具资产。"],["场景匹配","面向医院、学校、政府、企业拆解应用需求。"],["产品组合","开放数据、AI筛查、教育平台、专家系统组合交付。"],["运营迭代","通过使用反馈完善数据、模型和服务流程。"]],
+        systems: ["生命医学开放数据平台：数据集发布、使用申请和科研数据服务。","AI眼底疾病筛查系统：可对接筛查设备与健康管理服务。","生命医学AI教育平台：支撑医学科普内容和教学展示。"]
+      },
+      "research": {
+        title: "驱动临床科研",
+        lead: "围绕多中心病例、医学影像、公开数据和知识图谱，支撑科研数据检索、队列构建、文献推荐、图谱推理与课题研究。",
+        position: "科研赋能场景面向临床科研团队和AI医疗科研团队，目标是降低科研数据获取门槛，提升文献检索效率，构建医学知识网络，辅助科研选题、队列构建和成果转化。",
+        metrics: [["260GB+","公开数据资源"],["多中心","临床科研数据"],["知识图谱","实体关系推理"],["在线化","科研数据服务"]],
+        tags: ["临床数据开放","文献推荐","知识图谱","队列构建"],
+        caps: [["数据开放共享","支持多中心医院原始数据集与公开数据库数据集的检索、申请和授权使用。"],["科研检索推荐","提供关键词检索、语义向量检索和基于实体关系的文献推荐。"],["图谱推理","支持疾病、药物、检验检查、手术操作和病历知识图谱查询与关系推理。"]],
+        flow: [["数据检索","筛选病例、影像、公开眼科数据和专题数据集。"],["队列构建","按疾病、任务、模态和时间维度组织研究队列。"],["知识发现","结合文献检索和图谱推理发现研究线索。"],["成果沉淀","形成专题数据、课题成果和科研引用记录。"]],
+        systems: ["临床数据开放共享：数据概览、数据集列表、申请和上传。","科技文献检索推荐：关键词检索、语义检索、文献推荐。","知识图谱查询与推理：实体搜索、关系浏览、推理提示。"]
+      },
+      "governance": {
+        title: "医学数据标准治理",
+        lead: "建立眼病/慢病数据采集、清洗、脱敏、标注、标准化加工和知识图谱Schema规范，提升数据可用性和可追溯性。",
+        position: "生命医学主题库不是单纯展示平台，核心在于把多源异构医学数据转化为标准化、可治理、可应用的数据资产。PPT中明确包含数据标准体系、数据入库、数据标准化和工具开发。",
+        metrics: [["1500万+","标准化病例字段"],["多模态","病历/影像/OCT/音视频"],["Schema","知识图谱标准"],["全链路","采集到审核"]],
+        tags: ["采集规范","脱敏清洗","影像标注","数据审核"],
+        caps: [["标准体系","建设数据采集规范、疾病分类和病灶数据集标准、图像质量评价标准、知识图谱Schema标准。"],["治理加工","覆盖去重、抽取、筛选、转换、清洗、加工、解析、分类和主题化处理。"],["质量审核","通过专家审核与统计分析沉淀质量指标，保障入库数据可信可用。"]],
+        flow: [["采集接入","公开数据库、多中心医院、社区机构和其他授权数据源接入。"],["脱敏清洗","敏感信息识别、数据去重、质量检查和格式转换。"],["标注加工","影像标注、病灶分割、字段标准化和知识实体抽取。"],["审核入库","专家审核、统计分析、版本管理和标准化入库。"]],
+        systems: ["表单模板设置、数据录入填写、历史数据导入、病历随访。","医学影像存储与转码、影像标注工具、专家审核与统计分析。","后续可补齐：数据采集工具、影像脱敏工具。"]
+      },
+      "ai-model": {
+        title: "垂域AI模型赋能",
+        lead: "以高质量数据集与知识图谱为基础，集成影像算法、知识图谱问答、语义匹配和眼病/慢病垂域大模型能力。",
+        position: "PPT中强调团队已有眼科智能算法体系、糖网病灶AI标注技术和中文眼科垂域视觉语言模型能力。该模块负责把数据集、图谱和模型能力转化为筛查、科研、教育和专家系统的智能引擎。",
+        metrics: [["多病种","疾病分类与辅助识别"],["多算法","质控/复原/分割/预测"],["垂域模型","医学问诊与视觉语言"],["知识推理","图谱问答与语义匹配"]],
+        tags: ["影像算法","病灶分割","垂域大模型","知识问答"],
+        caps: [["医学影像算法","支持图像质量评价、图像复原、疾病分类、眼底结构分割和病灶分割。"],["知识智能","支持知识图谱问答、语义匹配、文献推荐和实体关系推理。"],["临床预测","支撑治疗效果预测、慢病风险提示、药物敏感性评估和个体化方案推荐。"]],
+        flow: [["数据训练","基于临床真实数据、公开数据和精细标注数据训练模型。"],["模型评估","通过质量评价、外部验证和专家审核控制模型输出。"],["能力封装","封装为筛查、教育、科研和专家系统可调用能力。"],["持续迭代","结合使用反馈、随访数据和新增数据集动态更新。"]],
+        systems: ["AI眼底疾病筛查、多任务联合筛查、影像标注工具。","临床决策支撑、患者咨询/导诊机器人、智能教学服务。","基于基因的眼病/慢病诊断应用、眼病/慢病药物效能评估和预测。"]
+      },
+      "service": {
+        title: "全流程应用服务",
+        lead: "将数据、模型、知识和工具组织成完整应用矩阵，覆盖筛查、开放数据、AI教育、专家系统、基因诊断和药效评估。",
+        position: "该模块强调从底层数据到上层场景的闭环服务能力，让用户能直观看到数据集、知识图谱和垂域AI模型在健康管理、科研、教育、临床辅助和产业转化中的用途。",
+        metrics: [["4类","核心平台系统"],["6类","数据与算法工具"],["2类","跨领域应用"],["闭环","数据到应用"]],
+        tags: ["应用矩阵","场景闭环","跨领域融合","持续运营"],
+        caps: [["平台矩阵","覆盖AI眼底筛查、开放数据平台、AI教育平台、眼病/慢病专家系统。"],["工具链路","覆盖数据采集、录入、脱敏、标注、存储转码和审核统计。"],["跨域应用","融合基因组、医学影像、临床表型和药物数据，支持精准诊断和药效预测。"]],
+        flow: [["数据底座","多模态数据与知识图谱建设。"],["工具治理","采集、脱敏、标注、审核和标准化加工。"],["模型赋能","影像算法、知识问答、垂域模型和风险预测。"],["场景服务","筛查、科研、教育、临床辅助和产业转化落地。"]],
+        systems: ["应用中心：AI眼底疾病筛查、开放数据平台、AI教育平台、临床决策支撑、患者导诊。","跨领域应用：基于基因的眼病/慢病诊断、药物效能评估和预测。","工具开发：数据录入、影像标注、影像存储转码、专家审核统计。"]
+      }
+    };
+
+    var labels = [
+      ["smart-care","支撑智慧医疗"],
+      ["industry","赋能区域健康产业"],
+      ["research","驱动临床科研"],
+      ["governance","医学数据标准治理"],
+      ["ai-model","垂域AI模型赋能"],
+      ["service","全流程应用服务"]
+    ];
+
+    function getModuleKey(){
+      var p = new URLSearchParams(location.search);
+      var key = p.get("module") || "smart-care";
+      return modules[key] ? key : "smart-care";
+    }
+    function render(){
+      var key = getModuleKey();
+      var data = modules[key];
+      document.title = data.title + " - 平台价值详情";
+      document.getElementById("pageTitle").textContent = data.title;
+      document.getElementById("pageLead").textContent = data.lead;
+      document.getElementById("positionText").textContent = data.position;
+      document.getElementById("metrics").innerHTML = data.metrics.map(function(m){
+        return '<div class="metric"><strong>' + m[0] + '</strong><span>' + m[1] + '</span></div>';
+      }).join("");
+      document.getElementById("tags").innerHTML = data.tags.map(function(t){
+        return '<a href="javascript:void(0)">' + t + '</a>';
+      }).join("");
+      document.getElementById("capabilities").innerHTML = data.caps.map(function(c){
+        return '<div class="mini-card"><h3>' + c[0] + '</h3><p>' + c[1] + '</p></div>';
+      }).join("");
+      document.getElementById("flow").innerHTML = data.flow.map(function(f, i){
+        return '<div class="flow-step"><b>0' + (i+1) + ' ' + f[0] + '</b><span>' + f[1] + '</span></div>';
+      }).join("");
+      document.getElementById("systems").innerHTML = data.systems.map(function(s){
+        return '<li>' + s + '</li>';
+      }).join("");
+      document.getElementById("moduleNav").innerHTML = labels.map(function(item){
+        return '<a class="' + (item[0] === key ? 'active' : '') + '" href="平台价值详情.html?module=' + item[0] + '">' + item[1] + '</a>';
+      }).join("");
+    }
+    render();
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -850,7 +850,7 @@ body {
     <span class="logo-text">生命医学智能平台</span>
   </div>
   <div class="user-area">
-    <a href="index.html" class="btn-back">返回门户</a>
+    <a href="app-center.html" class="btn-back">返回门户</a>
     <span>眼病/慢病药物效能评估和预测</span>
     <div class="user-avatar">张</div>
     <span id="headerUserName">张主任</span>
@@ -2072,7 +2072,7 @@ function checkAuth() {
 function handleLogout() {
   if (confirm('确认退出登录？')) {
     localStorage.removeItem('marvis_medical_user');
-    window.location.href = 'index.html';
+    window.location.href = 'app-center.html';
   }
 }
 

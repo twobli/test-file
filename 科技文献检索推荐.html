@@ -74,12 +74,16 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .filter-bar input, .filter-bar select { padding: 7px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
 .filter-bar input:focus, .filter-bar select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
 .filter-bar input { min-width: 180px; }
+.filter-bar .search-input { flex: 1 1 380px; min-width: 320px; }
+.filter-bar .filter-select { min-width: 150px; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; gap: 6px; white-space: nowrap; }
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-dark); }
 .btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
 .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+.btn.active-mode { box-shadow: 0 0 0 3px rgba(26,115,232,0.12); border-color: var(--primary); color: var(--primary); }
+.btn-primary.active-mode { color: #fff; border-color: var(--primary); }
 .btn-sm { padding: 5px 10px; font-size: 12px; }
 
 .table-wrap { overflow-x: auto; }
@@ -146,6 +150,24 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 /* 摘要片段样式 */
 .abstract-snippet { font-size: 12px; color: var(--gray-600); line-height: 1.6; max-width: 280px; }
 
+/* 文献结果列表 */
+.result-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; color: var(--gray-600); font-size: 13px; }
+.result-mode { display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-weight: 600; }
+.result-list { display: flex; flex-direction: column; gap: 12px; }
+.literature-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; background: #fff; transition: var(--transition); }
+.literature-item:hover { border-color: #c7d8f8; box-shadow: 0 4px 12px rgba(26,115,232,0.08); }
+.literature-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.literature-title { font-size: 16px; line-height: 1.5; color: var(--gray-900); font-weight: 700; cursor: pointer; }
+.literature-title:hover { color: var(--primary); }
+.literature-badges { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; flex-shrink: 0; justify-content: flex-end; }
+.recommend-badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 999px; background: #fff7e6; color: #ad6800; border: 1px solid #ffe0a3; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.semantic-score { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 999px; background: #e8f0fe; color: var(--primary); border: 1px solid #cfe0ff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.literature-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--gray-700); font-size: 13px; margin-bottom: 10px; }
+.literature-meta strong { color: var(--gray-800); font-weight: 600; }
+.literature-abstract { color: var(--gray-700); line-height: 1.75; font-size: 13px; margin-bottom: 12px; }
+.literature-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.literature-type { color: var(--gray-500); font-size: 12px; }
+
 /* 无结果提示 */
 .no-result { text-align: center; padding: 40px; color: var(--gray-500); font-size: 14px; }
 
@@ -158,6 +180,8 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
     .sidebar .menu-group-title { display: none; }
     .main-content { margin-left: 60px; flex-direction: column; }
     .main-right { width: 100%; position: static; }
+    .literature-head, .literature-actions { flex-direction: column; align-items: flex-start; }
+    .literature-badges { justify-content: flex-start; }
 }
 </style>
 </head>
@@ -165,7 +189,7 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 
 <!-- ===== 顶部导航栏 ===== -->
 <div class="header">
-    <a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+    <a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -200,77 +224,43 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 
             <!-- 搜索栏 -->
             <div class="filter-bar">
-                <input id="searchInput" placeholder="输入关键词（标题、摘要、作者）" style="flex:1;min-width:300px;" oninput="doSearch()" onkeydown="if(event.key==='Enter')doSearch()">
-                <button class="btn btn-primary" onclick="doSearch()" style="padding:7px 20px;font-size:13px;">检索</button>
-                <select id="fieldFilter" onchange="doSearch()">
-                    <option value="">全部领域</option>
-                    <option value="眼科">眼科</option>
-                    <option value="医学影像">医学影像</option>
-                    <option value="临床医学">临床医学</option>
-                    <option value="内分泌">内分泌</option>
-                    <option value="心血管">心血管</option>
-                    <option value="神经科学">神经科学</option>
+                <input id="searchInput" class="search-input" placeholder="输入关键词(标题、摘要、作者)进行检索或者输入文章内容进行语义向量检索" oninput="doSearch(currentMode)" onkeydown="if(event.key==='Enter')doSearch(currentMode)">
+                <button class="btn btn-primary" onclick="doSearch('keyword')" style="padding:7px 20px;font-size:13px;">检索</button>
+                <button class="btn btn-outline" onclick="doSearch('semantic')" style="padding:7px 20px;font-size:13px;">语义向量检索</button>
+                <select id="yearFilter" class="filter-select" onchange="doSearch(currentMode)">
+                    <option value="">发表年份：全部</option>
+                    <option value="2026">2026年</option>
+                    <option value="2025">2025年</option>
+                    <option value="2024">2024年</option>
+                    <option value="2023">2023年</option>
+                    <option value="2022">2022年及以前</option>
                 </select>
-                <select id="yearFilter" onchange="doSearch()">
-                    <option value="">发表时间不限</option>
-                    <option value="2024">近1年</option>
-                    <option value="2022">近3年</option>
-                    <option value="2020">近5年</option>
+                <select id="journalFilter" class="filter-select" onchange="doSearch(currentMode)">
+                    <option value="">期刊来源：全部</option>
+                    <option value="中华眼科杂志">中华眼科杂志</option>
+                    <option value="中华医学杂志">中华医学杂志</option>
+                    <option value="中国医学影像技术">中国医学影像技术</option>
+                    <option value="国际眼科杂志">国际眼科杂志</option>
+                    <option value="中国数字医学">中国数字医学</option>
+                    <option value="中华糖尿病杂志">中华糖尿病杂志</option>
+                </select>
+                <select id="typeFilter" class="filter-select" onchange="doSearch(currentMode)">
+                    <option value="">文献类型：全部</option>
+                    <option value="研究论文">研究论文</option>
+                    <option value="临床研究">临床研究</option>
+                    <option value="系统评价">系统评价</option>
+                    <option value="综述">综述</option>
+                    <option value="方法学研究">方法学研究</option>
                 </select>
             </div>
 
-            <!-- Tab 切换 -->
-            <div class="tabs">
-                <button class="tab-btn active" data-tab-group="lit" data-tab="all" onclick="switchTab('lit','all')">全部结果</button>
-                <button class="tab-btn" data-tab-group="lit" data-tab="semantic" onclick="switchTab('lit','semantic')">语义向量检索</button>
+            <div class="result-toolbar">
+                <span id="resultSummary">共检索到 0 条文献</span>
+                <span class="result-mode" id="resultMode">关键词检索</span>
             </div>
-
-            <!-- 全部结果 Tab -->
-            <div data-tab-content="lit" data-tab="all" class="tab-content active">
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:28%;">标题</th>
-                                <th style="width:12%;">作者</th>
-                                <th style="width:18%;">摘要片段</th>
-                                <th style="width:12%;">期刊</th>
-                                <th style="width:6%;">年份</th>
-                                <th style="width:6%;">引用</th>
-                                <th style="width:8%;">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allTableBody"></tbody>
-                    </table>
-                </div>
-                <div id="allNoResult" class="no-result" style="display:none;">未找到匹配的文献，请调整搜索条件</div>
-                <div class="pagination" id="allPagination"></div>
-            </div>
-
-            <!-- 语义向量检索 Tab -->
-            <div data-tab-content="lit" data-tab="semantic" class="tab-content">
-                <div class="semantic-note">
-                    <span class="note-icon">&#9432;</span>
-                    <span>基于语义相似度进行文献检索，返回内容相关的文献。系统将对摘要和标题进行语义向量编码，按相关性从高到低排序展示。</span>
-                </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:30%;">标题</th>
-                                <th style="width:12%;">作者</th>
-                                <th style="width:20%;">摘要片段</th>
-                                <th style="width:12%;">期刊</th>
-                                <th style="width:6%;">年份</th>
-                                <th style="width:8%;">语义相关度</th>
-                                <th style="width:8%;">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="semanticTableBody"></tbody>
-                    </table>
-                </div>
-                <div id="semanticNoResult" class="no-result" style="display:none;">未找到匹配的文献，请调整搜索条件</div>
-            </div>
+            <div id="resultList" class="result-list"></div>
+            <div id="resultNoResult" class="no-result" style="display:none;">未找到匹配的文献，请调整搜索条件</div>
+            <div class="pagination" id="resultPagination"></div>
         </div>
     </div>
 
@@ -298,403 +288,418 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 </div>
 
 <script>
-// ===== Mock 文献数据 =====
+// ===== 新版中文文献检索原型逻辑 =====
 var mockData = [
     {
-        id: 1,
-        title: "Deep Learning for Automated Detection of Diabetic Retinopathy in Retinal Fundus Photographs",
-        authors: ["Gulshan V", "Peng L", "Coram M", "Stumpe MC", "Wu D", "Narayanaswamy A", "Venugopalan S", "Widner K", "Madams T", "Cuadros J", "Kim R", "Raman R", "Nelson PC", "Mega JL", "Webster DR"],
-        affiliation: "Google Research, Mountain View, CA, USA",
-        correspondingAuthor: "Dale R. Webster",
-        correspondingEmail: "dwebster@google.com",
-        journal: "JAMA",
-        volumeIssuePages: "316(22): 2402-2410",
-        doi: "10.1001/jama.2016.17216",
-        abstract: "Diabetic retinopathy (DR) is the leading cause of blindness among working-age adults. Early detection and treatment can prevent vision loss, but screening rates remain low due to limited access to specialists. Deep learning, a family of machine learning methods that use artificial neural networks with many layers, has shown promise in medical image analysis. We developed and validated a deep learning algorithm for automated detection of DR and diabetic macular edema in retinal fundus photographs. The algorithm was trained on a dataset of 128,175 retinal images graded by ophthalmologists. In two independent validation sets, the algorithm achieved area under the receiver operating characteristic curve (AUC) values of 0.991 and 0.990 for detecting referable DR. These results demonstrate that deep learning can achieve high sensitivity and specificity for DR detection, potentially enabling wider access to screening.",
+        id: 101,
+        title: "基于深度学习的糖尿病视网膜病变自动筛查研究",
+        authors: ["古尔山", "彭磊", "科拉姆", "韦伯斯特"],
+        affiliation: "眼底影像智能分析联合实验室",
+        correspondingAuthor: "韦伯斯特",
+        correspondingEmail: "webster@example.org",
+        journal: "中华眼科杂志",
+        volumeIssuePages: "52(12): 901-910",
+        doi: "10.3760/cma.j.issn.0412-4081.2016.12.001",
+        abstract: "糖尿病视网膜病变是工作年龄人群视力损伤的重要原因。本研究基于大规模眼底彩照训练深度学习模型，对可转诊糖尿病视网膜病变和黄斑水肿进行自动识别，验证结果显示模型具备较高敏感度和特异度，可辅助基层筛查与分级转诊。",
         year: 2016,
         citations: 3245,
-        field: "眼科"
+        field: "眼科",
+        type: "临床研究",
+        recommended: true,
+        recommendReason: "高被引眼底筛查研究"
     },
     {
-        id: 2,
-        title: "Attention-Based Deep Multiple Instance Learning for Diabetic Retinopathy Grading",
-        authors: ["Li Xiaomeng", "Shen Linlin", "Yu Jun", "Heng Pheng-Ann"],
-        affiliation: "School of Computer Science and Software Engineering, Shenzhen University, Shenzhen, China",
-        correspondingAuthor: "Shen Linlin",
-        correspondingEmail: "llshen@szu.edu.cn",
-        journal: "Nature Medicine",
-        volumeIssuePages: "29(8): 1956-1965",
-        doi: "10.1038/s41591-023-02436-0",
-        abstract: "Accurate grading of diabetic retinopathy (DR) severity is essential for appropriate clinical management. Existing deep learning approaches typically rely on image-level labels for training, which may not capture the fine-grained pathological features present in retinal images. We propose an attention-based deep multiple instance learning (MIL) framework that leverages both image-level and lesion-level annotations for DR grading. The framework uses an attention mechanism to identify the most diagnostically relevant regions within retinal images, enabling interpretable predictions. Evaluated on multiple publicly available datasets including EyePACS and Messidor-2, our method achieved state-of-the-art performance with an AUC of 0.987 for referable DR detection and a quadratic weighted kappa of 0.863 for five-class DR severity grading, outperforming previous methods by a significant margin.",
+        id: 102,
+        title: "注意力机制多实例学习在糖尿病视网膜病变分级中的应用",
+        authors: ["李晓萌", "沈琳琳", "余俊", "洪鹏安"],
+        affiliation: "深圳大学医学人工智能研究中心",
+        correspondingAuthor: "沈琳琳",
+        correspondingEmail: "llshen@example.edu.cn",
+        journal: "国际眼科杂志",
+        volumeIssuePages: "23(8): 1186-1195",
+        doi: "10.3980/j.issn.1672-5123.2023.08.008",
+        abstract: "针对糖尿病视网膜病变分级中病灶细粒度信息难以充分利用的问题，本文构建基于注意力机制的多实例学习框架，结合图像级与病灶级标注实现可解释分级，为眼底筛查模型落地提供了可追溯依据。",
         year: 2023,
         citations: 892,
-        field: "眼科"
+        field: "眼科",
+        type: "研究论文",
+        recommended: true,
+        recommendReason: "与眼底智能分级高度相关"
     },
     {
-        id: 3,
-        title: "Multi-Task Deep Learning for Joint Segmentation and Classification of Retinal OCT Images",
-        authors: ["Wang Yu", "Zhang Yifan", "Liu Tianming", "Chen Hao"],
-        affiliation: "Department of Biomedical Engineering, Johns Hopkins University, Baltimore, MD, USA",
-        correspondingAuthor: "Chen Hao",
-        correspondingEmail: "hchen@jhu.edu",
-        journal: "IEEE Transactions on Medical Imaging",
-        volumeIssuePages: "41(8): 2112-2124",
-        doi: "10.1109/TMI.2022.3156789",
-        abstract: "Optical coherence tomography (OCT) is a non-invasive imaging modality that provides high-resolution cross-sectional views of the retina. Accurate segmentation of retinal layers and classification of retinal diseases from OCT images are crucial for clinical diagnosis. We present a multi-task deep learning framework that jointly performs retinal layer segmentation and disease classification. The framework employs a shared encoder-decoder architecture with task-specific heads, allowing the two tasks to benefit from shared feature representations. A novel cross-task attention module facilitates information exchange between segmentation and classification branches. Experiments on a large-scale clinical OCT dataset demonstrate that our method achieves superior performance on both tasks, with a Dice score of 0.921 for segmentation and an accuracy of 94.3% for multi-class disease classification.",
+        id: 103,
+        title: "视网膜OCT图像分割与疾病分类的多任务学习方法",
+        authors: ["王宇", "张一凡", "刘天明", "陈昊"],
+        affiliation: "医学影像智能计算重点实验室",
+        correspondingAuthor: "陈昊",
+        correspondingEmail: "hchen@example.edu",
+        journal: "中国医学影像技术",
+        volumeIssuePages: "38(9): 1321-1329",
+        doi: "10.13929/j.issn.1003-3289.2022.09.011",
+        abstract: "OCT影像能够呈现视网膜层结构的横断面信息。研究提出共享编码器与任务特异解码头组成的多任务网络，同时完成视网膜层分割和疾病分类，并通过跨任务注意力增强病灶定位能力。",
         year: 2022,
         citations: 567,
-        field: "眼科"
+        field: "医学影像",
+        type: "方法学研究",
+        recommended: true,
+        recommendReason: "适合OCT诊断模型建设"
     },
     {
-        id: 4,
-        title: "Artificial Intelligence for Glaucoma Screening: A Systematic Review and Meta-Analysis",
-        authors: ["Chen Huan", "Zhou Wei", "Li Jing", "Wang Fang", "Zhang Yuting"],
-        affiliation: "Department of Ophthalmology, Peking Union Medical College Hospital, Beijing, China",
-        correspondingAuthor: "Wang Fang",
-        correspondingEmail: "wangfang@pumch.cn",
-        journal: "Ophthalmology",
-        volumeIssuePages: "131(2): 187-201",
-        doi: "10.1016/j.ophtha.2023.09.012",
-        abstract: "Glaucoma is the second leading cause of blindness worldwide. Artificial intelligence (AI) has emerged as a promising tool for automated glaucoma screening using fundus photographs and OCT images. We conducted a systematic review and meta-analysis of studies evaluating AI algorithms for glaucoma detection. After screening 1,847 articles, 56 studies involving 186,357 participants were included. Pooled sensitivity and specificity were 0.923 and 0.915 for fundus-based algorithms, and 0.947 and 0.937 for OCT-based algorithms. Deep learning methods significantly outperformed traditional machine learning approaches. However, significant heterogeneity across studies and lack of external validation in most studies highlight the need for rigorous prospective evaluation before clinical deployment.",
+        id: 104,
+        title: "人工智能用于青光眼筛查的系统评价与Meta分析",
+        authors: ["陈欢", "周伟", "李静", "王芳", "张雨婷"],
+        affiliation: "北京协和医院眼科",
+        correspondingAuthor: "王芳",
+        correspondingEmail: "wangfang@example.cn",
+        journal: "中华眼科杂志",
+        volumeIssuePages: "60(2): 121-134",
+        doi: "10.3760/cma.j.cn112142-20230912-00072",
+        abstract: "研究系统评价人工智能算法在青光眼筛查中的诊断性能。纳入多中心眼底照相和OCT研究后发现，深度学习模型在敏感度和特异度方面整体优于传统机器学习方法，但前瞻性验证和外部泛化仍是临床部署的关键。",
         year: 2024,
         citations: 234,
-        field: "眼科"
+        field: "眼科",
+        type: "系统评价",
+        recommended: true,
+        recommendReason: "覆盖青光眼筛查证据"
     },
     {
-        id: 5,
-        title: "Transformer-Based Foundation Models for Medical Image Analysis: Opportunities and Challenges",
-        authors: ["Zhang Lei", "Liu Yang", "Chen Xiaogang", "Huang Junzhou", "Shen Dinggang"],
-        affiliation: "School of Biomedical Engineering, ShanghaiTech University, Shanghai, China",
-        correspondingAuthor: "Shen Dinggang",
-        correspondingEmail: "dgshen@shanghaitech.edu.cn",
-        journal: "Medical Image Analysis",
-        volumeIssuePages: "88: 102856",
-        doi: "10.1016/j.media.2023.102856",
-        abstract: "Transformer architectures have revolutionized natural language processing and are increasingly being applied to medical image analysis. This comprehensive review examines the adaptation of transformer-based foundation models for diverse medical imaging tasks, including image segmentation, classification, registration, and synthesis. We analyze the key architectural innovations—self-attention mechanisms, vision transformers (ViT), and hybrid CNN-transformer models—that have driven recent advances. The review covers applications across CT, MRI, X-ray, ultrasound, and pathology images. We identify critical challenges including data scarcity, domain shift, interpretability requirements, and computational costs, and propose future research directions to address these limitations for clinical translation.",
+        id: 105,
+        title: "医学影像基础模型的发展机遇与临床挑战",
+        authors: ["张磊", "刘洋", "陈晓刚", "黄俊洲", "沈定刚"],
+        affiliation: "上海医学影像人工智能工程中心",
+        correspondingAuthor: "沈定刚",
+        correspondingEmail: "dgshen@example.edu.cn",
+        journal: "中国数字医学",
+        volumeIssuePages: "18(11): 3-12",
+        doi: "10.3969/j.issn.1673-7571.2023.11.001",
+        abstract: "基础模型正在推动医学影像分割、分类、配准和生成任务的统一建模。本文梳理视觉Transformer、自监督预训练和多模态对齐等关键进展，并分析数据稀缺、跨域偏移、可解释性和算力成本等临床转化挑战。",
         year: 2023,
         citations: 678,
-        field: "医学影像"
+        field: "医学影像",
+        type: "综述",
+        recommended: true,
+        recommendReason: "适合技术路线调研"
     },
     {
-        id: 6,
-        title: "Multimodal Fusion of Fundus Photography and OCT for Comprehensive Retinal Disease Diagnosis",
-        authors: ["Kim Seoyoung", "Park Junyoung", "Lee Donghyun", "Choi Heejung"],
-        affiliation: "Department of Ophthalmology, Seoul National University Hospital, Seoul, Korea",
-        correspondingAuthor: "Park Junyoung",
-        correspondingEmail: "jypark@snu.ac.kr",
-        journal: "Lancet Digital Health",
-        volumeIssuePages: "6(3): e178-e190",
-        doi: "10.1016/S2589-7500(24)00012-5",
-        abstract: "Retinal diseases often manifest differently across imaging modalities. While fundus photography provides a wide view of the retina, OCT reveals cross-sectional details of retinal layers. We developed a multimodal fusion framework that combines fundus and OCT images for comprehensive diagnosis of multiple retinal diseases including age-related macular degeneration, diabetic macular edema, and glaucoma. The framework uses modality-specific encoders and a cross-modal attention mechanism to learn complementary features. In a multi-center study involving 15,623 patients, the multimodal approach achieved an AUC of 0.973, outperforming single-modality baselines by 6-12%. Visualization of attention maps revealed that the model learned clinically meaningful cross-modal correlations.",
+        id: 106,
+        title: "眼底彩照与OCT融合的视网膜疾病综合诊断模型",
+        authors: ["金素英", "朴俊英", "李东贤", "崔慧贞"],
+        affiliation: "多模态眼科影像研究中心",
+        correspondingAuthor: "朴俊英",
+        correspondingEmail: "jypark@example.kr",
+        journal: "国际眼科杂志",
+        volumeIssuePages: "24(3): 401-412",
+        doi: "10.3980/j.issn.1672-5123.2024.03.015",
+        abstract: "视网膜疾病在不同影像模态中呈现互补特征。本文构建眼底彩照与OCT融合诊断框架，通过模态特异编码器和跨模态注意力学习互补病灶特征，提升年龄相关性黄斑变性、糖尿病黄斑水肿和青光眼等疾病识别能力。",
         year: 2024,
         citations: 156,
-        field: "眼科"
+        field: "眼科",
+        type: "研究论文",
+        recommended: true,
+        recommendReason: "匹配多模态诊断场景"
     },
     {
-        id: 7,
-        title: "Automated Retinal Image Quality Assessment Using Deep Convolutional Neural Networks",
-        authors: ["Fu Huazhu", "Cheng Jun", "Xu Yanwu", "Wong Damon Wing Kee", "Liu Jiang"],
-        affiliation: "Institute for Infocomm Research, A*STAR, Singapore",
-        correspondingAuthor: "Liu Jiang",
-        correspondingEmail: "jliu@i2r.a-star.edu.sg",
-        journal: "Biomedical Optics Express",
-        volumeIssuePages: "15(4): 2138-2153",
-        doi: "10.1364/BOE.510234",
-        abstract: "Image quality is a critical factor affecting the performance of automated retinal disease screening systems. Poor-quality images can lead to false negatives and unreliable diagnoses. We propose a deep convolutional neural network (CNN) for automated retinal image quality assessment that evaluates four quality parameters: overall quality, field definition, illumination, and artifact presence. The network was trained on 47,362 fundus images with expert quality annotations and achieved an accuracy of 96.8% for binary (acceptable vs. reject) quality classification. Furthermore, we demonstrate that integrating quality assessment as a pre-screening step improves downstream disease detection accuracy by 4.3%. The model runs in under 50ms per image on commodity hardware, making it suitable for real-time screening workflows.",
+        id: 107,
+        title: "眼底图像质量自动评估及其在智能筛查中的应用",
+        authors: ["傅华珠", "程军", "徐彦武", "黄伟基", "刘江"],
+        affiliation: "医学图像质量控制联合实验室",
+        correspondingAuthor: "刘江",
+        correspondingEmail: "jiangliu@example.sg",
+        journal: "中国医学影像技术",
+        volumeIssuePages: "40(4): 511-520",
+        doi: "10.13929/j.issn.1003-3289.2024.04.009",
+        abstract: "图像质量直接影响自动筛查系统的可靠性。研究建立眼底图像质量评估网络，从清晰度、视野完整性、照明均衡和伪影干扰等维度判断图像是否可用于后续诊断，并证明质量控制可降低误判风险。",
         year: 2024,
         citations: 89,
-        field: "眼科"
+        field: "眼科",
+        type: "方法学研究",
+        recommended: true,
+        recommendReason: "支撑筛查质控流程"
     },
     {
-        id: 8,
-        title: "Generative Adversarial Networks for Cross-Modality Medical Image Synthesis: From MRI to CT",
-        authors: ["Yang Qingsong", "Yan Pingkun", "Zhang Yanbo", "Yu Hengyong", "Shi Yongyi", "Mou Xuanqin", "Kalra Mannudeep K", "Wang Ge"],
-        affiliation: "Department of Biomedical Engineering, Rensselaer Polytechnic Institute, Troy, NY, USA",
-        correspondingAuthor: "Wang Ge",
-        correspondingEmail: "wangg6@rpi.edu",
-        journal: "IEEE Reviews in Biomedical Engineering",
-        volumeIssuePages: "17: 98-117",
-        doi: "10.1109/RBME.2023.3267890",
-        abstract: "Cross-modality medical image synthesis has emerged as a transformative approach to reduce patient radiation exposure and imaging costs. This review focuses on generative adversarial network (GAN)-based methods for synthesizing CT images from MRI data. We systematically analyze over 80 GAN variants including pix2pix, CycleGAN, and their extensions applied to brain, lung, liver, and pelvic imaging. Key technical challenges include preserving anatomical fidelity, handling paired vs. unpaired training, and evaluating synthetic image quality. We also discuss emerging directions such as diffusion models and their potential advantages over GANs. Clinical validation studies suggest that synthetic CT images can achieve mean absolute errors below 50 HU for attenuation correction in PET/MRI, approaching the accuracy of real CT.",
+        id: 108,
+        title: "跨模态医学影像合成技术在MRI到CT转换中的应用进展",
+        authors: ["杨清松", "严平昆", "张彦博", "余恒永", "王革"],
+        affiliation: "医学影像重建与合成研究中心",
+        correspondingAuthor: "王革",
+        correspondingEmail: "wangge@example.edu",
+        journal: "中国数字医学",
+        volumeIssuePages: "19(2): 44-55",
+        doi: "10.3969/j.issn.1673-7571.2024.02.006",
+        abstract: "跨模态医学影像合成可减少辐射暴露并降低成像成本。文章重点综述生成式模型在MRI到CT转换中的应用，讨论解剖结构保持、配准误差、合成图像评价指标以及临床验证路径。",
         year: 2024,
         citations: 312,
-        field: "医学影像"
+        field: "医学影像",
+        type: "综述",
+        recommended: true,
+        recommendReason: "拓展影像生成方向"
     },
     {
-        id: 9,
-        title: "Federated Learning for Privacy-Preserving Medical Image Analysis: A Multi-Institutional Study",
-        authors: ["Sheller MJ", "Reina GA", "Edwards B", "Martin J", "Bakas S"],
-        affiliation: "Center for Biomedical Image Computing and Analytics, University of Pennsylvania, Philadelphia, PA, USA",
-        correspondingAuthor: "Spyridon Bakas",
-        correspondingEmail: "sbakas@upenn.edu",
-        journal: "Nature Communications",
-        volumeIssuePages: "15(1): 1123",
-        doi: "10.1038/s41467-024-45678-9",
-        abstract: "Sharing medical imaging data across institutions is hindered by privacy regulations and data governance policies. Federated learning (FL) enables collaborative model training without sharing raw data. We conducted a multi-institutional study across 14 hospitals in 6 countries to evaluate FL for brain tumor segmentation and classification. Our FL framework achieved Dice scores within 1.2% of centralized training while maintaining patient data privacy. Notably, models trained with FL on heterogeneous multi-site data outperformed single-site models by 18.6%, demonstrating the benefit of diverse training data. We also propose differential privacy mechanisms that provide formal privacy guarantees with minimal impact on model performance. This study establishes FL as a viable paradigm for privacy-preserving medical AI development.",
+        id: 109,
+        title: "基于联邦学习的多中心医学影像隐私保护分析",
+        authors: ["谢勒", "雷纳", "爱德华兹", "马丁", "巴卡斯"],
+        affiliation: "多中心医学人工智能协作组",
+        correspondingAuthor: "巴卡斯",
+        correspondingEmail: "bakas@example.org",
+        journal: "中华医学杂志",
+        volumeIssuePages: "104(18): 1401-1410",
+        doi: "10.3760/cma.j.cn112137-20240116-00088",
+        abstract: "医学影像数据共享受隐私合规和数据治理限制。研究采用联邦学习框架，使多家医疗机构在不交换原始数据的情况下完成模型训练，并在脑肿瘤分割与分类任务上验证了多中心协作的性能收益。",
         year: 2024,
         citations: 445,
-        field: "医学影像"
+        field: "医学影像",
+        type: "方法学研究",
+        recommended: true,
+        recommendReason: "关联数据安全共享"
     },
     {
-        id: 10,
-        title: "Deep Learning for Early Detection of Alzheimer's Disease Using Structural MRI: A Large-Scale Validation",
-        authors: ["Liu Manhua", "Cheng Danni", "Wang Kun", "Wang Yaping"],
-        affiliation: "Department of Instrument Science and Engineering, Shanghai Jiao Tong University, Shanghai, China",
-        correspondingAuthor: "Liu Manhua",
-        correspondingEmail: "mhliu@sjtu.edu.cn",
-        journal: "Alzheimer's & Dementia",
-        volumeIssuePages: "20(5): 3156-3170",
-        doi: "10.1002/alz.13890",
-        abstract: "Early detection of Alzheimer's disease (AD) is critical for timely intervention. We developed a deep learning framework based on 3D convolutional neural networks for AD detection and mild cognitive impairment (MCI) conversion prediction using structural MRI. The model was trained and validated on 8,294 subjects from the ADNI, AIBL, and OASIS cohorts. For AD vs. normal control classification, our method achieved an AUC of 0.962, sensitivity of 0.915, and specificity of 0.927. For predicting MCI-to-AD conversion within 3 years, the model achieved an AUC of 0.854. Attention maps highlighted the hippocampus, entorhinal cortex, and amygdala as key discriminative regions, consistent with established AD pathology. The model is publicly available as an open-source tool for research use.",
+        id: 110,
+        title: "结构MRI辅助阿尔茨海默病早期识别的大规模验证",
+        authors: ["刘曼华", "程丹妮", "王坤", "王亚萍"],
+        affiliation: "上海交通大学医学影像计算中心",
+        correspondingAuthor: "刘曼华",
+        correspondingEmail: "mhliu@example.edu.cn",
+        journal: "中华医学杂志",
+        volumeIssuePages: "104(9): 681-692",
+        doi: "10.3760/cma.j.cn112137-20240221-00137",
+        abstract: "早期识别阿尔茨海默病有助于及时干预。本文基于结构MRI建立三维卷积网络，用于阿尔茨海默病识别和轻度认知障碍转归预测，注意力热图显示海马、内嗅皮层等区域对模型判断贡献较高。",
         year: 2024,
         citations: 523,
-        field: "临床医学"
+        field: "临床医学",
+        type: "临床研究",
+        recommended: true,
+        recommendReason: "慢病智能诊断参考"
     },
     {
-        id: 11,
-        title: "Large Language Models in Clinical Medicine: A Systematic Review of Applications, Limitations, and Future Directions",
-        authors: ["Singhal Karan", "Tu Tao", "Gottweis Juraj", "Sayres Rory", "Wulczyn Ellery", "Hou Le", "Clark Kevin", "Pfohl Stephen", "Cole-Lewis Heather"],
-        affiliation: "Google DeepMind, London, UK",
-        correspondingAuthor: "Karan Singhal",
-        correspondingEmail: "karansinghal@google.com",
-        journal: "NEJM AI",
-        volumeIssuePages: "1(1): AIoa2300125",
-        doi: "10.1056/AIoa2300125",
-        abstract: "Large language models (LLMs) have demonstrated remarkable capabilities in medical question answering, clinical documentation, and decision support. This systematic review synthesizes evidence from 147 studies published between 2022 and 2024 evaluating LLMs in clinical settings. We categorize applications into eight domains: diagnostic reasoning, treatment planning, patient communication, clinical documentation, medical education, literature synthesis, drug discovery, and administrative tasks. Performance metrics reveal that LLMs achieve physician-comparable accuracy on board-style examinations (median 86.7%) but show significant limitations in real-world clinical scenarios involving nuanced reasoning, temporal awareness, and multimodal integration. We identify critical gaps in evaluation methodology and propose a framework for rigorous clinical validation of LLM-based tools.",
+        id: 111,
+        title: "临床医学大语言模型应用、局限与发展方向",
+        authors: ["辛格哈尔", "涂涛", "戈特韦斯", "赛尔斯", "侯乐"],
+        affiliation: "临床智能系统研究组",
+        correspondingAuthor: "辛格哈尔",
+        correspondingEmail: "singhal@example.org",
+        journal: "中国数字医学",
+        volumeIssuePages: "19(5): 1-13",
+        doi: "10.3969/j.issn.1673-7571.2024.05.001",
+        abstract: "大语言模型在医学问答、病历生成、临床决策支持和文献综述中展现出应用潜力。本文总结相关研究证据，指出真实临床场景中仍需解决事实一致性、时序推理、责任边界和多模态融合评价等问题。",
         year: 2024,
         citations: 1890,
-        field: "临床医学"
+        field: "临床医学",
+        type: "综述",
+        recommended: true,
+        recommendReason: "支撑智能问答与文献推荐"
     },
     {
-        id: 12,
-        title: "Multimodal Diagnosis of Eye Diseases Using Deep Learning with Retinal Images and Clinical Metadata",
-        authors: ["Ting Daniel SW", "Cheung Carol Y", "Lim Gilbert", "Tan Gavin SW", "Quang Nguyen D", "Gan Alfred", "Hamzah Haslina", "Garcia-Franco Renata", "San Yeo Ian Y", "Lee Shu Yen"],
-        affiliation: "Singapore Eye Research Institute, Singapore National Eye Center, Singapore",
-        correspondingAuthor: "Daniel S.W. Ting",
-        correspondingEmail: "daniel.ting@singhealth.com.sg",
-        journal: "The Lancet Digital Health",
-        volumeIssuePages: "5(12): e856-e869",
-        doi: "10.1016/S2589-7500(23)00195-0",
-        abstract: "Current AI diagnostic systems for eye diseases predominantly rely on single-modality retinal images, ignoring valuable clinical metadata such as patient demographics, medical history, and laboratory results. We developed a multimodal deep learning system that integrates retinal fundus photographs, OCT scans, and structured clinical metadata for diagnosis of 12 common eye diseases. The system was trained on 76,490 patient records from the Singapore Integrated Diabetic Retinopathy Programme and validated in three external cohorts across different ethnic populations. The multimodal approach achieved a mean AUC of 0.954 across all diseases, significantly outperforming image-only models. Subgroup analysis revealed that the addition of clinical metadata was particularly beneficial for diseases with subtle imaging findings, such as early glaucoma and hypertensive retinopathy.",
-        year: 2023,
-        citations: 467,
-        field: "眼科"
+        id: 112,
+        title: "融合眼底图像与临床指标的眼病多模态诊断研究",
+        authors: ["陈明", "赵倩", "孙博", "周宁"],
+        affiliation: "区域眼病慢病协同诊疗中心",
+        correspondingAuthor: "周宁",
+        correspondingEmail: "zhouning@example.cn",
+        journal: "中华眼科杂志",
+        volumeIssuePages: "61(1): 35-45",
+        doi: "10.3760/cma.j.cn112142-20250108-00019",
+        abstract: "单一眼底影像难以完整反映患者全身慢病状态。研究融合眼底彩照、OCT、血糖、血压和病史信息构建多模态诊断模型，在糖尿病视网膜病变、青光眼和高血压视网膜病变识别中取得更稳定表现。",
+        year: 2025,
+        citations: 126,
+        field: "眼科",
+        type: "研究论文",
+        recommended: true,
+        recommendReason: "贴合眼病慢病联合诊断"
     },
     {
-        id: 13,
-        title: "Self-Supervised Learning for Medical Image Analysis: A Comprehensive Survey",
-        authors: ["Chen Ting", "Kornblith Simon", "Norouzi Mohammad", "Hinton Geoffrey"],
-        affiliation: "Google Brain, Toronto, Canada",
-        correspondingAuthor: "Ting Chen",
-        correspondingEmail: "tingchen@google.com",
-        journal: "IEEE Transactions on Pattern Analysis and Machine Intelligence",
-        volumeIssuePages: "46(6): 3892-3912",
-        doi: "10.1109/TPAMI.2023.3345678",
-        abstract: "Self-supervised learning (SSL) has emerged as a powerful paradigm for learning representations from unlabeled medical images, addressing the chronic scarcity of expert annotations. This comprehensive survey reviews over 200 SSL methods applied to medical image analysis. We categorize approaches into contrastive methods (SimCLR, MoCo), generative methods (MAE, BEiT), and hybrid approaches. The survey covers applications in radiology, pathology, dermatology, and ophthalmology. Key findings include: SSL pretraining on domain-specific medical images consistently outperforms ImageNet transfer learning by 3-8% across tasks; methods combining local and global feature learning achieve the best results; and scaling laws observed in natural images also apply to medical domains. We provide practical recommendations for SSL method selection based on dataset size, annotation availability, and target task characteristics.",
-        year: 2024,
-        citations: 756,
-        field: "医学影像"
+        id: 113,
+        title: "基层糖尿病眼病筛查随访路径的真实世界研究",
+        authors: ["赵瑞", "黄洁", "马骏", "韩莉"],
+        affiliation: "省级慢病管理与眼健康协作网络",
+        correspondingAuthor: "韩莉",
+        correspondingEmail: "hanli@example.cn",
+        journal: "中华糖尿病杂志",
+        volumeIssuePages: "17(6): 421-431",
+        doi: "10.3760/cma.j.cn115791-20250511-00204",
+        abstract: "研究基于社区卫生服务中心、区域影像中心和三甲医院眼科协作数据，评估糖尿病患者眼底筛查、阳性转诊、复诊随访和干预反馈的闭环管理效果，为基层慢病协同管理提供流程证据。",
+        year: 2025,
+        citations: 74,
+        field: "内分泌",
+        type: "临床研究",
+        recommended: true,
+        recommendReason: "关联慢病随访闭环"
     },
     {
-        id: 14,
-        title: "Convolutional Neural Networks for Diabetic Foot Ulcer Classification Using Thermal and Color Images",
-        authors: ["Goyal Manu", "Reeves Neil D", "Rajbhandari Satyan", "Yap Moi Hoon"],
-        affiliation: "Faculty of Science and Engineering, Manchester Metropolitan University, Manchester, UK",
-        correspondingAuthor: "Moi Hoon Yap",
-        correspondingEmail: "m.yap@mmu.ac.uk",
-        journal: "Diabetes Care",
-        volumeIssuePages: "47(2): 278-286",
-        doi: "10.2337/dc23-1234",
-        abstract: "Diabetic foot ulcers (DFU) affect approximately 15% of diabetic patients and are the leading cause of non-traumatic lower-limb amputations. Early and accurate classification of DFU severity is essential for appropriate treatment. We developed a dual-stream convolutional neural network that processes both thermal and standard color images for DFU classification. The thermal stream captures temperature variations associated with inflammation and ischemia, while the color stream detects visual wound characteristics. The network was trained on a dataset of 7,258 image pairs from 1,834 patients and achieved 93.2% accuracy for ischemia detection and 89.7% accuracy for infection classification, significantly outperforming single-modality approaches. A mobile application integrating the model enables point-of-care screening in community health settings.",
-        year: 2024,
-        citations: 178,
-        field: "临床医学"
-    },
-    {
-        id: 15,
-        title: "Uncertainty-Aware Deep Learning for Reliable Detection of Referable Diabetic Retinopathy",
-        authors: ["Abramoff Michael D", "Lavin Philip T", "Birch Michele", "Shah Nilay", "Folk James C"],
-        affiliation: "Department of Ophthalmology and Visual Sciences, University of Iowa, Iowa City, IA, USA",
-        correspondingAuthor: "Michael D. Abramoff",
-        correspondingEmail: "michael-abramoff@uiowa.edu",
-        journal: "Nature Digital Medicine",
-        volumeIssuePages: "7(1): 45",
-        doi: "10.1038/s41746-024-00987-1",
-        abstract: "While deep learning models for diabetic retinopathy (DR) detection achieve high accuracy on curated datasets, their reliability in real-world settings is limited by the inability to quantify prediction uncertainty. We propose an uncertainty-aware deep learning framework that combines Monte Carlo dropout with test-time augmentation to estimate both aleatoric and epistemic uncertainty. The framework was validated on the FDA-authorized IDx-DR system and evaluated across 27,000 patient visits from 12 primary care clinics. By setting an uncertainty threshold, the model deferred 8.7% of cases for specialist review while maintaining 95.2% sensitivity on the remaining cases—comparable to the 94.8% sensitivity achieved without deferral. This approach enables safe autonomous screening by identifying cases where the model's prediction is unreliable, ensuring patient safety while maximizing efficiency.",
-        year: 2024,
-        citations: 321,
-        field: "眼科"
+        id: 114,
+        title: "面向眼病筛查的中文医学文献语义检索模型构建",
+        authors: ["郑源", "林珂", "许晴", "周明"],
+        affiliation: "生命医学知识工程实验室",
+        correspondingAuthor: "周明",
+        correspondingEmail: "zhouming@example.edu.cn",
+        journal: "中国数字医学",
+        volumeIssuePages: "21(2): 22-31",
+        doi: "10.3969/j.issn.1673-7571.2026.02.004",
+        abstract: "为提升眼病筛查领域文献发现效率，研究构建中文医学文献语义向量模型，对标题、摘要、关键词和作者信息进行统一编码，并结合用户检索意图返回高相关文献，显著改善同义表达和长文本检索场景下的召回效果。",
+        year: 2026,
+        citations: 28,
+        field: "医学信息学",
+        type: "方法学研究",
+        recommended: true,
+        recommendReason: "直接对应语义向量检索"
     }
 ];
 
-// ===== 推荐文献（基于热门度和引用量） =====
-var recommendData = [
-    mockData[0],  // DR JAMA 3245引用
-    mockData[10], // LLM Clinical 1890引用
-    mockData[1],  // DR Nature Medicine 892引用
-    mockData[12], // SSL Survey 756引用
-    mockData[4],  // Transformer Medical 678引用
-    mockData[3],  // Glaucoma AI 234引用 -> 改为 id=9 FL
-    mockData[9],  // Alzheimer 523引用
-    mockData[13]  // DFU 178引用 -> 改为 id=7 quality
-];
-// 重新构建推荐列表（按引用量排序取前8）
-recommendData = mockData.slice().sort(function(a,b){ return b.citations - a.citations; }).slice(0, 8);
-
-// ===== 全局状态 =====
-var currentTab = 'all';
+var recommendData = mockData.slice().sort(function(a, b) {
+    return b.citations - a.citations;
+}).slice(0, 8);
+var currentMode = 'keyword';
 var currentPage = 1;
 var pageSize = 5;
 var filteredData = mockData.slice();
 
-// ===== 初始化 =====
 function init() {
-    doSearch();
+    doSearch('keyword');
     renderRecommend();
 }
 
-// ===== 搜索过滤 =====
-function doSearch() {
-    var keyword = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-    var field = document.getElementById('fieldFilter').value;
+function doSearch(mode) {
+    currentMode = mode || currentMode || 'keyword';
+    var keywordBtn = document.querySelector('button[onclick="doSearch(\'keyword\')"]');
+    var semanticBtn = document.querySelector('button[onclick="doSearch(\'semantic\')"]');
+    if (keywordBtn && semanticBtn) {
+        keywordBtn.classList.toggle('active-mode', currentMode === 'keyword');
+        semanticBtn.classList.toggle('active-mode', currentMode === 'semantic');
+    }
+
+    var keyword = (document.getElementById('searchInput').value || '').trim();
     var year = document.getElementById('yearFilter').value;
+    var journal = document.getElementById('journalFilter').value;
+    var type = document.getElementById('typeFilter').value;
 
     filteredData = mockData.filter(function(item) {
-        // 领域过滤
-        if (field && item.field !== field) return false;
-        // 年份过滤
-        if (year && item.year < parseInt(year)) return false;
-        // 关键词模糊匹配（标题、摘要、作者）
-        if (keyword) {
-            var titleMatch = item.title.toLowerCase().indexOf(keyword) >= 0;
-            var abstractMatch = item.abstract.toLowerCase().indexOf(keyword) >= 0;
-            var authorMatch = item.authors.some(function(a) {
-                return a.toLowerCase().indexOf(keyword) >= 0;
-            });
-            if (!titleMatch && !abstractMatch && !authorMatch) return false;
+        if (year) {
+            if (year === '2022') {
+                if (item.year > 2022) return false;
+            } else if (item.year !== parseInt(year, 10)) {
+                return false;
+            }
+        }
+        if (journal && item.journal !== journal) return false;
+        if (type && item.type !== type) return false;
+
+        if (currentMode === 'keyword' && keyword) {
+            var haystack = [item.title, item.abstract, item.authors.join('、')].join(' ').toLowerCase();
+            if (haystack.indexOf(keyword.toLowerCase()) < 0) return false;
         }
         return true;
     });
 
-    currentPage = 1;
-    if (currentTab === 'semantic') {
-        renderSemanticTable();
+    if (currentMode === 'semantic') {
+        filteredData = filteredData.map(function(item) {
+            var cloned = Object.assign({}, item);
+            cloned._semanticScore = computeSemanticScore(item, keyword);
+            return cloned;
+        }).sort(function(a, b) {
+            if (b._semanticScore !== a._semanticScore) return b._semanticScore - a._semanticScore;
+            return b.citations - a.citations;
+        });
+        var maxScore = Math.max.apply(null, filteredData.map(function(item) { return item._semanticScore; }).concat([1]));
+        filteredData.forEach(function(item, index) {
+            var normalized = maxScore > 0 ? Math.round((item._semanticScore / maxScore) * 30) : 0;
+            item._semanticRelevance = Math.max(62, Math.min(98, 98 - index * 3 + normalized));
+        });
     } else {
-        renderTable();
+        filteredData.sort(function(a, b) { return b.citations - a.citations; });
     }
+
+    currentPage = 1;
+    renderResults();
 }
 
-// ===== 渲染全部结果表格 =====
-function renderTable() {
+function computeSemanticScore(item, query) {
+    var baseText = [item.title, item.abstract, item.field, item.type, item.journal].join(' ').toLowerCase();
+    var score = Math.min(item.citations / 80, 35);
+    if (!query) return score;
+
+    var normalizedQuery = query.toLowerCase();
+    if (baseText.indexOf(normalizedQuery) >= 0) score += 45;
+
+    var terms = extractSemanticTerms(normalizedQuery);
+    terms.forEach(function(term) {
+        if (item.title.toLowerCase().indexOf(term) >= 0) score += 16;
+        if (item.abstract.toLowerCase().indexOf(term) >= 0) score += 8;
+        if (item.field.toLowerCase().indexOf(term) >= 0 || item.type.toLowerCase().indexOf(term) >= 0) score += 4;
+    });
+
+    var domainBoosts = [
+        ['眼底', '视网膜', '糖尿病', 'OCT', '青光眼', '筛查'],
+        ['语义', '向量', '检索', '推荐', '文献'],
+        ['慢病', '随访', '基层', '临床', '诊断'],
+        ['多模态', '融合', '影像', '模型']
+    ];
+    domainBoosts.forEach(function(group) {
+        var queryHit = group.some(function(term) { return normalizedQuery.indexOf(term.toLowerCase()) >= 0; });
+        var itemHit = group.some(function(term) { return baseText.indexOf(term.toLowerCase()) >= 0; });
+        if (queryHit && itemHit) score += 10;
+    });
+    return score;
+}
+
+function extractSemanticTerms(text) {
+    var preset = ['眼底', '视网膜', '糖尿病', '黄斑', '青光眼', 'OCT', '慢病', '诊断', '筛查', '随访', '语义', '向量', '检索', '推荐', '文献', '大语言模型', '多模态', '融合', '医学影像', '隐私', '联邦学习', '质量', '基础模型'];
+    var terms = preset.filter(function(term) { return text.indexOf(term.toLowerCase()) >= 0; });
+    text.split(/[\s,，。；;、]+/).forEach(function(part) {
+        if (part.length >= 2) terms.push(part);
+    });
+    return Array.from(new Set(terms));
+}
+
+function renderResults() {
+    var list = document.getElementById('resultList');
+    var noResult = document.getElementById('resultNoResult');
+    var pagination = document.getElementById('resultPagination');
+    var summary = document.getElementById('resultSummary');
+    var modeLabel = document.getElementById('resultMode');
     var start = (currentPage - 1) * pageSize;
-    var end = start + pageSize;
-    var pageData = filteredData.slice(start, end);
+    var pageData = filteredData.slice(start, start + pageSize);
 
-    var tbody = document.getElementById('allTableBody');
-    var noResult = document.getElementById('allNoResult');
-    var pagination = document.getElementById('allPagination');
+    summary.textContent = '共检索到 ' + filteredData.length + ' 条文献';
+    modeLabel.textContent = currentMode === 'semantic' ? '语义向量检索结果' : '关键词检索结果';
 
-    if (filteredData.length === 0) {
-        tbody.innerHTML = '';
+    if (!filteredData.length) {
+        list.innerHTML = '';
         noResult.style.display = 'block';
         pagination.innerHTML = '';
         return;
     }
 
     noResult.style.display = 'none';
-
-    var html = '';
-    pageData.forEach(function(item) {
-        var snippet = item.abstract.length > 120 ? item.abstract.substring(0, 120) + '...' : item.abstract;
-        html += '<tr>';
-        html += '<td style="font-weight:500;">' + escapeHtml(item.title) + '</td>';
-        html += '<td style="font-size:12px;color:var(--gray-600);">' + escapeHtml(item.authors[0]) + ' et al.</td>';
-        html += '<td><div class="abstract-snippet">' + escapeHtml(snippet) + '</div></td>';
-        html += '<td style="font-size:12px;">' + escapeHtml(item.journal) + '</td>';
-        html += '<td>' + item.year + '</td>';
-        html += '<td>' + item.citations.toLocaleString() + '</td>';
-        html += '<td><button class="btn btn-sm btn-outline" onclick="openDetail(' + item.id + ')">详情</button></td>';
-        html += '</tr>';
-    });
-    tbody.innerHTML = html;
+    list.innerHTML = pageData.map(function(item) {
+        var authors = item.authors.join('、');
+        var snippet = item.abstract.length > 150 ? item.abstract.substring(0, 150) + '...' : item.abstract;
+        var semanticBadge = currentMode === 'semantic'
+            ? '<span class="semantic-score">语义相关度：' + item._semanticRelevance + '%</span>'
+            : '';
+        return '' +
+            '<article class="literature-item">' +
+                '<div class="literature-head">' +
+                    '<div class="literature-title" onclick="openDetail(' + item.id + ')">' + escapeHtml(item.title) + '</div>' +
+                    '<div class="literature-badges">' +
+                        '<span class="recommend-badge">为您推荐</span>' +
+                        semanticBadge +
+                    '</div>' +
+                '</div>' +
+                '<div class="literature-meta">' +
+                    '<span><strong>作者：</strong>' + escapeHtml(authors) + '</span>' +
+                    '<span><strong>期刊名称：</strong>' + escapeHtml(item.journal) + '</span>' +
+                    '<span><strong>发表年份：</strong>' + item.year + '</span>' +
+                    '<span><strong>文献类型：</strong>' + escapeHtml(item.type) + '</span>' +
+                '</div>' +
+                '<div class="literature-abstract"><strong>摘要片段：</strong>' + escapeHtml(snippet) + '</div>' +
+                '<div class="literature-actions">' +
+                    '<span class="literature-type">' + escapeHtml(item.recommendReason) + ' · 引用 ' + item.citations.toLocaleString() + ' 次</span>' +
+                    '<button class="btn btn-sm btn-outline" onclick="openDetail(' + item.id + ')">查看详情</button>' +
+                '</div>' +
+            '</article>';
+    }).join('');
     renderPagination(pagination);
 }
 
-// ===== 渲染语义向量检索表格 =====
-function renderSemanticTable() {
-    var keyword = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-    var field = document.getElementById('fieldFilter').value;
-    var year = document.getElementById('yearFilter').value;
-
-    // 先做基础过滤
-    var semanticData = mockData.filter(function(item) {
-        if (field && item.field !== field) return false;
-        if (year && item.year < parseInt(year)) return false;
-        return true;
-    });
-
-    // 模拟语义相关性排序：如果有搜索词，计算简单的TF-like得分
-    if (keyword) {
-        var keywords = keyword.split(/\s+/).filter(function(k) { return k.length > 0; });
-        semanticData.forEach(function(item) {
-            var score = 0;
-            var titleLower = item.title.toLowerCase();
-            var abstractLower = item.abstract.toLowerCase();
-            keywords.forEach(function(kw) {
-                // 标题匹配权重更高
-                var titleCount = (titleLower.match(new RegExp(escapeRegExp(kw), 'g')) || []).length;
-                var abstractCount = (abstractLower.match(new RegExp(escapeRegExp(kw), 'g')) || []).length;
-                score += titleCount * 3 + abstractCount * 1;
-            });
-            item._semanticScore = score;
-        });
-        // 按得分降序排列
-        semanticData.sort(function(a, b) {
-            return b._semanticScore - a._semanticScore;
-        });
-    } else {
-        // 无搜索词时按引用量排序作为默认"语义相关"
-        semanticData.sort(function(a, b) { return b.citations - a.citations; });
-    }
-
-    var tbody = document.getElementById('semanticTableBody');
-    var noResult = document.getElementById('semanticNoResult');
-
-    if (semanticData.length === 0) {
-        tbody.innerHTML = '';
-        noResult.style.display = 'block';
-        return;
-    }
-
-    noResult.style.display = 'none';
-
-    var html = '';
-    // 取前10条
-    var displayData = semanticData.slice(0, 10);
-    displayData.forEach(function(item) {
-        var snippet = item.abstract.length > 120 ? item.abstract.substring(0, 120) + '...' : item.abstract;
-        // 计算语义相关度百分比
-        var relevance;
-        if (keyword && item._semanticScore !== undefined) {
-            var maxScore = displayData[0]._semanticScore || 1;
-            relevance = maxScore > 0 ? Math.round((item._semanticScore / maxScore) * 100) : 50;
-        } else {
-            relevance = Math.round(60 + Math.random() * 38); // 无搜索词时随机60-98
-        }
-        html += '<tr>';
-        html += '<td style="font-weight:500;">' + escapeHtml(item.title) + '</td>';
-        html += '<td style="font-size:12px;color:var(--gray-600);">' + escapeHtml(item.authors[0]) + ' et al.</td>';
-        html += '<td><div class="abstract-snippet">' + escapeHtml(snippet) + '</div></td>';
-        html += '<td style="font-size:12px;">' + escapeHtml(item.journal) + '</td>';
-        html += '<td>' + item.year + '</td>';
-        html += '<td><span class="tag tag-blue">' + relevance + '%</span></td>';
-        html += '<td><button class="btn btn-sm btn-outline" onclick="openDetail(' + item.id + ')">详情</button></td>';
-        html += '</tr>';
-    });
-    tbody.innerHTML = html;
-}
-
-// ===== 分页 =====
 function renderPagination(container) {
     var totalPages = Math.ceil(filteredData.length / pageSize);
     if (totalPages <= 1) {
@@ -713,96 +718,36 @@ function renderPagination(container) {
 
 function goPage(page) {
     currentPage = page;
-    renderTable();
+    renderResults();
 }
 
-// ===== Tab 切换 =====
-function switchTab(group, name) {
-    currentTab = name;
-    var btns = document.querySelectorAll('[data-tab-group="' + group + '"]');
-    var contents = document.querySelectorAll('[data-tab-content="' + group + '"]');
-    btns.forEach(function(b) { b.classList.remove('active'); });
-    contents.forEach(function(c) { c.classList.remove('active'); });
-
-    var btn = document.querySelector('[data-tab-group="' + group + '"][data-tab="' + name + '"]');
-    var content = document.querySelector('[data-tab-content="' + group + '"][data-tab="' + name + '"]');
-    if (btn) btn.classList.add('active');
-    if (content) content.classList.add('active');
-
-    // 切换到语义向量检索时重新渲染
-    if (name === 'semantic') {
-        renderSemanticTable();
-    } else if (name === 'all') {
-        renderTable();
-    }
-}
-
-// ===== 详情弹窗 =====
 function openDetail(id) {
     var item = mockData.find(function(d) { return d.id === id; });
     if (!item) return;
 
     document.getElementById('modalTitle').textContent = item.title;
-
     var body = document.getElementById('modalBody');
     var authorTags = item.authors.map(function(a) { return '<span>' + escapeHtml(a) + '</span>'; }).join('');
-
     var doiHtml = item.doi
         ? '<a class="doi-link" href="https://doi.org/' + escapeHtml(item.doi) + '" target="_blank" rel="noopener">' + escapeHtml(item.doi) + '</a>'
         : '-';
 
     body.innerHTML =
-        '<div class="detail-field">' +
-        '<div class="detail-label">标题</div>' +
-        '<div class="detail-value" style="font-weight:600;font-size:15px;">' + escapeHtml(item.title) + '</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">全部作者</div>' +
-        '<div class="author-list">' + authorTags + '</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">作者单位</div>' +
-        '<div class="detail-value">' + escapeHtml(item.affiliation) + '</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">通信作者及邮箱</div>' +
-        '<div class="detail-value">' + escapeHtml(item.correspondingAuthor) + ' &lt;<a href="mailto:' + escapeHtml(item.correspondingEmail) + '" style="color:var(--primary);text-decoration:none;">' + escapeHtml(item.correspondingEmail) + '</a>&gt;</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">期刊名称</div>' +
-        '<div class="detail-value">' + escapeHtml(item.journal) + '</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">卷期页码</div>' +
-        '<div class="detail-value">' + escapeHtml(item.volumeIssuePages) + '</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">DOI</div>' +
-        '<div class="detail-value">' + doiHtml + '</div>' +
-        '</div>' +
-
-        '<div class="detail-field">' +
-        '<div class="detail-label">摘要全文</div>' +
-        '<div class="detail-abstract">' + escapeHtml(item.abstract) + '</div>' +
-        '</div>';
+        '<div class="detail-field"><div class="detail-label">标题</div><div class="detail-value" style="font-weight:600;font-size:15px;">' + escapeHtml(item.title) + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">全部作者</div><div class="author-list">' + authorTags + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">作者单位</div><div class="detail-value">' + escapeHtml(item.affiliation) + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">通信作者及邮箱</div><div class="detail-value">' + escapeHtml(item.correspondingAuthor) + ' &lt;<a href="mailto:' + escapeHtml(item.correspondingEmail) + '" style="color:var(--primary);text-decoration:none;">' + escapeHtml(item.correspondingEmail) + '</a>&gt;</div></div>' +
+        '<div class="detail-field"><div class="detail-label">期刊名称</div><div class="detail-value">' + escapeHtml(item.journal) + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">发表年份 / 文献类型</div><div class="detail-value">' + item.year + ' / ' + escapeHtml(item.type) + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">卷期页码</div><div class="detail-value">' + escapeHtml(item.volumeIssuePages) + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">DOI</div><div class="detail-value">' + doiHtml + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">推荐说明</div><div class="detail-value"><span class="recommend-badge">为您推荐</span> ' + escapeHtml(item.recommendReason) + '</div></div>' +
+        '<div class="detail-field"><div class="detail-label">摘要全文</div><div class="detail-abstract">' + escapeHtml(item.abstract) + '</div></div>';
 
     document.getElementById('detailModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
-function closeDetailModal(event) {
-    if (event && event.target !== document.getElementById('detailModal')) return;
-    document.getElementById('detailModal').style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-// ===== 右侧推荐区域 =====
 function renderRecommend() {
     var container = document.getElementById('recommendList');
     var html = '';
@@ -810,7 +755,7 @@ function renderRecommend() {
         html += '<div class="rec-item" onclick="openDetail(' + item.id + ')" title="点击查看详情">';
         html += '<div class="rec-item-title">' + escapeHtml(item.title) + '</div>';
         html += '<div class="rec-item-meta">';
-        html += '<span>' + escapeHtml(item.authors[0]) + ' et al.</span>';
+        html += '<span>' + escapeHtml(item.authors[0]) + ' 等</span>';
         html += '<span>' + escapeHtml(item.journal) + '</span>';
         html += '<span>' + item.year + '</span>';
         html += '</div>';
@@ -819,15 +764,10 @@ function renderRecommend() {
     container.innerHTML = html;
 }
 
-// ===== 工具函数 =====
 function escapeHtml(str) {
     var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
+    div.appendChild(document.createTextNode(String(str)));
     return div.innerHTML;
-}
-
-function escapeRegExp(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // ===== 导航和登出 =====

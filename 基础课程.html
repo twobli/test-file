@@ -78,36 +78,29 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .page-view { display: none; }
 .page-view.active { display: block; }
 
-/* ===== 学习统计卡片 ===== */
-.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
-.stat-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
-.stat-card .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-.stat-card .stat-info .stat-value { font-size: 26px; font-weight: 700; color: var(--gray-900); }
-.stat-card .stat-info .stat-label { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-.stat-card.blue .stat-icon { background: #e8f0fe; color: #1a73e8; }
-.stat-card.green .stat-icon { background: #e6f4ea; color: #34a853; }
-.stat-card.orange .stat-icon { background: #fef7e0; color: #f9ab00; }
-.stat-card.purple .stat-icon { background: #f3e8fd; color: #9334e6; }
-
-/* ===== 进度环形图 ===== */
-.progress-overview { display: flex; align-items: center; gap: 28px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; }
+/* ===== 学习概览 ===== */
+.overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 20px; }
+.overview-card { display: flex; align-items: center; gap: 24px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; min-height: 178px; }
 .ring-chart-wrap { flex-shrink: 0; position: relative; width: 120px; height: 120px; }
 .ring-chart-wrap svg { transform: rotate(-90deg); }
 .ring-chart-wrap .ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
 .ring-chart-wrap .ring-center .ring-pct { font-size: 28px; font-weight: 700; color: var(--primary); }
 .ring-chart-wrap .ring-center .ring-label { font-size: 11px; color: var(--gray-500); }
+.overview-card.quiz .ring-chart-wrap .ring-center .ring-pct { color: var(--success); }
 .progress-detail { flex: 1; }
 .progress-detail h3 { font-size: 16px; font-weight: 600; color: var(--gray-900); margin-bottom: 12px; }
 .progress-detail .progress-info-row { display: flex; gap: 32px; margin-top: 12px; }
 .progress-detail .progress-info-row .pi-item { text-align: center; }
 .progress-detail .progress-info-row .pi-num { font-size: 22px; font-weight: 700; color: var(--primary); }
+.progress-detail .progress-info-row .pi-num.ok { color: var(--success); }
 .progress-detail .progress-info-row .pi-num.warn { color: var(--orange); }
 .progress-detail .progress-info-row .pi-label { font-size: 12px; color: var(--gray-600); }
-.progress-detail .btn-continue { margin-top: 14px; }
 
 /* ===== 筛选栏 ===== */
 .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 18px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; }
 .filter-bar .filter-label { font-size: 13px; color: var(--gray-700); font-weight: 500; white-space: nowrap; margin-right: 4px; }
+.filter-select { padding: 6px 34px 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--gray-300); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA0A6' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center; color: var(--gray-700); transition: var(--transition); font-family: inherit; white-space: nowrap; appearance: none; outline: none; min-width: 128px; }
+.filter-select:hover, .filter-select:focus { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.08); }
 .filter-pill { padding: 6px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); transition: var(--transition); font-family: inherit; white-space: nowrap; }
 .filter-pill:hover { border-color: var(--primary); color: var(--primary); }
 .filter-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -163,25 +156,34 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* ===== 视频学习页 ===== */
 .learning-layout { display: flex; gap: 20px; height: calc(100vh - var(--header-height) - 120px); }
 .chapter-sidebar { width: 280px; flex-shrink: 0; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow-y: auto; display: flex; flex-direction: column; }
-.chapter-sidebar .chapter-header { padding: 16px 18px; border-bottom: 1px solid var(--gray-100); font-weight: 600; font-size: 15px; color: var(--gray-900); }
-.chapter-tree { flex: 1; overflow-y: auto; padding: 8px 0; }
+.chapter-sidebar .chapter-header { padding: 16px 18px; border-bottom: 1px solid var(--gray-100); font-weight: 600; font-size: 15px; color: var(--gray-900); display: flex; flex-direction: column; gap: 10px; }
+.chapter-sidebar .chapter-header .chapter-title-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.chapter-sidebar .chapter-header .course-progress-text { font-size: 12px; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 2px 8px; font-weight: 600; }
+.chapter-sidebar .chapter-header .course-progress-bar { height: 6px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.chapter-sidebar .chapter-header .course-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--success)); border-radius: 999px; transition: width 0.3s ease; }
+.chapter-tree { flex: 1; overflow-y: auto; padding: 8px 0; position: relative; }
 .chapter-tree .chapter-node { padding: 0; }
-.chapter-tree .chapter-title { padding: 10px 18px; font-size: 14px; font-weight: 600; color: var(--gray-800); cursor: pointer; display: flex; align-items: center; gap: 8px; user-select: none; transition: var(--transition); }
+.chapter-tree .chapter-title { padding: 10px 18px; font-size: 14px; font-weight: 600; color: var(--gray-800); cursor: pointer; display: flex; align-items: center; gap: 8px; user-select: none; transition: var(--transition); position: relative; z-index: 1; background: #fff; }
 .chapter-tree .chapter-title:hover { background: var(--gray-50); }
 .chapter-tree .chapter-title .expand-icon { font-size: 10px; transition: transform 0.2s; width: 14px; text-align: center; color: var(--gray-500); }
 .chapter-tree .chapter-title .expand-icon.open { transform: rotate(90deg); }
-.chapter-tree .chapter-title .chapter-quiz-btn { margin-left: auto; font-size: 13px; cursor: pointer; opacity: 0.7; transition: var(--transition); padding: 2px 6px; border-radius: 4px; }
-.chapter-tree .chapter-title .chapter-quiz-btn:hover { opacity: 1; background: var(--primary-light); }
-.chapter-tree .chapter-title .chapter-quiz-btn.no-quiz { opacity: 0.35; cursor: not-allowed; }
-.chapter-tree .chapter-title .chapter-quiz-btn.no-quiz:hover { background: transparent; }
 .chapter-tree .section-list { overflow: hidden; transition: max-height 0.3s ease; }
-.chapter-tree .section-item { padding: 8px 18px 8px 38px; font-size: 13px; color: var(--gray-700); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); border-left: 3px solid transparent; }
+.chapter-tree .section-item { padding: 8px 18px 8px 50px; font-size: 13px; color: var(--gray-700); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); border-left: 3px solid transparent; position: relative; z-index: 1; background: #fff; }
+.chapter-tree .section-item::before { content: ''; position: absolute; left: 23px; top: 50%; width: 14px; height: 14px; border-radius: 50%; transform: translateY(-50%); border: 2px solid var(--gray-300); background: #fff; box-shadow: 0 0 0 3px #fff; }
 .chapter-tree .section-item:hover { background: var(--gray-50); color: var(--primary); }
 .chapter-tree .section-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 500; }
+.chapter-tree .section-item.active::before { border-color: var(--primary); background: var(--primary); }
 .chapter-tree .section-item.done { color: var(--success); }
+.chapter-tree .section-item.done::before { content: '\2713'; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; border-color: var(--success); background: var(--success); }
 .chapter-tree .section-item.done::after { content: '\2713'; margin-left: auto; color: var(--success); font-weight: 700; }
 .chapter-tree .section-item.locked { color: var(--gray-400); cursor: not-allowed; }
 .chapter-tree .section-item.locked::after { content: '\1F512'; margin-left: auto; font-size: 11px; }
+.chapter-quiz-panel { padding: 12px 16px; border-top: 1px solid var(--gray-100); background: #fff; }
+.chapter-quiz-panel .chapter-quiz-entry { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+.chapter-quiz-panel .chapter-quiz-entry:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.chapter-quiz-panel .chapter-quiz-entry.locked { background: var(--gray-50); border-color: var(--gray-200); color: var(--gray-500); cursor: not-allowed; }
+.chapter-quiz-panel .chapter-quiz-entry.locked:hover { background: var(--gray-50); border-color: var(--gray-200); }
+.chapter-quiz-panel .quiz-note { margin-top: 6px; font-size: 11px; color: var(--gray-500); text-align: center; line-height: 1.4; }
 .learning-main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
 .learning-toolbar { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
 .learning-toolbar .toolbar-title { font-size: 16px; font-weight: 600; color: var(--gray-900); display: flex; align-items: center; gap: 12px; }
@@ -201,6 +203,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .video-controls .ctrl-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
 .handout-section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; flex: 1; overflow-y: auto; }
 .handout-section .handout-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
+.handout-section .handout-heading { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .handout-section .handout-header h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); }
 .handout-section .handout-body { font-size: 14px; color: var(--gray-800); line-height: 1.9; }
 .handout-section .handout-body h4 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 16px 0 8px; }
@@ -209,9 +212,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .handout-section .handout-body ul li { margin-bottom: 4px; }
 .section-complete-hint { background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: var(--radius); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
 .section-complete-hint .complete-text { font-size: 13px; color: #2e7d32; font-weight: 500; }
-.learning-record-mini { padding: 12px 18px; border-top: 1px solid var(--gray-100); background: var(--gray-50); }
-.learning-record-mini .lr-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--gray-600); margin-bottom: 4px; }
-.learning-record-mini .lr-row .lr-val { font-weight: 600; color: var(--gray-800); }
 
 /* ===== 测验页 ===== */
 .quiz-header { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
@@ -225,7 +225,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .quiz-question-card .q-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .quiz-question-card .q-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
 .quiz-question-card .q-type { font-size: 11px; color: var(--gray-500); background: var(--gray-100); padding: 2px 8px; border-radius: 4px; }
-.quiz-question-card .q-score { font-size: 11px; color: var(--orange); margin-left: auto; }
 .quiz-question-card .q-title { font-size: 15px; font-weight: 600; color: var(--gray-900); margin-bottom: 14px; line-height: 1.5; }
 .quiz-question-card .q-options { display: flex; flex-direction: column; gap: 8px; }
 .quiz-question-card .q-option { padding: 10px 16px; border: 1px solid var(--gray-200); border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition); font-size: 14px; }
@@ -250,7 +249,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-stats .rs-item { text-align: center; }
 .result-stats .rs-item .rs-val { font-size: 20px; font-weight: 600; color: var(--primary); }
 .result-stats .rs-item .rs-label { font-size: 12px; color: var(--gray-600); }
-.result-stats .rs-item.rank .rs-val { color: var(--orange); }
 .result-stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
 .result-stat-cards .rsc { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; text-align: center; }
 .result-stat-cards .rsc .rsc-num { font-size: 28px; font-weight: 700; }
@@ -261,11 +259,26 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-stat-cards .rsc .rsc-label { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
 
 /* ===== 强化建议 ===== */
-.reinforce-alert { background: #fef9e7; border: 1px solid #f9e79f; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
-.reinforce-alert .ra-title { font-weight: 600; color: #7d6608; font-size: 14px; margin-bottom: 10px; }
-.reinforce-alert .ra-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #fdebd0; }
-.reinforce-alert .ra-item:last-child { border-bottom: none; }
-.reinforce-alert .ra-item .ra-name { font-size: 13px; color: var(--gray-800); }
+.reinforce-alert { background: #fffaf0; border: 1px solid #f7d27a; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
+.reinforce-alert .ra-title { font-weight: 700; color: #7d5200; font-size: 15px; margin-bottom: 4px; }
+.reinforce-alert .ra-subtitle { color: #8a6a21; font-size: 12px; margin-bottom: 14px; }
+.reinforce-alert .ra-list { display: grid; gap: 12px; }
+.reinforce-alert .ra-item { background: #fff; border: 1px solid #f5e3b1; border-radius: 8px; padding: 14px 16px; }
+.reinforce-alert .ra-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+.reinforce-alert .ra-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.reinforce-alert .ra-badge { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: #fff3d0; color: #a56400; font-size: 12px; font-weight: 700; }
+.reinforce-alert .ra-name { font-size: 14px; color: var(--gray-900); font-weight: 700; }
+.reinforce-alert .ra-meta { color: var(--gray-500); font-size: 12px; margin-top: 4px; }
+.reinforce-alert .ra-suggestion { min-width: 300px; color: var(--gray-700); font-size: 13px; line-height: 1.6; }
+.reinforce-alert .ra-suggestion-label { display: block; color: var(--primary); font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+.reinforce-alert .ra-path { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.reinforce-alert .ra-step { padding: 5px 10px; border-radius: 999px; background: var(--primary-light); color: var(--primary); font-size: 12px; }
+.reinforce-alert .ra-arrow { color: #bd8b1d; font-size: 12px; }
+.reinforce-alert .ra-empty { background: #fff; border: 1px solid #d7ead9; border-radius: 8px; padding: 14px 16px; color: #1e7e34; font-size: 13px; }
+@media (max-width: 900px) {
+    .reinforce-alert .ra-main { flex-direction: column; }
+    .reinforce-alert .ra-suggestion { min-width: 0; }
+}
 
 /* ===== 错题解析 ===== */
 .wrong-analysis { margin-bottom: 20px; }
@@ -294,7 +307,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* ===== 响应式 ===== */
 @media (max-width: 1200px) {
     .course-grid { grid-template-columns: repeat(3, 1fr); }
-    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .overview-grid { grid-template-columns: 1fr; }
     .result-stat-cards { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 900px) {
@@ -305,40 +318,56 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 }
 @media (max-width: 600px) {
     .course-grid { grid-template-columns: 1fr; }
-    .stat-grid { grid-template-columns: 1fr; }
+    .overview-card { flex-direction: column; align-items: flex-start; }
 }
 
 /* ===== 星标难度 ===== */
 .stars { color: #f9ab00; letter-spacing: 1px; font-size: 12px; }
 
-/* ===== AI智能问答面板 ===== */
-.ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border: none; cursor: pointer; font-size: 24px; box-shadow: 0 4px 16px rgba(102,126,234,0.4); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
-.ai-chat-toggle:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(102,126,234,0.55); }
-.ai-chat-panel { position: fixed; bottom: 90px; right: 24px; width: 400px; height: 560px; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); z-index: 1500; display: none; flex-direction: column; overflow: hidden; }
-.ai-chat-panel.open { display: flex; }
-.ai-chat-panel .chat-header { padding: 14px 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; display: flex; align-items: center; justify-content: space-between; }
-.ai-chat-panel .chat-header .chat-header-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-.ai-chat-panel .chat-header .chat-close { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; transition: var(--transition); }
-.ai-chat-panel .chat-header .chat-close:hover { background: rgba(255,255,255,0.4); }
-.ai-chat-panel .chat-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; background: var(--gray-50); }
-.ai-chat-panel .chat-body .chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.6; word-wrap: break-word; animation: fadeIn 0.2s; }
-.ai-chat-panel .chat-body .chat-msg.user { align-self: flex-end; background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
-.ai-chat-panel .chat-body .chat-msg.ai { align-self: flex-start; background: #fff; color: var(--gray-800); border-bottom-left-radius: 4px; box-shadow: var(--shadow); }
-.ai-chat-panel .chat-body .chat-msg.ai .ai-label { font-size: 11px; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
-.ai-chat-panel .chat-body .chat-msg.ai p { margin-bottom: 6px; }
-.ai-chat-panel .chat-body .chat-msg.ai p:last-child { margin-bottom: 0; }
-.ai-chat-panel .chat-quick-questions { padding: 10px 14px; border-top: 1px solid var(--gray-100); display: flex; flex-wrap: wrap; gap: 6px; background: #fff; }
-.ai-chat-panel .chat-quick-questions .quick-btn { padding: 5px 12px; border-radius: 16px; border: 1px solid var(--gray-200); background: #fff; color: var(--gray-700); font-size: 12px; cursor: pointer; font-family: inherit; transition: var(--transition); white-space: nowrap; }
-.ai-chat-panel .chat-quick-questions .quick-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-.ai-chat-panel .chat-input-area { padding: 10px 14px; border-top: 1px solid var(--gray-100); display: flex; gap: 8px; background: #fff; }
-.ai-chat-panel .chat-input-area input { flex: 1; padding: 9px 14px; border: 1px solid var(--gray-200); border-radius: 20px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.ai-chat-panel .chat-input-area input:focus { border-color: var(--primary); }
-.ai-chat-panel .chat-input-area .send-btn { background: var(--primary); color: #fff; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 16px; transition: var(--transition); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.ai-chat-panel .chat-input-area .send-btn:hover { background: var(--primary-dark); }
-.ai-chat-panel .chat-body .chat-typing { align-self: flex-start; display: flex; gap: 4px; padding: 8px 14px; }
-.ai-chat-panel .chat-body .chat-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-400); animation: typingBounce 1.4s infinite; }
-.ai-chat-panel .chat-body .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
-.ai-chat-panel .chat-body .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+/* ===== AI智能答疑系统 ===== */
+.ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; height: 48px; padding: 0 18px; border-radius: 24px; background: linear-gradient(135deg, #2563eb, #6d5bd0); color: #fff; border: none; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(37,99,235,0.28); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
+.ai-chat-toggle:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.34); }
+.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 640px; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
+.ai-qa-sidebar { background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
+.ai-qa-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--gray-900); }
+.ai-qa-brand .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; }
+.ai-new-chat { width: 100%; height: 40px; border: none; border-radius: 6px; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
+.ai-history-title { font-size: 12px; color: var(--gray-500); font-weight: 700; margin-top: 4px; }
+.ai-history-group { display: flex; flex-direction: column; gap: 8px; }
+.ai-history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 38px; padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--gray-700); cursor: pointer; transition: var(--transition); }
+.ai-history-item.active, .ai-history-item:hover { background: var(--primary-light); color: var(--gray-900); }
+.ai-history-time { color: var(--gray-500); font-size: 11px; flex-shrink: 0; }
+.ai-qa-main { min-width: 0; display: flex; flex-direction: column; }
+.ai-qa-topbar { height: 58px; padding: 0 22px; background: #fff; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ai-qa-title { font-size: 15px; font-weight: 800; color: var(--gray-900); }
+.ai-qa-actions { display: flex; align-items: center; gap: 10px; }
+.ai-model-select { height: 36px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 0 12px; color: var(--gray-700); font-family: inherit; }
+.ai-qa-content { flex: 1; overflow-y: auto; padding: 28px 40px 22px; display: flex; flex-direction: column; gap: 18px; }
+.ai-welcome-card { align-self: center; width: min(520px, 100%); background: #fff; border: 1px solid var(--gray-200); border-radius: 12px; padding: 26px; text-align: center; box-shadow: var(--shadow); }
+.ai-welcome-icon { width: 48px; height: 48px; margin: 0 auto 12px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.ai-welcome-card h3 { font-size: 17px; margin-bottom: 8px; color: var(--gray-900); }
+.ai-welcome-card p { font-size: 13px; color: var(--gray-600); margin-bottom: 14px; }
+.ai-welcome-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.ai-welcome-tags span { padding: 4px 14px; border-radius: 999px; background: var(--primary-light); color: var(--primary); font-size: 12px; }
+.ai-qa-content .chat-msg { max-width: 66%; padding: 12px 16px; border-radius: 12px; font-size: 13px; line-height: 1.75; word-wrap: break-word; animation: fadeIn 0.2s; }
+.ai-qa-content .chat-msg.user { align-self: flex-end; background: #eaf2ff; color: var(--gray-900); border: 1px solid #d8e7ff; }
+.ai-qa-content .chat-msg.ai { align-self: flex-start; background: #fff; color: var(--gray-800); border: 1px solid var(--gray-200); box-shadow: var(--shadow); }
+.ai-qa-content .chat-msg.ai .ai-label { font-size: 12px; color: var(--primary); font-weight: 700; margin-bottom: 4px; }
+.ai-qa-content .chat-msg.ai p { margin-bottom: 6px; }
+.ai-qa-content .chat-msg.ai p:last-child { margin-bottom: 0; }
+.ai-qa-footer { background: #fff; border-top: 1px solid var(--gray-200); padding: 14px 22px; }
+.chat-quick-questions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chat-quick-questions .quick-btn { padding: 6px 14px; border-radius: 18px; border: 1px solid var(--gray-200); background: #fff; color: var(--gray-700); font-size: 12px; cursor: pointer; font-family: inherit; transition: var(--transition); white-space: nowrap; }
+.chat-quick-questions .quick-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.chat-input-area { display: flex; gap: 10px; }
+.chat-input-area input { flex: 1; height: 42px; padding: 0 16px; border: 1px solid var(--gray-200); border-radius: 22px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
+.chat-input-area input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.08); }
+.chat-input-area .send-btn { background: var(--primary); color: #fff; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 18px; transition: var(--transition); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.chat-input-area .send-btn:hover { background: var(--primary-dark); }
+.chat-typing { align-self: flex-start; display: flex; gap: 4px; padding: 10px 16px; background: #fff; border: 1px solid var(--gray-200); border-radius: 12px; }
+.chat-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); animation: typingBounce 1.4s infinite; }
+.chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 </style>
 </head>
@@ -395,57 +424,67 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 <div class="page-view active" id="page-course-list">
     <div class="breadcrumb"><a href="#">AI教育平台</a><span class="sep">›</span><span>基础课程</span></div>
 
-    <!-- 学习统计卡片 -->
-    <div class="stat-grid" id="statCards">
-        <div class="stat-card blue">
-            <div class="stat-icon">📚</div>
-            <div class="stat-info"><div class="stat-value" id="statChapters">12/48</div><div class="stat-label">已学章节 / 总章节</div></div>
-        </div>
-        <div class="stat-card green">
-            <div class="stat-icon">🎯</div>
-            <div class="stat-info"><div class="stat-value" id="statAccuracy">82%</div><div class="stat-label">阅片练习正确率</div></div>
-        </div>
-        <div class="stat-card orange">
-            <div class="stat-icon">📝</div>
-            <div class="stat-info"><div class="stat-value" id="statAvgScore">76.5</div><div class="stat-label">测验平均分</div></div>
-        </div>
-        <div class="stat-card purple">
-            <div class="stat-icon">🕐</div>
-            <div class="stat-info"><div class="stat-value" id="statLastStudy">2026-06-28</div><div class="stat-label">最近学习时间</div></div>
-        </div>
-    </div>
-
-    <!-- 总体学习进度 -->
-    <div class="progress-overview">
-        <div class="ring-chart-wrap">
-            <svg width="120" height="120" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" fill="none" stroke="#e8ecf0" stroke-width="10"/>
-                <circle cx="60" cy="60" r="52" fill="none" stroke="#1a73e8" stroke-width="10"
-                    stroke-dasharray="326.7" stroke-dashoffset="179.7" stroke-linecap="round"/>
-            </svg>
-            <div class="ring-center">
-                <div class="ring-pct">45%</div>
-                <div class="ring-label">总体进度</div>
+    <!-- 学习概览 -->
+    <div class="overview-grid">
+        <div class="overview-card">
+            <div class="ring-chart-wrap">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="#e8ecf0" stroke-width="10"/>
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="#1a73e8" stroke-width="10"
+                        stroke-dasharray="326.7" stroke-dashoffset="179.7" stroke-linecap="round" id="learningProgressRing"/>
+                </svg>
+                <div class="ring-center">
+                    <div class="ring-pct" id="learningProgressPct">45%</div>
+                    <div class="ring-label">学习进度</div>
+                </div>
+            </div>
+            <div class="progress-detail">
+                <h3>章节内容总体学习进度</h3>
+                <div class="progress-bar" style="height:10px; margin-bottom:8px;">
+                    <div class="progress-bar-fill" id="learningProgressBar" style="width:45%;"></div>
+                </div>
+                <div class="progress-info-row">
+                    <div class="pi-item"><div class="pi-num" id="learnedSections">0</div><div class="pi-label">已学章节</div></div>
+                    <div class="pi-item"><div class="pi-num warn" id="unlearnedSections">0</div><div class="pi-label">未学章节</div></div>
+                    <div class="pi-item"><div class="pi-num" id="totalSections">0</div><div class="pi-label">总章节</div></div>
+                </div>
             </div>
         </div>
-        <div class="progress-detail">
-            <h3>总体学习进度</h3>
-            <div class="progress-bar" style="height:10px; margin-bottom:8px;">
-                <div class="progress-bar-fill" style="width:45%;"></div>
+        <div class="overview-card quiz">
+            <div class="ring-chart-wrap">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="#e8ecf0" stroke-width="10"/>
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="#34a853" stroke-width="10"
+                        stroke-dasharray="326.7" stroke-dashoffset="57.2" stroke-linecap="round" id="quizAccuracyRing"/>
+                </svg>
+                <div class="ring-center">
+                    <div class="ring-pct" id="quizAccuracyPct">82%</div>
+                    <div class="ring-label">测验准确率</div>
+                </div>
             </div>
-            <div class="progress-info-row">
-                <div class="pi-item"><div class="pi-num">12</div><div class="pi-label">已完成章节</div></div>
-                <div class="pi-item"><div class="pi-num">8</div><div class="pi-label">进行中章节</div></div>
-                <div class="pi-item"><div class="pi-num warn">28</div><div class="pi-label">未开始章节</div></div>
+            <div class="progress-detail">
+                <h3>章节测验准确率</h3>
+                <div class="progress-bar" style="height:10px; margin-bottom:8px;">
+                    <div class="progress-bar-fill" id="quizAccuracyBar" style="width:82%; background:var(--success);"></div>
+                </div>
+                <div class="progress-info-row">
+                    <div class="pi-item"><div class="pi-num ok" id="quizCorrectCount">0</div><div class="pi-label">答对</div></div>
+                    <div class="pi-item"><div class="pi-num warn" id="quizWrongCount">0</div><div class="pi-label">待强化</div></div>
+                    <div class="pi-item"><div class="pi-num" id="quizTotalCount">0</div><div class="pi-label">已测题数</div></div>
+                </div>
             </div>
-            <button class="btn btn-primary btn-lg btn-continue" onclick="continueLearning()">继续学习</button>
         </div>
     </div>
 
     <!-- 筛选栏 -->
     <div class="filter-bar" id="filterBar">
-        <span class="filter-label">疾病类型：</span>
-        <button class="filter-pill active" data-filter="all" onclick="filterCourses('all', this)">全部</button>
+        <span class="filter-label">筛选：</span>
+        <select class="filter-select" id="courseCategoryFilter" onchange="filterCourseCategory(this.value)">
+            <option value="all">课程方向</option>
+            <option value="eye-base">眼科基础</option>
+            <option value="ai-diagnosis">AI诊疗</option>
+            <option value="image-reading">影像判读</option>
+        </select>
         <button class="filter-pill" data-filter="DR" onclick="filterCourses('DR', this)">糖尿病视网膜病变</button>
         <button class="filter-pill" data-filter="glaucoma" onclick="filterCourses('glaucoma', this)">青光眼</button>
         <button class="filter-pill" data-filter="AMD" onclick="filterCourses('AMD', this)">AMD</button>
@@ -453,7 +492,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <button class="filter-pill" data-filter="RVO" onclick="filterCourses('RVO', this)">RVO</button>
         <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" id="courseSearch" placeholder="搜索课程名称" oninput="filterCourses(currentFilter, document.querySelector('.filter-pill.active'))">
+            <input type="text" id="courseSearch" placeholder="搜索课程名称" oninput="renderCourseList()">
         </div>
     </div>
 
@@ -471,13 +510,15 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     <div class="learning-layout">
         <!-- 左侧章节树 -->
         <div class="chapter-sidebar">
-            <div class="chapter-header">📑 课程目录</div>
-            <div class="chapter-tree" id="chapterTree"></div>
-            <div class="learning-record-mini" id="learningRecordMini">
-                <div class="lr-row"><span>已学章节</span><span class="lr-val" id="lrChapters">0/0</span></div>
-                <div class="lr-row"><span>正确率</span><span class="lr-val" id="lrAccuracy">--</span></div>
-                <div class="lr-row"><span>平均分</span><span class="lr-val" id="lrAvgScore">--</span></div>
+            <div class="chapter-header">
+                <div class="chapter-title-line">
+                    <span>📑 课程目录</span>
+                    <span class="course-progress-text" id="courseProgressText">0%</span>
+                </div>
+                <div class="course-progress-bar"><div class="course-progress-fill" id="courseProgressFill"></div></div>
             </div>
+            <div class="chapter-tree" id="chapterTree"></div>
+            <div class="chapter-quiz-panel" id="chapterQuizPanel"></div>
         </div>
         <!-- 右侧内容区 -->
         <div class="learning-main">
@@ -487,8 +528,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                     <span class="section-badge" id="toolbarSectionBadge">1.1 当前节</span>
                 </div>
                 <div class="toolbar-actions">
-                    <button class="btn btn-outline btn-sm" onclick="downloadHandout()">📥 讲义下载</button>
-                    <button class="btn btn-primary btn-sm" onclick="startChapterQuiz()" id="btnChapterQuiz" style="background:linear-gradient(135deg,#667eea,#764ba2);border:none;">📝 章节测验</button>
                     <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回列表</button>
                 </div>
             </div>
@@ -514,7 +553,10 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             </div>
             <div class="handout-section" id="handoutSection">
                 <div class="handout-header">
-                    <h3 id="handoutTitle">课程讲义</h3>
+                    <div class="handout-heading">
+                        <h3 id="handoutTitle">在线讲义</h3>
+                        <button class="btn btn-outline btn-sm" onclick="downloadHandout()">📥 讲义下载</button>
+                    </div>
                     <span style="font-size:12px;color:var(--gray-500);" id="handoutMeta"></span>
                 </div>
                 <div class="handout-body" id="handoutBody"></div>
@@ -535,14 +577,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             <h2 id="quizTitle">第1章 章节测验</h2>
             <div class="quiz-meta">
                 <span>共 <b id="quizTotal">8</b> 题</span>
-                <span>满分 <b id="quizFullScore">100</b> 分</span>
-                <span>及格线 <b>60</b> 分</span>
-                <span>限时 <b id="quizTimeLimit">20</b> 分钟</span>
+                <span>用于查缺补漏，不计分不限时</span>
             </div>
-        </div>
-        <div class="quiz-timer" id="quizTimer">
-            <span class="timer-icon">⏱</span>
-            <span id="timerDisplay">20:00</span>
         </div>
         <div class="quiz-progress-text">答题进度：<b id="quizProgress">0/8</b></div>
     </div>
@@ -568,16 +604,14 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                     stroke-dasharray="389.6" stroke-dashoffset="78" stroke-linecap="round" id="resultRing"/>
             </svg>
             <div class="ring-center">
-                <div class="score-num" id="resultScore">80</div>
-                <div class="score-label">分</div>
+                <div class="score-num" id="resultScore">80%</div>
+                <div class="score-label">正确率</div>
             </div>
         </div>
         <div class="result-stats">
             <h2 id="resultTitle">第1章 章节测验 - 测验结果</h2>
             <div class="rs-row">
-                <div class="rs-item"><div class="rs-val" id="resultPct">80%</div><div class="rs-label">正确率</div></div>
-                <div class="rs-item"><div class="rs-val" id="resultTime">12分55秒</div><div class="rs-label">答题用时</div></div>
-                <div class="rs-item rank"><div class="rs-val" id="resultRank">第5名</div><div class="rs-label">排名</div></div>
+                <div class="rs-item"><div class="rs-val" id="resultPct">80%</div><div class="rs-label">做题准确率</div></div>
             </div>
         </div>
     </div>
@@ -590,7 +624,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
     <!-- 建议强化内容 -->
     <div class="reinforce-alert" id="reinforceAlert">
-        <div class="ra-title">📌 根据您的测验结果，建议重点强化以下内容：</div>
+        <div class="ra-title">知识追踪与学习路径优化</div>
+        <div class="ra-subtitle">AI根据本次测验表现识别薄弱知识点，并推荐下一步学习内容。</div>
         <div id="reinforceItems"></div>
     </div>
 
@@ -603,29 +638,68 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     </div>
 </div>
 
-<!-- ========== AI智能问答面板 ========== -->
-<button class="ai-chat-toggle" id="aiChatToggle" onclick="toggleAiChat()" title="AI智能问答">💬</button>
-<div class="ai-chat-panel" id="aiChatPanel">
-    <div class="chat-header">
-        <span class="chat-header-title">🤖 AI智能问答助手</span>
-        <button class="chat-close" onclick="toggleAiChat()">✕</button>
-    </div>
-    <div class="chat-body" id="aiChatBody">
-        <div class="chat-msg ai">
-            <div class="ai-label">AI助手</div>
-            <p>你好！我是AI学习助手，可以为你解答课程相关问题。试试点击下方的快捷问题，或者直接输入你的问题吧。</p>
-        </div>
-    </div>
-    <div class="chat-quick-questions" id="aiQuickQuestions">
-        <button class="quick-btn" onclick="askQuickQuestion('这个疾病的发病机制是什么？')">发病机制</button>
-        <button class="quick-btn" onclick="askQuickQuestion('有哪些典型临床表现？')">典型临床表现</button>
-        <button class="quick-btn" onclick="askQuickQuestion('诊断标准有哪些？')">诊断标准</button>
-        <button class="quick-btn" onclick="askQuickQuestion('治疗方案和预后如何？')">治疗方案与预后</button>
-        <button class="quick-btn" onclick="askQuickQuestion('最新的研究进展有哪些？')">最新研究进展</button>
-    </div>
-    <div class="chat-input-area">
-        <input type="text" id="aiChatInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')sendAiMessage()">
-        <button class="send-btn" onclick="sendAiMessage()">➤</button>
+<!-- ========== AI智能答疑系统入口 ========== -->
+<button class="ai-chat-toggle" id="aiChatToggle" onclick="openAiQaSystem()" title="AI智能答疑系统">
+    <span>🤖</span><span>AI智能答疑系统</span>
+</button>
+
+<!-- ====== 页面五：AI智能答疑系统 ====== -->
+<div class="page-view" id="page-ai-qa">
+    <div class="ai-qa-shell">
+        <aside class="ai-qa-sidebar">
+            <div class="ai-qa-brand"><span class="brand-dot">AI</span><span>AI智能答疑</span></div>
+            <button class="ai-new-chat" onclick="startNewAiDialog()">＋ 新建对话</button>
+            <div class="ai-history-title">历史对话</div>
+            <div class="ai-history-group">
+                <div class="ai-history-item active"><span>课程难点讲解</span><span class="ai-history-time">14:35</span></div>
+                <div class="ai-history-item"><span>DR分级标准咨询</span><span class="ai-history-time">10:23</span></div>
+                <div class="ai-history-item"><span>OCT检查结果咨询</span><span class="ai-history-time">昨天</span></div>
+                <div class="ai-history-item"><span>治疗方案与预后</span><span class="ai-history-time">上周</span></div>
+            </div>
+        </aside>
+        <section class="ai-qa-main">
+            <div class="ai-qa-topbar">
+                <div class="ai-qa-title">课程难点讲解与医学问答</div>
+                <div class="ai-qa-actions">
+                    <select class="ai-model-select" aria-label="模型选择">
+                        <option>医学课程专科模型</option>
+                        <option>眼底图像分析模型</option>
+                        <option>通用医学语言模型</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回课程</button>
+                    <button class="btn btn-outline btn-sm" onclick="startNewAiDialog()">清空对话</button>
+                </div>
+            </div>
+            <div class="ai-qa-content" id="aiChatBody">
+                <div class="ai-welcome-card">
+                    <div class="ai-welcome-icon">✚</div>
+                    <h3>欢迎使用AI智能答疑系统</h3>
+                    <p>基于医学语言模型提供自然语言问答、课程难点讲解与知识点梳理。</p>
+                    <div class="ai-welcome-tags">
+                        <span>课程难点讲解</span>
+                        <span>疾病知识问答</span>
+                        <span>诊断标准梳理</span>
+                    </div>
+                </div>
+                <div class="chat-msg ai">
+                    <div class="ai-label">AI助手</div>
+                    <p>你好！我是AI学习助手，可以为你解答课程相关问题。试试点击下方的快捷问题，或者直接输入你的问题吧。</p>
+                </div>
+            </div>
+            <div class="ai-qa-footer">
+                <div class="chat-quick-questions" id="aiQuickQuestions">
+                    <button class="quick-btn" onclick="askQuickQuestion('这个疾病的发病机制是什么？')">发病机制</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('有哪些典型临床表现？')">典型临床表现</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('诊断标准有哪些？')">诊断标准</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('治疗方案和预后如何？')">治疗方案与预后</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('最新的研究进展有哪些？')">最新研究进展</button>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="aiChatInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')sendAiMessage()">
+                    <button class="send-btn" onclick="sendAiMessage()">➤</button>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 
@@ -649,8 +723,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     <div class="modal-dialog">
         <div class="modal-body">
             <div class="modal-icon">⚠️</div>
-            <h3>确认提交测验？</h3>
-            <p id="modalSubmitMsg">提交后将无法修改答案。</p>
+            <h3>提交本次练习？</h3>
+            <p id="modalSubmitMsg">提交后将生成查缺补漏分析。</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-outline" onclick="closeModal('modalSubmitConfirm')">继续答题</button>
@@ -664,7 +738,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 const MOCK_COURSES = [
     {
         id: 1, name: '糖尿病视网膜病变基础', diseaseType: 'DR', difficulty: 'intermediate',
-        duration: '12小时', chapterCount: 12, totalSections: 28, progress: 65,
+        duration: '12小时', chapterCount: 12, totalSections: 28, progress: 65, quizStatus: 'locked',
         icon: '🔬', coverClass: 'c1',
         chapters: [
             { id: 'c1_1', title: '第一章 DR流行病学与危险因素', sections: [
@@ -694,7 +768,7 @@ const MOCK_COURSES = [
     },
     {
         id: 2, name: '青光眼诊疗基础', diseaseType: 'glaucoma', difficulty: 'advanced',
-        duration: '15小时', chapterCount: 15, totalSections: 32, progress: 30,
+        duration: '15小时', chapterCount: 15, totalSections: 32, progress: 100, quizStatus: 'pending',
         icon: '👁', coverClass: 'c2',
         chapters: [
             { id: 'c2_1', title: '第一章 青光眼房水动力学与病理生理', sections: [
@@ -716,7 +790,7 @@ const MOCK_COURSES = [
     },
     {
         id: 3, name: 'AMD诊疗规范', diseaseType: 'AMD', difficulty: 'advanced',
-        duration: '10小时', chapterCount: 10, totalSections: 22, progress: 0,
+        duration: '10小时', chapterCount: 10, totalSections: 22, progress: 0, quizStatus: 'locked',
         icon: '🔎', coverClass: 'c3',
         chapters: [
             { id: 'c3_1', title: '第一章 AMD的发病机制', sections: [
@@ -734,7 +808,7 @@ const MOCK_COURSES = [
     },
     {
         id: 4, name: '高血压视网膜病变', diseaseType: 'hypertension', difficulty: 'beginner',
-        duration: '8小时', chapterCount: 8, totalSections: 16, progress: 100,
+        duration: '8小时', chapterCount: 8, totalSections: 16, progress: 100, quizStatus: 'completed',
         icon: '🩺', coverClass: 'c4',
         chapters: [
             { id: 'c4_1', title: '第一章 高血压视网膜病变分级', sections: [
@@ -827,9 +901,8 @@ let currentChapterIndex = null;
 let currentSectionIndex = null;
 let currentSectionId = null;
 let currentFilter = 'all';
+let currentCategoryFilter = 'all';
 let quizAnswers = {};
-let quizTimerInterval = null;
-let quizTimeRemaining = 0;
 let quizStartTime = null;
 let currentQuizCourseId = null;
 let currentQuizChapterIndex = null;
@@ -901,18 +974,20 @@ function getChapterQuiz(chapterId) {
 
 // ==================== 数据计算辅助 ====================
 function getLearningStats() {
-    let totalChapters = 0, completedChapters = 0, totalSections = 0, completedSections = 0;
-    MOCK_COURSES.forEach(c => {
-        c.chapters.forEach(ch => {
-            totalChapters++;
-            totalSections += ch.sections.length;
-            // 模拟：progress比例计算已完成
-        });
-    });
-    // 根据所有课程的progress模拟统计数据
     let totalAllSections = 0, doneAllSections = 0;
     MOCK_COURSES.forEach(c => { totalAllSections += c.totalSections; doneAllSections += Math.round(c.totalSections * c.progress / 100); });
-    return { doneChapters: doneAllSections, totalChapters: totalAllSections, accuracy: 82, avgScore: 76.5, lastStudy: '2026-06-28' };
+    let quizTotal = 38;
+    let quizCorrect = 31;
+    return {
+        learnedSections: doneAllSections,
+        totalSections: totalAllSections,
+        unlearnedSections: Math.max(totalAllSections - doneAllSections, 0),
+        learningPct: totalAllSections ? Math.round(doneAllSections / totalAllSections * 100) : 0,
+        quizCorrect: quizCorrect,
+        quizTotal: quizTotal,
+        quizWrong: Math.max(quizTotal - quizCorrect, 0),
+        quizAccuracy: quizTotal ? Math.round(quizCorrect / quizTotal * 100) : 0
+    };
 }
 
 function getCourseById(id) { return MOCK_COURSES.find(c => c.id === id); }
@@ -928,16 +1003,42 @@ function getDiseaseLabel(t) {
     return map[t] || t;
 }
 
+function isCourseVideoComplete(course) {
+    return !!course && course.progress >= 100;
+}
+
+function isCourseQuizPending(course) {
+    return isCourseVideoComplete(course) && course.quizStatus !== 'completed';
+}
+
+function isCourseQuizCompleted(course) {
+    return !!course && course.quizStatus === 'completed';
+}
+
+function getCourseCardAction(course) {
+    if (isCourseQuizCompleted(course)) return 'viewResult(' + course.id + ')';
+    if (isCourseQuizPending(course)) return 'goCourseQuiz(' + course.id + ')';
+    return 'startLearning(' + course.id + ')';
+}
+
+function getCourseCategory(course) {
+    const name = course.name || '';
+    if (/OCT|读片|造影|影像/.test(name)) return 'image-reading';
+    if (/诊疗|治疗|指南|规范/.test(name)) return 'ai-diagnosis';
+    return 'eye-base';
+}
+
 // ==================== 页面导航 ====================
 function showPage(pageId) {
     document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
     const page = document.getElementById(pageId);
     if (page) page.classList.add('active');
+    const aiEntry = document.getElementById('aiChatToggle');
+    if (aiEntry) aiEntry.style.display = pageId === 'page-ai-qa' ? 'none' : 'flex';
 }
 
 function navToCourseList() {
     clearVideoInterval();
-    clearQuizTimer();
     showPage('page-course-list');
     document.querySelector('.sidebar .menu-item').classList.add('active');
     renderCourseList();
@@ -946,17 +1047,15 @@ function navToCourseList() {
 // ==================== 渲染课程列表 ====================
 function renderCourseList() {
     const stats = getLearningStats();
-    document.getElementById('statChapters').textContent = stats.doneChapters + '/' + stats.totalChapters;
-    document.getElementById('statAccuracy').textContent = stats.accuracy + '%';
-    document.getElementById('statAvgScore').textContent = stats.avgScore;
-    document.getElementById('statLastStudy').textContent = stats.lastStudy;
+    updateOverview(stats);
 
     const grid = document.getElementById('courseGrid');
     let searchTerm = (document.getElementById('courseSearch').value || '').toLowerCase();
     let filtered = MOCK_COURSES.filter(c => {
+        let categoryMatch = (currentCategoryFilter === 'all') ? true : getCourseCategory(c) === currentCategoryFilter;
         let typeMatch = (currentFilter === 'all') ? true : c.diseaseType === currentFilter;
         let searchMatch = !searchTerm || c.name.toLowerCase().includes(searchTerm);
-        return typeMatch && searchMatch;
+        return categoryMatch && typeMatch && searchMatch;
     });
 
     if (filtered.length === 0) {
@@ -968,20 +1067,22 @@ function renderCourseList() {
     filtered.forEach(c => {
         let diff = getDifficultyLabel(c.difficulty);
         let btnHtml = '';
+        let cardAction = getCourseCardAction(c);
         if (c.progress === 0) {
             btnHtml = '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();startLearning(' + c.id + ')">开始学习</button>';
-        } else if (c.progress >= 100) {
-            btnHtml = '<button class="btn btn-success btn-sm card-btn" onclick="event.stopPropagation();viewResult(' + c.id + ')">查看学习结果</button>';
+        } else if (isCourseQuizCompleted(c)) {
+            btnHtml = '<button class="btn btn-success btn-sm card-btn" onclick="event.stopPropagation();viewResult(' + c.id + ')">查看学习测验结果</button>';
+        } else if (isCourseQuizPending(c)) {
+            btnHtml = '<button class="btn btn-warning btn-sm card-btn" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">去进行章节测验</button>';
         } else {
             btnHtml = '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();continueCourse(' + c.id + ')">继续学习</button>';
         }
         html += `
-            <div class="course-card" onclick="startLearning(${c.id})">
+            <div class="course-card" onclick="${cardAction}">
                 <div class="card-cover ${c.coverClass}">${c.icon}</div>
                 <div class="card-body">
                     <div class="card-meta">
-                        <span class="difficulty-badge ${diff.cls}">${diff.text} <span class="stars">${diff.stars}</span></span>
-                        <span style="font-size:11px;color:var(--gray-500);">${getDiseaseLabel(c.diseaseType)}</span>
+                        <span class="difficulty-badge ${diff.cls}">难度等级：${diff.text} <span class="stars">${diff.stars}</span></span>
                     </div>
                     <div class="card-title">${c.name}</div>
                     <div class="card-info">
@@ -999,6 +1100,23 @@ function renderCourseList() {
     grid.innerHTML = html;
 }
 
+function updateOverview(stats) {
+    const circumference = 326.7;
+    document.getElementById('learningProgressPct').textContent = stats.learningPct + '%';
+    document.getElementById('learningProgressBar').style.width = stats.learningPct + '%';
+    document.getElementById('learningProgressRing').setAttribute('stroke-dashoffset', circumference - (stats.learningPct / 100 * circumference));
+    document.getElementById('learnedSections').textContent = stats.learnedSections;
+    document.getElementById('unlearnedSections').textContent = stats.unlearnedSections;
+    document.getElementById('totalSections').textContent = stats.totalSections;
+
+    document.getElementById('quizAccuracyPct').textContent = stats.quizAccuracy + '%';
+    document.getElementById('quizAccuracyBar').style.width = stats.quizAccuracy + '%';
+    document.getElementById('quizAccuracyRing').setAttribute('stroke-dashoffset', circumference - (stats.quizAccuracy / 100 * circumference));
+    document.getElementById('quizCorrectCount').textContent = stats.quizCorrect;
+    document.getElementById('quizWrongCount').textContent = stats.quizWrong;
+    document.getElementById('quizTotalCount').textContent = stats.quizTotal;
+}
+
 function filterCourses(type, el) {
     currentFilter = type;
     document.querySelectorAll('#filterBar .filter-pill').forEach(b => b.classList.remove('active'));
@@ -1006,11 +1124,11 @@ function filterCourses(type, el) {
     renderCourseList();
 }
 
-function continueLearning() {
-    // 找到第一个进行中的课程
-    let inProgress = MOCK_COURSES.find(c => c.progress > 0 && c.progress < 100);
-    if (inProgress) { startLearning(inProgress.id); }
-    else if (MOCK_COURSES.length > 0) { startLearning(MOCK_COURSES[0].id); }
+function filterCourseCategory(category) {
+    currentCategoryFilter = category;
+    currentFilter = 'all';
+    document.querySelectorAll('#filterBar .filter-pill').forEach(b => b.classList.remove('active'));
+    renderCourseList();
 }
 
 function startLearning(courseId) {
@@ -1028,6 +1146,22 @@ function startLearning(courseId) {
 
 function continueCourse(courseId) {
     startLearning(courseId);
+}
+
+function goCourseQuiz(courseId) {
+    const course = getCourseById(courseId);
+    if (!course) return;
+    currentCourseId = courseId;
+    currentQuizCourseId = courseId;
+    currentChapterIndex = 0;
+    currentQuizChapterIndex = 0;
+    const ch = course.chapters[0];
+    const quizData = ch ? (getChapterQuiz(ch.id) || course.quiz || []) : (course.quiz || []);
+    if (!quizData.length) {
+        alert('当前课程暂无章节测验数据。');
+        return;
+    }
+    openQuizWithData(course, quizData, ch ? ch.title : '章节');
 }
 
 function viewResult(courseId) {
@@ -1050,22 +1184,27 @@ function renderChapterTree() {
     if (!course) return;
     const tree = document.getElementById('chapterTree');
     let html = '';
+    let totalSections = 0, doneSections = 0, activeSectionOrder = 0, sectionOrder = 0;
     course.chapters.forEach((ch, ci) => {
         let isOpen = (ci === currentChapterIndex);
         let sectionHtml = '';
         ch.sections.forEach((sec, si) => {
+            sectionOrder++;
+            totalSections++;
             let cls = '';
             let isActive = (sec.id === currentSectionId);
+            let isDone = isCourseVideoComplete(course) || ci < currentChapterIndex || (ci === currentChapterIndex && (si < currentSectionIndex || (si === currentSectionIndex && videoCurrentTime >= videoDuration)));
             if (isActive) cls = 'active';
-            // 模拟完成状态：在当前节之前的所有节标记为done
-            if (ci < currentChapterIndex || (ci === currentChapterIndex && si < currentSectionIndex)) cls += ' done';
+            if (isDone) {
+                cls += ' done';
+                doneSections++;
+            }
+            if (isActive) activeSectionOrder = sectionOrder;
             sectionHtml += `<div class="section-item ${cls}" onclick="selectSection('${sec.id}', ${ci}, ${si})" data-section-id="${sec.id}">${sec.title}</div>`;
         });
-        let hasQuiz = getChapterQuiz(ch.id) !== null;
         html += `<div class="chapter-node">
             <div class="chapter-title" onclick="toggleChapter(${ci})">
                 <span class="expand-icon ${isOpen ? 'open' : ''}">▶</span>${ch.title}
-                <span class="chapter-quiz-btn${hasQuiz ? '' : ' no-quiz'}" onclick="event.stopPropagation();jumpToChapterQuiz(${ci},'${ch.id}')" title="${hasQuiz ? '进入本章测验' : '暂无测验'}">${hasQuiz ? '📝' : '🚫'}</span>
             </div>
             <div class="section-list" style="max-height:${isOpen ? (ch.sections.length * 40) : 0}px;">
                 ${sectionHtml}
@@ -1074,17 +1213,44 @@ function renderChapterTree() {
     });
     tree.innerHTML = html;
 
-    // 更新学习记录
-    let totalSections = 0, doneSections = 0;
-    course.chapters.forEach((ch, ci) => {
-        ch.sections.forEach((sec, si) => {
-            totalSections++;
-            if (ci < currentChapterIndex || (ci === currentChapterIndex && si < currentSectionIndex)) doneSections++;
-        });
-    });
-    document.getElementById('lrChapters').textContent = doneSections + '/' + totalSections;
-    document.getElementById('lrAccuracy').textContent = '82%';
-    document.getElementById('lrAvgScore').textContent = '76.5';
+    let progressPosition = Math.max(doneSections, activeSectionOrder);
+    let progressPct = totalSections ? Math.round(progressPosition / totalSections * 100) : 0;
+    const progressText = document.getElementById('courseProgressText');
+    if (progressText) progressText.textContent = progressPct + '%';
+    const progressFill = document.getElementById('courseProgressFill');
+    if (progressFill) progressFill.style.width = progressPct + '%';
+    renderChapterQuizEntry(course);
+}
+
+function renderChapterQuizEntry(course) {
+    const panel = document.getElementById('chapterQuizPanel');
+    if (!panel || !course || currentChapterIndex === null) return;
+    const ch = course.chapters[currentChapterIndex];
+    const hasQuiz = ch && getChapterQuiz(ch.id);
+    const currentSectionInChapter = ch ? ch.sections.findIndex(s => s.id === currentSectionId) : -1;
+    const chapterLearned = isCourseVideoComplete(course) || (ch && currentSectionInChapter === ch.sections.length - 1 && videoCurrentTime >= videoDuration);
+    if (isCourseQuizCompleted(course)) {
+        panel.innerHTML = `
+            <button class="chapter-quiz-entry" type="button" onclick="viewResult(${course.id})">
+                <span>📊</span><span>查看学习测验结果</span>
+            </button>
+            <div class="quiz-note">${course.name} 已完成测验</div>
+        `;
+    } else if (hasQuiz && chapterLearned) {
+        panel.innerHTML = `
+            <button class="chapter-quiz-entry" type="button" onclick="startChapterQuiz()">
+                <span>📝</span><span>去进行章节测验</span>
+            </button>
+            <div class="quiz-note">${ch.title} 已学完，可进入测验</div>
+        `;
+    } else {
+        panel.innerHTML = `
+            <button class="chapter-quiz-entry locked" type="button" onclick="showQuizLockedTip()">
+                <span>🔒</span><span>章节测验</span>
+            </button>
+            <div class="quiz-note">${ch ? ch.title : '当前章节'} 学完后开放</div>
+        `;
+    }
 }
 
 function toggleChapter(ci) {
@@ -1118,13 +1284,19 @@ function renderVideoSection() {
 
     document.getElementById('toolbarCourseTitle').textContent = course.name;
     document.getElementById('toolbarSectionBadge').textContent = section.title;
-    document.getElementById('handoutTitle').textContent = '课程讲义 - ' + section.title;
-    document.getElementById('handoutMeta').textContent = '时长：' + section.duration + ' | 难度：' + getDifficultyLabel(course.difficulty).text;
+    document.getElementById('handoutTitle').textContent = '在线讲义 - ' + section.title;
+    const diff = getDifficultyLabel(course.difficulty);
+    document.getElementById('handoutMeta').textContent = '时长：' + section.duration + ' | 难度等级：' + diff.text + ' ' + diff.stars;
     document.getElementById('handoutBody').innerHTML = section.handout || '<p>暂无讲义内容</p>';
 
     // 视频相关
     resetVideo(section.duration);
-    document.getElementById('sectionCompleteHint').style.display = 'none';
+    const completeHint = document.getElementById('sectionCompleteHint');
+    completeHint.style.display = 'none';
+    completeHint.innerHTML = `
+        <span class="complete-text">✅ 你已完成本章节的学习</span>
+        <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
+    `;
 
     // 检查是否是最后一节
     checkLastSection(course);
@@ -1191,6 +1363,7 @@ function updateVideoUI() {
 function onVideoEnd() {
     document.getElementById('videoHint').textContent = '播放完成';
     document.getElementById('sectionCompleteHint').style.display = 'flex';
+    renderChapterTree();
     checkLastSection(getCourseById(currentCourseId));
 }
 
@@ -1270,6 +1443,10 @@ function jumpToChapterQuiz(ci, chapterId) {
     openQuizWithData(course, quizData, course.chapters[ci].title);
 }
 
+function showQuizLockedTip() {
+    alert('请先完成本章全部课程学习，再进入章节测验。');
+}
+
 function updateQuizButtonState() {
     const course = getCourseById(currentCourseId);
     const btn = document.getElementById('btnChapterQuiz');
@@ -1314,18 +1491,11 @@ function openQuizWithData(course, quizData, chapterTitle) {
     showPage('page-quiz');
     document.getElementById('quizBreadcrumbCourse').textContent = course.name;
     document.getElementById('quizTotal').textContent = quizData.length;
-    document.getElementById('quizFullScore').textContent = '100';
-    document.getElementById('quizTimeLimit').textContent = '20';
     document.getElementById('quizTitle').textContent = chapterTitle + ' 章节测验';
     document.getElementById('quizProgress').textContent = '0/' + quizData.length;
-    document.getElementById('timerDisplay').textContent = '20:00';
 
     quizAnswers = {};
-    quizTimeRemaining = 20 * 60;
     quizStartTime = Date.now();
-    clearQuizTimer();
-    updateQuizTimer();
-    quizTimerInterval = setInterval(updateQuizTimer, 1000);
 
     let container = document.getElementById('quizQuestionsContainer');
     let html = '';
@@ -1334,7 +1504,6 @@ function openQuizWithData(course, quizData, chapterTitle) {
             <div class="q-header">
                 <span class="q-num">${i + 1}</span>
                 <span class="q-type">【单选题】</span>
-                <span class="q-score">${(100 / quizData.length).toFixed(1)}分</span>
             </div>
             <div class="q-title">${q.q}</div>
             <div class="q-options" data-qid="${q.id}">
@@ -1372,46 +1541,24 @@ function updateQuizProgress() {
     document.getElementById('quizProgress').textContent = answered + '/' + total;
 }
 
-function updateQuizTimer() {
-    quizTimeRemaining--;
-    if (quizTimeRemaining <= 0) {
-        quizTimeRemaining = 0;
-        clearQuizTimer();
-        document.getElementById('quizTimer').classList.add('urgent');
-        document.getElementById('timerDisplay').textContent = '00:00';
-        // 时间到自动提交
-        submitQuiz();
-        return;
-    }
-    if (quizTimeRemaining < 300) {
-        document.getElementById('quizTimer').classList.add('urgent');
-    }
-    let m = Math.floor(quizTimeRemaining / 60);
-    let s = quizTimeRemaining % 60;
-    document.getElementById('timerDisplay').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-}
-
-function clearQuizTimer() {
-    if (quizTimerInterval) { clearInterval(quizTimerInterval); quizTimerInterval = null; }
-}
-
 function submitQuiz() {
     const course = getCourseById(currentQuizCourseId);
     if (!course) return;
     let unanswered = currentQuizData.length - Object.keys(quizAnswers).length;
     if (unanswered > 0) {
-        document.getElementById('modalSubmitMsg').textContent = '还有 ' + unanswered + ' 道题未作答，确认提交吗？';
+        document.getElementById('modalSubmitMsg').textContent = '还有 ' + unanswered + ' 道题未作答，提交后将一起生成查缺补漏分析。';
     } else {
-        document.getElementById('modalSubmitMsg').textContent = '提交后将无法修改答案。';
+        document.getElementById('modalSubmitMsg').textContent = '提交后将生成查缺补漏分析。';
     }
     document.getElementById('modalSubmitConfirm').style.display = 'flex';
 }
 
 function confirmSubmitQuiz() {
     closeModal('modalSubmitConfirm');
-    clearQuizTimer();
     const course = getCourseById(currentQuizCourseId);
     if (!course) return;
+    course.progress = 100;
+    course.quizStatus = 'completed';
     let elapsed = Math.round((Date.now() - quizStartTime) / 1000);
     showResultPage(course.name, currentQuizData, elapsed);
 }
@@ -1429,29 +1576,22 @@ function showResultPage(courseName, quizData, elapsedSeconds) {
     let total = quizData.length;
     let correct = 0, wrong = 0, unanswered = 0;
     let wrongItems = [];
-    quizData.forEach(q => {
+    quizData.forEach((q, index) => {
         if (quizAnswers[q.id] === undefined) {
             unanswered++;
-            wrongItems.push({ ...q, userAnswer: -1 });
+            wrongItems.push({ ...q, userAnswer: -1, questionNo: index + 1 });
         } else if (quizAnswers[q.id] === q.correct) {
             correct++;
         } else {
             wrong++;
-            wrongItems.push({ ...q, userAnswer: quizAnswers[q.id] });
+            wrongItems.push({ ...q, userAnswer: quizAnswers[q.id], questionNo: index + 1 });
         }
     });
 
-    let score = Math.round(correct / total * 100);
     let pct = Math.round(correct / total * 100);
-    let minutes = Math.floor(elapsedSeconds / 60);
-    let seconds = elapsedSeconds % 60;
-    let timeStr = minutes + '分' + seconds + '秒';
-    let rank = (correct >= total - 1) ? '第1名' : (correct >= total - 2 ? '第3名' : '第5名');
 
-    document.getElementById('resultScore').textContent = score;
+    document.getElementById('resultScore').textContent = pct + '%';
     document.getElementById('resultPct').textContent = pct + '%';
-    document.getElementById('resultTime').textContent = timeStr;
-    document.getElementById('resultRank').textContent = rank;
     document.getElementById('rCorrect').textContent = correct;
     document.getElementById('rWrong').textContent = wrong;
     document.getElementById('rUnanswered').textContent = unanswered;
@@ -1462,25 +1602,9 @@ function showResultPage(courseName, quizData, elapsedSeconds) {
     let offset = circumference - (pct / 100 * circumference);
     document.getElementById('resultRing').setAttribute('stroke-dashoffset', offset);
 
-    // 强化建议
-    let reinforceHtml = '';
-    let reinforced = new Set();
-    wrongItems.forEach(w => {
-        let keyword = extractKeyword(w.q);
-        if (!reinforced.has(keyword)) {
-            reinforced.add(keyword);
-            reinforceHtml += `<div class="ra-item">
-                <span class="ra-name">📖 ${keyword}</span>
-                <button class="btn btn-sm btn-warning" onclick="navToCourseList()">去学习</button>
-            </div>`;
-        }
-    });
-    if (reinforceHtml === '') {
-        document.getElementById('reinforceAlert').style.display = 'none';
-    } else {
-        document.getElementById('reinforceAlert').style.display = 'block';
-        document.getElementById('reinforceItems').innerHTML = reinforceHtml;
-    }
+    // 知识追踪与学习路径优化
+    document.getElementById('reinforceAlert').style.display = 'block';
+    document.getElementById('reinforceItems').innerHTML = buildLearningPathHtml(wrongItems, pct);
 
     // 错题解析
     let analysisHtml = '';
@@ -1491,7 +1615,7 @@ function showResultPage(courseName, quizData, elapsedSeconds) {
             let userAns = w.userAnswer === -1 ? '未作答' : (String.fromCharCode(65 + w.userAnswer) + '. ' + w.opts[w.userAnswer]);
             let correctAns = String.fromCharCode(65 + w.correct) + '. ' + w.opts[w.correct];
             analysisHtml += `<div class="wa-card">
-                <div class="wa-header">第${quizData.indexOf(w) + 1}题</div>
+                <div class="wa-header">第${w.questionNo}题</div>
                 <div class="wa-question">${w.q}</div>
                 <div class="wa-answer-row">
                     <span class="your-answer">你的答案：${userAns}</span>
@@ -1504,10 +1628,102 @@ function showResultPage(courseName, quizData, elapsedSeconds) {
     document.getElementById('wrongAnalysis').innerHTML = analysisHtml;
 }
 
-function extractKeyword(q) {
-    let keywords = ['DR国际临床分级标准', 'ETDRS分级', '4-2-1规则', 'DCCT强化血糖控制', '视野检查', '青光眼', 'AMD发病机制', 'OCT结构分层', 'FFA荧光素钠', 'PRP全视网膜光凝', 'RNFL厚度', '抗VEGF', 'BRVO', 'CRVO'];
-    for (let kw of keywords) { if (q.includes(kw)) return kw; }
-    return '相关知识点';
+function buildLearningPathHtml(wrongItems, accuracy) {
+    if (wrongItems.length === 0) {
+        return `<div class="ra-empty">本次测验正确率 ${accuracy}%，当前知识掌握较稳定。建议下一步进入本课程后续章节或选择更高难度病例训练，继续扩展临床应用能力。</div>`;
+    }
+
+    const weakMap = new Map();
+    wrongItems.forEach(w => {
+        const keyword = extractKeyword(w.q, w.explain);
+        if (!weakMap.has(keyword)) {
+            weakMap.set(keyword, { keyword, count: 0, questions: [] });
+        }
+        const item = weakMap.get(keyword);
+        item.count++;
+        item.questions.push(w.questionNo);
+    });
+
+    const weakItems = Array.from(weakMap.values()).sort((a, b) => b.count - a.count);
+    const cards = weakItems.map((item, index) => {
+        const advice = getLearningPathAdvice(item.keyword);
+        const questionText = item.questions.map(n => '第' + n + '题').join('、');
+        return `<div class="ra-item">
+            <div class="ra-main">
+                <div>
+                    <div class="ra-line">
+                        <span class="ra-badge">薄弱项${index + 1}</span>
+                        <span class="ra-name">${item.keyword}</span>
+                    </div>
+                    <div class="ra-meta">知识追踪：关联 ${questionText}，本次出错 ${item.count} 次</div>
+                </div>
+                <div class="ra-suggestion">
+                    <span class="ra-suggestion-label">推荐下一步学习内容</span>
+                    ${advice}
+                </div>
+            </div>
+            <div class="ra-path">
+                <span class="ra-step">回看对应讲义</span>
+                <span class="ra-arrow">→</span>
+                <span class="ra-step">梳理核心概念</span>
+                <span class="ra-arrow">→</span>
+                <span class="ra-step">完成同类题巩固</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    return `<div class="ra-list">${cards}</div>`;
+}
+
+function getLearningPathAdvice(keyword) {
+    const adviceMap = [
+        { key: 'DR国际临床分级标准', text: '优先复习DR分级体系、NPDR/PDR边界和临床分级对应的处理策略。' },
+        { key: '4-2-1规则', text: '重点回看重度NPDR判定条件，建议把四象限出血、静脉串珠和IRMA分别做成对照表。' },
+        { key: 'ETDRS分级', text: '补强ETDRS级别与临床分级的对应关系，尤其是53级、随访频率和干预时机。' },
+        { key: 'DCCT强化血糖控制', text: '回看循证医学研究结论，重点记忆风险降低比例及其对应的临床意义。' },
+        { key: 'DR危险因素', text: '建议复习病程、HbA1c、血压、血脂等危险因素，并区分无关干扰项。' },
+        { key: 'DR筛查策略', text: '下一步学习筛查起始时间、筛查频率和首选检查方式，建立不同糖尿病类型的判断路径。' },
+        { key: 'OCTA与FFA鉴别', text: '建议对比OCTA和FFA的成像原理、优势限制，重点掌握OCTA不能显示渗漏这一点。' },
+        { key: '血压控制目标', text: '回看DR合并高血压管理目标，结合指南推荐和风险控制逻辑进行记忆。' },
+        { key: '房水生成与排出机制', text: '建议复习房水主动分泌、小梁网排出和葡萄膜巩膜途径之间的比例与机制。' },
+        { key: '青光眼视野检查', text: '下一步强化旁中心暗点、鼻侧阶梯、弓形暗点等典型视野缺损模式。' },
+        { key: 'RNFL厚度评估', text: '回看RNFL早期受累区域和OCT结构评估指标，建立结构损伤与功能损伤的对应关系。' },
+        { key: 'AMD发病机制', text: '重点复习干性/湿性AMD差异、CNV形成机制以及VEGF在湿性AMD中的作用。' },
+        { key: '抗VEGF治疗机制', text: '建议补强抗VEGF药物作用机制、适应证和对渗漏/新生血管的影响。' },
+        { key: '高血压视网膜病变分级', text: '回看KWB分级和Scheie分级，重点区分动静脉交叉压迫征、棉绒斑和视盘水肿。' },
+        { key: 'RVO分类与并发症', text: '建议复习BRVO/CRVO发生部位、缺血型判断标准和新生血管性青光眼风险。' },
+        { key: 'OCT结构分层', text: '下一步学习OCT关键层次、中心凹厚度和椭圆体带等结构与预后的关系。' },
+        { key: 'PRP全视网膜光凝', text: '重点复习PRP适应证、治疗参数和降低严重视力丧失风险的循证依据。' },
+        { key: 'FFA判读要点', text: '建议回看FFA时相、荧光素钠循环时间、高/低荧光原因和CNV典型表现。' }
+    ];
+    const match = adviceMap.find(item => keyword.includes(item.key) || item.key.includes(keyword));
+    return match ? match.text : '建议回看本题对应讲义段落，先明确概念定义，再对照临床场景完成同类题巩固。';
+}
+
+function extractKeyword(q, explain) {
+    const text = (q || '') + ' ' + (explain || '');
+    const keywordRules = [
+        { keyword: 'DR国际临床分级标准', patterns: ['DR国际临床分级标准', 'ICDRSS', '临床DR严重程度量表'] },
+        { keyword: '4-2-1规则', patterns: ['4-2-1', '四个象限', '静脉串珠', 'IRMA'] },
+        { keyword: 'ETDRS分级', patterns: ['ETDRS', '53级'] },
+        { keyword: 'DCCT强化血糖控制', patterns: ['DCCT', 'EDIC', '强化血糖', 'HbA1c每降低'] },
+        { keyword: 'DR危险因素', patterns: ['危险因素', '病程', 'HbA1c水平', '眼睛颜色'] },
+        { keyword: 'DR筛查策略', patterns: ['筛查', '眼底照相', '散瞳', '确诊时'] },
+        { keyword: 'OCTA与FFA鉴别', patterns: ['OCTA', '荧光素渗漏', '无创'] },
+        { keyword: '血压控制目标', patterns: ['血压控制', 'ADA', '130/80'] },
+        { keyword: '房水生成与排出机制', patterns: ['房水', '小梁网', 'Schlemm', 'Na⁺-K⁺-ATP酶'] },
+        { keyword: '青光眼视野检查', patterns: ['视野', '旁中心暗点', '鼻侧阶梯', '弓形暗点'] },
+        { keyword: 'RNFL厚度评估', patterns: ['RNFL', '颞下', '颞上', '神经纤维层'] },
+        { keyword: '抗VEGF治疗机制', patterns: ['抗VEGF', 'VEGF-A', '渗漏'] },
+        { keyword: 'FFA判读要点', patterns: ['FFA', '荧光素钠', '臂-视网膜循环', '高荧光', '低荧光'] },
+        { keyword: 'AMD发病机制', patterns: ['AMD', 'CNV', '脉络膜新生血管', '干性AMD', '湿性AMD'] },
+        { keyword: '高血压视网膜病变分级', patterns: ['KWB', 'Scheie', '棉绒斑', '视盘水肿', '动静脉交叉压迫'] },
+        { keyword: 'RVO分类与并发症', patterns: ['BRVO', 'CRVO', 'RVO', '新生血管性青光眼', '筛板'] },
+        { keyword: 'OCT结构分层', patterns: ['OCT', '椭圆体带', '中心凹', 'SD-OCT', 'SS-OCT'] },
+        { keyword: 'PRP全视网膜光凝', patterns: ['PRP', '全视网膜光凝', '眼底激光', '光热效应'] }
+    ];
+    const matched = keywordRules.find(rule => rule.patterns.some(pattern => text.includes(pattern)));
+    return matched ? matched.keyword : '课程核心概念';
 }
 
 function retryQuiz() {
@@ -1636,6 +1852,27 @@ document.addEventListener('DOMContentLoaded', function() {
         return bubble;
     }
 
+    function renderAiWelcome() {
+        const body = document.getElementById('aiChatBody');
+        if (!body) return;
+        body.innerHTML = `
+            <div class="ai-welcome-card">
+                <div class="ai-welcome-icon">✚</div>
+                <h3>欢迎使用AI智能答疑系统</h3>
+                <p>基于医学语言模型提供自然语言问答、课程难点讲解与知识点梳理。</p>
+                <div class="ai-welcome-tags">
+                    <span>课程难点讲解</span>
+                    <span>疾病知识问答</span>
+                    <span>诊断标准梳理</span>
+                </div>
+            </div>
+            <div class="chat-msg ai">
+                <div class="ai-label">AI助手</div>
+                <p>你好！我是AI学习助手，可以为你解答课程相关问题。试试点击下方的快捷问题，或者直接输入你的问题吧。</p>
+            </div>
+        `;
+    }
+
     window.sendAiMessage = function(msg) {
         if (!msg) msg = document.getElementById('aiChatInput').value;
         if (!msg || !msg.trim()) return;
@@ -1655,14 +1892,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 800 + Math.random() * 600);
     };
 
-    window.toggleAiChat = function() {
-        let panel = document.getElementById('aiChatPanel');
-        let toggle = document.getElementById('aiChatToggle');
-        panel.classList.toggle('open');
-        if (panel.classList.contains('open')) {
-            toggle.style.display = 'none';
-        } else {
-            toggle.style.display = 'flex';
+    window.openAiQaSystem = function() {
+        showPage('page-ai-qa');
+        const input = document.getElementById('aiChatInput');
+        if (input) input.focus();
+    };
+
+    window.startNewAiDialog = function() {
+        renderAiWelcome();
+        const input = document.getElementById('aiChatInput');
+        if (input) {
+            input.value = '';
+            input.focus();
         }
     };
 

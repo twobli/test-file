@@ -180,7 +180,8 @@ transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow, rgba(37,99,2
 
 /* Hero */
 .hero{
-  padding:100px 0 60px;position:relative;overflow:hidden;
+  min-height:640px;
+  padding:112px 0 72px;position:relative;overflow:hidden;
   background-image:url(img/hero_bg.png);background-size:cover;background-position:center;background-repeat:no-repeat;
 }
 .hero::before{
@@ -194,20 +195,48 @@ transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow, rgba(37,99,2
   pointer-events:none;
 }
 .hero-content{
-  position:relative;max-width:1200px;margin:0 auto;padding:0 28px;
-  display:flex;align-items:center;gap:60px;
+  position:relative;max-width:1280px;margin:0 auto;padding:0 36px;
+  display:flex;align-items:center;gap:72px;
 }
 .hero-left{flex:1.2;text-align:left;min-width:0;}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:18px;padding:7px 12px;
+  border:1px solid rgba(37,99,235,.16);
+  border-radius:999px;background:rgba(255,255,255,.66);
+  color:#2563eb;font-size:13px;font-weight:700;
+}
 .hero-left h1{
-  font-size:44px;font-weight:800;line-height:1.15;margin-bottom:20px;
+  font-size:52px;font-weight:800;line-height:1.08;margin-bottom:22px;
   color:var(--text, #111827);letter-spacing:-1px;
 }
 .hero-left h1 em{font-style:normal;color:var(--accent, #2563eb)}
 .hero-left .hero-desc{
-  font-size:16px;color:var(--text-mid, #4b5563);max-width:520px;margin-bottom:36px;line-height:1.9;
+  font-size:17px;color:var(--text-mid, #4b5563);max-width:660px;margin-bottom:24px;line-height:1.9;
 }
-.hero-left .hero-users{display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap}
-.hero-left .hero-stats{display:flex;gap:32px;margin-top:0;flex-wrap:nowrap}
+.hero-left .hero-users{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.hero-pipeline{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin:0 0 30px;color:#42526b;font-size:13px;
+}
+.hero-pipeline span{
+  display:inline-flex;align-items:center;min-height:30px;
+  padding:0 12px;border-radius:8px;background:rgba(255,255,255,.74);
+  border:1px solid rgba(148,163,184,.2);font-weight:700;
+}
+.hero-pipeline b{color:#8ba0bd;font-weight:700}
+.hero-actions{display:flex;align-items:center;gap:12px;margin:0 0 30px;flex-wrap:wrap}
+.hero-actions .btn{padding:12px 24px}
+.hero-left .hero-stats{
+  display:grid;grid-template-columns:repeat(4,minmax(104px,1fr));
+  gap:12px;max-width:620px;margin-top:0;
+}
+.hero-left .hero-stats .stat{
+  padding:14px 16px;border-radius:12px;
+  background:rgba(255,255,255,.68);
+  border:1px solid rgba(148,163,184,.18);
+  box-shadow:0 6px 18px rgba(15,23,42,.04);
+}
 .hero-right{
   flex:0.8;display:flex;align-items:center;justify-content:flex-end;
   perspective:800px;padding-right:20px;
@@ -259,15 +288,17 @@ section{padding:60px 0}
 
 /* Value */
 #value{background:var(--bg-alt, #f7f8fa)}
-.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .value-card{
   background:var(--card, #ffffff);
   border:1px solid var(--border, #e5e7eb);
   border-radius:var(--radius-lg, 12px);
-  padding:32px 28px 28px;
+  padding:32px 28px 26px;
   transition:all .3s;
   position:relative;overflow:hidden;
   cursor:pointer;
+  color:inherit;text-decoration:none;
+  min-height:286px;display:flex;flex-direction:column;
 }
 /* 顶部蓝色细线 — hover 展开 */
 .value-card::before{
@@ -301,6 +332,21 @@ section{padding:60px 0}
 .value-card p{
   font-size:13px;color:var(--text-mid, #4b5563);line-height:1.85;
 }
+.value-points{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;
+}
+.value-points span{
+  font-size:12px;color:#2563eb;background:#eef5ff;
+  border:1px solid rgba(37,99,235,.12);
+  border-radius:999px;padding:3px 9px;
+}
+.value-more{
+  margin-top:auto;padding-top:20px;
+  display:inline-flex;align-items:center;gap:6px;
+  color:#2563eb;font-size:13px;font-weight:700;
+}
+.value-more::after{content:'>';font-family:Arial,sans-serif;transition:transform .2s}
+.value-card:hover .value-more::after{transform:translateX(3px)}
 
 /* Card click animation */
 @keyframes cardBounce{
@@ -1006,6 +1052,7 @@ Responsive — Mobile & Tablet Adaptation
 .wrap{max-width:960px;padding:0 24px}
 .hero-content{padding:40px 0 40px}
 .hero-left h1{font-size:34px}
+.hero-left .hero-stats{grid-template-columns:repeat(2,minmax(120px,1fr));max-width:520px}
 .db-grid{grid-template-columns:repeat(2,1fr)}
 /* SVG molecule responsive */
 .molecule-3d{width:340px;height:340px}
@@ -1024,154 +1071,118 @@ Responsive — Mobile & Tablet Adaptation
 
 /* ── Mobile Landscape / Small Tablet (≤768px) ── */
 @media(max-width:768px){
-  /* ── Topbar & Nav ── */
-.topbar-inner{height:60px;padding:0 16px}
-.logo-text{font-size:15px}
-.logo-mark{width:30px;height:30px}
-.logo-mark svg{width:26px;height:26px}
-.nav-links{
-  position:fixed;top:60px;left:0;right:0;
-  background:#fff;flex-direction:column;
-  padding:8px 16px 16px;gap:2px;
-  box-shadow:0 8px 32px rgba(0,0,0,.1);
-  border-bottom:1px solid var(--border, #e5e7eb);
-  display:none;z-index:99;
-}
-.nav-links.open{display:flex}
-.nav-links a{
-  color:var(--text-mid, #4b5563)!important /* 保留：确保样式优先级 */;
-  padding:12px 16px;font-size:15px;
-  width:100%;box-sizing:border-box;
-  border-radius:8px;
+  .topbar-inner{height:60px;padding:0 16px}
+  .logo-text{font-size:15px}
+  .logo-mark{width:30px;height:30px}
+  .logo-mark svg{width:26px;height:26px}
+  .nav-hamburger{display:flex}
+  .nav-links{
+    position:fixed;top:60px;left:0;right:0;
+    display:none;flex-direction:column;gap:2px;
+    padding:8px 16px 16px;background:#fff;
+    border-bottom:1px solid var(--border, #e5e7eb);
+    box-shadow:0 8px 32px rgba(0,0,0,.1);
+    z-index:99;
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{
+    width:100%;min-height:44px;display:flex;align-items:center;
+    padding:12px 16px;border-radius:8px;
+    color:var(--text-mid, #4b5563)!important;
+    font-size:15px;box-sizing:border-box;
+  }
   .nav-links a:hover,
   .nav-links a.active{
-    color:var(--accent, #2563eb)!important /* 保留：确保样式优先级 */;
+    color:var(--accent, #2563eb)!important;
     background:var(--accent-light, rgba(37,99,235,.06));
-    /* Hide desktop login btn on mobile */
-    .topbar-inner > .btn-login:not(.mobile-login){
-      display:none!important /* 保留：确保样式优先级 */;
-      /* Mobile login btn inside nav menu (when open) */
-      .nav-links.open .mobile-login{
-        display:flex!important /* 保留：确保样式优先级 */;
-        /* Mobile login btn inside nav menu */
-        .mobile-login{
-          justify-content:center;
-          margin-top:8px;
-          padding:12px 24px!important /* 保留：确保样式优先级 */;
-          font-size:15px!important /* 保留：确保样式优先级 */;
-          border-radius:10px!important /* 保留：确保样式优先级 */;
-          width:calc(100% - 32px)!important /* 保留：确保样式优先级 */;
-          box-sizing:border-box;
-        .nav-hamburger{display:flex}
-        /* ── Hero ── */
-      .hero{padding:80px 0 40px}
-      .hero-content{
-        flex-direction:column;text-align:center;
-        gap:32px;
-        .hero-left{
-          order:2;text-align:center;
-          display:flex;flex-direction:column;
-          align-items:center;
-        .hero-left h1{font-size:26px;line-height:1.25}
-        .hero-left .hero-desc{
-          font-size:14px;
-          margin-left:auto;margin-right:auto;
-        .hero-left .hero-users{justify-content:center}
-        .hero-left .hero-stats{
-          justify-content:center;flex-wrap:wrap;gap:24px;
-        .hero-left .hero-stats .stat{text-align:center;min-width:80px}
-      .hero-left .hero-stats .stat .stat-num{font-size:28px}
-      .hero-right{
-        order:1;display:flex;justify-content:center;padding-right:0;
-        .molecule-3d{
-          width:320px;height:320px;margin:0 auto;
-          /* ── Section Headers ── */
-        .section-header{margin-bottom:32px}
-      .section-header h2{font-size:24px}
-    .section-header p{font-size:14px}
-    /* ── Value Cards ── */
+  }
+  .topbar-inner > .btn-login:not(.mobile-login){display:none!important}
+  .nav-links.open .mobile-login{
+    display:flex!important;justify-content:center;
+    width:calc(100% - 32px)!important;margin:8px 16px 0;
+    padding:12px 24px!important;border-radius:10px!important;
+  }
+
+  .hero{padding:80px 0 40px}
+  .hero-content{
+    flex-direction:column;text-align:center;
+    gap:32px;padding:24px 20px 32px;
+  }
+  .hero-left{
+    order:2;text-align:center;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .hero-left h1{font-size:30px;line-height:1.2}
+  .hero-left .hero-desc{font-size:14px;margin-left:auto;margin-right:auto}
+  .hero-left .hero-users{justify-content:center}
+  .hero-pipeline{justify-content:center}
+  .hero-actions{justify-content:center}
+  .hero-left .hero-stats{grid-template-columns:repeat(2,minmax(112px,1fr));gap:14px}
+  .hero-left .hero-stats .stat{text-align:center;min-width:0}
+  .hero-left .hero-stats .stat-num{font-size:28px}
+  .hero-right{order:1;display:flex;justify-content:center;padding-right:0}
+  .molecule-3d{width:320px;height:320px;margin:0 auto}
+
+  .section-header{margin-bottom:32px}
+  .section-header h2{font-size:24px}
+  .section-header p{font-size:14px}
   .value-grid{grid-template-columns:1fr;gap:14px}
-.value-card{padding:24px 20px 20px;border-radius:10px}
-.value-card .v-icon{width:40px;height:40px;margin-bottom:14px}
-.value-card .v-icon svg{width:20px;height:20px}
-.value-card h3{font-size:16px}
-.flow-timeline{padding:32px 0 60px}
-.flow-row{
-  flex-wrap:wrap;justify-content:center;
-  gap:24px 12px;
-.flow-row::after{display:none}
-.flow-step{
-  flex:0 0 calc(33.33% - 10px);max-width:140px;
-.flow-icon-node{width:46px;height:46px}
-.flow-icon-node svg{width:22px;height:22px}
-.flow-title-text{font-size:13px}
-.flow-desc p{font-size:11.5px}
-/* ── Database Cards ── */
-.db-grid{grid-template-columns:1fr}
-.db-card{
-  display:flex;flex-direction:row;
-  align-items:stretch;
-  .db-card .db-card-img{
-    width:100px;min-height:100px;
-    flex-shrink:0;
-    .db-card .db-card-body{
-      flex:1;padding:16px 20px;
-    .db-card .db-card-body h3{font-size:15px}
+  .value-card{padding:24px 20px 20px;border-radius:10px;min-height:auto}
+  .value-card .v-icon{width:40px;height:40px;margin-bottom:14px}
+  .value-card .v-icon svg{width:20px;height:20px}
+  .value-card h3{font-size:16px}
+
+  .flow-timeline{padding:32px 0 60px}
+  .flow-row{flex-wrap:wrap;justify-content:center;gap:24px 12px}
+  .flow-row::after{display:none}
+  .flow-step{flex:0 0 calc(33.33% - 10px);max-width:140px}
+  .flow-icon-node{width:46px;height:46px}
+  .flow-icon-node svg{width:22px;height:22px}
+  .flow-title-text{font-size:13px}
+  .flow-desc p{font-size:11.5px}
+
+  .db-grid{grid-template-columns:1fr}
+  .db-card{display:flex;flex-direction:row;align-items:stretch}
+  .db-card .db-card-img{width:100px;min-height:100px;flex-shrink:0}
+  .db-card .db-card-body{flex:1;padding:16px 20px}
+  .db-card .db-card-body h3{font-size:15px}
   .db-card .db-card-body p{font-size:13px}
-  /* ── Dataviz Section ── */
-.viz-content{grid-template-columns:1fr}
-.viz-db-grid{grid-template-columns:1fr}
-.viz-bar-row{
-  flex-direction:column;gap:12px;
-  .viz-bar-item{
-    flex-direction:row;align-items:center;gap:12px;
+
+  .viz-content{grid-template-columns:1fr}
+  .viz-db-grid{grid-template-columns:1fr}
+  .viz-bar-row{flex-direction:column;gap:12px}
+  .viz-bar-item{flex-direction:row;align-items:center;gap:12px}
   .viz-bar-label{width:auto;min-width:80px;font-size:13px}
-.viz-bar-track{flex:1}
-.viz-sources{
-  flex-direction:column;gap:8px;
-  align-items:flex-start;
-  /* ── Scenes Section ── */
+  .viz-bar-track{flex:1}
+  .viz-sources{flex-direction:column;gap:8px;align-items:flex-start}
+
   .scene-tabs{
-    overflow-x:auto;
-    flex-wrap:nowrap;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    gap:8px;padding-bottom:4px;
-    justify-content:flex-start;
+    overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;gap:8px;padding-bottom:4px;justify-content:flex-start;
+  }
   .scene-tabs::-webkit-scrollbar{display:none}
-  .scene-tab{
-    flex-shrink:0;padding:9px 18px;
-    font-size:13px;white-space:nowrap;
-    border-radius:50px;
-    .scene-content{
-      grid-template-columns:1fr;
-      gap:24px;
-    .scene-chart{min-height:300px;padding:20px 16px}
+  .scene-tab{flex-shrink:0;padding:9px 18px;font-size:13px;white-space:nowrap;border-radius:50px;min-height:40px}
+  .scene-content{grid-template-columns:1fr;gap:24px}
+  .scene-chart{min-height:300px;padding:20px 16px}
   .scene-info h3{font-size:20px}
-.scene-info>p{font-size:13.5px}
-.scene-feature{padding:14px 16px}
-.scene-feature-icon{width:34px;height:34px}
-/* ── Tools Section ── */
-.tool-grid{grid-template-columns:1fr}
-.tool-card{padding:20px 16px}
-/* ── Cases Section ── */
-.case-grid{grid-template-columns:1fr}
-.case-card .case-body{padding:20px 16px}
-/* ── Footer ── */
-footer .footer-grid{
-  gap:28px;text-align:center;
-footer .footer-brand{text-align:center}
-footer .footer-links{text-align:center}
-footer .footer-links h4{text-align:center}
-footer .footer-bottom{
-  text-align:center;
-.nav-links a{min-height:44px;display:flex;align-items:center}
-.scene-tab{min-height:40px}
-footer a{min-height:36px;display:inline-flex;align-items:center}
-.chart{width:100%;min-height:220px}
-#vizBarChart{width:100%;min-height:260px}
-#vizPieChart{width:100%;min-height:220px}
-#sceneChart{width:100%;min-height:220px}
+  .scene-info>p{font-size:13.5px}
+  .scene-feature{padding:14px 16px}
+  .scene-feature-icon{width:34px;height:34px}
+
+  .tool-grid{grid-template-columns:1fr}
+  .tool-card{padding:20px 16px}
+  .case-grid{grid-template-columns:1fr}
+  .case-card .case-body{padding:20px 16px}
+  footer .footer-grid{gap:28px;text-align:center}
+  footer .footer-brand,
+  footer .footer-links,
+  footer .footer-links h4,
+  footer .footer-bottom{text-align:center}
+  footer a{min-height:36px;display:inline-flex;align-items:center}
+  .chart{width:100%;min-height:220px}
+  #vizBarChart{width:100%;min-height:260px}
+  #vizPieChart{width:100%;min-height:220px}
+  #sceneChart{width:100%;min-height:220px}
 }
 
 /* ── Mobile Portrait (≤480px) ── */
@@ -1181,6 +1192,7 @@ footer a{min-height:36px;display:inline-flex;align-items:center}
 .hero-left h1{font-size:26px}
 .hero-left .hero-desc{font-size:13px}
 .hero-left .hero-stats{gap:16px}
+.hero-left .hero-stats{grid-template-columns:1fr}
 .hero-left .hero-stats .stat .stat-num{font-size:24px}
 .hero-left .hero-stats .stat .stat-label{font-size:11px}
 .hero-right{display:none}
@@ -1282,10 +1294,10 @@ footer .footer-grid{gap:20px}
       <a href="#scenes">场景应用</a>
       <a href="#tools">算法工具</a>
       <a href="#cases">合作案例</a>
-      <a href="index.html" class="btn-login mobile-login">进入平台</a>
+      <a href="login.html" class="btn-login mobile-login">进入平台</a>
     </div>
 
-    <a href="index.html" class="btn-login">
+    <a href="login.html" class="btn-login">
       进入平台
     </a>
 
@@ -1310,18 +1322,26 @@ footer .footer-grid{gap:20px}
 <section class="hero" id="hero" aria-label="页面头部">
   <div class="hero-content">
     <div class="hero-left">
+      <div class="hero-kicker fade-up">生命医学数据底座 · 垂域AI应用平台</div>
       <h1 class="fade-up">生命医学<em>主题库</em></h1>
-      <p class="hero-desc fade-up delay-1">聚焦眼病与慢病多模态数据、医学知识图谱、垂域AI模型、开放数据平台和健康科普应用，构建标准化、高质量、可追溯的生命医学数据库体系，支撑深圳医学健康领域大众科普、科研发展与产业转化。</p>
+      <p class="hero-desc fade-up delay-1">围绕眼病与高发慢病，汇聚多中心、多模态临床数据，建设覆盖采集、治理、标准化、知识图谱、垂域模型与场景应用的生命医学主题数据库，支撑健康管理、临床科研、医学科普与产业转化。</p>
       <div class="hero-users fade-up delay-2">
         <div class="user-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg> 面向医院</div>
         <div class="user-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg> 面向科研团队</div>
         <div class="user-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg> 面向公众</div>
       </div>
+      <div class="hero-pipeline fade-up delay-2">
+        <span>数据采集</span><b>/</b><span>脱敏清洗</span><b>/</b><span>标准加工</span><b>/</b><span>AI模型</span><b>/</b><span>应用转化</span>
+      </div>
+      <div class="hero-actions fade-up delay-3">
+        <a href="#value" class="btn btn-primary">查看平台价值</a>
+        <a href="#flow" class="btn btn-outline">了解建设流程</a>
+      </div>
       <div class="hero-stats fade-up delay-3">
+        <div class="stat"><div class="stat-num">50+</div><div class="stat-label">合作医院</div></div>
         <div class="stat"><div class="stat-num" data-target="100000">10万+</div><div class="stat-label">自采病例</div></div>
         <div class="stat"><div class="stat-num">1922万+</div><div class="stat-label">医学影像</div></div>
-        <div class="stat"><div class="stat-num">25+</div><div class="stat-label">优质数据集</div></div>
-        <div class="stat"><div class="stat-num">4</div><div class="stat-label">平台系统</div></div>
+        <div class="stat"><div class="stat-num">260GB+</div><div class="stat-label">公开数据</div></div>
       </div>
     </div>
     <div class="hero-right">
@@ -1341,39 +1361,51 @@ footer .footer-grid{gap:20px}
   <div class="wrap">
     <div class="section-header fade-up">
       <h2>平台价值</h2>
-      <p>从医学数据治理、科研赋能、AI教育到辅助筛查与健康管理，构建覆盖医院、科研团队、公众与产业伙伴的生命医学数据生态</p>
+      <p>以真实世界数据为底座，贯通标准治理、科研开放、医学教育、辅助筛查、垂域模型和产业应用，形成数据到应用的闭环</p>
     </div>
     <div class="value-grid">
-      <div class="value-card fade-up">
+      <a class="value-card fade-up" href="平台价值详情.html?module=smart-care">
           <div class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
           <h3>支撑智慧医疗</h3>
-          <p>围绕深圳医学健康领域真实需求，沉淀眼病与慢病多中心多模态数据，为智慧医疗服务、疾病风险提示和临床科研创新提供可信数据底座。</p>
-      </div>
-      <div class="value-card fade-up">
+          <p>面向医院、社区筛查和健康管理场景，沉淀眼病与慢病多中心数据，为风险提示、辅助筛查和规范诊疗提供可信底座。</p>
+          <div class="value-points"><span>辅助筛查</span><span>健康管理</span><span>临床决策</span></div>
+          <div class="value-more">查看二级页面</div>
+      </a>
+      <a class="value-card fade-up" href="平台价值详情.html?module=industry">
           <div class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
           <h3>赋能区域健康产业</h3>
-          <p>对接医院、学校、政府与企业应用场景，支撑AI医疗设备、健康管理服务、医学科普内容与数据服务产品转化落地。</p>
-      </div>
-      <div class="value-card fade-up">
+          <p>对接医院、学校、政府与企业应用场景，支撑AI医疗设备、数据服务、健康管理服务和医学科普产品转化落地。</p>
+          <div class="value-points"><span>产业转化</span><span>医工结合</span><span>产品孵化</span></div>
+          <div class="value-more">查看二级页面</div>
+      </a>
+      <a class="value-card fade-up" href="平台价值详情.html?module=research">
           <div class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m17.07-7.07l-4.24 4.24m-5.66 5.66l-4.24 4.24m0-15.56l4.24 4.24m5.66 5.66l4.24 4.24"/></svg></div>
           <h3>驱动临床科研</h3>
           <p>汇聚多中心病历、影像、公开数据与知识图谱，支持病例检索、队列构建、文献推荐和图谱推理，降低科研数据获取门槛。</p>
-      </div>
-      <div class="value-card fade-up">
+          <div class="value-points"><span>开放数据</span><span>队列构建</span><span>图谱推理</span></div>
+          <div class="value-more">查看二级页面</div>
+      </a>
+      <a class="value-card fade-up" href="平台价值详情.html?module=governance">
           <div class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><polyline points="9 7 12 4 15 7"/><line x1="12" y1="4" x2="12" y2="16"/></svg></div>
           <h3>医学数据标准治理</h3>
           <p>围绕眼底影像、OCT、病历、全身检查和知识图谱Schema建立采集、清洗、脱敏、标注与标准化加工规范，提升数据可用性。</p>
-      </div>
-      <div class="value-card fade-up">
+          <div class="value-points"><span>标准体系</span><span>脱敏清洗</span><span>质量质控</span></div>
+          <div class="value-more">查看二级页面</div>
+      </a>
+      <a class="value-card fade-up" href="平台价值详情.html?module=ai-model">
           <div class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
           <h3>垂域AI模型赋能</h3>
           <p>集成图像质量评价、图像复原、疾病分类、结构分割、病灶分割、治疗效果预测、知识图谱问答和语义匹配算法。</p>
-      </div>
-      <div class="value-card fade-up">
+          <div class="value-points"><span>影像算法</span><span>知识问答</span><span>垂域大模型</span></div>
+          <div class="value-more">查看二级页面</div>
+      </a>
+      <a class="value-card fade-up" href="平台价值详情.html?module=service">
           <div class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           <h3>全流程应用服务</h3>
           <p>覆盖眼底筛查、开放数据、AI教育、临床决策、导诊咨询、基因影像融合诊断与药效评估预测，形成数据到应用的闭环。</p>
-      </div>
+          <div class="value-points"><span>四大平台</span><span>跨领域应用</span><span>闭环服务</span></div>
+          <div class="value-more">查看二级页面</div>
+      </a>
     </div>
   </div>
 </section>

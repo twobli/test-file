@@ -89,6 +89,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .card-header { display:flex; align-items:center; padding:14px 20px; border-bottom:1px solid var(--gray-100); gap:8px; }
 .card-header .card-icon { font-size:16px; }
 .card-header .card-title { font-size:15px; font-weight:600; color:var(--gray-800); }
+.card-header .card-badge { margin-left:auto; font-size:11px; color:var(--primary); background:var(--primary-light); padding:3px 8px; border-radius:999px; font-weight:600; }
 .card-body { padding:16px 20px; }
 
 /* ===== Card 1: 虚拟病人信息 ===== */
@@ -110,16 +111,35 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .dialogue-area { display:flex; flex-direction:column; }
 .dialogue-list { max-height:360px; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
 .dialogue-item { display:flex; gap:8px; align-items:flex-start; }
-.dialogue-item.doctor { flex-direction:row; }
-.dialogue-item.patient { flex-direction:row-reverse; }
+.dialogue-item.doctor { flex-direction:row-reverse; }
+.dialogue-item.patient { flex-direction:row; }
 .dialogue-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; color:#fff; }
 .dialogue-item.doctor .dialogue-avatar { background:var(--primary); }
 .dialogue-item.patient .dialogue-avatar { background:var(--warning); }
 .dialogue-bubble { max-width:75%; padding:10px 14px; border-radius:12px; font-size:13px; line-height:1.5; position:relative; }
-.dialogue-item.doctor .dialogue-bubble { background:var(--gray-100); color:var(--gray-800); border-bottom-left-radius:4px; }
-.dialogue-item.patient .dialogue-bubble { background:#FFF7ED; color:#7C2D12; border-bottom-right-radius:4px; }
+.dialogue-item.doctor .dialogue-bubble { background:var(--primary); color:#fff; border-bottom-right-radius:4px; }
+.dialogue-item.patient .dialogue-bubble { background:var(--gray-100); color:var(--gray-800); border-bottom-left-radius:4px; }
 .dialogue-bubble .db-sender { font-size:10px; font-weight:600; margin-bottom:3px; color:var(--gray-500); }
 .dialogue-bubble .db-time { font-size:10px; color:var(--gray-400); margin-top:4px; text-align:right; }
+.dialogue-item.doctor .dialogue-bubble .db-sender,
+.dialogue-item.doctor .dialogue-bubble .db-time { color:rgba(255,255,255,0.75); }
+.dialogue-item.voice .dialogue-bubble { border:1px solid rgba(59,130,246,0.14); }
+.dialogue-item.voice.doctor .dialogue-bubble { background:linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+.dialogue-item.voice.patient .dialogue-bubble { background:#fff; }
+.voice-chip { display:inline-flex; align-items:center; gap:8px; padding:4px 10px; border-radius:999px; background:rgba(59,130,246,0.12); color:var(--primary-dark); font-size:11px; font-weight:600; margin-bottom:6px; }
+.dialogue-item.doctor .voice-chip { background:rgba(255,255,255,0.18); color:#fff; }
+.dialogue-item.patient .voice-chip { background:var(--primary-light); color:var(--primary-dark); }
+.voice-wave { display:inline-flex; gap:2px; align-items:center; }
+.voice-wave i { width:3px; height:10px; background:currentColor; border-radius:2px; display:block; opacity:0.8; }
+.voice-wave i:nth-child(2) { height:16px; }
+.voice-wave i:nth-child(3) { height:8px; }
+.voice-panel { margin-top:12px; padding:12px; background:#f8fbff; border:1px dashed #bfd4ff; border-radius:10px; }
+.voice-panel-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+.voice-panel-title { font-size:12px; font-weight:600; color:var(--gray-700); }
+.voice-panel-hint { font-size:11px; color:var(--gray-500); }
+.voice-input-row { align-items:flex-start; }
+.voice-input-row textarea { flex:1; min-height:64px; padding:9px 14px; border:1px solid var(--gray-300); border-radius:12px; font-size:13px; font-family:inherit; outline:none; resize:vertical; }
+.voice-input-row textarea:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
 
 /* Preset Questions */
 .preset-questions { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
@@ -133,6 +153,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .dialogue-input-row input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
 .btn-send { padding:8px 18px; background:var(--primary); color:#fff; border:none; border-radius:20px; cursor:pointer; font-size:13px; font-family:inherit; font-weight:500; transition:var(--transition); }
 .btn-send:hover { background:var(--primary-dark); }
+.voice-btn { padding:8px 18px; background:#fff; border:1px solid var(--gray-300); color:var(--primary); border-radius:20px; cursor:pointer; font-size:13px; font-family:inherit; font-weight:500; transition:var(--transition); white-space:nowrap; }
+.voice-btn:hover { border-color:var(--primary); background:var(--primary-light); }
 
 /* ===== Card 3: 患者影像资料 ===== */
 .imaging-tabs { display:flex; gap:2px; margin-bottom:12px; border-bottom:2px solid var(--gray-200); }
@@ -178,22 +200,18 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .btn-submit-diag { width:100%; padding:12px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; }
 .btn-submit-diag:hover { background:var(--primary-dark); box-shadow:var(--shadow-md); }
 
-/* ===== Card 5: 诊断评分 ===== */
+/* ===== Card 5: 诊断判定 ===== */
 .score-card { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
 .score-placeholder { padding:40px 20px; text-align:center; color:var(--gray-400); }
 .score-placeholder .sp-icon { font-size:40px; margin-bottom:10px; }
 .score-placeholder .sp-text { font-size:14px; }
 .score-result { padding:20px; }
 .score-header { text-align:center; margin-bottom:16px; }
-.score-ring { position:relative; width:100px; height:100px; margin:0 auto 12px; }
-.score-ring svg { transform:rotate(-90deg); }
-.score-ring .score-value { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:28px; font-weight:800; }
-.score-result.correct .score-value { color:var(--success); }
-.score-result.partial .score-value { color:var(--warning); }
-.score-result.wrong .score-value { color:var(--danger); }
+.judgement-icon { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:30px; font-weight:800; }
+.judgement-icon.correct { background:var(--success-light); color:var(--success); }
+.judgement-icon.wrong { background:var(--danger-light); color:var(--danger); }
 .score-badge { display:inline-block; padding:4px 16px; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:12px; }
 .score-badge.correct { background:var(--success-light); color:#065F46; }
-.score-badge.partial { background:var(--warning-light); color:#92400E; }
 .score-badge.wrong { background:var(--danger-light); color:#991B1B; }
 .score-detail { background:var(--gray-50); border-radius:6px; padding:14px; margin-bottom:10px; }
 .score-detail .sd-row { display:flex; margin-bottom:8px; font-size:13px; }
@@ -243,7 +261,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 
 <!-- ====== Header ====== -->
 <div class="header">
-    <a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+    <a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -315,6 +333,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                 <div class="card-header">
                     <span class="card-icon">💬</span>
                     <span class="card-title">问诊对话记录</span>
+                    <span class="card-badge">文本 / 语音</span>
                 </div>
                 <div class="card-body">
                     <div class="dialogue-list" id="dialogueList"></div>
@@ -322,6 +341,16 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                     <div class="dialogue-input-row">
                         <input type="text" id="customQuestion" placeholder="请输入您的问诊问题..." onkeydown="if(event.key==='Enter')sendCustomQuestion()">
                         <button class="btn-send" onclick="sendCustomQuestion()">发送</button>
+                    </div>
+                    <div class="voice-panel">
+                        <div class="voice-panel-head">
+                            <div class="voice-panel-title">语音问诊（模拟）</div>
+                            <div class="voice-panel-hint">语音转写后进入对话记录</div>
+                        </div>
+                        <div class="dialogue-input-row voice-input-row">
+                            <textarea id="voiceTranscript" placeholder="请输入语音转写内容，例如：您的视力是什么时候开始下降的？"></textarea>
+                            <button class="voice-btn" onclick="sendVoiceQuestion()">🎙️ 发送语音</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -373,16 +402,16 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                 </div>
             </div>
 
-            <!-- Card 5: 诊断评分 -->
+            <!-- Card 5: 诊断判定 -->
             <div class="score-card" id="cardScore">
                 <div class="card-header">
-                    <span class="card-icon">📊</span>
-                    <span class="card-title">诊断评分</span>
+                    <span class="card-icon">✅</span>
+                    <span class="card-title">诊断判定</span>
                 </div>
                 <div class="card-body" id="scoreBody">
                     <div class="score-placeholder" id="scorePlaceholder">
                         <div class="sp-icon">📝</div>
-                        <div class="sp-text">提交诊断后可查看评分</div>
+                        <div class="sp-text">提交诊断后可查看判定结果</div>
                     </div>
                     <div class="score-result" id="scoreResult" style="display:none;"></div>
                 </div>
@@ -396,7 +425,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     <div class="confirm-box">
         <div class="cb-icon">⚠️</div>
         <div class="cb-title">确认提交诊断</div>
-        <div class="cb-text" id="confirmText">您确定要提交当前诊断结果吗？提交后将立即显示评分。</div>
+        <div class="cb-text" id="confirmText">您确定要提交当前诊断结果吗？提交后将立即显示判定结果。</div>
         <div class="cb-actions">
             <button class="btn-cancel" onclick="closeConfirm()">取消</button>
             <button class="btn-confirm" onclick="doSubmitDiagnosis()">确认提交</button>
@@ -629,7 +658,7 @@ var diagnosisSubmitted = false;
 // ===== Load Case =====
 function loadCase(index) {
     currentCaseIndex = parseInt(index);
-    currentDialogue = [];
+    currentDialogue = getInitialDialogue(cases[currentCaseIndex]);
     currentImagingIndex = 0;
     selectedDiagnosis = null;
     diagnosisSubmitted = false;
@@ -638,6 +667,15 @@ function loadCase(index) {
     renderImaging();
     resetDiagnosis();
     resetScore();
+}
+
+function getInitialDialogue(c) {
+    return [{
+        type:'patient',
+        text:'医生您好，'+c.chiefComplaint+' 我想请您帮我看看是不是眼底出了问题。',
+        questionIndex:-1,
+        time:getTimeStr()
+    }];
 }
 
 function renderPatientInfo() {
@@ -697,14 +735,20 @@ function renderDialogue() {
 
 function renderDialogueItem(msg) {
     var cls = msg.type === 'doctor' ? 'doctor' : 'patient';
+    if (msg.mode === 'voice') cls += ' voice';
     var avatar = msg.type === 'doctor' ? '医' : '患';
-    var sender = msg.type === 'doctor' ? '医生' : '患者';
+    var sender = msg.type === 'doctor' ? '你' : cases[currentCaseIndex].name;
+    if (msg.mode === 'voice') sender += ' · 语音';
     var time = msg.time || getTimeStr();
+    var content = escapeHtml(msg.text);
+    if (msg.mode === 'voice') {
+        content = '<div class="voice-chip"><span class="voice-wave"><i></i><i></i><i></i></span>语音 '+(msg.duration || '10秒')+'</div><div>'+content+'</div>';
+    }
     return '<div class="dialogue-item '+cls+'">'+
         '<div class="dialogue-avatar">'+avatar+'</div>'+
         '<div class="dialogue-bubble">'+
-            '<div class="db-sender">'+sender+'</div>'+
-            '<div>'+msg.text+'</div>'+
+            '<div class="db-sender">'+escapeHtml(sender)+'</div>'+
+            '<div>'+content+'</div>'+
             '<div class="db-time">'+time+'</div>'+
         '</div>'+
     '</div>';
@@ -713,6 +757,10 @@ function renderDialogueItem(msg) {
 function getTimeStr() {
     var now = new Date();
     return '今天 '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+}
+
+function escapeHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function askPresetQuestion(index) {
@@ -752,6 +800,60 @@ function sendCustomQuestion() {
         currentDialogue.push({ type:'patient', text:resp, time:getTimeStr() });
         renderDialogue();
     }, 800);
+}
+
+function sendVoiceQuestion() {
+    if (diagnosisSubmitted) return;
+    var c = cases[currentCaseIndex];
+    var input = document.getElementById('voiceTranscript');
+    var text = input.value.trim() || getVoiceQuestionFallback(c);
+
+    currentDialogue.push({
+        type:'doctor',
+        mode:'voice',
+        text:text,
+        duration:getVoiceDuration(text),
+        questionIndex:-2,
+        time:getTimeStr()
+    });
+    input.value = '';
+    renderDialogue();
+
+    setTimeout(function(){
+        currentDialogue.push({
+            type:'patient',
+            mode:'voice',
+            text:getVoiceReply(c, text),
+            duration:'8秒',
+            time:getTimeStr()
+        });
+        renderDialogue();
+    }, 700);
+}
+
+function getVoiceQuestionFallback(c) {
+    var usedQuestions = currentDialogue
+        .filter(function(d){return d.type === 'doctor' && d.questionIndex >= 0;})
+        .map(function(d){return d.questionIndex;});
+    for (var i = 0; i < c.presetQuestions.length; i++) {
+        if (usedQuestions.indexOf(i) === -1) return c.presetQuestions[i];
+    }
+    return c.presetQuestions[0] || '请描述一下您目前最明显的不舒服。';
+}
+
+function getVoiceReply(c, questionText) {
+    var key = questionText.slice(0, 4);
+    for (var i = 0; i < c.presetQuestions.length; i++) {
+        if (c.presetQuestions[i].indexOf(key) !== -1 || questionText.indexOf(c.presetQuestions[i].slice(0, 4)) !== -1) {
+            return c.presetAnswers[i];
+        }
+    }
+    return c.presetAnswers[0] || '我主要还是觉得视力模糊，最近变化比较明显。';
+}
+
+function getVoiceDuration(text) {
+    var seconds = Math.max(5, Math.min(18, Math.round(text.length / 3)));
+    return seconds + '秒';
 }
 
 // ===== Imaging =====
@@ -866,62 +968,37 @@ function doSubmitDiagnosis() {
     var c = cases[currentCaseIndex];
     var isCorrect = (selectedDiagnosis === c.correctDiagnosis);
 
-    // Determine if partial match
-    var partial = false;
-    var diagOrder = ['none','mild','moderate','severe','pdr'];
-    var userIdx = diagOrder.indexOf(selectedDiagnosis);
-    var correctIdx = diagOrder.indexOf(c.correctDiagnosis);
-    if (!isCorrect && Math.abs(userIdx - correctIdx) === 1) partial = true;
-
-    var score, resultClass;
-    if (isCorrect) { score = 92 + Math.floor(Math.random()*9); resultClass = 'correct'; }
-    else if (partial) { score = 55 + Math.floor(Math.random()*20); resultClass = 'partial'; }
-    else { score = 15 + Math.floor(Math.random()*30); resultClass = 'wrong'; }
-
-    renderScore(score, resultClass, isCorrect, partial, c);
+    renderDiagnosisJudgement(isCorrect, c);
 }
 
-function renderScore(score, resultClass, isCorrect, partial, c) {
+function renderDiagnosisJudgement(isCorrect, c) {
     document.getElementById('scorePlaceholder').style.display = 'none';
     var resultDiv = document.getElementById('scoreResult');
     resultDiv.style.display = 'block';
+    resultDiv.className = 'score-result '+(isCorrect ? 'correct' : 'wrong');
 
-    var badgeText = isCorrect ? '正确' : (partial ? '部分正确' : '错误');
-    var badgeClass = resultClass;
-
-    var circumference = 2 * Math.PI * 42;
-    var dashOffset = circumference * (1 - score/100);
+    var badgeText = isCorrect ? '诊断正确' : '诊断错误';
+    var badgeClass = isCorrect ? 'correct' : 'wrong';
+    var feedback = getDiagnosisFeedback(selectedDiagnosis, c.correctDiagnosis, isCorrect);
 
     var html = '';
 
-    // Score header with ring
+    // Judgement header
     html += '<div class="score-header">';
-    html += '<div class="score-ring">';
-    html += '<svg width="100" height="100" viewBox="0 0 100 100">';
-    html += '<circle cx="50" cy="50" r="42" fill="none" stroke="#E5E7EB" stroke-width="8"/>';
-    html += '<circle cx="50" cy="50" r="42" fill="none" stroke="'+(isCorrect?'#10B981':(partial?'#F59E0B':'#EF4444'))+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circumference+'" stroke-dashoffset="'+dashOffset+'"/>';
-    html += '</svg>';
-    html += '<div class="score-value '+resultClass+'">'+score+'</div>';
-    html += '</div>';
+    html += '<div class="judgement-icon '+badgeClass+'">'+(isCorrect?'✓':'!')+'</div>';
     html += '<div class="score-badge '+badgeClass+'">'+badgeText+'</div>';
     html += '</div>';
 
     // Detail
     html += '<div class="score-detail">';
-    html += '<div class="sd-row"><span class="sd-label">正确诊断</span><span class="sd-value">'+c.correctLabel+'</span></div>';
     html += '<div class="sd-row"><span class="sd-label">您的诊断</span><span class="sd-value">'+getDiagLabel(selectedDiagnosis)+'</span></div>';
-    html += '<div class="sd-row"><span class="sd-label">得分</span><span class="sd-value">'+score+'/100</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">参考答案</span><span class="sd-value">'+c.correctLabel+'</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">判定标准</span><span class="sd-value">以DR临床分期为主，结合ETDRS 4-2-1原则与PDR新生血管/玻璃体出血等关键体征，单选结果需与参考分期一致。</span></div>';
     html += '</div>';
 
     // Feedback
-    var fbClass = isCorrect ? 'success' : (partial ? 'warning' : 'info');
-    var fbText = isCorrect
-        ? '您的诊断与标准答案一致，判断准确。建议进一步关注合并黄斑水肿的可能，并在治疗方案中体现综合管理策略。'
-        : (partial
-            ? '您的诊断方向基本正确，但分级略有偏差。请仔细回顾ETDRS 4-2-1分级原则，关注微血管瘤、出血的象限分布及静脉串珠等关键体征。'
-            : '您的诊断与标准答案差异较大。建议重新复习DR分级标准，重点关注微血管瘤数量、出血范围、棉绒斑和静脉串珠等关键鉴别指标。');
-
-    html += '<div class="score-feedback '+fbClass+'"><strong>反馈建议：</strong>'+fbText+'</div>';
+    html += '<div class="score-feedback '+(isCorrect?'success':'warning')+'"><strong>诊断提示：</strong>'+feedback.tip+'</div>';
+    html += '<div class="score-feedback info"><strong>反馈建议：</strong>'+feedback.suggestion+'</div>';
 
     // Answer reference
     html += '<div class="score-feedback info">';
@@ -943,6 +1020,35 @@ function renderScore(score, resultClass, isCorrect, partial, c) {
     });
     document.getElementById('diagNotes').disabled = true;
     document.querySelector('.btn-submit-diag').style.display = 'none';
+}
+
+function getDiagnosisFeedback(userDiagnosis, correctDiagnosis, isCorrect) {
+    var rules = {
+        none: '未见明确DR体征，重点确认是否存在微血管瘤、点片状出血或硬性渗出。',
+        mild: '轻度NPDR通常以少量微血管瘤为主，无达到中重度NPDR的出血范围或静脉改变。',
+        moderate: '中度NPDR已有微血管瘤、出血或渗出等改变，但未达到ETDRS 4-2-1重度NPDR标准。',
+        severe: '重度NPDR按ETDRS 4-2-1原则判断：四象限广泛出血/微血管瘤、两象限静脉串珠或一象限IRMA满足其一。',
+        pdr: 'PDR的核心依据是视盘或视网膜新生血管，常可合并玻璃体/视网膜前出血、牵拉性改变。'
+    };
+    if (isCorrect) {
+        return {
+            tip: '您的诊断与参考分期一致，关键病变程度判断准确。',
+            suggestion: '下一步可继续评估是否合并糖尿病性黄斑水肿，并结合视力、OCT和全身代谢控制制定治疗与随访方案。'
+        };
+    }
+
+    var order = ['none','mild','moderate','severe','pdr'];
+    var userIndex = order.indexOf(userDiagnosis);
+    var correctIndex = order.indexOf(correctDiagnosis);
+    var direction = userIndex < correctIndex ? '低估' : '高估';
+    var severityTip = direction === '低估'
+        ? '您目前的判断低估了病变程度，容易遗漏需要更密切随访或干预的风险信号。'
+        : '您目前的判断高估了病变程度，建议回到关键体征本身，避免把未达到标准的改变直接归入更重分期。';
+
+    return {
+        tip: severityTip,
+        suggestion: '请按参考分期复核：'+(rules[correctDiagnosis] || '')+' 重点对照眼底照相/OCT中的出血象限、微血管瘤数量、硬性渗出、棉絮斑、静脉串珠、IRMA和新生血管。'
+    };
 }
 
 function resetScore() {

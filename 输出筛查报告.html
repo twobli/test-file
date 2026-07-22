@@ -120,50 +120,9 @@ input, select, textarea { font: inherit; outline: none; }
 .row-main strong { font-size: 13px; }
 .row-main span { color: var(--soft); font-size: 12px; }
 
-/* Toolbar */
-.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
-.toolbar .search-shell {
-  display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px;
-  border: 1px solid var(--line); border-radius: 10px; background: #fff; min-width: 220px;
-}
-.toolbar .search-shell input { width: 100%; border: 0; background: transparent; }
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
-
-/* Steps */
-.steps { display: flex; margin-bottom: 20px; }
-.step { flex: 1; text-align: center; position: relative; font-size: 12px; color: var(--soft); }
-.step::before { content: ''; position: absolute; top: 15px; left: 50%; right: -50%; height: 2px; background: var(--line); z-index: 0; }
-.step:last-child::before { display: none; }
-.step .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e8edf5; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; position: relative; z-index: 1; }
-.step.active .step-circle { background: var(--primary); color: #fff; }
-.step.active { color: var(--primary); font-weight: 700; }
-.step.done .step-circle { background: var(--success); color: #fff; }
-.step.done { color: var(--success); }
-.step.done::before { background: var(--success); }
-
-/* Upload Zone */
-.upload-zone {
-  border: 1.5px dashed #b5c7e6; border-radius: 16px; min-height: 200px; display: flex; align-items: center; justify-content: center;
-  text-align: center; background: linear-gradient(180deg, #f8fbff 0%, #f3f7fd 100%); color: var(--muted); cursor: pointer; transition: .18s;
-}
-.upload-zone:hover { border-color: var(--primary); background: var(--primary-soft); }
-.upload-zone .plus {
-  width: 44px; height: 44px; margin: 0 auto 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  background: #e8f3ff; color: var(--primary); font-size: 24px; font-weight: 400;
-}
-.upload-zone .upload-hint { color: var(--soft); font-size: 12px; margin-top: 6px; }
-
-/* Forms */
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-.form-group input, .form-group select { width: 100%; padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; background: #fff; color: var(--text); }
-.form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(22,93,255,.1); }
-.form-row { display: flex; gap: 12px; }
-.form-row .form-group { flex: 1; }
-
 /* Report Box */
 .report-box { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 10px; }
-.report-box p { margin: 0; color: var(--muted); }
+.report-box p { margin: 6px 0; color: var(--muted); line-height: 1.7; }
 .report-box strong { color: var(--text); }
 
 /* Alerts */
@@ -181,28 +140,29 @@ input, select, textarea { font: inherit; outline: none; }
 .result-card .result-desc { color: var(--muted); font-size: 12px; line-height: 1.5; }
 .result-card .result-tips { margin-top: 8px; font-size: 12px; color: var(--soft); }
 
-/* Preview */
-.preview-shell { border-radius: 14px; overflow: hidden; background: #0b0b0b; margin-bottom: 14px; }
-.preview-bar {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 14px; background: #f7f9fd; border: 1px solid var(--line); border-bottom: 0; border-radius: 14px 14px 0 0;
-}
-.preview-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-.preview-stage { aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; position: relative; }
-.tab-pill {
-  height: 30px; padding: 0 12px; border-radius: 999px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700;
-}
-.tab-pill.active { color: #fff; background: linear-gradient(90deg, var(--primary), var(--primary-2)); }
+/* Steps */
+.steps { display: flex; margin-bottom: 20px; }
+.step { flex: 1; text-align: center; position: relative; font-size: 12px; color: var(--soft); }
+.step::before { content: ''; position: absolute; top: 15px; left: 50%; right: -50%; height: 2px; background: var(--line); z-index: 0; }
+.step:last-child::before { display: none; }
+.step .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e8edf5; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; position: relative; z-index: 1; }
+.step.active .step-circle { background: var(--primary); color: #fff; }
+.step.active { color: var(--primary); font-weight: 700; }
+.step.done .step-circle { background: var(--success); color: #fff; }
+.step.done { color: var(--success); }
+.step.done::before { background: var(--success); }
 
-/* Timeline */
-.timeline { display: grid; gap: 8px; margin-bottom: 14px; }
-.timeline-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #fbfdff; box-shadow: inset 0 0 0 1px #edf2f9; }
-.timeline-item .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; background: #b9c7da; flex: 0 0 auto; }
-.timeline-item.success .dot { background: var(--success); }
-.timeline-item.warning .dot { background: var(--warning); }
-.timeline-item.danger .dot { background: var(--danger); }
-.timeline-item strong { display: block; font-size: 13px; }
-.timeline-item span { display: block; color: var(--soft); font-size: 12px; margin-top: 2px; }
+/* Report section title */
+.report-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 6px;
+  display: inline-block;
+}
 
 @media (max-width: 1024px) {
   .sidebar { width: 60px; }
@@ -224,7 +184,7 @@ input, select, textarea { font: inherit; outline: none; }
 </head>
 <body>
 <div class="header">
-<a href="index.html" class="logo">生命医学主题库应用</a>
+<a href="app-center.html" class="logo">生命医学主题库应用</a>
 <div class="header-nav">
 <a href="眼底图像输入.html" class="active">AI眼底疾病筛查</a>
 <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -238,12 +198,15 @@ input, select, textarea { font: inherit; outline: none; }
 <a class="menu-item" href="图像质量质控.html">图像质量质控</a>
 <a class="menu-item" href="常见疾病筛查.html">常见疾病筛查</a>
 <a class="menu-item" href="多任务联合筛查.html">多任务联合筛查</a>
-<a class="menu-item" href="输出筛查报告.html" class="active">输出筛查报告</a></div></div><div class="main-content">
-<div class="breadcrumb"><a href="index.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>输出筛查报告</strong></div>
+<a class="menu-item" href="输出筛查报告.html" class="active">输出筛查报告</a></div></div>
+
+<div class="main-content">
+<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>输出筛查报告</strong></div>
 <h1 class="page-title">输出筛查报告</h1>
 
 <div class="card">
   <div class="card-header"><span class="card-title">AI眼底疾病筛查报告</span></div>
+
   <div class="steps">
     <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
     <div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>
@@ -259,18 +222,8 @@ input, select, textarea { font: inherit; outline: none; }
     <div class="stat"><span>复查建议</span><strong>3个月内</strong></div>
   </div>
 
-  <!-- Timeline -->
-  <div class="card-header"><span class="card-title">筛查流程时间线</span></div>
-  <div class="timeline">
-    <div class="timeline-item success"><span class="dot"></span><div><strong>上传图像</strong><span>已完成图像上传 — 2026-06-26 14:30</span></div></div>
-    <div class="timeline-item success"><span class="dot"></span><div><strong>图像质控</strong><span>质量合格，评分96%，可进入筛查 — 2026-06-26 14:32</span></div></div>
-    <div class="timeline-item success"><span class="dot"></span><div><strong>常见疾病筛查</strong><span>4项筛查完成，检出2项异常 — 2026-06-26 14:35</span></div></div>
-    <div class="timeline-item success"><span class="dot"></span><div><strong>多任务联合筛查</strong><span>病灶分割、视盘定位、血管分析均已完成 — 2026-06-26 15:00</span></div></div>
-    <div class="timeline-item success"><span class="dot"></span><div><strong>输出筛查报告</strong><span>结构化报告已生成，可下载或打印 — 2026-06-26 15:30</span></div></div>
-  </div>
-
-  <!-- Results -->
-  <div class="card-header"><span class="card-title">筛查结果汇总</span></div>
+  <!-- 常见疾病筛查 -->
+  <div class="card-header"><span class="card-title">常见疾病筛查</span></div>
   <div class="result-grid">
     <div class="result-card" style="border-left:3px solid var(--warning);">
       <div class="result-name">糖尿病视网膜病变（DR）</div>
@@ -298,9 +251,17 @@ input, select, textarea { font: inherit; outline: none; }
     </div>
   </div>
 
-  <!-- Report Box -->
+  <!-- 多任务联合筛查 -->
+  <div class="card-header"><span class="card-title">多任务联合筛查</span></div>
   <div class="report-box">
-    <p><strong>报告编号：</strong>RP-260626-001</p>
+    <p><strong>病灶分割：</strong>在右眼眼底图像中检出微动脉瘤5处（颞上及鼻下区域）、出血灶4处（火焰状及点片状，集中分布于黄斑周围及颞下象限）、硬性渗出4处（黄斑区颞侧，蜡黄色斑点状排列）。综合病灶密度与分布模式，提示中度 NPDR 改变。</p>
+    <p><strong>视盘/黄斑定位：</strong>AI 视盘分割测得杯盘比约0.38，盘沿宽度各象限分布均匀，未见切迹或局灶性变薄。黄斑中心凹定位正常，未见明显渗出或水肿信号。</p>
+    <p><strong>血管分布分析：</strong>视网膜动脉轻度缩窄，AV 比约1:2.2，颞上支及鼻下支走形稍显僵硬，血管反光增强，提示轻度动脉硬化改变。未见棉绒斑或新生血管。</p>
+    <p><strong>综合分析：</strong>4项子任务均已完成，置信度均值92.5%。DR 相关指标异常最为显著（微动脉瘤+出血+渗出），与常见疾病筛查结论一致。综合风险评级：<strong style="color:var(--warning);">中度</strong>，建议3个月内眼底复查并联合控糖、降压管理。</p>
+  </div>
+
+  <!-- 报告信息 -->
+  <div class="report-box">
     <p><strong>患者信息：</strong>李* · OPD-202606-001</p>
     <p><strong>来源机构：</strong>市中心门诊</p>
     <p><strong>图片来源：</strong>右眼_眼底彩照_001.jpg</p>
@@ -318,8 +279,6 @@ input, select, textarea { font: inherit; outline: none; }
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
     <button class="btn primary lg" onclick="alert('报告下载功能已触发，文件将保存至本地。')">下载报告（PDF）</button>
     <button class="btn secondary lg" onclick="window.print()">打印报告</button>
-    <button class="btn secondary lg" onclick="alert('报告已复制到剪贴板。')">复制报告内容</button>
-    <a class="btn secondary lg" href="常见疾病筛查.html">返回筛查详情</a>
   </div>
 </div>
 
@@ -343,18 +302,12 @@ input, select, textarea { font: inherit; outline: none; }
           <td><span class="tag success">低风险</span></td>
           <td><button class="btn secondary small" onclick="alert('报告已下载。')">下载</button></td>
         </tr>
-        <tr>
-          <td><strong>RP-260625-003</strong></td>
-          <td>赵*</td>
-          <td>2026-06-25 10:20</td>
-          <td><span class="tag danger">质控未通过</span></td>
-          <td><span class="tag gray">无报告</span></td>
-        </tr>
       </tbody>
     </table>
   </div>
 </div>
 </div>
+
 <script>
 function navigateTo(url) { window.location.href = url; }
 function logout() {

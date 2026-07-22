@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>医学报告 - 临床决策支撑</title>
+<style>
+:root{
+  --primary:#1a73e8;--primary-dark:#1557b0;--primary-light:#e8f0fe;
+  --success:#34a853;--success-light:#e6f4ea;--warning:#fbbc04;--warning-light:#fef7e0;
+  --danger:#ea4335;--danger-light:#fce8e6;--purple:#7c3aed;--purple-light:#f1ebff;
+  --teal:#0891b2;--teal-light:#e0f7fb;--gray-50:#f8f9fa;--gray-100:#f5f7fa;
+  --gray-200:#e8ecf0;--gray-300:#dadce0;--gray-400:#bdc1c6;--gray-500:#9aa0a6;
+  --gray-600:#80868b;--gray-700:#5f6368;--gray-800:#3c4043;--gray-900:#202124;
+  --sidebar-width:220px;--header-height:56px;--radius:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --transition:all .2s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','PingFang SC','Microsoft YaHei',Arial,sans-serif;font-size:14px;color:#333;background:var(--gray-50);min-height:100vh;line-height:1.6}
+a{text-decoration:none;color:inherit}.header{height:var(--header-height);background:linear-gradient(135deg,#1a56db 0%,#2563eb 52%,#1d4ed8 100%);color:#fff;display:flex;align-items:center;padding:0 24px;position:fixed;inset:0 0 auto 0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;white-space:nowrap}.header-nav{display:flex;gap:4px;margin-left:40px}.header-nav a{color:rgba(255,255,255,.85);padding:6px 14px;border-radius:6px;font-size:13px;transition:var(--transition);white-space:nowrap}.header-nav a:hover,.header-nav a.active{background:rgba(255,255,255,.15);color:#fff}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px}.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px}.btn-logout:hover{background:rgba(255,255,255,.35)}
+.sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100vh - var(--header-height));background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:999;padding:8px 0}.menu-group-title{padding:12px 20px 6px;font-size:11px;color:var(--gray-500);letter-spacing:1px;font-weight:600}.menu-item,.sub-menu-item{display:flex;align-items:center;color:var(--gray-700);transition:var(--transition);border-left:3px solid transparent;cursor:pointer}.menu-item{padding:10px 20px;font-size:13px}.sub-menu-item{padding:8px 20px 8px 36px;font-size:12px}.menu-item:hover,.sub-menu-item:hover{background:var(--gray-50);color:var(--primary)}.menu-item.active,.sub-menu-item.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+.main-content{margin-left:var(--sidebar-width);margin-top:var(--header-height);padding:24px;min-height:calc(100vh - var(--header-height))}.breadcrumb{font-size:13px;color:var(--gray-600);margin-bottom:16px;display:flex;align-items:center;gap:8px}.breadcrumb a{color:var(--primary)}.breadcrumb .sep{color:var(--gray-400)}
+.page-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.page-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:4px}.page-subtitle{color:var(--gray-600);font-size:13px}.title-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;transition:var(--transition);text-decoration:none;gap:6px;white-space:nowrap}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#2d9249}.btn-danger{background:var(--danger);color:#fff}.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--gray-700)}.btn-outline:hover{background:var(--gray-50);border-color:var(--gray-400)}.btn-sm{padding:5px 10px;font-size:12px}.btn-block{width:100%}
+.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:500;line-height:1.5}.tag-blue{background:var(--primary-light);color:var(--primary)}.tag-green{background:var(--success-light);color:#137333}.tag-orange{background:var(--warning-light);color:#b06000}.tag-red{background:var(--danger-light);color:#c5221f}.tag-purple{background:var(--purple-light);color:var(--purple)}.tag-teal{background:var(--teal-light);color:var(--teal)}.tag-gray{background:#f1f3f4;color:var(--gray-700)}
+.module-nav{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;margin-bottom:16px}.module-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:12px;text-align:left;color:inherit;min-height:88px;transition:var(--transition);cursor:default}.module-card.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.08)}.module-card.done{border-color:rgba(52,168,83,.35);background:#fbfffc}.module-index{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--gray-100);color:var(--gray-600);font-size:12px;font-weight:700;margin-bottom:8px}.module-card.active .module-index{background:var(--primary);color:#fff}.module-card.done .module-index{background:var(--success);color:#fff}.module-card strong{display:block;font-size:14px;color:var(--gray-900)}.module-card span{font-size:11px;color:var(--gray-500);display:block;margin-top:2px}
+.workspace{display:grid;grid-template-columns:300px minmax(640px,1fr);gap:16px;align-items:start}.panel{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow)}.panel-header{padding:14px 16px;border-bottom:1px solid var(--gray-100);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.panel-title{font-size:15px;font-weight:700;color:var(--gray-900)}.panel-desc{font-size:12px;color:var(--gray-500);margin-top:2px}.panel-body{padding:16px}.left-stack,.center-stack,.right-stack{display:flex;flex-direction:column;gap:16px}
+.profile{display:flex;gap:12px;align-items:center}.avatar{width:46px;height:46px;border-radius:12px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}.profile-name{font-size:15px;font-weight:800;color:var(--gray-900)}.profile-meta{font-size:12px;color:var(--gray-600);margin-top:2px}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}.info-item{border:1px solid var(--gray-200);border-radius:8px;padding:9px 10px;background:#fff}.info-item span{font-size:11px;color:var(--gray-500);display:block}.info-item strong{font-size:13px;color:var(--gray-900);display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.case-summary-block{margin-top:14px;border-top:1px solid var(--gray-100);padding-top:14px}.case-summary-title{font-size:13px;font-weight:800;color:var(--gray-900);margin-bottom:8px}.case-summary-list{display:flex;flex-direction:column;gap:8px}.case-summary-item{border:1px solid var(--gray-200);border-radius:8px;padding:9px 10px;background:#fff}.case-summary-item span{font-size:11px;color:var(--gray-500);display:block}.case-summary-item strong{font-size:12px;color:var(--gray-900);display:block;margin-top:3px;line-height:1.55}
+.report-preview{padding:18px 20px;background:#fff}.report-section{border-bottom:1px solid var(--gray-100);padding:15px 0}.report-section:first-child{padding-top:0}.report-section:last-child{border-bottom:0;padding-bottom:0}.report-section h3{font-size:15px;color:var(--gray-900);margin-bottom:8px}.report-section p,.report-section li{font-size:13px;color:var(--gray-700);line-height:1.75}.report-section ul{padding-left:18px}.report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.report-meta div{border:1px solid var(--gray-200);border-radius:8px;padding:8px 10px;background:var(--gray-50)}.report-meta span{font-size:11px;color:var(--gray-500);display:block}.report-meta strong{font-size:13px;color:var(--gray-900);display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.report-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.report-section-head h3{margin:0}.source-tags{display:flex;gap:6px;flex-wrap:wrap}.report-note{border:1px solid var(--gray-200);border-radius:8px;background:var(--gray-50);padding:10px;font-size:12px;color:var(--gray-700);line-height:1.65}
+.order-list,.rule-list,.trace-list{display:flex;flex-direction:column;gap:8px}.order-item,.rule-item,.trace-item{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff}.order-item strong,.rule-item strong,.trace-item strong{font-size:13px;color:var(--gray-900);display:block}.order-item span,.rule-item span,.trace-item span{font-size:12px;color:var(--gray-600);display:block;margin-top:4px;line-height:1.6}.trace-item.done{border-color:rgba(52,168,83,.35);background:#fbfffc}.trace-item.warn{border-color:rgba(251,188,4,.45);background:#fffdf6}.rule-item.error{border-color:rgba(234,67,53,.35);background:#fffafa}.rule-item.warn{border-color:rgba(251,188,4,.45);background:#fffdf6}.rule-item.pass{border-color:rgba(52,168,83,.35);background:#fbfffc}.rule-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.rule-action{margin-top:8px}
+.qc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}.qc-stat{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff;text-align:center}.qc-stat strong{font-size:22px;line-height:1;color:var(--gray-900);display:block}.qc-stat span{font-size:12px;color:var(--gray-600);display:block;margin-top:5px}.empty{padding:20px;text-align:center;color:var(--gray-500);background:var(--gray-50);border-radius:8px}.toast{position:fixed;right:24px;bottom:24px;background:var(--gray-900);color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:13px;display:none;z-index:2000;max-width:380px}
+@media(max-width:1500px){.workspace{grid-template-columns:280px minmax(520px,1fr)}.module-nav{grid-template-columns:repeat(3,minmax(0,1fr))}.report-meta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1100px){.sidebar{width:64px}.menu-group-title,.menu-item span,.sub-menu-item{display:none}.main-content{margin-left:64px}.workspace,.module-nav,.qc-grid{grid-template-columns:1fr}.right-stack{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html" class="active">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+
+<aside class="sidebar">
+  <div class="menu-group">
+    <div class="menu-group-title">专家系统</div>
+    <a class="menu-item active" href="临床决策支撑.html"><span>临床决策支撑</span></a>
+    <a class="sub-menu-item" href="临床决策支撑.html" onclick="persist()">病例采集确认</a>
+    <a class="sub-menu-item" href="临床决策支撑_辅助临床诊断.html" onclick="persist()">辅助临床诊断</a>
+    <a class="sub-menu-item" href="临床决策支撑_相似病历推荐.html" onclick="persist()">相似病历推荐</a>
+    <a class="sub-menu-item" href="临床决策支撑_治疗方案推荐.html" onclick="persist()">治疗方案推荐</a>
+    <a class="sub-menu-item active" href="临床决策支撑_报告与质控.html">医学报告</a>
+    <a class="sub-menu-item" href="临床决策支撑_医嘱质控.html" onclick="persist()">医嘱质控</a>
+    <a class="menu-item" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
+  </div>
+</aside>
+
+<main class="main-content">
+  <div class="breadcrumb"><a href="app-center.html">应用中心</a><span class="sep">></span><a href="临床决策支撑.html">临床决策支撑</a><span class="sep">></span><span>医学报告</span></div>
+  <div class="page-title-row">
+    <div>
+      <h1 class="page-title">医学报告自动化生成</h1>
+      <div class="page-subtitle">把病例采集、辅助诊断、相似病历和医生确认方案转成可追溯医学报告，报告生成后可进入独立医嘱质控页面查看规则明细并完成归档。</div>
+    </div>
+    <div class="title-actions">
+      <a class="btn btn-outline" href="临床决策支撑_治疗方案推荐.html" onclick="persist()">重新确认治疗方案</a>
+      <button class="btn btn-success" onclick="goQualityControl()">进入医嘱质控</button>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <div class="module-card done"><div class="module-index">1</div><strong>病例采集确认</strong><span>采集病例字段</span></div>
+    <div class="module-card done"><div class="module-index">2</div><strong>辅助临床诊断</strong><span>形成诊断依据</span></div>
+    <div class="module-card done"><div class="module-index">3</div><strong>相似病历推荐</strong><span>形成既往参考</span></div>
+    <div class="module-card done"><div class="module-index">4</div><strong>治疗方案推荐</strong><span id="planStatusText">方案已确认</span></div>
+    <div class="module-card active"><div class="module-index">5</div><strong>医学报告</strong><span id="reportStepText">待生成报告</span></div>
+    <div class="module-card"><div class="module-index">6</div><strong>医嘱质控</strong><span id="qcStepText">查看规则明细</span></div>
+  </div>
+
+  <div class="workspace">
+    <div class="left-stack">
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">当前病例</div><div class="panel-desc">由病例采集确认页传入的病例信息</div></div></div>
+        <div class="panel-body" id="profilePanel"></div>
+      </section>
+
+    </div>
+
+    <div class="center-stack">
+      <section class="panel">
+        <div class="panel-header">
+          <div><div class="panel-title">结构化医学报告</div><div class="panel-desc">自动汇总病例摘要、辅助诊断结论、相似病历参考和医生确认诊疗方案。</div></div>
+          <span class="tag tag-blue" id="reportStatus">待生成</span>
+        </div>
+        <div class="report-preview" id="reportPreview"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var questionDefs=[
+  {key:'mainComplaint',label:'主诉'},
+  {key:'chronicHistory',label:'慢病史'},
+  {key:'eyeHistory',label:'眼病史'},
+  {key:'imagingFindings',label:'医学影像'},
+  {key:'physicalExam',label:'体格检查'},
+  {key:'labResults',label:'检验结果'}
+];
+var categoryDefs=[
+  {key:'checks',label:'检查检验'},
+  {key:'medication',label:'用药'},
+  {key:'procedures',label:'手术/处置'},
+  {key:'followup',label:'随访'}
+];
+var caseData=null;
+var qcRules=[];
+
+document.addEventListener('DOMContentLoaded',function(){
+  try{var user=JSON.parse(localStorage.getItem('life_med_user'));if(user&&user.name)document.getElementById('headerUserName').textContent=user.name;}catch(e){}
+  caseData=normalizeCase(loadCase());
+  ensureReportReady();
+  qcRules=buildQcRules();
+  renderAll();
+});
+
+function loadCase(){
+  try{var saved=JSON.parse(localStorage.getItem('clinical_decision_case'));if(saved&&saved.id)return saved;}catch(e){}
+  return {
+    id:'CASE-20260717-001',source:'AI筛查转入',status:'已确认方案',patientName:'张某某',gender:'女',age:62,patientId:'P20260717008',dept:'眼科',visitType:'门诊复诊',visitDate:'2026-07-17',pastHistory:'2型糖尿病15年，高血压8年。',medicationHistory:'长期口服降糖药和降压药，近期血糖控制欠佳；未规律接受眼底专科治疗。',
+    mainComplaint:'双眼视物模糊2月，眼前黑影飘动1周。',chronicHistory:'2型糖尿病15年，高血压8年，近半年血糖控制欠佳。',eyeHistory:'去年体检提示轻度非增殖期糖尿病视网膜病变。',imagingFindings:'AI眼底筛查DR阳性，OCT提示黄斑区水肿。',physicalExam:'视力右眼0.5左眼0.6，眼底散在出血点。',labResults:'HbA1c 8.9%，空腹血糖9.6mmol/L，eGFR 76。',
+    diagnoses:[{name:'糖尿病视网膜病变，重度NPDR并黄斑水肿可能',probability:91,reason:'慢性糖尿病、血糖控制欠佳、眼底出血渗出及OCT黄斑水肿共同支持。'}],
+    selectedPlan:{checks:['完善FFA明确是否存在新生血管及无灌注区。','复查OCT量化黄斑中心凹厚度。'],medication:['优先强化血糖、血压和血脂综合管理。'],procedures:['评估玻璃体腔抗VEGF治疗适应症。'],followup:['眼底病专科3个月随访。']},
+    planConfirmed:true,qualityRules:[],knowledge:[]
+  };
+}
+
+function normalizeCase(c){
+  c.pastHistory=c.pastHistory||c.chronicHistory||'';
+  c.medicationHistory=c.medicationHistory||c.pastMedicationHistory||'';
+  c.diagnoses=c.diagnoses&&c.diagnoses.length?c.diagnoses:[{name:'待运行辅助诊断',probability:0,reason:'请先完成辅助诊断。'}];
+  if(!c.selectedPlan&&c.confirmedPlan)c.selectedPlan=c.confirmedPlan;
+  if(!c.selectedPlan&&c.treatment)c.selectedPlan=c.treatment;
+  c.selectedPlan=c.selectedPlan||{checks:[],medication:[],procedures:[],followup:[]};
+  categoryDefs.forEach(function(cat){if(!Array.isArray(c.selectedPlan[cat.key]))c.selectedPlan[cat.key]=[];});
+  c.qualityRules=c.qualityRules||[];
+  c.knowledge=c.knowledge||[];
+  c.similar=c.similar||[];
+  if(c.reportGenerated&&!c.reportId)c.reportId=createReportId();
+  return c;
+}
+
+function renderAll(){
+  renderProfile();
+  qcRules=buildQcRules();
+  renderReport();
+  document.getElementById('planStatusText').textContent=caseData.planConfirmed?'方案已确认':'方案待确认';
+  document.getElementById('reportStepText').textContent=caseData.reportGenerated?'报告已生成':'待生成报告';
+  document.getElementById('qcStepText').textContent=qcRules.filter(r=>r.level==='error').length?'存在冲突待处理':'查看规则明细';
+}
+function renderProfile(){
+  var name=caseData.patientName||'—';
+  var firstChar=(name||'患').substr(0,1);
+  var pastHistory=caseData.pastHistory||caseData.chronicHistory||'待传入';
+  var medicationHistory=caseData.medicationHistory||caseData.pastMedicationHistory||'待传入';
+  var summaryHtml=questionDefs.map(function(q){
+    return '<div class="case-summary-item"><span>'+q.label+'</span><strong>'+escapeHtml(caseData[q.key]||'待采集')+'</strong></div>';
+  }).join('');
+  document.getElementById('profilePanel').innerHTML=
+    '<div class="profile">'+
+      '<div class="avatar">'+escapeHtml(firstChar)+'</div>'+
+      '<div><div class="profile-name">'+escapeHtml(name)+'</div>'+
+      '<div class="profile-meta">由病例采集确认模块传入</div></div>'+
+    '</div>'+
+    '<div class="info-grid">'+
+      '<div class="info-item"><span>姓名</span><strong>'+escapeHtml(caseData.patientName||'待传入')+'</strong></div>'+
+      '<div class="info-item"><span>年龄</span><strong>'+escapeHtml(caseData.age?caseData.age+'岁':'待传入')+'</strong></div>'+
+      '<div class="info-item"><span>性别</span><strong>'+escapeHtml(caseData.gender||'待传入')+'</strong></div>'+
+      '<div class="info-item"><span>既往病史</span><strong>'+escapeHtml(pastHistory)+'</strong></div>'+
+      '<div class="info-item"><span>过往用药史</span><strong>'+escapeHtml(medicationHistory)+'</strong></div>'+
+    '</div>'+
+    '<div class="case-summary-block"><div class="case-summary-title">病例摘要</div><div class="case-summary-list">'+summaryHtml+'</div></div>';
+}
+function renderReport(){
+  document.getElementById('reportStatus').textContent=caseData.reportGenerated?'已生成':'待生成';
+  document.getElementById('reportPreview').innerHTML=buildReportHtml();
+}
+function buildReportHtml(){
+  var primary=caseData.diagnoses[0]||{};
+  var similarRef=caseData.selectedSimilar||(caseData.similar&&caseData.similar[0]);
+  var reportId=caseData.reportGenerated?ensureReportId():'待生成';
+  var generatedAt=caseData.reportGeneratedAt||'待生成';
+  return '<div class="report-section"><div class="report-section-head"><h3>基本信息</h3>'+sourceTags(['病例采集'])+'</div><div class="report-meta"><div><span>报告ID</span><strong>'+escapeHtml(reportId)+'</strong></div><div><span>患者</span><strong>'+escapeHtml(caseData.patientName||'-')+'</strong></div><div><span>性别/年龄</span><strong>'+escapeHtml((caseData.gender||'-')+' / '+(caseData.age||'-')+'岁')+'</strong></div><div><span>报告状态</span><strong>'+escapeHtml(caseData.reportGenerated?'已生成':'待生成')+'</strong></div></div><p style="margin-top:8px">生成时间：'+escapeHtml(generatedAt)+'；报告依据：病例采集确认、辅助临床诊断、相似病历推荐和治疗方案推荐。</p></div>'+
+    '<div class="report-section"><div class="report-section-head"><h3>病例摘要</h3>'+sourceTags(['病例采集','图片/OCR/字段'])+'</div><p><strong>主诉：</strong>'+escapeHtml(caseData.mainComplaint||'主诉待补充')+'</p><p><strong>既往病史：</strong>'+escapeHtml(caseData.pastHistory||caseData.chronicHistory||'既往病史待补充')+'</p><p><strong>过往用药史：</strong>'+escapeHtml(caseData.medicationHistory||'过往用药史待补充')+'</p><p><strong>慢病史：</strong>'+escapeHtml(caseData.chronicHistory||'慢病史待补充')+'</p><p><strong>眼病史：</strong>'+escapeHtml(caseData.eyeHistory||'眼病史待补充')+'</p><p><strong>医学影像：</strong>'+escapeHtml(caseData.imagingFindings||'影像结果待补充')+'</p><p><strong>体格检查：</strong>'+escapeHtml(caseData.physicalExam||'体格检查待补充')+'</p><p><strong>检验结果：</strong>'+escapeHtml(caseData.labResults||'检验结果待补充')+'</p></div>'+
+    '<div class="report-section"><div class="report-section-head"><h3>辅助诊断结论</h3>'+sourceTags(['辅助临床诊断'])+'</div><p>首位诊断：'+escapeHtml(primary.name||'待确认')+'，模型提示可能性 '+escapeHtml(primary.probability||0)+'%。'+escapeHtml(primary.reason||'')+'</p><ul>'+caseData.diagnoses.map(function(d){return '<li>'+escapeHtml(d.name)+'：'+escapeHtml(d.probability||0)+'%，'+escapeHtml(d.reason||'')+'</li>';}).join('')+'</ul></div>'+
+    '<div class="report-section"><div class="report-section-head"><h3>相似病历参考</h3>'+sourceTags(['相似病历推荐'])+'</div>'+(similarRef?'<p>'+escapeHtml(similarRef.title||'已选相似病历')+'；匹配度 '+escapeHtml(similarRef.match||'-')+'%。既往转归：'+escapeHtml(similarRef.outcome||'待补充')+'</p><p>参考用途：用于辅助医生理解既往转归和治疗路径，不替代当前病例的个体化判断。</p>':'<p>未选择相似病历参考，当前报告不写入既往病例对照。</p>')+'</div>'+
+    '<div class="report-section"><div class="report-section-head"><h3>医生确认诊疗方案</h3>'+sourceTags(['治疗方案推荐','医生勾选'])+'</div>'+planHtmlForReport()+'</div>';
+}
+function sourceTags(tags){return '<div class="source-tags">'+tags.map(function(tag){return '<span class="tag tag-gray">'+escapeHtml(tag)+'</span>';}).join('')+'</div>';}
+function planHtmlForReport(){
+  var html=categoryDefs.map(function(cat){
+    var arr=caseData.selectedPlan[cat.key]||[];
+    if(!arr.length)return '';
+    return '<p><strong>'+cat.label+'：</strong>'+arr.map(escapeHtml).join('；')+'</p>';
+  }).join('');
+  return html||'<p>尚未确认治疗方案，请返回治疗方案推荐页确认。</p>';
+}
+function renderQc(){
+  var error=qcRules.filter(r=>r.level==='error').length;
+  var warn=qcRules.filter(r=>r.level==='warn').length;
+  var pass=qcRules.filter(r=>r.level==='pass').length;
+  var coverage=qcRules.length?Math.round(pass/qcRules.length*100):0;
+  document.getElementById('errorCount').textContent=error;
+  document.getElementById('warnCount').textContent=warn;
+  document.getElementById('passCount').textContent=pass;
+  document.getElementById('coverageRate').textContent=coverage+'%';
+  document.getElementById('ruleList').innerHTML=qcRules.map(function(rule,index){
+    var tag=rule.level==='error'?'<span class="tag tag-red">需修正</span>':(rule.level==='warn'?'<span class="tag tag-orange">需确认</span>':'<span class="tag tag-green">通过</span>');
+    var action=rule.action==='removeAmoxicillin'?'<div class="rule-action"><button class="btn btn-danger btn-sm" onclick="removeAmoxicillin()">移除冲突医嘱</button></div>':'';
+    return '<div class="rule-item '+rule.level+'"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><strong>'+escapeHtml(rule.title)+'</strong>'+tag+'</div><span>'+escapeHtml(rule.desc)+'</span><span>建议：'+escapeHtml(rule.suggestion||'医生复核后确认。')+'</span><div class="rule-meta"><span class="tag tag-gray">'+escapeHtml(rule.category||'通用质控')+'</span><span class="tag tag-gray">依据：'+escapeHtml(rule.basis)+'</span></div>'+action+'</div>';
+  }).join('');
+}
+function buildQcRules(){
+  var orders=flattenPlan().join('；')+'；'+(caseData.orderDraft||'');
+  var primary=((caseData.diagnoses&&caseData.diagnoses[0]&&caseData.diagnoses[0].name)||'')+(caseData.mainComplaint||'')+(caseData.imagingFindings||'');
+  var isDr=primary.indexOf('糖尿病视网膜病变')>-1||primary.indexOf('黄斑水肿')>-1||primary.indexOf('OCT')>-1;
+  var isHtn=primary.indexOf('高血压')>-1||primary.indexOf('头痛')>-1;
+  var rules=[];
+  if(!flattenPlan().length){
+    rules.push(rule('warn','治疗方案待确认','尚未形成明确医嘱草案，报告只能生成病例摘要，无法完成完整医嘱质控。','请返回治疗方案推荐页勾选检查检验、用药、处置和随访方案。','方案完整性','已确认方案为空'));
+    return rules;
+  }
+  var allergyText=(caseData.chronicHistory||'')+'；'+(caseData.pastHistory||'')+'；'+(caseData.medicationHistory||'');
+  if(allergyText.indexOf('青霉素过敏')>-1&&orders.indexOf('阿莫西林')>-1){
+    rules.push(rule('error','过敏禁忌冲突','患者存在青霉素过敏史，医嘱草案包含阿莫西林。','删除或替换该药物，并在报告中保留过敏史提示。','禁忌/冲突','慢病史/过敏史 + 药品说明书禁忌','removeAmoxicillin'));
+  }else{
+    rules.push(rule('pass','过敏史冲突检查','当前医嘱未发现与已采集过敏史直接冲突的药物。','归档前仍需医生确认过敏史是否完整。','禁忌/冲突','慢病史、既往用药史、医嘱草案'));
+  }
+  if(isDr&&(orders.indexOf('OCT')>-1||orders.indexOf('FFA')>-1)){
+    rules.push(rule('pass','眼底检查适应症匹配','已包含OCT或FFA，可支撑糖尿病视网膜病变分级、黄斑水肿量化或处置适应症判断。','报告中保留检查目的，便于后续疗效对比。','检查检验适应症','诊断结果 + 影像/OCT线索 + 检查适应症知识'));
+  }else if(isHtn&&(orders.indexOf('24小时动态血压')>-1||orders.indexOf('头颅CT')>-1)){
+    rules.push(rule('pass','血压/头痛排查适应症匹配','已包含动态血压或头颅影像评估，可支撑血压控制和高风险头痛排查。','根据检查结果再调整降压或急症处置策略。','检查检验适应症','主诉 + 慢病史 + 检查适应症知识'));
+  }else{
+    rules.push(rule('warn','检查检验依据不足','当前医嘱草案未覆盖与诊断强相关的分型、排险或疗效基线检查。','请确认是否补充OCT、FFA、动态血压、肾功能或其他必要检查。','检查检验适应症','诊断结果 + 检查适应症知识'));
+  }
+  if((orders.indexOf('抗VEGF')>-1||orders.indexOf('激光')>-1)&&!(orders.indexOf('OCT')>-1||orders.indexOf('FFA')>-1)){
+    rules.push(rule('warn','处置前检查依据需补齐','草案包含眼内药物或激光处置方向，但未同步看到OCT/FFA等关键依据。','建议补充影像检查或在报告中说明已有院外检查来源。','手术/处置适应症','处置医嘱 + 检查适应症知识'));
+  }else{
+    rules.push(rule('pass','手术/处置适应症校验','处置类医嘱与当前检查或观察策略未出现明显冲突。','若后续补充处置细节，应再次质控适应症和风险告知。','手术/处置适应症','处置医嘱 + 检查结果'));
+  }
+  if(((caseData.labResults||'').indexOf('eGFR 58')>-1||(caseData.labResults||'').indexOf('eGFR 5')>-1)&&(orders.indexOf('缬沙坦')>-1||orders.indexOf('ARB')>-1||orders.indexOf('ACEI')>-1)){
+    rules.push(rule('warn','肾功能与电解质监测','肾功能下降患者使用ACEI/ARB类药物后，应复查肌酐和血钾。','补充复查肌酐、eGFR、血钾的时间要求。','用药监测','检验结果 + 药品说明书监测规则'));
+  }else if(orders.indexOf('用药')>-1||orders.indexOf('药')>-1||orders.indexOf('抗VEGF')>-1){
+    rules.push(rule('pass','用药监测规则检查','当前药物或眼内治疗方向未发现明确的检验监测缺失。','实际下达药名、剂量和频次后仍需再次核对说明书。','用药监测','医嘱草案 + 药品说明书规则'));
+  }
+  if(isDr&&orders.indexOf('血糖')===-1&&orders.indexOf('血压')===-1&&orders.indexOf('内分泌')===-1){
+    rules.push(rule('warn','慢病联动管理提示','糖尿病视网膜病变需要同步管理血糖、血压、血脂，当前草案未明显覆盖慢病联动。','建议补充内分泌/全科联动或血糖血压血脂管理要求。','随访完整性','诊断结果 + 慢病史 + 随访管理规则'));
+  }else{
+    rules.push(rule('pass','慢病联动管理','方案已覆盖慢病控制、风险因素管理或跨科室联动提示。','报告中保留慢病管理建议。','随访完整性','诊断结果 + 治疗方案'));
+  }
+  if((caseData.selectedPlan.followup||[]).length){
+    rules.push(rule('pass','随访安排完整性','医嘱草案已包含随访安排或复诊周期。','建议在报告中明确复诊时间和症状预警。','随访完整性','随访方案 + 诊疗规范'));
+  }else{
+    rules.push(rule('warn','随访安排缺失','医嘱草案未包含明确随访计划。','请补充复诊时间、复查项目和提前就诊预警。','随访完整性','治疗方案 + 随访管理规则'));
+  }
+  return rules.concat((caseData.qualityRules||[]).filter(function(r){
+    var allergyRule=(r.title||'').indexOf('过敏')>-1||(r.desc||'').indexOf('阿莫西林')>-1;
+    return !(allergyRule&&orders.indexOf('阿莫西林')===-1);
+  }).map(function(r){return rule(r.level==='error'?'error':(r.level==='warn'?'warn':'pass'),r.title,r.desc,r.suggestion||'请医生复核后确认。','病例内置规则','病例内置质控规则');}));
+}
+function rule(level,title,desc,suggestion,category,basis,action){return {level:level,title:title,desc:desc,suggestion:suggestion,category:category,basis:basis,action:action};}
+function flattenPlan(){return categoryDefs.reduce(function(list,cat){return list.concat(caseData.selectedPlan[cat.key]||[]);},[]);}
+function createReportId(){
+  var d=new Date();
+  function pad(n){return String(n).padStart(2,'0');}
+  return 'RPT-'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'-'+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds());
+}
+function ensureReportId(){
+  if(!caseData.reportId){caseData.reportId=createReportId();persist();}
+  return caseData.reportId;
+}
+function ensureReportReady(){
+  if(caseData.planConfirmed&&flattenPlan().length&&!caseData.reportGenerated){
+    caseData.reportGenerated=true;
+    caseData.reportId=createReportId();
+    caseData.status='已生成报告';
+    caseData.reportGeneratedAt=new Date().toLocaleString('zh-CN',{hour12:false});
+    persist();
+  }
+}
+function generateReport(){
+  caseData.reportGenerated=true;
+  caseData.reportId=caseData.reportId||createReportId();
+  caseData.status='已生成报告';
+  caseData.reportGeneratedAt=new Date().toLocaleString('zh-CN',{hour12:false});
+  persist();
+  renderAll();
+  toast('医学报告已生成，可进入医嘱质控查看规则明细。');
+}
+function rerunQuality(){
+  qcRules=buildQcRules();
+  renderReport();
+  toast('已根据当前病例和医嘱草案同步更新报告中的质控结论。');
+}
+function goQualityControl(){
+  qcRules=buildQcRules();
+  persist();
+  window.location.href='临床决策支撑_医嘱质控.html';
+}
+function archiveCase(){
+  var errors=buildQcRules().filter(r=>r.level==='error');
+  if(errors.length){toast('仍有禁忌或冲突项，请先处理后再归档。');return;}
+  caseData.reportGenerated=true;
+  caseData.status='已完成报告质控';
+  persist();
+  renderAll();
+  toast('已完成报告质控归档，病例闭环结束。');
+}
+function removeAmoxicillin(){
+  categoryDefs.forEach(function(cat){caseData.selectedPlan[cat.key]=(caseData.selectedPlan[cat.key]||[]).filter(function(item){return item.indexOf('阿莫西林')===-1;});});
+  caseData.orderDraft=(caseData.orderDraft||'').split('；').filter(function(item){return item.indexOf('阿莫西林')===-1;}).join('；');
+  caseData.recommendedOrders=(caseData.recommendedOrders||'').split('；').filter(function(item){return item.indexOf('阿莫西林')===-1;}).join('；');
+  persist();renderAll();toast('已移除与过敏史冲突的阿莫西林医嘱。');
+}
+function persist(){localStorage.setItem('clinical_decision_case',JSON.stringify(caseData));}
+function escapeHtml(text){var div=document.createElement('div');div.appendChild(document.createTextNode(text==null?'':String(text)));return div.innerHTML;}
+function toast(message){var el=document.getElementById('toast');el.textContent=message;el.style.display='block';clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(function(){el.style.display='none';},2400);}
+function logout(){if(confirm('确定要退出登录吗？')){localStorage.removeItem('life_med_user');window.location.href='login.html';}}
+</script>
+</body>
+</html>

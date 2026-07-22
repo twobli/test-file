@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>眼病/慢病影像脱敏工具</title>
+<style>
+:root{
+  --primary:#1a73e8;--primary-dark:#1557b0;--primary-light:#e8f0fe;
+  --success:#34a853;--warning:#fbbc04;--danger:#ea4335;--teal:#00897b;
+  --gray-50:#f8f9fa;--gray-100:#f5f7fa;--gray-200:#e8ecf0;--gray-300:#dadce0;
+  --gray-500:#9aa0a6;--gray-600:#80868b;--gray-700:#5f6368;--gray-800:#3c4043;--gray-900:#202124;
+  --sidebar-width:228px;--header-height:56px;--radius:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 22px rgba(26,115,232,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;background:var(--gray-50);color:#333;font-size:14px;line-height:1.6;letter-spacing:0}
+a{text-decoration:none;color:inherit}
+button,input,select,textarea{font:inherit;letter-spacing:0}
+.header{height:var(--header-height);background:linear-gradient(135deg,#1a56db,#2563eb 52%,#1d4ed8);color:#fff;display:flex;align-items:center;padding:0 24px;position:fixed;left:0;right:0;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{font-size:18px;font-weight:700;color:#fff;white-space:nowrap}
+.header-nav{display:flex;gap:4px;margin-left:40px}
+.header-nav a{color:rgba(255,255,255,.86);padding:6px 14px;border-radius:6px;font-size:13px;white-space:nowrap}
+.header-nav a:hover,.header-nav a.active{background:rgba(255,255,255,.15);color:#fff}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:13px}
+.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:0;padding:6px 16px;border-radius:6px;cursor:pointer}
+.sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100vh - var(--header-height));background:#fff;border-right:1px solid var(--gray-200);padding:8px 0;overflow:auto;z-index:999}
+.menu-group-title{padding:12px 20px 6px;font-size:11px;color:var(--gray-500);letter-spacing:1px;font-weight:700}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:var(--gray-700);font-size:13px;border-left:3px solid transparent;cursor:pointer}
+.menu-item:hover{background:var(--gray-50);color:var(--primary)}
+.menu-item.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:700}
+.menu-icon{width:18px;height:18px;border-radius:5px;background:#edf3ff;color:var(--primary);display:grid;place-items:center;font-size:11px;font-weight:800;flex-shrink:0}
+.main{margin-left:var(--sidebar-width);margin-top:var(--header-height);padding:24px;min-height:calc(100vh - var(--header-height))}
+.breadcrumb{font-size:13px;color:var(--gray-600);display:flex;gap:8px;align-items:center;margin-bottom:14px}
+.breadcrumb a{color:var(--primary)}
+.page-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:16px}
+.page-title{font-size:22px;font-weight:800;color:var(--gray-900);margin-bottom:6px}
+.page-desc{font-size:13px;color:var(--gray-600);max-width:860px}
+.head-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.18s}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:#fff}.btn-warning{background:#fff7df;color:#8a5b00;border:1px solid #efd28c}.btn-danger{background:#fff1f0;color:#c5221f;border:1px solid #ffc9c4}
+.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--gray-700)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.panel{display:none}.panel.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}
+.stat-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;min-height:112px}
+.stat-label{font-size:12px;color:var(--gray-600);margin-bottom:6px}.stat-value{font-size:26px;font-weight:800;color:var(--gray-900);line-height:1}.stat-sub{font-size:12px;color:var(--gray-500);margin-top:8px}
+.grid{display:grid;gap:18px}.grid.two{grid-template-columns:minmax(0,1.3fr) minmax(340px,.7fr)}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid var(--gray-100);padding-bottom:12px;margin-bottom:14px}
+.card-title{font-size:16px;font-weight:800;color:var(--gray-800)}
+.card-subtitle{font-size:12px;color:var(--gray-600);margin-top:4px;line-height:1.55}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.filters{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.input,.select{height:36px;border:1px solid var(--gray-300);border-radius:6px;padding:0 10px;background:#fff;color:var(--gray-800);outline:none;min-width:138px}
+.input{min-width:230px}.input:focus,.select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.tag-green{background:#e6f4ea;color:#137333}.tag-orange{background:#fef7e0;color:#b06000}.tag-blue{background:#e8f0fe;color:#1a73e8}.tag-red{background:#fce8e6;color:#c5221f}.tag-gray{background:#f1f3f4;color:#5f6368}.tag-teal{background:#e0f2f1;color:#00796b}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:920px}th{background:var(--gray-100);padding:10px 12px;text-align:left;color:var(--gray-700);border-bottom:1px solid var(--gray-200);white-space:nowrap}td{padding:10px 12px;border-bottom:1px solid var(--gray-100);vertical-align:top;color:var(--gray-800)}tr:hover td{background:var(--gray-50)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.link{color:var(--primary);cursor:pointer;font-weight:600}
+.flow{display:grid;grid-template-columns:repeat(6,minmax(128px,1fr));gap:10px;overflow:auto;padding-bottom:3px}
+.flow-step{border:1px solid var(--gray-200);background:linear-gradient(180deg,#fff,#fbfdff);border-radius:8px;padding:13px;min-height:116px}
+.flow-index{width:24px;height:24px;border-radius:7px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px;margin-bottom:8px}
+.flow-step b{display:block;color:var(--gray-900);margin-bottom:6px}.flow-step p{font-size:12px;color:var(--gray-600)}
+.rule-list{display:grid;gap:10px}.rule-item{border:1px solid var(--gray-200);border-radius:8px;padding:12px;background:#fff}.rule-item b{display:block;margin-bottom:4px;color:var(--gray-900)}.rule-item p{font-size:12px;color:var(--gray-600)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;background:#edf2f7;padding:4px;border-radius:8px}.tab{border:0;background:transparent;border-radius:7px;padding:8px 12px;cursor:pointer;color:#51606f;font-weight:700}.tab.active{background:#fff;color:var(--primary);box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.scan-board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.scan-card{border:1px solid var(--gray-200);border-radius:8px;background:#fff;padding:13px}
+.scan-card strong{display:block;color:var(--gray-900);margin-bottom:4px}.scan-card p{font-size:12px;color:var(--gray-600)}
+.progress{height:8px;background:var(--gray-200);border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,#1a73e8,#00897b);border-radius:999px}.progress-label{font-size:12px;color:var(--gray-500);margin-top:5px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}.dicom-box{border:1px solid var(--gray-200);border-radius:8px;background:#fff;padding:12px}.dicom-box h4{font-size:14px;margin-bottom:8px}.kv{display:grid;grid-template-columns:135px 1fr;gap:6px 10px;font-size:12px}.kv span:nth-child(odd){color:var(--gray-600)}.masked{color:var(--success);font-weight:700}.danger-text{color:var(--danger);font-weight:700}
+.permission-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.permission{border:1px solid var(--gray-200);border-radius:8px;background:#fff;padding:13px}.permission h4{font-size:14px;margin-bottom:8px}.permission ul{padding-left:16px;color:var(--gray-600);font-size:12px}
+.chart-bars{display:grid;gap:10px}.bar-row{display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:12px;color:var(--gray-700)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--gray-600);font-weight:700}.field.full{grid-column:1/-1}.field input,.field select,.field textarea{border:1px solid var(--gray-300);border-radius:6px;padding:8px 10px;outline:none}.field textarea{min-height:86px;resize:vertical}
+.drawer-mask{position:fixed;inset:0;background:rgba(32,33,36,.45);display:none;z-index:2000}.drawer-mask.open{display:block}.drawer{position:fixed;top:0;right:0;width:min(560px,100vw);height:100vh;background:#fff;box-shadow:-16px 0 34px rgba(0,0,0,.2);transform:translateX(105%);transition:.22s;z-index:2001;display:grid;grid-template-rows:auto 1fr auto}.drawer.open{transform:translateX(0)}.drawer-head{padding:18px 20px;border-bottom:1px solid var(--gray-200)}.drawer-head h3{font-size:18px}.drawer-head p{font-size:13px;color:var(--gray-600);margin-top:4px}.drawer-body{padding:18px 20px;overflow:auto}.drawer-foot{border-top:1px solid var(--gray-200);padding:14px 20px;display:flex;justify-content:flex-end;gap:10px}
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);background:var(--gray-900);color:#fff;padding:10px 18px;border-radius:6px;opacity:0;transition:.2s;z-index:2200;font-size:13px}.toast.show{opacity:1}
+@media(max-width:1180px){.stat-grid,.grid.two,.grid.three,.scan-board,.permission-grid,.compare{grid-template-columns:1fr}.flow{grid-template-columns:repeat(3,minmax(160px,1fr))}.header-nav{display:none}}
+@media(max-width:780px){.sidebar{width:64px}.menu-item span:not(.menu-icon),.menu-group-title{display:none}.main{margin-left:64px}.page-head{display:grid}.stat-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.flow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="logo" href="../app-center.html">生命医学智能平台</a>
+  <div class="header-nav">
+    <a href="慢病数据采集工具.html">眼病/慢病数据采集工具</a>
+    <a href="../表单模板设置.html">眼病/慢病数据录入工具</a>
+    <a class="active" href="慢病影像脱敏工具.html">眼病/慢病影像脱敏工具</a>
+    <a href="../影像标注工具.html">眼病/慢病影像标注工具</a>
+  </div>
+  <div class="header-right"><span id="headerUserName">张教授</span><button class="btn-logout" onclick="logout()">退出登录</button></div>
+</div>
+
+<aside class="sidebar">
+  <div class="menu-group-title">影像脱敏工具</div>
+  <a class="menu-item active" data-page="overview"><span class="menu-icon">0</span><span>闭环总览</span></a>
+  <a class="menu-item" data-page="sources"><span class="menu-icon">1</span><span>多中心数据源</span></a>
+  <a class="menu-item" data-page="rules"><span class="menu-icon">2</span><span>抽取与脱敏规则</span></a>
+  <a class="menu-item" data-page="scan"><span class="menu-icon">3</span><span>数据扫描</span></a>
+  <a class="menu-item" data-page="desensitize"><span class="menu-icon">4</span><span>脱敏变化</span></a>
+  <a class="menu-item" data-page="output"><span class="menu-icon">5</span><span>权限输出</span></a>
+  <a class="menu-item" data-page="stats"><span class="menu-icon">6</span><span>统计分析</span></a>
+  <a class="menu-item" data-page="audit"><span class="menu-icon">7</span><span>审计日志</span></a>
+</aside>
+
+<main class="main">
+  <div class="breadcrumb"><a href="../app-center.html">首页</a><span>&gt;</span><span>眼病/慢病影像脱敏工具</span></div>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">眼病/慢病影像脱敏工具</h1>
+      <p class="page-desc">面向多中心眼科影像、病历信息和科研数据的脱敏治理工具，覆盖数据源管理、数据抽取、敏感数据扫描、脱敏变化、权限分级输出、统计分析和审计追踪。</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn btn-outline" onclick="showPage('sources')">配置数据源</button>
+      <button class="btn btn-primary" onclick="openDrawer('创建脱敏任务','从已接入的数据源抽取原始影像和病历信息，进入隔离区后自动扫描并脱敏。','task')">新建脱敏任务</button>
+    </div>
+  </div>
+
+  <section class="panel active" id="page-overview">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">多中心数据源</div><div class="stat-value">12</div><div class="stat-sub">8个在线，4个待同步；覆盖PACS、EMR、科研库</div></div>
+      <div class="stat-card"><div class="stat-label">今日抽取原始数据</div><div class="stat-value">18,426</div><div class="stat-sub">眼底照相 9,860 / OCT 5,212 / 病历 3,354</div></div>
+      <div class="stat-card"><div class="stat-label">敏感数据发现</div><div class="stat-value">42,917</div><div class="stat-sub">DICOM标签、影像烧录文字、病历字段自动定位</div></div>
+      <div class="stat-card"><div class="stat-label">脱敏输出包</div><div class="stat-value">1,236</div><div class="stat-sub">按科研、标注、临床协作、管理员权限差异化输出</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">业务闭环</div><div class="card-subtitle">把甲方需规中的数据抽取、数据扫描、脱敏变化，与现有采集、录入、转码、开放共享、标注和审核模块串成一条链路。</div></div>
+        <span class="tag tag-blue">原始库不直接外发</span>
+      </div>
+      <div class="flow">
+        <div class="flow-step"><span class="flow-index">1</span><b>多中心数据源</b><p>接入不同医院、不同数据库类型，维护连接状态、同步状态、最后抽取和最后脱敏时间。</p></div>
+        <div class="flow-step"><span class="flow-index">2</span><b>数据抽取</b><p>按数据源配置抽取规则，抽取影像、病历、检查报告进入脱敏系统隔离区。</p></div>
+        <div class="flow-step"><span class="flow-index">3</span><b>敏感扫描</b><p>根据发现规则自动定位患者姓名、身份证、电话、住院号、DICOM标签和影像烧录文字。</p></div>
+        <div class="flow-step"><span class="flow-index">4</span><b>脱敏变化</b><p>按规则执行哈希、掩码、删除、日期偏移、年龄分组和图像区域擦除。</p></div>
+        <div class="flow-step"><span class="flow-index">5</span><b>权限输出</b><p>针对不同权限等级输出不同数据粒度，给科研、标注、开放共享和临床协作使用。</p></div>
+        <div class="flow-step"><span class="flow-index">6</span><b>统计审计</b><p>统计不同库数据量、角色工作量、科研分析结果，并留存抽取、脱敏、输出审计链。</p></div>
+      </div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">待处理任务</div><div class="card-subtitle">优先处理会影响后续开放共享和标注的数据。</div></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>任务</th><th>来源</th><th>当前步骤</th><th>风险</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>DR筛查多中心回顾队列</td><td>华东PACS + 科研库</td><td><span class="tag tag-orange">扫描完成待复核</span></td><td>影像角落发现烧录姓名 126处</td><td><button class="btn btn-sm btn-primary" onclick="showPage('scan')">处理</button></td></tr>
+            <tr><td>青光眼OCT随访队列</td><td>华南DICOMweb</td><td><span class="tag tag-blue">脱敏中</span></td><td>DICOM StudyDate需偏移</td><td><button class="btn btn-sm btn-outline" onclick="showPage('desensitize')">查看</button></td></tr>
+            <tr><td>AMD临床研究数据集</td><td>EMR + OCT库</td><td><span class="tag tag-green">可输出</span></td><td>科研权限仅开放匿名ID</td><td><button class="btn btn-sm btn-outline" onclick="showPage('output')">输出</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">与现有系统衔接</div><div class="card-subtitle">脱敏模块输出的数据继续流转到其他业务模块。</div></div></div>
+        <div class="rule-list">
+          <div class="rule-item"><b>数据采集/录入</b><p>新增影像和病历录入后自动触发扫描，发现敏感字段位置并进入脱敏队列。</p></div>
+          <div class="rule-item"><b>医学影像存储与转码</b><p>脱敏后的DICOM、PNG序列、JPEG2000进入存储桶，原始影像只保留在隔离区。</p></div>
+          <div class="rule-item"><b>临床数据开放共享</b><p>发布数据集时校验脱敏版本、授权范围和输出权限，未脱敏数据不能开放。</p></div>
+          <div class="rule-item"><b>影像标注/专家审核</b><p>标注人员只看到匿名ID和必要临床标签；专家审核可查看脱敏报告和审计记录。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-sources">
+    <div class="toolbar">
+      <div class="filters">
+        <input class="input" id="sourceSearch" oninput="renderSources()" placeholder="搜索数据源/医院/数据库">
+        <select class="select" id="sourceStatus" onchange="renderSources()"><option value="">全部状态</option><option>在线</option><option>待同步</option><option>异常</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="openDrawer('新增多中心数据源','支持添加不同医院、不同数据库类型的原始数据源，统一管理连接和同步状态。','source')">新增数据源</button>
+    </div>
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">数据源列表管理</div><div class="card-subtitle">表格展示已配置的多中心数据源，包含数据源名称、数据库类型、连接状态、最后抽取时间、最后脱敏时间和同步状态。</div></div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>数据源名称</th><th>所属中心/医院</th><th>数据库类型</th><th>数据范围</th><th>连接状态</th><th>最后抽取</th><th>最后脱敏</th><th>同步状态</th><th>操作</th></tr></thead>
+        <tbody id="sourceRows"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-rules">
+    <div class="toolbar">
+      <div class="tabs" data-tabs="ruleTabs">
+        <button class="tab active" data-tab="extractRules">脱敏规则配置入口</button>
+        <button class="tab" data-tab="changeRules">脱敏变化配置入口</button>
+        <button class="tab" data-tab="discoveryRules">敏感发现规则</button>
+      </div>
+      <button class="btn btn-primary" onclick="openDrawer('新增规则','配置抽取字段、敏感类型、脱敏算法、执行计划和输出权限。','rule')">新增规则</button>
+    </div>
+    <div class="tab-pane active" id="extractRules">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">抽取与脱敏规则</div><div class="card-subtitle">每个数据源提供“脱敏规则”操作入口，用于配置该数据源对应的敏感字段、DICOM标签和脱敏算法。</div></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>规则集</th><th>适用数据源</th><th>抽取范围</th><th>敏感字段/标签</th><th>脱敏算法</th><th>质控要求</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody id="ruleRows"></tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="tab-pane" id="changeRules">
+      <div class="grid two">
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">脱敏变化执行计划</div><div class="card-subtitle">配置脱敏任务执行计划、输出格式、版本策略和失败回滚方式。</div></div></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>变化计划</th><th>执行频率</th><th>输出格式</th><th>版本策略</th><th>回滚方式</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>DR筛查日增量脱敏</td><td>每日 22:30</td><td>DICOM + JSON索引 + CSV字典</td><td>按日期生成V版本</td><td>保留上一版本</td><td><span class="tag tag-green">启用</span></td></tr>
+              <tr><td>科研队列批量重脱敏</td><td>手动触发</td><td>ZIP数据包 + 脱敏报告</td><td>按课题编号生成</td><td>任务级回滚</td><td><span class="tag tag-blue">待执行</span></td></tr>
+              <tr><td>影像标注输出裁剪</td><td>入库后自动</td><td>PNG序列 + 匿名ID</td><td>跟随影像版本</td><td>自动暂停输出</td><td><span class="tag tag-orange">待复核</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">典型脱敏变化</div><div class="card-subtitle">脱敏不是简单替换，要保留研究价值，同时消除身份识别风险。</div></div></div>
+          <div class="rule-list">
+            <div class="rule-item"><b>身份字段</b><p>姓名、身份证、手机号、住址、住院号删除或掩码；患者ID用HMAC生成匿名ID。</p></div>
+            <div class="rule-item"><b>时间字段</b><p>检查时间、入院时间按患者级随机偏移，保留前后时间间隔用于随访研究。</p></div>
+            <div class="rule-item"><b>影像字段</b><p>DICOM PatientName、PatientID、AccessionNumber等标签清除；影像烧录文字做区域擦除。</p></div>
+            <div class="rule-item"><b>科研变量</b><p>年龄可分组，疾病分型、眼别、检查设备、图像质量等研究变量保留。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="discoveryRules">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">敏感数据发现规则</div><div class="card-subtitle">数据扫描模块先被设入敏感数据发现规则，再对原始影像和病历信息自动扫描。</div></div></div>
+        <div class="scan-board">
+          <div class="scan-card"><strong>DICOM标签规则</strong><p>PatientName、PatientID、BirthDate、InstitutionName、AccessionNumber、StudyDate。</p><span class="tag tag-green">启用 18项</span></div>
+          <div class="scan-card"><strong>病历字段规则</strong><p>姓名、证件号、手机号、地址、门诊号、住院号、医保号、联系人。</p><span class="tag tag-green">启用 24项</span></div>
+          <div class="scan-card"><strong>影像OCR规则</strong><p>识别眼底照相、OCT导出图和造影图角落烧录文字，定位像素坐标。</p><span class="tag tag-blue">启用 6项</span></div>
+          <div class="scan-card"><strong>科研风险规则</strong><p>小样本组合识别、极端年龄、罕见诊断、日期+中心组合再识别风险。</p><span class="tag tag-orange">待优化</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-scan">
+    <div class="toolbar">
+      <div class="filters">
+        <select class="select"><option>全部扫描对象</option><option>原始DICOM</option><option>病历文本</option><option>导出图片</option></select>
+        <select class="select"><option>全部风险等级</option><option>高风险</option><option>中风险</option><option>低风险</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="simulateScan()">启动扫描</button>
+    </div>
+    <div class="grid two">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">数据扫描任务</div><div class="card-subtitle">用于发现敏感数据类型和所在位置，扫描结果会驱动脱敏变化任务。</div></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>扫描批次</th><th>数据类型</th><th>来源</th><th>扫描进度</th><th>发现敏感项</th><th>风险</th><th>状态</th></tr></thead>
+          <tbody id="scanRows"></tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">敏感位置明细</div><div class="card-subtitle">定位到字段、DICOM标签和影像像素区域，避免“只说发现敏感信息”但无法处理。</div></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>位置</th><th>敏感类型</th><th>样例</th><th>建议处理</th></tr></thead>
+          <tbody>
+            <tr><td>DICOM (0010,0010)</td><td>患者姓名</td><td><span class="danger-text">王某某</span></td><td>删除并写入匿名ID</td></tr>
+            <tr><td>DICOM (0010,0020)</td><td>患者ID</td><td><span class="danger-text">P202607100089</span></td><td>HMAC映射</td></tr>
+            <tr><td>OCT导出图 x:28 y:18 w:210 h:42</td><td>烧录姓名/日期</td><td><span class="danger-text">王某某 2026-07-10</span></td><td>区域擦除 + 日期偏移</td></tr>
+            <tr><td>EMR.patient.phone</td><td>手机号</td><td><span class="danger-text">138****9912</span></td><td>删除</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-desensitize">
+    <div class="grid two">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">脱敏处理任务</div><div class="card-subtitle">数据抽取到脱敏系统后，通过规则和算法进行脱敏处理。</div></div><button class="btn btn-primary btn-sm" onclick="simulateDesensitize()">执行脱敏</button></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>任务</th><th>处理对象</th><th>规则集</th><th>进度</th><th>质控结果</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody id="desensitizeRows"></tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">脱敏前后对比</div><div class="card-subtitle">展示数据变化，便于专家审核与后续需求确认。</div></div></div>
+        <div class="compare">
+          <div class="dicom-box">
+            <h4>原始数据</h4>
+            <div class="kv">
+              <span>PatientName</span><b class="danger-text">王建国</b>
+              <span>PatientID</span><b class="danger-text">P202607100089</b>
+              <span>BirthDate</span><b class="danger-text">1968-05-12</b>
+              <span>StudyDate</span><b class="danger-text">2026-07-10</b>
+              <span>Image Overlay</span><b class="danger-text">左上角烧录姓名</b>
+              <span>Diagnosis</span><b>糖尿病视网膜病变</b>
+            </div>
+          </div>
+          <div class="dicom-box">
+            <h4>脱敏输出</h4>
+            <div class="kv">
+              <span>PatientName</span><b class="masked">REMOVED</b>
+              <span>PatientID</span><b class="masked">ANON-8F3A21</b>
+              <span>BirthDate</span><b class="masked">58-65岁</b>
+              <span>StudyDate</span><b class="masked">+37天偏移</b>
+              <span>Image Overlay</span><b class="masked">已擦除</b>
+              <span>Diagnosis</span><b>糖尿病视网膜病变</b>
+            </div>
+          </div>
+        </div>
+        <div class="rule-list" style="margin-top:14px">
+          <div class="rule-item"><b>质控闭环</b><p>脱敏完成后再次扫描，若仍发现姓名、身份证、手机号或影像烧录文字，则任务不能进入输出队列。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-output">
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">按权限等级差异化输出</div><div class="card-subtitle">提供针对不同权限等级用户的数据输出接口，确保不同角色获取的数据粒度不同。</div></div><button class="btn btn-primary" onclick="openDrawer('创建输出包','选择脱敏版本、输出目标、权限等级和字段范围。','output')">创建输出包</button></div>
+      <div class="permission-grid">
+        <div class="permission"><h4>科研人员</h4><ul><li>匿名ID</li><li>疾病分型、年龄组、眼别</li><li>脱敏影像与统计变量</li><li>不可见原始患者ID</li></ul><span class="tag tag-blue">科研库接口</span></div>
+        <div class="permission"><h4>影像标注人员</h4><ul><li>匿名ID与影像</li><li>必要病灶标签</li><li>隐藏病历正文和联系方式</li><li>输出到影像标注工具</li></ul><span class="tag tag-teal">标注接口</span></div>
+        <div class="permission"><h4>临床协作用户</h4><ul><li>匿名病例摘要</li><li>保留随访时间间隔</li><li>可看脱敏检查结论</li><li>需审批后导出</li></ul><span class="tag tag-orange">审批输出</span></div>
+        <div class="permission"><h4>平台管理员</h4><ul><li>查看脱敏映射审计</li><li>不可直接外发原始数据</li><li>可处理失败任务</li><li>所有操作留痕</li></ul><span class="tag tag-red">强审计</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">输出队列与下游系统</div><div class="card-subtitle">脱敏输出可进入开放共享、转码存储、影像标注、专家审核和科研统计。</div></div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>输出包</th><th>脱敏版本</th><th>权限等级</th><th>下游系统</th><th>字段范围</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td>DR_screening_release_202607</td><td>v2.4</td><td>科研人员</td><td>临床数据开放共享</td><td>匿名ID、影像、分级标签、年龄组</td><td><span class="tag tag-green">已发布</span></td><td><button class="btn btn-sm btn-outline">查看报告</button></td></tr>
+          <tr><td>OCT_annotation_batch_0710</td><td>v1.8</td><td>影像标注人员</td><td>影像标注工具</td><td>匿名ID、OCT序列、病灶候选框</td><td><span class="tag tag-blue">推送中</span></td><td><button class="btn btn-sm btn-outline">进度</button></td></tr>
+          <tr><td>AMD_research_cohort_A</td><td>v3.0</td><td>临床协作用户</td><td>专家审核与统计分析</td><td>匿名病历摘要、脱敏影像、随访间隔</td><td><span class="tag tag-orange">待审批</span></td><td><button class="btn btn-sm btn-primary">审批</button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-stats">
+    <div class="toolbar">
+      <div class="tabs" data-tabs="statsTabs">
+        <button class="tab active" data-tab="systemStats">系统统计</button>
+        <button class="tab" data-tab="researchStats">临床科研统计</button>
+      </div>
+    </div>
+    <div class="tab-pane active" id="systemStats">
+      <div class="grid two">
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">不同库数据量与处理量</div><div class="card-subtitle">对应甲方需规中的系统统计。</div></div></div>
+          <div class="chart-bars">
+            <div class="bar-row"><span>PACS影像库</span><div class="progress"><span style="width:86%"></span></div><b>86万</b></div>
+            <div class="bar-row"><span>OCT序列库</span><div class="progress"><span style="width:62%"></span></div><b>42万</b></div>
+            <div class="bar-row"><span>病历EMR库</span><div class="progress"><span style="width:74%"></span></div><b>58万</b></div>
+            <div class="bar-row"><span>科研随访库</span><div class="progress"><span style="width:38%"></span></div><b>19万</b></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">不同角色工作量</div><div class="card-subtitle">统计管理员、专家、科研人员和标注人员在脱敏流程中的工作量。</div></div></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>角色</th><th>本周处理</th><th>主要工作</th><th>待办</th></tr></thead>
+            <tbody>
+              <tr><td>数据管理员</td><td>316批</td><td>数据源配置、抽取任务、失败重试</td><td>12</td></tr>
+              <tr><td>脱敏审核专家</td><td>84批</td><td>高风险扫描复核、输出审批</td><td>9</td></tr>
+              <tr><td>科研人员</td><td>27个队列</td><td>统计口径配置、数据申请</td><td>4</td></tr>
+              <tr><td>标注人员</td><td>18,240张</td><td>脱敏影像标注与质检</td><td>1,260</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="researchStats">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">临床科研统计工具</div><div class="card-subtitle">脱敏后的数据才能进入科研统计，提供描述性统计、回归分析和差异性分析。</div></div><button class="btn btn-primary" onclick="openDrawer('新建科研统计','选择脱敏队列、变量集合和统计方法。','research')">新建分析</button></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>研究队列</th><th>脱敏版本</th><th>样本量</th><th>统计方法</th><th>关键变量</th><th>输出结果</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>DR筛查风险因素分析</td><td>v2.4</td><td>12,860</td><td>描述性统计 + Logistic回归</td><td>年龄组、HbA1c、DR分级、影像质量</td><td>风险OR值、分层表</td><td><span class="tag tag-green">已生成</span></td></tr>
+            <tr><td>青光眼OCT进展分析</td><td>v1.8</td><td>4,320</td><td>线性回归</td><td>RNFL厚度、眼压、随访间隔</td><td>进展曲线</td><td><span class="tag tag-blue">分析中</span></td></tr>
+            <tr><td>AMD治疗差异分析</td><td>v3.0</td><td>2,146</td><td>组间差异检验</td><td>治疗方案、视力变化、OCT指标</td><td>差异性报告</td><td><span class="tag tag-orange">待审批</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="page-audit">
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">全链路审计日志</div><div class="card-subtitle">每次连接、抽取、扫描、脱敏、输出、审批都必须留痕，形成可追溯闭环。</div></div><button class="btn btn-outline" onclick="toast('已导出审计日志：audit_20260717.csv')">导出审计</button></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>时间</th><th>对象</th><th>动作</th><th>操作人</th><th>影响范围</th><th>结果</th><th>审计号</th></tr></thead>
+        <tbody>
+          <tr><td>2026-07-17 10:32</td><td>DR筛查多中心回顾队列</td><td>执行脱敏变化</td><td>数据管理员</td><td>18,426条数据</td><td><span class="tag tag-green">成功</span></td><td>AD-20260717-001</td></tr>
+          <tr><td>2026-07-17 10:18</td><td>华东PACS影像库</td><td>扫描敏感位置</td><td>系统任务</td><td>4,620张影像</td><td><span class="tag tag-orange">需复核</span></td><td>AD-20260717-002</td></tr>
+          <tr><td>2026-07-17 09:44</td><td>AMD临床研究数据集</td><td>创建输出包</td><td>科研管理员</td><td>2,146例病例</td><td><span class="tag tag-blue">待审批</span></td><td>AD-20260717-003</td></tr>
+          <tr><td>2026-07-17 09:12</td><td>华南DICOMweb</td><td>测试数据源连接</td><td>平台管理员</td><td>连接配置</td><td><span class="tag tag-green">在线</span></td><td>AD-20260717-004</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+</main>
+
+<div class="drawer-mask" id="drawerMask" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><h3 id="drawerTitle">配置</h3><p id="drawerDesc"></p></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot"><button class="btn btn-outline" onclick="closeDrawer()">取消</button><button class="btn btn-primary" onclick="saveDrawer()">保存</button></div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+var sourceData=[
+  {name:'华东PACS影像库',center:'上海市第一人民医院',type:'PACS / DICOM',scope:'眼底照相、OCT、FA',status:'在线',extract:'2026-07-17 09:40',des:'2026-07-17 10:32',sync:'同步完成'},
+  {name:'华南DICOMweb节点',center:'中山眼科中心',type:'DICOMweb',scope:'OCT三维序列、眼前节影像',status:'在线',extract:'2026-07-17 08:55',des:'2026-07-17 09:26',sync:'同步完成'},
+  {name:'华北EMR临床库',center:'北京协和医院',type:'MySQL / EMR',scope:'病历、检查、诊断、随访',status:'在线',extract:'2026-07-16 22:30',des:'2026-07-17 00:18',sync:'同步完成'},
+  {name:'西南科研随访库',center:'四川大学华西医院',type:'PostgreSQL',scope:'科研队列、随访变量',status:'待同步',extract:'2026-07-15 21:00',des:'2026-07-15 23:10',sync:'等待增量'},
+  {name:'社区筛查影像库',center:'深圳慢病筛查中心',type:'对象存储 / CSV',scope:'眼底图像、筛查登记表',status:'异常',extract:'2026-07-14 19:20',des:'2026-07-14 20:42',sync:'连接超时'}
+];
+var ruleData=[
+  {name:'DICOM核心标签脱敏规则',source:'PACS / DICOMweb',range:'Patient、Study、Series、Institution标签',fields:'PatientName、PatientID、BirthDate、AccessionNumber',algo:'删除 + HMAC匿名ID + 日期偏移',qc:'二次扫描无高危标签',status:'启用'},
+  {name:'眼底/OCT导出图烧录文字擦除',source:'影像文件 / PNG序列',range:'图像四角与设备文字区域',fields:'姓名、检查号、日期、医院名称',algo:'OCR定位 + 区域擦除 + 局部修复',qc:'OCR复扫置信度 < 0.35',status:'启用'},
+  {name:'病历文本结构化脱敏规则',source:'EMR / 科研库',range:'患者基本信息、主诉、现病史、检查结果',fields:'姓名、手机号、身份证、住址、联系人',algo:'字段删除 + 掩码 + 年龄分组',qc:'正则与NER双重扫描',status:'启用'},
+  {name:'科研低频组合风险规则',source:'科研随访库',range:'年龄、中心、罕见诊断、日期组合',fields:'极端年龄、少量样本中心、精确日期',algo:'分组泛化 + 日期粒度降低',qc:'k匿名风险评估',status:'待复核'}
+];
+var scanData=[
+  {batch:'SCAN-20260717-01',type:'原始DICOM',source:'华东PACS影像库',progress:100,found:'18,204项',risk:'高风险',status:'待复核'},
+  {batch:'SCAN-20260717-02',type:'病历文本',source:'华北EMR临床库',progress:100,found:'21,886项',risk:'中风险',status:'已入脱敏队列'},
+  {batch:'SCAN-20260717-03',type:'导出图片',source:'社区筛查影像库',progress:72,found:'2,827项',risk:'高风险',status:'扫描中'},
+  {batch:'SCAN-20260716-08',type:'科研变量',source:'西南科研随访库',progress:100,found:'196项',risk:'低风险',status:'已通过'}
+];
+var taskData=[
+  {task:'DES-DR-20260717',object:'DR筛查多中心回顾队列',rule:'DICOM核心 + 烧录文字擦除',progress:68,qc:'二次扫描待执行',status:'处理中'},
+  {task:'DES-OCT-20260716',object:'青光眼OCT随访队列',rule:'DICOM标签 + 日期偏移',progress:100,qc:'无残留高危项',status:'可输出'},
+  {task:'DES-AMD-20260715',object:'AMD临床研究数据集',rule:'病历文本 + 科研风险泛化',progress:100,qc:'待专家复核',status:'待复核'}
+];
+function tagClass(text){if(/在线|启用|可输出|成功|已通过|同步完成|已生成/.test(text))return'tag-green';if(/异常|高风险|失败|超时/.test(text))return'tag-red';if(/待|扫描中|处理|等待|复核|审批/.test(text))return'tag-orange';if(/中风险|推送|分析中/.test(text))return'tag-blue';return'tag-gray'}
+function renderSources(){
+  var keyword=(document.getElementById('sourceSearch')&&document.getElementById('sourceSearch').value||'').trim();
+  var status=(document.getElementById('sourceStatus')&&document.getElementById('sourceStatus').value||'');
+  var rows=sourceData.filter(function(d){return(!keyword||[d.name,d.center,d.type,d.scope].join('').indexOf(keyword)>=0)&&(!status||d.status===status)}).map(function(d){
+    return '<tr><td><strong>'+d.name+'</strong></td><td>'+d.center+'</td><td>'+d.type+'</td><td>'+d.scope+'</td><td><span class="tag '+tagClass(d.status)+'">'+d.status+'</span></td><td>'+d.extract+'</td><td>'+d.des+'</td><td><span class="tag '+tagClass(d.sync)+'">'+d.sync+'</span></td><td><div class="actions"><button class="btn btn-sm btn-outline" onclick="toast(&quot;连接测试完成：'+d.name+'&quot;)">测试</button><button class="btn btn-sm btn-outline" onclick="openDrawer(&quot;编辑数据源&quot;,&quot;维护连接参数、抽取范围和同步策略。&quot;,&quot;source&quot;)">编辑</button><button class="btn btn-sm btn-primary" onclick="showPage(&quot;rules&quot;)">规则</button></div></td></tr>'
+  }).join('');
+  document.getElementById('sourceRows').innerHTML=rows||'<tr><td colspan="9">未找到匹配数据源</td></tr>';
+}
+function renderRules(){
+  document.getElementById('ruleRows').innerHTML=ruleData.map(function(d){
+    return '<tr><td><strong>'+d.name+'</strong></td><td>'+d.source+'</td><td>'+d.range+'</td><td>'+d.fields+'</td><td>'+d.algo+'</td><td>'+d.qc+'</td><td><span class="tag '+tagClass(d.status)+'">'+d.status+'</span></td><td><div class="actions"><button class="btn btn-sm btn-outline">编辑</button><button class="btn btn-sm btn-outline">复制</button></div></td></tr>'
+  }).join('');
+}
+function renderScans(){
+  document.getElementById('scanRows').innerHTML=scanData.map(function(d){
+    return '<tr><td><strong>'+d.batch+'</strong></td><td>'+d.type+'</td><td>'+d.source+'</td><td><div class="progress"><span style="width:'+d.progress+'%"></span></div><div class="progress-label">'+d.progress+'%</div></td><td>'+d.found+'</td><td><span class="tag '+tagClass(d.risk)+'">'+d.risk+'</span></td><td><span class="tag '+tagClass(d.status)+'">'+d.status+'</span></td></tr>'
+  }).join('');
+}
+function renderTasks(){
+  document.getElementById('desensitizeRows').innerHTML=taskData.map(function(d){
+    return '<tr><td><strong>'+d.task+'</strong></td><td>'+d.object+'</td><td>'+d.rule+'</td><td><div class="progress"><span style="width:'+d.progress+'%"></span></div><div class="progress-label">'+d.progress+'%</div></td><td>'+d.qc+'</td><td><span class="tag '+tagClass(d.status)+'">'+d.status+'</span></td><td><button class="btn btn-sm btn-outline" onclick="toast(&quot;已打开脱敏报告&quot;)">报告</button></td></tr>'
+  }).join('');
+}
+function showPage(name){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.menu-item').forEach(function(i){i.classList.toggle('active',i.getAttribute('data-page')===name)});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.menu-item').forEach(function(item){item.addEventListener('click',function(){showPage(item.getAttribute('data-page'))})});
+document.querySelectorAll('.tabs').forEach(function(group){
+  group.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      group.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+      tab.classList.add('active');
+      var section=group.closest('.panel')||document;
+      section.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active')});
+      document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+});
+var drawerTemplates={
+  source:'<div class="form-grid"><div class="field"><label>数据源名称</label><input value="华东PACS影像库"></div><div class="field"><label>数据库类型</label><select><option>PACS / DICOM</option><option>DICOMweb</option><option>MySQL / EMR</option><option>PostgreSQL</option><option>对象存储</option></select></div><div class="field"><label>所属医院</label><input value="上海市第一人民医院"></div><div class="field"><label>连接状态</label><select><option>在线</option><option>待同步</option><option>异常</option></select></div><div class="field full"><label>连接地址</label><input value="dicom://10.10.21.36:104"></div><div class="field full"><label>抽取范围</label><textarea>眼底照相、OCT、FA、病历摘要、检查报告。</textarea></div></div>',
+  rule:'<div class="form-grid"><div class="field"><label>适用数据源</label><select><option>PACS / DICOMweb</option><option>EMR临床库</option><option>科研随访库</option></select></div><div class="field"><label>敏感类型</label><select><option>DICOM标签</option><option>病历字段</option><option>影像烧录文字</option><option>组合识别风险</option></select></div><div class="field"><label>脱敏算法</label><select><option>删除</option><option>掩码</option><option>HMAC匿名ID</option><option>日期偏移</option><option>区域擦除</option></select></div><div class="field"><label>质控方式</label><select><option>脱敏后二次扫描</option><option>专家复核</option><option>k匿名风险评估</option></select></div><div class="field full"><label>字段/标签配置</label><textarea>PatientName, PatientID, BirthDate, AccessionNumber, EMR.patient.phone, OCR.image.corner_text</textarea></div></div>',
+  task:'<div class="form-grid"><div class="field"><label>数据源</label><select><option>华东PACS影像库</option><option>华北EMR临床库</option><option>西南科研随访库</option></select></div><div class="field"><label>任务类型</label><select><option>增量抽取并脱敏</option><option>历史批量脱敏</option><option>失败任务重跑</option></select></div><div class="field"><label>执行时间</label><select><option>立即执行</option><option>每日 22:30</option><option>手动审批后执行</option></select></div><div class="field"><label>输出目标</label><select><option>开放共享数据集</option><option>影像标注工具</option><option>专家审核与统计分析</option></select></div><div class="field full"><label>说明</label><textarea>任务将先进入隔离区扫描，扫描通过后执行脱敏变化，最终按权限生成输出包。</textarea></div></div>',
+  output:'<div class="form-grid"><div class="field"><label>脱敏版本</label><select><option>v2.4</option><option>v1.8</option><option>v3.0</option></select></div><div class="field"><label>权限等级</label><select><option>科研人员</option><option>影像标注人员</option><option>临床协作用户</option><option>平台管理员</option></select></div><div class="field"><label>下游系统</label><select><option>临床数据开放共享</option><option>影像标注工具</option><option>医学影像存储与转码</option><option>专家审核与统计分析</option></select></div><div class="field"><label>审批方式</label><select><option>自动校验后提交审批</option><option>人工审批</option></select></div><div class="field full"><label>输出字段</label><textarea>匿名ID、脱敏影像、疾病分型、眼别、年龄组、必要临床标签。</textarea></div></div>',
+  research:'<div class="form-grid"><div class="field"><label>脱敏队列</label><select><option>DR筛查风险因素分析</option><option>青光眼OCT进展分析</option><option>AMD治疗差异分析</option></select></div><div class="field"><label>统计方法</label><select><option>描述性统计</option><option>回归分析</option><option>差异性分析</option></select></div><div class="field full"><label>变量集合</label><textarea>年龄组、性别、眼别、疾病分级、影像质量、检查设备、随访间隔。</textarea></div></div>'
+};
+function openDrawer(title,desc,type){
+  document.getElementById('drawerTitle').textContent=title;
+  document.getElementById('drawerDesc').textContent=desc;
+  document.getElementById('drawerBody').innerHTML=drawerTemplates[type]||'<p>暂无配置项。</p>';
+  document.getElementById('drawerMask').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+function closeDrawer(){document.getElementById('drawerMask').classList.remove('open');document.getElementById('drawer').classList.remove('open')}
+function saveDrawer(){closeDrawer();toast('配置已保存，并已写入审计日志')}
+function toast(text){var t=document.getElementById('toast');t.textContent=text;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(function(){t.classList.remove('show')},1900)}
+function simulateScan(){scanData[2].progress=100;scanData[2].status='待复核';renderScans();toast('扫描完成：发现影像烧录文字与DICOM敏感标签，已进入复核队列')}
+function simulateDesensitize(){taskData[0].progress=100;taskData[0].qc='二次扫描无高危项';taskData[0].status='可输出';renderTasks();toast('脱敏处理完成，输出包可进入权限审批')}
+function logout(){if(confirm('确定要退出登录吗？')){localStorage.removeItem('life_med_user');location.href='../login.html'}}
+try{var user=JSON.parse(localStorage.getItem('life_med_user'));if(user&&user.name)document.getElementById('headerUserName').textContent=user.name}catch(e){}
+renderSources();renderRules();renderScans();renderTasks();
+</script>
+</body>
+</html>

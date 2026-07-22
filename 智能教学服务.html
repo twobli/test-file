@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -62,10 +62,13 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
 .card-title { font-size: 16px; font-weight: 600; color: var(--gray-800); }
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; gap: 6px; white-space: nowrap; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-dark); }
 .btn-success { background: var(--success); color: #fff; }
 .btn-success:hover { background: #2d9249; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #d33426; }
 .btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
 .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
 .btn-sm { padding: 5px 10px; font-size: 12px; }
@@ -105,26 +108,26 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .film-list .list-header { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
 .film-list .list-header .list-title { font-size: 15px; font-weight: 600; color: var(--gray-800); }
 .film-list .list-header .list-count { font-size: 12px; color: var(--gray-500); background: var(--gray-100); padding: 2px 10px; border-radius: 10px; }
-.film-list .list-search { padding: 10px 14px; }
-.film-list .list-search input { width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; outline: none; font-family: inherit; }
-.film-list .list-search input:focus { border-color: var(--primary); }
 .film-list .list-items { max-height: 480px; overflow-y: auto; }
-.film-list .film-item { padding: 12px 16px; border-bottom: 1px solid var(--gray-50); cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; }
+.film-list .film-item { padding: 12px 16px; border-bottom: 1px solid var(--gray-50); cursor: pointer; transition: var(--transition); display: flex; align-items: flex-start; gap: 10px; }
 .film-list .film-item:hover { background: var(--primary-light); }
 .film-list .film-item.active { background: var(--primary-light); border-left: 3px solid var(--primary); }
-.film-list .film-item .film-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.film-list .film-item .film-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
 .film-list .film-item .film-status.pending { background: var(--gray-400); }
 .film-list .film-item .film-status.done { background: var(--success); }
 .film-list .film-item .film-status.wrong { background: var(--danger); }
 .film-list .film-item .film-info { flex: 1; min-width: 0; }
-.film-list .film-item .film-name { font-size: 13px; font-weight: 500; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.film-list .film-item .film-meta { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+.film-list .film-item .film-name { font-size: 13px; font-weight: 600; color: var(--gray-800); line-height: 1.45; word-break: break-all; }
+.film-list .film-item .film-meta { font-size: 11px; color: var(--gray-500); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.film-list .film-item .film-meta .stars { color: var(--warning); letter-spacing: 1px; }
 
 /* 中间影像展示区 */
 .image-viewer { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; height: 100%; display: flex; flex-direction: column; }
-.image-viewer .viewer-header { margin-bottom: 14px; }
+.image-viewer .viewer-header { margin-bottom: 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .image-viewer .viewer-header .viewer-title { font-size: 16px; font-weight: 600; color: var(--gray-800); }
 .image-viewer .viewer-subtitle { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+.image-viewer .viewer-top-meta { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; font-size: 12px; color: var(--gray-700); }
+.image-viewer .viewer-top-meta span { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
 .image-viewer .viewer-images { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; }
 .image-viewer .viewer-images.single-col { grid-template-columns: 1fr; grid-template-rows: 1fr; }
 .image-viewer .img-placeholder { border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 140px; }
@@ -195,9 +198,14 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-film-item { padding: 10px 14px; border-bottom: 1px solid var(--gray-50); cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; }
 .result-film-item:hover { background: var(--gray-50); }
 .result-film-item.active { background: var(--primary-light); }
-.result-film-item .result-icon { font-size: 18px; flex-shrink: 0; }
-.result-film-item .result-icon.correct { color: var(--success); }
-.result-film-item .result-icon.wrong { color: var(--danger); }
+.result-film-item .result-status-tag { min-width: 48px; text-align: center; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.result-film-item .result-status-tag.correct { background: #e6f4ea; color: #137333; }
+.result-film-item .result-status-tag.wrong { background: #fce8e6; color: #c5221f; }
+.result-film-item .result-status-tag.pending { background: #f1f3f4; color: #5f6368; }
+.analysis-panel .option-analysis { display: block; margin-top: 4px; color: var(--gray-600); font-size: 12px; line-height: 1.7; }
+.analysis-panel .answer-tag { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.analysis-panel .answer-tag.correct { background: #e6f4ea; color: #137333; }
+.analysis-panel .answer-tag.wrong { background: #fce8e6; color: #c5221f; }
 
 /* ===== 知识点学习样式 ===== */
 .knowledge-layout { display: flex; gap: 16px; min-height: 600px; }
@@ -210,6 +218,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .knowledge-layout .knowledge-sidebar .ks-topic { padding: 10px 16px 10px 28px; cursor: pointer; font-size: 13px; color: var(--gray-700); transition: var(--transition); border-left: 3px solid transparent; }
 .knowledge-layout .knowledge-sidebar .ks-topic:hover { background: var(--gray-50); color: var(--primary); }
 .knowledge-layout .knowledge-sidebar .ks-topic.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.knowledge-layout .knowledge-sidebar .ks-topic.search-hit { background: #fef7e0; color: #8a5a00; }
+.knowledge-layout .knowledge-sidebar .ks-topic.active.search-hit { background: var(--primary-light); color: var(--primary); }
 .knowledge-layout .knowledge-main { flex: 1; min-width: 0; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; }
 .knowledge-layout .knowledge-main .km-title { font-size: 20px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
 .knowledge-layout .knowledge-main .km-subtitle { font-size: 13px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.7; }
@@ -244,7 +254,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 <body>
 
 <div class="header">
-    <a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+    <a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -282,54 +292,29 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             </div>
             <div class="toolbar-right">
                 <div class="exam-stats">
-                    <span>待阅: <strong id="stat-pending">8</strong></span>
-                    <span>已阅: <strong id="stat-done">0</strong></span>
+                    <span>未作答: <strong id="stat-pending">8</strong></span>
+                    <span>已作答: <strong id="stat-done">0</strong></span>
                     <span>正确率: <strong id="stat-rate">-</strong></span>
                 </div>
-                <button class="btn btn-primary" onclick="showKnowledge()">知识点学习</button>
+                <button class="btn btn-primary knowledge-entry-btn" onclick="showKnowledge()" disabled title="完成全部阅片练习后开放知识点学习">知识点学习</button>
             </div>
         </div>
 
-        <!-- Tab + 列表 -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab-group="film" data-tab="pending" onclick="switchFilmTab('pending')">待阅影片列表</button>
-            <button class="tab-btn" data-tab-group="film" data-tab="done" onclick="switchFilmTab('done')">已阅影片列表</button>
-        </div>
-
-        <!-- 待阅影片列表 -->
-        <div data-tab-content="film" data-tab="pending" class="tab-content active" id="film-pending">
-            <div class="exam-layout">
-                <!-- 左：题卡列表 -->
-                <div class="exam-left">
-                    <div class="film-list">
-                        <div class="list-header">
-                            <span class="list-title">待阅影片</span>
-                            <span class="list-count" id="pending-count">8</span>
-                        </div>
-                        <div class="list-search">
-                            <input type="text" placeholder="搜索影片名称/ID" oninput="filterFilmList(this.value, 'pending')">
-                        </div>
-                        <div class="list-items" id="pending-film-items"></div>
+        <div class="exam-layout">
+            <!-- 左：阅片列表 -->
+            <div class="exam-left">
+                <div class="film-list">
+                    <div class="list-header">
+                        <span class="list-title">阅片列表</span>
+                        <span class="list-count" id="film-count">8</span>
                     </div>
-                </div>
-                <!-- 中：影像展示 -->
-                <div class="exam-center" id="exam-image-viewer"></div>
-                <!-- 右：答题区 -->
-                <div class="exam-right" id="exam-answer-panel"></div>
-            </div>
-        </div>
-
-        <!-- 已阅影片列表 -->
-        <div data-tab-content="film" data-tab="done" class="tab-content" id="film-done">
-            <div class="film-list" style="max-width:900px;">
-                <div class="list-header">
-                    <span class="list-title">已阅影片</span>
-                    <span class="list-count" id="done-count">0</span>
-                </div>
-                <div class="list-items" id="done-film-items">
-                    <div class="empty-state">暂无已阅影片</div>
+                    <div class="list-items" id="film-items"></div>
                 </div>
             </div>
+            <!-- 中：影像展示 -->
+            <div class="exam-center" id="exam-image-viewer"></div>
+            <!-- 右：答题区 -->
+            <div class="exam-right" id="exam-answer-panel"></div>
         </div>
     </div>
 
@@ -341,7 +326,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 <h1 class="page-title" style="margin-bottom:0;margin-left:12px;">阅片练习结果</h1>
             </div>
             <div class="toolbar-right">
-                <button class="btn btn-primary" onclick="showKnowledge()">知识点学习</button>
+                <button class="btn btn-primary knowledge-entry-btn" onclick="showKnowledge()" disabled title="完成全部阅片练习后开放知识点学习">知识点学习</button>
             </div>
         </div>
 
@@ -373,7 +358,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <div class="knowledge-layout">
             <div class="knowledge-sidebar">
                 <div class="ks-header">
-                    <input type="text" placeholder="搜索医学主题..." oninput="filterKnowledge(this.value)">
+                    <input type="text" placeholder="搜索知识点" oninput="filterKnowledge(this.value)">
                 </div>
                 <div class="ks-tree" id="knowledge-tree"></div>
             </div>
@@ -524,6 +509,57 @@ const examQuestions = [
     }
 ];
 
+const optionAnalysisMap = {
+    'OPHTH-2023-0041': [
+        'AMD通常以玻璃膜疣、黄斑区萎缩或脉络膜新生血管为核心表现，本例弥漫出血、棉绒斑和新生血管渗漏更符合糖尿病视网膜病变。',
+        '该项正确。广泛出血、无灌注区、新生血管渗漏并合并黄斑水肿，符合增殖期糖尿病视网膜病变。',
+        '重度非增殖期DR可见大量出血、静脉串珠或IRMA，但尚未出现新生血管；本例已有新生血管渗漏。',
+        '高血压性视网膜病变以动脉狭窄、交叉压迫征、火焰状出血为主，不能解释本例新生血管和糖尿病相关改变。'
+    ],
+    'OPHTH-2023-0047': [
+        '正常眼底通常杯盘比不明显增大，RNFL无明显变薄；本例存在青光眼性视神经损害特征。',
+        '糖尿病视网膜病变应见微血管瘤、点状出血、硬性渗出或新生血管，本例重点异常在视盘和神经纤维层。',
+        '该项正确。杯盘比增大、盘沿变窄、RNFL变薄并伴眼压升高，符合原发性开角型青光眼。',
+        '视网膜中央静脉阻塞通常出现静脉迂曲扩张和广泛出血，本例未见典型“番茄酱样”眼底。'
+    ],
+    'OPHTH-2023-0052': [
+        '该项正确。中心视力下降、视物变形，黄斑出血渗出、CNV渗漏和视网膜下液支持湿性AMD。',
+        '干性AMD以玻璃膜疣和地图状萎缩为主，一般无明显出血、渗出和活动性CNV。',
+        '中浆多见于相对年轻患者，常见浆液性神经上皮脱离，本例年龄和出血渗出不支持。',
+        '黄斑裂孔在OCT上应见全层黄斑结构缺损，本例核心表现为CNV及渗出性改变。'
+    ],
+    'OPHTH-2023-0058': [
+        '糖尿病视网膜病变以微血管瘤、点状出血和硬性渗出为主，本例病史和血管改变更指向高血压损害。',
+        '该项正确。长期高血压、动脉狭窄、交叉压迫征、棉绒斑和火焰状出血符合高血压性视网膜病变。',
+        '视网膜静脉阻塞多为静脉迂曲扩张和广泛出血，通常有急性视力下降表现。',
+        '正常眼底不会出现明显动脉狭窄、交叉压迫征和出血渗出。'
+    ],
+    'OPHTH-2023-0063': [
+        '正常眼底不应出现微血管瘤和点状出血；本例已有轻度糖尿病眼底改变。',
+        '该项正确。后极部散在微血管瘤和点状出血，未见新生血管，符合轻度非增殖性DR。',
+        '增殖期DR需要新生血管、玻璃体积血或视网膜前出血等表现，本例未达到该阶段。',
+        '高血压性视网膜病变以动脉狭窄和交叉压迫征为主，本例改变更符合糖尿病微血管损伤。'
+    ],
+    'OPHTH-2023-0068': [
+        '糖尿病视网膜病变通常为微血管瘤、点状出血和渗出，难以解释突发视力下降和静脉迂曲扩张。',
+        '该项正确。广泛火焰状出血、静脉迂曲扩张、视网膜水肿和黄斑水肿符合CRVO。',
+        '视网膜动脉阻塞常见视网膜苍白水肿和樱桃红斑，而非广泛出血和静脉扩张。',
+        '前部缺血性视神经病变以视盘水肿为主，通常没有弥漫性视网膜出血。'
+    ],
+    'OPHTH-2023-0073': [
+        '湿性AMD应有出血、渗出、视网膜下液或CNV活动征象，本例以玻璃膜疣和萎缩为主。',
+        '该项正确。双眼缓慢下降、多发玻璃膜疣、RPE改变和地图状萎缩符合干性AMD。',
+        '病理性近视黄斑病变常伴豹纹状眼底、后巩膜葡萄肿或近视性CNV，本例年龄相关改变更典型。',
+        'Stargardt病多见于青少年或较年轻患者，典型为黄白色斑点和遗传性黄斑营养不良。'
+    ],
+    'OPHTH-2023-0078': [
+        '玻璃体后脱离可出现闪光感和飞蚊症，但通常不造成明确视网膜隆起和裂孔相关脱离。',
+        '该项正确。高度近视、突发视野缺损、马蹄形裂孔和灰白色隆起视网膜支持孔源性视网膜脱离。',
+        '渗出性视网膜脱离通常无裂孔，常与炎症、肿瘤或血管性渗出相关。',
+        '牵拉性视网膜脱离多见于增殖性糖尿病视网膜病变或PVR，形态常为牵拉造成的凹面脱离。'
+    ]
+};
+
 // ===== 知识点学习数据 =====
 const knowledgeData = {
     '视网膜疾病': {
@@ -591,10 +627,62 @@ const knowledgeData = {
     }
 };
 
+const knowledgeCategories = [
+    { name: '视网膜血管性疾病', topics: ['糖尿病视网膜病变', '视网膜静脉阻塞', '高血压性视网膜病变'] },
+    { name: '黄斑疾病', topics: ['年龄相关性黄斑变性'] },
+    { name: '青光眼相关疾病', topics: ['青光眼'] },
+    { name: '视网膜脱离', topics: ['孔源性视网膜脱离'] }
+];
+
+const structuredKnowledgeData = {
+    '糖尿病视网膜病变': {
+        title: '糖尿病视网膜病变（DR）',
+        subtitle: '糖尿病微血管病变在眼底的典型表现，是阅片练习中最常见的核心知识点之一。',
+        definition: '<p>糖尿病视网膜病变是长期高血糖导致视网膜微血管损伤后出现的一组眼底改变，包括微血管瘤、视网膜内出血、硬性渗出、棉绒斑、静脉串珠、IRMA、新生血管和黄斑水肿等。它是工作年龄人群视力损害和致盲的重要原因。</p><p>流行病学上，患病风险随糖尿病病程延长而显著增加。病程、血糖控制水平、血压和肾功能状态是影响发生与进展的关键因素。</p>',
+        risk: '<ul><li><strong>危险因素：</strong>糖尿病病程长、HbA1c控制不佳、高血压、血脂异常、糖尿病肾病、妊娠等。</li><li><strong>发病机制：</strong>高血糖造成毛细血管内皮损伤、周细胞丢失和基底膜增厚，导致血-视网膜屏障破坏、毛细血管闭塞、缺血缺氧和VEGF上调。</li><li><strong>进展逻辑：</strong>早期以微血管瘤和点状出血为主，缺血加重后出现棉绒斑、静脉串珠和IRMA，进入增殖期后出现新生血管、玻璃体积血或牵拉性视网膜脱离。</li></ul>',
+        diagnosis: '<ul><li><strong>诊断要点：</strong>结合糖尿病病史，阅片关注微血管瘤、点状/斑状出血、硬性渗出、棉绒斑、新生血管和黄斑水肿。</li><li><strong>分期判断：</strong>轻度NPDR仅有微血管瘤；重度NPDR符合4-2-1法则；PDR以新生血管、玻璃体积血或视网膜前出血为标志。</li><li><strong>鉴别诊断：</strong>高血压性视网膜病变以动脉狭窄、交叉压迫征和火焰状出血为主；CRVO表现为静脉迂曲扩张和弥漫性出血；AMD主要位于黄斑区并见玻璃膜疣或CNV。</li></ul>'
+    },
+    '年龄相关性黄斑变性': {
+        title: '年龄相关性黄斑变性（AMD）',
+        subtitle: '老年人中心视力下降的重要原因，阅片时重点观察黄斑区玻璃膜疣、萎缩、出血和渗出。',
+        definition: '<p>年龄相关性黄斑变性是发生于黄斑区的退行性疾病，主要影响中心视力。临床上分为干性AMD和湿性AMD，前者以玻璃膜疣、RPE改变和地图状萎缩为主，后者以脉络膜新生血管、出血和渗出为主。</p><p>该病多见于50岁以上人群，年龄越大患病率越高。湿性AMD比例较低，但进展快、致盲风险高。</p>',
+        risk: '<ul><li><strong>危险因素：</strong>高龄、吸烟、家族史、浅色虹膜、心血管风险因素、慢性氧化应激和补体通路异常。</li><li><strong>发病机制：</strong>RPE-Bruch膜-脉络膜毛细血管复合体老化，代谢废物沉积形成玻璃膜疣，局部炎症和缺氧可诱发CNV。</li><li><strong>进展逻辑：</strong>干性AMD可长期缓慢进展，部分患者转化为湿性AMD后出现快速中心视力下降和视物变形。</li></ul>',
+        diagnosis: '<ul><li><strong>诊断要点：</strong>干性AMD关注玻璃膜疣、RPE色素紊乱和地图状萎缩；湿性AMD关注黄斑出血、硬性渗出、视网膜下液、PED和CNV渗漏。</li><li><strong>影像要点：</strong>OCT可见RPE隆起、外层视网膜萎缩、视网膜下液或视网膜内囊样水肿；FA可显示CNV渗漏。</li><li><strong>鉴别诊断：</strong>中浆多见于较年轻患者且多为浆液性脱离；病理性近视黄斑病变常伴豹纹状眼底和后巩膜葡萄肿；Stargardt病多见于更年轻人群。</li></ul>'
+    },
+    '青光眼': {
+        title: '青光眼性视神经病变',
+        subtitle: '以视神经结构损害和视野缺损为核心，阅片重点是视盘杯盘比、盘沿和RNFL改变。',
+        definition: '<p>青光眼是一组进行性视神经病变，典型表现为视盘凹陷扩大、视网膜神经纤维层变薄和特征性视野缺损。眼压升高是重要危险因素，但正常眼压也不能完全排除青光眼。</p><p>青光眼是全球不可逆盲的主要原因之一，早期可无明显自觉症状，因此眼底阅片和OCT筛查具有重要价值。</p>',
+        risk: '<ul><li><strong>危险因素：</strong>眼压升高、高龄、家族史、高度近视、薄中央角膜、糖尿病或血管调节异常。</li><li><strong>发病机制：</strong>机械压力和血流灌注异常共同造成视神经筛板区损害，导致视网膜神经节细胞及其轴突逐渐丢失。</li><li><strong>进展逻辑：</strong>早期可仅有RNFL局灶变薄，随后出现盘沿切迹、杯盘比增大和可检测视野缺损。</li></ul>',
+        diagnosis: '<ul><li><strong>诊断要点：</strong>关注杯盘比增大、双眼杯盘比不对称、盘沿变窄、RNFL缺损、盘周出血和OCT RNFL/GCC变薄。</li><li><strong>辅助检查：</strong>需结合眼压、房角、视野检查和OCT结果综合判断。</li><li><strong>鉴别诊断：</strong>大生理杯盘比通常无进行性RNFL变薄和视野缺损；缺血性视神经病变常有急性视力下降和视盘水肿病史；视神经压迫性病变需结合神经影像排除。</li></ul>'
+    },
+    '视网膜静脉阻塞': {
+        title: '视网膜静脉阻塞（RVO）',
+        subtitle: '常见视网膜血管病，阅片以静脉迂曲扩张、视网膜出血和黄斑水肿为关键线索。',
+        definition: '<p>视网膜静脉阻塞是视网膜静脉回流障碍导致的眼底血管性疾病，可分为视网膜中央静脉阻塞和分支静脉阻塞。典型表现包括视网膜出血、静脉扩张迂曲、棉绒斑和黄斑水肿。</p><p>该病多见于中老年人，是仅次于糖尿病视网膜病变的常见视网膜血管疾病。</p>',
+        risk: '<ul><li><strong>危险因素：</strong>高血压、动脉硬化、糖尿病、高脂血症、青光眼、血液高凝状态等。</li><li><strong>发病机制：</strong>静脉受压、血管壁损伤或血流动力学异常导致血栓形成，继发静脉回流受阻、毛细血管渗漏和视网膜缺血。</li><li><strong>进展逻辑：</strong>缺血范围越大，新生血管和新生血管性青光眼风险越高。</li></ul>',
+        diagnosis: '<ul><li><strong>诊断要点：</strong>CRVO常表现为弥漫性出血、静脉迂曲扩张和“番茄酱样”眼底；BRVO表现为沿受累静脉分布的扇形出血。</li><li><strong>影像要点：</strong>FA提示静脉充盈延迟、毛细血管无灌注和血管渗漏；OCT常见黄斑水肿。</li><li><strong>鉴别诊断：</strong>DR出血多伴微血管瘤和糖尿病病史；高血压性视网膜病变以动脉改变为主；视网膜动脉阻塞以视网膜苍白水肿和樱桃红斑为典型表现。</li></ul>'
+    },
+    '高血压性视网膜病变': {
+        title: '高血压性视网膜病变',
+        subtitle: '慢性或急性血压升高导致的视网膜血管改变，可反映全身血管损害程度。',
+        definition: '<p>高血压性视网膜病变是高血压导致视网膜小动脉痉挛、硬化和血-视网膜屏障破坏后出现的一组眼底改变。常见表现包括动脉狭窄、动静脉交叉压迫征、棉绒斑、火焰状出血、硬性渗出和视盘水肿。</p><p>其发生与高血压持续时间、血压控制水平和靶器官损害程度相关。</p>',
+        risk: '<ul><li><strong>危险因素：</strong>长期血压控制不佳、急进性高血压、肾病、动脉硬化、糖尿病和高脂血症。</li><li><strong>发病机制：</strong>早期小动脉痉挛，长期高压导致动脉壁增厚和硬化；严重时血管内皮损伤造成渗漏、出血和视盘水肿。</li><li><strong>进展逻辑：</strong>从动脉狭窄和交叉压迫征逐步进展至棉绒斑、出血渗出，恶性高血压可出现视盘水肿。</li></ul>',
+        diagnosis: '<ul><li><strong>诊断要点：</strong>关注动静脉比值下降、动脉反光增强、交叉压迫征、火焰状出血、棉绒斑和黄斑星芒状渗出。</li><li><strong>分级提示：</strong>轻中度以血管狭窄和硬化为主，重度可见出血、渗出和视盘水肿。</li><li><strong>鉴别诊断：</strong>DR以微血管瘤和点状出血为主；CRVO以静脉迂曲扩张和广泛出血为主；贫血或血液病视网膜病变需结合全身检查。</li></ul>'
+    },
+    '孔源性视网膜脱离': {
+        title: '孔源性视网膜脱离',
+        subtitle: '视网膜裂孔导致液化玻璃体进入视网膜下腔，是眼科急症相关的重要阅片知识点。',
+        definition: '<p>孔源性视网膜脱离是因视网膜裂孔形成，液化玻璃体经裂孔进入视网膜下腔，使神经上皮层与色素上皮层分离。患者常有闪光感、飞蚊症、视野遮挡或突发视力下降。</p><p>高度近视、外伤和玻璃体后脱离人群风险更高，延误处理可能造成永久性视功能损害。</p>',
+        risk: '<ul><li><strong>危险因素：</strong>高度近视、周边视网膜变性、既往眼外伤、内眼手术史、家族史和急性玻璃体后脱离。</li><li><strong>发病机制：</strong>玻璃体牵拉造成视网膜裂孔，液化玻璃体进入视网膜下腔后扩大脱离范围。</li><li><strong>进展逻辑：</strong>裂孔位置、大小和是否累及黄斑决定进展速度与视力预后。</li></ul>',
+        diagnosis: '<ul><li><strong>诊断要点：</strong>阅片关注灰白色隆起视网膜、波浪状视网膜皱褶、马蹄形裂孔、视网膜下液和脱离范围。</li><li><strong>辅助检查：</strong>OCT可显示神经上皮层脱离；周边部病变需结合散瞳眼底检查或广角眼底照相。</li><li><strong>鉴别诊断：</strong>渗出性视网膜脱离通常无裂孔且液体可随体位变化；牵拉性视网膜脱离多见于PDR或PVR，呈牵拉性凹面形态；玻璃体后脱离可有闪光飞蚊但无视网膜下液。</li></ul>'
+    }
+};
+
 // ===== 全局状态 =====
 let userAnswers = {}; // { questionId: selectedIndex }
+let draftAnswers = {}; // { questionId: selectedIndex }
 let currentQIndex = 0;
-let currentFilmTab = 'pending';
 let currentView = 'exam';
 let currentResultIndex = 0;
 let currentKnowledgeTopic = '糖尿病视网膜病变';
@@ -605,10 +693,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var user = JSON.parse(localStorage.getItem('life_med_user'));
         if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
     } catch(e) {}
-    renderPendingFilmList();
+    renderFilmList();
     selectQuestion(0);
     renderKnowledgeTree();
     renderKnowledgeContent(currentKnowledgeTopic);
+    updateStats();
 });
 
 // ===== 视图切换 =====
@@ -618,13 +707,8 @@ function switchView(view) {
     document.getElementById('view-' + view).classList.add('active');
     if (view === 'exam') {
         document.getElementById('breadcrumbLabel').textContent = '智能教学服务 / 阅片练习';
-        renderPendingFilmList();
-        renderDoneFilmList();
+        renderFilmList();
         updateStats();
-        var doneCount = Object.keys(userAnswers).length;
-        if (doneCount === examQuestions.length) {
-            // 全部做完，选中已阅tab
-        }
     } else if (view === 'result') {
         document.getElementById('breadcrumbLabel').textContent = '智能教学服务 / 阅片练习结果';
         renderResultSummary();
@@ -637,109 +721,46 @@ function switchView(view) {
 }
 
 function showExamList() {
-    document.querySelectorAll('.tab-btn[data-tab-group="film"]').forEach(function(b) { b.classList.remove('active'); });
-    var pendingBtn = document.querySelector('.tab-btn[data-tab-group="film"][data-tab="pending"]');
-    if (pendingBtn) pendingBtn.classList.add('active');
-    document.querySelectorAll('[data-tab-content="film"]').forEach(function(c) { c.classList.remove('active'); });
-    var pendingContent = document.querySelector('[data-tab-content="film"][data-tab="pending"]');
-    if (pendingContent) pendingContent.classList.add('active');
-    currentFilmTab = 'pending';
     switchView('exam');
 }
 
 function showKnowledge() {
+    if (!isAllAnswered()) return;
     switchView('knowledge');
 }
 
-// ===== Tab切换 =====
-function switchFilmTab(tab) {
-    currentFilmTab = tab;
-    var btns = document.querySelectorAll('[data-tab-group="film"]');
-    var contents = document.querySelectorAll('[data-tab-content="film"]');
-    btns.forEach(function(b) { b.classList.remove('active'); });
-    contents.forEach(function(c) { c.classList.remove('active'); });
-    var btn = document.querySelector('[data-tab-group="film"][data-tab="' + tab + '"]');
-    var content = document.querySelector('[data-tab-content="film"][data-tab="' + tab + '"]');
-    if (btn) btn.classList.add('active');
-    if (content) content.classList.add('active');
-    if (tab === 'done') renderDoneFilmList();
-}
-
-// ===== 渲染待阅列表 =====
-function renderPendingFilmList(filterText) {
-    var container = document.getElementById('pending-film-items');
-    var countEl = document.getElementById('pending-count');
-    var questions = examQuestions;
-    if (filterText) {
-        var ft = filterText.toLowerCase();
-        questions = questions.filter(function(q) {
-            return q.id.toLowerCase().includes(ft) || q.title.toLowerCase().includes(ft) || q.diagnosis.toLowerCase().includes(ft);
-        });
-    }
-    var pendingQuestions = questions.filter(function(q) { return !(q.id in userAnswers); });
-    countEl.textContent = pendingQuestions.length;
-    if (pendingQuestions.length === 0) {
-        container.innerHTML = '<div class="empty-state">所有影片已阅完毕</div>';
-    } else {
-        container.innerHTML = pendingQuestions.map(function(q, i) {
-            var origIdx = examQuestions.indexOf(q);
-            var activeClass = (currentFilmTab === 'pending' && origIdx === currentQIndex) ? ' active' : '';
-            return '<div class="film-item' + activeClass + '" onclick="selectQuestion(' + origIdx + ')">' +
-                '<span class="film-status pending"></span>' +
-                '<div class="film-info">' +
-                    '<div class="film-name">' + q.title + '</div>' +
-                    '<div class="film-meta">' + q.diagnosis + ' | ' + q.meta.eye + ' | ' + '★'.repeat(q.meta.difficulty) + '</div>' +
+// ===== 渲染阅片列表 =====
+function renderFilmList() {
+    var container = document.getElementById('film-items');
+    var countEl = document.getElementById('film-count');
+    countEl.textContent = examQuestions.length;
+    container.innerHTML = examQuestions.map(function(q, index) {
+        var answered = q.id in userAnswers;
+        var isCorrect = answered && userAnswers[q.id] === q.correctIndex;
+        var statusClass = !answered ? 'pending' : (isCorrect ? 'done' : 'wrong');
+        var statusText = !answered ? '未作答' : (isCorrect ? '已作答 正确' : '已作答 错误');
+        var tagClass = !answered ? 'tag-gray' : (isCorrect ? 'tag-green' : 'tag-red');
+        var activeClass = index === currentQIndex ? ' active' : '';
+        return '<div class="film-item' + activeClass + '" onclick="selectQuestion(' + index + ')">' +
+            '<span class="film-status ' + statusClass + '"></span>' +
+            '<div class="film-info">' +
+                '<div class="film-name">' + q.title + '</div>' +
+                '<div class="film-meta">' +
+                    '<span class="stars">' + '★'.repeat(q.meta.difficulty) + '</span>' +
+                    '<span>眼别: ' + q.meta.eye + '</span>' +
                 '</div>' +
-                '<span class="tag tag-gray">未作答</span>' +
-            '</div>';
-        }).join('');
-    }
-}
-
-function renderDoneFilmList() {
-    var container = document.getElementById('done-film-items');
-    var countEl = document.getElementById('done-count');
-    var doneQuestions = examQuestions.filter(function(q) { return q.id in userAnswers; });
-    countEl.textContent = doneQuestions.length;
-    if (doneQuestions.length === 0) {
-        container.innerHTML = '<div class="empty-state">暂无已阅影片</div>';
-    } else {
-        container.innerHTML = doneQuestions.map(function(q) {
-            var userIdx = userAnswers[q.id];
-            var isCorrect = (userIdx === q.correctIndex);
-            var statusClass = isCorrect ? 'done' : 'wrong';
-            var statusText = isCorrect ? '正确' : '错误';
-            var tagClass = isCorrect ? 'tag-green' : 'tag-red';
-            return '<div class="film-item" onclick="showResultForQuestion(\'' + q.id + '\')">' +
-                '<span class="film-status ' + statusClass + '"></span>' +
-                '<div class="film-info">' +
-                    '<div class="film-name">' + q.title + '</div>' +
-                    '<div class="film-meta">' + q.diagnosis + '</div>' +
-                '</div>' +
-                '<span class="tag ' + tagClass + '">' + statusText + '</span>' +
-            '</div>';
-        }).join('');
-    }
+            '</div>' +
+            '<span class="tag ' + tagClass + '">' + statusText + '</span>' +
+        '</div>';
+    }).join('');
 }
 
 // ===== 选择题号 =====
 function selectQuestion(index) {
-    if (currentFilmTab === 'done') {
-        switchFilmTab('pending');
-    }
     currentQIndex = index;
-    renderPendingFilmList();
+    renderFilmList();
     renderImageArea(index);
     renderAnswerPanel(index);
-    // 高亮左侧列表
-    setTimeout(function() {
-        var items = document.querySelectorAll('#pending-film-items .film-item');
-        items.forEach(function(item, i) {
-            item.classList.remove('active');
-        });
-        var targetItem = document.querySelectorAll('#pending-film-items .film-item')[index];
-        if (targetItem) targetItem.classList.add('active');
-    }, 50);
 }
 
 // ===== 渲染影像展示区 =====
@@ -757,15 +778,16 @@ function renderImageArea(index) {
 
     container.innerHTML = '<div class="image-viewer">' +
         '<div class="viewer-header">' +
-            '<div class="viewer-title">' + q.title + '</div>' +
-            '<div class="viewer-subtitle">题目ID: ' + q.id + '</div>' +
+            '<div>' +
+                '<div class="viewer-title">' + q.title + '</div>' +
+            '</div>' +
+            '<div class="viewer-top-meta">' +
+                '<span>彩照ID: ' + q.id + '</span>' +
+                '<span>眼别: ' + q.meta.eye + '</span>' +
+                '<span>难度: <span class="difficulty-stars">' + '★'.repeat(q.meta.difficulty) + '</span></span>' +
+            '</div>' +
         '</div>' +
         '<div class="viewer-images">' + imagesHtml + '</div>' +
-        '<div class="viewer-meta">' +
-            '<span class="meta-item">影像类型: ' + q.meta.type + '</span>' +
-            '<span class="meta-item">拍摄眼: ' + q.meta.eye + '</span>' +
-            '<span class="meta-item">难度: <span class="difficulty-stars">' + '★'.repeat(q.meta.difficulty) + '</span></span>' +
-        '</div>' +
     '</div>';
 }
 
@@ -774,20 +796,7 @@ function renderAnswerPanel(index) {
     var container = document.getElementById('exam-answer-panel');
     var q = examQuestions[index];
     var isAnswered = q.id in userAnswers;
-    var selectedIndex = userAnswers[q.id];
-
-    // 题号导航
-    var navHtml = '<div class="question-nav">';
-    examQuestions.forEach(function(qItem, i) {
-        var cls = 'q-num';
-        if (i === index) cls += ' active';
-        if (qItem.id in userAnswers) {
-            var correct = (userAnswers[qItem.id] === qItem.correctIndex);
-            cls += correct ? ' done' : ' wrong-dot';
-        }
-        navHtml += '<span class="' + cls + '" onclick="selectQuestion(' + i + ')">' + (i + 1) + '</span>';
-    });
-    navHtml += '</div>';
+    var selectedIndex = isAnswered ? userAnswers[q.id] : draftAnswers[q.id];
 
     // 选项（单选）
     var optionsHtml = '<div class="options-list">';
@@ -810,6 +819,7 @@ function renderAnswerPanel(index) {
     var actionsHtml = '';
     if (!isAnswered) {
         actionsHtml = '<div class="answer-actions">' +
+            '<button class="btn btn-outline" onclick="skipQuestion()">暂不作答</button>' +
             '<button class="btn btn-primary btn-submit" onclick="submitAnswer()" ' + (selectedIndex === undefined ? 'disabled' : '') + ' id="btn-submit">提交答案</button>' +
         '</div>';
     } else {
@@ -827,8 +837,7 @@ function renderAnswerPanel(index) {
     navLinks += '</div>';
 
     container.innerHTML = '<div class="answer-panel">' +
-        navHtml +
-        '<div class="question-text">' + (index + 1) + '. ' + q.question + '</div>' +
+        '<div class="question-text">关联习题：' + q.question + '</div>' +
         optionsHtml +
         actionsHtml +
         navLinks +
@@ -839,31 +848,26 @@ function renderAnswerPanel(index) {
 function selectOption(optionIndex) {
     var q = examQuestions[currentQIndex];
     if (q.id in userAnswers) return; // 已作答不可修改
-    userAnswers[q.id] = optionIndex;
+    draftAnswers[q.id] = optionIndex;
     renderAnswerPanel(currentQIndex);
-    updateStats();
 }
 
 // ===== 提交答案 =====
 function submitAnswer() {
     var q = examQuestions[currentQIndex];
-    if (!(q.id in userAnswers)) {
+    if (!(q.id in draftAnswers)) {
         alert('请先选择一个选项');
         return;
     }
+    userAnswers[q.id] = draftAnswers[q.id];
     renderAnswerPanel(currentQIndex);
-    renderPendingFilmList();
-    renderDoneFilmList();
+    renderFilmList();
     updateStats();
+}
 
-    // 自动跳转下一题
-    var remaining = examQuestions.filter(function(qq) { return !(qq.id in userAnswers); });
-    if (remaining.length > 0) {
-        selectQuestion(examQuestions.indexOf(remaining[0]));
-    } else {
-        // 全部答完，显示结果
-        showResults();
-    }
+function skipQuestion() {
+    var nextIndex = currentQIndex >= examQuestions.length - 1 ? 0 : currentQIndex + 1;
+    selectQuestion(nextIndex);
 }
 
 // ===== 显示结果 =====
@@ -916,21 +920,19 @@ function renderResultFilmList() {
     var container = document.getElementById('result-film-list');
     container.innerHTML = examQuestions.map(function(q, i) {
         var answered = q.id in userAnswers;
-        var iconHtml = '';
-        var cls = '';
+        var statusText = '未作答';
+        var cls = 'pending';
         if (answered) {
             var isCorrect = (userAnswers[q.id] === q.correctIndex);
-            iconHtml = isCorrect ? '✓' : '✗';
             cls = isCorrect ? 'correct' : 'wrong';
-        } else {
-            iconHtml = '—';
+            statusText = isCorrect ? '正确' : '错误';
         }
         var activeCls = (i === currentResultIndex) ? ' active' : '';
         return '<div class="result-film-item' + activeCls + '" onclick="selectResultQuestion(' + i + ')">' +
-            '<span class="result-icon ' + cls + '">' + iconHtml + '</span>' +
+            '<span class="result-status-tag ' + cls + '">' + statusText + '</span>' +
             '<div class="film-info">' +
-                '<div class="film-name">' + q.title + '</div>' +
-                '<div class="film-meta">' + q.diagnosis + ' | ' + (answered ? '已作答' : '未作答') + '</div>' +
+                '<div class="film-name">' + q.id + '</div>' +
+                '<div class="film-meta">' + (answered ? '已作答' : '未作答') + '</div>' +
             '</div>' +
         '</div>';
     }).join('');
@@ -978,21 +980,25 @@ function renderResultAnalysis(index) {
     var answerCompareHtml = '';
     if (answered) {
         answerCompareHtml = '<div class="correct-answer"><strong>正确答案:</strong> ' + q.options[q.correctIndex] + '</div>';
-        answerCompareHtml += '<div class="user-answer ' + (isCorrect ? 'match' : 'mismatch') + '"><strong>你的答案:</strong> ' + q.options[userIdx] + (isCorrect ? ' ✓ 回答正确' : ' ✗ 回答错误') + '</div>';
+        answerCompareHtml += '<div class="user-answer ' + (isCorrect ? 'match' : 'mismatch') + '"><strong>你的答案:</strong> ' + q.options[userIdx] + '<span class="answer-tag ' + (isCorrect ? 'correct' : 'wrong') + '">' + (isCorrect ? '正确' : '错误') + '</span></div>';
     } else {
         answerCompareHtml = '<div class="correct-answer"><strong>正确答案:</strong> ' + q.options[q.correctIndex] + '</div>';
         answerCompareHtml += '<div class="user-answer mismatch"><strong>你的答案:</strong> 未作答</div>';
     }
 
     // 选项对比展示
+    var optionAnalyses = optionAnalysisMap[q.id] || [];
     var optionsCompare = '<div style="margin-bottom:16px;">' + q.options.map(function(opt, oi) {
         var cls = '';
         if (answered && oi === userIdx && oi === q.correctIndex) cls = ' correct';
         else if (answered && oi === userIdx && oi !== q.correctIndex) cls = ' wrong';
         else if (oi === q.correctIndex) cls = ' correct';
+        var optionTag = oi === q.correctIndex ? '<span class="answer-tag correct">正确选项</span>' : '<span class="answer-tag wrong">干扰项</span>';
         return '<div class="option-item' + cls + '" style="cursor:default;">' +
             '<span class="opt-letter">' + String.fromCharCode(65 + oi) + '</span>' +
-            '<span>' + opt.substring(3) + '</span>' +
+            '<span>' + opt.substring(3) + optionTag +
+                '<span class="option-analysis">' + (optionAnalyses[oi] || '该选项与本题主要影像表现不完全匹配，需要结合病史、眼别、影像征象和鉴别诊断综合判断。') + '</span>' +
+            '</span>' +
         '</div>';
     }).join('') + '</div>';
 
@@ -1011,66 +1017,51 @@ function renderResultAnalysis(index) {
 }
 
 // ===== 知识点学习 =====
-function renderKnowledgeTree() {
+function renderKnowledgeTree(keyword) {
     var container = document.getElementById('knowledge-tree');
-    var topics = Object.keys(knowledgeData);
-    var html = '<div class="ks-category">眼病知识分类</div>';
-    topics.forEach(function(topic) {
-        var activeCls = (topic === currentKnowledgeTopic) ? ' active' : '';
-        html += '<div class="ks-topic' + activeCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + topic + '</div>';
+    var ft = (keyword || '').trim().toLowerCase();
+    var html = '';
+    knowledgeCategories.forEach(function(category) {
+        var topicHtml = '';
+        category.topics.forEach(function(topic) {
+            var data = structuredKnowledgeData[topic];
+            if (!data) return;
+            var searchText = [category.name, topic, data.title, data.subtitle, data.definition, data.risk, data.diagnosis].join(' ').replace(/<[^>]+>/g, '').toLowerCase();
+            var matched = !ft || searchText.indexOf(ft) >= 0;
+            if (!matched) return;
+            var activeCls = (topic === currentKnowledgeTopic) ? ' active' : '';
+            var hitCls = ft ? ' search-hit' : '';
+            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + highlightKeyword(topic, keyword) + '</div>';
+        });
+        if (topicHtml) {
+            html += '<div class="ks-category">' + category.name + '</div>' + topicHtml;
+        }
     });
-    container.innerHTML = html;
+    container.innerHTML = html || '<div class="empty-state">未匹配到相关知识点</div>';
 }
 
 function selectKnowledgeTopic(topic) {
     currentKnowledgeTopic = topic;
-    renderKnowledgeTree();
+    var input = document.querySelector('.knowledge-sidebar .ks-header input');
+    renderKnowledgeTree(input ? input.value : '');
     renderKnowledgeContent(topic);
 }
 
 function filterKnowledge(text) {
-    var items = document.querySelectorAll('#knowledge-tree .ks-topic');
-    var ft = text.toLowerCase();
-    items.forEach(function(item) {
-        var topic = item.getAttribute('data-topic') || '';
-        if (!ft || topic.toLowerCase().includes(ft)) {
-            item.style.display = '';
-        } else {
-            item.style.display = 'none';
-        }
-    });
+    renderKnowledgeTree(text);
 }
 
 function renderKnowledgeContent(topic) {
     var container = document.getElementById('knowledge-content');
-    var data = knowledgeData[topic];
+    var data = structuredKnowledgeData[topic];
     if (!data) { container.innerHTML = '<p>请选择左侧知识点主题</p>'; return; }
-
-    var sectionsHtml = data.sections.map(function(sec) {
-        return '<div class="km-section"><h3>' + sec.title + '</h3>' + sec.content + '</div>';
-    }).join('');
-
-    var qaHtml = '';
-    if (data.qaItems && data.qaItems.length > 0) {
-        qaHtml = '<div class="km-section"><h3>常见问题</h3>' +
-            data.qaItems.map(function(qa) {
-                return '<div class="qa-card">' +
-                    '<div class="qa-q"><span style="color:var(--primary);font-weight:700;">Q</span> ' + qa.q + '</div>' +
-                    '<div class="qa-a"><span style="color:var(--success);font-weight:700;">A</span> ' + qa.a + '</div>' +
-                    (qa.ref ? '<div class="qa-ref">参考文献: ' + qa.ref + '</div>' : '') +
-                '</div>';
-            }).join('') +
-        '</div>';
-    }
 
     container.innerHTML =
         '<div class="km-title">' + data.title + '</div>' +
         '<div class="km-subtitle">' + data.subtitle + '</div>' +
-        sectionsHtml +
-        qaHtml +
-        '<div class="km-actions">' +
-            '<button class="btn btn-primary btn-lg" onclick="showExamList()">去答题</button>' +
-        '</div>';
+        '<div class="km-section"><h3>疾病定义与流行病学</h3>' + data.definition + '</div>' +
+        '<div class="km-section"><h3>危险因素与发病机制</h3>' + data.risk + '</div>' +
+        '<div class="km-section"><h3>诊断要点与鉴别诊断</h3>' + data.diagnosis + '</div>';
 }
 
 // ===== 统计更新 =====
@@ -1084,11 +1075,27 @@ function updateStats() {
     document.getElementById('stat-pending').textContent = total - doneCount;
     document.getElementById('stat-done').textContent = doneCount;
     document.getElementById('stat-rate').textContent = doneCount > 0 ? Math.round((correct / doneCount) * 100) + '%' : '-';
+    updateKnowledgeEntryState();
 }
 
-// ===== 筛选 =====
-function filterFilmList(text, tab) {
-    if (tab === 'pending') renderPendingFilmList(text);
+function isAllAnswered() {
+    return Object.keys(userAnswers).length === examQuestions.length;
+}
+
+function updateKnowledgeEntryState() {
+    var enabled = isAllAnswered();
+    document.querySelectorAll('.knowledge-entry-btn').forEach(function(btn) {
+        btn.disabled = !enabled;
+        btn.title = enabled ? '进入知识点学习' : '完成全部阅片练习后开放知识点学习';
+    });
+}
+
+function highlightKeyword(text, keyword) {
+    var kw = (keyword || '').trim();
+    if (!kw) return text;
+    var idx = text.toLowerCase().indexOf(kw.toLowerCase());
+    if (idx < 0) return text;
+    return text.substring(0, idx) + '<mark style="background:#ffe58f;padding:0 2px;border-radius:2px;">' + text.substring(idx, idx + kw.length) + '</mark>' + text.substring(idx + kw.length);
 }
 
 // ===== 通用函数 =====

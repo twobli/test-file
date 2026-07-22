@@ -5,14 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>患者咨询/导诊机器人</title>
 <style>
-/* ===== 生命医学主题库 - 通用样式 ===== */
 :root {
     --primary: #1a73e8;
     --primary-dark: #1557b0;
     --primary-light: #e8f0fe;
     --success: #34a853;
+    --success-light: #e6f4ea;
     --warning: #fbbc04;
+    --warning-light: #fef7e0;
     --danger: #ea4335;
+    --danger-light: #fce8e6;
+    --purple: #7c3aed;
+    --purple-light: #f1ebff;
+    --teal: #0891b2;
+    --teal-light: #e0f7fb;
     --gray-50: #f8f9fa;
     --gray-100: #f5f7fa;
     --gray-200: #e8ecf0;
@@ -23,399 +29,961 @@
     --gray-700: #5f6368;
     --gray-800: #3c4043;
     --gray-900: #202124;
-    --text: #333333;
-    --text-secondary: #999999;
-    --bg: #ffffff;
     --sidebar-width: 220px;
     --header-height: 56px;
     --radius: 8px;
     --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
     --transition: all 0.2s ease;
-
-    /* Chat specific */
-    --chat-bg: #F5F7FA;
-    --chat-bot-bubble: #FFFFFF;
-    --chat-user-bubble: #1677FF;
-    --chat-user-text: #FFFFFF;
-    --chat-bot-text: #1D2129;
-    --chat-time: #999999;
-    --chat-border: #EBEEF5;
-    --chat-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    --chat-panel-width: 280px;
-    --chat-orange-bg: #FFF7E6;
-    --chat-orange-icon: #FAAD14;
-    --chat-red-bg: #FFF1F0;
-    --chat-red-icon: #FF4D4F;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-serif; font-size: 14px; color: var(--text); background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
-.header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
+body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; color: #333; background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
+.header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 52%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; inset: 0 0 auto 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #fff; text-decoration: none; }
 .header .header-nav { display: flex; gap: 4px; margin-left: 40px; }
-.header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); }
+.header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); white-space: nowrap; }
 .header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
 .header .header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; }
-.header .header-right .user-info { cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: var(--transition); }
-.header .header-right .user-info:hover { background: rgba(255,255,255,0.15); }
-.header .header-right .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: var(--transition); }
-.header .header-right .btn-logout:hover { background: rgba(255,255,255,0.35); }
+.btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: var(--transition); }
+.btn-logout:hover { background: rgba(255,255,255,0.35); }
 .sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 8px 0; }
-.sidebar .menu-group { margin-bottom: 4px; }
-.sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.sidebar .menu-item { display: flex; align-items: center; padding: 10px 20px; color: var(--gray-700); text-decoration: none; font-size: 13px; transition: var(--transition); border-left: 3px solid transparent; cursor: pointer; }
-.sidebar .menu-item:hover { background: var(--gray-50); color: var(--primary); }
-.sidebar .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-.sidebar .menu-item .menu-icon { width: 20px; margin-right: 10px; text-align: center; font-size: 14px; }
-.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); height: calc(100vh - var(--header-height)); display: flex; overflow: hidden; }
-
-/* ===== Chat Layout ===== */
-.chat-wrapper { display: flex; flex: 1; height: 100%; overflow: hidden; }
-
-/* Left Panel */
-.chat-panel { width: var(--chat-panel-width); background: #fff; border-right: 1px solid var(--chat-border); display: flex; flex-direction: column; flex-shrink: 0; }
-.chat-panel-header { padding: 16px; border-bottom: 1px solid var(--chat-border); }
-.chat-panel-header .btn-new-session { display: block; width: 100%; padding: 10px 0; background: var(--chat-user-bubble); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; transition: var(--transition); letter-spacing: 1px; }
-.chat-panel-header .btn-new-session:hover { background: #1565d1; }
-.chat-panel-sessions { flex: 1; overflow-y: auto; padding: 8px 0; }
-.chat-panel-sessions .session-title { padding: 12px 16px 6px; font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.chat-panel-sessions .session-item { padding: 10px 16px; cursor: pointer; font-size: 13px; color: var(--gray-700); transition: var(--transition); border-left: 3px solid transparent; display: flex; align-items: center; gap: 8px; }
-.chat-panel-sessions .session-item:hover { background: var(--gray-50); }
-.chat-panel-sessions .session-item.active { background: #e8f4fd; color: var(--chat-user-bubble); border-left-color: var(--chat-user-bubble); font-weight: 500; }
-.chat-panel-sessions .session-item .session-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-400); flex-shrink: 0; }
-
-/* Main Chat Area */
-.chat-main { flex: 1; display: flex; flex-direction: column; background: var(--chat-bg); overflow: hidden; }
-
-/* Chat Header */
-.chat-header { padding: 14px 24px; background: #fff; border-bottom: 1px solid var(--chat-border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.chat-header .chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--chat-user-bubble); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; flex-shrink: 0; }
-.chat-header .chat-title { font-size: 15px; font-weight: 600; color: var(--gray-800); }
-.chat-header .chat-status { font-size: 12px; color: var(--success); display: flex; align-items: center; gap: 4px; }
-.chat-header .chat-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
-.chat-header .chat-actions { margin-left: auto; display: flex; gap: 12px; }
-.chat-header .chat-actions .chat-action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; background: transparent; cursor: pointer; color: var(--gray-600); font-size: 16px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-.chat-header .chat-actions .chat-action-btn:hover { background: var(--gray-100); color: var(--gray-800); }
-
-/* Chat Messages */
-.chat-messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
-.chat-messages::-webkit-scrollbar { width: 5px; }
-.chat-messages::-webkit-scrollbar-track { background: transparent; }
-.chat-messages::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
-
-.message-row { display: flex; gap: 10px; max-width: 85%; }
-.message-row.bot { align-self: flex-start; }
+.menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.menu-item, .sub-menu-item { display: flex; align-items: center; color: var(--gray-700); text-decoration: none; transition: var(--transition); border-left: 3px solid transparent; cursor: pointer; }
+.menu-item { padding: 10px 20px; font-size: 13px; }
+.sub-menu-item { padding: 8px 20px 8px 36px; font-size: 12px; }
+.menu-item:hover, .sub-menu-item:hover { background: var(--gray-50); color: var(--primary); }
+.menu-item.active, .sub-menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
+.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.breadcrumb a { color: var(--primary); text-decoration: none; }
+.breadcrumb .sep { color: var(--gray-400); }
+.page-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+.page-title { font-size: 22px; color: var(--gray-900); font-weight: 700; margin-bottom: 4px; }
+.page-subtitle { font-size: 13px; color: var(--gray-600); }
+.title-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); white-space: nowrap; text-decoration: none; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { background: #2d9249; }
+.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
+.btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 1.5; }
+.tag-blue { background: var(--primary-light); color: var(--primary); }
+.tag-green { background: var(--success-light); color: #137333; }
+.tag-orange { background: var(--warning-light); color: #b06000; }
+.tag-red { background: var(--danger-light); color: #c5221f; }
+.tag-purple { background: var(--purple-light); color: var(--purple); }
+.tag-teal { background: var(--teal-light); color: var(--teal); }
+.tag-gray { background: #f1f3f4; color: var(--gray-700); }
+.journey { display: grid; grid-template-columns: repeat(6, minmax(118px, 1fr)); gap: 8px; margin-bottom: 16px; }
+.journey-step { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px 12px; min-height: 78px; text-align: left; cursor: pointer; font-family: inherit; transition: var(--transition); position: relative; }
+.journey-step::after { content: ''; position: absolute; top: 36px; right: -8px; width: 8px; height: 1px; background: var(--gray-300); }
+.journey-step:last-child::after { display: none; }
+.journey-step:hover { border-color: var(--primary); background: #fbfdff; }
+.journey-step.done { border-color: rgba(52,168,83,0.35); background: #fbfffc; }
+.journey-step.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.08); }
+.journey-index { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--gray-100); color: var(--gray-600); margin-bottom: 6px; }
+.journey-step.done .journey-index { background: var(--success); color: #fff; }
+.journey-step.active .journey-index { background: var(--primary); color: #fff; }
+.journey-step strong { display: block; color: var(--gray-900); font-size: 13px; line-height: 1.3; }
+.journey-step span { color: var(--gray-500); font-size: 11px; display: block; margin-top: 2px; line-height: 1.4; }
+.workspace { display: grid; grid-template-columns: 300px minmax(560px, 1fr) 360px; gap: 16px; align-items: start; }
+.panel { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); box-shadow: var(--shadow); }
+.panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--gray-100); }
+.panel-title { color: var(--gray-900); font-size: 15px; font-weight: 700; }
+.panel-desc { color: var(--gray-500); font-size: 12px; margin-top: 2px; }
+.panel-body { padding: 16px; }
+.left-stack, .right-stack, .center-stack { display: flex; flex-direction: column; gap: 16px; }
+.patient-card { display: flex; align-items: center; gap: 12px; }
+.patient-avatar { width: 48px; height: 48px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
+.patient-name { font-weight: 700; color: var(--gray-900); }
+.patient-meta { color: var(--gray-600); font-size: 12px; margin-top: 2px; }
+.context-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 14px; }
+.context-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 9px 10px; background: #fff; min-height: 66px; }
+.context-item span { display: block; color: var(--gray-500); font-size: 11px; }
+.context-item strong { display: block; color: var(--gray-900); font-size: 13px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.case-list { display: flex; flex-direction: column; gap: 8px; }
+.case-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px; cursor: pointer; transition: var(--transition); background: #fff; }
+.case-item:hover { border-color: var(--primary); }
+.case-item.active { border-color: var(--primary); background: var(--primary-light); }
+.case-title-row { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+.case-title { color: var(--gray-900); font-size: 13px; font-weight: 700; }
+.case-meta { color: var(--gray-600); font-size: 11px; display: flex; flex-wrap: wrap; gap: 6px; }
+.case-summary { color: var(--gray-700); font-size: 12px; margin-top: 6px; line-height: 1.45; }
+.flow-list { display: flex; flex-direction: column; gap: 8px; }
+.flow-row { display: grid; grid-template-columns: 24px 1fr; gap: 10px; font-size: 12px; align-items: start; }
+.flow-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--gray-100); color: var(--gray-600); font-weight: 700; font-size: 11px; }
+.flow-row.done .flow-dot { background: var(--success); color: #fff; }
+.flow-row.active .flow-dot { background: var(--primary); color: #fff; }
+.flow-row strong { color: var(--gray-900); display: block; }
+.flow-row span { color: var(--gray-600); display: block; margin-top: 1px; }
+.stage-panel { display: none; }
+.stage-panel.active { display: block; }
+.stage-header { padding: 16px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.stage-title { font-size: 18px; color: var(--gray-900); font-weight: 700; margin-bottom: 4px; }
+.stage-desc { color: var(--gray-600); font-size: 13px; }
+.stage-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 16px; }
+.form-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.field { min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { display: block; color: var(--gray-700); font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+input, select, textarea { width: 100%; border: 1px solid var(--gray-300); border-radius: 6px; padding: 8px 10px; font-size: 13px; color: var(--gray-900); font-family: inherit; outline: none; transition: var(--transition); background: #fff; }
+textarea { min-height: 88px; resize: vertical; line-height: 1.55; }
+input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+.chat-box { padding: 16px; border-top: 1px solid var(--gray-100); }
+.chat-thread { display: flex; flex-direction: column; gap: 12px; max-height: 360px; overflow: auto; padding-right: 4px; }
+.message-row { display: flex; gap: 10px; max-width: 88%; }
 .message-row.user { align-self: flex-end; flex-direction: row-reverse; }
-
-.message-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; }
-.message-row.bot .message-avatar { background: var(--chat-user-bubble); }
+.message-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; background: var(--primary); }
 .message-row.user .message-avatar { background: var(--gray-500); }
-
-.message-body { display: flex; flex-direction: column; gap: 4px; }
-.message-bubble { padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.7; word-break: break-word; }
-.message-row.bot .message-bubble { background: var(--chat-bot-bubble); color: var(--chat-bot-text); box-shadow: var(--chat-shadow); border-top-left-radius: 2px; }
-.message-row.user .message-bubble { background: var(--chat-user-bubble); color: var(--chat-user-text); border-top-right-radius: 2px; }
-
-.message-time { font-size: 11px; color: var(--chat-time); padding: 0 4px; }
-.message-row.bot .message-time { text-align: left; }
-.message-row.user .message-time { text-align: right; }
-
-/* Inline cards within messages */
-.inline-card { background: #fff; border: 1px solid var(--chat-border); border-radius: 8px; padding: 12px 14px; margin-top: 8px; box-shadow: var(--chat-shadow); }
-.inline-card .inline-card-title { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 4px; }
-.inline-card .inline-card-subtitle { font-size: 12px; color: var(--gray-500); margin-bottom: 6px; }
-.inline-card .inline-card-body { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
-.inline-card .inline-card-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.inline-card .inline-btn { padding: 6px 16px; border-radius: 16px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: var(--transition); }
-.inline-card .inline-btn-primary { background: var(--chat-user-bubble); color: #fff; }
-.inline-card .inline-btn-primary:hover { background: #1565d1; }
-.inline-card .inline-btn-outline { background: #fff; color: var(--chat-user-bubble); border: 1px solid var(--chat-user-bubble); }
-.inline-card .inline-btn-outline:hover { background: #e8f4fd; }
-
-/* Steps card */
-.steps-card { margin-top: 8px; }
-.steps-card .steps-title { font-weight: 600; font-size: 14px; color: var(--gray-800); margin-bottom: 10px; }
-.steps-list { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; }
-.step-item { flex: 1; text-align: center; position: relative; min-width: 80px; padding: 0 4px; }
-.step-item::after { content: ''; position: absolute; top: 16px; left: 55%; width: 90%; height: 2px; background: var(--gray-200); z-index: 0; }
-.step-item:last-child::after { display: none; }
-.step-dot { width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; position: relative; z-index: 1; }
-.step-dot.blue { background: var(--chat-user-bubble); }
-.step-dot.green { background: var(--success); }
-.step-dot.purple { background: #722ED1; }
-.step-dot.orange { background: #FA8C16; }
-.step-dot.teal { background: #13C2C2; }
-.step-label { font-size: 11px; color: var(--gray-600); line-height: 1.3; }
-.step-desc { font-size: 10px; color: var(--gray-500); line-height: 1.2; margin-top: 2px; }
-
-/* Detailed steps list */
-.detail-steps { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
-.detail-step { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; background: #f9fafb; border-radius: 6px; }
-.detail-step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
-.detail-step-num.c1 { background: var(--chat-user-bubble); }
-.detail-step-num.c2 { background: var(--success); }
-.detail-step-num.c3 { background: #722ED1; }
-.detail-step-num.c4 { background: #FA8C16; }
-.detail-step-num.c5 { background: #13C2C2; }
-.detail-step-info { flex: 1; min-width: 0; }
-.detail-step-title { font-size: 13px; font-weight: 600; color: var(--gray-800); }
-.detail-step-desc { font-size: 11px; color: var(--gray-600); line-height: 1.4; }
-
-/* File card */
-.file-card { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--chat-border); border-radius: 8px; padding: 10px 14px; margin-top: 8px; }
-.file-card .file-icon { width: 36px; height: 36px; border-radius: 6px; background: #FFF7E6; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #D48806; flex-shrink: 0; font-weight: 600; }
-.file-card .file-info { flex: 1; min-width: 0; }
-.file-card .file-name { font-size: 13px; font-weight: 500; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.file-card .file-size { font-size: 11px; color: var(--gray-500); }
-.file-card .file-download { width: 28px; height: 28px; border-radius: 50%; background: var(--chat-user-bubble); border: none; cursor: pointer; color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-/* Prescription card */
-.rx-card { background: #fff; border: 1px solid var(--chat-border); border-radius: 8px; padding: 14px; margin-top: 8px; }
-.rx-card .rx-title { font-size: 15px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
-.rx-card .rx-usage { font-size: 12px; color: var(--gray-500); margin-bottom: 10px; }
-.rx-card .rx-items { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-.rx-card .rx-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-700); }
-.rx-card .rx-check { width: 16px; height: 16px; border: 2px solid var(--chat-user-bubble); border-radius: 3px; flex-shrink: 0; }
-.rx-card .rx-notes { font-size: 12px; color: var(--gray-500); border-top: 1px solid var(--chat-border); padding-top: 8px; margin-top: 4px; }
-.rx-card .rx-notes p { margin-bottom: 2px; }
-.rx-card .rx-warning { color: var(--chat-red-icon); font-size: 12px; margin-top: 4px; }
-
-/* Link text in messages */
-.message-link { color: var(--chat-user-bubble); text-decoration: none; cursor: pointer; border-bottom: 1px dashed var(--chat-user-bubble); }
-.message-link:hover { color: #1565d1; }
-
-/* Doctor card */
-.doctor-card { background: #fff; border: 1px solid var(--chat-border); border-radius: 8px; padding: 14px; margin-top: 10px; box-shadow: var(--chat-shadow); }
-.doctor-card .doctor-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.doctor-card .doctor-avatar { width: 48px; height: 48px; border-radius: 8px; background: #e8f4fd; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.doctor-card .doctor-name { font-size: 15px; font-weight: 700; color: var(--gray-800); }
-.doctor-card .doctor-title { display: inline-block; background: #FFF7E6; color: #D48806; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 6px; }
-.doctor-card .doctor-specialty { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-.doctor-card .doctor-rating { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-600); margin-bottom: 10px; }
-.doctor-card .doctor-stars { color: #FAAD14; }
-.doctor-card .doctor-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.doctor-card .doctor-btn { padding: 8px 18px; border-radius: 16px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: var(--transition); }
-.doctor-card .doctor-btn-primary { background: var(--chat-user-bubble); color: #fff; }
-.doctor-card .doctor-btn-primary:hover { background: #1565d1; }
-.doctor-card .doctor-btn-secondary { background: #e8f4fd; color: var(--chat-user-bubble); border: 1px solid var(--chat-user-bubble); }
-.doctor-card .doctor-btn-secondary:hover { background: #d4e8fc; }
-.doctor-card .doctor-btn-gray { background: #f5f5f5; color: var(--gray-600); border: 1px solid var(--gray-300); }
-.doctor-card .doctor-btn-gray:hover { background: #e8e8e8; }
-
-/* Input Area */
-.chat-input-area { padding: 16px 24px; background: #fff; border-top: 1px solid var(--chat-border); flex-shrink: 0; }
-.chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
-.chat-input-actions { display: flex; gap: 6px; margin-bottom: 6px; }
-.chat-input-actions button { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--gray-300); background: #fff; cursor: pointer; font-size: 14px; color: var(--gray-600); display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-.chat-input-actions button:hover { background: var(--gray-50); border-color: var(--gray-400); }
-.chat-input-textarea { flex: 1; border: 1px solid var(--gray-300); border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: inherit; resize: none; outline: none; min-height: 44px; max-height: 120px; line-height: 1.5; transition: var(--transition); }
-.chat-input-textarea:focus { border-color: var(--chat-user-bubble); box-shadow: 0 0 0 3px rgba(22,119,255,0.1); }
-.chat-send-btn { padding: 10px 24px; background: var(--chat-user-bubble); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--transition); white-space: nowrap; align-self: flex-end; }
-.chat-send-btn:hover { background: #1565d1; }
-.chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.chat-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.chat-suggestions .suggest-tag { padding: 6px 14px; background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 14px; font-size: 12px; color: var(--gray-600); cursor: pointer; transition: var(--transition); white-space: nowrap; }
-.chat-suggestions .suggest-tag:hover { background: #e8f4fd; border-color: var(--chat-user-bubble); color: var(--chat-user-bubble); }
-
-/* Scrollbar for panel */
-.chat-panel-sessions::-webkit-scrollbar { width: 4px; }
-.chat-panel-sessions::-webkit-scrollbar-track { background: transparent; }
-.chat-panel-sessions::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 2px; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-@media (max-width: 1024px) {
-    .sidebar { width: 60px; }
-    .sidebar .menu-item span { display: none; }
-    .sidebar .menu-group-title { display: none; }
-    .main-content { margin-left: 60px; }
-    .chat-panel { width: 200px; }
+.message-bubble { border-radius: 10px; padding: 10px 12px; line-height: 1.65; font-size: 13px; background: var(--gray-100); color: var(--gray-900); }
+.message-row.user .message-bubble { background: var(--primary); color: #fff; }
+.chat-input { margin-top: 12px; display: flex; gap: 8px; align-items: flex-end; }
+.chat-input textarea { min-height: 42px; max-height: 110px; }
+.quick-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.quick-actions button { border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); border-radius: 16px; padding: 5px 12px; font-size: 12px; cursor: pointer; transition: var(--transition); }
+.quick-actions button:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.result-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.86fr); gap: 16px; padding: 16px; }
+.section-card { border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 14px; background: #fff; }
+.section-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.section-title h3 { color: var(--gray-900); font-size: 15px; }
+.section-subtitle { color: var(--gray-500); font-size: 11px; }
+.triage-card, .doctor-card, .guide-item, .drug-card, .qa-card, .report-card { border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px; margin-bottom: 8px; background: #fff; }
+.triage-head, .doctor-head, .guide-head, .drug-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.triage-name, .doctor-name, .guide-title, .drug-name, .qa-title { color: var(--gray-900); font-size: 13px; font-weight: 700; }
+.triage-desc, .doctor-meta, .guide-desc, .drug-desc, .qa-desc, .report-desc { color: var(--gray-600); font-size: 12px; line-height: 1.5; margin-top: 4px; }
+.confidence { color: var(--primary); font-weight: 700; font-size: 13px; }
+.bar { height: 7px; background: var(--gray-200); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+.bar-fill { height: 100%; background: var(--primary); border-radius: 4px; }
+.doctor-head { align-items: center; }
+.doctor-avatar { width: 42px; height: 42px; border-radius: 10px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.doctor-main { flex: 1; min-width: 0; }
+.doctor-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.guide-list { counter-reset: guide; }
+.guide-item { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: start; }
+.guide-index { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.status-card { padding: 14px; background: linear-gradient(180deg, #fff 0%, #f8fbff 100%); border-bottom: 1px solid var(--gray-100); }
+.status-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+.status-title strong { font-size: 15px; color: var(--gray-900); }
+.status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.status-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 8px 10px; background: #fff; }
+.status-item span { display: block; color: var(--gray-500); font-size: 11px; }
+.status-item strong { display: block; color: var(--gray-900); font-size: 13px; margin-top: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.next-action-list { display: flex; flex-direction: column; gap: 8px; }
+.next-action { border-left: 3px solid var(--primary); background: var(--gray-50); border-radius: 6px; padding: 9px 10px; color: var(--gray-700); font-size: 12px; line-height: 1.5; cursor: pointer; }
+.next-action strong { display: block; color: var(--gray-900); margin-bottom: 2px; }
+.risk-card { border: 1px solid rgba(251,188,4,0.35); background: #fffdf5; border-radius: 8px; padding: 10px; color: #8a5a00; font-size: 12px; line-height: 1.55; }
+.file-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 16px; padding: 4px 10px; color: var(--gray-700); font-size: 12px; }
+.toast { position: fixed; right: 24px; bottom: 24px; background: var(--gray-900); color: #fff; padding: 10px 14px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); font-size: 13px; display: none; z-index: 2000; max-width: 380px; }
+@media (max-width: 1500px) {
+    .workspace { grid-template-columns: 290px minmax(520px, 1fr); }
+    .right-stack { grid-column: 1 / -1; }
+    .status-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+    .sidebar { width: 64px; }
+    .menu-group-title, .menu-item span, .sub-menu-item { display: none; }
+    .main-content { margin-left: 64px; }
+    .workspace, .journey, .result-grid, .form-grid, .form-grid.two, .status-grid { grid-template-columns: 1fr; }
+    .journey-step::after { display: none; }
 }
 </style>
 </head>
 <body>
 <div class="header">
-    <a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
         <a href="基础课程.html">生命医学AI教育平台</a>
-        <a href="临床决策支撑.html">眼病/慢病专家系统</a>
-</div>
+        <a href="临床决策支撑.html" class="active">眼病/慢病专家系统</a>
+    </div>
     <div class="header-right">
         <span class="user-info" id="headerUserName">管理员</span>
         <button class="btn-logout" onclick="logout()">退出</button>
     </div>
 </div>
 
-<div class="sidebar" id="sidebar">
+<aside class="sidebar">
     <div class="menu-group">
         <div class="menu-group-title">专家系统</div>
-        <a class="menu-item" href="临床决策支撑.html">临床决策支撑</a>
-        <a class="menu-item active" href="患者咨询_导诊机器人.html">导诊机器人</a>
+        <a class="menu-item" href="临床决策支撑.html"><span>临床决策支撑</span></a>
+        <a class="menu-item active" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
+        <a class="sub-menu-item active" data-stage-link="intake" onclick="switchStage('intake')">症状采集</a>
+        <a class="sub-menu-item" data-stage-link="triage" onclick="switchStage('triage')">智能导诊</a>
+        <a class="sub-menu-item" data-stage-link="doctor" onclick="switchStage('doctor')">快速找医生</a>
+        <a class="sub-menu-item" data-stage-link="guide" onclick="switchStage('guide')">就诊流程</a>
+        <a class="sub-menu-item" data-stage-link="consult" onclick="switchStage('consult')">病情咨询</a>
+        <a class="sub-menu-item" data-stage-link="medication" onclick="switchStage('medication')">用药指导</a>
     </div>
-</div>
+</aside>
 
-<div class="main-content">
-    <div class="chat-wrapper">
-        <!-- Left Panel -->
-        <div class="chat-panel">
-            <div class="chat-panel-header">
-                <button class="btn-new-session" onclick="startNewSession()">新建会话</button>
-            </div>
-            <div class="chat-panel-sessions">
-                <div class="session-title">会话记录</div>
-                <div class="session-item active" onclick="switchSession(this, 'headache')">
-                    <span class="session-dot"></span> 头痛问诊
-                </div>
-                <div class="session-item" onclick="switchSession(this, 'eyeache')">
-                    <span class="session-dot"></span> 眼痛问诊
-                </div>
-            </div>
+<main class="main-content">
+    <div class="breadcrumb">
+        <a href="app-center.html">应用中心</a><span class="sep">></span>
+        <a href="临床决策支撑.html">眼病/慢病专家系统</a><span class="sep">></span>
+        <span>患者咨询/导诊机器人</span>
+    </div>
+    <div class="page-title-row">
+        <div>
+            <h1 class="page-title">患者咨询/导诊机器人</h1>
+            <div class="page-subtitle">围绕同一次患者咨询完成症状理解、科室导诊、医生匹配、就诊流程、病情咨询与用药指导</div>
         </div>
+        <div class="title-actions">
+            <button class="btn btn-outline" onclick="startNewCase()">新建咨询</button>
+            <button class="btn btn-primary" onclick="runTriage()">生成导诊建议</button>
+            <button class="btn btn-success" onclick="switchStage('guide')">查看就诊流程</button>
+        </div>
+    </div>
 
-        <!-- Main Chat Area -->
-        <div class="chat-main">
-            <div class="chat-header">
-                <div class="chat-avatar">&#10010;</div>
-                <div>
-                    <div class="chat-title">AI导诊助手</div>
-                    <div class="chat-status">在线</div>
-                </div>
-                <div class="chat-actions">
-                    <button class="chat-action-btn" title="搜索">&#128269;</button>
-                    <button class="chat-action-btn" title="设置">&#9881;</button>
-                    <button class="chat-action-btn" title="帮助">&#63;</button>
-                </div>
-            </div>
+    <div class="journey" id="journey"></div>
 
-            <div class="chat-messages" id="chatMessages">
-                <!-- 默认对话：头痛问诊 -->
-            </div>
-
-            <!-- Input Area -->
-            <div class="chat-input-area">
-                <div class="chat-input-row">
-                    <div style="display:flex;flex-direction:column;flex:1;gap:8px;">
-                        <div class="chat-input-actions">
-                            <button title="上传图片" onclick="triggerUpload()">&#128247;</button>
-                            <button title="发送文件" onclick="triggerUpload()">&#128206;</button>
-                        </div>
-                        <textarea class="chat-input-textarea" id="chatInput" placeholder="请详细描述您的症状问题……" rows="1" onkeydown="handleKeyDown(event)"></textarea>
+    <div class="workspace">
+        <div class="left-stack">
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">患者咨询单</div>
+                        <div class="panel-desc">同一咨询单贯穿导诊、挂号、病情和用药</div>
                     </div>
-                    <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">发送</button>
                 </div>
-                <div class="chat-suggestions">
-                    <span class="suggest-tag" onclick="renderScene('guide')">就诊流程指引</span>
-                    <span class="suggest-tag" onclick="renderScene('triage')">智能导诊</span>
-                    <span class="suggest-tag" onclick="renderScene('health')">健康咨询</span>
-                    <span class="suggest-tag" onclick="renderScene('doctor')">快速找医生</span>
-                    <span class="suggest-tag" onclick="renderScene('consult')">病情咨询</span>
-                    <span class="suggest-tag" onclick="renderScene('medication')">用药指导</span>
+                <div class="panel-body">
+                    <div class="patient-card">
+                        <div class="patient-avatar" id="patientInitial">陈</div>
+                        <div>
+                            <div class="patient-name" id="patientNameBrief">陈女士</div>
+                            <div class="patient-meta" id="patientMetaBrief">32岁 女 · 深圳市眼科医院互联网门诊</div>
+                        </div>
+                    </div>
+                    <div class="context-grid">
+                        <div class="context-item"><span>主诉</span><strong id="briefSymptom">-</strong></div>
+                        <div class="context-item"><span>风险等级</span><strong id="briefRisk">-</strong></div>
+                        <div class="context-item"><span>推荐科室</span><strong id="briefDept">-</strong></div>
+                        <div class="context-item"><span>下一步</span><strong id="briefNext">-</strong></div>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">会话记录</div>
+                        <div class="panel-desc">切换后中间和右侧结果同步刷新</div>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="startNewCase()">新建</button>
+                </div>
+                <div class="panel-body">
+                    <div class="case-list" id="caseList"></div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">闭环流转</div>
+                </div>
+                <div class="panel-body">
+                    <div class="flow-list" id="flowList"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="center-stack">
+            <section class="panel stage-panel active" id="stage-intake">
+                <div class="stage-header">
+                    <div>
+                        <div class="stage-title">症状采集与语义理解</div>
+                        <div class="stage-desc">先沉淀主诉、症状、时长、既往史、报告和过敏史，后续模块全部引用这些信息。</div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-outline btn-sm" onclick="triggerUpload()">上传报告</button>
+                        <button class="btn btn-primary btn-sm" onclick="runTriage()">生成导诊</button>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="field"><label>患者姓名</label><input id="patientNameInput"></div>
+                    <div class="field"><label>性别</label><select id="genderInput"><option>女</option><option>男</option></select></div>
+                    <div class="field"><label>年龄</label><input id="ageInput" type="number" min="0"></div>
+                    <div class="field full"><label>主诉描述</label><textarea id="complaintInput"></textarea></div>
+                    <div class="field"><label>持续时间</label><input id="durationInput"></div>
+                    <div class="field"><label>既往史/过敏史</label><input id="historyInput"></div>
+                    <div class="field"><label>已上传资料</label><input id="filesInput"></div>
+                </div>
+                <div class="chat-box">
+                    <div class="chat-thread" id="chatThread"></div>
+                    <div class="chat-input">
+                        <textarea id="chatInput" rows="1" placeholder="继续补充症状、检查结果、用药情况..." onkeydown="handleKeyDown(event)"></textarea>
+                        <button class="btn btn-primary" onclick="sendMessage()">发送</button>
+                    </div>
+                    <div class="quick-actions">
+                        <button onclick="quickAsk('我眼睛干涩发痒，适合挂什么科？')">眼睛干涩发痒</button>
+                        <button onclick="quickAsk('眼前黑影飘动，伴视物模糊')">黑影飘动</button>
+                        <button onclick="quickAsk('我上传了验光报告，帮我分析')">报告分析</button>
+                        <button onclick="quickAsk('过敏性结膜炎怎么用药？')">用药问题</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel stage-panel" id="stage-triage">
+                <div class="stage-header">
+                    <div>
+                        <div class="stage-title">智能导诊</div>
+                        <div class="stage-desc">根据主诉、时长、危险信号和已上传资料，给出科室、优先级和补充问题。</div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-outline btn-sm" onclick="switchStage('intake')">补充信息</button>
+                        <button class="btn btn-primary btn-sm" onclick="switchStage('doctor')">匹配医生</button>
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>推荐科室与分诊依据</h3>
+                            <span class="section-subtitle">AI语义理解 + 医院科室规则</span>
+                        </div>
+                        <div id="triageList"></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>补充问题与风险提示</h3>
+                            <span class="section-subtitle">降低错分风险</span>
+                        </div>
+                        <div id="questionList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel stage-panel" id="stage-doctor">
+                <div class="stage-header">
+                    <div>
+                        <div class="stage-title">快速找医生</div>
+                        <div class="stage-desc">结合导诊科室、症状、专长、职称和排班，推荐可预约医生。</div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-outline btn-sm" onclick="switchStage('triage')">返回导诊</button>
+                        <button class="btn btn-primary btn-sm" onclick="bookDoctor()">确认预约</button>
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>医生推荐</h3>
+                            <span class="section-subtitle">疾病、症状、专长、可约时间综合匹配</span>
+                        </div>
+                        <div id="doctorList"></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>预约信息</h3>
+                            <span class="section-subtitle">确认后进入就诊流程</span>
+                        </div>
+                        <div id="bookingSummary"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel stage-panel" id="stage-guide">
+                <div class="stage-header">
+                    <div>
+                        <div class="stage-title">就诊流程指引</div>
+                        <div class="stage-desc">挂号、候诊、检查、缴费、取药和报告结果串成患者可执行的流程。</div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-outline btn-sm" onclick="switchStage('doctor')">返回预约</button>
+                        <button class="btn btn-primary btn-sm" onclick="switchStage('consult')">病情咨询</button>
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>就诊步骤</h3>
+                            <span class="section-subtitle">实时展示进度、叫号和报告节点</span>
+                        </div>
+                        <div class="guide-list" id="guideList"></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>当前提醒</h3>
+                            <span class="section-subtitle">减少等待和跑错窗口</span>
+                        </div>
+                        <div id="visitReminder"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel stage-panel" id="stage-consult">
+                <div class="stage-header">
+                    <div>
+                        <div class="stage-title">病情咨询与报告解读</div>
+                        <div class="stage-desc">结合主诉和上传报告，给出可追溯解释，并支持医生在线服务形成联合咨询。</div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-outline btn-sm" onclick="triggerUpload()">上传报告</button>
+                        <button class="btn btn-primary btn-sm" onclick="switchStage('medication')">用药指导</button>
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>病情解释</h3>
+                            <span class="section-subtitle">AI分析 + 医生在线服务</span>
+                        </div>
+                        <div id="consultSummary"></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>健康咨询</h3>
+                            <span class="section-subtitle">可溯源问答知识库</span>
+                        </div>
+                        <div id="healthAdvice"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel stage-panel" id="stage-medication">
+                <div class="stage-header">
+                    <div>
+                        <div class="stage-title">用药指导</div>
+                        <div class="stage-desc">结合诊断建议、过敏史和当前用药，给出风险提示、用法用量和提醒服务。</div>
+                    </div>
+                    <div class="stage-actions">
+                        <button class="btn btn-outline btn-sm" onclick="switchStage('consult')">返回咨询</button>
+                        <button class="btn btn-primary btn-sm" onclick="enableMedicationReminder()">开启提醒</button>
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>用药方案</h3>
+                            <span class="section-subtitle">药品知识库 + 个体化匹配</span>
+                        </div>
+                        <div id="drugList"></div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title">
+                            <h3>安全提醒</h3>
+                            <span class="section-subtitle">禁忌、依从性和复诊提示</span>
+                        </div>
+                        <div id="drugSafety"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="right-stack">
+            <section class="panel">
+                <div class="status-card">
+                    <div class="status-title">
+                        <strong>当前闭环状态</strong>
+                        <span class="tag tag-teal" id="statusTag">咨询中</span>
+                    </div>
+                    <div class="status-grid">
+                        <div class="status-item"><span>咨询编号</span><strong id="statusCaseId">-</strong></div>
+                        <div class="status-item"><span>导诊结论</span><strong id="statusDept">-</strong></div>
+                        <div class="status-item"><span>预约医生</span><strong id="statusDoctor">-</strong></div>
+                        <div class="status-item"><span>用药提醒</span><strong id="statusMedication">-</strong></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">下一步动作</div>
+                        <div class="panel-desc">根据当前步骤自动给出可执行入口</div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="next-action-list" id="nextActions"></div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">安全提示</div>
+                        <div class="panel-desc">仅作为导诊和健康咨询辅助</div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="risk-card" id="riskCard"></div>
+                </div>
+            </section>
         </div>
     </div>
-</div>
+</main>
 
-<input type="file" id="fileInput" style="display:none;" onchange="handleFileSelect(event)" multiple>
+<input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)" multiple>
+<div class="toast" id="toast"></div>
 
 <script>
-// ===== Common JavaScript =====
-function navigateTo(url) { window.location.href = url; }
-function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
+var currentStage = 'intake';
+var currentCaseIndex = 0;
 
-// ===== Chat JavaScript =====
+var consultationCases = [
+    {
+        id: 'CONS-20260717-001',
+        patientName: '陈女士',
+        gender: '女',
+        age: 32,
+        source: '互联网门诊',
+        complaint: '双眼干涩、发痒，晨起明显，近3天加重。',
+        duration: '3天',
+        history: '过敏性鼻炎史；无药物过敏；长期使用电脑。',
+        files: ['眼表照片.jpg'],
+        status: '已导诊',
+        riskLevel: '低危',
+        recommendedDept: '眼表与角膜病专科',
+        nextStep: '预约眼科医生',
+        bookedDoctor: '',
+        medicationReminder: '未开启',
+        triage: [
+            { dept: '眼表与角膜病专科', confidence: 92, reason: '干涩、发痒、过敏史和长期屏幕用眼共同支持干眼或过敏性结膜炎方向。' },
+            { dept: '普通眼科门诊', confidence: 78, reason: '若无视力下降、剧痛或分泌物增多，可先由普通眼科完成裂隙灯检查。' },
+            { dept: '急诊眼科', confidence: 21, reason: '目前无外伤、剧痛、急性视力下降等危险信号，暂不优先。' }
+        ],
+        questions: ['是否有明显分泌物或眼睑红肿？', '是否佩戴隐形眼镜？', '是否出现视力突然下降或眼痛？'],
+        doctors: [
+            { name: '李医生', title: '主任医师', dept: '眼表与角膜病专科', match: 96, schedule: '今天 15:30 可约', specialty: '干眼症、过敏性结膜炎、角膜病' },
+            { name: '王医生', title: '副主任医师', dept: '眼科门诊', match: 89, schedule: '明天 09:00 可约', specialty: '结膜炎、视疲劳、眼表疾病' }
+        ],
+        guide: [
+            { title: '预约挂号', desc: '确认眼表与角膜病专科，选择李医生今天15:30号源。', status: '待完成' },
+            { title: '候诊提醒', desc: '提前20分钟到院签到，系统显示排队号和预计等待时间。', status: '待开始' },
+            { title: '检查检验', desc: '可能需要裂隙灯、泪膜破裂时间、角膜荧光染色。', status: '待医生开单' },
+            { title: '缴费与报告', desc: '检查费用可线上缴纳，结果生成后自动推送并支持解读。', status: '待触发' },
+            { title: '取药与随访', desc: '根据处方取药，可开启滴眼提醒和复诊提醒。', status: '待触发' }
+        ],
+        consultSummary: '症状更符合干眼伴过敏性结膜炎可能。若出现明显眼痛、视力下降、大量分泌物或角膜异物感加重，应尽快线下就诊。',
+        healthAdvice: ['减少连续屏幕用眼，建议20分钟远眺20秒。', '避免揉眼，减少花粉、尘螨等过敏原暴露。', '可使用不含防腐剂人工泪液缓解干涩。'],
+        drugs: [
+            { name: '不含防腐剂人工泪液', use: '每日4-6次，每次1滴；适用于干涩、异物感。', risk: '开封后按说明保存，避免瓶口接触眼部。' },
+            { name: '奥洛他定滴眼液', use: '过敏性结膜炎常用，每日2次，每次1滴。', risk: '若使用3天无缓解或出现疼痛、视力下降，应线下复诊。' }
+        ],
+        safety: ['目前无药物过敏记录；用药前需确认是否孕期、哺乳期或儿童用药。', '激素类滴眼液不得自行长期使用，需医生明确处方。']
+    },
+    {
+        id: 'CONS-20260717-002',
+        patientName: '张先生',
+        gender: '男',
+        age: 58,
+        source: 'AI筛查转入',
+        complaint: '近1周眼前黑影飘动，视物模糊，糖尿病15年。',
+        duration: '1周',
+        history: '2型糖尿病15年，高血压8年；无药物过敏。',
+        files: ['眼底筛查报告.pdf', 'OCT报告.png'],
+        status: '待预约',
+        riskLevel: '中危',
+        recommendedDept: '眼底病专科',
+        nextStep: '尽快预约眼底病专科',
+        bookedDoctor: '',
+        medicationReminder: '未开启',
+        triage: [
+            { dept: '眼底病专科', confidence: 95, reason: '糖尿病病程长，黑影飘动和视物模糊提示糖网或玻璃体出血风险。' },
+            { dept: '内分泌科联合门诊', confidence: 72, reason: '慢病控制与眼底进展相关，需同步优化血糖、血压和血脂。' },
+            { dept: '急诊眼科', confidence: 48, reason: '若出现视力急降、黑影骤增或闪光感，应转急诊眼科。' }
+        ],
+        questions: ['黑影是否突然增多？', '是否有闪光感或视野缺损？', '最近血糖控制和HbA1c是多少？'],
+        doctors: [
+            { name: '周医生', title: '主任医师', dept: '眼底病专科', match: 97, schedule: '明天 10:00 可约', specialty: '糖尿病视网膜病变、黄斑水肿、玻璃体出血' },
+            { name: '赵医生', title: '副主任医师', dept: '眼底病专科', match: 91, schedule: '今天 16:20 可约', specialty: '眼底激光、OCT解读、慢病眼底管理' }
+        ],
+        guide: [
+            { title: '预约挂号', desc: '优先选择眼底病专科，携带眼底筛查和OCT报告。', status: '待完成' },
+            { title: '候诊提醒', desc: '可能需要散瞳检查，请预留半天时间，避免自行开车。', status: '待开始' },
+            { title: '检查检验', desc: '医生可能开具眼底照相、OCT、FFA和血糖相关检查。', status: '待医生开单' },
+            { title: '缴费与报告', desc: '检查缴费后报告推送到本页面，可继续进行病情咨询。', status: '待触发' },
+            { title: '取药与随访', desc: '根据眼底分级决定用药、激光或抗VEGF治疗，并设置随访提醒。', status: '待触发' }
+        ],
+        consultSummary: '上传报告和症状提示糖尿病视网膜病变进展风险，应尽快完成眼底病专科评估。若黑影快速增加或视力明显下降，应立即急诊。',
+        healthAdvice: ['同步控制血糖、血压和血脂，避免仅处理眼底症状。', '出现视力急降、遮挡感或闪光感时不要等待线上回复。', '复诊时带上既往眼底照片、OCT和血糖记录。'],
+        drugs: [
+            { name: '羟苯磺酸钙胶囊', use: '部分微血管病变场景可由医生评估后使用。', risk: '不能替代眼底检查、激光或抗VEGF等必要治疗。' },
+            { name: '降糖/降压长期用药', use: '按内分泌或心内科医嘱规律服用。', risk: '请勿因眼底症状自行停药或加量。' }
+        ],
+        safety: ['糖尿病眼底病变需与内分泌管理联动。', '任何眼内注射或激光治疗都应由眼底专科医生评估后执行。']
+    }
+];
+
 document.addEventListener('DOMContentLoaded', function() {
     try {
         var user = JSON.parse(localStorage.getItem('life_med_user'));
-        if (user && user.name) {
-            document.getElementById('headerUserName').textContent = user.name;
-        }
+        if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
     } catch(e) {}
-
-    var path = window.location.pathname.replace(/\\/g, '/');
-    var currentPage = path.split('/').pop();
-    var menuItems = document.querySelectorAll('.sidebar .menu-item');
-    menuItems.forEach(function(item) {
-        var href = item.getAttribute('href');
-        if (href && (href === currentPage || href.endsWith('/' + currentPage))) {
-            item.classList.add('active');
-        }
-    });
-
-    // 加载默认会话（头痛问诊）
-    renderSession('headache');
+    renderAll();
+    setupTextarea();
 });
 
-function getCurrentTime() {
-    var now = new Date();
-    return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+function renderAll() {
+    renderJourney();
+    renderCaseList();
+    bindCaseToForm();
+    renderConversation();
+    renderCurrentStatus();
+    renderStage();
 }
 
-function clearMessages() {
-    document.getElementById('chatMessages').innerHTML = '';
+function renderJourney() {
+    var c = getCurrentCase();
+    var doneMap = {
+        intake: true,
+        triage: Boolean(c.recommendedDept),
+        doctor: Boolean(c.bookedDoctor),
+        guide: Boolean(c.bookedDoctor),
+        consult: Boolean(c.consultSummary),
+        medication: c.medicationReminder === '已开启'
+    };
+    var steps = [
+        { key: 'intake', title: '症状采集', desc: c.files.length ? c.files.length + '份资料已上传' : '主诉与资料沉淀' },
+        { key: 'triage', title: '智能导诊', desc: c.recommendedDept || '待生成科室' },
+        { key: 'doctor', title: '快速找医生', desc: c.bookedDoctor || '按专长与排班匹配' },
+        { key: 'guide', title: '就诊流程', desc: '挂号候诊检查缴费取药' },
+        { key: 'consult', title: '病情咨询', desc: '报告解读与医生联合咨询' },
+        { key: 'medication', title: '用药指导', desc: c.medicationReminder }
+    ];
+    document.getElementById('journey').innerHTML = steps.map(function(step, index) {
+        var cls = 'journey-step' + (doneMap[step.key] ? ' done' : '') + (currentStage === step.key ? ' active' : '');
+        return '<button type="button" class="' + cls + '" onclick="switchStage(\'' + step.key + '\')"><div class="journey-index">' + (index + 1) + '</div><strong>' + step.title + '</strong><span>' + escapeHtml(step.desc) + '</span></button>';
+    }).join('');
+    renderFlowList(steps, doneMap);
 }
 
-function addMessage(type, html, time) {
-    var container = document.getElementById('chatMessages');
-    var row = document.createElement('div');
-    row.className = 'message-row ' + type;
-
-    var avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    avatar.innerHTML = type === 'bot' ? '&#10010;' : '&#128100;';
-
-    var body = document.createElement('div');
-    body.className = 'message-body';
-
-    var bubble = document.createElement('div');
-    bubble.className = 'message-bubble';
-    bubble.innerHTML = html;
-
-    var timeDiv = document.createElement('div');
-    timeDiv.className = 'message-time';
-    timeDiv.textContent = time || getCurrentTime();
-
-    body.appendChild(bubble);
-    body.appendChild(timeDiv);
-    row.appendChild(avatar);
-    row.appendChild(body);
-    container.appendChild(row);
-
-    container.scrollTop = container.scrollHeight;
+function renderFlowList(steps, doneMap) {
+    document.getElementById('flowList').innerHTML = steps.map(function(step, index) {
+        var cls = 'flow-row' + (doneMap[step.key] ? ' done' : '') + (currentStage === step.key ? ' active' : '');
+        return '<div class="' + cls + '"><div class="flow-dot">' + (index + 1) + '</div><div><strong>' + step.title + '</strong><span>' + escapeHtml(step.desc) + '</span></div></div>';
+    }).join('');
 }
 
-function addBotMessage(html, time) {
-    addMessage('bot', html, time);
+function renderCaseList() {
+    document.getElementById('caseList').innerHTML = consultationCases.map(function(c, index) {
+        var active = index === currentCaseIndex ? ' active' : '';
+        return '<div class="case-item' + active + '" onclick="selectCase(' + index + ')">' +
+            '<div class="case-title-row"><div class="case-title">' + escapeHtml(c.patientName) + ' · ' + escapeHtml(c.recommendedDept) + '</div>' + renderRiskTag(c.riskLevel) + '</div>' +
+            '<div class="case-meta"><span>' + escapeHtml(c.id) + '</span><span>' + escapeHtml(c.source) + '</span><span>' + escapeHtml(c.status) + '</span></div>' +
+            '<div class="case-summary">' + escapeHtml(c.complaint) + '</div>' +
+            '</div>';
+    }).join('');
 }
 
-function addUserMessage(html, time) {
-    addMessage('user', html, time);
+function bindCaseToForm() {
+    var c = getCurrentCase();
+    setValue('patientNameInput', c.patientName);
+    setValue('genderInput', c.gender);
+    setValue('ageInput', c.age);
+    setValue('complaintInput', c.complaint);
+    setValue('durationInput', c.duration);
+    setValue('historyInput', c.history);
+    setValue('filesInput', c.files.join('、'));
+    document.getElementById('patientInitial').textContent = c.patientName.slice(0, 1);
+    document.getElementById('patientNameBrief').textContent = c.patientName;
+    document.getElementById('patientMetaBrief').textContent = c.age + '岁 ' + c.gender + ' · ' + c.source;
+    document.getElementById('briefSymptom').textContent = c.complaint;
+    document.getElementById('briefRisk').textContent = c.riskLevel;
+    document.getElementById('briefDept').textContent = c.recommendedDept || '待导诊';
+    document.getElementById('briefNext').textContent = c.nextStep;
+}
+
+function collectForm() {
+    var c = getCurrentCase();
+    c.patientName = getValue('patientNameInput');
+    c.gender = getValue('genderInput');
+    c.age = getValue('ageInput');
+    c.complaint = getValue('complaintInput');
+    c.duration = getValue('durationInput');
+    c.history = getValue('historyInput');
+    c.files = getValue('filesInput') ? getValue('filesInput').split(/[、,，]/).map(function(item) { return item.trim(); }).filter(Boolean) : [];
+}
+
+function renderConversation() {
+    var c = getCurrentCase();
+    var html = '';
+    html += messageHtml('bot', '您好，我是患者咨询与导诊助手。我会先理解您的主诉，再给出科室导诊、医生匹配、就诊流程、病情解释和用药提醒。');
+    html += messageHtml('user', escapeHtml(c.complaint));
+    html += messageHtml('bot', '已提取信息：' + escapeHtml(c.duration) + '；既往/过敏史：' + escapeHtml(c.history) + '。建议先查看智能导诊结论，并补充危险信号问题。');
+    document.getElementById('chatThread').innerHTML = html;
+}
+
+function renderCurrentStatus() {
+    var c = getCurrentCase();
+    document.getElementById('statusTag').textContent = c.status;
+    document.getElementById('statusCaseId').textContent = c.id;
+    document.getElementById('statusDept').textContent = c.recommendedDept || '待导诊';
+    document.getElementById('statusDoctor').textContent = c.bookedDoctor || '未预约';
+    document.getElementById('statusMedication').textContent = c.medicationReminder;
+    document.getElementById('riskCard').innerHTML = getRiskText(c);
+    renderTriage();
+    renderDoctors();
+    renderGuide();
+    renderConsult();
+    renderMedication();
+    renderNextActions();
+}
+
+function renderTriage() {
+    var c = getCurrentCase();
+    document.getElementById('triageList').innerHTML = c.triage.map(function(item) {
+        return '<div class="triage-card"><div class="triage-head"><div><div class="triage-name">' + escapeHtml(item.dept) + '</div><div class="triage-desc">' + escapeHtml(item.reason) + '</div></div><div class="confidence">' + item.confidence + '%</div></div><div class="bar"><div class="bar-fill" style="width:' + item.confidence + '%"></div></div></div>';
+    }).join('');
+    document.getElementById('questionList').innerHTML = c.questions.map(function(q) {
+        return '<div class="qa-card"><div class="qa-title">' + escapeHtml(q) + '</div><div class="qa-desc">该问题会影响科室推荐、就诊优先级或是否需要急诊。</div></div>';
+    }).join('');
+}
+
+function renderDoctors() {
+    var c = getCurrentCase();
+    document.getElementById('doctorList').innerHTML = c.doctors.map(function(d, index) {
+        return '<div class="doctor-card"><div class="doctor-head"><div class="doctor-avatar">' + escapeHtml(d.name.slice(0, 1)) + '</div><div class="doctor-main"><div class="doctor-name">' + escapeHtml(d.name) + ' <span class="tag tag-orange">' + escapeHtml(d.title) + '</span></div><div class="doctor-meta">' + escapeHtml(d.dept) + ' · ' + escapeHtml(d.specialty) + '</div><div class="doctor-meta">' + escapeHtml(d.schedule) + ' · 匹配度 ' + d.match + '%</div></div></div><div class="doctor-actions"><button class="btn btn-primary btn-sm" onclick="bookDoctor(' + index + ')">预约该医生</button><button class="btn btn-outline btn-sm" onclick="switchStage(\'consult\')">先咨询</button></div></div>';
+    }).join('');
+    var selected = c.bookedDoctor || '尚未预约';
+    document.getElementById('bookingSummary').innerHTML = '<div class="report-card"><div class="report-desc">推荐科室：' + escapeHtml(c.recommendedDept || '待导诊') + '</div><div class="report-desc">已选医生：' + escapeHtml(selected) + '</div><div class="report-desc">确认预约后，就诊流程会自动更新为挂号、候诊、检查、缴费、取药和报告结果提醒。</div></div>';
+}
+
+function renderGuide() {
+    var c = getCurrentCase();
+    document.getElementById('guideList').innerHTML = c.guide.map(function(item, index) {
+        return '<div class="guide-item"><div class="guide-index">' + (index + 1) + '</div><div><div class="guide-title">' + escapeHtml(item.title) + '</div><div class="guide-desc">' + escapeHtml(item.desc) + '</div></div><span class="tag tag-gray">' + escapeHtml(item.status) + '</span></div>';
+    }).join('');
+    document.getElementById('visitReminder').innerHTML = '<div class="report-card"><div class="report-desc">当前建议：' + escapeHtml(c.nextStep) + '</div><div class="report-desc">如已预约，请在就诊当天提前到院签到；检查报告生成后可回到“病情咨询”继续解读。</div></div>';
+}
+
+function renderConsult() {
+    var c = getCurrentCase();
+    var fileHtml = c.files.length ? '<div style="margin-top:8px">' + c.files.map(function(file) { return '<span class="file-chip">' + escapeHtml(file) + '</span>'; }).join(' ') + '</div>' : '<div class="report-desc">尚未上传报告，可上传图片、PDF或检查结果。</div>';
+    document.getElementById('consultSummary').innerHTML = '<div class="report-card"><div class="qa-title">AI病情解释</div><div class="report-desc">' + escapeHtml(c.consultSummary) + '</div>' + fileHtml + '<div class="doctor-actions"><button class="btn btn-outline btn-sm" onclick="triggerUpload()">上传新报告</button><button class="btn btn-primary btn-sm" onclick="switchStage(\'doctor\')">联系医生</button></div></div>';
+    document.getElementById('healthAdvice').innerHTML = c.healthAdvice.map(function(text) {
+        return '<div class="qa-card"><div class="qa-desc">' + escapeHtml(text) + '</div></div>';
+    }).join('');
+}
+
+function renderMedication() {
+    var c = getCurrentCase();
+    document.getElementById('drugList').innerHTML = c.drugs.map(function(d) {
+        return '<div class="drug-card"><div class="drug-head"><div><div class="drug-name">' + escapeHtml(d.name) + '</div><div class="drug-desc">' + escapeHtml(d.use) + '</div></div><span class="tag tag-blue">指导</span></div><div class="drug-desc">风险提示：' + escapeHtml(d.risk) + '</div></div>';
+    }).join('');
+    document.getElementById('drugSafety').innerHTML = c.safety.map(function(text) {
+        return '<div class="qa-card"><div class="qa-desc">' + escapeHtml(text) + '</div></div>';
+    }).join('');
+}
+
+function renderNextActions() {
+    var actions = {
+        intake: [
+            { title: '生成导诊建议', desc: '根据当前主诉和资料推荐科室及风险等级。', stage: 'triage' },
+            { title: '上传报告或图片', desc: '报告会进入后续病情咨询和医生匹配依据。', upload: true }
+        ],
+        triage: [
+            { title: '匹配医生', desc: '按推荐科室、症状和号源推荐医生。', stage: 'doctor' },
+            { title: '补充危险信号', desc: '完善视力下降、疼痛、外伤等问题。', stage: 'intake' }
+        ],
+        doctor: [
+            { title: '确认预约', desc: '预约后进入完整就诊流程指引。', action: 'book' },
+            { title: '先做病情咨询', desc: '继续上传报告或查看AI解释。', stage: 'consult' }
+        ],
+        guide: [
+            { title: '查看报告解读', desc: '报告生成后可回到病情咨询继续问答。', stage: 'consult' },
+            { title: '开启取药提醒', desc: '处方完成后进入用药指导。', stage: 'medication' }
+        ],
+        consult: [
+            { title: '进入用药指导', desc: '结合当前诊断和过敏史给出用药风险提示。', stage: 'medication' },
+            { title: '快速找医生', desc: '需要医生确认时可回到医生匹配。', stage: 'doctor' }
+        ],
+        medication: [
+            { title: '开启用药提醒', desc: '记录用法用量和复诊提醒。', action: 'reminder' },
+            { title: '回到就诊流程', desc: '查看取药、复诊和报告节点。', stage: 'guide' }
+        ]
+    };
+    document.getElementById('nextActions').innerHTML = actions[currentStage].map(function(item) {
+        var click = item.upload ? 'triggerUpload()' : (item.action === 'book' ? 'bookDoctor()' : (item.action === 'reminder' ? 'enableMedicationReminder()' : 'switchStage(\'' + item.stage + '\')'));
+        return '<div class="next-action" onclick="' + click + '"><strong>' + escapeHtml(item.title) + '</strong>' + escapeHtml(item.desc) + '</div>';
+    }).join('');
+}
+
+function switchStage(stage) {
+    collectForm();
+    currentStage = stage;
+    renderAll();
+}
+
+function selectCase(index) {
+    collectForm();
+    currentCaseIndex = index;
+    currentStage = 'intake';
+    renderAll();
+    toast('已切换咨询单：' + getCurrentCase().patientName);
+}
+
+function runTriage() {
+    collectForm();
+    var c = getCurrentCase();
+    inferCaseRecommendations(c);
+    c.status = '已导诊';
+    c.nextStep = c.recommendedDept ? '匹配' + c.recommendedDept + '医生' : '匹配合适医生';
+    currentStage = 'triage';
+    renderAll();
+    toast('已生成导诊建议，下一步可匹配医生。');
+}
+
+function bookDoctor(index) {
+    var c = getCurrentCase();
+    var doctor = c.doctors[index || 0];
+    if (!doctor) {
+        toast('请先完成智能导诊，系统会根据科室和症状推荐医生。');
+        currentStage = 'triage';
+        renderAll();
+        return;
+    }
+    c.bookedDoctor = doctor.name + ' ' + doctor.schedule;
+    c.status = '已预约';
+    c.nextStep = '按就诊流程完成签到、候诊和检查';
+    c.guide[0].status = '已预约';
+    currentStage = 'guide';
+    renderAll();
+    toast('已预约：' + c.bookedDoctor);
+}
+
+function enableMedicationReminder() {
+    var c = getCurrentCase();
+    c.medicationReminder = '已开启';
+    c.status = '用药随访中';
+    c.nextStep = '按提醒用药并留意风险信号';
+    currentStage = 'medication';
+    renderAll();
+    toast('已开启用药提醒和复诊提醒。');
+}
+
+function inferCaseRecommendations(c) {
+    var text = [c.complaint, c.history, c.files.join(' ')].join(' ');
+    if (/黑影|视物模糊|糖尿病|眼底|OCT|筛查/.test(text)) {
+        c.riskLevel = '中危';
+        c.recommendedDept = '眼底病专科';
+        c.consultSummary = '当前症状或资料提示眼底病变风险，应尽快完成眼底病专科评估。若黑影快速增加、闪光感或视力明显下降，请直接急诊。';
+        c.healthAdvice = ['携带既往眼底照片、OCT和血糖记录就诊。', '同步控制血糖、血压和血脂，不要只处理眼底症状。', '检查前若需散瞳，避免自行驾车。'];
+        c.drugs = [
+            { name: '长期降糖/降压药', use: '继续按慢病医生医嘱规律服用。', risk: '不要因眼底症状自行停药或加量。' },
+            { name: '眼底相关用药待医生评估', use: '根据眼底分级决定是否需要药物、激光或抗VEGF治疗。', risk: '不能用保健品替代专科评估。' }
+        ];
+        c.safety = ['若出现视力急降、遮挡感、闪光感或黑影骤增，应立即线下就医。', '眼内注射和激光治疗必须由专科医生评估后执行。'];
+        c.triage = [
+            { dept: '眼底病专科', confidence: 92, reason: '症状或资料提示眼底病变风险，需结合眼底照相、OCT或FFA进一步判断。' },
+            { dept: '普通眼科门诊', confidence: 66, reason: '可作为初筛入口，但若已有糖尿病或黑影飘动，优先专科。' },
+            { dept: '急诊眼科', confidence: 46, reason: '若视力急降、闪光感或黑影骤增，应立即急诊。' }
+        ];
+        c.questions = ['黑影是否突然增多？', '是否伴闪光感或视野缺损？', '最近血糖和HbA1c是多少？'];
+        c.doctors = [
+            { name: '周医生', title: '主任医师', dept: '眼底病专科', match: 94, schedule: '明天 10:00 可约', specialty: '糖尿病视网膜病变、黄斑水肿、玻璃体出血' },
+            { name: '赵医生', title: '副主任医师', dept: '眼底病专科', match: 88, schedule: '今天 16:20 可约', specialty: '眼底激光、OCT解读、慢病眼底管理' }
+        ];
+    } else if (/干涩|发痒|红血丝|过敏|异物感|结膜炎/.test(text)) {
+        c.riskLevel = '低危';
+        c.recommendedDept = '眼表与角膜病专科';
+        c.consultSummary = '症状更符合干眼或过敏性结膜炎方向，建议结合裂隙灯、泪膜和角膜染色检查明确。';
+        c.healthAdvice = ['减少连续屏幕用眼，每20分钟远眺休息。', '避免揉眼，减少花粉、尘螨等过敏原暴露。', '短期可使用不含防腐剂人工泪液缓解干涩。'];
+        c.drugs = [
+            { name: '不含防腐剂人工泪液', use: '每日4-6次，每次1滴，适合干涩和异物感。', risk: '开封后按说明保存，避免瓶口接触眼部。' },
+            { name: '奥洛他定滴眼液', use: '过敏性结膜炎常用，每日2次，每次1滴。', risk: '若3天无缓解或出现疼痛、视力下降，应线下复诊。' }
+        ];
+        c.safety = ['激素类滴眼液不得自行长期使用。', '佩戴隐形眼镜者需暂停佩戴并尽快线下检查。'];
+        c.triage = [
+            { dept: '眼表与角膜病专科', confidence: 90, reason: '干涩、发痒、红血丝和过敏史更符合眼表疾病方向。' },
+            { dept: '普通眼科门诊', confidence: 76, reason: '普通眼科可完成裂隙灯和基础眼表检查。' },
+            { dept: '急诊眼科', confidence: 18, reason: '目前未见剧痛、急性视力下降或外伤等急诊信号。' }
+        ];
+        c.questions = ['是否佩戴隐形眼镜？', '是否有明显分泌物？', '是否出现视力下降或眼痛？'];
+        c.doctors = [
+            { name: '李医生', title: '主任医师', dept: '眼表与角膜病专科', match: 95, schedule: '今天 15:30 可约', specialty: '干眼症、过敏性结膜炎、角膜病' },
+            { name: '王医生', title: '副主任医师', dept: '眼科门诊', match: 86, schedule: '明天 09:00 可约', specialty: '结膜炎、视疲劳、眼表疾病' }
+        ];
+    } else {
+        c.riskLevel = '待评估';
+        c.recommendedDept = '普通眼科门诊';
+        c.consultSummary = '当前资料不足，建议补充症状、持续时间、检查结果或上传报告后再进行细分导诊。';
+        c.healthAdvice = ['补充疼痛程度、视力变化、外伤史和既往眼病史。', '如出现急性视力下降、剧痛或外伤，请不要等待线上导诊。'];
+        c.drugs = [{ name: '待医生评估', use: '信息不足时不建议自行使用处方眼药。', risk: '避免自行长期使用抗生素或激素类滴眼液。' }];
+        c.safety = ['线上导诊只能辅助分流，不能替代医生面诊。'];
+        c.triage = [
+            { dept: '普通眼科门诊', confidence: 68, reason: '当前信息不足，建议先由普通眼科完成基础检查并补充分诊信息。' },
+            { dept: '专科门诊待定', confidence: 42, reason: '系统会根据补充症状和报告进一步细分专科。' }
+        ];
+        c.questions = ['主要症状是什么？', '持续多久？', '是否有疼痛、外伤、视力下降或既往疾病？'];
+        c.doctors = [
+            { name: '王医生', title: '副主任医师', dept: '普通眼科门诊', match: 76, schedule: '明天 09:00 可约', specialty: '常见眼病、视疲劳、初诊分流' }
+        ];
+    }
 }
 
 function sendMessage() {
     var input = document.getElementById('chatInput');
     var text = input.value.trim();
     if (!text) return;
-
-    addUserMessage(text);
+    var c = getCurrentCase();
+    c.complaint = c.complaint ? c.complaint + '；' + text : text;
     input.value = '';
     input.style.height = 'auto';
+    bindCaseToForm();
+    renderConversation();
+    toast('已记录补充信息，并会用于后续导诊。');
+}
 
-    // Simulate bot response
-    setTimeout(function() {
-        var responses = [
-            '收到您的消息，我正在为您分析中。请稍候……',
-            '感谢您的描述。建议您到相应科室进一步检查，需要我帮您预约挂号吗？',
-            '根据您的症状，初步判断可能与常见疾病有关。建议：<br>1. 保持良好作息<br>2. 避免过度用眼<br>3. 定期复查<br><br>需要更详细的建议吗？',
-            '我已记录您的症状信息。如需进一步帮助，可以点击下方快捷入口或输入更多细节。'
-        ];
-        var resp = responses[Math.floor(Math.random() * responses.length)];
-        addBotMessage(resp);
-    }, 800);
+function quickAsk(text) {
+    document.getElementById('chatInput').value = text;
+    sendMessage();
+}
+
+function startNewCase() {
+    var today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    consultationCases.unshift({
+        id: 'CONS-' + today + '-' + String(consultationCases.length + 1).padStart(3, '0'),
+        patientName: '新患者',
+        gender: '女',
+        age: '',
+        source: '自助咨询',
+        complaint: '',
+        duration: '',
+        history: '',
+        files: [],
+        status: '咨询中',
+        riskLevel: '待评估',
+        recommendedDept: '',
+        nextStep: '补充主诉后生成导诊',
+        bookedDoctor: '',
+        medicationReminder: '未开启',
+        triage: [{ dept: '待评估', confidence: 0, reason: '请先补充主诉、持续时间、既往史和报告资料。' }],
+        questions: ['主要不适是什么？', '持续多久？', '是否有急性疼痛、视力下降或外伤？'],
+        doctors: [],
+        guide: [
+            { title: '预约挂号', desc: '生成导诊后展示推荐科室和号源。', status: '待导诊' },
+            { title: '候诊提醒', desc: '预约后展示叫号和候诊提醒。', status: '待触发' },
+            { title: '检查检验', desc: '医生开单后展示检查和报告状态。', status: '待触发' },
+            { title: '缴费与报告', desc: '检查缴费和报告推送会在此更新。', status: '待触发' },
+            { title: '取药与随访', desc: '处方生成后可开启用药提醒。', status: '待触发' }
+        ],
+        consultSummary: '请先补充症状或上传报告。',
+        healthAdvice: ['补充资料后生成健康咨询建议。'],
+        drugs: [{ name: '待评估', use: '补充诊断建议后生成用药指导。', risk: '不要自行使用处方药。' }],
+        safety: ['线上导诊不能替代医生面诊；出现急性严重症状请及时就医。']
+    });
+    currentCaseIndex = 0;
+    currentStage = 'intake';
+    renderAll();
+    toast('已新建咨询单，请先录入主诉。');
+}
+
+function triggerUpload() {
+    document.getElementById('fileInput').click();
+}
+
+function handleFileSelect(event) {
+    var files = Array.from(event.target.files || []);
+    if (!files.length) return;
+    var c = getCurrentCase();
+    files.forEach(function(file) { c.files.push(file.name); });
+    event.target.value = '';
+    bindCaseToForm();
+    renderConsult();
+    renderJourney();
+    toast('已上传 ' + files.length + ' 份资料，后续病情咨询会引用。');
 }
 
 function handleKeyDown(event) {
@@ -425,240 +993,64 @@ function handleKeyDown(event) {
     }
 }
 
-function triggerUpload() {
-    document.getElementById('fileInput').click();
+function renderStage() {
+    document.querySelectorAll('.stage-panel').forEach(function(panel) {
+        panel.classList.toggle('active', panel.id === 'stage-' + currentStage);
+    });
+    document.querySelectorAll('[data-stage-link]').forEach(function(link) {
+        link.classList.toggle('active', link.dataset.stageLink === currentStage);
+    });
 }
 
-function handleFileSelect(event) {
-    var files = event.target.files;
-    if (!files.length) return;
-    for (var i = 0; i < files.length; i++) {
-        var f = files[i];
-        var sizeStr = f.size < 1024 ? f.size + 'B' : f.size < 1048576 ? (f.size / 1024).toFixed(1) + 'KB' : (f.size / 1048576).toFixed(1) + 'MB';
-        var fileCard = '<div class="file-card">' +
-            '<div class="file-icon">' + f.name.split('.').pop().toUpperCase() + '</div>' +
-            '<div class="file-info"><div class="file-name">' + f.name + '</div><div class="file-size">' + sizeStr + '</div></div>' +
-            '</div>';
-        addUserMessage('我发送了一个文件' + fileCard);
-    }
-    event.target.value = '';
-}
-
-function switchSession(el, sessionId) {
-    var items = document.querySelectorAll('.chat-panel-sessions .session-item');
-    items.forEach(function(i) { i.classList.remove('active'); });
-    el.classList.add('active');
-    renderSession(sessionId);
-}
-
-function startNewSession() {
-    clearMessages();
-    document.getElementById('chatInput').value = '';
-    document.getElementById('chatInput').focus();
-    // 取消会话选中状态
-    var items = document.querySelectorAll('.chat-panel-sessions .session-item');
-    items.forEach(function(i) { i.classList.remove('active'); });
-}
-
-// ===== 对话内容渲染 =====
-
-function renderSession(sessionId) {
-    clearMessages();
-    if (sessionId === 'headache') {
-        renderHeadacheSession();
-    } else if (sessionId === 'eyeache') {
-        renderEyeacheSession();
-    }
-}
-
-// 头痛问诊（默认）
-function renderHeadacheSession() {
-    addBotMessage('您好，我是AI导诊助手。请描述您的症状，我将为您推荐合适的科室和医生。', '10:20');
-    addUserMessage('我最近经常头痛，有时候会持续半天，位置在太阳穴附近。', '10:21');
-    addBotMessage(
-        '根据您的描述，可能与紧张性头痛或偏头痛有关。为了更准确地判断，请问：<br><br>' +
-        '1. 头痛频率如何？每周发作几次？<br>' +
-        '2. 是否伴有恶心、畏光等症状？<br>' +
-        '3. 是否有高血压病史？', '10:21');
-    addUserMessage('大概每周三四次，有时候会恶心，没有高血压。', '10:22');
-    addBotMessage(
-        '感谢您的补充。根据您的症状，初步判断可能为<strong>偏头痛</strong>，建议您到<strong>神经内科</strong>就诊。<br><br>' +
-        '日常建议：<br>' +
-        '1. 保持规律作息，避免熬夜和过度疲劳<br>' +
-        '2. 记录头痛日记，跟踪发作频率和诱因<br>' +
-        '3. 避免已知的触发因素（如特定食物、强光、噪音）<br>' +
-        '4. 如疼痛剧烈，可暂行休息并在医生指导下用药<br><br>' +
-        '需要帮您预约神经内科专家门诊吗？', '10:22');
-}
-
-// 眼痛问诊
-function renderEyeacheSession() {
-    addBotMessage('您好，我是AI导诊助手。请描述您的症状，我将为您推荐合适的科室和医生。', '09:15');
-    addUserMessage('我右眼疼痛，伴有畏光和流泪，已经两天了。', '09:16');
-    addBotMessage(
-        '了解您的症状。请问：<br><br>' +
-        '1. 有没有外伤史？<br>' +
-        '2. 视力是否下降？<br>' +
-        '3. 是否有异物感？', '09:16');
-    addUserMessage('没有外伤，视力稍微有点模糊，有异物感。', '09:17');
-    addBotMessage(
-        '根据您的描述，可能是<strong>角膜炎或急性结膜炎</strong>，建议您挂<strong>眼科</strong>就诊。<br><br>' +
-        '就诊前注意：<br>' +
-        '1. 不要用手揉眼睛，避免加重感染<br>' +
-        '2. 暂停佩戴隐形眼镜<br>' +
-        '3. 可用清洁的湿毛巾冷敷缓解不适<br>' +
-        '4. 避免与他人共用毛巾等个人物品<br><br>' +
-        '需要帮您预约眼科门诊吗？', '09:17');
-}
-
-// 场景1：就诊流程指引（图2原型）
-function renderGuideScene() {
-    addUserMessage('请给我提供挂号、候诊、检查、缴费、取药等过程的就诊指引。', '10:36');
-    addBotMessage(
-        '建议按 <strong>"挂号 → 候诊 → 检查 → 缴费 → 取药"</strong> 的顺序办理：', '10:36');
-    addBotMessage(
-        '<div class="steps-card">' +
-        '<div class="steps-title">就诊流程指引</div>' +
-        '<div class="steps-list">' +
-        '<div class="step-item">' +
-        '<div class="step-dot blue">1</div>' +
-        '<div class="step-label">预约挂号</div>' +
-        '</div>' +
-        '<div class="step-item">' +
-        '<div class="step-dot green">2</div>' +
-        '<div class="step-label">候诊等待</div>' +
-        '</div>' +
-        '<div class="step-item">' +
-        '<div class="step-dot purple">3</div>' +
-        '<div class="step-label">检查检验</div>' +
-        '</div>' +
-        '<div class="step-item">' +
-        '<div class="step-dot orange">4</div>' +
-        '<div class="step-label">费用缴纳</div>' +
-        '</div>' +
-        '<div class="step-item">' +
-        '<div class="step-dot teal">5</div>' +
-        '<div class="step-label">取药服务</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="detail-steps" style="margin-top:12px;">' +
-        '<div class="detail-step"><div class="detail-step-num c1">1</div><div class="detail-step-info"><div class="detail-step-title">预约挂号</div><div class="detail-step-desc">在线选择科室、医生及就诊时间，支持医保/自费多种方式</div></div></div>' +
-        '<div class="detail-step"><div class="detail-step-num c2">2</div><div class="detail-step-info"><div class="detail-step-title">候诊等待</div><div class="detail-step-desc">实时查看叫号进度，支持消息提醒，避免错过就诊时间</div></div></div>' +
-        '<div class="detail-step"><div class="detail-step-num c3">3</div><div class="detail-step-info"><div class="detail-step-title">检查检验</div><div class="detail-step-desc">在线预约检查项目，结果推送提醒，支持报告解读服务</div></div></div>' +
-        '<div class="detail-step"><div class="detail-step-num c4">4</div><div class="detail-step-info"><div class="detail-step-title">费用缴纳</div><div class="detail-step-desc">一站式缴纳挂号费、检查费、药费等，支持医保实时结算</div></div></div>' +
-        '<div class="detail-step"><div class="detail-step-num c5">5</div><div class="detail-step-info"><div class="detail-step-title">取药服务</div><div class="detail-step-desc">查看取药窗口与等待时间，支持药品配送到家服务</div></div></div>' +
-        '</div>' +
-        '</div>', '10:36');
-}
-
-// 场景2：智能导诊（图3原型）
-function renderTriageScene() {
-    addUserMessage('我最近眼睛干涩，还有点痒，应该挂什么科？', '10:32');
-    addBotMessage('根据您描述的症状，可能是<strong>干眼症或过敏性结膜炎</strong>，建议您挂<strong>眼科</strong>就诊。', '10:32');
-}
-
-// 场景3：健康咨询（图4原型）
-function renderHealthScene() {
-    addUserMessage('我最近经常熬夜，眼睛干涩有红血丝，平时要注意什么？', '10:48');
-    addBotMessage(
-        '根据您的情况，这是典型的视疲劳和干眼症表现，日常需要注意：<br><br>' +
-        '1. 减少熬夜，保持规律作息，每天睡眠时间建议7-8小时；<br>' +
-        '2. 每用眼40分钟休息5-10分钟，远眺放松眼部；<br>' +
-        '3. 可以使用不含防腐剂的人工泪液缓解干涩，避免用手揉眼睛；<br>' +
-        '4. 饮食上多吃富含维生素A、C的食物，如胡萝卜、蓝莓、菠菜等；<br>' +
-        '5. 如果症状持续超过一周或伴有视力下降，建议到眼科进行详细检查。', '10:48');
-}
-
-// 场景4：快速找医生（图5原型）
-function renderDoctorScene() {
-    addUserMessage('根据我的主诉，帮我推荐医生', '10:45');
-    addBotMessage(
-        '根据您描述的症状，为您推荐以下眼科医生：' +
-        '<div class="doctor-card">' +
-        '<div class="doctor-header">' +
-        '<div class="doctor-avatar">&#127973;</div>' +
-        '<div>' +
-        '<div class="doctor-name">李医生<span class="doctor-title">主任医师</span></div>' +
-        '<div class="doctor-specialty">擅长：干眼症、角膜病、过敏性结膜炎</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="doctor-rating"><span class="doctor-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4.8分 (3285人评价)</div>' +
-        '<div class="doctor-actions">' +
-        '<button class="doctor-btn doctor-btn-primary">预约</button>' +
-        '<button class="doctor-btn doctor-btn-secondary">立即挂号</button>' +
-        '<button class="doctor-btn doctor-btn-gray">了解更多眼科医生</button>' +
-        '</div>' +
-        '</div>', '10:45');
-}
-
-// 场景5：病情咨询（图6原型）
-function renderConsultScene() {
-    addUserMessage(
-        '这是我的验光报告，能帮我分析一下吗？' +
-        '<div class="file-card">' +
-        '<div class="file-icon">PDF</div>' +
-        '<div class="file-info"><div class="file-name">验光报告_20250620.pdf</div><div class="file-size">2.4MB · 已上传完成</div></div>' +
-        '<button class="file-download">&#8595;</button>' +
-        '</div>', '10:51');
-    addBotMessage(
-        '从您的报告分析结果如下：<br><br>' +
-        '您双眼近视度数：<strong>左眼325度，右眼350度</strong>，伴有50度散光，属于中度近视，矫正视力可以达到1.0，情况稳定。<br><br>' +
-        '<strong>建议：</strong><br>' +
-        '1. 日常需要正确佩戴眼镜，避免长时间近距离用眼导致度数加深；<br>' +
-        '2. 每年定期复查视力和眼轴，观察度数变化；<br>' +
-        '3. 如果有视物模糊、眼痛、头痛等症状，及时到眼科就诊；<br>' +
-        '4. 可以考虑使用低浓度阿托品滴眼液控制近视进展，需在医生指导下使用。', '10:51');
-}
-
-// 场景6：用药指导（图7原型）
-function renderMedicationScene() {
-    addUserMessage('我有过敏性结膜炎，用什么药比较好？', '10:55');
-    addBotMessage(
-        '针对过敏性结膜炎，常用的治疗药物有：<br><br>' +
-        '1. <strong>抗组胺药：</strong>如盐酸奥洛他定滴眼液，每天2次，每次1滴，可以有效缓解痒感、红肿症状；<br><br>' +
-        '2. <strong>肥大细胞稳定剂：</strong>如色甘酸钠滴眼液，适合在过敏季来临前使用预防发作；<br><br>' +
-        '3. <strong>人工泪液：</strong>可以稀释过敏原、缓解眼部干涩不适，建议选不含防腐剂的剂型；<br><br>' +
-        '4. <strong>严重时</strong>可在医生指导下使用激素类滴眼液，不要自行长期使用。<br><br>' +
-        '<strong>注意事项：</strong>避免接触已知过敏原，不要用手揉眼，用药前先清洁双手。如果用药3天症状无缓解或加重，请及时到眼科就医。', '10:55');
-}
-
-// 场景路由
-function renderScene(sceneId) {
-    clearMessages();
-    switch(sceneId) {
-        case 'guide':
-            renderGuideScene();
-            break;
-        case 'triage':
-            renderTriageScene();
-            break;
-        case 'health':
-            renderHealthScene();
-            break;
-        case 'doctor':
-            renderDoctorScene();
-            break;
-        case 'consult':
-            renderConsultScene();
-            break;
-        case 'medication':
-            renderMedicationScene();
-            break;
-        default:
-            break;
-    }
-}
-
-// Auto-resize textarea
-document.addEventListener('DOMContentLoaded', function() {
+function setupTextarea() {
     var textarea = document.getElementById('chatInput');
-    if (textarea) {
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
+    if (!textarea) return;
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 110) + 'px';
+    });
+}
+
+function getRiskText(c) {
+    if (c.riskLevel === '中危') {
+        return '当前存在需尽快线下评估的风险信号。若出现视力急降、黑影骤增、明显眼痛、外伤或闪光感，应立即转急诊眼科。';
     }
-});
+    if (c.riskLevel === '低危') {
+        return '当前更适合普通门诊或专科门诊评估。若症状加重、视力下降或出现明显疼痛，请及时线下就医。';
+    }
+    return '请先补充主诉、持续时间、既往史和报告资料，系统会根据危险信号给出风险分层。';
+}
+
+function renderRiskTag(level) {
+    var cls = level === '中危' ? 'tag-orange' : (level === '低危' ? 'tag-green' : 'tag-gray');
+    return '<span class="tag ' + cls + '">' + escapeHtml(level) + '</span>';
+}
+
+function messageHtml(type, text) {
+    return '<div class="message-row ' + type + '"><div class="message-avatar">' + (type === 'bot' ? 'AI' : '我') + '</div><div class="message-bubble">' + text + '</div></div>';
+}
+
+function getCurrentCase() { return consultationCases[currentCaseIndex]; }
+function getValue(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function setValue(id, value) { var el = document.getElementById(id); if (el) el.value = value == null ? '' : value; }
+function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(text == null ? '' : String(text)));
+    return div.innerHTML;
+}
+function toast(message) {
+    var el = document.getElementById('toast');
+    el.textContent = message;
+    el.style.display = 'block';
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(function() { el.style.display = 'none'; }, 2600);
+}
+function logout() {
+    if (confirm('确定要退出登录吗？')) {
+        localStorage.removeItem('life_med_user');
+        window.location.href = 'login.html';
+    }
+}
 </script>
 </body>
 </html>

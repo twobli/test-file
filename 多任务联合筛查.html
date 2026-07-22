@@ -76,9 +76,7 @@ input, select, textarea { font: inherit; outline: none; }
 .btn:hover { filter: brightness(1.03); }
 .btn.primary { color: #fff; background: linear-gradient(90deg, var(--primary), var(--primary-2)); box-shadow: 0 10px 20px rgba(22, 93, 255, .18); }
 .btn.secondary { color: var(--muted); background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
-.btn.danger { color: #fff; background: linear-gradient(90deg, #f45b5b, #e73d3d); }
 .btn.small { min-height: 30px; padding: 0 10px; font-size: 12px; border-radius: 8px; }
-.btn.lg { min-height: 44px; padding: 0 20px; font-size: 15px; }
 
 /* Tags */
 .tag {
@@ -91,43 +89,10 @@ input, select, textarea { font: inherit; outline: none; }
 .tag.danger { color: var(--danger); background: #ffecec; }
 .tag.gray { color: var(--soft); background: #f0f3f8; }
 
-/* Cards & Panels */
+/* Cards */
 .card { background: #fff; border-radius: var(--radius-lg); box-shadow: 0 10px 24px rgba(61, 102, 150, .08); padding: 20px; margin-bottom: 16px; }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
 .card-title { font-size: 16px; font-weight: 800; color: var(--text); }
-
-/* Stats */
-.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-.stat {
-  padding: 14px 16px; border-radius: 12px; background: var(--panel-soft);
-  box-shadow: inset 0 0 0 1px #e8eef8;
-}
-.stat span { display: block; color: var(--soft); font-size: 12px; }
-.stat strong { display: block; margin-top: 6px; font-size: 20px; line-height: 1.2; color: var(--text); }
-
-/* Tables */
-.table-wrap { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
-.data-table { width: 100%; border-collapse: collapse; }
-.data-table thead th {
-  padding: 11px 12px; background: var(--panel-soft); color: var(--soft); font-size: 12px; text-align: left;
-  border-bottom: 1px solid var(--line); font-weight: 600;
-}
-.data-table tbody td { padding: 11px 12px; border-bottom: 1px solid #f0f4f9; vertical-align: middle; }
-.data-table tbody tr { transition: .14s; }
-.data-table tbody tr:hover { background: #f9fcff; }
-.data-table tbody tr.active { background: #eef7ff; }
-.row-main { display: flex; flex-direction: column; gap: 2px; }
-.row-main strong { font-size: 13px; }
-.row-main span { color: var(--soft); font-size: 12px; }
-
-/* Toolbar */
-.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
-.toolbar .search-shell {
-  display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px;
-  border: 1px solid var(--line); border-radius: 10px; background: #fff; min-width: 220px;
-}
-.toolbar .search-shell input { width: 100%; border: 0; background: transparent; }
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* Steps */
 .steps { display: flex; margin-bottom: 20px; }
@@ -141,68 +106,89 @@ input, select, textarea { font: inherit; outline: none; }
 .step.done { color: var(--success); }
 .step.done::before { background: var(--success); }
 
-/* Upload Zone */
-.upload-zone {
-  border: 1.5px dashed #b5c7e6; border-radius: 16px; min-height: 200px; display: flex; align-items: center; justify-content: center;
-  text-align: center; background: linear-gradient(180deg, #f8fbff 0%, #f3f7fd 100%); color: var(--muted); cursor: pointer; transition: .18s;
-}
-.upload-zone:hover { border-color: var(--primary); background: var(--primary-soft); }
-.upload-zone .plus {
-  width: 44px; height: 44px; margin: 0 auto 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  background: #e8f3ff; color: var(--primary); font-size: 24px; font-weight: 400;
-}
-.upload-zone .upload-hint { color: var(--soft); font-size: 12px; margin-top: 6px; }
-
-/* Forms */
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-.form-group input, .form-group select { width: 100%; padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; background: #fff; color: var(--text); }
-.form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(22,93,255,.1); }
-.form-row { display: flex; gap: 12px; }
-.form-row .form-group { flex: 1; }
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.stat { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; }
+.stat span { display: block; color: var(--soft); font-size: 12px; }
+.stat strong { display: block; margin-top: 6px; font-size: 20px; line-height: 1.2; color: var(--text); }
 
 /* Report Box */
 .report-box { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 10px; }
-.report-box p { margin: 0; color: var(--muted); }
+.report-box p { margin: 6px 0; color: var(--muted); line-height: 1.7; }
 .report-box strong { color: var(--text); }
 
-/* Alerts */
-.alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
-.alert-info { background: #e8f3ff; color: #1a56db; border: 1px solid #d2e3fc; }
-.alert-success { background: #e8ffea; color: #137333; border: 1px solid #ceead6; }
-.alert-warning { background: #fff4df; color: #b06000; border: 1px solid #feefc3; }
-.alert-danger { background: #ffecec; color: #c5221f; border: 1px solid #f5c6c2; }
-
-/* Result Grid */
-.result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-.result-card { padding: 14px; border-radius: 12px; background: #f8fbff; box-shadow: inset 0 0 0 1px #e8eef8; }
-.result-card .result-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.result-card .result-status { display: inline-block; margin-bottom: 6px; }
-.result-card .result-desc { color: var(--muted); font-size: 12px; line-height: 1.5; }
-.result-card .result-tips { margin-top: 8px; font-size: 12px; color: var(--soft); }
-
-/* Preview */
-.preview-shell { border-radius: 14px; overflow: hidden; background: #0b0b0b; margin-bottom: 14px; }
-.preview-bar {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 14px; background: #f7f9fd; border: 1px solid var(--line); border-bottom: 0; border-radius: 14px 14px 0 0;
+/* Compare Grid */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 }
-.preview-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-.preview-stage { aspect-ratio: 16/10; max-height: 560px; display: flex; align-items: center; justify-content: center; position: relative; }
-.tab-pill {
-  height: 30px; padding: 0 12px; border-radius: 999px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700;
+.compare-panel {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0b0b0b;
 }
-.tab-pill.active { color: #fff; background: linear-gradient(90deg, var(--primary), var(--primary-2)); }
+.compare-label {
+  padding: 10px 14px;
+  background: #f7f9fd;
+  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.compare-label .badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.compare-image {
+  aspect-ratio: 16/10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.compare-image svg {
+  width: 100%;
+  height: 100%;
+}
 
-/* Timeline */
-.timeline { display: grid; gap: 8px; margin-bottom: 14px; }
-.timeline-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #fbfdff; box-shadow: inset 0 0 0 1px #edf2f9; }
-.timeline-item .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; background: #b9c7da; flex: 0 0 auto; }
-.timeline-item.success .dot { background: var(--success); }
-.timeline-item.warning .dot { background: var(--warning); }
-.timeline-item.danger .dot { background: var(--danger); }
-.timeline-item strong { display: block; font-size: 13px; }
-.timeline-item span { display: block; color: var(--soft); font-size: 12px; margin-top: 2px; }
+/* Legend */
+.legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.5);
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+/* Report box sub sections */
+.report-section { margin-bottom: 8px; }
+.report-section:last-child { margin-bottom: 0; }
+.report-section .section-title { font-weight: 700; color: var(--text); font-size: 13px; margin-bottom: 2px; }
 
 @media (max-width: 1024px) {
   .sidebar { width: 60px; }
@@ -211,7 +197,7 @@ input, select, textarea { font: inherit; outline: none; }
   .sidebar .menu-group-title { display: none; }
   .main-content { margin-left: 60px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .result-grid { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
@@ -219,13 +205,12 @@ input, select, textarea { font: inherit; outline: none; }
   .sidebar { display: none; }
   .main-content { margin-left: 0; padding: 14px; }
   .stats { grid-template-columns: 1fr; }
-  .form-row { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 <div class="header">
-<a href="index.html" class="logo">生命医学主题库应用</a>
+<a href="app-center.html" class="logo">生命医学主题库应用</a>
 <div class="header-nav">
 <a href="眼底图像输入.html" class="active">AI眼底疾病筛查</a>
 <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -239,19 +224,15 @@ input, select, textarea { font: inherit; outline: none; }
 <a class="menu-item" href="图像质量质控.html">图像质量质控</a>
 <a class="menu-item" href="常见疾病筛查.html">常见疾病筛查</a>
 <a class="menu-item" href="多任务联合筛查.html" class="active">多任务联合筛查</a>
-<a class="menu-item" href="输出筛查报告.html">输出筛查报告</a></div></div><div class="main-content">
-<div class="breadcrumb"><a href="index.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>多任务联合筛查</strong></div>
+<a class="menu-item" href="输出筛查报告.html">输出筛查报告</a></div></div>
+
+<div class="main-content">
+<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>多任务联合筛查</strong></div>
 <h1 class="page-title">多任务联合筛查</h1>
 
 <div class="card">
   <div class="card-header">
-    <span class="card-title">多任务分析结果预览</span>
-    <div class="preview-tabs" style="margin-left:auto;">
-      <button class="tab-pill active" onclick="switchView(this,'raw')">原图</button>
-      <button class="tab-pill" onclick="switchView(this,'lesion')">病灶分割</button>
-      <button class="tab-pill" onclick="switchView(this,'disc')">视盘/黄斑</button>
-      <button class="tab-pill" onclick="switchView(this,'vessel')">血管分布</button>
-    </div>
+    <span class="card-title">多任务联合分析</span>
   </div>
 
   <div class="steps">
@@ -262,49 +243,140 @@ input, select, textarea { font: inherit; outline: none; }
     <div class="step"><div class="step-circle">5</div>输出报告</div>
   </div>
 
-  <div class="preview-shell">
-    <div class="preview-bar">
-      <div><strong id="previewLabel">原始眼底图像</strong><div style="color:var(--soft);font-size:12px;">点击上方标签切换不同分析视图</div></div>
+  <div class="compare-grid">
+    <!-- Original Image -->
+    <div class="compare-panel">
+      <div class="compare-label">
+        原始眼底图像
+        <span class="badge">右眼</span>
+      </div>
+      <div class="compare-image">
+        <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="fundusBg" cx="50%" cy="50%" r="70%">
+              <stop offset="0%" stop-color="#ffbd2c"/>
+              <stop offset="52%" stop-color="#f18f10"/>
+              <stop offset="100%" stop-color="#d7600a"/>
+            </radialGradient>
+            <radialGradient id="fundusGlow" cx="50%" cy="48%" r="44%">
+              <stop offset="0%" stop-color="rgba(255,255,255,.42)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="900" height="560" fill="#0b0b0b"/>
+          <g transform="translate(26,24)">
+            <ellipse cx="418" cy="256" rx="350" ry="226" fill="url(#fundusBg)"/>
+            <ellipse cx="438" cy="252" rx="332" ry="208" fill="url(#fundusGlow)" opacity=".18"/>
+            <g opacity=".75" stroke="#7d2d0a" stroke-width="4" fill="none">
+              <path d="M430 250C390 210 340 180 286 150"/>
+              <path d="M430 250C500 190 548 155 620 130"/>
+              <path d="M430 250C381 280 322 310 240 345"/>
+              <path d="M430 250C510 305 575 340 662 372"/>
+              <path d="M494 180C545 162 585 138 629 98"/>
+              <path d="M350 195C317 178 271 160 216 132"/>
+              <path d="M350 324C316 341 280 364 232 396"/>
+              <path d="M512 315C558 340 604 370 662 410"/>
+            </g>
+            <circle cx="604" cy="246" r="46" fill="#fff0b0" opacity=".86"/>
+            <circle cx="595" cy="238" r="28" fill="#ffed8e" opacity=".9"/>
+            <circle cx="440" cy="248" r="24" fill="#b65612" opacity=".8"/>
+          </g>
+          <rect x="660" y="38" width="190" height="86" rx="18" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.12)"/>
+          <text x="682" y="74" fill="#fff" font-size="18" font-weight="700">记录 FS-260626-001</text>
+          <text x="682" y="100" fill="#fff" font-size="14" opacity=".82">右眼_眼底彩照_001.jpg</text>
+        </svg>
+      </div>
     </div>
-    <div class="preview-stage" id="previewStage">
-      <svg viewBox="0 0 900 560" style="width:100%;height:100%;">
-        <defs>
-          <radialGradient id="fundusBg" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stop-color="#ffbd2c"/><stop offset="52%" stop-color="#f18f10"/><stop offset="100%" stop-color="#d7600a"/>
-          </radialGradient>
-          <radialGradient id="fundusGlow" cx="50%" cy="48%" r="44%">
-            <stop offset="0%" stop-color="rgba(255,255,255,.42)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-          </radialGradient>
-        </defs>
-        <rect width="900" height="560" fill="#0b0b0b"/>
-        <g transform="translate(26,24)">
-          <ellipse cx="418" cy="256" rx="350" ry="226" fill="url(#fundusBg)"/>
-          <ellipse cx="438" cy="252" rx="332" ry="208" fill="url(#fundusGlow)" opacity=".18"/>
-          <g opacity=".75" stroke="#7d2d0a" stroke-width="4" fill="none">
-            <path d="M430 250C390 210 340 180 286 150"/>
-            <path d="M430 250C500 190 548 155 620 130"/>
-            <path d="M430 250C381 280 322 310 240 345"/>
-            <path d="M430 250C510 305 575 340 662 372"/>
-            <path d="M494 180C545 162 585 138 629 98"/>
-            <path d="M350 195C317 178 271 160 216 132"/>
-            <path d="M350 324C316 341 280 364 232 396"/>
-            <path d="M512 315C558 340 604 370 662 410"/>
+
+    <!-- Processed Image -->
+    <div class="compare-panel">
+      <div class="compare-label">
+        病灶分割结果
+        <span class="badge">AI自动标注</span>
+      </div>
+      <div class="compare-image">
+        <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="fundusBg2" cx="50%" cy="50%" r="70%">
+              <stop offset="0%" stop-color="#ffbd2c"/>
+              <stop offset="52%" stop-color="#f18f10"/>
+              <stop offset="100%" stop-color="#d7600a"/>
+            </radialGradient>
+            <radialGradient id="fundusGlow2" cx="50%" cy="48%" r="44%">
+              <stop offset="0%" stop-color="rgba(255,255,255,.42)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="900" height="560" fill="#0b0b0b"/>
+          <g transform="translate(26,24)">
+            <ellipse cx="418" cy="256" rx="350" ry="226" fill="url(#fundusBg2)"/>
+            <ellipse cx="438" cy="252" rx="332" ry="208" fill="url(#fundusGlow2)" opacity=".18"/>
+            <!-- Blood vessels -->
+            <g opacity=".65" stroke="#7d2d0a" stroke-width="4" fill="none">
+              <path d="M430 250C390 210 340 180 286 150"/>
+              <path d="M430 250C500 190 548 155 620 130"/>
+              <path d="M430 250C381 280 322 310 240 345"/>
+              <path d="M430 250C510 305 575 340 662 372"/>
+              <path d="M494 180C545 162 585 138 629 98"/>
+              <path d="M350 195C317 178 271 160 216 132"/>
+              <path d="M350 324C316 341 280 364 232 396"/>
+              <path d="M512 315C558 340 604 370 662 410"/>
+            </g>
+            <!-- Optic disc -->
+            <circle cx="604" cy="246" r="46" fill="#fff0b0" opacity=".56"/>
+            <circle cx="595" cy="238" r="28" fill="#ffed8e" opacity=".6"/>
+            <!-- Macula -->
+            <circle cx="440" cy="248" r="24" fill="#b65612" opacity=".5"/>
+
+            <!-- === Lesion Markings === -->
+
+            <!-- Microaneurysms (Red: #ff5a52) - small dots -->
+            <circle cx="360" cy="186" r="10" fill="none" stroke="#ff5a52" stroke-width="5" opacity=".9"/>
+            <circle cx="358" cy="184" r="4" fill="#ff5a52" opacity=".7"/>
+            <circle cx="310" cy="210" r="8" fill="none" stroke="#ff5a52" stroke-width="4" opacity=".85"/>
+            <circle cx="309" cy="209" r="3" fill="#ff5a52" opacity=".65"/>
+            <circle cx="280" cy="260" r="7" fill="none" stroke="#ff5a52" stroke-width="4" opacity=".8"/>
+            <circle cx="279" cy="259" r="3" fill="#ff5a52" opacity=".6"/>
+            <circle cx="530" cy="190" r="8" fill="none" stroke="#ff5a52" stroke-width="4" opacity=".85"/>
+            <circle cx="529" cy="189" r="3" fill="#ff5a52" opacity=".65"/>
+            <circle cx="560" cy="280" r="6" fill="none" stroke="#ff5a52" stroke-width="3" opacity=".75"/>
+
+            <!-- Hemorrhages (Dark red: #c5221f) - larger patches -->
+            <ellipse cx="334" cy="278" rx="20" ry="16" fill="none" stroke="#c5221f" stroke-width="5" opacity=".85"/>
+            <ellipse cx="334" cy="278" rx="12" ry="9" fill="#c5221f" opacity=".4"/>
+            <ellipse cx="380" cy="320" rx="18" ry="14" fill="none" stroke="#c5221f" stroke-width="5" opacity=".8"/>
+            <ellipse cx="380" cy="320" rx="10" ry="8" fill="#c5221f" opacity=".35"/>
+            <ellipse cx="480" cy="300" rx="22" ry="18" fill="none" stroke="#c5221f" stroke-width="5" opacity=".75"/>
+            <ellipse cx="480" cy="300" rx="13" ry="10" fill="#c5221f" opacity=".3"/>
+            <ellipse cx="590" cy="320" rx="15" ry="12" fill="none" stroke="#c5221f" stroke-width="4" opacity=".7"/>
+            <ellipse cx="590" cy="320" rx="8" ry="6" fill="#c5221f" opacity=".3"/>
+
+            <!-- Hard exudates (Yellow: #f6c22e) - bright spots -->
+            <circle cx="488" cy="324" r="12" fill="none" stroke="#f6c22e" stroke-width="5" opacity=".9"/>
+            <circle cx="488" cy="324" r="6" fill="#f6c22e" opacity=".5"/>
+            <circle cx="510" cy="340" r="9" fill="none" stroke="#f6c22e" stroke-width="4" opacity=".85"/>
+            <circle cx="510" cy="340" r="5" fill="#f6c22e" opacity=".45"/>
+            <circle cx="465" cy="345" r="8" fill="none" stroke="#f6c22e" stroke-width="4" opacity=".8"/>
+            <circle cx="465" cy="345" r="4" fill="#f6c22e" opacity=".4"/>
+            <circle cx="520" cy="310" r="7" fill="none" stroke="#f6c22e" stroke-width="3" opacity=".75"/>
+            <circle cx="520" cy="310" r="3" fill="#f6c22e" opacity=".4"/>
+
+            <!-- Optic disc boundary (Green: #21c06f) - contour line -->
+            <path d="M566 246c20 8 32 14 48 28c18 16 26 34 22 54c-4 18 -16 32 -34 38c-18 6 -36 0 -48 -14c-10 -12 -16 -28 -14 -46c2 -20 12 -38 26 -60z" fill="none" stroke="#21c06f" stroke-width="4" opacity=".85" stroke-dasharray="6 3"/>
+            <path d="M560 248c22 10 38 18 52 32" fill="none" stroke="#21c06f" stroke-width="3" opacity=".7" stroke-dasharray="4 2"/>
           </g>
-          <circle cx="604" cy="246" r="46" fill="#fff0b0" opacity=".86"/>
-          <circle cx="595" cy="238" r="28" fill="#ffed8e" opacity=".9"/>
-          <circle cx="440" cy="248" r="24" fill="#b65612" opacity=".8"/>
-          <g id="overlayGroup" fill="none" stroke-linecap="round" style="display:none;">
-            <circle cx="360" cy="186" r="14" stroke="#ff5a52" stroke-width="8"/>
-            <circle cx="334" cy="278" r="10" stroke="#4f8cff" stroke-width="8"/>
-            <circle cx="488" cy="324" r="12" stroke="#f6c22e" stroke-width="8"/>
-            <path d="M566 246c32 10 48 18 72 36" stroke="#21c06f" stroke-width="6"/>
-          </g>
-          <text x="48" y="510" fill="#ffffff" font-size="26" font-weight="700" opacity=".82" id="previewText">原始图像</text>
-        </g>
-        <rect x="660" y="38" width="190" height="86" rx="18" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.12)"/>
-        <text x="682" y="74" fill="#fff" font-size="18" font-weight="700">记录 FS-260626-001</text>
-        <text x="682" y="100" fill="#fff" font-size="14" opacity=".82">右眼_眼底彩照_001.jpg</text>
-      </svg>
+          <rect x="660" y="38" width="190" height="86" rx="18" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.12)"/>
+          <text x="682" y="74" fill="#fff" font-size="18" font-weight="700">AI 标注结果</text>
+          <text x="682" y="100" fill="#fff" font-size="14" opacity=".82">4类病灶已标注</text>
+        </svg>
+      </div>
+      <!-- Legend -->
+      <div class="legend-row">
+        <span class="legend-item"><span class="legend-dot" style="background:#ff5a52;"></span>微动脉瘤</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c5221f;"></span>出血点</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f6c22e;"></span>硬性渗出</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#21c06f;"></span>视盘边界</span>
+      </div>
     </div>
   </div>
 
@@ -316,7 +388,27 @@ input, select, textarea { font: inherit; outline: none; }
   </div>
 
   <div class="report-box">
-    <p><strong>联合筛查结论：</strong>4项子任务均已完成分析。病灶分割检测到微动脉瘤与出血灶；视盘/黄斑定位正常；血管分布分析提示轻度动脉硬化迹象。综合评分：中风险。</p>
+    <p><strong>联合筛查结论：</strong></p>
+    <div class="report-section">
+      <div class="section-title">1. 糖尿病视网膜病变（DR）评估</div>
+      <p>基于多任务联合分析结果，右眼眼底图像中检出微动脉瘤 5 处（主要分布于颞上及鼻下区域），出血灶 4 处（形态不规则，呈火焰状及点片状分布，集中在黄斑周围及颞下象限），硬性渗出 4 处（位于黄斑区颞侧，呈蜡黄色斑点状排列）。上述发现提示中度非增殖性糖尿病视网膜病变（NPDR）改变。微动脉瘤密度及出血灶数量较上次随访问卷（2026年4月）有所增加，建议结合血糖控制情况评估进展速度。</p>
+    </div>
+    <div class="report-section">
+      <div class="section-title">2. 青光眼相关评估</div>
+      <p>视盘边界清晰，经 AI 轮廓分割（绿色标注）测得杯盘比约 0.38，视盘形态呈椭圆形，盘沿宽度在各象限分布均匀，未见明显切迹或局灶性变薄。黄斑区定位正常，中心凹反射未见异常。当前未见明确青光眼性视神经损伤征象，建议结合眼压测量及视野检查进行综合评估，年度随访即可。</p>
+    </div>
+    <div class="report-section">
+      <div class="section-title">3. 年龄相关性黄斑变性（AMD）评估</div>
+      <p>黄斑区未见典型玻璃膜疣沉积，未见地图样萎缩或脉络膜新生血管等渗出性改变迹象。视网膜色素上皮层（RPE）边界完整，未见明显隆起或断裂。当前眼底彩照下未见明确 AMD 阳性征象，建议保留本次基线图像作为后续随访对照，半年至一年复查。</p>
+    </div>
+    <div class="report-section">
+      <div class="section-title">4. 高血压性视网膜病变评估</div>
+      <p>视网膜动脉呈现轻度缩窄及动静脉交叉压迫征（AV 比约 1:2.2），颞上支及鼻下支血管走形稍显僵硬，血管反光增强，提示轻度动脉硬化改变。未见明显棉绒斑、火焰状出血或视盘水肿等恶性高血压眼底改变。综合评估为轻度高血压性视网膜病变，建议结合血压管理并定期复查眼底。</p>
+    </div>
+    <div class="report-section">
+      <div class="section-title">综合风险评级</div>
+      <p><strong style="color:var(--warning);">中风险 —— 建议优先关注糖尿病视网膜病变进展。</strong> 4 项子任务中，DR 相关指标（微动脉瘤 + 出血灶 + 渗出）异常最为显著，与常见疾病筛查结果一致；建议 3 个月内眼底复查，同时控糖、降压并行管理。推荐进入输出报告模块生成完整筛查报告，以便临床医生综合会诊。</p>
+    </div>
   </div>
 
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
@@ -325,6 +417,7 @@ input, select, textarea { font: inherit; outline: none; }
   </div>
 </div>
 </div>
+
 <script>
 function navigateTo(url) { window.location.href = url; }
 function logout() {
@@ -348,18 +441,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-</script>
-<script>
-function switchView(btn, view) {
-  document.querySelectorAll('.tab-pill').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-  var labels = { raw: '原始眼底图像', lesion: '病灶分割', disc: '视盘/黄斑定位', vessel: '血管分布' };
-  var texts = { raw: '原始图像', lesion: '病灶分割', disc: '视盘/黄斑', vessel: '血管分布' };
-  document.getElementById('previewLabel').textContent = labels[view];
-  document.getElementById('previewText').textContent = texts[view];
-  var overlay = document.getElementById('overlayGroup');
-  overlay.style.display = (view === 'raw') ? 'none' : 'block';
-}
 </script>
 </body>
 </html>

@@ -2,47 +2,66 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人中心与能力评估</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>个人中心与能力评估 - 生命医学AI教育平台</title>
 <style>
-/* ===== 生命医学主题库 - 通用样式 ===== */
 :root {
-    --primary: #007aff;
-    --primary-light: rgba(0,122,255,0.1);
-    --primary-dark: #0056cc;
-    --success: #00b36b;
-    --warning: #ffb300;
-    --danger: #ff4d4f;
-    --info: #00bcd4;
-    --gray-50: #f8f9fa;
-    --gray-100: #f5f7fa;
-    --gray-200: #e8ecf0;
-    --gray-300: #dadce0;
-    --gray-400: #bdc1c6;
-    --gray-500: #9aa0a6;
-    --gray-600: #80868b;
-    --gray-700: #5f6368;
-    --gray-800: #3c4043;
-    --gray-900: #202124;
-    --text: #333333;
-    --text-secondary: #999999;
-    --bg: #f0f2f5;
-    --card-bg: #ffffff;
+    --primary: #1a73e8;
+    --primary-dark: #1557b0;
+    --primary-light: #e8f0fe;
+    --success: #10b981;
+    --success-light: #ecfdf5;
+    --warning: #f59e0b;
+    --warning-light: #fffbeb;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --purple: #7c3aed;
+    --purple-light: #f3e8ff;
+    --cyan: #0891b2;
+    --cyan-light: #ecfeff;
+    --gray-50: #f8fafc;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --text: #111827;
+    --bg: #f8fafc;
     --sidebar-width: 220px;
     --header-height: 56px;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 2px 8px rgba(0,0,0,0.06);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
-    --transition: all 0.25s ease;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(15,23,42,0.08);
+    --shadow-lg: 0 8px 24px rgba(15,23,42,0.10);
+    --transition: all 0.2s ease;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: var(--text); background: var(--bg); min-height: 100vh; line-height: 1.6; }
-
-/* ===== Header ===== */
-.header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
+body {
+    font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+.header {
+    height: var(--header-height);
+    background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #fff; text-decoration: none; }
 .header .header-nav { display: flex; gap: 4px; margin-left: 40px; }
 .header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); }
 .header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
@@ -52,238 +71,205 @@ body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, s
 .header .header-right .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: var(--transition); }
 .header .header-right .btn-logout:hover { background: rgba(255,255,255,0.35); }
 
-/* ===== Sidebar ===== */
-.sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 8px 0; }
+.sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    background: #fff;
+    border-right: 1px solid var(--gray-200);
+    overflow-y: auto;
+    z-index: 999;
+    padding: 8px 0;
+}
 .sidebar .menu-group { margin-bottom: 4px; }
 .sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 .sidebar .menu-item { display: flex; align-items: center; padding: 10px 20px; color: var(--gray-700); text-decoration: none; font-size: 13px; transition: var(--transition); border-left: 3px solid transparent; cursor: pointer; }
 .sidebar .menu-item:hover { background: var(--gray-50); color: var(--primary); }
 .sidebar .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
 .sidebar .menu-item .menu-icon { width: 20px; margin-right: 10px; text-align: center; font-size: 14px; }
-.sidebar .has-submenu { cursor: pointer; user-select: none; }
+.sidebar .has-submenu { justify-content: space-between; user-select: none; }
 .sidebar .has-submenu .arrow { margin-left: auto; font-size: 10px; transition: transform 0.2s ease; }
 .sidebar .has-submenu.expanded .arrow { transform: rotate(90deg); }
 .sidebar .submenu { display: none; }
 .sidebar .submenu.open { display: block; }
 .sidebar .submenu .menu-item { padding-left: 48px; font-size: 12px; }
 
-/* ===== Main Content ===== */
-.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
-.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px 30px 40px; min-height: calc(100vh - var(--header-height)); }
+.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
 .breadcrumb span.sep { color: var(--gray-400); }
-.page-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 24px; }
-
-/* ===== Dashboard Grid Layout ===== */
-.dashboard-layout { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
-.left-column { display: flex; flex-direction: column; gap: 20px; }
-.right-column { display: flex; flex-direction: column; gap: 20px; }
-
-/* ===== Card ===== */
-.card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; transition: var(--transition); }
-.card:hover { box-shadow: var(--shadow-lg); }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.card-title { font-size: 16px; font-weight: 600; color: var(--gray-800); display: flex; align-items: center; gap: 8px; }
-.card-title .icon { font-size: 18px; }
-
-/* ===== Module 1: Personal Profile ===== */
-.profile-card { }
-.profile-avatar-section { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-.profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; font-weight: 700; box-shadow: 0 4px 12px rgba(102,126,234,0.4); flex-shrink: 0; }
-.profile-name-section { flex: 1; }
-.profile-name-section h3 { font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
-.profile-name-section .profile-role { font-size: 13px; color: var(--gray-500); }
-.profile-name-section .profile-tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
-.profile-edit-btn { padding: 6px 14px; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; transition: var(--transition); white-space: nowrap; }
-.profile-edit-btn:hover { background: var(--primary-dark); }
-.profile-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.profile-info-item { display: flex; flex-direction: column; gap: 2px; }
-.profile-info-item .info-label { font-size: 11px; color: var(--gray-500); font-weight: 500; }
-.profile-info-item .info-value { font-size: 13px; color: var(--gray-800); font-weight: 500; }
-
-/* ===== Module 2: Learning Stats ===== */
-.stats-card { }
-.certificate-section { margin-bottom: 20px; }
-.certificate-section h4 { font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-.cert-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.cert-table th { background: var(--gray-100); padding: 8px 10px; text-align: left; font-weight: 600; color: var(--gray-700); border-bottom: 2px solid var(--gray-200); font-size: 12px; }
-.cert-table td { padding: 8px 10px; border-bottom: 1px solid var(--gray-100); color: var(--gray-800); font-size: 12px; }
-.cert-table tbody tr:hover { background: var(--gray-50); }
-.cert-actions { display: flex; gap: 6px; }
-.btn-xs { padding: 3px 8px; font-size: 11px; border: none; border-radius: 4px; cursor: pointer; transition: var(--transition); }
-.btn-view { background: var(--primary-light); color: var(--primary); }
-.btn-download { background: #e6f4ea; color: var(--success); }
-.btn-del { background: #fce8e6; color: var(--danger); }
-.credit-overview { background: var(--gray-50); border-radius: var(--radius-sm); padding: 16px; }
-.credit-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.credit-row:last-child { margin-bottom: 0; }
-.credit-label { font-size: 13px; color: var(--gray-600); }
-.credit-value { font-size: 14px; font-weight: 700; color: var(--gray-900); }
-.credit-progress { height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; margin-top: 6px; }
-.credit-progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-.credit-detail-btn { margin-top: 12px; padding: 6px 14px; background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary); border-radius: 6px; font-size: 12px; cursor: pointer; transition: var(--transition); width: 100%; text-align: center; }
-.credit-detail-btn:hover { background: var(--primary); color: #fff; }
-
-/* ===== Module 3: Recent Browsing ===== */
-.recent-card { }
-.recent-list { display: flex; flex-direction: column; gap: 10px; }
-.recent-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; border: 1px solid transparent; }
-.recent-item:hover { background: var(--gray-50); border-color: var(--gray-200); }
-.recent-thumb { width: 48px; height: 48px; border-radius: 8px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.recent-info { flex: 1; min-width: 0; }
-.recent-info .recent-title { font-size: 13px; font-weight: 600; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.recent-info .recent-meta { font-size: 11px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
-.recent-tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 500; }
-
-/* ===== Module 4: Learning Trajectory ===== */
-.trajectory-card { }
-.trajectory-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid var(--gray-200); }
-.traj-tab { padding: 8px 20px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; font-size: 13px; font-family: inherit; color: var(--gray-600); transition: var(--transition); font-weight: 500; }
-.traj-tab:hover { color: var(--primary); }
-.traj-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-.traj-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-.traj-stat-card { background: var(--gray-50); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
-.traj-stat-card .traj-stat-value { font-size: 24px; font-weight: 700; color: var(--gray-900); }
-.traj-stat-card .traj-stat-label { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-.traj-stat-card .traj-stat-trend { font-size: 11px; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 4px; }
-.trend-up { color: var(--success); }
-.trend-down { color: var(--danger); }
-.trajectory-chart-container { width: 100%; height: 280px; position: relative; }
-.trajectory-chart-container canvas { width: 100% !important; height: 100% !important; }
-
-/* ===== Module 5: Current Courses ===== */
-.courses-card { }
-.course-list { display: flex; flex-direction: column; gap: 14px; }
-.course-item { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); transition: var(--transition); }
-.course-item:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(0,122,255,0.1); }
-.course-cover { width: 64px; height: 64px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
-.course-info { flex: 1; min-width: 0; }
-.course-info h4 { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.course-meta { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.course-progress-bar { height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; }
-.course-progress-fill { height: 100%; border-radius: 3px; }
-.course-continue-btn { padding: 7px 16px; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; transition: var(--transition); white-space: nowrap; font-weight: 500; }
-.course-continue-btn:hover { background: var(--primary-dark); }
-
-/* ===== Module 6: AI Ability Radar ===== */
-.radar-card { }
-.radar-layout { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
-.radar-chart-container { width: 280px; height: 280px; position: relative; }
-.radar-chart-container canvas { width: 100% !important; height: 100% !important; }
-.radar-legend { display: flex; flex-direction: column; gap: 10px; }
-.radar-legend-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 6px; font-size: 13px; }
-.radar-legend-item .dim-name { color: var(--gray-700); font-weight: 500; }
-.radar-legend-item .dim-score { font-weight: 700; }
-.ability-desc { margin-top: 16px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-sm); }
-.ability-desc h4 { font-size: 13px; font-weight: 600; color: var(--gray-800); margin-bottom: 8px; }
-.ability-desc p { font-size: 12px; color: var(--gray-600); line-height: 1.8; }
-
-/* ===== Module 7: Smart Learning Suggestions ===== */
-.suggestions-card { }
-.suggestion-list { display: flex; flex-direction: column; gap: 14px; }
-.suggestion-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px; border-radius: var(--radius-sm); border-left: 4px solid; }
-.suggestion-item.weak { background: #fff1f0; border-left-color: var(--danger); }
-.suggestion-item.strength { background: #f6ffed; border-left-color: var(--success); }
-.suggestion-item.path { background: #e6f7ff; border-left-color: var(--primary); }
-.suggestion-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.suggestion-item.weak .suggestion-icon { background: #ff4d4f; color: #fff; }
-.suggestion-item.strength .suggestion-icon { background: var(--success); color: #fff; }
-.suggestion-item.path .suggestion-icon { background: var(--primary); color: #fff; }
-.suggestion-content { flex: 1; }
-.suggestion-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.suggestion-item.weak h4 { color: #cf1322; }
-.suggestion-item.strength h4 { color: #389e0d; }
-.suggestion-item.path h4 { color: var(--primary); }
-.suggestion-content p { font-size: 12px; color: var(--gray-600); line-height: 1.6; }
-.suggestion-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.suggestion-btn { padding: 5px 14px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; transition: var(--transition); font-weight: 500; }
-.suggestion-item.weak .suggestion-btn { background: #ff4d4f; color: #fff; }
-.suggestion-item.strength .suggestion-btn { background: var(--success); color: #fff; }
-.suggestion-item.path .suggestion-btn { background: var(--primary); color: #fff; }
-.suggestion-item.weak .suggestion-btn.outline { background: transparent; border: 1px solid #ff4d4f; color: #ff4d4f; }
-.suggestion-item.path .suggestion-btn.outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
-.refresh-btn { margin-top: 16px; padding: 8px 18px; background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
-.refresh-btn:hover { background: var(--gray-200); }
-
-/* ===== Modal ===== */
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; animation: fadeIn 0.2s; }
-.modal-overlay.show { display: flex; }
-.modal { background: #fff; border-radius: 12px; box-shadow: var(--shadow-lg); width: 90%; max-width: 560px; max-height: 85vh; overflow-y: auto; animation: slideUp 0.25s; }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--gray-200); }
-.modal-header h3 { font-size: 17px; color: var(--gray-900); font-weight: 600; }
-.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray-500); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
-.modal-close:hover { background: var(--gray-50); color: var(--gray-700); }
-.modal-body { padding: 24px; }
-.modal-footer { padding: 14px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; }
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 9px 13px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,122,255,0.1); }
-.form-group textarea { resize: vertical; min-height: 80px; }
-.form-row { display: flex; gap: 16px; }
-.form-row .form-group { flex: 1; }
-.btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; gap: 6px; white-space: nowrap; }
+.page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+.page-title { font-size: 24px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+.page-desc { color: var(--gray-500); font-size: 13px; max-width: 760px; }
+.head-actions { display: flex; gap: 10px; flex-shrink: 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: 6px; padding: 8px 14px; font-size: 13px; font-family: inherit; font-weight: 600; cursor: pointer; text-decoration: none; transition: var(--transition); white-space: nowrap; }
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-dark); }
-.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
-.btn-outline:hover { background: var(--gray-50); }
-.btn-success { background: var(--success); color: #fff; }
+.btn-outline { background: #fff; color: var(--gray-700); border: 1px solid var(--gray-300); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-light { background: var(--primary-light); color: var(--primary); }
 
-/* Certificate mockup */
-.cert-mockup { width: 100%; max-width: 480px; margin: 0 auto; padding: 30px; border: 3px double var(--primary); border-radius: 8px; text-align: center; background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%); }
-.cert-mockup h2 { font-size: 20px; color: var(--primary); margin-bottom: 16px; }
-.cert-mockup .cert-name { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
-.cert-mockup .cert-detail { font-size: 12px; color: var(--gray-600); margin-bottom: 4px; }
-.cert-mockup .cert-seal { width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; margin: 16px auto 0; font-weight: 700; }
+.overview-grid { display: grid; grid-template-columns: 1.2fr repeat(4, minmax(130px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.profile-summary, .metric-card, .card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+.profile-summary { padding: 18px; display: flex; align-items: center; gap: 16px; min-height: 128px; }
+.avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; box-shadow: 0 8px 18px rgba(37,99,235,0.24); flex-shrink: 0; }
+.profile-main h2 { font-size: 20px; color: var(--gray-900); margin-bottom: 4px; }
+.profile-main p { color: var(--gray-500); font-size: 13px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.tag.blue { background: var(--primary-light); color: var(--primary); }
+.tag.green { background: var(--success-light); color: var(--success); }
+.tag.orange { background: var(--warning-light); color: #b45309; }
+.tag.purple { background: var(--purple-light); color: var(--purple); }
+.metric-card { padding: 16px; display: flex; flex-direction: column; justify-content: center; min-height: 128px; }
+.metric-label { color: var(--gray-500); font-size: 12px; margin-bottom: 8px; }
+.metric-value { font-size: 26px; line-height: 1.2; font-weight: 800; color: var(--gray-900); }
+.metric-foot { margin-top: 8px; color: var(--gray-500); font-size: 12px; }
+.metric-foot.up { color: var(--success); }
+.metric-foot.warn { color: var(--warning); }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.layout { display: grid; grid-template-columns: minmax(360px, 0.95fr) minmax(0, 1.55fr); gap: 18px; align-items: start; }
+.column { display: flex; flex-direction: column; gap: 18px; }
+.card { padding: 18px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.card-title { font-size: 16px; font-weight: 800; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
+.card-subtitle { font-size: 12px; color: var(--gray-500); }
+.section-note { color: var(--gray-500); font-size: 12px; margin-top: -8px; margin-bottom: 14px; }
 
-@media (max-width: 1200px) {
-    .dashboard-layout { grid-template-columns: 1fr; }
-    .left-column { flex-direction: row; flex-wrap: wrap; }
-    .left-column > .card { flex: 1; min-width: 300px; }
-    .radar-layout { grid-template-columns: 1fr; }
-    .radar-chart-container { margin: 0 auto; }
+.archive-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.archive-tile { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; background: var(--gray-50); }
+.archive-tile b { display: block; font-size: 20px; color: var(--gray-900); }
+.archive-tile span { display: block; color: var(--gray-500); font-size: 12px; margin-top: 2px; }
+.archive-table, .cert-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.archive-table th, .cert-table th { background: var(--gray-50); color: var(--gray-600); padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--gray-200); font-weight: 700; }
+.archive-table td, .cert-table td { padding: 10px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); vertical-align: middle; }
+.archive-table tr:last-child td, .cert-table tr:last-child td { border-bottom: none; }
+.status { display: inline-flex; align-items: center; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+.status.done { background: var(--success-light); color: var(--success); }
+.status.ing { background: var(--warning-light); color: #b45309; }
+.status.todo { background: var(--gray-100); color: var(--gray-500); }
+
+.learning-path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.path-step { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; position: relative; background: #fff; min-height: 130px; }
+.path-step.active { border-color: var(--primary); background: #f8fbff; }
+.path-step strong { display: block; color: var(--gray-900); margin-bottom: 6px; }
+.path-step p { font-size: 12px; color: var(--gray-500); line-height: 1.5; margin-bottom: 10px; }
+.path-step .step-num { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--gray-100); color: var(--gray-600); font-weight: 800; font-size: 12px; margin-bottom: 8px; }
+.path-step.active .step-num { background: var(--primary); color: #fff; }
+.mini-progress { height: 6px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.mini-progress i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
+
+.track-layout { display: grid; grid-template-columns: 1fr 280px; gap: 18px; align-items: stretch; }
+.bar-chart { height: 250px; display: flex; align-items: end; gap: 18px; padding: 18px 18px 28px; border: 1px solid var(--gray-200); border-radius: 8px; background: linear-gradient(180deg, #fff 0%, #f8fafc 100%); position: relative; }
+.bar-chart:before { content: ""; position: absolute; left: 18px; right: 18px; top: 25%; bottom: 28px; background: linear-gradient(to bottom, var(--gray-200) 1px, transparent 1px); background-size: 100% 33.33%; pointer-events: none; }
+.bar-item { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: end; gap: 6px; position: relative; z-index: 1; }
+.bar { width: 30px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #1a73e8, #8ec5ff); min-height: 6px; position: relative; }
+.bar b { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); white-space: nowrap; color: var(--gray-700); font-size: 11px; }
+.bar-label { color: var(--gray-500); font-size: 12px; }
+.coverage-panel { display: flex; flex-direction: column; gap: 10px; }
+.coverage-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; }
+.coverage-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--gray-700); margin-bottom: 8px; }
+.coverage-track { height: 7px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+.coverage-track i { display: block; height: 100%; border-radius: 999px; }
+
+.radar-section { display: grid; grid-template-columns: 330px 1fr; gap: 18px; align-items: center; }
+.radar-wrap { border: 1px solid var(--gray-200); border-radius: 8px; padding: 14px; background: #fff; display: flex; justify-content: center; }
+.radar-svg { width: 300px; height: 300px; overflow: visible; }
+.radar-grid { fill: none; stroke: var(--gray-200); stroke-width: 1; }
+.radar-axis { stroke: var(--gray-200); stroke-width: 1; }
+.radar-area { fill: rgba(26,115,232,0.22); stroke: var(--primary); stroke-width: 2; }
+.radar-point { fill: var(--primary); stroke: #fff; stroke-width: 2; }
+.radar-label { font-size: 12px; fill: var(--gray-700); font-weight: 700; }
+.ability-list { display: flex; flex-direction: column; gap: 10px; }
+.ability-row { display: grid; grid-template-columns: 106px 1fr 44px; align-items: center; gap: 10px; font-size: 13px; }
+.ability-track { height: 8px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+.ability-track i { display: block; height: 100%; border-radius: 999px; }
+.ability-row b { text-align: right; color: var(--gray-900); }
+.ability-note { margin-top: 12px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; font-size: 12px; color: var(--gray-600); line-height: 1.7; }
+
+.feedback-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.feedback-card { border-radius: 8px; padding: 14px; border: 1px solid var(--gray-200); min-height: 168px; display: flex; flex-direction: column; }
+.feedback-card.warn { background: #fff7ed; border-color: #fed7aa; }
+.feedback-card.blue { background: #eff6ff; border-color: #bfdbfe; }
+.feedback-card.green { background: #f0fdf4; border-color: #bbf7d0; }
+.feedback-card h4 { font-size: 14px; color: var(--gray-900); margin-bottom: 8px; }
+.feedback-card p { font-size: 12px; color: var(--gray-600); line-height: 1.65; flex: 1; }
+.feedback-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.feedback-actions a { font-size: 12px; color: var(--primary); text-decoration: none; font-weight: 700; }
+
+.timeline { display: flex; flex-direction: column; gap: 12px; }
+.timeline-item { display: grid; grid-template-columns: 80px 1fr; gap: 12px; }
+.timeline-date { color: var(--gray-500); font-size: 12px; padding-top: 2px; }
+.timeline-body { border-left: 3px solid var(--primary-light); padding-left: 12px; }
+.timeline-body b { display: block; color: var(--gray-800); font-size: 13px; }
+.timeline-body span { color: var(--gray-500); font-size: 12px; }
+
+.cert-actions { display: flex; gap: 6px; }
+.btn-xs { border: 1px solid var(--gray-300); background: #fff; border-radius: 5px; padding: 3px 8px; font-size: 11px; cursor: pointer; color: var(--gray-700); }
+.btn-xs.primary { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.credit-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.credit-box { background: var(--gray-50); border-radius: 8px; padding: 12px; border: 1px solid var(--gray-200); }
+.credit-box strong { display: block; font-size: 22px; color: var(--gray-900); }
+.credit-box span { color: var(--gray-500); font-size: 12px; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.48); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 24px; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 10px; width: min(560px, 100%); max-height: 86vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--gray-200); }
+.modal-header h3 { font-size: 17px; color: var(--gray-900); }
+.modal-close { width: 32px; height: 32px; border: none; background: var(--gray-50); border-radius: 6px; cursor: pointer; font-size: 18px; color: var(--gray-500); }
+.modal-body { padding: 20px; }
+.cert-preview { border: 3px double var(--primary); border-radius: 8px; padding: 28px; text-align: center; background: linear-gradient(135deg, #f8fbff 0%, #fff 100%); }
+.cert-preview h2 { color: var(--primary); margin-bottom: 12px; }
+.cert-preview .cert-name { font-size: 18px; font-weight: 800; color: var(--gray-900); margin: 12px 0; }
+.cert-preview p { color: var(--gray-600); font-size: 13px; margin: 4px 0; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; }
+
+@media (max-width: 1280px) {
+    .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layout, .track-layout, .radar-section { grid-template-columns: 1fr; }
+    .feedback-grid, .learning-path { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 768px) {
     .sidebar { width: 60px; }
-    .sidebar .menu-item span { display: none; }
-    .sidebar .menu-group-title { display: none; }
-    .main-content { margin-left: 60px; }
-    .traj-stats { grid-template-columns: repeat(2, 1fr); }
+    .sidebar .menu-item span, .sidebar .menu-group-title, .sidebar .has-submenu .arrow { display: none; }
+    .main-content { margin-left: 60px; padding: 18px; }
+    .page-head { flex-direction: column; }
+    .overview-grid, .feedback-grid, .learning-path, .archive-grid, .credit-strip { grid-template-columns: 1fr; }
+    .bar-chart { gap: 8px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== Header ===== -->
 <div class="header">
-    <a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
-        <a href="基础课程.html">生命医学AI教育平台</a>
+        <a href="基础课程.html" class="active">生命医学AI教育平台</a>
         <a href="临床决策支撑.html">眼病/慢病专家系统</a>
-</div>
+    </div>
     <div class="header-right">
-        <span class="user-info" id="headerUserName">李同学</span>
+        <span class="user-info" id="headerUserName">张教授</span>
         <button class="btn-logout" onclick="logout()">退出</button>
     </div>
 </div>
 
-<!-- ===== Sidebar ===== -->
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
     <div class="menu-group">
         <div class="menu-group-title">AI教育平台</div>
-        <a class="menu-item" href="基础课程.html">
-            <span class="menu-icon">📖</span><span>基础课程</span>
-        </a>
-        <a class="menu-item" href="案例教学.html">
-            <span class="menu-icon">📋</span><span>案例教学</span>
-        </a>
+        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📖</span><span>基础课程</span></a>
+        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span><span>案例教学</span></a>
         <div class="menu-item has-submenu" onclick="toggleSubmenu(this)">
-            <span class="menu-icon">🔧</span><span>技能实践</span>
+            <span><span class="menu-icon">🔧</span><span>技能实践</span></span>
             <span class="arrow">▶</span>
         </div>
         <div class="submenu">
@@ -293,975 +279,413 @@ body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, s
             <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
             <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
         </div>
-        <a class="menu-item" href="考试中心.html">
-            <span class="menu-icon">📝</span><span>考试中心</span>
-        </a>
-        <a class="menu-item active" href="个人中心与能力评估.html">
-            <span class="menu-icon">👤</span><span>个人中心与能力评估</span>
-        </a>
+        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
+        <a class="menu-item active" href="个人中心与能力评估.html"><span class="menu-icon">👤</span><span>个人中心与能力评估</span></a>
     </div>
 </div>
 
-<!-- ===== Main Content ===== -->
-<div class="main-content">
+<main class="main-content">
     <div class="breadcrumb">
-        <a href="#">AI教育平台</a><span class="sep">></span><span>个人中心与能力评估</span>
+        <a href="基础课程.html">AI教育平台</a><span class="sep">></span><span>个人中心与能力评估</span>
     </div>
-    <h1 class="page-title">个人中心与能力评估</h1>
 
-    <!-- Dashboard Layout: Left Column + Right Column -->
-    <div class="dashboard-layout">
+    <div class="page-head">
+        <div>
+            <h1 class="page-title">个人中心与能力评估</h1>
+            <p class="page-desc">基于基础课程、案例教学、技能实践和考试中心数据，自动生成个人学习档案、学习轨迹、AI能力雷达图，并给出个性化教学反馈。</p>
+        </div>
+        <div class="head-actions">
+            <a class="btn btn-outline" href="考试中心.html">查看考试记录</a>
+            <button class="btn btn-primary" onclick="refreshEvaluation()">重新生成能力画像</button>
+        </div>
+    </div>
 
-        <!-- ===== Left Column ===== -->
-        <div class="left-column">
-
-            <!-- Module 1: Personal Profile -->
-            <div class="card profile-card">
-                <div class="card-header">
-                    <span class="card-title"><span class="icon">👤</span>个人档案</span>
-                    <button class="profile-edit-btn" onclick="openModal('editProfileModal')">编辑档案</button>
-                </div>
-                <div class="profile-avatar-section">
-                    <div class="profile-avatar" id="profileAvatar">李</div>
-                    <div class="profile-name-section">
-                        <h3 id="profileName">李同学</h3>
-                        <div class="profile-role" id="profileRole">眼科学硕士在读</div>
-                        <div class="profile-tags">
-                            <span class="recent-tag" style="background:rgba(0,122,255,0.1);color:#007aff;">中级学员</span>
-                            <span class="recent-tag" style="background:#e6f4ea;color:#00b36b;">VIP</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="profile-info-grid">
-                    <div class="profile-info-item">
-                        <span class="info-label">性别</span>
-                        <span class="info-value" id="infoGender">男</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">出生日期</span>
-                        <span class="info-value" id="infoBirth">1999-08-15</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">所属院校</span>
-                        <span class="info-value" id="infoSchool">北京协和医学院</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">专业方向</span>
-                        <span class="info-value" id="infoMajor">眼科学</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">入学年份</span>
-                        <span class="info-value" id="infoEnroll">2023年</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">学号</span>
-                        <span class="info-value" id="infoStudentId">S202301427</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">联系方式</span>
-                        <span class="info-value" id="infoPhone">138****6789</span>
-                    </div>
-                    <div class="profile-info-item">
-                        <span class="info-label">紧急联系人</span>
-                        <span class="info-value" id="infoEmergency">李父 139****1234</span>
-                    </div>
+    <section class="overview-grid">
+        <div class="profile-summary">
+            <div class="avatar">张</div>
+            <div class="profile-main">
+                <h2>张教授</h2>
+                <p>眼科方向 / 带教专家 / AI诊疗应用进阶学员</p>
+                <div class="tag-row">
+                    <span class="tag blue">课程进度 68%</span>
+                    <span class="tag green">综合能力 B+</span>
+                    <span class="tag purple">AI技能徽章 4枚</span>
                 </div>
             </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">累计学习时长</div>
+            <div class="metric-value">86.5h</div>
+            <div class="metric-foot up">近7天 +8.2h</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">内容覆盖率</div>
+            <div class="metric-value">72%</div>
+            <div class="metric-foot">课程/案例/实训综合</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">平均测评正确率</div>
+            <div class="metric-value">84%</div>
+            <div class="metric-foot warn">病例分析题偏弱</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">已获学分</div>
+            <div class="metric-value">28</div>
+            <div class="metric-foot up">距年度目标还差 12 分</div>
+        </div>
+    </section>
 
-            <!-- Module 2: Learning Stats -->
-            <div class="card stats-card">
+    <div class="layout">
+        <div class="column">
+            <section class="card">
                 <div class="card-header">
-                    <span class="card-title"><span class="icon">📊</span>学习统计</span>
+                    <div>
+                        <div class="card-title">个人学习档案管理</div>
+                        <div class="card-subtitle">记录课程、实验报告、考试成绩与模型作品</div>
+                    </div>
+                    <button class="btn btn-light" onclick="alert('进入档案编辑')">编辑档案</button>
                 </div>
-                <!-- Certificate List -->
-                <div class="certificate-section">
-                    <h4>获得证书 <span style="font-size:12px;color:var(--gray-500);font-weight:400;">(共3张)</span></h4>
-                    <div style="overflow-x:auto;">
-                    <table class="cert-table">
+                <div class="archive-grid">
+                    <div class="archive-tile"><b>18</b><span>学习课程记录</span></div>
+                    <div class="archive-tile"><b>7</b><span>实验/实训报告</span></div>
+                    <div class="archive-tile"><b>9</b><span>考试测评记录</span></div>
+                    <div class="archive-tile"><b>5</b><span>AI模型作品</span></div>
+                </div>
+                <div style="overflow-x:auto;margin-top:14px;">
+                    <table class="archive-table">
                         <thead>
-                            <tr>
-                                <th>证书名称</th>
-                                <th>颁发机构</th>
-                                <th>颁发日期</th>
-                                <th>证书编号</th>
-                                <th>操作</th>
-                            </tr>
+                            <tr><th>档案内容</th><th>来源模块</th><th>最近状态</th><th>沉淀成果</th></tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>眼底影像诊断初级证书</td>
-                                <td>生命医学AI教育平台</td>
-                                <td>2024-12-20</td>
-                                <td>CERT-2024-001427</td>
-                                <td>
-                                    <div class="cert-actions">
-                                        <button class="btn-xs btn-view" onclick="viewCertificate(0)">查看</button>
-                                        <button class="btn-xs btn-download" onclick="downloadCertificate(0)">下载</button>
-                                        <button class="btn-xs btn-del" onclick="deleteCertificate(0)">删除</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>青光眼诊疗专项证书</td>
-                                <td>生命医学AI教育平台</td>
-                                <td>2025-03-15</td>
-                                <td>CERT-2025-000892</td>
-                                <td>
-                                    <div class="cert-actions">
-                                        <button class="btn-xs btn-view" onclick="viewCertificate(1)">查看</button>
-                                        <button class="btn-xs btn-download" onclick="downloadCertificate(1)">下载</button>
-                                        <button class="btn-xs btn-del" onclick="deleteCertificate(1)">删除</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>AI医学影像分析结业证书</td>
-                                <td>生命医学AI教育平台</td>
-                                <td>2025-06-10</td>
-                                <td>CERT-2025-001203</td>
-                                <td>
-                                    <div class="cert-actions">
-                                        <button class="btn-xs btn-view" onclick="viewCertificate(2)">查看</button>
-                                        <button class="btn-xs btn-download" onclick="downloadCertificate(2)">下载</button>
-                                        <button class="btn-xs btn-del" onclick="deleteCertificate(2)">删除</button>
-                                    </div>
-                                </td>
-                            </tr>
+                            <tr><td>糖尿病视网膜病变基础</td><td>基础课程</td><td><span class="status done">已学完</span></td><td>章节测验 92%</td></tr>
+                            <tr><td>疑难眼底病例讨论</td><td>案例教学</td><td><span class="status ing">进行中</span></td><td>病例分析报告 2份</td></tr>
+                            <tr><td>OCT病灶分割训练</td><td>技能实践</td><td><span class="status done">已提交</span></td><td>标注集与模型作品</td></tr>
+                            <tr><td>眼科基础模块考核</td><td>考试中心</td><td><span class="status done">已完成</span></td><td>历次成绩 86 / 92</td></tr>
                         </tbody>
                     </table>
-                    </div>
                 </div>
-                <!-- Credit Overview -->
-                <div class="credit-overview">
-                    <h4 style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:14px;">学分概览</h4>
-                    <div class="credit-row">
-                        <span class="credit-label">总学分</span>
-                        <span class="credit-value">86 分</span>
-                    </div>
-                    <div class="credit-row">
-                        <span class="credit-label">本学期学分</span>
-                        <span class="credit-value">24 分</span>
-                    </div>
-                    <div class="credit-row">
-                        <span class="credit-label">本年度要求</span>
-                        <span class="credit-value">60 分</span>
-                    </div>
-                    <div style="margin-top:8px;">
-                        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray-600);margin-bottom:4px;">
-                            <span>完成进度</span>
-                            <span>86/60 分 (143%)</span>
-                        </div>
-                        <div class="credit-progress">
-                            <div class="credit-progress-fill" style="width:100%;background:var(--success);"></div>
-                        </div>
-                    </div>
-                    <button class="credit-detail-btn" onclick="openModal('creditDetailModal')">学分明细</button>
-                </div>
-            </div>
+            </section>
 
-            <!-- Module 3: Recent Browsing -->
-            <div class="card recent-card">
+            <section class="card">
                 <div class="card-header">
-                    <span class="card-title"><span class="icon">🕐</span>最近浏览</span>
-                </div>
-                <div class="recent-list">
-                    <div class="recent-item" onclick="alert('跳转到课程详情')">
-                        <div class="recent-thumb" style="background:#e6f7ff;">📖</div>
-                        <div class="recent-info">
-                            <div class="recent-title">眼底解剖与生理基础</div>
-                            <div class="recent-meta">
-                                <span class="recent-tag" style="background:rgba(0,122,255,0.1);color:#007aff;">课程</span>
-                                <span>2025-06-28 14:32</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="recent-item" onclick="alert('跳转到病例详情')">
-                        <div class="recent-thumb" style="background:#f6ffed;">📋</div>
-                        <div class="recent-info">
-                            <div class="recent-title">糖尿病视网膜病变病例分析</div>
-                            <div class="recent-meta">
-                                <span class="recent-tag" style="background:#e6f4ea;color:#00b36b;">病例</span>
-                                <span>2025-06-27 09:15</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="recent-item" onclick="alert('跳转到资源详情')">
-                        <div class="recent-thumb" style="background:#fff8e6;">📄</div>
-                        <div class="recent-info">
-                            <div class="recent-title">OCT影像解读指南（PDF文档）</div>
-                            <div class="recent-meta">
-                                <span class="recent-tag" style="background:#fff8e6;color:#ffb300;">资源</span>
-                                <span>2025-06-26 16:45</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="recent-item" onclick="alert('跳转到考试详情')">
-                        <div class="recent-thumb" style="background:#fef0f7;">📝</div>
-                        <div class="recent-info">
-                            <div class="recent-title">眼科基础知识模拟考试（第3套）</div>
-                            <div class="recent-meta">
-                                <span class="recent-tag" style="background:#fef0f7;color:#e64980;">考试</span>
-                                <span>2025-06-25 11:20</span>
-                            </div>
-                        </div>
+                    <div>
+                        <div class="card-title">学习与测评前置路径</div>
+                        <div class="card-subtitle">能力评估来自图3中的课程、案例、实训和考试数据</div>
                     </div>
                 </div>
-            </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">步骤 1</div>
+                        <div class="timeline-body"><b>完成基础课程章节学习</b><span>系统采集学习时长、章节完成率、讲义浏览和答疑记录。</span></div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">步骤 2</div>
+                        <div class="timeline-body"><b>进入案例教学与技能实践</b><span>沉淀病例分析报告、影像标注质量、模型训练结果和实训作品。</span></div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">步骤 3</div>
+                        <div class="timeline-body"><b>参加考试中心测评</b><span>结合单课程测评、模块考核、全周期综合考试形成能力分布。</span></div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">步骤 4</div>
+                        <div class="timeline-body"><b>自动生成能力画像</b><span>多模态大语言模型汇总学习轨迹、答题错误率和作品质量，输出雷达图与建议。</span></div>
+                    </div>
+                </div>
+            </section>
 
-        </div><!-- /left-column -->
-
-        <!-- ===== Right Column ===== -->
-        <div class="right-column">
-
-            <!-- Module 4: Learning Trajectory -->
-            <div class="card trajectory-card">
+            <section class="card">
                 <div class="card-header">
-                    <span class="card-title"><span class="icon">📈</span>学习轨迹分析</span>
-                </div>
-                <div class="trajectory-tabs">
-                    <button class="traj-tab active" onclick="switchTrajTab('7d', this)">近7天</button>
-                    <button class="traj-tab" onclick="switchTrajTab('30d', this)">近30天</button>
-                    <button class="traj-tab" onclick="switchTrajTab('all', this)">全部</button>
-                </div>
-                <div class="traj-stats">
-                    <div class="traj-stat-card">
-                        <div class="traj-stat-value" id="statTotalHours">42.5h</div>
-                        <div class="traj-stat-label">总学习时长</div>
-                        <div class="traj-stat-trend trend-up">↑ 12.1% 较上周</div>
+                    <div>
+                        <div class="card-title">证书与学分管理</div>
+                        <div class="card-subtitle">支持课程结业证书、实验认证和AI技能徽章查询</div>
                     </div>
-                    <div class="traj-stat-card">
-                        <div class="traj-stat-value" id="statCourses">12</div>
-                        <div class="traj-stat-label">完成课程数</div>
-                        <div class="traj-stat-trend trend-up">↑ 2门 较上周</div>
-                    </div>
-                    <div class="traj-stat-card">
-                        <div class="traj-stat-value" id="statAvgScore">84</div>
-                        <div class="traj-stat-label">平均测验得分</div>
-                        <div class="traj-stat-trend trend-down">↓ 3分 较上周</div>
-                    </div>
-                    <div class="traj-stat-card">
-                        <div class="traj-stat-value" id="statHighScore">96</div>
-                        <div class="traj-stat-label">最高分</div>
-                        <div class="traj-stat-trend trend-up">↑ 2分 较上周</div>
-                    </div>
+                    <button class="btn btn-outline" onclick="openModal('certModal')">生成证书</button>
                 </div>
-                <div class="trajectory-chart-container">
-                    <canvas id="trajectoryChart"></canvas>
+                <div class="credit-strip">
+                    <div class="credit-box"><strong>28</strong><span>已获学分</span></div>
+                    <div class="credit-box"><strong>3</strong><span>课程结业证书</span></div>
+                    <div class="credit-box"><strong>4</strong><span>AI技能徽章</span></div>
                 </div>
-            </div>
-
-            <!-- Module 5: Current Courses -->
-            <div class="card courses-card">
-                <div class="card-header">
-                    <span class="card-title"><span class="icon">📚</span>当前在学课程</span>
-                    <a href="基础课程.html" class="btn btn-outline btn-sm" style="font-size:12px;text-decoration:none;">查看全部</a>
+                <div style="overflow-x:auto;">
+                    <table class="cert-table">
+                        <thead>
+                            <tr><th>证书/徽章</th><th>来源</th><th>发放条件</th><th>状态</th><th>操作</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>眼底影像诊断结业证书</td><td>基础课程</td><td>课程完成 + 测验正确率≥80%</td><td><span class="status done">已生成</span></td><td><div class="cert-actions"><button class="btn-xs primary" onclick="openModal('certModal')">查看</button><button class="btn-xs">下载</button></div></td></tr>
+                            <tr><td>OCT标注实训认证</td><td>技能实践</td><td>标注质控通过 + 报告提交</td><td><span class="status done">已生成</span></td><td><div class="cert-actions"><button class="btn-xs primary" onclick="openModal('certModal')">查看</button><button class="btn-xs">下载</button></div></td></tr>
+                            <tr><td>AI模型构建能力徽章</td><td>数据标注与AI实训</td><td>模型作品评分≥75</td><td><span class="status ing">待审核</span></td><td><div class="cert-actions"><button class="btn-xs">查询</button></div></td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="course-list" id="courseList">
-                    <!-- Course items rendered by JS -->
-                </div>
-            </div>
-
-            <!-- Module 6: AI Ability Assessment -->
-            <div class="card radar-card">
-                <div class="card-header">
-                    <span class="card-title"><span class="icon">🤖</span>AI能力评估</span>
-                    <span style="font-size:12px;color:var(--gray-500);">更新于 2025-06-28</span>
-                </div>
-                <div class="radar-layout">
-                    <div class="radar-chart-container">
-                        <canvas id="radarChart"></canvas>
-                    </div>
-                    <div class="radar-legend" id="radarLegend">
-                        <!-- Rendered by JS -->
-                    </div>
-                </div>
-                <div class="ability-desc" id="abilityDesc">
-                    <!-- Rendered by JS -->
-                </div>
-            </div>
-
-            <!-- Module 7: Smart Learning Suggestions -->
-            <div class="card suggestions-card">
-                <div class="card-header">
-                    <span class="card-title"><span class="icon">💡</span>智能学习建议</span>
-                    <button class="refresh-btn" onclick="refreshSuggestions()">🔄 刷新建议</button>
-                </div>
-                <div class="suggestion-list" id="suggestionList">
-                    <!-- Rendered by JS -->
-                </div>
-            </div>
-
-        </div><!-- /right-column -->
-
-    </div><!-- /dashboard-layout -->
-</div><!-- /main-content -->
-
-<!-- ===== Modal: Edit Profile ===== -->
-<div class="modal-overlay" id="editProfileModal">
-    <div class="modal" style="max-width:600px;">
-        <div class="modal-header">
-            <h3>编辑个人档案</h3>
-            <button class="modal-close" onclick="closeModal('editProfileModal')">×</button>
+            </section>
         </div>
-        <div class="modal-body">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>姓名</label>
-                    <input type="text" id="editName" value="李同学">
+
+        <div class="column">
+            <section class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">学习轨迹分析</div>
+                        <div class="card-subtitle">分析学习时间、活跃度和内容覆盖率</div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag blue">近7天</span>
+                        <span class="tag green">自动统计</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>性别</label>
-                    <select id="editGender">
-                        <option value="男" selected>男</option>
-                        <option value="女">女</option>
-                    </select>
+                <div class="track-layout">
+                    <div class="bar-chart" id="timeChart"></div>
+                    <div class="coverage-panel">
+                        <div class="coverage-item">
+                            <div class="coverage-head"><span>基础课程覆盖</span><b>78%</b></div>
+                            <div class="coverage-track"><i style="width:78%;background:var(--primary);"></i></div>
+                        </div>
+                        <div class="coverage-item">
+                            <div class="coverage-head"><span>案例教学覆盖</span><b>64%</b></div>
+                            <div class="coverage-track"><i style="width:64%;background:var(--warning);"></i></div>
+                        </div>
+                        <div class="coverage-item">
+                            <div class="coverage-head"><span>技能实践覆盖</span><b>58%</b></div>
+                            <div class="coverage-track"><i style="width:58%;background:var(--purple);"></i></div>
+                        </div>
+                        <div class="coverage-item">
+                            <div class="coverage-head"><span>考试测评覆盖</span><b>86%</b></div>
+                            <div class="coverage-track"><i style="width:86%;background:var(--success);"></i></div>
+                        </div>
+                        <div class="coverage-item">
+                            <div class="coverage-head"><span>近7天活跃度</span><b>高</b></div>
+                            <div class="coverage-track"><i style="width:92%;background:var(--cyan);"></i></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>出生日期</label>
-                    <input type="date" id="editBirth" value="1999-08-15">
+            </section>
+
+            <section class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">AI能力雷达图</div>
+                        <div class="card-subtitle">可视化知识掌握、诊断能力、模型构建与科研创新水平</div>
+                    </div>
+                    <span class="card-subtitle">更新时间：2026-07-16</span>
                 </div>
-                <div class="form-group">
-                    <label>入学年份</label>
-                    <select id="editEnroll">
-                        <option value="2021年">2021年</option>
-                        <option value="2022年">2022年</option>
-                        <option value="2023年" selected>2023年</option>
-                        <option value="2024年">2024年</option>
-                        <option value="2025年">2025年</option>
-                    </select>
+                <div class="radar-section">
+                    <div class="radar-wrap">
+                        <svg class="radar-svg" viewBox="0 0 300 300" aria-label="AI能力雷达图">
+                            <polygon class="radar-grid" points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"></polygon>
+                            <polygon class="radar-grid" points="150,80 210.6,115 210.6,185 150,220 89.4,185 89.4,115"></polygon>
+                            <polygon class="radar-grid" points="150,110 184.6,130 184.6,170 150,190 115.4,170 115.4,130"></polygon>
+                            <line class="radar-axis" x1="150" y1="150" x2="150" y2="50"></line>
+                            <line class="radar-axis" x1="150" y1="150" x2="236.6" y2="100"></line>
+                            <line class="radar-axis" x1="150" y1="150" x2="236.6" y2="200"></line>
+                            <line class="radar-axis" x1="150" y1="150" x2="150" y2="250"></line>
+                            <line class="radar-axis" x1="150" y1="150" x2="63.4" y2="200"></line>
+                            <line class="radar-axis" x1="150" y1="150" x2="63.4" y2="100"></line>
+                            <polygon class="radar-area" id="radarArea"></polygon>
+                            <g id="radarPoints"></g>
+                            <text class="radar-label" x="150" y="35" text-anchor="middle">知识掌握</text>
+                            <text class="radar-label" x="252" y="96" text-anchor="start">诊断能力</text>
+                            <text class="radar-label" x="252" y="207" text-anchor="start">模型构建</text>
+                            <text class="radar-label" x="150" y="272" text-anchor="middle">科研创新</text>
+                            <text class="radar-label" x="48" y="207" text-anchor="end">实践操作</text>
+                            <text class="radar-label" x="48" y="96" text-anchor="end">临床推理</text>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="ability-list" id="abilityList"></div>
+                        <div class="ability-note">
+                            当前能力画像由课程完成率、章节测验、模块考核、病例分析报告、影像标注质控和AI模型作品综合计算。临床推理与模型构建低于总体水平，是下一阶段教学反馈的主要依据。
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>所属院校</label>
-                <input type="text" id="editSchool" value="北京协和医学院">
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>专业方向</label>
-                    <input type="text" id="editMajor" value="眼科学">
+            </section>
+
+            <section class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">智能反馈与学习建议</div>
+                        <div class="card-subtitle">根据评估结果自动推荐学习方向与实践内容</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>学号</label>
-                    <input type="text" id="editStudentId" value="S202301427">
+                <div class="feedback-grid">
+                    <div class="feedback-card warn">
+                        <h4>薄弱项：临床推理</h4>
+                        <p>病例分析题正确率为 68%，错误集中在鉴别诊断和处置路径选择。建议优先进入案例教学，完成糖网、青光眼、AMD三类疑难病例讨论。</p>
+                        <div class="feedback-actions">
+                            <a href="案例教学.html">进入案例教学</a>
+                            <a href="疑难病例分析与学术研讨.html">查看研讨</a>
+                        </div>
+                    </div>
+                    <div class="feedback-card blue">
+                        <h4>实践建议：模型构建</h4>
+                        <p>AI模型作品评分为 74，主要问题是训练集覆盖不足、验证指标说明不完整。建议补做影像标注与AI实训，完善模型报告。</p>
+                        <div class="feedback-actions">
+                            <a href="数据标注与AI实训.html">进入AI实训</a>
+                            <a href="影像标注工具.html">补充标注</a>
+                        </div>
+                    </div>
+                    <div class="feedback-card green">
+                        <h4>巩固方向：综合测评</h4>
+                        <p>基础课程掌握稳定，但全周期测评尚未覆盖影像判读全课程。建议完成全周期考试，更新能力雷达图并生成下一阶段学习计划。</p>
+                        <div class="feedback-actions">
+                            <a href="考试中心.html">进入考试中心</a>
+                            <a href="基础课程.html">复习基础课程</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>联系方式</label>
-                    <input type="text" id="editPhone" value="138****6789">
+            </section>
+
+            <section class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">模块学习完成度</div>
+                        <div class="card-subtitle">与当前已开发模块保持一致</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>紧急联系人</label>
-                    <input type="text" id="editEmergency" value="李父 139****1234">
+                <div class="learning-path">
+                    <div class="path-step active">
+                        <span class="step-num">1</span>
+                        <strong>基础课程</strong>
+                        <p>已完成 12/18 门，章节测验平均正确率 88%。</p>
+                        <div class="mini-progress"><i style="width:68%;"></i></div>
+                    </div>
+                    <div class="path-step active">
+                        <span class="step-num">2</span>
+                        <strong>案例教学</strong>
+                        <p>已完成 9 个病例，2 份病例分析报告待完善。</p>
+                        <div class="mini-progress"><i style="width:64%;background:var(--warning);"></i></div>
+                    </div>
+                    <div class="path-step active">
+                        <span class="step-num">3</span>
+                        <strong>技能实践</strong>
+                        <p>影像标注质控通过，AI模型作品仍需复核。</p>
+                        <div class="mini-progress"><i style="width:58%;background:var(--purple);"></i></div>
+                    </div>
+                    <div class="path-step active">
+                        <span class="step-num">4</span>
+                        <strong>考试中心</strong>
+                        <p>模块考核已完成，全周期测评待补齐。</p>
+                        <div class="mini-progress"><i style="width:86%;background:var(--success);"></i></div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('editProfileModal')">取消</button>
-            <button class="btn btn-primary" onclick="saveProfile()">保存修改</button>
+            </section>
         </div>
     </div>
-</div>
+</main>
 
-<!-- ===== Modal: View Certificate ===== -->
-<div class="modal-overlay" id="viewCertModal">
-    <div class="modal" style="max-width:520px;">
+<div class="modal-overlay" id="certModal">
+    <div class="modal">
         <div class="modal-header">
-            <h3>证书详情</h3>
-            <button class="modal-close" onclick="closeModal('viewCertModal')">×</button>
+            <h3>证书与AI技能徽章</h3>
+            <button class="modal-close" onclick="closeModal('certModal')">×</button>
         </div>
         <div class="modal-body">
-            <div class="cert-mockup" id="certMockup">
-                <!-- Rendered by JS -->
+            <div class="cert-preview">
+                <h2>生命医学AI教育平台</h2>
+                <div class="cert-name">眼底影像诊断结业证书</div>
+                <p>授予：张教授</p>
+                <p>完成内容：基础课程、章节测验、模块考核</p>
+                <p>证书编号：LM-AI-CERT-20260716-0328</p>
+                <p>同步生成：AI影像判读技能徽章</p>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('viewCertModal')">关闭</button>
+            <button class="btn btn-outline" onclick="closeModal('certModal')">关闭</button>
             <button class="btn btn-primary" onclick="alert('证书下载中...')">下载证书</button>
         </div>
     </div>
 </div>
 
-<!-- ===== Modal: Credit Detail ===== -->
-<div class="modal-overlay" id="creditDetailModal">
-    <div class="modal" style="max-width:640px;">
-        <div class="modal-header">
-            <h3>学分获取明细</h3>
-            <button class="modal-close" onclick="closeModal('creditDetailModal')">×</button>
-        </div>
-        <div class="modal-body">
-            <div style="overflow-x:auto;">
-            <table class="cert-table">
-                <thead>
-                    <tr>
-                        <th>课程名称</th>
-                        <th>获得学分</th>
-                        <th>日期</th>
-                        <th>类型</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>眼底解剖与生理基础</td>
-                        <td>3 分</td>
-                        <td>2025-06-20</td>
-                        <td><span class="recent-tag" style="background:rgba(0,122,255,0.1);color:#007aff;">课程学习</span></td>
-                    </tr>
-                    <tr>
-                        <td>青光眼诊疗技术进展</td>
-                        <td>4 分</td>
-                        <td>2025-06-15</td>
-                        <td><span class="recent-tag" style="background:rgba(0,122,255,0.1);color:#007aff;">课程学习</span></td>
-                    </tr>
-                    <tr>
-                        <td>眼科基础知识测验</td>
-                        <td>2 分</td>
-                        <td>2025-06-10</td>
-                        <td><span class="recent-tag" style="background:#fef0f7;color:#e64980;">考试</span></td>
-                    </tr>
-                    <tr>
-                        <td>AI医学影像分析实践</td>
-                        <td>5 分</td>
-                        <td>2025-06-05</td>
-                        <td><span class="recent-tag" style="background:rgba(0,122,255,0.1);color:#007aff;">课程学习</span></td>
-                    </tr>
-                    <tr>
-                        <td>眼底读片技能实训</td>
-                        <td>3 分</td>
-                        <td>2025-05-28</td>
-                        <td><span class="recent-tag" style="background:#e6f4ea;color:#00b36b;">实训</span></td>
-                    </tr>
-                    <tr>
-                        <td>学术研讨会：AI在眼科的应用</td>
-                        <td>2 分</td>
-                        <td>2025-05-20</td>
-                        <td><span class="recent-tag" style="background:#fff8e6;color:#ffb300;">学术活动</span></td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('creditDetailModal')">关闭</button>
-        </div>
-    </div>
-</div>
-
 <script>
-// ===== Mock Data =====
-const mockCourses = [
-    {
-        name: '眼底影像诊断基础',
-        progress: 78,
-        completed: 14,
-        total: 18,
-        lastStudy: '2025-06-28',
-        color: '#007aff',
-        bgColor: '#e6f7ff',
-        icon: '🔬'
-    },
-    {
-        name: '青光眼诊疗技术进展',
-        progress: 45,
-        completed: 6,
-        total: 14,
-        lastStudy: '2025-06-27',
-        color: '#00b36b',
-        bgColor: '#e7f9f2',
-        icon: '👁️'
-    },
-    {
-        name: 'AI辅助眼科诊断实践',
-        progress: 23,
-        completed: 3,
-        total: 13,
-        lastStudy: '2025-06-26',
-        color: '#ffb300',
-        bgColor: '#fff8e6',
-        icon: '🤖'
-    },
-    {
-        name: '黄斑病变影像解读',
-        progress: 92,
-        completed: 11,
-        total: 12,
-        lastStudy: '2025-06-25',
-        color: '#e64980',
-        bgColor: '#fef0f7',
-        icon: '📊'
-    },
-    {
-        name: '眼科手术模拟训练',
-        progress: 12,
-        completed: 1,
-        total: 8,
-        lastStudy: '2025-06-24',
-        color: '#9b59b6',
-        bgColor: '#f3e8fd',
-        icon: '🔧'
-    }
+var studyTime = [
+    { day: '07-10', hour: 2.8 },
+    { day: '07-11', hour: 3.6 },
+    { day: '07-12', hour: 1.5 },
+    { day: '07-13', hour: 4.2 },
+    { day: '07-14', hour: 5.1 },
+    { day: '07-15', hour: 3.9 },
+    { day: '07-16', hour: 4.8 }
 ];
 
-const abilityDimensions = [
-    { name: 'DR识别能力', score: 88, avgScore: 75, color: '#ff4d4f' },
-    { name: '青光眼诊断能力', score: 76, avgScore: 72, color: '#00b36b' },
-    { name: '黄斑病变分析能力', score: 82, avgScore: 70, color: '#ffb300' },
-    { name: '影像判读速度', score: 91, avgScore: 68, color: '#007aff' },
-    { name: '临床推理能力', score: 69, avgScore: 73, color: '#9b59b6' },
-    { name: '病理知识掌握度', score: 85, avgScore: 71, color: '#00bcd4' }
+var abilityData = [
+    { name: '知识掌握', score: 86, color: '#1a73e8' },
+    { name: '诊断能力', score: 82, color: '#10b981' },
+    { name: '模型构建', score: 74, color: '#7c3aed' },
+    { name: '科研创新', score: 78, color: '#0891b2' },
+    { name: '实践操作', score: 81, color: '#f59e0b' },
+    { name: '临床推理', score: 68, color: '#ef4444' }
 ];
 
-const suggestionsData = [
-    {
-        type: 'weak',
-        title: '薄弱项提醒：临床推理能力需加强',
-        desc: '您的临床推理能力评分为 69 分，低于同级别医生平均水平（73分）。建议加强病例分析练习，重点训练鉴别诊断思维。',
-        btns: [
-            { text: '去学习', primary: true },
-            { text: '去做专项练习', primary: false }
-        ]
-    },
-    {
-        type: 'strength',
-        title: '优势项保持：影像判读速度优秀',
-        desc: '您的影像判读速度得分 91 分，超过 92% 的同级别学员。建议继续保持当前学习节奏，可尝试更高难度的影像判读挑战。',
-        btns: [
-            { text: '查看前沿研究动态', primary: true }
-        ]
-    },
-    {
-        type: 'path',
-        title: '学习路径推荐：黄斑病变深度学习路径',
-        desc: '根据您的学习记录和能力评估，推荐您学习「黄斑病变影像解读」→「OCT影像分析进阶」→「黄斑病变手术规划」路径，预计总时长 12 小时，可获得 8 学分。',
-        btns: [
-            { text: '立即开始学习', primary: true },
-            { text: '加入学习计划', primary: false }
-        ]
-    }
-];
-
-// Trajectory chart data for different periods
-const trajectoryData = {
-    '7d': {
-        labels: ['06-22', '06-23', '06-24', '06-25', '06-26', '06-27', '06-28'],
-        values: [3.2, 2.8, 4.1, 1.5, 3.8, 5.2, 4.6],
-        courses: [1, 0, 2, 0, 1, 2, 1]
-    },
-    '30d': {
-        labels: ['6/1', '6/4', '6/7', '6/10', '6/13', '6/16', '6/19', '6/22', '6/25', '6/28'],
-        values: [2.5, 3.1, 4.2, 3.8, 5.0, 4.5, 3.9, 4.2, 3.6, 4.6],
-        courses: [1, 1, 2, 1, 2, 1, 1, 1, 1, 1]
-    },
-    'all': {
-        labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
-        values: [28, 32, 38, 35, 42, 43],
-        courses: [4, 5, 8, 6, 10, 7]
-    }
-};
-
-let currentTrajPeriod = '7d';
-
-// ===== Render Functions =====
-
-function renderCourses() {
-    const container = document.getElementById('courseList');
-    container.innerHTML = mockCourses.map(c => `
-        <div class="course-item">
-            <div class="course-cover" style="background:${c.bgColor};color:${c.color};">${c.icon}</div>
-            <div class="course-info">
-                <h4>${c.name}</h4>
-                <div class="course-meta">
-                    <span>已学 ${c.completed}/${c.total} 章节</span>
-                    <span>上次学习: ${c.lastStudy}</span>
-                </div>
-                <div class="course-progress-bar">
-                    <div class="course-progress-fill" style="width:${c.progress}%;background:${c.color};"></div>
-                </div>
-            </div>
-            <button class="course-continue-btn" onclick="alert('继续学习: ${c.name}')">继续学习</button>
-        </div>
-    `).join('');
+function renderTimeChart() {
+    var chart = document.getElementById('timeChart');
+    var max = Math.max.apply(null, studyTime.map(function(item) { return item.hour; }));
+    chart.innerHTML = studyTime.map(function(item) {
+        var height = Math.round(item.hour / max * 88);
+        return '<div class="bar-item"><div class="bar" style="height:' + height + '%"><b>' + item.hour + 'h</b></div><span class="bar-label">' + item.day + '</span></div>';
+    }).join('');
 }
 
-function renderRadarLegend() {
-    const container = document.getElementById('radarLegend');
-    container.innerHTML = abilityDimensions.map(d => `
-        <div class="radar-legend-item" style="background:${d.score < d.avgScore ? '#fff1f0' : '#f6ffed'};">
-            <span class="dim-name">${d.name}</span>
-            <span class="dim-score" style="color:${d.color};">${d.score} 分</span>
-        </div>
-    `).join('');
-}
-
-function renderAbilityDesc() {
-    const container = document.getElementById('abilityDesc');
-    const weakItems = abilityDimensions.filter(d => d.score < d.avgScore);
-    const strongItems = abilityDimensions.filter(d => d.score >= d.avgScore);
-    let html = '<h4>能力维度说明</h4>';
-    if (weakItems.length > 0) {
-        weakItems.forEach(item => {
-            html += `<p style="color:#cf1322;">• ${item.name}：${item.score}分，低于同级别医生平均水平（${item.avgScore}分），<strong>需加强练习</strong>。</p>`;
-        });
-    }
-    if (strongItems.length > 0) {
-        strongItems.forEach(item => {
-            html += `<p style="color:#389e0d;">• ${item.name}：${item.score}分，高于同级别医生平均水平（${item.avgScore}分），表现优秀，请<strong>保持</strong>。</p>`;
-        });
-    }
-    container.innerHTML = html;
-}
-
-function renderSuggestions() {
-    const container = document.getElementById('suggestionList');
-    container.innerHTML = suggestionsData.map(s => `
-        <div class="suggestion-item ${s.type}">
-            <div class="suggestion-icon">${s.type === 'weak' ? '⚠️' : s.type === 'strength' ? '✅' : '📍'}</div>
-            <div class="suggestion-content">
-                <h4>${s.title}</h4>
-                <p>${s.desc}</p>
-                <div class="suggestion-actions">
-                    ${s.btns.map((b, i) => `<button class="suggestion-btn ${!b.primary && s.type !== 'weak' ? 'outline' : ''}" onclick="alert('操作: ${b.text}')">${b.text}</button>`).join('')}
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ===== Chart: Radar =====
-function drawRadarChart() {
-    const canvas = document.getElementById('radarChart');
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const displaySize = 280;
-    canvas.width = displaySize * dpr;
-    canvas.height = displaySize * dpr;
-    canvas.style.width = displaySize + 'px';
-    canvas.style.height = displaySize + 'px';
-    ctx.scale(dpr, dpr);
-
-    const cx = displaySize / 2;
-    const cy = displaySize / 2;
-    const maxR = 110;
-    const levels = 5;
-    const dims = abilityDimensions.length;
-    const angleStep = (Math.PI * 2) / dims;
-    const startAngle = -Math.PI / 2;
-
-    ctx.clearRect(0, 0, displaySize, displaySize);
-
-    // Draw grid
-    for (let l = 1; l <= levels; l++) {
-        const r = (maxR / levels) * l;
-        ctx.beginPath();
-        for (let i = 0; i <= dims; i++) {
-            const angle = startAngle + angleStep * (i % dims);
-            const x = cx + Math.cos(angle) * r;
-            const y = cy + Math.sin(angle) * r;
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = '#e8ecf0';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        if (l % 2 === 0) {
-            ctx.fillStyle = 'rgba(245,247,250,0.5)';
-            ctx.fill();
-        }
-    }
-
-    // Draw data polygon
-    ctx.beginPath();
-    abilityDimensions.forEach((d, i) => {
-        const r = (d.score / 100) * maxR;
-        const angle = startAngle + angleStep * i;
-        const x = cx + Math.cos(angle) * r;
-        const y = cy + Math.sin(angle) * r;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-    });
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(0,122,255,0.15)';
-    ctx.fill();
-    ctx.strokeStyle = '#007aff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Draw data points
-    abilityDimensions.forEach((d, i) => {
-        const r = (d.score / 100) * maxR;
-        const angle = startAngle + angleStep * i;
-        const x = cx + Math.cos(angle) * r;
-        const y = cy + Math.sin(angle) * r;
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fillStyle = '#007aff';
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    });
-
-    // Draw labels
-    ctx.font = '12px PingFang SC, Microsoft YaHei, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    abilityDimensions.forEach((d, i) => {
-        const labelR = maxR + 22;
-        const angle = startAngle + angleStep * i;
-        const x = cx + Math.cos(angle) * labelR;
-        const y = cy + Math.sin(angle) * labelR;
-        ctx.fillStyle = '#5f6368';
-        ctx.fillText(d.name, x, y);
-        // Score below label
-        ctx.fillStyle = d.color;
-        ctx.font = 'bold 11px PingFang SC, Microsoft YaHei, sans-serif';
-        ctx.fillText(d.score + '分', x, y + 16);
-        ctx.font = '12px PingFang SC, Microsoft YaHei, sans-serif';
-    });
-}
-
-// ===== Chart: Trajectory (Canvas) =====
-let trajectoryChart = null;
-
-function drawTrajectoryChart(period) {
-    const canvas = document.getElementById('trajectoryChart');
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const W = Math.floor(rect.width);
-    const H = Math.floor(rect.height);
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.scale(dpr, dpr);
-
-    const data = trajectoryData[period];
-    const padL = 50, padR = 20, padT = 20, padB = 40;
-    const chartW = W - padL - padR;
-    const chartH = H - padT - padB;
-
-    ctx.clearRect(0, 0, W, H);
-
-    // Find max value for Y axis
-    const maxVal = Math.max(...data.values) * 1.2 || 1;
-    const yTicks = 5;
-
-    // Draw Y axis gridlines and labels
-    ctx.font = '11px PingFang SC, Microsoft YaHei, sans-serif';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    for (let i = 0; i <= yTicks; i++) {
-        const y = padT + chartH - (chartH / yTicks) * i;
-        const val = (maxVal / yTicks * i).toFixed(1);
-        ctx.fillStyle = '#9aa0a6';
-        ctx.fillText(val + 'h', padL - 8, y);
-        // Gridline
-        ctx.beginPath();
-        ctx.moveTo(padL, y);
-        ctx.lineTo(W - padR, y);
-        ctx.strokeStyle = '#e8ecf0';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
-
-    // Draw X axis labels
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    const barW = chartW / data.labels.length;
-    data.labels.forEach((label, i) => {
-        const x = padL + barW * i + barW / 2;
-        ctx.fillStyle = '#5f6368';
-        ctx.fillText(label, x, padT + chartH + 10);
-    });
-
-    // Draw bars
-    const barWidth = Math.min(barW * 0.5, 24);
-    data.values.forEach((val, i) => {
-        const x = padL + barW * i + barW / 2 - barWidth / 2;
-        const barH = (val / maxVal) * chartH;
-        const y = padT + chartH - barH;
-
-        // Gradient
-        const grad = ctx.createLinearGradient(x, y, x, padT + chartH);
-        grad.addColorStop(0, '#007aff');
-        grad.addColorStop(1, 'rgba(0,122,255,0.3)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        const radius = Math.min(4, barWidth / 2);
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + barWidth - radius, y);
-        ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
-        ctx.lineTo(x + barWidth, padT + chartH);
-        ctx.lineTo(x, padT + chartH);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.fill();
-
-        // Value on top
-        ctx.fillStyle = '#3c4043';
-        ctx.font = 'bold 10px PingFang SC, Microsoft YaHei, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(val + 'h', x + barWidth / 2, y - 6);
-    });
-}
-
-// ===== Tab Switching =====
-function switchTrajTab(period, btn) {
-    currentTrajPeriod = period;
-    document.querySelectorAll('.traj-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    // Update stats mock
-    const stats = {
-        '7d': { hours: '42.5h', courses: '12', avg: '84', high: '96' },
-        '30d': { hours: '168.3h', courses: '38', avg: '81', high: '98' },
-        'all': { hours: '526h', courses: '126', avg: '83', high: '99' }
+function radarPoint(index, score) {
+    var cx = 150;
+    var cy = 150;
+    var radius = score;
+    var angle = -Math.PI / 2 + index * Math.PI * 2 / abilityData.length;
+    return {
+        x: cx + Math.cos(angle) * radius,
+        y: cy + Math.sin(angle) * radius
     };
-    document.getElementById('statTotalHours').textContent = stats[ toPeriodKey(period) ]?.hours || stats['7d'].hours;
-    // For simplicity, just update the first stat
-    const s = stats[period] || stats['7d'];
-    document.getElementById('statTotalHours').textContent = s.hours;
-    document.getElementById('statCourses').textContent = s.courses;
-    document.getElementById('statAvgScore').textContent = s.avg;
-    document.getElementById('statHighScore').textContent = s.high;
-    drawTrajectoryChart(period);
 }
 
-function toPeriodKey(p) {
-    return p;
+function renderRadar() {
+    var points = abilityData.map(function(item, index) {
+        var p = radarPoint(index, item.score);
+        return p.x.toFixed(1) + ',' + p.y.toFixed(1);
+    }).join(' ');
+    document.getElementById('radarArea').setAttribute('points', points);
+    document.getElementById('radarPoints').innerHTML = abilityData.map(function(item, index) {
+        var p = radarPoint(index, item.score);
+        return '<circle class="radar-point" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4"></circle>';
+    }).join('');
 }
 
-// ===== Modal Controls =====
+function renderAbilityList() {
+    document.getElementById('abilityList').innerHTML = abilityData.map(function(item) {
+        return '<div class="ability-row"><span>' + item.name + '</span><div class="ability-track"><i style="width:' + item.score + '%;background:' + item.color + ';"></i></div><b>' + item.score + '</b></div>';
+    }).join('');
+}
+
+function refreshEvaluation() {
+    alert('已基于课程、案例、实训、考试数据重新生成能力画像。');
+}
+
 function openModal(id) {
     document.getElementById(id).classList.add('show');
 }
+
 function closeModal(id) {
     document.getElementById(id).classList.remove('show');
 }
 
-// ===== Profile Edit =====
-function saveProfile() {
-    const name = document.getElementById('editName').value;
-    const gender = document.getElementById('editGender').value;
-    const birth = document.getElementById('editBirth').value;
-    const school = document.getElementById('editSchool').value;
-    const major = document.getElementById('editMajor').value;
-    const enroll = document.getElementById('editEnroll').value;
-    const studentId = document.getElementById('editStudentId').value;
-    const phone = document.getElementById('editPhone').value;
-    const emergency = document.getElementById('editEmergency').value;
-
-    document.getElementById('profileName').textContent = name;
-    document.getElementById('profileRole').textContent = major + ' ' + enroll.replace('年','') + '级';
-    document.getElementById('infoGender').textContent = gender;
-    document.getElementById('infoBirth').textContent = birth;
-    document.getElementById('infoSchool').textContent = school;
-    document.getElementById('infoMajor').textContent = major;
-    document.getElementById('infoEnroll').textContent = enroll;
-    document.getElementById('infoStudentId').textContent = studentId;
-    document.getElementById('infoPhone').textContent = phone;
-    document.getElementById('infoEmergency').textContent = emergency;
-
-    // Update avatar initial
-    document.getElementById('profileAvatar').textContent = name.charAt(0);
-
-    closeModal('editProfileModal');
-    alert('个人档案已更新！');
+function toggleSubmenu(el) {
+    el.classList.toggle('expanded');
+    var submenu = el.nextElementSibling;
+    if (submenu) submenu.classList.toggle('open');
 }
 
-// ===== Certificate Operations =====
-const certificates = [
-    { name: '眼底影像诊断初级证书', org: '生命医学AI教育平台', date: '2024-12-20', id: 'CERT-2024-001427' },
-    { name: '青光眼诊疗专项证书', org: '生命医学AI教育平台', date: '2025-03-15', id: 'CERT-2025-000892' },
-    { name: 'AI医学影像分析结业证书', org: '生命医学AI教育平台', date: '2025-06-10', id: 'CERT-2025-001203' }
-];
-
-function viewCertificate(idx) {
-    const cert = certificates[idx];
-    document.getElementById('certMockup').innerHTML = `
-        <h2>🎓 荣 誉 证 书</h2>
-        <div class="cert-name">${cert.name}</div>
-        <div class="cert-detail">颁发给：<strong>李同学</strong></div>
-        <div class="cert-detail">颁发机构：${cert.org}</div>
-        <div class="cert-detail">颁发日期：${cert.date}</div>
-        <div class="cert-detail">证书编号：${cert.id}</div>
-        <div class="cert-seal">官方认证</div>
-    `;
-    openModal('viewCertModal');
-}
-
-function downloadCertificate(idx) {
-    alert('证书下载功能：' + certificates[idx].name + '\n（模拟下载中...）');
-}
-
-function deleteCertificate(idx) {
-    if (confirm('确定要删除证书「' + certificates[idx].name + '」吗？此操作不可恢复。')) {
-        alert('证书已删除（模拟）');
+function logout() {
+    if (confirm('确定要退出登录吗？')) {
+        localStorage.removeItem('life_med_user');
+        window.location.href = 'login.html';
     }
 }
 
-// ===== Refresh Suggestions =====
-function refreshSuggestions() {
-    // Randomize scores for demo
-    const newSuggestions = JSON.parse(JSON.stringify(suggestionsData));
-    newSuggestions[0].desc = newSuggestions[0].desc.replace(/\d+ 分/, Math.floor(Math.random() * 20 + 60) + ' 分');
-    // Re-render
-    const container = document.getElementById('suggestionList');
-    container.innerHTML = newSuggestions.map(s => `
-        <div class="suggestion-item ${s.type}">
-            <div class="suggestion-icon">${s.type === 'weak' ? '⚠️' : s.type === 'strength' ? '✅' : '📍'}</div>
-            <div class="suggestion-content">
-                <h4>${s.title}</h4>
-                <p>${s.desc}</p>
-                <div class="suggestion-actions">
-                    ${s.btns.map((b, i) => `<button class="suggestion-btn ${!b.primary && s.type !== 'weak' ? 'outline' : ''}" onclick="alert('操作: ${b.text}')">${b.text}</button>`).join('')}
-                </div>
-            </div>
-        </div>
-    `).join('');
-    alert('学习建议已刷新！');
-}
-
-// ===== Init =====
-function toggleSubmenu(el) {
-    el.classList.toggle('expanded');
-    el.nextElementSibling.classList.toggle('open');
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+    renderTimeChart();
+    renderRadar();
+    renderAbilityList();
     try {
         var user = JSON.parse(localStorage.getItem('life_med_user'));
-        if (user && user.name) {
-            document.getElementById('headerUserName').textContent = user.name;
-        }
+        if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
     } catch(e) {}
-
-    renderCourses();
-    renderRadarLegend();
-    renderAbilityDesc();
-    renderSuggestions();
-
-    // Draw charts after DOM is ready and sizes are calculated
-    setTimeout(function() {
-        drawRadarChart();
-        drawTrajectoryChart(currentTrajPeriod);
-    }, 100);
-
-    // Close modals on overlay click
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === this) this.classList.remove('show');
-        });
-    });
-
-    // Responsive chart redraw
-    window.addEventListener('resize', function() {
-        drawRadarChart();
-        drawTrajectoryChart(currentTrajPeriod);
-    });
 });
 </script>
 </body>

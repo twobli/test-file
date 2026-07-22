@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -6,118 +6,117 @@
 <title>疑难病例分析与学术研讨</title>
 <style>
 :root {
-    --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe;
-    --success: #34a853; --warning: #fbbc04; --danger: #ea4335;
-    --gray-50: #f8f9fa; --gray-100: #f5f7fa; --gray-200: #e8ecf0; --gray-300: #dadce0;
-    --gray-400: #bdc1c6; --gray-500: #9aa0a6; --gray-600: #80868b; --gray-700: #5f6368;
-    --gray-800: #3c4043; --gray-900: #202124;
-    --sidebar-width: 220px; --header-height: 56px; --radius: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08); --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
-    --transition: all 0.2s ease;
+    --primary: #4a6fa5; --primary-dark: #3a5a8c; --primary-light: #edf2f7;
+    --success: #5a8a6a; --warning: #c9a94e; --danger: #c95a5a;
+    --gray-50: #f7f8fa; --gray-100: #f0f1f4; --gray-200: #e4e6ea; --gray-300: #d0d3d9;
+    --gray-400: #a8acb4; --gray-500: #8b8f97; --gray-600: #6b6f77; --gray-700: #50545c;
+    --gray-800: #383b42; --gray-900: #1f2126;
+    --sidebar-width: 210px; --header-height: 48px; --radius: 4px;
+    --shadow: none; --transition: none;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; font-size: 14px; color: #333; background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
-.header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
-.header .header-nav { display: flex; gap: 4px; margin-left: 40px; }
-.header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); }
-.header .header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
-.header .header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; }
-.header .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-.sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 8px 0; }
-.sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.sidebar .menu-item { display: flex; align-items: center; padding: 10px 20px; color: var(--gray-700); text-decoration: none; font-size: 13px; transition: var(--transition); border-left: 3px solid transparent; cursor: pointer; }
-.sidebar .menu-item:hover { background: var(--gray-50); color: var(--primary); }
-.sidebar .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-.sidebar .menu-icon { width: 20px; margin-right: 10px; text-align: center; font-size: 14px; }
+body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; font-size: 13px; color: var(--gray-800); background: var(--gray-50); min-height: 100vh; line-height: 1.55; }
+.header { height: var(--header-height); background: #3b4a5e; color: #ddd; display: flex; align-items: center; padding: 0 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
+.header .logo { font-size: 15px; font-weight: 600; }
+.header .header-nav { display: flex; gap: 2px; margin-left: 32px; }
+.header .header-nav a { color: rgba(255,255,255,0.7); text-decoration: none; padding: 5px 12px; border-radius: 3px; font-size: 12px; }
+.header .header-nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.header .header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 12px; color: #ccc; }
+.header .btn-logout { background: rgba(255,255,255,0.12); color: #ccc; border: none; padding: 4px 12px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+.sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 4px 0; }
+.sidebar .menu-group-title { padding: 10px 18px 4px; font-size: 10px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.sidebar .menu-item { display: flex; align-items: center; padding: 7px 18px; color: var(--gray-600); text-decoration: none; font-size: 12px; border-left: 2px solid transparent; cursor: pointer; }
+.sidebar .menu-item:hover { background: var(--gray-50); color: var(--gray-800); }
+.sidebar .menu-item.active { background: #edf2f7; color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.sidebar .menu-icon { width: 18px; margin-right: 8px; text-align: center; font-size: 12px; }
 .menu-item.has-submenu { position: relative; cursor: pointer; }
-.menu-item .arrow { margin-left: auto; font-size: 10px; transition: transform 0.2s; }
+.menu-item .arrow { margin-left: auto; font-size: 9px; }
 .menu-item.expanded .arrow { transform: rotate(90deg); }
-.submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.submenu { max-height: 0; overflow: hidden; }
 .submenu.open { max-height: 280px; }
-.submenu .menu-item { padding-left: 50px; font-size: 12px; }
-.submenu .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
-.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.submenu .menu-item { padding-left: 44px; font-size: 12px; }
+.submenu .menu-item.active { background: #edf2f7; color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 20px; min-height: calc(100vh - var(--header-height)); }
+.breadcrumb { font-size: 12px; color: var(--gray-500); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
-.page-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 20px; }
-.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 20px; }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
-.card-title { font-size: 16px; font-weight: 600; color: var(--gray-800); }
-.btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: var(--transition); gap: 6px; }
-.btn-primary { background: var(--primary); color: #fff; } .btn-primary:hover { background: var(--primary-dark); }
-.btn-danger { background: var(--danger); color: #fff; } .btn-danger:hover { background: #d33426; }
-.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
+.page-title { font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 14px; }
+.card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--gray-100); }
+.card-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 6px 14px; border: 1px solid var(--gray-300); border-radius: 3px; font-size: 12px; font-weight: 500; cursor: pointer; gap: 4px; background: #fff; color: var(--gray-700); }
+.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); } .btn-primary:hover { background: var(--primary-dark); }
+.btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); } .btn-danger:hover { background: #b54a4a; }
+.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-600); }
 .btn-outline:hover { background: var(--gray-50); }
-.tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
-.tag-blue { background: #e8f0fe; color: #1a73e8; }
-.tag-orange { background: #fef7e0; color: #b06000; }
-.tag-red { background: #fce8e6; color: #c5221f; }
-.filter-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px 18px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 16px; }
-.filter-bar input { padding: 7px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; min-width: 240px; outline: none; transition: var(--transition); }
-.filter-bar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.filter-bar select { padding: 7px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; outline: none; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; font-weight: 500; }
+.tag-blue { background: #e8edf4; color: #4a6fa5; }
+.tag-orange { background: #f9f2e0; color: #9a7a30; }
+.tag-red { background: #f6e4e4; color: #9a4a4a; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 14px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 12px; }
+.filter-bar input { padding: 5px 10px; border: 1px solid var(--gray-300); border-radius: 3px; font-size: 12px; min-width: 220px; outline: none; }
+.filter-bar input:focus { border-color: var(--primary); }
+.filter-bar select { padding: 5px 10px; border: 1px solid var(--gray-300); border-radius: 3px; font-size: 12px; outline: none; }
 .filter-bar select:focus { border-color: var(--primary); }
 .discuss-list { display: flex; flex-direction: column; gap: 0; }
-.discuss-item { display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: var(--transition); }
+.discuss-item { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--gray-100); cursor: pointer; }
 .discuss-item:hover { background: var(--gray-50); }
 .discuss-item .discuss-info { flex: 1; min-width: 0; }
-.discuss-item .discuss-title { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.discuss-item .discuss-title { font-size: 13px; font-weight: 600; color: var(--gray-800); margin-bottom: 3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .discuss-item .discuss-desc { font-size: 12px; color: var(--gray-600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.discuss-item .discuss-stats { display: flex; gap: 16px; font-size: 12px; color: var(--gray-500); flex-shrink: 0; margin-left: 16px; }
-.discuss-item .discuss-stats span { display: flex; align-items: center; gap: 3px; user-select: none; }
-.discuss-item .action-btn { background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 6px; transition: var(--transition); color: var(--gray-500); display: flex; align-items: center; gap: 3px; }
+.discuss-item .discuss-stats { display: flex; gap: 12px; font-size: 12px; color: var(--gray-500); flex-shrink: 0; margin-left: 12px; }
+.discuss-item .discuss-stats span { display: flex; align-items: center; gap: 2px; }
+.discuss-item .action-btn { background: none; border: none; cursor: pointer; font-size: 12px; padding: 3px 6px; border-radius: 3px; color: var(--gray-500); display: flex; align-items: center; gap: 2px; }
 .discuss-item .action-btn:hover { background: var(--gray-100); }
 .discuss-item .action-btn.liked { color: var(--danger); }
-.comment-section { margin-top: 20px; }
-.comment-box { display: flex; gap: 12px; padding: 14px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 16px; }
-.comment-box textarea { flex: 1; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 60px; outline: none; }
-.comment-box textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.comment-item { padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
-.comment-item .comment-author { font-weight: 600; color: var(--gray-800); margin-bottom: 4px; font-size: 13px; }
-.comment-item .comment-author .role-tag { font-size: 10px; padding: 1px 6px; border-radius: 4px; background: #f3e8fd; color: #9334e6; margin-left: 6px; }
-.comment-item .comment-text { font-size: 13px; color: var(--gray-700); line-height: 1.7; }
-.comment-item .comment-meta { font-size: 11px; color: var(--gray-500); margin-top: 6px; }
-.article-content { line-height: 1.8; }
-.article-content h3 { font-size: 14px; color: var(--gray-800); margin: 16px 0 8px; }
-.article-content p { color: var(--gray-700); margin-bottom: 10px; }
-.image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
-.image-grid .img-placeholder { background: #111; border-radius: 6px; height: 180px; display: flex; align-items: center; justify-content: center; color: #666; font-size: 13px; }
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; }
+.comment-section { margin-top: 14px; }
+.comment-box { display: flex; gap: 10px; padding: 12px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 12px; }
+.comment-box textarea { flex: 1; padding: 8px; border: 1px solid var(--gray-300); border-radius: 3px; font-size: 12px; font-family: inherit; resize: vertical; min-height: 56px; outline: none; }
+.comment-box textarea:focus { border-color: var(--primary); }
+.comment-item { padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
+.comment-item .comment-author { font-weight: 600; color: var(--gray-800); margin-bottom: 3px; font-size: 12px; }
+.comment-item .comment-author .role-tag { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: #efe8f6; color: #7a4ea8; margin-left: 4px; }
+.comment-item .comment-text { font-size: 12px; color: var(--gray-700); line-height: 1.6; }
+.comment-item .comment-meta { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+.article-content { line-height: 1.7; }
+.article-content h3 { font-size: 13px; color: var(--gray-800); margin: 14px 0 6px; }
+.article-content p { color: var(--gray-700); margin-bottom: 8px; }
+.image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.image-grid .img-placeholder { background: #2a2a2a; border-radius: 3px; height: 160px; display: flex; align-items: center; justify-content: center; color: #777; font-size: 12px; }
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: none; align-items: center; justify-content: center; }
 .modal-overlay.show { display: flex; }
-.modal { background: #fff; border-radius: 12px; box-shadow: var(--shadow-lg); width: 90%; max-width: 560px; max-height: 85vh; overflow-y: auto; }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--gray-200); }
-.modal-header h3 { font-size: 17px; color: var(--gray-900); }
-.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray-500); padding: 4px 8px; border-radius: 6px; transition: var(--transition); }
+.modal { background: #fff; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); width: 90%; max-width: 520px; max-height: 85vh; overflow-y: auto; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--gray-200); }
+.modal-header h3 { font-size: 15px; color: var(--gray-900); }
+.modal-close { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--gray-500); padding: 2px 6px; border-radius: 3px; }
 .modal-close:hover { background: var(--gray-100); }
-.modal-body { padding: 24px; }
-.modal-footer { padding: 14px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; }
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 9px 13px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.form-group textarea { resize: vertical; min-height: 80px; }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.detail-header { margin-bottom: 16px; }
-.detail-header .detail-tags { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.modal-body { padding: 20px; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 8px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; font-weight: 500; color: var(--gray-700); margin-bottom: 5px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 7px 11px; border: 1px solid var(--gray-300); border-radius: 3px; font-size: 12px; font-family: inherit; outline: none; }
+.form-group textarea { resize: vertical; min-height: 72px; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); }
+.detail-header { margin-bottom: 12px; }
+.detail-header .detail-tags { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
 .detail-header .detail-meta { font-size: 12px; color: var(--gray-500); }
-.empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); font-size: 14px; }
-.empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
-.detail-actions { display: flex; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-100); }
-.comment-list-container { max-height: 600px; overflow-y: auto; }
-.upload-area { border: 2px dashed var(--gray-300); border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; transition: var(--transition); }
+.empty-state { text-align: center; padding: 50px 20px; color: var(--gray-400); font-size: 13px; }
+.empty-state .empty-icon { font-size: 40px; margin-bottom: 10px; }
+.detail-actions { display: flex; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-100); }
+.comment-list-container { max-height: 500px; overflow-y: auto; }
+.upload-area { border: 2px dashed var(--gray-300); border-radius: 4px; padding: 24px; text-align: center; cursor: pointer; }
 .upload-area:hover { border-color: var(--primary); background: var(--primary-light); }
-.upload-area .upload-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-area .upload-icon { font-size: 24px; margin-bottom: 6px; }
 .upload-area p { font-size: 12px; color: var(--gray-600); }
-.upload-area .upload-hint { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
-.toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #323232; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 3000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.upload-area .upload-hint { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
+.toast { position: fixed; top: 68px; left: 50%; transform: translateX(-50%); background: #3b3b3b; color: #eee; padding: 8px 20px; border-radius: 4px; font-size: 12px; z-index: 3000; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
 .toast.show { opacity: 1; }
-@media (max-width: 1024px) { .sidebar { width: 60px; } .sidebar .menu-item span { display: none; } .sidebar .menu-group-title { display: none; } .main-content { margin-left: 60px; } .submenu .menu-item { padding-left: 10px; } }
+@media (max-width: 1024px) { .sidebar { width: 56px; } .sidebar .menu-item span { display: none; } .sidebar .menu-group-title { display: none; } .main-content { margin-left: 56px; } .submenu .menu-item { padding-left: 10px; } }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <a href="index.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+    <a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -187,8 +186,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     <div class="card">
         <div class="detail-header">
             <div class="detail-tags">
-                <span class="tag" id="detailTag">疑难</span>
-                <span id="detailTitle" style="font-size:18px;font-weight:700;color:var(--gray-900);"></span>
+                <span id="detailTitle" style="font-size:17px;font-weight:600;color:var(--gray-900);"></span>
             </div>
             <div class="detail-meta" id="detailMeta"></div>
         </div>
@@ -303,7 +301,7 @@ var cases = [
             { author: '赵教授', role: '专家', text: '非常有意思的病例。我同意OCTA在评估黄斑缺血方面比FFA更敏感。但需要注意：OCTA的伪影可能导致假阳性，建议结合结构OCT的en-face图像综合判断。关于治疗，如果OCTA确认存在显著缺血且视力持续下降，可以考虑抗VEGF治疗以减轻VEGF介导的血管渗漏。', time: '2024-05-20 16:15', likes: 42 },
             { author: '王主任', role: '专家', text: '补充一个观点：糖尿病视网膜病变中的黄斑缺血不应孤立看待，应结合全身血糖控制水平、肾病等全身并发症综合评估。建议完善HbA1c、尿微量白蛋白等检查，必要时内分泌科会诊。', time: '2024-05-21 09:00', likes: 35 }
         ],
-        content: `<h3>病例简介</h3><p>患者女性，56岁，因"双眼视力逐渐下降半年"就诊。糖尿病病史10年，口服降糖药控制欠佳（HbA1c 8.5%）。眼科检查：视力右眼0.4，左眼0.5；眼压正常；眼前节（-）。散瞳后眼底检查：双眼后极部散在微血管瘤、点片状出血及硬性渗出。OCT示黄斑中心凹形态尚可，但旁中心凹区域视网膜内层变薄、反射率增高，提示缺血性改变。然而FFA检查未见明确毛细血管无灌注区，诊断存在争议。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">右眼眼底彩照</div><div class="img-placeholder">左眼眼底彩照</div><div class="img-placeholder">右眼 OCT B-scan</div><div class="img-placeholder">FFA 早期像</div></div><h3>核心讨论问题</h3><p>1. OCT显示的视网膜内层变薄是否足以诊断黄斑缺血？<br>2. FFA阴性的情况下，是否需要OCTA进一步评估？<br>3. 是否启动抗VEGF治疗？</p>`
+        content: `<h3>病例简介</h3><p>患者女性，56岁，因"双眼视力逐渐下降半年"就诊。糖尿病病史10年，口服降糖药控制欠佳（HbA1c 8.5%）。眼科检查：视力右眼0.4，左眼0.5；眼压正常；眼前节（-）。散瞳后眼底检查：双眼后极部散在微血管瘤、点片状出血及硬性渗出。OCT示黄斑中心凹形态尚可，但旁中心凹区域视网膜内层变薄、反射率增高，提示缺血性改变。然而FFA检查未见明确毛细血管无灌注区，诊断存在争议。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">右眼眼底彩照</div><div class="img-placeholder">左眼眼底彩照</div><div class="img-placeholder">右眼 OCT B-scan</div><div class="img-placeholder">FFA 早期像</div></div>`
     },
     {
         id: 2,
@@ -321,7 +319,7 @@ var cases = [
             { author: '张医生', role: '楼主', text: '该病例为27岁男性，双眼视力进行性下降2年。OCT显示视盘小凹伴黄斑区视网膜层间劈裂，讨论是否需要玻璃体切割术。', time: '2024-05-18 10:00', likes: 15 },
             { author: '刘教授', role: '专家', text: '先天性视盘小凹合并黄斑劈裂较为罕见。根据文献，当BCVA低于0.3或劈裂范围扩大时，建议手术干预。本例视力0.4，可密切随访。', time: '2024-05-18 14:20', likes: 22 }
         ],
-        content: `<h3>病例简介</h3><p>患者男性，27岁，因"双眼视力进行性下降2年"就诊。最佳矫正视力右眼0.4，左眼0.3。眼底检查：双眼视盘颞侧可见小凹，黄斑区视网膜隆起。OCT：视盘小凹伴黄斑区视网膜层间劈裂，外层视网膜结构尚完整。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">双眼眼底彩照</div><div class="img-placeholder">OCT水平扫描</div><div class="img-placeholder">OCT垂直扫描</div><div class="img-placeholder">视野检查</div></div><h3>核心讨论问题</h3><p>1. 手术时机如何把握？<br>2. 玻璃体切割术联合内界膜剥除是否必要？<br>3. 术后视力预后如何评估？</p>`
+        content: `<h3>病例简介</h3><p>患者男性，27岁，因"双眼视力进行性下降2年"就诊。最佳矫正视力右眼0.4，左眼0.3。眼底检查：双眼视盘颞侧可见小凹，黄斑区视网膜隆起。OCT：视盘小凹伴黄斑区视网膜层间劈裂，外层视网膜结构尚完整。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">双眼眼底彩照</div><div class="img-placeholder">OCT水平扫描</div><div class="img-placeholder">OCT垂直扫描</div><div class="img-placeholder">视野检查</div></div>`
     },
     {
         id: 3,
@@ -339,7 +337,7 @@ var cases = [
             { author: '陈医生', role: '楼主', text: '患者78岁，湿性AMD，连续12次雷珠单抗注射后OCT仍显示视网膜下液持续存在，FA显示活动性渗漏。讨论换药策略。', time: '2024-05-15 09:30', likes: 18 },
             { author: '孙教授', role: '专家', text: '抗VEGF治疗抵抗的定义尚不统一。建议换用阿柏西普（更强亲和力），或考虑联合光动力疗法（PDT）。也可检测房水中VEGF水平指导个体化治疗。', time: '2024-05-15 11:45', likes: 31 }
         ],
-        content: `<h3>病例简介</h3><p>患者女性，78岁，确诊湿性年龄相关性黄斑变性（AMD）18个月。初始视力0.5，经连续12次雷珠单抗玻璃体腔注射后，最佳矫正视力降至0.2，OCT显示视网膜下液持续存在，FA显示活动性渗漏。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">初诊FAF</div><div class="img-placeholder">近期OCT</div><div class="img-placeholder">FA晚期像</div><div class="img-placeholder">ICGA影像</div></div><h3>核心讨论问题</h3><p>1. 抗VEGF治疗抵抗的定义和评估标准？<br>2. 换药策略：阿柏西普 vs 布西珠单抗？<br>3. 是否联合PDT或类固醇治疗？</p>`
+        content: `<h3>病例简介</h3><p>患者女性，78岁，确诊湿性年龄相关性黄斑变性（AMD）18个月。初始视力0.5，经连续12次雷珠单抗玻璃体腔注射后，最佳矫正视力降至0.2，OCT显示视网膜下液持续存在，FA显示活动性渗漏。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">初诊FAF</div><div class="img-placeholder">近期OCT</div><div class="img-placeholder">FA晚期像</div><div class="img-placeholder">ICGA影像</div></div>`
     },
     {
         id: 4,
@@ -357,7 +355,7 @@ var cases = [
             { author: '王医生', role: '楼主', text: '患者62岁，原发性闭角型青光眼，小梁切除术后第3天出现浅前房、高眼压（32mmHg），讨论恶性青光眼的诊断与处理。', time: '2024-05-12 08:00', likes: 12 },
             { author: '周主任', role: '专家', text: '恶性青光眼的核心病理是睫状环阻滞。处理原则：立即停用缩瞳剂，全身使用高渗剂+碳酸酐酶抑制剂，局部睫状肌麻痹剂。如药物治疗72小时无效，需手术干预（玻璃体切割+前房成形）。', time: '2024-05-12 10:30', likes: 25 }
         ],
-        content: `<h3>病例简介</h3><p>患者女性，62岁，原发性闭角型青光眼（右眼），行小梁切除术。术后第3天出现浅前房（中央前房深度＜1.5mm），眼压升高至32mmHg。B超显示睫状环阻滞征象，诊断为恶性青光眼。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">术前房角镜</div><div class="img-placeholder">术后AS-OCT</div><div class="img-placeholder">UBM检查</div><div class="img-placeholder">B超影像</div></div><h3>核心讨论问题</h3><p>1. 恶性青光眼的早期诊断线索有哪些？<br>2. 药物治疗的首选方案及疗程？<br>3. 手术干预的时机和方式选择？</p>`
+        content: `<h3>病例简介</h3><p>患者女性，62岁，原发性闭角型青光眼（右眼），行小梁切除术。术后第3天出现浅前房（中央前房深度＜1.5mm），眼压升高至32mmHg。B超显示睫状环阻滞征象，诊断为恶性青光眼。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">术前房角镜</div><div class="img-placeholder">术后AS-OCT</div><div class="img-placeholder">UBM检查</div><div class="img-placeholder">B超影像</div></div>`
     },
     {
         id: 5,
@@ -375,7 +373,7 @@ var cases = [
             { author: '赵医生', role: '楼主', text: '患者65岁，反复发作"葡萄膜炎"2年，多次激素冲击治疗无效。玻璃体活检最终确诊原发性眼内淋巴瘤（PIOL）。分享早期识别要点。', time: '2024-05-10 16:00', likes: 45 },
             { author: '吴教授', role: '专家', text: '伪装综合征是临床陷阱。关键鉴别点：激素治疗反应差、单侧起病、玻璃体细胞形态异常。建议对疑似病例尽早行玻璃体切割活检+流式细胞术。', time: '2024-05-10 18:20', likes: 38 }
         ],
-        content: `<h3>病例简介</h3><p>患者男性，65岁，因"右眼反复红痛、视力下降2年"就诊。外院诊断为"慢性葡萄膜炎"，多次激素冲击治疗无效。入院后查：玻璃体混浊明显，视网膜未见明显病灶。玻璃体切割活检：见到大型B细胞淋巴瘤细胞，CD20（+），确诊为原发性眼内淋巴瘤（PIOL）。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">眼底彩照</div><div class="img-placeholder">FAF影像</div><div class="img-placeholder">玻璃体混浊照相</div><div class="img-placeholder">病理活检（示意）</div></div><h3>核心讨论问题</h3><p>1. 伪装综合征的早期识别要点？<br>2. 玻璃体活检的最佳时机和方法？<br>3. PIOL的系统评估（CNS、全身）流程？</p>`
+        content: `<h3>病例简介</h3><p>患者男性，65岁，因"右眼反复红痛、视力下降2年"就诊。外院诊断为"慢性葡萄膜炎"，多次激素冲击治疗无效。入院后查：玻璃体混浊明显，视网膜未见明显病灶。玻璃体切割活检：见到大型B细胞淋巴瘤细胞，CD20（+），确诊为原发性眼内淋巴瘤（PIOL）。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">眼底彩照</div><div class="img-placeholder">FAF影像</div><div class="img-placeholder">玻璃体混浊照相</div><div class="img-placeholder">病理活检（示意）</div></div>`
     }
 ];
 
@@ -399,14 +397,10 @@ function renderCaseList(caseArray) {
     }
     var html = '';
     caseArray.forEach(function(c) {
-        var tagClass = diseaseTagMap[c.disease] || 'tag-blue';
-        var likeIcon = c.liked ? '❤️' : '🤍';
-        var likeBtnClass = c.liked ? 'liked' : '';
-        html += '<div class="discuss-item" style="flex-direction:column;align-items:stretch;">' +
-            '<div style="display:flex;align-items:center;cursor:pointer;" onclick="showDetail(' + c.id + ')">' +
+        html += '<div class="discuss-item" style="flex-direction:column;align-items:stretch;cursor:pointer;" onclick="showDetail(' + c.id + ')">' +
+            '<div style="display:flex;align-items:center;">' +
                 '<div class="discuss-info" style="flex:1;">' +
-                    '<div class="discuss-title">' +
-                        '<span class="tag ' + tagClass + '">' + (c.tag || '疑难') + '</span> ' +
+                    '<div class="discuss-title" style="color:var(--gray-800);">' +
                         c.title +
                     '</div>' +
                     '<div class="discuss-desc">' + c.desc + '</div>' +
@@ -415,14 +409,9 @@ function renderCaseList(caseArray) {
                     '<span>👁 ' + c.views + '</span>' +
                 '</div>' +
             '</div>' +
-            '<div style="display:flex;align-items:center;gap:16px;margin-top:8px;padding-left:2px;">' +
-                '<button class="action-btn ' + likeBtnClass + '" onclick="event.stopPropagation();toggleLike(' + c.id + ', this)" style="font-size:13px;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;color:' + (c.liked ? 'var(--danger)' : 'var(--gray-500)') + ';">' +
-                    '<span class="like-icon">' + likeIcon + '</span> <span class="like-count">' + c.likes + '</span>' +
-                '</button>' +
-                '<span style="font-size:13px;color:var(--gray-500);display:flex;align-items:center;gap:4px;cursor:pointer;" onclick="event.stopPropagation();showDetail(' + c.id + ')">' +
-                    '💬 ' + c.comments.length + ' 评论' +
-                '</span>' +
-                '<span style="font-size:12px;color:var(--gray-400);margin-left:auto;">' + c.disease + '</span>' +
+            '<div style="display:flex;align-items:center;gap:16px;margin-top:6px;padding-left:2px;">' +
+                '<span style="font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:3px;">💬 ' + c.comments.length + ' 评论</span>' +
+                '<span style="font-size:12px;color:var(--gray-400);margin-left:auto;">' + c.disease + ' · ' + c.author + ' · ' + c.date + '</span>' +
             '</div>' +
         '</div>';
     });
@@ -473,11 +462,8 @@ function showDetail(id) {
     document.getElementById('listView').style.display = 'none';
     document.getElementById('detailView').style.display = 'block';
 
-    var tagClass = diseaseTagMap[c.disease] || 'tag-blue';
-    document.getElementById('detailTag').className = 'tag ' + tagClass;
-    document.getElementById('detailTag').textContent = c.tag || '疑难';
     document.getElementById('detailTitle').textContent = c.title;
-    document.getElementById('detailMeta').textContent = '发布者：' + c.author + ' | 发布时间：' + c.date + ' | 科室：' + c.department + ' | 疾病分类：' + c.disease;
+    document.getElementById('detailMeta').textContent = '发布者：' + c.author + ' | 发布时间：' + c.date + ' | 疾病分类：' + c.disease;
     document.getElementById('detailContent').innerHTML = c.content;
 
     // 更新点赞按钮

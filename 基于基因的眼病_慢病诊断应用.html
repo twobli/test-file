@@ -300,8 +300,38 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
 
 /* Info card */
 .info-card{background:#f9fafb;border-radius:8px;padding:14px;border:1px solid var(--line)}
+.info-row{display:flex;gap:8px;margin-bottom:6px;font-size:12.5px}
+.info-row .info-label{color:var(--soft);min-width:80px;flex-shrink:0}
 .info-card .info-row{display:flex;gap:8px;margin-bottom:6px;font-size:12.5px}
 .info-card .info-row .info-label{color:var(--soft);min-width:80px;flex-shrink:0}
+
+/* Workflow */
+.workflow-panel{
+  display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:10px;margin-bottom:16px;
+}
+.workflow-step{
+  background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:var(--shadow);
+  cursor:pointer;transition:.16s;min-height:86px;
+}
+.workflow-step:hover{border-color:var(--blue);transform:translateY(-1px)}
+.workflow-step .num{
+  width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:800;margin-bottom:8px;
+}
+.workflow-step.done .num{background:var(--green-light);color:#065f46}
+.workflow-step.running .num{background:var(--yellow-light);color:#92400e}
+.workflow-step strong{display:block;font-size:12.5px;color:#1f2937;line-height:1.35}
+.workflow-step span{display:block;margin-top:4px;font-size:11px;color:var(--soft)}
+.flow-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mini-kpis{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:12px;margin-bottom:16px}
+.mini-kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;box-shadow:var(--shadow)}
+.mini-kpi strong{display:block;font-size:24px;line-height:1.1;color:var(--blue)}
+.mini-kpi span{font-size:12px;color:var(--soft)}
+.task-timeline{display:flex;flex-direction:column;gap:10px}
+.task-node{display:grid;grid-template-columns:120px 1fr auto;gap:14px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.task-node .time{font-size:12px;color:var(--soft)}
+.task-node .title{font-weight:700;color:#1f2937}
+.task-node .desc{font-size:12px;color:var(--soft);margin-top:2px}
 
 /* Toast */
 .toast{
@@ -319,6 +349,9 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
   .panel-grid.cols-2,.panel-grid.cols-3,.panel-grid.cols-4{grid-template-columns:1fr}
   .split-lr{flex-direction:column}
   .split-lr>*:first-child{flex:auto}
+  .workflow-panel{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mini-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .task-node{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -332,7 +365,7 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
     <span>生命医学智能平台</span>
   </div>
   <div class="topbar-actions">
-    <a href="index.html">← 返回门户</a>
+    <a href="app-center.html">← 返回门户</a>
     <div class="topbar-user" id="userArea">
       <span class="avatar-sm" id="userAvatar">张</span>
       <span id="userName">张教授</span>
@@ -347,22 +380,26 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
   <aside class="sidebar" id="sidebar">
     <div class="side-group" data-group="0">
       <div class="side-group-header" onclick="toggleGroup(this)">
-        <span class="dot"></span>多模态数据接入与统一管理<span class="arrow">▼</span>
+        <span class="dot"></span>多模态特征融合<span class="arrow">▼</span>
       </div>
       <div class="side-group-items" id="group-items-0">
         <div class="side-item active" data-page="page-data-mgmt" onclick="switchPage(this,'page-data-mgmt')">多模态数据接入与统一管理</div>
+        <div class="side-item" data-page="page-gene-prep" onclick="switchPage(this,'page-gene-prep')">基因序列数据预处理与特征提取</div>
+        <div class="side-item" data-page="page-img-prep" onclick="switchPage(this,'page-img-prep')">眼底医学影像预处理与特征提取</div>
+        <div class="side-item" data-page="page-fusion" onclick="switchPage(this,'page-fusion')">跨模态特征融合分析</div>
+        <div class="side-item" data-page="page-vis" onclick="switchPage(this,'page-vis')">结果可视化与交互展示</div>
+        <div class="side-item" data-page="page-task" onclick="switchPage(this,'page-task')">分析任务管理与历史追溯</div>
+        <div class="side-item" data-page="page-report-gen" onclick="switchPage(this,'page-report-gen')">报告生成与导出</div>
       </div>
     </div>
     <div class="side-group" data-group="1">
-      <div class="side-group-header" onclick="toggleGroup(this)">
+      <div class="side-group-header collapsed" onclick="toggleGroup(this)">
         <span class="dot"></span>疾病风险评估<span class="arrow">▼</span>
       </div>
-      <div class="side-group-items" id="group-items-1">
-        <div class="side-item" data-page="page-gene-prep" onclick="switchPage(this,'page-gene-prep')">基因序列数据预处理与特征提取</div>
-        <div class="side-item" data-page="page-img-prep" onclick="switchPage(this,'page-img-prep')">眼底医学影像预处理与特征提取</div>
-        <div class="side-item" data-page="page-fusion" onclick="switchPage(this,'page-fusion')">多模态特征融合</div>
-        <div class="side-item" data-page="page-vis" onclick="switchPage(this,'page-vis')">结果可视化与交互展示</div>
-        <div class="side-item" data-page="page-report-gen" onclick="switchPage(this,'page-report-gen')">报告生成与导出</div>
+      <div class="side-group-items collapsed" id="group-items-1" style="max-height:0">
+        <div class="side-item" data-page="page-mutation" onclick="switchPage(this,'page-mutation')">基因突变位点信息解析录入</div>
+        <div class="side-item" data-page="page-score" onclick="switchPage(this,'page-score')">基因易感性评分</div>
+        <div class="side-item" data-page="page-anomaly" onclick="switchPage(this,'page-anomaly')">影像异常识别提示</div>
       </div>
     </div>
     <div class="side-group" data-group="2">
@@ -370,9 +407,6 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
         <span class="dot"></span>综合评估报告<span class="arrow">▼</span>
       </div>
       <div class="side-group-items collapsed" id="group-items-2" style="max-height:0">
-        <div class="side-item" data-page="page-mutation" onclick="switchPage(this,'page-mutation')">基因突变位点信息解析录入</div>
-        <div class="side-item" data-page="page-score" onclick="switchPage(this,'page-score')">基因易感性评分</div>
-        <div class="side-item" data-page="page-anomaly" onclick="switchPage(this,'page-anomaly')">影像异常识别提示</div>
         <div class="side-item" data-page="page-auto-report" onclick="switchPage(this,'page-auto-report')">自动生成结构化报告</div>
         <div class="side-item" data-page="page-core-vis" onclick="switchPage(this,'page-core-vis')">核心评估内容可视化呈现</div>
         <div class="side-item" data-page="page-report-export" onclick="switchPage(this,'page-report-export')">报告导出与归档管理</div>
@@ -396,6 +430,20 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
 <!-- ===== Page 0: 多模态数据接入与统一管理 ===== -->
 <div class="page-section active" id="page-data-mgmt">
   <h2 class="section-title">多模态数据接入与统一管理</h2>
+  <div class="workflow-panel" id="workflowPanel">
+    <div class="workflow-step done" data-step="data" onclick="goToPage('page-data-mgmt')"><div class="num">1</div><strong>数据接入</strong><span>基因序列、眼底影像、OCT统一入库</span></div>
+    <div class="workflow-step running" data-step="prep" onclick="goToPage('page-gene-prep')"><div class="num">2</div><strong>预处理提特征</strong><span>基因清洗、影像增强、特征向量生成</span></div>
+    <div class="workflow-step" data-step="fusion" onclick="goToPage('page-fusion')"><div class="num">3</div><strong>跨模态融合</strong><span>关联热力图、权重分布、融合结论</span></div>
+    <div class="workflow-step" data-step="risk" onclick="goToPage('page-score')"><div class="num">4</div><strong>风险评估</strong><span>基因易感评分与影像异常提示</span></div>
+    <div class="workflow-step" data-step="report" onclick="goToPage('page-auto-report')"><div class="num">5</div><strong>结构化报告</strong><span>自动汇总风险、变异和影像依据</span></div>
+    <div class="workflow-step" data-step="decision" onclick="goToPage('page-treatment')"><div class="num">6</div><strong>临床决策</strong><span>会诊、科研分析、个体化方案推荐</span></div>
+  </div>
+  <div class="mini-kpis">
+    <div class="mini-kpi"><strong>6</strong><span>患者多模态数据</span></div>
+    <div class="mini-kpi"><strong>14维</strong><span>融合特征向量</span></div>
+    <div class="mini-kpi"><strong>78分</strong><span>AMD最高风险评分</span></div>
+    <div class="mini-kpi"><strong>3份</strong><span>可生成/归档报告</span></div>
+  </div>
   <div class="filter-bar">
     <input type="text" placeholder="搜索患者ID / 姓名..." style="width:200px" oninput="filterDataTable(this,'data-mgmt-table')">
     <select onchange="filterDataTable(this,'data-mgmt-table')" data-col="2">
@@ -405,6 +453,7 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
       <option value="">上传状态：全部</option><option value="已处理">已处理</option><option value="待处理">待处理</option><option value="失败">失败</option>
     </select>
     <button class="btn btn-primary" onclick="showModal('modal-upload')">+ 新增数据</button>
+    <button class="btn btn-success" onclick="runFullDemo()">一键跑通演示</button>
   </div>
   <div class="card">
     <table class="data-table" id="data-mgmt-table">
@@ -441,6 +490,10 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
         </div>
       </div>
       <button class="btn btn-primary" style="width:100%" onclick="appendLog('gene-log','[INFO] 开始特征提取...');showGeneFeatures()">开始特征提取</button>
+      <div class="flow-actions">
+        <button class="btn btn-outline btn-sm" onclick="goToPage('page-data-mgmt')">返回数据列表</button>
+        <button class="btn btn-success btn-sm" onclick="completeStep('prep');goToPage('page-img-prep')">下一步：影像预处理</button>
+      </div>
     </div>
     <div>
       <div class="card">
@@ -512,6 +565,7 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
       <label style="font-size:12px;cursor:pointer"><input type="checkbox"> 出血区域</label>
     </div>
     <button class="btn btn-primary btn-sm" onclick="showImgFeatures()">提取特征</button>
+    <button class="btn btn-success btn-sm" onclick="completeStep('prep');goToPage('page-fusion')">下一步：跨模态融合</button>
     <div style="overflow-x:auto;margin-top:12px">
     <table class="data-table" id="img-feature-table">
       <thead><tr><th>特征名称</th><th>特征值</th><th>参考范围</th><th>偏差</th><th>状态</th></tr></thead>
@@ -579,6 +633,10 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
           与眼底影像中 <strong>黄斑区渗出</strong> 和 <strong>视盘形态异常</strong> 高度相关（p&lt;0.001）。
           综合风险评估等级为 <span class="risk-high">高风险</span>，建议进一步临床检查。
         </p>
+        <div class="flow-actions">
+          <button class="btn btn-outline btn-sm" onclick="goToPage('page-vis')">查看可视化结果</button>
+          <button class="btn btn-success btn-sm" onclick="completeStep('fusion');goToPage('page-score')">进入疾病风险评估</button>
+        </div>
       </div>
     </div>
   </div>
@@ -593,6 +651,7 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
     <button class="btn btn-outline btn-sm">标注</button>
     <button class="btn btn-outline btn-sm">截图导出</button>
     <button class="btn btn-outline btn-sm">添加批注</button>
+    <button class="btn btn-success btn-sm" onclick="completeStep('fusion');goToPage('page-task')">进入任务追溯</button>
   </div>
   <div class="panel-grid cols-2">
     <div class="card">
@@ -648,7 +707,44 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
   </div>
 </div>
 
-<!-- ===== Page 5: 报告生成与导出 ===== -->
+<!-- ===== Page 5: 分析任务管理与历史追溯 ===== -->
+<div class="page-section" id="page-task">
+  <h2 class="section-title">分析任务管理与历史追溯</h2>
+  <div class="filter-bar">
+    <input type="text" placeholder="搜索任务ID / 患者ID / 姓名..." style="width:240px" oninput="filterDataTable(this,'task-table')">
+    <select class="form-select" style="width:150px;height:34px"><option>任务状态：全部</option><option>待处理</option><option>处理中</option><option>已完成</option><option>失败</option></select>
+    <button class="btn btn-primary btn-sm" onclick="createAnalysisTask()">创建分析任务</button>
+    <button class="btn btn-outline btn-sm" onclick="goToPage('page-report-gen')">生成融合报告</button>
+  </div>
+  <div class="panel-grid cols-3">
+    <div class="card"><div class="card-header">当前任务</div><div style="font-size:28px;font-weight:800;color:var(--blue)">TASK-0709-001</div><div style="font-size:12px;color:var(--soft);margin-top:4px">王建国 · 多模态融合分析</div><div class="progress-bar"><div class="progress-fill" id="task-current-progress" style="width:86%"></div></div><span class="status-tag status-pending">报告生成中</span></div>
+    <div class="card"><div class="card-header">分析状态</div><div class="info-row"><span class="info-label">基因预处理:</span><span class="status-tag status-done">已完成</span></div><div class="info-row"><span class="info-label">影像预处理:</span><span class="status-tag status-done">已完成</span></div><div class="info-row"><span class="info-label">融合分析:</span><span class="status-tag status-done">已完成</span></div><div class="info-row"><span class="info-label">报告归档:</span><span class="status-tag status-pending">待确认</span></div></div>
+    <div class="card"><div class="card-header">结果摘要</div><div style="font-size:13px;line-height:1.8">AMD风险 <span class="risk-high">高风险 78分</span><br>青光眼风险 <span class="risk-mid">中风险 45分</span><br>关键依据：CFH、ARMS2、黄斑渗出、视盘形态异常</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header">任务列表</div>
+    <table class="data-table" id="task-table">
+      <thead><tr><th>任务ID</th><th>患者ID</th><th>姓名</th><th>分析类型</th><th>创建时间</th><th>状态</th><th>耗时</th><th>结果摘要</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td>TASK-0709-001</td><td>P0001</td><td>王建国</td><td>基因+影像融合</td><td>2026-07-09 10:15</td><td><span class="status-tag status-pending">报告生成中</span></td><td>4分20秒</td><td>AMD高风险，建议进入综合报告</td><td><button class="btn btn-outline btn-xs" onclick="goToPage('page-auto-report')">查看</button> <button class="btn btn-outline btn-xs" onclick="goToPage('page-fusion')">重跑</button></td></tr>
+        <tr><td>TASK-0701-003</td><td>P0002</td><td>李明华</td><td>基因易感评分</td><td>2026-07-01 09:30</td><td><span class="status-tag status-done">已完成</span></td><td>1分42秒</td><td>DR低风险，OCT待复核</td><td><button class="btn btn-outline btn-xs">查看</button> <button class="btn btn-outline btn-xs">重跑</button></td></tr>
+        <tr><td>TASK-0628-004</td><td>P0004</td><td>赵丽</td><td>突变位点解析</td><td>2026-06-28 15:08</td><td><span class="status-tag status-done">已完成</span></td><td>58秒</td><td>检出3个有效变异位点</td><td><button class="btn btn-outline btn-xs">查看</button> <button class="btn btn-outline btn-xs">重跑</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-header">历史追溯</div>
+    <div class="task-timeline">
+      <div class="task-node"><div class="time">10:15</div><div><div class="title">创建多模态分析任务</div><div class="desc">选择 P0001 王建国，关联 WJG_genome_2026.vcf 与 WJG_fundus_od.dcm</div></div><span class="status-tag status-done">完成</span></div>
+      <div class="task-node"><div class="time">10:16</div><div><div class="title">基因序列清洗与标准化</div><div class="desc">去除低质量序列，解析 VCF 格式，提取 CFH、ARMS2 等8个位点</div></div><span class="status-tag status-done">完成</span></div>
+      <div class="task-node"><div class="time">10:18</div><div><div class="title">眼底影像增强与病灶标注</div><div class="desc">完成去噪、增强、分割，识别渗出、出血、血管异常等5类提示</div></div><span class="status-tag status-done">完成</span></div>
+      <div class="task-node"><div class="time">10:20</div><div><div class="title">跨模态融合建模</div><div class="desc">生成关联热力图、特征权重表与风险评估摘要</div></div><span class="status-tag status-done">完成</span></div>
+      <div class="task-node"><div class="time">10:21</div><div><div class="title">生成结构化报告</div><div class="desc">自动汇总患者信息、疾病风险、基因解释、影像提示和建议</div></div><span class="status-tag status-pending">进行中</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Page 6: 报告生成与导出 ===== -->
 <div class="page-section" id="page-report-gen">
   <h2 class="section-title">报告生成与导出</h2>
   <div class="split-lr">
@@ -688,9 +784,10 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
         </div>
       </div>
       <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn btn-primary btn-sm">导出PDF</button>
-        <button class="btn btn-outline btn-sm">导出Word</button>
-        <button class="btn btn-outline btn-sm">一键保存图表</button>
+        <button class="btn btn-primary btn-sm" onclick="exportReport('PDF')">导出PDF</button>
+        <button class="btn btn-outline btn-sm" onclick="exportReport('Word')">导出Word</button>
+        <button class="btn btn-outline btn-sm" onclick="toast('图表已保存到报告附件')">一键保存图表</button>
+        <button class="btn btn-success btn-sm" onclick="completeStep('report');goToPage('page-auto-report')">进入综合评估报告</button>
       </div>
     </div>
   </div>
@@ -772,8 +869,9 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
     </table>
   </div>
   <div style="display:flex;gap:10px;margin-top:10px">
-    <button class="btn btn-primary btn-sm">一键刷新评分</button>
-    <button class="btn btn-outline btn-sm">查看测算逻辑</button>
+    <button class="btn btn-primary btn-sm" onclick="toast('评分已刷新：AMD 78分，青光眼45分')">一键刷新评分</button>
+    <button class="btn btn-outline btn-sm" onclick="toast('评分逻辑：变异致病等级 × 证据等级 × 疾病权重')">查看测算逻辑</button>
+    <button class="btn btn-success btn-sm" onclick="completeStep('risk');goToPage('page-anomaly')">下一步：影像异常识别</button>
   </div>
 </div>
 
@@ -791,8 +889,9 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
         <div class="annot annot-red" style="top:68%;left:45%;cursor:pointer" onclick="highlightAnnot(this)" data-id="A5">A5·出血点</div>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-outline btn-xs">放大查看</button>
-        <button class="btn btn-outline btn-xs">历史影像对比</button>
+        <button class="btn btn-outline btn-xs" onclick="toast('已进入放大查看模式')">放大查看</button>
+        <button class="btn btn-outline btn-xs" onclick="toast('已加载历史影像对比')">历史影像对比</button>
+        <button class="btn btn-success btn-xs" onclick="completeStep('risk');goToPage('page-auto-report')">生成结构化报告</button>
       </div>
     </div>
     <div class="card">
@@ -843,9 +942,10 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
     </div>
   </div>
   <div style="display:flex;gap:10px;margin-top:12px">
-    <button class="btn btn-primary btn-sm">导出PDF</button>
-    <button class="btn btn-outline btn-sm">导出Word</button>
-    <button class="btn btn-outline btn-sm">归档保存</button>
+    <button class="btn btn-primary btn-sm" onclick="exportReport('PDF')">导出PDF</button>
+    <button class="btn btn-outline btn-sm" onclick="exportReport('Word')">导出Word</button>
+    <button class="btn btn-outline btn-sm" onclick="archiveReport()">归档保存</button>
+    <button class="btn btn-success btn-sm" onclick="completeStep('report');goToPage('page-core-vis')">查看核心评估可视化</button>
   </div>
 </div>
 
@@ -1013,7 +1113,8 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
     </div>
   </div>
   <div style="margin-top:12px;text-align:right">
-    <button class="btn btn-primary btn-sm">导出分析数据</button>
+    <button class="btn btn-primary btn-sm" onclick="toast('科研分析数据已导出')">导出分析数据</button>
+    <button class="btn btn-success btn-sm" onclick="completeStep('decision');goToPage('page-treatment')">进入治疗方案推荐</button>
   </div>
 </div>
 
@@ -1160,9 +1261,12 @@ document.getElementById('logoutBtn').addEventListener('click', function(){
 
 /* ===== Sidebar ===== */
 function toggleGroup(header) {
-  header.classList.toggle('collapsed');
   var items = header.nextElementSibling;
-  if (items) items.classList.toggle('collapsed');
+  if (!items) return;
+  var willCollapse = !items.classList.contains('collapsed');
+  header.classList.toggle('collapsed', willCollapse);
+  items.classList.toggle('collapsed', willCollapse);
+  items.style.maxHeight = willCollapse ? '0' : items.scrollHeight + 'px';
 }
 
 function switchPage(item, pageId) {
@@ -1170,17 +1274,59 @@ function switchPage(item, pageId) {
   item.classList.add('active');
   document.querySelectorAll('.page-section').forEach(function(el){ el.classList.remove('active'); });
   var page = document.getElementById(pageId);
-  if (page) page.classList.add('active');
+  if (page) {
+    page.classList.add('active');
+    document.getElementById('mainContent').scrollTop = 0;
+  }
+  var groupItems = item.closest('.side-group-items');
+  if (groupItems) {
+    groupItems.classList.remove('collapsed');
+    groupItems.style.maxHeight = groupItems.scrollHeight + 'px';
+    var header = groupItems.previousElementSibling;
+    if (header) header.classList.remove('collapsed');
+  }
 }
 
-/* Initialize groups: group 1 items visible, others collapsed */
+function goToPage(pageId) {
+  var item = document.querySelector('.side-item[data-page="'+pageId+'"]');
+  if (item) switchPage(item, pageId);
+}
+
+/* Initialize groups: multimodal flow visible, others collapsed */
 (function(){
   var groups = document.querySelectorAll('.side-group-items');
   groups.forEach(function(g, i) {
-    if (i !== 1) { g.classList.add('collapsed'); g.style.maxHeight = '0'; }
+    if (i !== 0) { g.classList.add('collapsed'); g.style.maxHeight = '0'; }
     else { g.style.maxHeight = g.scrollHeight + 'px'; }
   });
 })();
+
+function completeStep(step) {
+  document.querySelectorAll('.workflow-step').forEach(function(el){
+    if (el.getAttribute('data-step') === step) {
+      el.classList.remove('running');
+      el.classList.add('done');
+    }
+  });
+  var order = ['data','prep','fusion','risk','report','decision'];
+  var idx = order.indexOf(step);
+  if (idx >= 0 && idx < order.length - 1) {
+    var next = document.querySelector('.workflow-step[data-step="'+order[idx + 1]+'"]');
+    if (next && !next.classList.contains('done')) next.classList.add('running');
+  }
+}
+
+function runFullDemo() {
+  toast('开始串联演示：数据接入 → 特征提取 → 融合分析 → 风险评估 → 报告');
+  completeStep('data');
+  setTimeout(function(){ goToPage('page-gene-prep'); appendLog('gene-log','[OK] 基因数据清洗、解析、标准化完成'); showGeneFeatures(); completeStep('prep'); }, 500);
+  setTimeout(function(){ goToPage('page-img-prep'); showImgFeatures(); }, 1400);
+  setTimeout(function(){ goToPage('page-fusion'); runFusion(); }, 2300);
+  setTimeout(function(){ completeStep('fusion'); goToPage('page-score'); toast('进入疾病风险评估：已生成基因易感性评分'); }, 5600);
+  setTimeout(function(){ goToPage('page-anomaly'); toast('影像异常识别提示已加载'); }, 7000);
+  setTimeout(function(){ completeStep('risk'); goToPage('page-auto-report'); toast('结构化诊断报告已生成'); }, 8400);
+  setTimeout(function(){ completeStep('report'); goToPage('page-treatment'); toast('已串联至个体化治疗方案推荐'); }, 9800);
+}
 
 /* ===== Modals ===== */
 function showModal(id) {
@@ -1210,7 +1356,11 @@ function renderDataMgmtTable(data) {
   var html = '';
   data.forEach(function(r){
     var statusClass = r[7]==='已处理'?'status-done':(r[7]==='待处理'?'status-pending':'status-failed');
-    html += '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td><td><span class="status-tag '+statusClass+'">'+r[7]+'</span></td><td><button class="btn btn-outline btn-xs">预览</button> <button class="btn btn-outline btn-xs">下载</button> <button class="btn btn-danger btn-xs">删除</button></td></tr>';
+    var nextPage = r[2] === '基因序列' ? 'page-gene-prep' : 'page-img-prep';
+    var action = r[7] === '已处理'
+      ? "<button class=\"btn btn-primary btn-xs\" onclick=\"goToPage('" + nextPage + "')\">进入处理</button>"
+      : "<button class=\"btn btn-warning btn-xs\" onclick=\"toast('已加入处理队列')\">重新处理</button>";
+    html += "<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td><td>"+r[3]+"</td><td>"+r[4]+"</td><td>"+r[5]+"</td><td>"+r[6]+"</td><td><span class=\"status-tag "+statusClass+"\">"+r[7]+"</span></td><td><button class=\"btn btn-outline btn-xs\" onclick=\"toast('已打开数据预览')\">预览</button> "+action+" <button class=\"btn btn-outline btn-xs\" onclick=\"toast('开始下载文件')\">下载</button></td></tr>";
   });
   tbody.innerHTML = html;
 }
@@ -1337,7 +1487,36 @@ function highlightAnnot(el) {
 /* ===== Report Preview ===== */
 function showReportPreview() {
   document.getElementById('report-preview-area').scrollIntoView({behavior:'smooth'});
+  completeStep('report');
   toast('报告已生成');
+}
+
+function exportReport(type) {
+  showModal('modal-export-progress');
+  var fill = document.getElementById('export-progress');
+  var status = document.getElementById('export-status');
+  fill.style.width = '0%';
+  status.textContent = '正在生成' + type + '文件...';
+  var w = 0;
+  var timer = setInterval(function(){
+    w += 20;
+    fill.style.width = w + '%';
+    status.textContent = w < 100 ? '正在打包报告与图表...' : type + '导出完成';
+    if (w >= 100) {
+      clearInterval(timer);
+      setTimeout(function(){ hideModal('modal-export-progress'); toast(type + '报告已导出'); }, 500);
+    }
+  }, 180);
+}
+
+function archiveReport() {
+  completeStep('report');
+  toast('报告已归档，可在报告导出与归档管理中查看');
+  setTimeout(function(){ goToPage('page-report-export'); }, 500);
+}
+
+function createAnalysisTask() {
+  toast('已创建任务 TASK-0709-002，并关联当前患者多模态数据');
 }
 
 /* ===== Gene Features ===== */
