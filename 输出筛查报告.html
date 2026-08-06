@@ -132,6 +132,17 @@ input, select, textarea { font: inherit; outline: none; }
 .alert-warning { background: #fff4df; color: #b06000; border: 1px solid #feefc3; }
 .alert-danger { background: #ffecec; color: #c5221f; border: 1px solid #f5c6c2; }
 
+.task-summary {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;
+  padding: 12px; border-radius: 12px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 14px;
+}
+.task-summary.empty { display: block; color: var(--muted); }
+.task-summary-item { padding: 10px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
+.task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
+.task-summary-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; word-break: break-all; }
+.task-summary-item.wide { grid-column: 1 / -1; }
+
 /* Result Grid */
 .result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
 .result-card { padding: 14px; border-radius: 12px; background: #f8fbff; box-shadow: inset 0 0 0 1px #e8eef8; }
@@ -171,6 +182,7 @@ input, select, textarea { font: inherit; outline: none; }
   .main-content { margin-left: 60px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .result-grid { grid-template-columns: 1fr; }
+  .task-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
@@ -179,6 +191,7 @@ input, select, textarea { font: inherit; outline: none; }
   .main-content { margin-left: 0; padding: 14px; }
   .stats { grid-template-columns: 1fr; }
   .form-row { flex-direction: column; }
+  .task-summary { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -193,12 +206,16 @@ input, select, textarea { font: inherit; outline: none; }
 </div>
 <div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
 <div class="sidebar" id="sidebar">
-<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查</div>
-<a class="menu-item" href="眼底图像输入.html">眼底图像输入</a>
-<a class="menu-item" href="图像质量质控.html">图像质量质控</a>
-<a class="menu-item" href="常见疾病筛查.html">常见疾病筛查</a>
-<a class="menu-item" href="多任务联合筛查.html">多任务联合筛查</a>
-<a class="menu-item" href="输出筛查报告.html" class="active">输出筛查报告</a></div></div>
+<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a></div>
+<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
+<a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
+<a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
+<a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
+<a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div>
 
 <div class="main-content">
 <div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>输出筛查报告</strong></div>
@@ -215,9 +232,11 @@ input, select, textarea { font: inherit; outline: none; }
     <div class="step active"><div class="step-circle">5</div>输出报告</div>
   </div>
 
+  <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
+
   <div class="stats">
-    <div class="stat"><span>报告编号</span><strong>RP-260626-001</strong></div>
-    <div class="stat"><span>生成时间</span><strong>2026-06-26 15:30</strong></div>
+    <div class="stat"><span>报告编号</span><strong id="reportId">RP-260626-001</strong></div>
+    <div class="stat"><span>生成时间</span><strong id="reportTime">2026-06-26 15:30</strong></div>
     <div class="stat"><span>综合风险</span><strong style="color:var(--warning);">中度</strong></div>
     <div class="stat"><span>复查建议</span><strong>3个月内</strong></div>
   </div>
@@ -252,19 +271,21 @@ input, select, textarea { font: inherit; outline: none; }
   </div>
 
   <!-- 多任务联合筛查 -->
+  <div id="multiTaskReportSection">
   <div class="card-header"><span class="card-title">多任务联合筛查</span></div>
-  <div class="report-box">
+  <div class="report-box" id="multiTaskReportBox">
     <p><strong>病灶分割：</strong>在右眼眼底图像中检出微动脉瘤5处（颞上及鼻下区域）、出血灶4处（火焰状及点片状，集中分布于黄斑周围及颞下象限）、硬性渗出4处（黄斑区颞侧，蜡黄色斑点状排列）。综合病灶密度与分布模式，提示中度 NPDR 改变。</p>
     <p><strong>视盘/黄斑定位：</strong>AI 视盘分割测得杯盘比约0.38，盘沿宽度各象限分布均匀，未见切迹或局灶性变薄。黄斑中心凹定位正常，未见明显渗出或水肿信号。</p>
     <p><strong>血管分布分析：</strong>视网膜动脉轻度缩窄，AV 比约1:2.2，颞上支及鼻下支走形稍显僵硬，血管反光增强，提示轻度动脉硬化改变。未见棉绒斑或新生血管。</p>
     <p><strong>综合分析：</strong>4项子任务均已完成，置信度均值92.5%。DR 相关指标异常最为显著（微动脉瘤+出血+渗出），与常见疾病筛查结论一致。综合风险评级：<strong style="color:var(--warning);">中度</strong>，建议3个月内眼底复查并联合控糖、降压管理。</p>
   </div>
+  </div>
 
   <!-- 报告信息 -->
   <div class="report-box">
-    <p><strong>患者信息：</strong>李* · OPD-202606-001</p>
-    <p><strong>来源机构：</strong>市中心门诊</p>
-    <p><strong>图片来源：</strong>右眼_眼底彩照_001.jpg</p>
+    <p><strong>患者信息：</strong><span id="reportPatientInfo">李* · OPD-202606-001</span></p>
+    <p><strong>筛查任务：</strong><span id="reportTaskInfo">FS-260626-001 · 医生筛查任务</span></p>
+    <p><strong>图片来源：</strong><span id="reportImageInfo">右眼_眼底彩照_001.jpg</span></p>
     <p><strong>质控评分：</strong>96%</p>
   </div>
 
@@ -272,7 +293,7 @@ input, select, textarea { font: inherit; outline: none; }
     <p><strong>质控说明：</strong>图像清晰，视盘、黄斑与血管分布完整，可进入AI分析。</p>
   </div>
 
-  <div class="report-box">
+  <div class="report-box" id="reportAdviceBox">
     <p><strong>医生建议：</strong>综合AI筛查结果，建议患者3个月内行眼底复查，重点关注糖尿病视网膜病变进展。同时建议控制血糖、血压，必要时转诊眼底专科进行进一步检查和治疗。</p>
   </div>
 
@@ -314,6 +335,98 @@ function logout() {
   localStorage.removeItem('life_med_user');
   window.location.href = 'login.html';
 }
+function readFundusTask() {
+  try { return JSON.parse(localStorage.getItem('fundus_screening_task')) || null; } catch(e) { return null; }
+}
+function readCurrentUser() {
+  try { return JSON.parse(localStorage.getItem('life_med_user')) || {}; } catch(e) { return {}; }
+}
+function getFlowRoleFromUrl() {
+  var role = new URLSearchParams(window.location.search).get('role');
+  return role === 'doctor' || role === 'normal' ? role : '';
+}
+function getFlowRole() {
+  var role = getFlowRoleFromUrl();
+  if (role) return role;
+  var task = readFundusTask();
+  if (task && task.userType) return task.userType;
+  var user = readCurrentUser();
+  var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
+  if (/普通|患者|居民|公众/.test(text)) return 'normal';
+  return 'doctor';
+}
+function activateFlowSidebar() {
+  document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
+    item.classList.toggle('active', item.getAttribute('data-flow-page') === '输出筛查报告.html' && item.getAttribute('data-flow-role') === getFlowRole());
+  });
+}
+function applyReportRole() {
+  var isNormal = getFlowRole() !== 'doctor';
+  var multiSection = document.getElementById('multiTaskReportSection');
+  if (multiSection && isNormal) multiSection.remove();
+  var steps = document.querySelectorAll('.steps .step');
+  if (isNormal && steps.length >= 5) {
+    steps[3].style.display = 'none';
+    var outputCircle = steps[4].querySelector('.step-circle');
+    if (outputCircle) outputCircle.textContent = '4';
+  }
+  var adviceBox = document.getElementById('reportAdviceBox');
+  if (adviceBox && isNormal) {
+    adviceBox.innerHTML = '<p><strong>筛查提示：</strong>本报告仅包含常见疾病筛查结果，不包含多任务联合筛查内容，不提供用药或治疗方案。</p>';
+  }
+}
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, function(ch) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+  });
+}
+function slotLabel(slot) {
+  if (slot === 'left') return '左眼位';
+  if (slot === 'right') return '右眼位';
+  return '单眼位';
+}
+function imageSummary(task) {
+  var imgs = task && task.images ? task.images : [];
+  if (!imgs.length) return '尚未同步图像';
+  return imgs.map(function(img) {
+    var eye = img.detectedEye || '未识别';
+    return slotLabel(img.slot) + '：' + img.name + '（' + eye + '）';
+  }).join('；');
+}
+function renderFundusTaskSummary() {
+  var el = document.getElementById('taskSummary');
+  if (!el) return;
+  var task = readFundusTask();
+  if (!task) {
+    el.className = 'task-summary empty';
+    el.innerHTML = '暂无已创建的筛查任务，当前页面展示示例筛查报告。';
+    return;
+  }
+  var patient = task.patient || {};
+  el.className = 'task-summary';
+  el.innerHTML =
+    '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
+    '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
+    '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
+    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (getFlowRole() === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
+    '<div class="task-summary-item wide"><span>图像与眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>';
+}
+function renderReportByTask() {
+  var task = readFundusTask();
+  if (!task) return;
+  var patient = task.patient || {};
+  var reportId = document.getElementById('reportId');
+  var reportTime = document.getElementById('reportTime');
+  var reportPatientInfo = document.getElementById('reportPatientInfo');
+  var reportTaskInfo = document.getElementById('reportTaskInfo');
+  var reportImageInfo = document.getElementById('reportImageInfo');
+  if (reportId) reportId.textContent = task.taskId ? task.taskId.replace('FS-', 'RP-') : 'RP-260626-001';
+  if (reportTime) reportTime.textContent = task.updatedAt || task.submittedAt || '2026-06-26 15:30';
+  if (reportPatientInfo) reportPatientInfo.textContent = (patient.name || '—') + ' · ' + (patient.age || '—') + '岁 · ' + (patient.gender || '—');
+  if (reportTaskInfo) reportTaskInfo.textContent = task.taskId + ' · ' + (getFlowRole() === 'doctor' ? '医生筛查任务' : '普通筛查任务');
+  if (reportImageInfo) reportImageInfo.textContent = imageSummary(task);
+  applyReportRole();
+}
 document.addEventListener('DOMContentLoaded', function() {
   try {
     var user = JSON.parse(localStorage.getItem('life_med_user'));
@@ -330,6 +443,10 @@ document.addEventListener('DOMContentLoaded', function() {
       item.classList.add('active');
     }
   });
+  activateFlowSidebar();
+  applyReportRole();
+  renderFundusTaskSummary();
+  renderReportByTask();
 });
 </script>
 

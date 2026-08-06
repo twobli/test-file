@@ -112,12 +112,15 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .film-list .film-item { padding: 12px 16px; border-bottom: 1px solid var(--gray-50); cursor: pointer; transition: var(--transition); display: flex; align-items: flex-start; gap: 10px; }
 .film-list .film-item:hover { background: var(--primary-light); }
 .film-list .film-item.active { background: var(--primary-light); border-left: 3px solid var(--primary); }
+.film-list .film-item.locked { cursor: not-allowed; opacity: 0.58; background: #fff; }
+.film-list .film-item.locked:hover { background: #fff; color: inherit; }
 .film-list .film-item .film-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
 .film-list .film-item .film-status.pending { background: var(--gray-400); }
 .film-list .film-item .film-status.done { background: var(--success); }
 .film-list .film-item .film-status.wrong { background: var(--danger); }
 .film-list .film-item .film-info { flex: 1; min-width: 0; }
 .film-list .film-item .film-name { font-size: 13px; font-weight: 600; color: var(--gray-800); line-height: 1.45; word-break: break-all; }
+.film-list .film-item .film-code { font-family: Consolas, "Courier New", monospace; letter-spacing: 0; }
 .film-list .film-item .film-meta { font-size: 11px; color: var(--gray-500); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 8px; }
 .film-list .film-item .film-meta .stars { color: var(--warning); letter-spacing: 1px; }
 
@@ -125,18 +128,37 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .image-viewer { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; height: 100%; display: flex; flex-direction: column; }
 .image-viewer .viewer-header { margin-bottom: 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .image-viewer .viewer-header .viewer-title { font-size: 16px; font-weight: 600; color: var(--gray-800); }
+.image-viewer .viewer-code { font-family: Consolas, "Courier New", monospace; letter-spacing: 0; }
 .image-viewer .viewer-subtitle { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
 .image-viewer .viewer-top-meta { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; font-size: 12px; color: var(--gray-700); }
 .image-viewer .viewer-top-meta span { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
-.image-viewer .viewer-images { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; }
+.image-viewer .viewer-images { flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start; }
 .image-viewer .viewer-images.single-col { grid-template-columns: 1fr; grid-template-rows: 1fr; }
-.image-viewer .img-placeholder { border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 140px; }
+.image-viewer .image-card { display: flex; flex-direction: column; min-width: 0; }
+.image-viewer .image-eye-label { margin-bottom: 8px; padding: 5px 10px; border-radius: 6px; background: var(--primary-light); color: var(--primary); font-size: 13px; font-weight: 600; text-align: center; }
+.image-viewer .img-placeholder { border: 0; width: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 140px; cursor: zoom-in; }
+.image-viewer .img-placeholder:hover { box-shadow: 0 0 0 3px rgba(26,115,232,0.18); }
 .image-viewer .img-placeholder .img-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); }
 .image-viewer .img-placeholder .img-label { font-size: 13px; font-weight: 600; }
 .image-viewer .img-placeholder .img-hint { font-size: 11px; opacity: 0.7; margin-top: 4px; }
 .image-viewer .viewer-meta { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--gray-100); display: flex; gap: 20px; font-size: 12px; color: var(--gray-600); }
 .image-viewer .viewer-meta .meta-item { display: flex; align-items: center; gap: 4px; }
 .image-viewer .difficulty-stars { color: var(--warning); letter-spacing: 2px; }
+
+/* 影像放大查看 */
+.image-zoom-modal { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center; padding: 28px; background: rgba(15, 23, 42, 0.72); }
+.image-zoom-modal.open { display: flex; }
+.image-zoom-dialog { width: min(980px, 94vw); max-height: 92vh; background: #fff; border-radius: 10px; box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column; }
+.image-zoom-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--gray-200); }
+.image-zoom-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.image-zoom-meta { margin-top: 3px; color: var(--gray-600); font-size: 12px; }
+.image-zoom-close { width: 34px; height: 34px; border: 0; border-radius: 6px; background: var(--gray-100); color: var(--gray-700); font-size: 22px; line-height: 1; cursor: pointer; }
+.image-zoom-close:hover { background: var(--gray-200); }
+.image-zoom-body { padding: 18px; min-height: 520px; display: flex; }
+.image-zoom-canvas { flex: 1; min-height: 520px; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.image-zoom-canvas .img-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.92); }
+.image-zoom-canvas .img-label { font-size: 22px; font-weight: 700; }
+.image-zoom-canvas .img-hint { margin-top: 8px; font-size: 13px; opacity: .78; }
 
 /* 右侧答题区 */
 .answer-panel { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; display: flex; flex-direction: column; height: 100%; }
@@ -171,7 +193,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-summary .stat-label { font-size: 13px; color: var(--gray-600); margin-top: 4px; }
 .result-summary .stat-box.correct .stat-value { color: var(--success); }
 .result-summary .stat-box.wrong .stat-value { color: var(--danger); }
-.result-summary .stat-box.rate .stat-value { color: var(--primary); }
 .result-summary .stat-divider { width: 1px; height: 48px; background: var(--gray-200); }
 
 .result-layout { display: flex; gap: 16px; }
@@ -206,8 +227,28 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .analysis-panel .answer-tag { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
 .analysis-panel .answer-tag.correct { background: #e6f4ea; color: #137333; }
 .analysis-panel .answer-tag.wrong { background: #fce8e6; color: #c5221f; }
+.status-tag { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1.4; }
+.status-tag.status-completed { background: #e6f4ea; color: #137333; }
+.status-tag.status-pending { background: #fff4d6; color: #8a5a00; }
+.status-tag.status-error { background: #fce8e6; color: #c5221f; }
+.status-tag.status-draft { background: #f1f3f4; color: #5f6368; }
+.muted { color: var(--gray-500); }
 
 /* ===== 知识点学习样式 ===== */
+.recommend-learning { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; margin-bottom: 16px; }
+.recommend-learning .recommend-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.recommend-learning .recommend-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.recommend-learning .recommend-desc { font-size: 12px; color: var(--gray-600); margin-top: 3px; }
+.recommend-learning .recommend-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.recommend-learning .recommend-card { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; cursor: pointer; transition: var(--transition); background: linear-gradient(180deg,#fff,#f8fbff); }
+.recommend-learning .recommend-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-1px); }
+.recommend-learning .recommend-card strong { display: block; color: var(--gray-900); font-size: 13px; margin-bottom: 6px; }
+.recommend-learning .recommend-card p { margin: 0 0 8px; color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.recommend-learning .recommend-card .recommend-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.knowledge-type-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.knowledge-type-tabs .type-tab { border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: 13px; cursor: pointer; transition: var(--transition); }
+.knowledge-type-tabs .type-tab:hover { border-color: var(--primary); color: var(--primary); }
+.knowledge-type-tabs .type-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 .knowledge-layout { display: flex; gap: 16px; min-height: 600px; }
 .knowledge-layout .knowledge-sidebar { width: 260px; flex-shrink: 0; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .knowledge-layout .knowledge-sidebar .ks-header { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); }
@@ -223,6 +264,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .knowledge-layout .knowledge-main { flex: 1; min-width: 0; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; }
 .knowledge-layout .knowledge-main .km-title { font-size: 20px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
 .knowledge-layout .knowledge-main .km-subtitle { font-size: 13px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.7; }
+.knowledge-layout .knowledge-main .km-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .knowledge-layout .knowledge-main .km-section { margin-bottom: 24px; }
 .knowledge-layout .knowledge-main .km-section h3 { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-100); }
 .knowledge-layout .knowledge-main .km-section p { font-size: 13px; color: var(--gray-700); line-height: 1.9; margin-bottom: 8px; }
@@ -233,6 +275,11 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .knowledge-layout .knowledge-main .qa-card .qa-a { font-size: 13px; color: var(--gray-700); line-height: 1.8; display: flex; align-items: flex-start; gap: 6px; }
 .knowledge-layout .knowledge-main .qa-card .qa-ref { font-size: 11px; color: var(--gray-500); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--gray-300); }
 .knowledge-layout .knowledge-main .km-actions { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--gray-100); display: flex; justify-content: center; }
+.knowledge-layout .knowledge-main .km-related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.knowledge-layout .knowledge-main .related-card { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; background: var(--gray-50); }
+.knowledge-layout .knowledge-main .related-card.recommend-hit { border-color: #f6c453; background: #fff8df; box-shadow: inset 3px 0 0 #fbbc04; }
+.knowledge-layout .knowledge-main .related-card strong { display: block; margin-bottom: 5px; font-size: 13px; color: var(--gray-900); }
+.knowledge-layout .knowledge-main .related-card span { display: block; font-size: 12px; color: var(--gray-600); line-height: 1.6; }
 
 /* 状态提示 */
 .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); font-size: 13px; }
@@ -249,6 +296,10 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .fundus-bg-4 { background: linear-gradient(135deg, #1a0010 0%, #3a0030 40%, #5a0040 70%, #7a1050 100%); }
 .fa-bg-1 { background: linear-gradient(135deg, #001a1a 0%, #003333 40%, #004d4d 70%, #006666 100%); }
 .oct-bg-1 { background: linear-gradient(180deg, #000 0%, #111 30%, #222 60%, #333 80%, #555 100%); }
+.doppler-bg-1 { background: linear-gradient(135deg, #061d2e 0%, #0b4c72 36%, #14a3b8 62%, #f05a28 100%); }
+.doppler-bg-2 { background: linear-gradient(135deg, #121a38 0%, #214a7d 38%, #2fb6c8 64%, #fbbc04 100%); }
+.mri-bg-1 { background: radial-gradient(circle at 50% 46%, #aeb7c2 0%, #6c7580 32%, #262b32 62%, #07090d 100%); }
+.mri-bg-2 { background: radial-gradient(circle at 52% 50%, #c8ccd2 0%, #7b838c 28%, #343940 58%, #090b10 100%); }
 </style>
 </head>
 <body>
@@ -294,7 +345,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 <div class="exam-stats">
                     <span>未作答: <strong id="stat-pending">8</strong></span>
                     <span>已作答: <strong id="stat-done">0</strong></span>
-                    <span>正确率: <strong id="stat-rate">-</strong></span>
                 </div>
                 <button class="btn btn-primary knowledge-entry-btn" onclick="showKnowledge()" disabled title="完成全部阅片练习后开放知识点学习">知识点学习</button>
             </div>
@@ -355,6 +405,14 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             </div>
         </div>
 
+        <div class="knowledge-type-tabs" id="knowledge-type-tabs">
+            <button class="type-tab active" type="button" onclick="setKnowledgeType('全部')">全部</button>
+            <button class="type-tab" type="button" onclick="setKnowledgeType('疾病')">疾病</button>
+            <button class="type-tab" type="button" onclick="setKnowledgeType('药品')">药品</button>
+            <button class="type-tab" type="button" onclick="setKnowledgeType('手术操作')">手术操作</button>
+            <button class="type-tab" type="button" onclick="setKnowledgeType('检验检查')">检验检查</button>
+        </div>
+
         <div class="knowledge-layout">
             <div class="knowledge-sidebar">
                 <div class="ks-header">
@@ -368,12 +426,31 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
 </div>
 
+<div class="image-zoom-modal" id="imageZoomModal" onclick="closeImageZoom(event)">
+    <div class="image-zoom-dialog" onclick="event.stopPropagation()">
+        <div class="image-zoom-head">
+            <div>
+                <div class="image-zoom-title" id="imageZoomTitle">影像查看</div>
+                <div class="image-zoom-meta" id="imageZoomMeta"></div>
+            </div>
+            <button class="image-zoom-close" type="button" onclick="closeImageZoom()">×</button>
+        </div>
+        <div class="image-zoom-body">
+            <div class="image-zoom-canvas" id="imageZoomCanvas"></div>
+        </div>
+    </div>
+</div>
+
 <script>
 // ===== Mock 数据：8道阅片练习题 =====
-const examQuestions = [
+const allExamQuestions = [
     {
         id: 'OPHTH-2023-0041',
-        title: '眼底彩照 OPHTH-2023-0041',
+        no: 'LM-RP-20260730-0001',
+        validFrom: '2026-08-03T00:00:00',
+        validTo: '2026-08-10T23:59:59',
+        shelfStatus: '已上架',
+        title: '彩色眼底照相',
         diagnosis: '糖尿病视网膜病变',
         question: '根据上述病例信息和眼底影像表现，最可能的诊断是？',
         options: [
@@ -383,14 +460,17 @@ const examQuestions = [
             'D. 高血压性视网膜病变'
         ],
         correctIndex: 1, // B
-        images: ['fundus-bg-1', 'fa-bg-1', 'oct-bg-1'],
-        imageLabels: ['眼底彩照', '荧光血管造影(FA)', 'OCT'],
-        meta: { type: '眼底彩照', eye: '右眼', difficulty: 3 },
+        images: [{ bg: 'fundus-bg-1', label: '彩色眼底照相', eye: '右眼' }],
+        meta: { type: '彩色眼底照相', eye: '右眼', difficulty: 3 },
         explanation: '该病例显示视网膜可见大量出血斑、微血管瘤及棉绒斑，符合增殖期糖尿病视网膜病变的典型表现。荧光血管造影显示广泛的无灌注区和新生血管渗漏。OCT显示黄斑水肿。患者有糖尿病病史10年，糖化血红蛋白控制不佳。鉴别诊断：AMD主要表现为玻璃膜疣和地图状萎缩；高血压性视网膜病变表现为动脉狭窄和交叉压迫征；重度非增殖性DR虽有出血但无新生血管。'
     },
     {
         id: 'OPHTH-2023-0047',
-        title: '眼底彩照 OPHTH-2023-0047',
+        no: 'LM-RP-20260730-0002',
+        validFrom: '2026-08-01T00:00:00',
+        validTo: '2026-08-15T23:59:59',
+        shelfStatus: '已上架',
+        title: '彩色眼底照相',
         diagnosis: '青光眼',
         question: '根据上述病例信息和眼底影像表现，最可能的诊断是？',
         options: [
@@ -400,14 +480,17 @@ const examQuestions = [
             'D. 视网膜中央静脉阻塞'
         ],
         correctIndex: 2, // C
-        images: ['fundus-bg-2', 'fundus-bg-3', 'oct-bg-1'],
-        imageLabels: ['眼底彩照', '眼底彩照（对侧眼）', 'OCT'],
-        meta: { type: '眼底彩照', eye: '左眼', difficulty: 3 },
+        images: [{ bg: 'fundus-bg-2', label: '彩色眼底照相', eye: '左眼' }, { bg: 'fundus-bg-3', label: '彩色眼底照相', eye: '右眼' }],
+        meta: { type: '彩色眼底照相', eye: '双眼', difficulty: 3 },
         explanation: '眼底彩照显示视盘杯盘比明显增大（C/D≈0.8），盘沿变窄，符合青光眼性视神经病变。OCT显示视网膜神经纤维层（RNFL）变薄。患者眼压升高（26mmHg），视野检查显示弓形暗点。鉴别诊断：正常眼底C/D比一般<0.5；DR应有出血渗出；CRVO表现为广泛视网膜出血（"番茄酱"样眼底）。'
     },
     {
         id: 'OPHTH-2023-0052',
-        title: '眼底彩照 OPHTH-2023-0052',
+        no: 'LM-RP-20260730-0003',
+        validFrom: '2026-08-01T00:00:00',
+        validTo: '2026-08-20T23:59:59',
+        shelfStatus: '已上架',
+        title: '光学相干断层扫描 OCT',
         diagnosis: 'AMD',
         question: '该患者67岁，主诉中心视力下降、视物变形。最可能的诊断是？',
         options: [
@@ -417,14 +500,17 @@ const examQuestions = [
             'D. 黄斑裂孔'
         ],
         correctIndex: 0, // A
-        images: ['fundus-bg-4', 'fa-bg-1', 'oct-bg-1'],
-        imageLabels: ['眼底彩照', '荧光血管造影(FA)', 'OCT'],
-        meta: { type: '眼底彩照', eye: '右眼', difficulty: 2 },
+        images: [{ bg: 'oct-bg-1', label: '光学相干断层扫描 OCT', eye: '右眼' }],
+        meta: { type: '光学相干断层扫描 OCT', eye: '右眼', difficulty: 2 },
         explanation: '眼底彩照显示黄斑区出血、渗出及色素紊乱。FA显示典型的新生血管渗漏（经典型CNV）。OCT显示视网膜下液、色素上皮脱离（PED）和视网膜内囊样水肿，符合湿性AMD的特征。干性AMD主要表现为玻璃膜疣和地图状萎缩。中浆多见于年轻男性，OCT表现为浆液性PED而无出血。黄斑裂孔OCT显示全层视网膜缺损。'
     },
     {
         id: 'OPHTH-2023-0058',
-        title: '眼底彩照 OPHTH-2023-0058',
+        no: 'LM-RP-20260730-0004',
+        validFrom: '2026-08-08T00:00:00',
+        validTo: '2026-08-15T23:59:59',
+        shelfStatus: '已上架',
+        title: '眼部彩色多普勒超声',
         diagnosis: '高血压性视网膜病变',
         question: '患者55岁，高血压病史15年，血压控制不佳。最可能的诊断是？',
         options: [
@@ -434,14 +520,17 @@ const examQuestions = [
             'D. 正常眼底'
         ],
         correctIndex: 1, // B
-        images: ['fundus-bg-3', 'fundus-bg-1', 'fundus-bg-2'],
-        imageLabels: ['眼底彩照', '眼底彩照（放大）', '眼底彩照（对侧眼）'],
-        meta: { type: '眼底彩照', eye: '双眼', difficulty: 2 },
+        images: [{ bg: 'doppler-bg-1', label: '眼部彩色多普勒超声', eye: '右眼' }, { bg: 'doppler-bg-2', label: '眼部彩色多普勒超声', eye: '左眼' }],
+        meta: { type: '眼部彩色多普勒超声', eye: '双眼', difficulty: 2 },
         explanation: '眼底显示视网膜动脉普遍狭窄，动静脉交叉压迫征阳性（Gunn征），可见少量棉绒斑和火焰状出血，符合高血压性视网膜病变II-III级。患者无糖尿病病史且血糖正常，排除DR。无静脉迂曲扩张及广泛出血，排除CRVO。鉴别要点：高血压眼底以动脉改变为主，DR以微血管瘤和出血为主要特征。'
     },
     {
         id: 'OPHTH-2023-0063',
-        title: '眼底彩照 OPHTH-2023-0063',
+        no: 'LM-RP-20260730-0005',
+        validFrom: '2026-08-03T00:00:00',
+        validTo: '2026-08-10T23:59:59',
+        shelfStatus: '已上架',
+        title: '彩色眼底照相',
         diagnosis: '轻度非增殖性DR',
         question: '患者48岁，2型糖尿病病史5年，视力无明显下降。最可能的诊断是？',
         options: [
@@ -451,14 +540,17 @@ const examQuestions = [
             'D. 高血压性视网膜病变'
         ],
         correctIndex: 1, // B
-        images: ['fundus-bg-1', 'fundus-bg-2', 'fundus-bg-3'],
-        imageLabels: ['眼底彩照（右眼）', '眼底彩照（左眼）', '眼底彩照（后极部放大）'],
-        meta: { type: '眼底彩照', eye: '双眼', difficulty: 1 },
+        images: [{ bg: 'fundus-bg-1', label: '彩色眼底照相', eye: '右眼' }, { bg: 'fundus-bg-2', label: '彩色眼底照相', eye: '左眼' }],
+        meta: { type: '彩色眼底照相', eye: '双眼', difficulty: 1 },
         explanation: '眼底显示后极部散在微血管瘤和点状出血，未见棉绒斑、新生血管或明显渗出，符合轻度NPDR（ETDRS分级）。关键鉴别：正常眼底无微血管瘤；增殖期DR可见新生血管（NVD/NVE）；高血压性视网膜病变表现为动脉改变为主。此阶段需加强血糖控制并定期随访。'
     },
     {
         id: 'OPHTH-2023-0068',
-        title: '眼底彩照 OPHTH-2023-0068',
+        no: 'LM-RP-20260730-0006',
+        validFrom: '2026-08-03T00:00:00',
+        validTo: '2026-08-10T23:59:59',
+        shelfStatus: '已上架',
+        title: '光学相干断层扫描 OCT',
         diagnosis: '视网膜中央静脉阻塞',
         question: '患者62岁，突发左眼视力下降3天。最可能的诊断是？',
         options: [
@@ -468,14 +560,17 @@ const examQuestions = [
             'D. 前部缺血性视神经病变'
         ],
         correctIndex: 1, // B
-        images: ['fundus-bg-2', 'fa-bg-1', 'oct-bg-1'],
-        imageLabels: ['眼底彩照', '荧光血管造影(FA)', 'OCT'],
-        meta: { type: '眼底彩照', eye: '左眼', difficulty: 2 },
+        images: [{ bg: 'oct-bg-1', label: '光学相干断层扫描 OCT', eye: '左眼' }],
+        meta: { type: '光学相干断层扫描 OCT', eye: '左眼', difficulty: 2 },
         explanation: '眼底显示广泛视网膜出血（以神经纤维层为主的火焰状出血），静脉迂曲扩张，视网膜水肿，呈典型的"番茄酱"样眼底，符合CRVO。FA显示静脉充盈延迟、毛细血管无灌注区。OCT显示黄斑水肿。鉴别：DR出血以前层（点状/斑状）为主且有微血管瘤；CRAO表现为视网膜苍白水肿+樱桃红斑；AION表现为视盘水肿而无弥漫出血。'
     },
     {
         id: 'OPHTH-2023-0073',
-        title: '眼底彩照 OPHTH-2023-0073',
+        no: 'LM-RP-20260730-0007',
+        validFrom: '2026-08-03T00:00:00',
+        validTo: '2026-08-10T23:59:59',
+        shelfStatus: '已上架',
+        title: '眼眶核磁 MRI',
         diagnosis: '干性AMD',
         question: '患者72岁，双眼视力缓慢下降2年。最可能的诊断是？',
         options: [
@@ -485,14 +580,17 @@ const examQuestions = [
             'D. Stargardt病'
         ],
         correctIndex: 1, // B
-        images: ['fundus-bg-4', 'fundus-bg-3', 'oct-bg-1'],
-        imageLabels: ['眼底彩照', '眼底彩照（对侧眼）', 'OCT'],
-        meta: { type: '眼底彩照', eye: '双眼', difficulty: 2 },
+        images: [{ bg: 'mri-bg-1', label: '眼眶核磁 MRI', eye: '右眼' }, { bg: 'mri-bg-2', label: '眼眶核磁 MRI', eye: '左眼' }],
+        meta: { type: '眼眶核磁 MRI', eye: '双眼', difficulty: 2 },
         explanation: '眼底显示黄斑区多发玻璃膜疣（drusen）、色素上皮改变及地图状萎缩，符合干性AMD。OCT显示RPE不规则、玻璃膜疣隆起及外层视网膜萎缩。无明显出血、渗出或视网膜下液，排除湿性AMD。病理性近视可见豹纹状眼底和后巩膜葡萄肿。Stargardt病多见于青少年，眼底有黄白色斑点。'
     },
     {
         id: 'OPHTH-2023-0078',
-        title: '眼底彩照 OPHTH-2023-0078',
+        no: 'LM-RP-20260730-0008',
+        validFrom: '2026-07-20T00:00:00',
+        validTo: '2026-07-31T23:59:59',
+        shelfStatus: '已下架',
+        title: '彩色眼底照相',
         diagnosis: '孔源性视网膜脱离',
         question: '患者45岁，高度近视，突发右眼视野缺损伴闪光感。最可能的诊断是？',
         options: [
@@ -502,12 +600,13 @@ const examQuestions = [
             'D. 牵拉性视网膜脱离'
         ],
         correctIndex: 1, // B
-        images: ['fundus-bg-1', 'fundus-bg-2', 'oct-bg-1'],
-        imageLabels: ['眼底彩照', '眼底彩照（周边部）', 'OCT'],
-        meta: { type: '眼底彩照', eye: '右眼', difficulty: 3 },
+        images: [{ bg: 'fundus-bg-4', label: '彩色眼底照相', eye: '右眼' }],
+        meta: { type: '彩色眼底照相', eye: '右眼', difficulty: 3 },
         explanation: '眼底显示颞上方视网膜隆起，呈灰白色波浪状，可见马蹄形裂孔。高度近视是RRD的主要危险因素。OCT显示神经上皮层脱离。鉴别：玻璃体后脱离通常不伴视野缺损；渗出性RD由炎症/肿瘤引起，无裂孔且视网膜下液可移动；牵拉性RD见于DR/PVR，呈凹面脱离形态。需紧急手术处理。'
     }
 ];
+
+const examQuestions = allExamQuestions.filter(isQuestionVisible);
 
 const optionAnalysisMap = {
     'OPHTH-2023-0041': [
@@ -679,6 +778,216 @@ const structuredKnowledgeData = {
     }
 };
 
+knowledgeCategories.splice(
+    0,
+    knowledgeCategories.length,
+    { name: '疾病', type: '疾病', topics: ['糖尿病视网膜病变', '青光眼', '年龄相关性黄斑变性', '视网膜静脉阻塞', '高血压性视网膜病变', '孔源性视网膜脱离'] },
+    { name: '药品', type: '药品', topics: ['抗VEGF药物治疗', '前列腺素类降眼压药'] },
+    { name: '手术操作', type: '手术操作', topics: ['玻璃体切除术', '视网膜激光光凝术'] },
+    { name: '检验检查', type: '检验检查', topics: ['OCT RNFL检查解读', '眼眶MRI检查', '眼部彩色多普勒超声'] }
+);
+
+Object.assign(structuredKnowledgeData, {
+    '糖尿病视网膜病变': {
+        type: '疾病',
+        source: '关联题号 LM-RP-20260730-0001、LM-RP-20260730-0005',
+        title: '糖尿病视网膜病变（DR）',
+        subtitle: '糖尿病微血管病变在眼底的典型表现，是阅片练习中最常见的核心知识点之一。',
+        sections: [
+            { title: '疾病定义与流行病学', content: '<p>糖尿病视网膜病变是长期高血糖导致视网膜微血管损伤后出现的一组眼底改变，包括微血管瘤、视网膜内出血、硬性渗出、棉绒斑、静脉串珠、IRMA、新生血管和黄斑水肿等。</p>' },
+            { title: '危险因素与发病机制', content: '<ul><li>危险因素包括糖尿病病程长、HbA1c控制不佳、高血压、血脂异常、糖尿病肾病和妊娠。</li><li>高血糖造成毛细血管内皮损伤、周细胞丢失和血-视网膜屏障破坏，缺血缺氧后VEGF上调。</li></ul>' },
+            { title: '诊断要点与学习提醒', content: '<ul><li>阅片关注微血管瘤、点状/斑状出血、硬性渗出、棉绒斑、新生血管和黄斑水肿。</li><li>后台可将DR分期、黄斑水肿、筛查随访等子知识点绑定到具体题目选项。</li></ul>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0001、LM-RP-20260730-0005' },
+            { label: '关联影像', value: '彩色眼底照相；单眼/双眼均可绑定' },
+            { label: '后台规则', value: '错选AMD、高血压眼底或正常眼底时推送DR分期强化' }
+        ]
+    },
+    '青光眼': {
+        type: '疾病',
+        source: '关联题号 LM-RP-20260730-0002',
+        title: '青光眼性视神经病变',
+        subtitle: '以视神经结构损害和视野缺损为核心，阅片重点是视盘杯盘比、盘沿和RNFL改变。',
+        sections: [
+            { title: '疾病定义', content: '<p>青光眼是一组进行性视神经病变，典型表现为视盘凹陷扩大、视网膜神经纤维层变薄和特征性视野缺损。眼压升高是重要危险因素，但正常眼压也不能完全排除青光眼。</p>' },
+            { title: '阅片与检查要点', content: '<ul><li>关注杯盘比增大、双眼杯盘比不对称、盘沿变窄、RNFL缺损和盘周出血。</li><li>需要结合眼压、房角、视野检查和OCT RNFL/GCC结果综合判断。</li></ul>' },
+            { title: '关联学习', content: '<p>若用户在青光眼题目中误选正常眼底、DR或CRVO，系统会在知识点详情中突出关联题目，并同步展示“青光眼性视神经病变”“OCT RNFL检查解读”和“前列腺素类降眼压药”。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0002 原发性开角型青光眼' },
+            { label: '关联检查', value: '彩色眼底照相 + OCT RNFL检查解读' },
+            { label: '能力回写', value: '影像判读、鉴别诊断、治疗路径三个维度同步更新' }
+        ]
+    },
+    '年龄相关性黄斑变性': {
+        type: '疾病',
+        source: '关联题号 LM-RP-20260730-0003、LM-RP-20260730-0007',
+        title: '年龄相关性黄斑变性（AMD）',
+        subtitle: '老年人中心视力下降的重要原因，阅片时重点观察黄斑区玻璃膜疣、萎缩、出血和渗出。',
+        sections: [
+            { title: '疾病分型', content: '<ul><li>干性AMD以玻璃膜疣、RPE改变和地图状萎缩为主，进展相对缓慢。</li><li>湿性AMD以脉络膜新生血管、出血、渗出和视网膜下液为主，进展快、致盲风险高。</li></ul>' },
+            { title: '影像要点', content: '<p>OCT可显示RPE隆起、外层视网膜萎缩、视网膜下液或视网膜内囊样水肿；湿性AMD需重点识别CNV相关渗漏。</p>' },
+            { title: '关联学习', content: '<p>后台将AMD题目的疾病知识点与抗VEGF治疗、OCT黄斑检查绑定，用户完成题目后可在知识点详情中看到疾病、药品和检查的完整关联。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0003 湿性AMD；LM-RP-20260730-0007 干性AMD' },
+            { label: '关联药品', value: '抗VEGF药物治疗' },
+            { label: '关联检查', value: 'OCT黄斑结构判读' }
+        ]
+    },
+    '视网膜静脉阻塞': {
+        type: '疾病',
+        source: '关联题号 LM-RP-20260730-0006',
+        title: '视网膜静脉阻塞（RVO）',
+        subtitle: '常见视网膜血管病，阅片以静脉迂曲扩张、视网膜出血和黄斑水肿为关键线索。',
+        sections: [
+            { title: '疾病定义', content: '<p>视网膜静脉阻塞是视网膜静脉回流障碍导致的眼底血管性疾病，可分为中央静脉阻塞和分支静脉阻塞。</p>' },
+            { title: '诊断要点', content: '<ul><li>CRVO常表现为弥漫性出血、静脉迂曲扩张和“番茄酱样”眼底。</li><li>OCT常见黄斑水肿，FA可提示静脉充盈延迟、毛细血管无灌注和血管渗漏。</li></ul>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0006' },
+            { label: '关联检查', value: 'OCT黄斑水肿评估' },
+            { label: '后台规则', value: '错选DR或动脉阻塞时推送鉴别诊断' }
+        ]
+    },
+    '高血压性视网膜病变': {
+        type: '疾病',
+        source: '关联题号 LM-RP-20260730-0004',
+        title: '高血压性视网膜病变',
+        subtitle: '慢性或急性血压升高导致的视网膜血管改变，可反映全身血管损害程度。',
+        sections: [
+            { title: '疾病定义', content: '<p>高血压性视网膜病变是高血压导致视网膜小动脉痉挛、硬化和血-视网膜屏障破坏后出现的一组眼底改变。</p>' },
+            { title: '阅片要点', content: '<ul><li>关注动静脉比值下降、动脉反光增强、交叉压迫征、火焰状出血、棉绒斑和黄斑星芒状渗出。</li><li>与DR鉴别时，后台规则强调“动脉改变为主”这一核心差异。</li></ul>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0004' },
+            { label: '关联检查', value: '眼部彩色多普勒超声' },
+            { label: '关联说明', value: '答错血管性疾病鉴别题后，高亮展示该题目与本知识点的关系' }
+        ]
+    },
+    '孔源性视网膜脱离': {
+        type: '疾病',
+        source: '关联题号 LM-RP-20260730-0008',
+        title: '孔源性视网膜脱离',
+        subtitle: '视网膜裂孔导致液化玻璃体进入视网膜下腔，是眼科急症相关的重要阅片知识点。',
+        sections: [
+            { title: '疾病定义', content: '<p>孔源性视网膜脱离是因视网膜裂孔形成，液化玻璃体经裂孔进入视网膜下腔，使神经上皮层与色素上皮层分离。</p>' },
+            { title: '诊断与处理要点', content: '<ul><li>阅片关注灰白色隆起视网膜、波浪状皱褶、马蹄形裂孔、视网膜下液和脱离范围。</li><li>高度近视、外伤和急性玻璃体后脱离人群风险更高，累及黄斑时需提示急诊处理。</li></ul>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0008' },
+            { label: '关联手术', value: '玻璃体切除术' },
+            { label: '关联说明', value: '错选玻璃体后脱离或渗出性脱离时，高亮展示裂孔识别相关题目' }
+        ]
+    },
+    '抗VEGF药物治疗': {
+        type: '药品',
+        source: '关联AMD、DR黄斑水肿题目',
+        title: '抗VEGF药物治疗',
+        subtitle: '用于湿性AMD、糖尿病黄斑水肿等疾病的核心治疗知识点。',
+        sections: [
+            { title: '适应证', content: '<ul><li>湿性年龄相关性黄斑变性伴CNV活动。</li><li>糖尿病黄斑水肿、视网膜静脉阻塞相关黄斑水肿等需要结合病情判断。</li></ul>' },
+            { title: '学习重点', content: '<p>前台不展示具体处方建议，而是作为教学知识点提示：识别渗出性病变后，需要知道抗VEGF是常见治疗方向，并理解随访与复治评估。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0003' },
+            { label: '关联疾病', value: '年龄相关性黄斑变性、糖尿病视网膜病变' },
+            { label: '后台规则', value: '疾病题解析完成后推送治疗类知识点' }
+        ]
+    },
+    '前列腺素类降眼压药': {
+        type: '药品',
+        source: '关联青光眼题目 LM-RP-20260730-0002',
+        title: '前列腺素类降眼压药',
+        subtitle: '青光眼治疗路径中常见的降眼压药物类别，作为教学知识点绑定到青光眼诊疗模块。',
+        sections: [
+            { title: '作用定位', content: '<p>前列腺素类药物常用于降低眼压，学习重点是理解“结构损害识别 -> 眼压与视野评估 -> 治疗与随访”的路径。</p>' },
+            { title: '前台展示边界', content: '<p>学生端用于教学学习，不输出个体化用药剂量或替代临床医嘱；后台可维护禁忌、注意事项和课程引用来源。</p>' }
+        ],
+        related: [
+            { label: '关联疾病', value: '青光眼性视神经病变' },
+            { label: '关联题目', value: 'LM-RP-20260730-0002' },
+            { label: '闭环回写', value: '治疗路径薄弱点进入能力评估' }
+        ]
+    },
+    '玻璃体切除术': {
+        type: '手术操作',
+        source: '关联题号 LM-RP-20260730-0008',
+        title: '玻璃体切除术',
+        subtitle: '眼底急症和复杂视网膜疾病中常见的手术操作知识点。',
+        sections: [
+            { title: '适用教学场景', content: '<p>在孔源性视网膜脱离、复杂玻璃体视网膜牵拉等教学病例中，用于帮助学生理解病变识别后的处理路径。</p>' },
+            { title: '与题目绑定方式', content: '<p>后台上传阅片题时，可将“孔源性视网膜脱离”疾病知识点与“玻璃体切除术”手术知识点同时绑定，答题解析后形成延伸学习。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0008' },
+            { label: '关联疾病', value: '孔源性视网膜脱离' },
+            { label: '后台规则', value: '急症识别错误时同时推送处理路径' }
+        ]
+    },
+    '视网膜激光光凝术': {
+        type: '手术操作',
+        source: '关联DR分期和视网膜裂孔题目',
+        title: '视网膜激光光凝术',
+        subtitle: '用于DR、新生血管性病变或视网膜裂孔等场景的操作类知识点。',
+        sections: [
+            { title: '学习重点', content: '<p>理解激光光凝在封闭裂孔、处理缺血性视网膜病变和减少新生血管风险中的教学定位。</p>' },
+            { title: '后台维护字段', content: '<p>可维护适应证、禁忌证、操作目的、关联疾病、关联题目和教学提示。</p>' }
+        ],
+        related: [
+            { label: '关联疾病', value: 'DR、孔源性视网膜脱离' },
+            { label: '关联影像', value: '彩色眼底照相' },
+            { label: '闭环来源', value: '由错题标签或课程学习进度触发' }
+        ]
+    },
+    'OCT RNFL检查解读': {
+        type: '检验检查',
+        source: '关联青光眼题目 LM-RP-20260730-0002',
+        title: 'OCT RNFL检查解读',
+        subtitle: '用于青光眼结构评估的核心检查知识点，重点关注RNFL和GCC变薄。',
+        sections: [
+            { title: '检查内容', content: '<ul><li>RNFL厚度用于评估视网膜神经纤维层是否局灶或弥漫性变薄。</li><li>GCC厚度有助于评估黄斑区神经节细胞复合体损害。</li></ul>' },
+            { title: '与疾病联动', content: '<p>当前台青光眼题目出现错答，后台规则将该检查知识点与疾病知识点一起推送，让学习路径从“看见视盘异常”延伸到“会看检查指标”。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0002' },
+            { label: '关联疾病', value: '青光眼性视神经病变' },
+            { label: '能力维度', value: '影像判读、检查解读' }
+        ]
+    },
+    '眼眶MRI检查': {
+        type: '检验检查',
+        source: '关联题号 LM-RP-20260730-0007',
+        title: '眼眶MRI检查',
+        subtitle: '用于眼眶、视神经和部分鉴别诊断场景的检查类知识点。',
+        sections: [
+            { title: '学习定位', content: '<p>眼眶MRI在教学中主要用于理解眼眶结构、视神经相关病变和部分黄斑/视神经疾病的鉴别边界。</p>' },
+            { title: '后台绑定逻辑', content: '<p>后台可将MRI影像题绑定到疾病、检查和鉴别诊断知识点，前台详情页统一展示关联来源。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0007' },
+            { label: '关联疾病', value: '年龄相关性黄斑变性鉴别' },
+            { label: '后台规则', value: '检查类型标签驱动检验检查栏目展示' }
+        ]
+    },
+    '眼部彩色多普勒超声': {
+        type: '检验检查',
+        source: '关联题号 LM-RP-20260730-0004',
+        title: '眼部彩色多普勒超声',
+        subtitle: '用于眼部血流动力学评估的检查类知识点，可与血管性眼底病学习联动。',
+        sections: [
+            { title: '检查定位', content: '<p>彩色多普勒超声可用于观察眼部血流速度、阻力指数和血管状态，在血管性疾病教学中作为辅助检查知识点。</p>' },
+            { title: '与题目关联的关系', content: '<p>当用户在高血压性视网膜病变或血管阻塞相关题目中出错，详情页会高亮对应题目，补足“疾病表现 + 检查证据”的学习链路。</p>' }
+        ],
+        related: [
+            { label: '关联题目', value: 'LM-RP-20260730-0004' },
+            { label: '关联疾病', value: '高血压性视网膜病变' },
+            { label: '能力维度', value: '检查解读、血管性疾病鉴别' }
+        ]
+    }
+});
+
 // ===== 全局状态 =====
 let userAnswers = {}; // { questionId: selectedIndex }
 let draftAnswers = {}; // { questionId: selectedIndex }
@@ -686,6 +995,7 @@ let currentQIndex = 0;
 let currentView = 'exam';
 let currentResultIndex = 0;
 let currentKnowledgeTopic = '糖尿病视网膜病变';
+let currentKnowledgeType = '全部';
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', function() {
@@ -699,6 +1009,16 @@ document.addEventListener('DOMContentLoaded', function() {
     renderKnowledgeContent(currentKnowledgeTopic);
     updateStats();
 });
+
+function isQuestionVisible(q) {
+    if (q.shelfStatus === '已下架') return false;
+    var now = new Date();
+    var start = q.validFrom ? new Date(q.validFrom) : null;
+    var end = q.validTo ? new Date(q.validTo) : null;
+    if (start && now < start) return false;
+    if (end && now > end) return false;
+    return true;
+}
 
 // ===== 视图切换 =====
 function switchView(view) {
@@ -716,6 +1036,7 @@ function switchView(view) {
         selectResultQuestion(currentResultIndex);
     } else if (view === 'knowledge') {
         document.getElementById('breadcrumbLabel').textContent = '智能教学服务 / 知识点学习';
+        renderKnowledgeTree();
         renderKnowledgeContent(currentKnowledgeTopic);
     }
 }
@@ -737,17 +1058,19 @@ function renderFilmList() {
     container.innerHTML = examQuestions.map(function(q, index) {
         var answered = q.id in userAnswers;
         var isCorrect = answered && userAnswers[q.id] === q.correctIndex;
+        var locked = !canOpenQuestion(index);
         var statusClass = !answered ? 'pending' : (isCorrect ? 'done' : 'wrong');
-        var statusText = !answered ? '未作答' : (isCorrect ? '已作答 正确' : '已作答 错误');
+        var statusText = locked ? '未解锁' : (!answered ? '未作答' : (isCorrect ? '已作答 正确' : '已作答 错误'));
         var tagClass = !answered ? 'tag-gray' : (isCorrect ? 'tag-green' : 'tag-red');
         var activeClass = index === currentQIndex ? ' active' : '';
-        return '<div class="film-item' + activeClass + '" onclick="selectQuestion(' + index + ')">' +
+        var lockedClass = locked ? ' locked' : '';
+        return '<div class="film-item' + activeClass + lockedClass + '" onclick="selectQuestion(' + index + ')">' +
             '<span class="film-status ' + statusClass + '"></span>' +
             '<div class="film-info">' +
-                '<div class="film-name">' + q.title + '</div>' +
+                '<div class="film-name film-code">' + q.no + '</div>' +
                 '<div class="film-meta">' +
+                    '<span class="tag tag-blue">' + q.meta.type + '</span>' +
                     '<span class="stars">' + '★'.repeat(q.meta.difficulty) + '</span>' +
-                    '<span>眼别: ' + q.meta.eye + '</span>' +
                 '</div>' +
             '</div>' +
             '<span class="tag ' + tagClass + '">' + statusText + '</span>' +
@@ -757,22 +1080,38 @@ function renderFilmList() {
 
 // ===== 选择题号 =====
 function selectQuestion(index) {
+    if (!canOpenQuestion(index)) {
+        alert('请先提交当前题答案后再进入下一题');
+        return;
+    }
     currentQIndex = index;
     renderFilmList();
     renderImageArea(index);
     renderAnswerPanel(index);
 }
 
+function canOpenQuestion(index) {
+    if (index <= currentQIndex) return true;
+    for (var i = 0; i < index; i++) {
+        if (!(examQuestions[i].id in userAnswers)) return false;
+    }
+    return true;
+}
+
 // ===== 渲染影像展示区 =====
 function renderImageArea(index) {
     var container = document.getElementById('exam-image-viewer');
     var q = examQuestions[index];
-    var imagesHtml = q.images.map(function(bgClass, i) {
-        return '<div class="img-placeholder ' + bgClass + '" style="grid-row:' + (i < 2 ? '1' : '2') + ';grid-column:' + (i % 2 + 1) + ';">' +
-            '<div class="img-overlay">' +
-                '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>' +
-                '<span class="img-label">' + q.imageLabels[i] + '</span>' +
-            '</div>' +
+    var imageLayoutClass = q.images.length === 1 ? ' single-col' : '';
+    var imagesHtml = q.images.map(function(img, i) {
+        return '<div class="image-card">' +
+            '<div class="image-eye-label">' + img.eye + '</div>' +
+            '<button class="img-placeholder ' + img.bg + '" type="button" onclick="openImageZoom(' + index + ',' + i + ')">' +
+                '<div class="img-overlay">' +
+                    '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>' +
+                    '<span class="img-label">' + img.label + '</span>' +
+                '</div>' +
+            '</button>' +
         '</div>';
     }).join('');
 
@@ -782,12 +1121,12 @@ function renderImageArea(index) {
                 '<div class="viewer-title">' + q.title + '</div>' +
             '</div>' +
             '<div class="viewer-top-meta">' +
-                '<span>彩照ID: ' + q.id + '</span>' +
-                '<span>眼别: ' + q.meta.eye + '</span>' +
+                '<span class="viewer-code">' + q.no + '</span>' +
+                '<span>影像类型: ' + q.meta.type + '</span>' +
                 '<span>难度: <span class="difficulty-stars">' + '★'.repeat(q.meta.difficulty) + '</span></span>' +
             '</div>' +
         '</div>' +
-        '<div class="viewer-images">' + imagesHtml + '</div>' +
+        '<div class="viewer-images' + imageLayoutClass + '">' + imagesHtml + '</div>' +
     '</div>';
 }
 
@@ -819,7 +1158,6 @@ function renderAnswerPanel(index) {
     var actionsHtml = '';
     if (!isAnswered) {
         actionsHtml = '<div class="answer-actions">' +
-            '<button class="btn btn-outline" onclick="skipQuestion()">暂不作答</button>' +
             '<button class="btn btn-primary btn-submit" onclick="submitAnswer()" ' + (selectedIndex === undefined ? 'disabled' : '') + ' id="btn-submit">提交答案</button>' +
         '</div>';
     } else {
@@ -832,8 +1170,9 @@ function renderAnswerPanel(index) {
 
     // 上下题导航
     var navLinks = '<div class="answer-nav">';
+    var canGoNext = index < examQuestions.length - 1 && isAnswered;
     navLinks += '<a class="' + (index === 0 ? 'disabled' : '') + '" onclick="' + (index > 0 ? 'selectQuestion(' + (index - 1) + ')' : '') + '">← 上一题</a>';
-    navLinks += '<a class="' + (index >= examQuestions.length - 1 ? 'disabled' : '') + '" onclick="' + (index < examQuestions.length - 1 ? 'selectQuestion(' + (index + 1) + ')' : '') + '">下一题 →</a>';
+    navLinks += '<a class="' + (!canGoNext ? 'disabled' : '') + '" onclick="' + (canGoNext ? 'selectQuestion(' + (index + 1) + ')' : '') + '">下一题 →</a>';
     navLinks += '</div>';
 
     container.innerHTML = '<div class="answer-panel">' +
@@ -865,13 +1204,12 @@ function submitAnswer() {
     updateStats();
 }
 
-function skipQuestion() {
-    var nextIndex = currentQIndex >= examQuestions.length - 1 ? 0 : currentQIndex + 1;
-    selectQuestion(nextIndex);
-}
-
 // ===== 显示结果 =====
 function showResults() {
+    if (Object.keys(userAnswers).length === 0) {
+        alert('请至少提交一道题后再查看解析');
+        return;
+    }
     currentResultIndex = 0;
     switchView('result');
 }
@@ -879,6 +1217,10 @@ function showResults() {
 function showResultForQuestion(questionId) {
     var idx = examQuestions.findIndex(function(q) { return q.id === questionId; });
     if (idx >= 0) {
+        if (!(questionId in userAnswers)) {
+            alert('请先提交答案后再查看解析');
+            return;
+        }
         currentResultIndex = idx;
         switchView('result');
     }
@@ -887,7 +1229,6 @@ function showResultForQuestion(questionId) {
 // ===== 结果页渲染 =====
 function renderResultSummary() {
     var container = document.getElementById('result-summary-bar');
-    var total = examQuestions.length;
     var correct = 0;
     var wrong = 0;
     examQuestions.forEach(function(q) {
@@ -896,8 +1237,6 @@ function renderResultSummary() {
             else wrong++;
         }
     });
-    var answered = correct + wrong;
-    var rate = answered > 0 ? Math.round((correct / answered) * 100) : 0;
 
     container.innerHTML =
         '<div class="stat-box correct">' +
@@ -908,11 +1247,6 @@ function renderResultSummary() {
         '<div class="stat-box wrong">' +
             '<div class="stat-value">' + wrong + '</div>' +
             '<div class="stat-label">错误</div>' +
-        '</div>' +
-        '<div class="stat-divider"></div>' +
-        '<div class="stat-box rate">' +
-            '<div class="stat-value">' + rate + '%</div>' +
-            '<div class="stat-label">正确率</div>' +
         '</div>';
 }
 
@@ -931,8 +1265,8 @@ function renderResultFilmList() {
         return '<div class="result-film-item' + activeCls + '" onclick="selectResultQuestion(' + i + ')">' +
             '<span class="result-status-tag ' + cls + '">' + statusText + '</span>' +
             '<div class="film-info">' +
-                '<div class="film-name">' + q.id + '</div>' +
-                '<div class="film-meta">' + (answered ? '已作答' : '未作答') + '</div>' +
+                '<div class="film-name film-code">' + q.no + '</div>' +
+                '<div class="film-meta">' + q.meta.type + ' · ' + (answered ? '已作答' : '未作答') + '</div>' +
             '</div>' +
         '</div>';
     }).join('');
@@ -948,23 +1282,26 @@ function selectResultQuestion(index) {
 function renderResultImage(index) {
     var container = document.getElementById('result-image-viewer');
     var q = examQuestions[index];
-    var imagesHtml = q.images.map(function(bgClass, i) {
-        return '<div class="img-placeholder ' + bgClass + '">' +
-            '<div class="img-overlay">' +
-                '<span class="img-label" style="font-size:20px;">' + q.imageLabels[i] + '</span>' +
-            '</div>' +
+    var imageLayoutClass = q.images.length === 1 ? ' single-col' : '';
+    var imagesHtml = q.images.map(function(img, i) {
+        return '<div class="image-card">' +
+            '<div class="image-eye-label">' + img.eye + '</div>' +
+            '<button class="img-placeholder ' + img.bg + '" type="button" onclick="openImageZoom(' + index + ',' + i + ')">' +
+                '<div class="img-overlay">' +
+                    '<span class="img-label" style="font-size:20px;">' + img.label + '</span>' +
+                '</div>' +
+            '</button>' +
         '</div>';
     }).join('');
 
     container.innerHTML = '<div class="image-viewer">' +
         '<div class="viewer-header">' +
             '<div class="viewer-title">' + q.title + '</div>' +
-            '<div class="viewer-subtitle">题目ID: ' + q.id + '</div>' +
+            '<div class="viewer-subtitle viewer-code">' + q.no + '</div>' +
         '</div>' +
-        '<div class="viewer-images single-col">' + imagesHtml + '</div>' +
+        '<div class="viewer-images' + imageLayoutClass + '">' + imagesHtml + '</div>' +
         '<div class="viewer-meta">' +
             '<span class="meta-item">影像类型: ' + q.meta.type + '</span>' +
-            '<span class="meta-item">拍摄眼: ' + q.meta.eye + '</span>' +
             '<span class="meta-item">难度: <span class="difficulty-stars">' + '★'.repeat(q.meta.difficulty) + '</span></span>' +
         '</div>' +
     '</div>';
@@ -977,14 +1314,23 @@ function renderResultAnalysis(index) {
     var userIdx = userAnswers[q.id];
     var isCorrect = answered && (userIdx === q.correctIndex);
 
-    var answerCompareHtml = '';
-    if (answered) {
-        answerCompareHtml = '<div class="correct-answer"><strong>正确答案:</strong> ' + q.options[q.correctIndex] + '</div>';
-        answerCompareHtml += '<div class="user-answer ' + (isCorrect ? 'match' : 'mismatch') + '"><strong>你的答案:</strong> ' + q.options[userIdx] + '<span class="answer-tag ' + (isCorrect ? 'correct' : 'wrong') + '">' + (isCorrect ? '正确' : '错误') + '</span></div>';
-    } else {
-        answerCompareHtml = '<div class="correct-answer"><strong>正确答案:</strong> ' + q.options[q.correctIndex] + '</div>';
-        answerCompareHtml += '<div class="user-answer mismatch"><strong>你的答案:</strong> 未作答</div>';
+    if (!answered) {
+        container.innerHTML = '<div class="analysis-panel">' +
+            '<div class="analysis-header">' +
+                '<span class="analysis-icon">?</span>' +
+                '<span class="analysis-title">答案解析</span>' +
+            '</div>' +
+            '<div class="user-answer mismatch"><strong>当前状态:</strong> 未作答</div>' +
+            '<div class="analysis-text">' +
+                '<p>该题尚未提交答案，暂不展示正确答案和解析内容。请返回阅片练习完成作答后再查看解析。</p>' +
+            '</div>' +
+        '</div>';
+        return;
     }
+
+    var answerCompareHtml = '';
+    answerCompareHtml = '<div class="correct-answer"><strong>正确答案:</strong> ' + q.options[q.correctIndex] + '</div>';
+    answerCompareHtml += '<div class="user-answer ' + (isCorrect ? 'match' : 'mismatch') + '"><strong>你的答案:</strong> ' + q.options[userIdx] + '<span class="answer-tag ' + (isCorrect ? 'correct' : 'wrong') + '">' + (isCorrect ? '正确' : '错误') + '</span></div>';
 
     // 选项对比展示
     var optionAnalyses = optionAnalysisMap[q.id] || [];
@@ -1017,21 +1363,88 @@ function renderResultAnalysis(index) {
 }
 
 // ===== 知识点学习 =====
+function getKnowledgeTypeClass(type) {
+    if (type === '疾病') return 'status-error';
+    if (type === '药品') return 'status-completed';
+    if (type === '手术操作') return 'status-pending';
+    return 'status-draft';
+}
+
+function getKnowledgeSearchText(category, topic, data) {
+    var sections = (data.sections || []).map(function(section) { return section.title + ' ' + section.content; }).join(' ');
+    var related = (data.related || []).map(function(item) { return item.label + ' ' + item.value; }).join(' ');
+    return [category.name, category.type, topic, data.type, data.title, data.subtitle, data.source, sections, related]
+        .join(' ')
+        .replace(/<[^>]+>/g, '')
+        .toLowerCase();
+}
+
+function getKnowledgeQuestionCodes(data) {
+    var text = [data.source || ''].concat((data.related || []).map(function(item) { return item.value || ''; })).join(' ');
+    var matches = text.match(/LM-RP-\d{8}-\d{4}/g) || [];
+    return matches.filter(function(code, index) {
+        return matches.indexOf(code) === index && !!getQuestionByCode(code);
+    });
+}
+
+function getQuestionByCode(code) {
+    return examQuestions.find(function(q) { return q.no === code; });
+}
+
+function isQuestionWrong(code) {
+    var q = getQuestionByCode(code);
+    return !!(q && q.id in userAnswers && userAnswers[q.id] !== q.correctIndex);
+}
+
+function isKnowledgeRecommended(data) {
+    return getKnowledgeQuestionCodes(data).some(isQuestionWrong);
+}
+
+function setKnowledgeType(type) {
+    currentKnowledgeType = type;
+    document.querySelectorAll('#knowledge-type-tabs .type-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent.trim() === type);
+    });
+    var data = structuredKnowledgeData[currentKnowledgeTopic];
+    if (!data || (type !== '全部' && data.type !== type)) {
+        var firstTopic = null;
+        knowledgeCategories.some(function(category) {
+            if (type !== '全部' && category.type !== type) return false;
+            return category.topics.some(function(topic) {
+                if (structuredKnowledgeData[topic] && getKnowledgeQuestionCodes(structuredKnowledgeData[topic]).length) {
+                    firstTopic = topic;
+                    return true;
+                }
+                return false;
+            });
+        });
+        currentKnowledgeTopic = firstTopic || currentKnowledgeTopic;
+    }
+    var input = document.querySelector('.knowledge-sidebar .ks-header input');
+    renderKnowledgeTree(input ? input.value : '');
+    renderKnowledgeContent(currentKnowledgeTopic);
+}
+
 function renderKnowledgeTree(keyword) {
     var container = document.getElementById('knowledge-tree');
     var ft = (keyword || '').trim().toLowerCase();
     var html = '';
     knowledgeCategories.forEach(function(category) {
+        if (currentKnowledgeType !== '全部' && category.type !== currentKnowledgeType) return;
         var topicHtml = '';
         category.topics.forEach(function(topic) {
             var data = structuredKnowledgeData[topic];
-            if (!data) return;
-            var searchText = [category.name, topic, data.title, data.subtitle, data.definition, data.risk, data.diagnosis].join(' ').replace(/<[^>]+>/g, '').toLowerCase();
+            if (!data || !getKnowledgeQuestionCodes(data).length) return;
+            var searchText = getKnowledgeSearchText(category, topic, data);
             var matched = !ft || searchText.indexOf(ft) >= 0;
             if (!matched) return;
             var activeCls = (topic === currentKnowledgeTopic) ? ' active' : '';
             var hitCls = ft ? ' search-hit' : '';
-            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + highlightKeyword(topic, keyword) + '</div>';
+            var recommendTag = isKnowledgeRecommended(data) ? '<span class="status-tag status-pending" style="margin-left:6px;">推荐学习</span>' : '';
+            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">'
+                + highlightKeyword(topic, keyword)
+                + '<div class="muted" style="font-size:11px;margin-top:3px;">' + data.type + recommendTag + '</div>'
+                + '</div>';
         });
         if (topicHtml) {
             html += '<div class="ks-category">' + category.name + '</div>' + topicHtml;
@@ -1042,6 +1455,13 @@ function renderKnowledgeTree(keyword) {
 
 function selectKnowledgeTopic(topic) {
     currentKnowledgeTopic = topic;
+    var data = structuredKnowledgeData[topic];
+    if (data && currentKnowledgeType !== '全部' && data.type !== currentKnowledgeType) {
+        currentKnowledgeType = data.type;
+        document.querySelectorAll('#knowledge-type-tabs .type-tab').forEach(function(btn) {
+            btn.classList.toggle('active', btn.textContent.trim() === currentKnowledgeType);
+        });
+    }
     var input = document.querySelector('.knowledge-sidebar .ks-header input');
     renderKnowledgeTree(input ? input.value : '');
     renderKnowledgeContent(topic);
@@ -1056,25 +1476,48 @@ function renderKnowledgeContent(topic) {
     var data = structuredKnowledgeData[topic];
     if (!data) { container.innerHTML = '<p>请选择左侧知识点主题</p>'; return; }
 
+    var sectionHtml = (data.sections || []).map(function(section) {
+        return '<div class="km-section"><h3>' + section.title + '</h3>' + section.content + '</div>';
+    }).join('');
+    var relatedHtml = (data.related || []).map(function(item) {
+        return '<div class="related-card"><strong>' + item.label + '</strong><span>' + item.value + '</span></div>';
+    }).join('');
+    var questionCodes = getKnowledgeQuestionCodes(data);
+    var questionHtml = questionCodes.map(function(code) {
+        var q = getQuestionByCode(code);
+        var wrong = isQuestionWrong(code);
+        var answered = q && q.id in userAnswers;
+        var state = wrong ? '做错题' : (answered ? '已作答' : '未作答');
+        return '<div class="related-card' + (wrong ? ' recommend-hit' : '') + '"><strong>' + code + '</strong><span>' + (q ? q.title + ' · ' + q.diagnosis : '关联题目') + '</span><span class="status-tag ' + (wrong ? 'status-pending' : 'status-draft') + '">' + state + '</span></div>';
+    }).join('');
+    var qaHtml = (data.qaItems || []).map(function(item) {
+        return '<div class="qa-card">'
+            + '<div class="qa-q"><span>问</span><span>' + item.q + '</span></div>'
+            + '<div class="qa-a"><span>答</span><span>' + item.a + '</span></div>'
+            + (item.ref ? '<div class="qa-ref">' + item.ref + '</div>' : '')
+            + '</div>';
+    }).join('');
+
     container.innerHTML =
         '<div class="km-title">' + data.title + '</div>' +
         '<div class="km-subtitle">' + data.subtitle + '</div>' +
-        '<div class="km-section"><h3>疾病定义与流行病学</h3>' + data.definition + '</div>' +
-        '<div class="km-section"><h3>危险因素与发病机制</h3>' + data.risk + '</div>' +
-        '<div class="km-section"><h3>诊断要点与鉴别诊断</h3>' + data.diagnosis + '</div>';
+        '<div class="km-meta">'
+            + '<span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span>'
+            + (isKnowledgeRecommended(data) ? '<span class="status-tag status-pending">推荐学习</span>' : '')
+            + '<span class="status-tag status-draft">' + data.source + '</span>'
+        + '</div>' +
+        (questionHtml ? '<div class="km-section"><h3>关联题目</h3><div class="km-related">' + questionHtml + '</div></div>' : '') +
+        sectionHtml +
+        (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '') +
+        (relatedHtml ? '<div class="km-section"><h3>关联内容</h3><div class="km-related">' + relatedHtml + '</div></div>' : '');
 }
 
 // ===== 统计更新 =====
 function updateStats() {
     var total = examQuestions.length;
     var doneCount = Object.keys(userAnswers).length;
-    var correct = 0;
-    examQuestions.forEach(function(q) {
-        if (q.id in userAnswers && userAnswers[q.id] === q.correctIndex) correct++;
-    });
     document.getElementById('stat-pending').textContent = total - doneCount;
     document.getElementById('stat-done').textContent = doneCount;
-    document.getElementById('stat-rate').textContent = doneCount > 0 ? Math.round((correct / doneCount) * 100) + '%' : '-';
     updateKnowledgeEntryState();
 }
 
@@ -1097,6 +1540,33 @@ function highlightKeyword(text, keyword) {
     if (idx < 0) return text;
     return text.substring(0, idx) + '<mark style="background:#ffe58f;padding:0 2px;border-radius:2px;">' + text.substring(idx, idx + kw.length) + '</mark>' + text.substring(idx + kw.length);
 }
+
+function openImageZoom(questionIndex, imageIndex) {
+    var q = examQuestions[questionIndex];
+    if (!q || !q.images || !q.images[imageIndex]) return;
+    var img = q.images[imageIndex];
+    document.getElementById('imageZoomTitle').textContent = img.label;
+    document.getElementById('imageZoomMeta').textContent = q.no + ' · ' + img.eye;
+    document.getElementById('imageZoomCanvas').className = 'image-zoom-canvas ' + img.bg;
+    document.getElementById('imageZoomCanvas').innerHTML =
+        '<div class="img-overlay">' +
+            '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.62)" stroke-width="1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>' +
+            '<span class="img-label">' + img.label + '</span>' +
+            '<span class="img-hint">' + img.eye + '</span>' +
+        '</div>';
+    document.getElementById('imageZoomModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageZoom(event) {
+    if (event && event.target !== document.getElementById('imageZoomModal')) return;
+    document.getElementById('imageZoomModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') closeImageZoom();
+});
 
 // ===== 通用函数 =====
 function navigateTo(url) { window.location.href = url; }

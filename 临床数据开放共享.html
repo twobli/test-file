@@ -105,6 +105,7 @@ tbody tr:hover{background:var(--gray-50)}
 .upload-zone{border:2px dashed var(--gray-300);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;background:var(--gray-50);transition:var(--transition)}
 .upload-zone:hover{border-color:var(--primary);background:var(--primary-light)}.upload-zone p{color:var(--gray-600);font-size:13px}.upload-hint{color:var(--gray-500);font-size:11px;margin-top:4px}
 .upload-file-list{margin-top:10px}.upload-file-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fff;border:1px solid var(--gray-200);border-radius:6px;margin-bottom:6px}
+.upload-file-name{display:flex;align-items:center;gap:8px;min-width:0}.upload-file-name span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .file-remove{border:0;background:transparent;color:var(--danger);cursor:pointer;padding:3px 6px}
 .detail-table{width:100%;margin-bottom:16px}.detail-table td:first-child{width:128px;font-weight:700;color:var(--gray-700);background:var(--gray-50)}
 .detail-desc{background:var(--gray-50);border-radius:6px;padding:14px 16px;color:var(--gray-800);white-space:pre-wrap;margin-bottom:16px}
@@ -151,7 +152,6 @@ tbody tr:hover{background:var(--gray-50)}
     <div>
       <h1 class="page-title">临床数据开放共享</h1>
     </div>
-    <button class="btn btn-primary" onclick="openDatasetModal()">发布数据集</button>
   </div>
 
   <div class="card">
@@ -243,7 +243,7 @@ tbody tr:hover{background:var(--gray-50)}
 
 <div class="modal-overlay" id="detailModal"><div class="modal wide"><div class="modal-header"><h3 id="detailModalTitle">数据集详情</h3><button class="modal-close" onclick="closeModal('detailModal')">x</button></div><div class="modal-body" id="detailModalBody"></div><div class="modal-footer" id="detailModalFooter"></div></div></div>
 <div class="modal-overlay" id="applyModal"><div class="modal"><div class="modal-header"><h3 id="applyModalTitle">数据使用申请</h3><button class="modal-close" onclick="closeModal('applyModal')">x</button></div><div class="modal-body" id="applyModalBody"></div></div></div>
-<div class="modal-overlay" id="datasetModal"><div class="modal wide"><div class="modal-header"><h3 id="datasetModalTitle">发布数据集</h3><button class="modal-close" onclick="closeModal('datasetModal')">x</button></div><div class="modal-body"><form id="datasetForm" onsubmit="submitDataset(event)"><input type="hidden" id="editDatasetId"><div class="form-row"><div class="form-group"><label>数据集名称 <span class="required">*</span></label><input id="datasetName" required placeholder="请输入数据集名称"></div><div class="form-group"><label>分类 <span class="required">*</span></label><select id="datasetCategory" required><option value="">请选择分类</option><option value="临床数据">临床数据</option><option value="影像数据">影像数据</option><option value="基因数据">基因数据</option><option value="其他">其他</option></select></div></div><div class="form-row"><div class="form-group"><label>开放方式 <span class="required">*</span></label><div class="radio-row"><label><input type="radio" name="datasetPublic" value="public" checked> 公开：所有用户可查看下载</label><label><input type="radio" name="datasetPublic" value="private"> 不公开：需申请并审核</label></div></div><div class="form-group"><label>数据状态</label><select id="datasetStatus"><option value="已发布">已发布</option><option value="草稿">草稿</option></select></div></div><div class="form-group"><label>数据集描述 <span class="required">*</span></label><textarea id="datasetDesc" required placeholder="说明数据来源、样本量、格式、脱敏方式、适用用途等..."></textarea></div><div class="section-label">上传数据集文件</div><div class="upload-zone" id="dataUploadZone" onclick="document.getElementById('dataFileInput').click()"><p>点击或拖拽上传数据集文件</p><div class="upload-hint">支持 .zip / .csv / .dcm / .nii / .vcf 等格式，可上传多个文件</div></div><input type="file" id="dataFileInput" multiple style="display:none" onchange="handleFileSelect(this,'data')"><div class="upload-file-list" id="dataFileList"></div><div class="section-label">上传说明文档</div><div class="upload-zone" id="docUploadZone" onclick="document.getElementById('docFileInput').click()"><p>点击或拖拽上传说明文档</p><div class="upload-hint">支持 .pdf / .docx / .txt 等格式</div></div><input type="file" id="docFileInput" multiple style="display:none" onchange="handleFileSelect(this,'doc')"><div class="upload-file-list" id="docFileList"></div><div class="form-group" style="margin-top:18px"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="datasetAgree" required style="width:auto;margin-top:3px"> 我承诺所上传数据已完成必要脱敏与授权，符合数据安全、个人信息保护和医学伦理要求 <span class="required">*</span></label></div><div class="modal-footer" style="padding:14px 0 0;border-top:none"><button type="button" class="btn btn-outline" onclick="closeModal('datasetModal')">取消</button><button type="submit" class="btn btn-primary">保存并发布</button></div></form></div></div></div>
+<div class="modal-overlay" id="datasetModal"><div class="modal wide"><div class="modal-header"><h3 id="datasetModalTitle">发布数据集</h3><button class="modal-close" onclick="closeModal('datasetModal')">x</button></div><div class="modal-body"><form id="datasetForm" onsubmit="submitDataset(event)"><input type="hidden" id="editDatasetId"><div class="form-row"><div class="form-group"><label>数据集名称 <span class="required">*</span></label><input id="datasetName" required placeholder="请输入数据集名称"></div><div class="form-group"><label>分类 <span class="required">*</span></label><select id="datasetCategory" required><option value="">请选择分类</option><option value="临床数据">临床数据</option><option value="影像数据">影像数据</option><option value="基因数据">基因数据</option><option value="其他">其他</option></select></div></div><div class="form-row"><div class="form-group"><label>开放方式 <span class="required">*</span></label><div class="radio-row"><label><input type="radio" name="datasetPublic" value="public" checked> 公开：所有用户可查看下载</label><label><input type="radio" name="datasetPublic" value="private"> 不公开：需申请并审核</label></div></div></div><div class="form-group"><label>数据集描述 <span class="required">*</span></label><textarea id="datasetDesc" required placeholder="说明数据来源、样本量、格式、脱敏方式、适用用途等..."></textarea></div><div class="section-label">上传数据集文件</div><div class="upload-zone" id="dataUploadZone" onclick="document.getElementById('dataFileInput').click()"><p>点击或拖拽上传数据集文件</p><div class="upload-hint">支持 .zip / .csv / .dcm / .nii / .vcf 等格式，可上传多个文件</div></div><input type="file" id="dataFileInput" multiple style="display:none" onchange="handleFileSelect(this,'data')"><div class="upload-file-list" id="dataFileList"></div><div class="section-label">上传说明文档</div><div class="upload-zone" id="docUploadZone" onclick="document.getElementById('docFileInput').click()"><p>点击或拖拽上传说明文档</p><div class="upload-hint">支持 .pdf / .docx / .txt 等格式</div></div><input type="file" id="docFileInput" multiple style="display:none" onchange="handleFileSelect(this,'doc')"><div class="upload-file-list" id="docFileList"></div><div class="form-group" style="margin-top:18px"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="datasetAgree" required style="width:auto;margin-top:3px"> 我承诺所上传数据已完成必要脱敏与授权，符合数据安全、个人信息保护和医学伦理要求 <span class="required">*</span></label></div><div class="modal-footer" style="padding:14px 0 0;border-top:none"><button type="button" class="btn btn-outline" onclick="closeModal('datasetModal')">取消</button><button type="submit" class="btn btn-primary">保存并发布</button></div></form></div></div></div>
 <div class="modal-overlay" id="reviewModal"><div class="modal"><div class="modal-header"><h3 id="reviewModalTitle">审核申请</h3><button class="modal-close" onclick="closeModal('reviewModal')">x</button></div><div class="modal-body" id="reviewModalBody"></div></div></div>
 <div class="success-overlay" id="successOverlay"><div class="success-box"><div class="success-icon">✓</div><h3 id="successTitle">操作成功</h3><p id="successMsg"></p><button class="btn btn-primary" onclick="closeSuccess()">确定</button></div></div>
 
@@ -252,19 +252,22 @@ var currentUser = { name:'张教授', role:'医学教授', org:'深圳市眼科�
 var currentTab = 'all';
 var currentSortOrder = 'desc';
 var currentPage = 1;
-var pageSize = 8;
+var pageSize = 9;
 var dataUploadFiles = [];
 var docUploadFiles = [];
+var existingDataFiles = [];
+var existingDocFiles = [];
 
 var allDatasets = [
-  {id:1,name:'DR筛查数据集',author:'张教授',org:'深圳市眼科医院',category:'影像数据',updateTime:'2026-07-01 10:30',isPublic:true,status:'已发布',desc:'5000例糖尿病视网膜病变眼底彩照及专家标注，已完成患者身份脱敏，可用于教学、模型训练与筛查算法验证。',attachments:[{name:'dr_screening_images.zip',size:'2.3 GB',url:'data/dr_screening_images.zip'},{name:'dr_annotations.json',size:'156 MB',url:'data/dr_annotations.json'}]},
+  {id:1,name:'DR筛查数据集',author:'张教授',org:'深圳市眼科医院',category:'影像数据',updateTime:'2026-07-01 10:30',isPublic:true,status:'已发布',desc:'5000例糖尿病视网膜病变眼底彩照及专家标注，已完成患者身份脱敏，可用于教学、模型训练与筛查算法验证。',attachments:[{name:'dr_screening_images.zip',size:'2.3 GB',url:'data/dr_screening_images.zip',type:'data'},{name:'dr_annotations.json',size:'156 MB',url:'data/dr_annotations.json',type:'data'},{name:'DR筛查数据说明.pdf',size:'2.4 MB',url:'docs/dr_screening_readme.pdf',type:'doc'}]},
   {id:2,name:'青光眼OCT随访数据集',author:'张教授',org:'深圳市眼科医院',category:'影像数据',updateTime:'2026-06-28 16:20',isPublic:false,status:'已发布',desc:'3200例青光眼患者OCT随访数据，包含RNFL厚度、GCL+IPL厚度、视野MD值等字段。因包含纵向随访信息，需申请后使用。',attachments:[{name:'glaucoma_oct_followup.zip',size:'8.5 GB',url:'data/glaucoma_oct_followup.zip'},{name:'glaucoma_metadata.csv',size:'32 MB',url:'data/glaucoma_metadata.csv'}]},
   {id:3,name:'AMD多模态数据集',author:'王强',org:'上海眼病防治中心',category:'影像数据',updateTime:'2026-06-25 09:40',isPublic:true,status:'已发布',desc:'2100例AMD患者多模态影像，包含眼底彩照、OCT、OCTA及荧光血管造影图像。',attachments:[{name:'amd_multimodal.zip',size:'12.1 GB',url:'data/amd_multimodal.zip'}]},
   {id:4,name:'儿童眼底筛查数据集',author:'陈敏',org:'华西医院',category:'临床数据',updateTime:'2026-06-20 11:00',isPublic:true,status:'已发布',desc:'8000例0-6岁儿童眼底筛查数据，涵盖早产儿视网膜病变、先天性白内障等常见儿童眼病。',attachments:[{name:'pediatric_screening.zip',size:'6.8 GB',url:'data/pediatric_screening.zip'}]},
   {id:5,name:'高血压视网膜病变数据集',author:'刘洋医师',org:'解放军总医院',category:'临床数据',updateTime:'2026-06-12 08:30',isPublic:false,status:'已发布',desc:'由主治医师刘洋发布的4500例高血压患者眼底彩照及临床指标数据，用于高血压视网膜病变与全身指标相关性研究。非公开数据需向发布者申请。',attachments:[{name:'hypertensive_retinopathy.zip',size:'4.2 GB',url:'data/hypertensive_retinopathy.zip'}]},
   {id:6,name:'糖尿病基因关联数据集',author:'赵静',org:'中山大学公共卫生学院',category:'基因数据',updateTime:'2026-06-18 13:20',isPublic:true,status:'已发布',desc:'2000例2型糖尿病患者GWAS数据，涵盖SNP位点与表型数据。',attachments:[{name:'diabetes_gwas_vcf.zip',size:'15.3 GB',url:'data/diabetes_gwas_vcf.zip'}]},
   {id:7,name:'肺部CT结节标注数据集',author:'周磊',org:'北京协和医院',category:'影像数据',updateTime:'2026-06-22 17:00',isPublic:true,status:'已发布',desc:'1280例胸部CT影像肺结节标注数据集，包含结节轮廓和良恶性判别。',attachments:[{name:'lung_nodule_ct.zip',size:'22.6 GB',url:'data/lung_nodule_ct.zip'}]},
-  {id:8,name:'肿瘤基因表达数据集',author:'孙悦',org:'复旦大学附属肿瘤医院',category:'基因数据',updateTime:'2026-06-25 10:45',isPublic:false,status:'已发布',desc:'常见肿瘤RNA-seq表达谱数据及临床预后信息。非公开数据，需说明科研用途并经发布者审核。',attachments:[{name:'tumor_rnaseq.tar.gz',size:'45.8 GB',url:'data/tumor_rnaseq.tar.gz'}]}
+  {id:8,name:'肿瘤基因表达数据集',author:'孙悦',org:'复旦大学附属肿瘤医院',category:'基因数据',updateTime:'2026-06-25 10:45',isPublic:false,status:'已发布',desc:'常见肿瘤RNA-seq表达谱数据及临床预后信息。非公开数据，需说明科研用途并经发布者审核。',attachments:[{name:'tumor_rnaseq.tar.gz',size:'45.8 GB',url:'data/tumor_rnaseq.tar.gz'}]},
+  {id:9,name:'近视进展随访数据集',author:'林主任',org:'广州中山眼科中心',category:'临床数据',updateTime:'2026-06-23 14:20',isPublic:false,status:'已发布',desc:'其他机构发布的青少年近视进展随访数据，包含屈光度、眼轴长度、用眼行为问卷和复查记录。该数据集不公开，需提交科研用途并经发布者审核后使用。',attachments:[{name:'myopia_progress_followup.zip',size:'5.7 GB',url:'data/myopia_progress_followup.zip'},{name:'myopia_followup_readme.pdf',size:'1.8 MB',url:'docs/myopia_followup_readme.pdf',type:'doc'}]}
 ];
 
 var applications = [
@@ -383,7 +386,7 @@ function renderDatasetActions(ds, relation){
     return html;
   }
   if (ds.isPublic || relation === 'approved') {
-    html += '<button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载</button>';
+    html += '<button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载附件</button>';
   } else if (relation === 'none') {
     html += '<button class="btn btn-primary btn-sm" onclick="openApply(' + ds.id + ')">申请</button>';
   } else if (relation === 'pending') {
@@ -437,7 +440,7 @@ function renderApplicationTable(){
     if (!ds) return;
     html += '<tr><td><div class="dataset-name">' + escapeHtml(ds.name) + '</div><div class="dataset-meta">' + escapeHtml(ds.category) + '</div></td><td>' + escapeHtml(ds.author) + '</td><td>' + escapeHtml(app.purpose) + '</td><td>' + app.submitTime + '</td><td>' + renderAppStatus(app.status) + '</td><td>' + escapeHtml(app.reviewOpinion || '-') + '</td><td><div class="action-cell">';
     html += '<button class="btn btn-outline btn-sm" onclick="openDetail(' + ds.id + ')">查看数据集</button>';
-    if (app.status === '已通过') html += '<button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载</button>';
+    if (app.status === '已通过') html += '<button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载附件</button>';
     if (app.status === '已驳回') html += '<button class="btn btn-primary btn-sm" onclick="openApply(' + ds.id + ')">重新申请</button>';
     if (app.status === '待审核') html += '<button class="btn btn-outline btn-sm" onclick="withdrawApplication(' + ds.id + ')">撤回</button>';
     html += '</div></td></tr>';
@@ -537,9 +540,13 @@ function submitApply(event,id){
 function openDatasetModal(id){
   dataUploadFiles = [];
   docUploadFiles = [];
+  existingDataFiles = [];
+  existingDocFiles = [];
   document.getElementById('datasetForm').reset();
   document.getElementById('dataFileList').innerHTML = '';
   document.getElementById('docFileList').innerHTML = '';
+  var dataFileTitle = document.querySelector('#datasetModal .section-label');
+  if (dataFileTitle) dataFileTitle.innerHTML = '上传数据集文件 <span class="required">*</span>';
   document.getElementById('editDatasetId').value = id || '';
   document.getElementById('datasetModalTitle').textContent = id ? '修改数据集' : '发布数据集';
   if (id) {
@@ -548,7 +555,6 @@ function openDatasetModal(id){
     document.getElementById('datasetName').value = ds.name;
     document.getElementById('datasetCategory').value = ds.category;
     document.getElementById('datasetDesc').value = ds.desc;
-    document.getElementById('datasetStatus').value = ds.status;
     document.querySelector('input[name="datasetPublic"][value="' + (ds.isPublic ? 'public' : 'private') + '"]').checked = true;
     document.getElementById('datasetAgree').checked = true;
     renderExistingFiles(ds.attachments);
@@ -564,18 +570,19 @@ function submitDataset(event){
   var isPublic = document.querySelector('input[name="datasetPublic"]:checked').value === 'public';
   var desc = document.getElementById('datasetDesc').value.trim();
   var attachments = buildAttachments();
-  if (!id && !attachments.length) {
-    alert('请至少上传一个数据集文件或说明文档');
+  var hasDataFiles = existingDataFiles.length + dataUploadFiles.length > 0;
+  if (!hasDataFiles) {
+    alert('请至少上传一个数据集文件');
     return;
   }
   if (id) {
     var ds = findDataset(id);
     if (!ds || !isOwner(ds)) return;
-    ds.name = name; ds.category = category; ds.isPublic = isPublic; ds.desc = desc; ds.status = document.getElementById('datasetStatus').value; ds.updateTime = nowText();
-    if (attachments.length) ds.attachments = ds.attachments.concat(attachments);
+    ds.name = name; ds.category = category; ds.isPublic = isPublic; ds.desc = desc; ds.updateTime = nowText();
+    ds.attachments = attachments;
     showSuccess('修改成功','数据集已更新，列表中的更新时间已同步刷新。');
   } else {
-    allDatasets.unshift({id:nextDatasetId(),name:name,author:currentUser.name,org:currentUser.org,category:category,updateTime:nowText(),isPublic:isPublic,status:document.getElementById('datasetStatus').value,desc:desc,attachments:attachments});
+    allDatasets.unshift({id:nextDatasetId(),name:name,author:currentUser.name,org:currentUser.org,category:category,updateTime:nowText(),isPublic:isPublic,status:'已发布',desc:desc,attachments:attachments});
     showSuccess('发布成功', isPublic ? '公开数据集已发布，所有用户可查看并下载。' : '非公开数据集已发布，其他用户需提交申请并由你审核。');
   }
   closeModal('datasetModal');
@@ -689,23 +696,37 @@ function handleFileSelect(input,type){
   input.value = '';
 }
 function renderUploadFiles(){
-  renderFileList(dataUploadFiles,'dataFileList','data');
-  renderFileList(docUploadFiles,'docFileList','doc');
+  renderFileList(existingDataFiles,dataUploadFiles,'dataFileList','data');
+  renderFileList(existingDocFiles,docUploadFiles,'docFileList','doc');
 }
-function renderFileList(files,listId,type){
+function renderFileList(existingFiles,newFiles,listId,type){
   var html = '';
-  files.forEach(function(file,index){
-    html += '<div class="upload-file-item"><span>' + escapeHtml(file.name) + ' · ' + formatFileSize(file.size) + '</span><button type="button" class="file-remove" onclick="removeUploadFile(\'' + type + '\',' + index + ')">删除</button></div>';
+  existingFiles.forEach(function(file,index){
+    html += '<div class="upload-file-item"><div class="upload-file-name"><span class="tag tag-gray">已上传</span><span>' + escapeHtml(file.name) + ' · ' + escapeHtml(file.size) + '</span></div><button type="button" class="file-remove" onclick="removeExistingFile(\'' + type + '\',' + index + ')">删除</button></div>';
+  });
+  newFiles.forEach(function(file,index){
+    html += '<div class="upload-file-item"><div class="upload-file-name"><span class="tag tag-blue">待新增</span><span>' + escapeHtml(file.name) + ' · ' + formatFileSize(file.size) + '</span></div><button type="button" class="file-remove" onclick="removeUploadFile(\'' + type + '\',' + index + ')">删除</button></div>';
   });
   document.getElementById(listId).innerHTML = html;
 }
 function removeUploadFile(type,index){ if (type === 'data') dataUploadFiles.splice(index,1); else docUploadFiles.splice(index,1); renderUploadFiles(); }
+function removeExistingFile(type,index){ if (type === 'data') existingDataFiles.splice(index,1); else existingDocFiles.splice(index,1); renderUploadFiles(); }
 function buildAttachments(){
-  var files = dataUploadFiles.concat(docUploadFiles);
-  return files.map(function(file){ return {name:file.name,size:formatFileSize(file.size),url:'data/' + file.name}; });
+  var dataFiles = existingDataFiles.concat(dataUploadFiles.map(function(file){ return {name:file.name,size:formatFileSize(file.size),url:'data/' + file.name,type:'data'}; }));
+  var docFiles = existingDocFiles.concat(docUploadFiles.map(function(file){ return {name:file.name,size:formatFileSize(file.size),url:'docs/' + file.name,type:'doc'}; }));
+  return dataFiles.concat(docFiles);
 }
 function renderExistingFiles(files){
-  document.getElementById('dataFileList').innerHTML = files.map(function(file){ return '<div class="upload-file-item"><span>' + escapeHtml(file.name) + ' · ' + escapeHtml(file.size) + '</span><span class="tag tag-gray">已上传</span></div>'; }).join('');
+  (files || []).forEach(function(file){
+    if (getAttachmentType(file) === 'doc') existingDocFiles.push(file);
+    else existingDataFiles.push(file);
+  });
+  renderUploadFiles();
+}
+function getAttachmentType(file){
+  if (file.type === 'doc' || file.type === 'data') return file.type;
+  var ext = (file.name || '').split('.').pop().toLowerCase();
+  return ['pdf','doc','docx','txt','md','rtf'].indexOf(ext) >= 0 ? 'doc' : 'data';
 }
 function formatFileSize(bytes){ if (!bytes && bytes !== 0) return '未知大小'; if (bytes < 1024) return bytes + ' B'; if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB'; if (bytes < 1073741824) return (bytes/1048576).toFixed(1) + ' MB'; return (bytes/1073741824).toFixed(1) + ' GB'; }
 function setupDropUpload(){

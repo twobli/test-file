@@ -34,10 +34,10 @@
     --transition: all 0.2s ease;
 
     --node-disease: #e74c3c;
-    --node-treatment: #3498db;
     --node-drug: #2ecc71;
     --node-surgery: #e67e22;
-    --node-basic-disease: #9b59b6;
+    --node-exam: #3498db;
+    --node-symptom: #9b59b6;
     --node-inferred: #95a5a6;
     --edge-defined: #95a5a6;
     --edge-inferred: #e67e22;
@@ -95,10 +95,10 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .kg-legend .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 .kg-legend .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .kg-legend .legend-dot.disease { background: var(--node-disease); }
-.kg-legend .legend-dot.treatment { background: var(--node-treatment); }
 .kg-legend .legend-dot.drug { background: var(--node-drug); }
 .kg-legend .legend-dot.surgery { background: var(--node-surgery); }
-.kg-legend .legend-dot.basic-disease { background: var(--node-basic-disease); }
+.kg-legend .legend-dot.exam { background: var(--node-exam); }
+.kg-legend .legend-dot.symptom { background: var(--node-symptom); }
 .kg-legend .legend-line { width: 16px; height: 2px; border-radius: 1px; flex-shrink: 0; }
 .kg-legend .legend-line.defined { background: var(--edge-defined); }
 .kg-legend .legend-line.inferred { background: none; border-top: 2px dashed var(--edge-inferred); height: 0; }
@@ -110,17 +110,30 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .kg-edge line { stroke-linecap: round; }
 .kg-edge.defined line { stroke: #b0b8c1; stroke-width: 1.5; }
 .kg-edge.inferred line { stroke: var(--edge-inferred); stroke-width: 1.5; stroke-dasharray: 6 4; }
-.kg-edge text { font-size: 10px; font-family: 'Inter', 'PingFang SC', sans-serif; fill: #666; text-anchor: middle; pointer-events: none; user-select: none; }
-.kg-edge:hover line { stroke-width: 2.5; }
+.kg-edge text {
+  font-size: 10px;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  fill: #475467;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  user-select: none;
+}
+.kg-edge .edge-label-bg { fill: rgba(255,255,255,0.94); stroke: #e4e7ec; stroke-width: 1; }
+.kg-edge.inferred .edge-label-bg { fill: #fff7ed; stroke: #fed7aa; }
+.kg-edge.selected .edge-label-bg,
+.kg-edge:hover .edge-label-bg { stroke: #2b6de8; stroke-width: 1.4; }
+.kg-edge:hover line,
+.kg-edge.selected line { stroke-width: 2.5; }
 .kg-node.highlighted circle { stroke: #ff9800; stroke-width: 3; }
 .kg-node.dimmed { opacity: 0.25; }
 .kg-edge.dimmed { opacity: 0.15; }
 
 .kg-node.disease circle { fill: #e74c3c; }
-.kg-node.treatment circle { fill: #3498db; }
 .kg-node.drug circle { fill: #2ecc71; }
 .kg-node.surgery circle { fill: #e67e22; }
-.kg-node.basic-disease circle { fill: #9b59b6; }
+.kg-node.exam circle { fill: #3498db; }
+.kg-node.symptom circle { fill: #9b59b6; }
 .kg-node.inferred-node circle { fill: #bdc3c7; stroke: #95a5a6; stroke-width: 2; stroke-dasharray: 4 3; }
 .kg-node.core circle { stroke: #2c3e50; stroke-width: 3; }
 
@@ -135,10 +148,10 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .kg-detail-panel .detail-body { padding: 20px; }
 .kg-detail-panel .detail-type-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
 .kg-detail-panel .detail-type-badge.disease { background: #fce8e6; color: #c0392b; }
-.kg-detail-panel .detail-type-badge.treatment { background: #e8f0fe; color: #1a73e8; }
 .kg-detail-panel .detail-type-badge.drug { background: #e6f4ea; color: #137333; }
 .kg-detail-panel .detail-type-badge.surgery { background: #fef3e8; color: #b06000; }
-.kg-detail-panel .detail-type-badge.basic-disease { background: #f3e8fd; color: #6c3483; }
+.kg-detail-panel .detail-type-badge.exam { background: #e8f0fe; color: #1a73e8; }
+.kg-detail-panel .detail-type-badge.symptom { background: #f3e8fd; color: #6c3483; }
 .kg-detail-panel .detail-name { font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
 .kg-detail-panel .detail-eng { font-size: 12px; color: var(--gray-500); margin-bottom: 16px; }
 .kg-detail-panel .detail-field { margin-bottom: 14px; }
@@ -162,6 +175,16 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .kg-detail-panel .relation-kind.defined { background: #e8f0fe; color: #1a73e8; }
 .kg-detail-panel .relation-kind.inferred { background: #fef3e8; color: #b06000; }
 .kg-detail-panel .inference-rule { background: #fff7e6; border: 1px solid #ffe0a3; border-radius: 8px; padding: 10px 12px; color: #7a4b00; font-size: 13px; line-height: 1.75; }
+.kg-detail-panel .candidate-summary { background: #f6f9fe; border: 1px solid #d8e7fb; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; color: var(--gray-700); font-size: 13px; line-height: 1.7; }
+.kg-detail-panel .candidate-card { padding: 10px 12px; border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: 8px; background: #fff; cursor: pointer; transition: var(--transition); }
+.kg-detail-panel .candidate-card:hover { border-color: var(--primary); background: var(--primary-light); }
+.kg-detail-panel .candidate-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; font-size: 13px; font-weight: 700; color: var(--gray-900); }
+.kg-detail-panel .candidate-meta { color: var(--gray-500); font-size: 12px; line-height: 1.6; }
+.kg-detail-panel .candidate-score { flex-shrink: 0; padding: 2px 7px; border-radius: 999px; background: #e8f0fe; color: var(--primary); font-size: 11px; font-weight: 700; }
+.kg-detail-panel .source-grid { display: grid; gap: 8px; }
+.kg-detail-panel .source-card { border: 1px solid var(--gray-200); border-radius: 8px; padding: 9px 10px; background: var(--gray-50); font-size: 12px; line-height: 1.65; color: var(--gray-700); }
+.kg-detail-panel .source-card strong { display: block; color: var(--gray-900); margin-bottom: 3px; }
+.kg-detail-panel .new-knowledge { border-left: 3px solid #e67e22; padding-left: 9px; }
 .kg-detail-panel .detail-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--gray-400); font-size: 13px; text-align: center; padding: 40px 20px; }
 .kg-detail-panel .detail-empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .kg-detail-panel .btn-detail { display: inline-block; margin-top: 12px; padding: 8px 18px; background: var(--primary-light); color: var(--primary); border-radius: 6px; font-size: 12px; text-decoration: none; font-weight: 500; cursor: pointer; border: none; font-family: inherit; }
@@ -225,24 +248,23 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <select class="kg-select" id="entityTypeFilter" onchange="searchEntity()">
             <option value="">全部实体</option>
             <option value="disease">疾病</option>
-            <option value="treatment">治疗方法</option>
             <option value="drug">药物</option>
-            <option value="surgery">手术</option>
-            <option value="basic-disease">基础疾病</option>
+            <option value="surgery">手术操作</option>
+            <option value="exam">检验检查</option>
+            <option value="symptom">症状信息</option>
         </select>
         <select class="kg-select" id="relationFilter" onchange="changeRelationFilter()">
             <option value="all">全部关系</option>
-            <option value="defined">已定义关系</option>
-            <option value="inferred">推理关系</option>
-            <option value="treatment">治疗相关</option>
-            <option value="drug">用药/包含药物</option>
-            <option value="risk">危险因素/导致</option>
-            <option value="complication">并发/关联疾病</option>
+            <option value="drug">药物相关</option>
+            <option value="surgery">手术操作相关</option>
+            <option value="exam">检验检查相关</option>
+            <option value="symptom">症状信息相关</option>
+            <option value="inferred">病例之间的推理</option>
         </select>
         <button class="kg-action-btn" onclick="runInference()">运行图谱推理</button>
         <label class="kg-toggle">
             <input type="checkbox" id="toggleInferred" checked onchange="toggleInferredEdges()">
-            显示推理关系
+            显示病例推理
         </label>
     </div>
 
@@ -251,12 +273,11 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             <div class="kg-legend">
                 <div class="legend-title">图例</div>
                 <div class="legend-item"><span class="legend-dot disease"></span> 疾病</div>
-                <div class="legend-item"><span class="legend-dot treatment"></span> 治疗方法</div>
                 <div class="legend-item"><span class="legend-dot drug"></span> 药物</div>
-                <div class="legend-item"><span class="legend-dot surgery"></span> 手术</div>
-                <div class="legend-item"><span class="legend-dot basic-disease"></span> 基础疾病</div>
-                <div class="legend-item" style="margin-top:4px;"><span class="legend-line defined"></span> 已定义关系</div>
-                <div class="legend-item"><span class="legend-line inferred"></span> 推理关系</div>
+                <div class="legend-item"><span class="legend-dot surgery"></span> 手术操作</div>
+                <div class="legend-item"><span class="legend-dot exam"></span> 检验检查</div>
+                <div class="legend-item"><span class="legend-dot symptom"></span> 症状信息</div>
+                <div class="legend-item" style="margin-top:4px;"><span class="legend-line inferred"></span> 病例之间的推理</div>
             </div>
             <div class="kg-zoom-controls">
                 <button onclick="zoomIn()" title="放大">+</button>
@@ -275,7 +296,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             </div>
             <div id="detailContent" style="display:none;flex-direction:column;height:100%;">
                 <div class="detail-header">
-                    <h3>实体详情</h3>
+                    <h3 id="detailTitle">实体详情</h3>
                     <button class="detail-close" onclick="clearSelection()" title="关闭">&times;</button>
                 </div>
                 <div class="detail-body" id="detailBody"></div>
@@ -295,11 +316,11 @@ var graphData = {
         { id: 'cataract', name: '白内障', engName: 'Cataract', type: 'disease', icd: 'H26.9', alias: '晶体混浊', prevalence: '47.8%（中国60岁以上人群）', severity: '初发期、膨胀期、成熟期、过熟期' },
         { id: 'rvo', name: '视网膜静脉阻塞', engName: 'Retinal Vein Occlusion (RVO)', type: 'disease', icd: 'H34.81', alias: '视网膜静脉栓塞', prevalence: '1.6%（中国40岁以上人群）', severity: '中央型、分支型' },
         { id: 'dme', name: '糖尿病黄斑水肿', engName: 'Diabetic Macular Edema (DME)', type: 'disease', icd: 'E11.311+H36.0', alias: 'DME', prevalence: '约30%DR患者合并DME', severity: '局灶性、弥漫性' },
-        { id: 'anti-vegf', name: '抗VEGF药物治疗', engName: 'Anti-VEGF Therapy', type: 'treatment' },
-        { id: 'laser', name: '激光光凝治疗', engName: 'Laser Photocoagulation', type: 'treatment' },
-        { id: 'glucose-ctrl', name: '血糖控制', engName: 'Blood Glucose Control', type: 'treatment' },
-        { id: 'bp-ctrl', name: '血压控制', engName: 'Blood Pressure Control', type: 'treatment' },
-        { id: 'steroid', name: '糖皮质激素治疗', engName: 'Corticosteroid Therapy', type: 'treatment' },
+        { id: 'anti-vegf', name: '抗VEGF药物治疗', engName: 'Anti-VEGF Therapy', type: 'drug' },
+        { id: 'laser', name: '激光光凝治疗', engName: 'Laser Photocoagulation', type: 'surgery' },
+        { id: 'glucose-ctrl', name: '血糖检查', engName: 'Blood Glucose Test', type: 'exam' },
+        { id: 'bp-ctrl', name: '血压测量', engName: 'Blood Pressure Measurement', type: 'exam' },
+        { id: 'steroid', name: '糖皮质激素治疗', engName: 'Corticosteroid Therapy', type: 'drug' },
         { id: 'ranibizumab', name: '雷珠单抗', engName: 'Ranibizumab (Lucentis)', type: 'drug' },
         { id: 'aflibercept', name: '阿柏西普', engName: 'Aflibercept (Eylea)', type: 'drug' },
         { id: 'conbercept', name: '康柏西普', engName: 'Conbercept', type: 'drug' },
@@ -311,15 +332,17 @@ var graphData = {
         { id: 'vitrectomy', name: '玻璃体切割术', engName: 'Vitrectomy', type: 'surgery' },
         { id: 'phaco', name: '白内障超声乳化术', engName: 'Phacoemulsification', type: 'surgery' },
         { id: 'trabeculectomy', name: '小梁切除术', engName: 'Trabeculectomy', type: 'surgery' },
-        { id: 'diabetes', name: '2型糖尿病', engName: 'Type 2 Diabetes Mellitus', type: 'basic-disease' },
-        { id: 'hypertension', name: '高血压', engName: 'Hypertension', type: 'basic-disease' },
-        { id: 'hyperlipidemia', name: '高脂血症', engName: 'Hyperlipidemia', type: 'basic-disease' },
+        { id: 'diabetes', name: '2型糖尿病', engName: 'Type 2 Diabetes Mellitus', type: 'disease' },
+        { id: 'hypertension', name: '高血压', engName: 'Hypertension', type: 'disease' },
+        { id: 'hyperlipidemia', name: '高脂血症', engName: 'Hyperlipidemia', type: 'disease' },
+        { id: 'vision-loss', name: '视力下降', engName: 'Vision Loss', type: 'symptom' },
+        { id: 'fundus-bleeding', name: '眼底出血', engName: 'Fundus Hemorrhage', type: 'symptom' },
     ],
     edges: [
         { from: 'dr', to: 'anti-vegf', label: '治疗', type: 'defined' },
         { from: 'dr', to: 'laser', label: '治疗', type: 'defined' },
         { from: 'dr', to: 'steroid', label: '治疗', type: 'defined' },
-        { from: 'dr', to: 'glucose-ctrl', label: '基础治疗', type: 'defined' },
+        { from: 'dr', to: 'glucose-ctrl', label: '检验检查', type: 'defined' },
         { from: 'dr', to: 'vitrectomy', label: '手术治疗', type: 'defined' },
         { from: 'dr', to: 'dme', label: '并发', type: 'defined' },
         { from: 'dr', to: 'diabetes', label: '属于并发症', type: 'defined' },
@@ -337,8 +360,8 @@ var graphData = {
         { from: 'glaucoma', to: 'timolol', label: '用药', type: 'defined' },
         { from: 'glaucoma', to: 'latanoprost', label: '用药', type: 'defined' },
         { from: 'glaucoma', to: 'laser', label: '激光治疗', type: 'defined' },
-        { from: 'hr', to: 'hypertension', label: '由基础疾病导致', type: 'defined' },
-        { from: 'hr', to: 'bp-ctrl', label: '基础治疗', type: 'defined' },
+        { from: 'hr', to: 'hypertension', label: '由疾病导致', type: 'defined' },
+        { from: 'hr', to: 'bp-ctrl', label: '检验检查', type: 'defined' },
         { from: 'hypertension', to: 'hr', label: '导致', type: 'defined' },
         { from: 'cataract', to: 'phaco', label: '手术治疗', type: 'defined' },
         { from: 'rvo', to: 'anti-vegf', label: '治疗', type: 'defined' },
@@ -348,6 +371,9 @@ var graphData = {
         { from: 'dme', to: 'anti-vegf', label: '一线治疗', type: 'defined' },
         { from: 'dme', to: 'steroid', label: '二线治疗', type: 'defined' },
         { from: 'dme', to: 'laser', label: '辅助治疗', type: 'defined' },
+        { from: 'dr', to: 'vision-loss', label: '症状表现', type: 'defined' },
+        { from: 'hr', to: 'fundus-bleeding', label: '症状表现', type: 'defined' },
+        { from: 'rvo', to: 'vision-loss', label: '症状表现', type: 'defined' },
         { from: 'dr', to: 'hypertension', label: '推理：共病风险', type: 'inferred' },
         { from: 'dr', to: 'hyperlipidemia', label: '推理：代谢综合征', type: 'inferred' },
         { from: 'diabetes', to: 'amd', label: '推理：代谢关联', type: 'inferred' },
@@ -387,7 +413,7 @@ var nodeExtra = {
         definition: '高血压导致视网膜小动脉痉挛、硬化及血-视网膜屏障破坏后的眼底改变。',
         clinical: '动脉狭窄、动静脉交叉压迫征、火焰状出血、棉绒斑、硬性渗出和视盘水肿。',
         grading: 'Keith-Wagener I-IV级。',
-        evidence: '由高血压基础疾病导致关系和血压控制治疗关系共同定义。'
+        evidence: '由高血压病因关系和血压测量检查关系共同定义。'
     },
     rvo: {
         definition: '视网膜静脉回流障碍导致的血管性疾病，可分中央静脉阻塞和分支静脉阻塞。',
@@ -396,44 +422,46 @@ var nodeExtra = {
         evidence: '由危险因素、高血压/高脂血症关联和抗VEGF/激光治疗关系定义。'
     },
     diabetes: {
-        definition: '以慢性高血糖为特征的代谢性疾病，是DR、DME和白内障等眼病的重要基础疾病。',
+        definition: '以慢性高血糖为特征的代谢性疾病，是DR、DME和白内障等眼病的重要病因背景。',
         clinical: '长期高血糖可造成微血管损伤、晶状体代谢异常和视网膜缺血。',
         grading: '以血糖控制水平、并发症和用药方案进行风险分层。',
-        evidence: '基础疾病节点用于连接眼病实体、基础用药和推理关系。'
+        evidence: '疾病实体用于连接眼病实体、基础用药和病例推理关系。'
     },
     hypertension: {
         definition: '持续血压升高导致全身血管损害，是高血压性视网膜病变和RVO的重要风险因素。',
         clinical: '可引发动脉硬化、视网膜血管狭窄和灌注异常。',
         grading: '按血压水平及靶器官损害程度分层。',
-        evidence: '基础疾病节点用于推理血管机制相关眼病风险。'
+        evidence: '疾病实体用于推理血管机制相关眼病风险。'
     },
     hyperlipidemia: {
         definition: '脂质代谢异常，可增加血管阻塞性眼底病变风险。',
         clinical: '与动脉硬化、血液黏滞度升高和视网膜静脉阻塞风险相关。',
         grading: '按血脂水平和合并代谢疾病分层。',
-        evidence: '作为代谢综合征推理链路的基础疾病节点。'
+        evidence: '作为代谢综合征推理链路中的疾病实体。'
     },
-    'anti-vegf': { definition: '通过抑制VEGF减少血管渗漏和新生血管活性。', clinical: '常用于DME、湿性AMD、RVO黄斑水肿等。', grading: '一线注射治疗路径。', evidence: '治疗方法节点，可下钻到雷珠单抗、阿柏西普、康柏西普等药物。' },
-    laser: { definition: '通过激光封闭渗漏点或减少缺血区VEGF释放。', clinical: '用于部分DR、DME、RVO及青光眼相关治疗。', grading: '局灶/格栅光凝、全视网膜光凝等。', evidence: '治疗方法节点，与疾病的治疗关系相连。' },
+    'anti-vegf': { definition: '通过抑制VEGF减少血管渗漏和新生血管活性。', clinical: '常用于DME、湿性AMD、RVO黄斑水肿等。', grading: '一线注射治疗路径。', evidence: '药物实体，可下钻到雷珠单抗、阿柏西普、康柏西普等具体药物。' },
+    laser: { definition: '通过激光封闭渗漏点或减少缺血区VEGF释放。', clinical: '用于部分DR、DME、RVO及青光眼相关治疗。', grading: '局灶/格栅光凝、全视网膜光凝等。', evidence: '手术操作实体，与疾病的治疗关系相连。' },
     vitrectomy: { definition: '玻璃体切割手术，用于玻璃体积血、牵拉性视网膜脱离等复杂眼底病变。', clinical: '常用于增殖期DR严重并发症。', grading: '手术治疗节点。', evidence: '与DR、AMD等复杂病程手术治疗关系相连。' }
 };
 
 var relationDescriptions = {
-    '治疗': '疾病可采用该治疗方法作为临床干预路径，需要结合分期、病灶位置和禁忌证判断。',
+    '治疗': '疾病可采用对应药物或手术操作作为临床干预路径，需要结合分期、病灶位置和禁忌证判断。',
     '一线治疗': '知识库标记为优先治疗路径，通常对应指南或常规临床路径中的首选方案。',
     '二线治疗': '一线方案效果不足、禁忌或复发时可考虑的备选治疗方案。',
     '辅助治疗': '通常不单独作为主要方案，用于控制病灶、减少复发或配合主要治疗。',
     '基础治疗': '针对基础病因或全身风险因素的长期管理措施。',
     '手术治疗': '病变进入手术适应证或药物/激光无法控制时采用的治疗方式。',
-    '包含药物': '治疗类别下可选择的具体药物实体。',
-    '基础用药': '基础疾病长期控制中的常用药物或治疗手段。',
+    '包含药物': '药物类别下可选择的具体药物实体。',
+    '基础用药': '疾病长期控制中的常用药物或治疗手段。',
     '用药': '实体与药物存在临床用药关系。',
     '并发': '源疾病可直接导致或合并目标疾病/病理状态。',
-    '属于并发症': '眼病实体作为基础疾病的并发症存在。',
+    '属于并发症': '眼病实体作为相关疾病的并发症存在。',
     '导致': '源实体是目标实体的明确病因或重要致病基础。',
-    '由基础疾病导致': '目标眼病由对应基础疾病诱发或维持。',
+    '由疾病导致': '目标眼病由对应疾病诱发或维持。',
     '危险因素': '目标实体为源实体的危险因素或显著相关因素。',
-    '激光治疗': '治疗方法属于激光干预路径。'
+    '激光治疗': '治疗方式属于激光手术操作路径。',
+    '检验检查': '疾病实体与检验检查项目存在诊断、监测或随访关联。',
+    '症状表现': '疾病实体可表现为对应症状信息，辅助临床识别和鉴别。'
 };
 
 var inferenceDescriptions = {
@@ -444,6 +472,51 @@ var inferenceDescriptions = {
     '推理：血管机制': '规则：高血压导致眼部灌注异常和血管调节异常，可与青光眼视神经损害风险关联。',
     '推理：血管病变': '规则：糖尿病造成微血管内皮损害和血流异常，增加视网膜静脉阻塞风险。',
     '推理：脂代谢异常': '规则：高脂血症增加动脉硬化和血液黏滞度，是RVO隐含危险因素。'
+};
+
+var inferenceEvidence = {
+    '推理：共病风险': {
+        clinical: '临床数据：DR病例中高血压共病比例升高，血压控制差时眼底出血和渗出风险增加。',
+        literature: '科研文献：视网膜微血管病变研究提示糖代谢异常与高血压共同作用于视网膜小血管。',
+        newKnowledge: '新知识候选：DR患者应联合标注高血压共病风险，用于随访和干预提醒。',
+        confidence: 92
+    },
+    '推理：代谢综合征': {
+        clinical: '临床数据：DR合并血脂异常时硬性渗出和黄斑水肿风险更高。',
+        literature: '科研文献：代谢综合征相关研究支持高血糖、高血压和高脂血症共同影响视网膜血管事件。',
+        newKnowledge: '新知识候选：DR与高脂血症之间存在代谢综合征相关隐含联系。',
+        confidence: 88
+    },
+    '推理：代谢关联': {
+        clinical: '临床数据：糖尿病患者黄斑区血管和代谢异常可能增加黄斑病变复杂度。',
+        literature: '科研文献：多模态眼底研究提示代谢异常与AMD进展风险存在交叉影响。',
+        newKnowledge: '新知识候选：2型糖尿病与AMD可纳入黄斑区代谢关联知识链。',
+        confidence: 76
+    },
+    '推理：高血糖诱因': {
+        clinical: '临床数据：长期高血糖患者白内障发生年龄提前，晶状体混浊进展更快。',
+        literature: '科研文献：糖代谢异常可改变晶状体渗透压和蛋白稳定性。',
+        newKnowledge: '新知识候选：2型糖尿病可作为白内障风险和病程管理的推理节点。',
+        confidence: 84
+    },
+    '推理：血管机制': {
+        clinical: '临床数据：高血压患者眼部灌注异常与视神经损害风险存在相关性。',
+        literature: '科研文献：青光眼血管机制研究提示血压波动可能影响视神经灌注。',
+        newKnowledge: '新知识候选：高血压与青光眼之间可形成血管机制解释链。',
+        confidence: 79
+    },
+    '推理：血管病变': {
+        clinical: '临床数据：糖尿病造成微血管内皮损伤，RVO病例常见代谢异常背景。',
+        literature: '科研文献：糖尿病相关微血管病变可增加血管阻塞性事件风险。',
+        newKnowledge: '新知识候选：2型糖尿病可作为RVO血管病变风险推理来源。',
+        confidence: 81
+    },
+    '推理：脂代谢异常': {
+        clinical: '临床数据：RVO患者中高脂血症和动脉硬化风险因素较常见。',
+        literature: '科研文献：脂代谢异常可通过血液黏滞度和血管硬化增加静脉阻塞风险。',
+        newKnowledge: '新知识候选：高脂血症与RVO之间可建立脂代谢异常推理关系。',
+        confidence: 86
+    }
 };
 
 var nodes = [];
@@ -464,6 +537,7 @@ var tooltip = document.getElementById('edgeTooltip');
 var searchToast = document.getElementById('searchToast');
 var detailEmpty = document.getElementById('detailEmpty');
 var detailContent = document.getElementById('detailContent');
+var detailTitle = document.getElementById('detailTitle');
 var detailBody = document.getElementById('detailBody');
 
 var nodeRadius = 26;
@@ -498,6 +572,8 @@ function calculateLayout() {
     positions['diabetes'] = { x: centerX + 350, y: centerY - 160 };
     positions['hypertension'] = { x: centerX + 320, y: centerY + 200 };
     positions['hyperlipidemia'] = { x: centerX + 260, y: centerY + 270 };
+    positions['vision-loss'] = { x: centerX - 360, y: centerY - 20 };
+    positions['fundus-bleeding'] = { x: centerX + 10, y: centerY - 300 };
 
     nodes = graphData.nodes.map(function(n) {
         var extra = nodeExtra[n.id] || {};
@@ -515,8 +591,78 @@ function calculateLayout() {
     edges = graphData.edges.map(function(e) { return { from: e.from, to: e.to, label: e.label, type: e.type }; });
 }
 
+function estimateRelationLabelWidth(label) {
+    var units = 0;
+    for (var i = 0; i < label.length; i++) {
+        units += /[\x00-\x7F]/.test(label.charAt(i)) ? 0.58 : 1;
+    }
+    return Math.max(30, Math.ceil(units * 10 + 16));
+}
+
+function boxesOverlap(a, b, padding) {
+    padding = padding || 0;
+    return !(a.right + padding < b.left ||
+        a.left - padding > b.right ||
+        a.bottom + padding < b.top ||
+        a.top - padding > b.bottom);
+}
+
+function labelOverlapsNode(box, node) {
+    var nodeBox = {
+        left: node.x - node.r - 6,
+        right: node.x + node.r + 6,
+        top: node.y - node.r - 6,
+        bottom: node.y + node.r + 6
+    };
+    return boxesOverlap(box, nodeBox, 2);
+}
+
+function getRelationLabelPlacement(edge, x1, y1, x2, y2, placedLabelBoxes) {
+    var width = estimateRelationLabelWidth(edge.label);
+    var height = 20;
+    var midX = (x1 + x2) / 2;
+    var midY = (y1 + y2) / 2;
+    var dx = x2 - x1;
+    var dy = y2 - y1;
+    var dist = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+    var lineX = dx / dist;
+    var lineY = dy / dist;
+    var normalX = -lineY;
+    var normalY = lineX;
+    var offsets = [22, -22, 38, -38, 54, -54, 70, -70, 0];
+    var shifts = [0, -34, 34, -58, 58];
+    var best = null;
+
+    offsets.forEach(function(offset) {
+        shifts.forEach(function(shift) {
+            var x = midX + normalX * offset + lineX * shift;
+            var y = midY + normalY * offset + lineY * shift;
+            var box = {
+                left: x - width / 2,
+                right: x + width / 2,
+                top: y - height / 2,
+                bottom: y + height / 2
+            };
+            var score = Math.abs(offset) * 0.08 + Math.abs(shift) * 0.04;
+            nodes.forEach(function(node) {
+                if (labelOverlapsNode(box, node)) score += 120;
+            });
+            placedLabelBoxes.forEach(function(placed) {
+                if (boxesOverlap(box, placed, 4)) score += 70;
+            });
+            if (!best || score < best.score) {
+                best = { x: x, y: y, width: width, height: height, box: box, score: score };
+            }
+        });
+    });
+
+    placedLabelBoxes.push(best.box);
+    return best;
+}
+
 function renderGraph() {
     svg.innerHTML = '';
+    var placedLabelBoxes = [];
 
     var NS = 'http://www.w3.org/2000/svg';
     var mainG = document.createElementNS(NS, 'g');
@@ -551,6 +697,7 @@ function renderGraph() {
 
         var g = document.createElementNS(NS, 'g');
         g.classList.add('kg-edge', edge.type);
+        if (selectedEdge === edge) g.classList.add('selected');
         g.setAttribute('data-from', edge.from);
         g.setAttribute('data-to', edge.to);
         g.setAttribute('data-type', edge.type);
@@ -573,18 +720,33 @@ function renderGraph() {
         line.setAttribute('marker-end', 'url(#arrow-' + edge.type + ')');
         g.appendChild(line);
 
-        var midX = (x1 + x2) / 2;
-        var midY = (y1 + y2) / 2;
+        var labelPlacement = getRelationLabelPlacement(edge, x1, y1, x2, y2, placedLabelBoxes);
+        var labelGroup = document.createElementNS(NS, 'g');
+        labelGroup.classList.add('edge-label');
+
+        var labelBg = document.createElementNS(NS, 'rect');
+        labelBg.classList.add('edge-label-bg');
+        labelBg.setAttribute('x', labelPlacement.x - labelPlacement.width / 2);
+        labelBg.setAttribute('y', labelPlacement.y - labelPlacement.height / 2);
+        labelBg.setAttribute('width', labelPlacement.width);
+        labelBg.setAttribute('height', labelPlacement.height);
+        labelBg.setAttribute('rx', 5);
+        labelBg.setAttribute('ry', 5);
+        labelGroup.appendChild(labelBg);
+
         var text = document.createElementNS(NS, 'text');
-        text.setAttribute('x', midX);
-        text.setAttribute('y', midY);
-        text.setAttribute('dy', '-0.3em');
+        text.setAttribute('x', labelPlacement.x);
+        text.setAttribute('y', labelPlacement.y);
         text.textContent = edge.label;
-        g.appendChild(text);
+        labelGroup.appendChild(text);
+        g.appendChild(labelGroup);
 
         g.addEventListener('click', function(e) {
             e.stopPropagation();
             selectedEdge = edge;
+            selectedNodeId = null;
+            highlightedNodeId = null;
+            renderGraph();
             showRelationDetail(edge);
             showEdgeTooltip(e, edge);
         });
@@ -728,16 +890,24 @@ function highlightRelated(nodeId) {
     });
 }
 
+function getNodeTypeById(nodeId) {
+    var node = nodes.find(function(n) { return n.id === nodeId; });
+    return node ? node.type : '';
+}
+
+function edgeTouchesType(edge, type) {
+    return getNodeTypeById(edge.from) === type || getNodeTypeById(edge.to) === type;
+}
+
 function edgePassesFilter(edge) {
     if (edge.type === 'inferred' && !showInferred) return false;
     if (relationFilter === 'all') return true;
-    if (relationFilter === 'defined') return edge.type === 'defined';
     if (relationFilter === 'inferred') return edge.type === 'inferred';
     var label = edge.label.replace('推理：', '');
-    if (relationFilter === 'treatment') return /治疗|手术|激光/.test(label);
-    if (relationFilter === 'drug') return /用药|药物/.test(label);
-    if (relationFilter === 'risk') return /危险因素|导致|基础疾病|风险|诱因|机制|代谢/.test(label);
-    if (relationFilter === 'complication') return /并发|并发症|关联|病变/.test(label);
+    if (relationFilter === 'drug') return edgeTouchesType(edge, 'drug') || /用药|药物|一线治疗|二线治疗/.test(label);
+    if (relationFilter === 'surgery') return edgeTouchesType(edge, 'surgery') || /手术|激光|光凝|切割|切除/.test(label);
+    if (relationFilter === 'exam') return edgeTouchesType(edge, 'exam') || /检验|检查|测量|监测/.test(label);
+    if (relationFilter === 'symptom') return edgeTouchesType(edge, 'symptom') || /症状|表现/.test(label);
     return true;
 }
 
@@ -757,7 +927,8 @@ function clearSelection() {
 function showDetail(node) {
     detailEmpty.style.display = 'none';
     detailContent.style.display = 'flex';
-    var typeNames = { disease: '疾病', treatment: '治疗方法', drug: '药物', surgery: '手术', 'basic-disease': '基础疾病' };
+    detailTitle.textContent = '实体详情';
+    var typeNames = { disease: '疾病', drug: '药物', surgery: '手术操作', exam: '检验检查', symptom: '症状信息' };
     var typeClass = node.type;
 
     var relatedEdges = edges.filter(function(e) {
@@ -807,18 +978,37 @@ function getRelationDescription(edge) {
     return relationDescriptions[edge.label] || '该关系为知识库中维护的已定义关系，用于描述两个医学实体之间的明确关联。';
 }
 
+function getInferenceEvidence(edge) {
+    return inferenceEvidence[edge.label] || {
+        clinical: '临床数据：待补充结构化病例统计和随访结果。',
+        literature: '科研文献：待补充指南、论文或共识证据。',
+        newKnowledge: '新知识候选：该关系可作为后续图谱推理的候选知识。',
+        confidence: 70
+    };
+}
+
 function showRelationDetail(edge) {
     selectedNodeId = null;
     detailEmpty.style.display = 'none';
     detailContent.style.display = 'flex';
+    detailTitle.textContent = edge.type === 'inferred' ? '推理详情' : '关系详情';
     var fromNode = nodes.find(function(n) { return n.id === edge.from; });
     var toNode = nodes.find(function(n) { return n.id === edge.to; });
     var relationLabel = cleanRelationLabel(edge);
-    var kind = edge.type === 'inferred' ? '推理关系' : '已定义关系';
-    var sourceType = edge.type === 'inferred' ? '知识库规则自动推理' : '人工维护/规则配置';
+    var kind = edge.type === 'inferred' ? '病例之间的推理' : '已定义关系';
+    var sourceType = edge.type === 'inferred' ? '知识图谱 + 临床数据 + 科研文献' : '人工维护/规则配置';
+    var evidence = edge.type === 'inferred' ? getInferenceEvidence(edge) : null;
     var ruleHtml = edge.type === 'inferred'
         ? '<div class="inference-rule"><strong>推理规则：</strong>' + getRelationDescription(edge) + '</div>'
         : '<div class="detail-text">' + getRelationDescription(edge) + '</div>';
+    var evidenceHtml = edge.type === 'inferred'
+        ? '<div class="detail-section"><div class="detail-section-title">推理证据链</div><div class="source-grid">' +
+            '<div class="source-card"><strong>知识图谱关系</strong>' + (fromNode ? fromNode.name : edge.from) + ' 与 ' + (toNode ? toNode.name : edge.to) + ' 通过疾病、危险因素、治疗路径或症状链路形成可解释关联。</div>' +
+            '<div class="source-card"><strong>临床数据</strong>' + evidence.clinical + '</div>' +
+            '<div class="source-card"><strong>科研文献</strong>' + evidence.literature + '</div>' +
+            '<div class="source-card new-knowledge"><strong>生成的新知识候选</strong>' + evidence.newKnowledge + '（置信度 ' + evidence.confidence + '%）</div>' +
+        '</div></div>'
+        : '';
 
     detailBody.innerHTML =
         '<span class="relation-kind ' + edge.type + '">' + kind + '</span>' +
@@ -830,6 +1020,7 @@ function showRelationDetail(edge) {
             '<span class="detail-chip">' + sourceType + '</span>' +
         '</div></div>' +
         '<div class="detail-section"><div class="detail-section-title">关系说明</div>' + ruleHtml + '</div>' +
+        evidenceHtml +
         '<div class="detail-section"><div class="detail-section-title">实体跳转</div>' +
             '<div class="detail-relations">' +
             '<div class="rel-item"><span>源实体</span><span class="rel-target" onclick="jumpToNode(\'' + edge.from + '\')">' + (fromNode ? fromNode.name : edge.from) + '</span></div>' +
@@ -850,34 +1041,136 @@ function highlightNodeAndCenter(nodeId) {
     }
 }
 
+function getTypeName(type) {
+    var typeNames = { disease: '疾病', drug: '药物', surgery: '手术操作', exam: '检验检查', symptom: '症状信息' };
+    return typeNames[type] || type;
+}
+
+function getNodeSearchText(node) {
+    return [
+        node.name, node.engName, node.icd, node.alias, node.prevalence, node.severity,
+        node.definition, node.clinical, node.grading, node.evidence, getTypeName(node.type)
+    ].filter(Boolean).join(' ').toLowerCase();
+}
+
+function getEdgeSearchText(edge) {
+    var fromNode = nodes.find(function(n) { return n.id === edge.from; });
+    var toNode = nodes.find(function(n) { return n.id === edge.to; });
+    return [
+        edge.label,
+        cleanRelationLabel(edge),
+        fromNode ? fromNode.name : edge.from,
+        toNode ? toNode.name : edge.to,
+        fromNode ? fromNode.engName : '',
+        toNode ? toNode.engName : '',
+        getRelationDescription(edge),
+        edge.type === 'inferred' ? getInferenceEvidence(edge).newKnowledge : ''
+    ].filter(Boolean).join(' ').toLowerCase();
+}
+
+function scoreText(text, query) {
+    if (!query) return 0;
+    if (text.indexOf(query) >= 0) return 100;
+    var chars = query.split('');
+    var hit = 0;
+    chars.forEach(function(ch) {
+        if (text.indexOf(ch) >= 0) hit++;
+    });
+    return Math.round((hit / Math.max(chars.length, 1)) * 72);
+}
+
+function collectKnowledgeCandidates(query, typeFilter) {
+    var candidates = [];
+    nodes.forEach(function(node) {
+        if (typeFilter && node.type !== typeFilter) return;
+        var score = scoreText(getNodeSearchText(node), query);
+        if (score >= 45) {
+            var relatedCount = edges.filter(function(e) { return e.from === node.id || e.to === node.id; }).length;
+            candidates.push({
+                kind: 'entity',
+                id: node.id,
+                title: node.name,
+                tag: getTypeName(node.type),
+                score: score,
+                desc: (node.engName || '') + (node.icd ? ' · ' + node.icd : ''),
+                reason: '认知计算命中实体名称、别名、编码或详情内容；已关联 ' + relatedCount + ' 条图谱关系。'
+            });
+        }
+    });
+    edges.forEach(function(edge, index) {
+        if (!edgePassesFilter(edge)) return;
+        var score = scoreText(getEdgeSearchText(edge), query);
+        if (score >= 45) {
+            var fromNode = nodes.find(function(n) { return n.id === edge.from; });
+            var toNode = nodes.find(function(n) { return n.id === edge.to; });
+            var evidence = edge.type === 'inferred' ? getInferenceEvidence(edge) : null;
+            candidates.push({
+                kind: edge.type === 'inferred' ? 'inference' : 'relation',
+                edgeIndex: index,
+                title: (fromNode ? fromNode.name : edge.from) + ' → ' + (toNode ? toNode.name : edge.to),
+                tag: edge.type === 'inferred' ? '病例之间的推理' : cleanRelationLabel(edge),
+                score: Math.min(99, score + (edge.type === 'inferred' ? 4 : 0)),
+                desc: edge.type === 'inferred' ? evidence.newKnowledge : getRelationDescription(edge),
+                reason: edge.type === 'inferred'
+                    ? '知识推理命中实体链路，并结合临床数据和科研文献形成新知识候选。'
+                    : '知识计算命中实体关系，可直接查看源实体、目标实体和关系说明。'
+            });
+        }
+    });
+    return candidates.sort(function(a, b) {
+        return b.score - a.score;
+    }).slice(0, 8);
+}
+
+function openCandidate(kind, ref) {
+    if (kind === 'entity') {
+        jumpToNode(ref);
+        return;
+    }
+    showRelationDetailByIndex(ref);
+}
+
+function showCandidateKnowledgeList(query, candidates) {
+    detailEmpty.style.display = 'none';
+    detailContent.style.display = 'flex';
+    detailTitle.textContent = '候选知识列表';
+    var cards = candidates.map(function(item) {
+        var clickArg = item.kind === 'entity' ? '\'' + item.id + '\'' : item.edgeIndex;
+        return '<div class="candidate-card" onclick="openCandidate(\'' + item.kind + '\',' + clickArg + ')">' +
+            '<div class="candidate-title"><span>' + item.title + '</span><span class="candidate-score">' + item.score + '%</span></div>' +
+            '<div class="candidate-meta"><strong>' + item.tag + '</strong> · ' + item.desc + '</div>' +
+            '<div class="candidate-meta">' + item.reason + '</div>' +
+        '</div>';
+    }).join('');
+    detailBody.innerHTML =
+        '<span class="relation-kind defined">图谱查询</span>' +
+        '<div class="detail-name">候选知识列表</div>' +
+        '<div class="candidate-summary">关键词“' + query + '”已通过实体名称、别名、ICD编码、关系标签、实体详情和推理说明进行候选召回。点击候选项可定位图谱节点或查看关系详情。</div>' +
+        '<div class="detail-section"><div class="detail-section-title">认知计算 / 知识推理候选</div>' +
+        (cards || '<div class="detail-text">暂未召回候选知识，请尝试输入疾病名、药物名、检查项、症状或关系关键词。</div>') +
+        '</div>';
+}
+
 function searchEntity() {
     var query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
     var typeFilter = document.getElementById('entityTypeFilter').value;
-    if (!query) return;
-    var matched = null;
-    for (var i = 0; i < nodes.length; i++) {
-        var n = nodes[i];
-        if (typeFilter && n.type !== typeFilter) continue;
-        if (n.name.toLowerCase().indexOf(query) !== -1 ||
-            (n.engName && n.engName.toLowerCase().indexOf(query) !== -1) ||
-            (n.icd && n.icd.toLowerCase().indexOf(query) !== -1) ||
-            (n.alias && n.alias.toLowerCase().indexOf(query) !== -1)) {
-            matched = n;
-            break;
-        }
+    if (!query) {
+        showSearchToast('请输入关键词后查询候选知识');
+        return;
     }
+    var candidates = collectKnowledgeCandidates(query, typeFilter);
+    var matched = candidates.find(function(item) { return item.kind === 'entity'; });
     if (matched) {
+        matched = nodes.find(function(n) { return n.id === matched.id; });
         selectedNodeId = matched.id;
         highlightedNodeId = matched.id;
         centerOnNode(matched);
         renderGraph();
         highlightRelated(matched.id);
-        showDetail(matched);
-        showSearchToast('已定位到：' + matched.name);
         setTimeout(function() { highlightedNodeId = null; renderGraph(); }, 2500);
-    } else {
-        showSearchToast('未找到匹配实体，请尝试其他关键词');
     }
+    showCandidateKnowledgeList(query, candidates);
+    showSearchToast(candidates.length ? '已生成 ' + candidates.length + ' 条候选知识' : '未找到匹配知识，请尝试其他关键词');
 }
 
 function showSearchToast(msg) {
@@ -945,28 +1238,47 @@ function runInference() {
     relationFilter = 'inferred';
     document.getElementById('relationFilter').value = 'inferred';
     renderGraph();
-    var inferredCount = edges.filter(function(e) { return e.type === 'inferred'; }).length;
+    var inferredEdges = edges.filter(function(e) { return e.type === 'inferred'; });
+    var inferredCount = inferredEdges.length;
     detailEmpty.style.display = 'none';
     detailContent.style.display = 'flex';
+    detailTitle.textContent = '图谱推理';
     detailBody.innerHTML =
         '<span class="relation-kind inferred">图谱推理</span>' +
-        '<div class="detail-name">已发现 ' + inferredCount + ' 条隐含关系</div>' +
+        '<div class="detail-name">生成 ' + inferredCount + ' 条新知识候选</div>' +
         '<div class="detail-section"><div class="detail-section-title">推理依据</div>' +
-        '<div class="detail-text">系统基于基础疾病、危险因素、治疗路径和并发症规则，对实体间未直接维护但具有医学解释的关联进行自动推理。推理关系在图谱中以橙色虚线展示。</div></div>' +
+        '<div class="source-grid">' +
+            '<div class="source-card"><strong>知识图谱实体与关系</strong>读取疾病、药物、手术操作、检验检查、症状信息及已有定义关系，识别可解释的多跳链路。</div>' +
+            '<div class="source-card"><strong>临床数据</strong>结合病例共病、检查指标、眼底表现、随访风险等结构化信息，判断实体间潜在关联。</div>' +
+            '<div class="source-card"><strong>科研文献</strong>结合指南、论文和专家共识中的机制解释，对候选关系进行证据补强。</div>' +
+        '</div></div>' +
         '<div class="detail-section"><div class="detail-section-title">本次推理结果</div><div class="detail-relations">' +
-        edges.filter(function(e) { return e.type === 'inferred'; }).map(function(e) {
+        inferredEdges.map(function(e) {
             var fromNode = nodes.find(function(n) { return n.id === e.from; });
             var toNode = nodes.find(function(n) { return n.id === e.to; });
             var edgeIndex = edges.indexOf(e);
-            return '<div class="rel-item"><span><span class="rel-type">' + cleanRelationLabel(e) + '</span></span><span class="rel-target" onclick="showRelationDetailByIndex(' + edgeIndex + ')">' + (fromNode ? fromNode.name : e.from) + ' → ' + (toNode ? toNode.name : e.to) + '</span></div>';
+            var evidence = getInferenceEvidence(e);
+            return '<div class="candidate-card" onclick="showRelationDetailByIndex(' + edgeIndex + ')">' +
+                '<div class="candidate-title"><span>' + cleanRelationLabel(e) + '</span><span class="candidate-score">' + evidence.confidence + '%</span></div>' +
+                '<div class="candidate-meta">' + (fromNode ? fromNode.name : e.from) + ' → ' + (toNode ? toNode.name : e.to) + '</div>' +
+                '<div class="candidate-meta new-knowledge">' + evidence.newKnowledge + '</div>' +
+            '</div>';
         }).join('') +
-        '</div></div>';
-    showSearchToast('推理完成：已展示 ' + inferredCount + ' 条隐含关系');
+        '</div></div>' +
+        '<div class="detail-section"><div class="detail-section-title">前台展示逻辑</div>' +
+        '<div class="detail-text">推理结果以橙色虚线展示在图谱中，并进入“病例之间的推理”筛选项；点击任意推理候选可查看源实体、目标实体、规则依据、临床数据和科研文献证据链。</div></div>';
+    showSearchToast('推理完成：已生成 ' + inferredCount + ' 条新知识候选');
 }
 
 function showRelationDetailByIndex(index) {
     var edge = edges[index];
-    if (edge) showRelationDetail(edge);
+    if (edge) {
+        selectedEdge = edge;
+        selectedNodeId = null;
+        highlightedNodeId = null;
+        renderGraph();
+        showRelationDetail(edge);
+    }
 }
 
 function navigateTo(url) { window.location.href = url; }

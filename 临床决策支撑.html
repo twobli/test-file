@@ -47,7 +47,7 @@ body{font-family:'Inter','PingFang SC','Microsoft YaHei',Arial,sans-serif;font-s
 .tag-blue{background:var(--primary-light);color:var(--primary)}.tag-green{background:var(--success-light);color:#137333}
 .tag-orange{background:var(--warning-light);color:#b06000}.tag-red{background:var(--danger-light);color:#c5221f}
 .tag-purple{background:var(--purple-light);color:var(--purple)}.tag-teal{background:var(--teal-light);color:var(--teal)}.tag-gray{background:#f1f3f4;color:var(--gray-700)}
-.module-nav{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+.module-nav{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:10px;margin-bottom:16px}
 .module-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:12px;text-align:left;text-decoration:none;color:inherit;min-height:88px;cursor:default;transition:var(--transition);position:relative}
 .module-card.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.08)}
 .module-card.future{background:#fff;color:var(--gray-600)}
@@ -114,6 +114,7 @@ input,select,textarea{width:100%;border:1px solid var(--gray-300);border-radius:
     <a class="sub-menu-item" href="临床决策支撑_治疗方案推荐.html" onclick="return saveCurrentCaseBeforeNavigate()">治疗方案推荐</a>
     <a class="sub-menu-item" href="临床决策支撑_报告与质控.html" onclick="return saveCurrentCaseBeforeNavigate()">医学报告</a>
     <a class="sub-menu-item" href="临床决策支撑_医嘱质控.html" onclick="return saveCurrentCaseBeforeNavigate()">医嘱质控</a>
+    <a class="sub-menu-item" href="临床决策支撑_归档记录.html" onclick="return saveCurrentCaseBeforeNavigate()">归档记录</a>
     <a class="menu-item" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
   </div>
 </aside>
@@ -312,7 +313,8 @@ function renderModuleNav(){
     {key:'similar',title:'相似病历推荐',desc:'诊断完成后检索参考',state:'future'},
     {key:'plan',title:'治疗方案推荐',desc:'结合诊断与病历推荐',state:'future'},
     {key:'report',title:'医学报告',desc:'自动生成结构化报告',state:'future'},
-    {key:'quality',title:'医嘱质控',desc:'检查医嘱规则与归档',state:'future'}
+    {key:'quality',title:'医嘱质控',desc:'检查医嘱规则与归档',state:'future'},
+    {key:'archive',title:'归档记录',desc:'固化完整诊疗记录',state:'future'}
   ];
   document.getElementById('moduleNav').innerHTML=modules.map(function(m,i){
     var cls='module-card '+(m.state==='active'?'active':'future');

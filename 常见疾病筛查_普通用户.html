@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>图像质量质控</title>
+<title>常见疾病筛查（普通用户）</title>
 <style>
 :root {
   --primary: #165dff;
@@ -212,41 +212,6 @@ input, select, textarea { font: inherit; outline: none; }
 }
 .image-preview-overlay .preview-close:hover { background: rgba(255,255,255,.28); }
 
-/* QC Progress */
-.qc-progress-shell {
-  background: var(--panel-soft);
-  border-radius: 10px; padding: 14px 18px;
-  margin-bottom: 12px;
-  box-shadow: inset 0 0 0 1px #e8eef8;
-}
-.qc-progress-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-}
-.qc-progress-label {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 700; color: #137333;
-}
-.qc-progress-icon {
-  width: 20px; height: 20px; border-radius: 50%;
-  background: #e8ffea; color: var(--success);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; flex-shrink: 0;
-}
-.qc-progress-pct {
-  font-size: 20px; font-weight: 800; color: var(--success);
-}
-.qc-progress-track {
-  width: 100%; height: 8px; border-radius: 999px;
-  background: #e0e8f0; overflow: hidden;
-}
-.qc-progress-fill {
-  height: 100%; width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #00b42a 0%, #0f9a83 100%);
-  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 /* Result Grid */
 .result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
 .result-card { padding: 14px; border-radius: 12px; background: #f8fbff; box-shadow: inset 0 0 0 1px #e8eef8; }
@@ -320,121 +285,104 @@ input, select, textarea { font: inherit; outline: none; }
 <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div><div class="main-content">
-<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>图像质量质控</strong></div>
-<h1 class="page-title">图像质量质控</h1>
+<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>常见疾病筛查（普通用户）</strong></div>
+<h1 class="page-title">常见疾病筛查（普通用户）</h1>
 
 <div class="card">
-  <div class="card-header"><span class="card-title">质控检测结果</span></div>
+  <div class="card-header"><span class="card-title">普通用户筛查结果</span></div>
   <div class="steps">
     <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
-    <div class="step active"><div class="step-circle">2</div>质量质控</div>
-    <div class="step"><div class="step-circle">3</div>疾病筛查</div>
-    <div class="step"><div class="step-circle">4</div>联合筛查</div>
-    <div class="step"><div class="step-circle">5</div>输出报告</div>
+    <div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>
+    <div class="step active"><div class="step-circle">3</div>疾病筛查</div>
+    <div class="step"><div class="step-circle">4</div>生成报告</div>
   </div>
 
   <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
 
   <div class="stats">
-    <div class="stat"><span>眼底图像判定</span><strong style="color:var(--success);">通过</strong></div>
-    <div class="stat"><span>图像质量判定</span><strong style="color:var(--success);">通过</strong></div>
-    <div class="stat"><span>AI分析状态</span><strong>已完成</strong></div>
-    <div class="stat"><span>后续处理</span><strong>可筛查</strong></div>
+    <div class="stat"><span>筛查完成</span><strong style="color:var(--success);">12/12</strong></div>
+    <div class="stat"><span>检出中高风险</span><strong style="color:var(--warning);">5</strong></div>
+    <div class="stat"><span>低风险结果</span><strong style="color:var(--success);">7</strong></div>
+    <div class="stat"><span>置信度均值</span><strong>86.6%</strong></div>
   </div>
 
-  <div class="qc-progress-shell">
-    <div class="qc-progress-header">
-      <div class="qc-progress-label">
-        <span class="qc-progress-icon">✓</span>
-        <span>AI质控分析已完成，图像通过质控</span>
-      </div>
-      <span class="qc-progress-pct" id="qcProgressPct">100%</span>
-    </div>
-    <div class="qc-progress-track">
-      <div class="qc-progress-fill" id="qcProgressFill"></div>
-    </div>
-  </div>
-
-  <div class="alert alert-info" id="qcAlert">
-    <strong>质控通过：</strong><span id="qcAlertMsg">AI先确认上传内容为眼底彩照，再判断视盘、黄斑、血管等关键结构可见且图像质量满足筛查要求。</span>
-    <a class="btn primary small" id="screeningEntryBtn" href="常见疾病筛查.html" style="margin-left:12px;">进入疾病筛查</a>
-  </div>
-
-  <div class="card-header"><span class="card-title">质控判定逻辑明细</span></div>
-  <div class="table-wrap">
+  <div class="card-header"><span class="card-title">常见疾病筛查项</span></div>
+  <div class="table-wrap" style="margin-bottom:16px;">
     <table class="data-table">
-      <thead><tr><th>判定项</th><th>结果</th><th>判定逻辑</th><th>处理结论</th></tr></thead>
+      <thead><tr><th>筛查项</th><th>风险等级</th><th>置信度</th></tr></thead>
       <tbody>
         <tr>
-          <td><strong>是否为眼底图像</strong></td>
-          <td><span class="tag success">通过</span></td>
-          <td>AI识别到视盘、黄斑暗区、视网膜血管树和橙红色眼底背景，符合眼底彩照的基本结构特征。</td>
-          <td>确认是眼底彩照，可继续质量判断。</td>
+          <td><strong>高血压病风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>72%</td>
         </tr>
         <tr>
-          <td><strong>关键结构完整性</strong></td>
-          <td><span class="tag success">通过</span></td>
-          <td>视盘、黄斑及主要血管弓均位于有效视野内，未出现关键区域缺失。</td>
-          <td>满足后续病灶识别和疾病筛查需要。</td>
+          <td><strong>糖代谢风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>94%</td>
         </tr>
         <tr>
-          <td><strong>清晰度与对焦</strong></td>
-          <td><span class="tag success">通过</span></td>
-          <td>血管边界连续可辨，视盘边缘清楚，未见明显对焦失败或运动模糊。</td>
-          <td>图像细节足以支撑AI筛查。</td>
+          <td><strong>认知障碍风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>96%</td>
         </tr>
         <tr>
-          <td><strong>曝光与色彩</strong></td>
-          <td><span class="tag success">通过</span></td>
-          <td>黄斑区、视盘区无明显过曝或欠曝，整体色彩符合眼底彩照表现。</td>
-          <td>不会影响基础病变识别。</td>
+          <td><strong>贫血风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>91%</td>
         </tr>
         <tr>
-          <td><strong>遮挡与伪影</strong></td>
-          <td><span class="tag success">通过</span></td>
-          <td>未检测到大面积眼睑、睫毛、反光斑或黑边遮挡关键眼底区域。</td>
-          <td>通过质控，允许进入AI疾病筛查。</td>
+          <td><strong>脑肿瘤风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>98%</td>
         </tr>
         <tr>
-          <td><strong>眼别逻辑匹配</strong></td>
-          <td><span class="tag success" id="eyeMatchTag">通过</span></td>
-          <td id="eyeMatchLogic">AI已完成眼别识别，双眼模式下确认左右眼各一张，眼别组合逻辑正确；单眼模式下无需额外匹配。</td>
-          <td id="eyeMatchConclusion">眼别匹配通过，符合筛查流程要求。</td>
+          <td><strong>心脑血管风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>68%</td>
+        </tr>
+        <tr>
+          <td><strong>病理性近视风险</strong></td>
+          <td><span class="tag danger">高风险</span></td>
+          <td>89%</td>
+        </tr>
+        <tr>
+          <td><strong>眼底肿瘤风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>97%</td>
+        </tr>
+        <tr>
+          <td><strong>青光眼风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>94%</td>
+        </tr>
+        <tr>
+          <td><strong>中心性浆液性脉络膜视网膜风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>93%</td>
+        </tr>
+        <tr>
+          <td><strong>黄斑视力损伤风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>76%</td>
+        </tr>
+        <tr>
+          <td><strong>白内障风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>71%</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="card-header" style="margin-top:20px;"><span class="card-title">图像脱敏处理</span></div>
-  <div class="table-wrap">
-    <table class="data-table">
-      <thead><tr><th>处理项</th><th>处理状态</th><th>处理说明</th><th>安全声明</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>患者信息脱敏</strong></td>
-          <td><span class="tag success">已处理</span></td>
-          <td>从眼底图像输入板块传入的图像已自动剥离DICOM头文件中的患者姓名、ID、出生日期等个人身份信息。</td>
-          <td>符合HIPAA/GDPR及国内个人信息保护法合规要求。</td>
-        </tr>
-        <tr>
-          <td><strong>设备与机构信息脱敏</strong></td>
-          <td><span class="tag success">已处理</span></td>
-          <td>图像元数据中的采集设备序列号、医疗机构名称、检查科室等可追溯信息已做匿名化处理。</td>
-          <td>杜绝设备与机构信息泄露风险，保护机构隐私。</td>
-        </tr>
-        <tr>
-          <td><strong>地理位置脱敏</strong></td>
-          <td><span class="tag success">已处理</span></td>
-          <td>如原始图像含有GPS坐标或地理位置标签，已统一清除。</td>
-          <td>防止患者活动轨迹与就诊地点被关联追溯。</td>
-        </tr>
-        <tr>
-          <td><strong>图像唯一标识生成</strong></td>
-          <td><span class="tag success">已处理</span></td>
-          <td>脱敏后的图像分配系统内部唯一标识符，替代原始文件名，确保后续流程中的数据关联不依赖敏感信息。</td>
-          <td>实现数据可用不可见，保障隐私安全的同时支撑AI分析。</td>
-        </tr>
-      </tbody>
-    </table>
+
+  <div class="alert alert-warning" style="display:flex;align-items:flex-start;gap:10px;">
+    <strong style="flex-shrink:0;font-size:15px;">&#9888;</strong>
+    <div><strong>重要提示：</strong>以上筛查结果由AI辅助分析生成，仅供健康参考，不能替代专业医疗诊断。请勿依据本结果自行判断病情或自行用药，建议携带筛查报告前往正规医疗机构的相关科室，由执业医师结合临床检查进行综合评估与诊断。</div>
+  </div>
+
+  <div id="nextActionArea" style="display:flex;gap:12px;flex-wrap:wrap;">
+    <a class="btn primary" href="输出筛查报告.html?role=normal">生成并下载常见疾病筛查报告</a>
+    <span class="tag gray">报告仅包含常见疾病筛查结果</span>
   </div>
 </div>
 </div>
@@ -450,69 +398,20 @@ function readFundusTask() {
 function readCurrentUser() {
   try { return JSON.parse(localStorage.getItem('life_med_user')) || {}; } catch(e) { return {}; }
 }
-function getFlowRoleFromUrl() {
-  var role = new URLSearchParams(window.location.search).get('role');
-  return role === 'doctor' || role === 'normal' ? role : '';
-}
 function getFlowRole() {
-  var role = getFlowRoleFromUrl();
-  if (role) return role;
-  var task = readFundusTask();
-  if (task && task.userType) return task.userType;
-  var user = readCurrentUser();
-  var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
-  if (/普通|患者|居民|公众/.test(text)) return 'normal';
-  return 'doctor';
-}
-function roleQuery() {
-  return '?role=' + getFlowRole();
-}
-function commonScreeningHref() {
-  return getFlowRole() === 'doctor' ? '多任务联合筛查.html?role=doctor' : '常见疾病筛查_普通用户.html?role=normal';
+  return 'normal';
 }
 function activateFlowSidebar() {
-  var currentPage = window.location.pathname.replace(/\\/g, '/').split('/').pop();
-  var role = getFlowRole();
   document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
-    var itemPage = item.getAttribute('data-flow-page');
-    var itemRole = item.getAttribute('data-flow-role');
-    item.classList.toggle('active', itemPage === currentPage && itemRole === role);
+    item.classList.toggle('active', item.getAttribute('data-flow-page') === '常见疾病筛查.html' && item.getAttribute('data-flow-role') === getFlowRole());
   });
 }
-function renderSteps() {
-  var bar = document.getElementById('stepsBar');
-  if (!bar) return;
-  var role = getFlowRole();
-  if (role === 'doctor') {
-    bar.innerHTML =
-      '<div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>' +
-      '<div class="step active"><div class="step-circle">2</div>质量质控</div>' +
-      '<div class="step"><div class="step-circle">3</div>联合筛查</div>' +
-      '<div class="step"><div class="step-circle">4</div>输出报告</div>';
-  } else {
-    bar.innerHTML =
-      '<div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>' +
-      '<div class="step active"><div class="step-circle">2</div>质量质控</div>' +
-      '<div class="step"><div class="step-circle">3</div>疾病筛查</div>' +
-      '<div class="step"><div class="step-circle">4</div>输出报告</div>';
-  }
-}
-function syncRoleLinks() {
-  var entry = document.getElementById('screeningEntryBtn');
-  var msg = document.getElementById('qcAlertMsg');
-  var role = getFlowRole();
-  if (entry) {
-    if (role === 'doctor') {
-      entry.href = '多任务联合筛查.html?role=doctor';
-      entry.textContent = '进入多任务联合筛查';
-    } else {
-      entry.href = '常见疾病筛查_普通用户.html?role=normal';
-      entry.textContent = '进入疾病筛查';
-    }
-  }
-  if (msg && role === 'doctor') {
-    msg.textContent = 'AI先确认上传内容为眼底彩照，再判断视盘、黄斑、血管等关键结构可见且图像质量满足筛查要求，因此可直接进入多任务联合筛查。';
-  }
+function isDoctorAllowed(task) {
+  if (task && task.userType) return task.userType === 'doctor';
+  var user = readCurrentUser();
+  var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
+  if (/普通|患者|居民|公众/.test(text)) return false;
+  return /医生|医师|主任|教授|专家|管理员|技师/.test(text) || !text.trim();
 }
 function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, function(ch) {
@@ -573,7 +472,7 @@ function renderFundusTaskSummary() {
   var task = readFundusTask();
   if (!task) {
     el.className = 'task-summary empty';
-    el.innerHTML = '暂无已创建的筛查任务，当前页面展示示例质控结果。';
+    el.innerHTML = '暂无已创建的筛查任务，当前页面展示示例筛查结果。';
     return;
   }
   var patient = task.patient || {};
@@ -582,7 +481,7 @@ function renderFundusTaskSummary() {
     '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
     '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
     '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (getFlowRole() === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
+    '<div class="task-summary-item"><span>页面类型</span><strong>普通用户筛查</strong></div>' +
     '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
     imageCards(task);
 }
@@ -602,40 +501,10 @@ function closeQcImage() {
   overlay.classList.remove('show');
   document.body.style.overflow = '';
 }
-function checkEyeMatch() {
-  var task = readFundusTask();
-  var tag = document.getElementById('eyeMatchTag');
-  var logic = document.getElementById('eyeMatchLogic');
-  var conclusion = document.getElementById('eyeMatchConclusion');
-  var qcAlert = document.getElementById('qcAlert');
-  var entryBtn = document.getElementById('screeningEntryBtn');
-  if (!task || !task.images || task.images.length < 2 || task.uploadMode !== 'double') {
-    // 单眼模式或无任务，默认通过
-    if (logic) logic.textContent = 'AI已完成眼别识别，单眼模式下无需额外匹配检查。';
-    if (conclusion) conclusion.textContent = '眼别匹配通过，符合筛查流程要求。';
-    return;
-  }
-  var eyes = task.images.map(function(img, i) { return qcEyeLabel(task, img, i); });
-  var allSame = eyes.length >= 2 && eyes.every(function(e) { return e === eyes[0]; });
-  if (allSame) {
-    if (tag) { tag.className = 'tag danger'; tag.textContent = '未通过'; }
-    if (logic) logic.textContent = '双眼模式下检测到上传的两张图像AI均识别为' + eyes[0] + '，缺少对侧眼图像。同一患者的双眼筛查需要左右眼各一张图像，请返回重新上传。';
-    if (conclusion) conclusion.textContent = '眼别匹配失败，流程中断，需退回眼底图像输入板块重新上传正确的双眼图像。';
-    if (qcAlert) {
-      qcAlert.className = 'alert alert-danger';
-      qcAlert.innerHTML = '<strong>眼别匹配异常：</strong>双眼模式下检测到两张图像均为' + eyes[0] + '，缺少对侧眼图像。请返回重新上传左右眼各一张的眼底彩照。';
-    }
-    var statusEls = document.querySelectorAll('.stats .stat strong');
-    if (statusEls.length >= 4) {
-      statusEls[1].textContent = '通过';
-      statusEls[3].textContent = '需重传';
-      statusEls[3].style.color = 'var(--danger)';
-    }
-  } else {
-    if (tag) { tag.className = 'tag success'; tag.textContent = '通过'; }
-    if (logic) logic.textContent = 'AI已完成眼别识别，双眼模式下确认左右眼各一张（左眼：' + eyes[0] + '，右眼：' + eyes[1] + '），眼别组合逻辑正确。';
-    if (conclusion) conclusion.textContent = '眼别匹配通过，符合筛查流程要求。';
-  }
+function renderNextAction() {
+  var area = document.getElementById('nextActionArea');
+  if (!area) return;
+  area.innerHTML = '<a class="btn primary" href="输出筛查报告.html?role=normal">生成并下载常见疾病筛查报告</a><span class="tag gray">报告仅包含常见疾病筛查结果</span>';
 }
 document.addEventListener('DOMContentLoaded', function() {
   try {
@@ -653,11 +522,9 @@ document.addEventListener('DOMContentLoaded', function() {
       item.classList.add('active');
     }
   });
-  renderSteps();
-  renderFundusTaskSummary();
   activateFlowSidebar();
-  syncRoleLinks();
-  checkEyeMatch();
+  renderFundusTaskSummary();
+  renderNextAction();
   var overlay = document.getElementById('qcImageOverlay');
   if (overlay) {
     overlay.addEventListener('click', function(e) {
@@ -667,13 +534,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeQcImage();
   });
-  // 进度条动画
-  setTimeout(function() {
-    var progressBar = document.getElementById('qcProgressFill');
-    if (progressBar) {
-      progressBar.style.width = '100%';
-    }
-  }, 300);
 });
 </script>
 

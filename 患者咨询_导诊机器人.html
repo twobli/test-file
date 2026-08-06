@@ -211,12 +211,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         <div class="menu-group-title">专家系统</div>
         <a class="menu-item" href="临床决策支撑.html"><span>临床决策支撑</span></a>
         <a class="menu-item active" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
-        <a class="sub-menu-item active" data-stage-link="intake" onclick="switchStage('intake')">症状采集</a>
-        <a class="sub-menu-item" data-stage-link="triage" onclick="switchStage('triage')">智能导诊</a>
-        <a class="sub-menu-item" data-stage-link="doctor" onclick="switchStage('doctor')">快速找医生</a>
-        <a class="sub-menu-item" data-stage-link="guide" onclick="switchStage('guide')">就诊流程</a>
-        <a class="sub-menu-item" data-stage-link="consult" onclick="switchStage('consult')">病情咨询</a>
-        <a class="sub-menu-item" data-stage-link="medication" onclick="switchStage('medication')">用药指导</a>
     </div>
 </aside>
 
@@ -518,7 +512,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 <div class="toast" id="toast"></div>
 
 <script>
-var currentStage = 'intake';
+var currentStage = 'guide';
 var currentCaseIndex = 0;
 
 var consultationCases = [
@@ -998,7 +992,8 @@ function renderStage() {
         panel.classList.toggle('active', panel.id === 'stage-' + currentStage);
     });
     document.querySelectorAll('[data-stage-link]').forEach(function(link) {
-        link.classList.toggle('active', link.dataset.stageLink === currentStage);
+        var activeStages = [link.dataset.stageLink].concat((link.dataset.stageAlias || '').split(',').filter(Boolean));
+        link.classList.toggle('active', activeStages.indexOf(currentStage) > -1);
     });
 }
 

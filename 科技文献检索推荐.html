@@ -748,6 +748,13 @@ function openDetail(id) {
     document.body.style.overflow = 'hidden';
 }
 
+function closeDetailModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    var modal = document.getElementById('detailModal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
 function renderRecommend() {
     var container = document.getElementById('recommendList');
     var html = '';

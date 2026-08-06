@@ -13,26 +13,17 @@
   --warning: #f59a23;
   --danger: #f53f3f;
   --bg: #eef3fb;
-  --panel: #ffffff;
   --panel-soft: #f7fbff;
   --line: #e4ebf5;
-  --line-strong: #d5deeb;
   --text: #1d2533;
   --muted: #5d6b82;
   --soft: #7c8ba1;
-  --shadow: 0 14px 40px rgba(41, 76, 131, 0.12);
-  --radius: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
   --font: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
 body { font-size: 14px; line-height: 1.6; }
 button { font: inherit; border: 0; cursor: pointer; }
-input, select, textarea { font: inherit; outline: none; }
-
-/* Header */
 .header {
   height: 58px; display: flex; align-items: center; padding: 0 24px;
   background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%);
@@ -44,401 +35,539 @@ input, select, textarea { font: inherit; outline: none; }
 .header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; transition: .18s; }
 .header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
 .header .header-right { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; }
-.header .header-right .user-info { cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: .18s; }
-.header .header-right .user-info:hover { background: rgba(255,255,255,0.15); }
-.header .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: .18s; font-weight: 600; }
-.header .btn-logout:hover { background: rgba(255,255,255,0.35); }
-
-/* Sidebar */
+.header .btn-logout { background: rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; }
 .sidebar {
   position: fixed; top: 58px; left: 0; width: 220px;
   height: calc(100vh - 58px); background: #fff; border-right: 1px solid var(--line);
   overflow-y: auto; z-index: 999; padding: 8px 0;
 }
-.sidebar .menu-group { margin-bottom: 4px; }
-.sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-.sidebar .menu-item { display: flex; align-items: center; padding: 9px 20px; color: var(--muted); text-decoration: none; font-size: 13px; transition: .18s; border-left: 3px solid transparent; }
-.sidebar .menu-item:hover { background: var(--panel-soft); color: var(--primary); }
-.sidebar .menu-item.active { background: var(--primary-soft); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-
-/* Main Content */
-.main-content { margin-left: 220px; margin-top: 0; padding: 24px; min-height: calc(100vh - 58px); }
-.breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.menu-group { margin-bottom: 4px; }
+.menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--soft); letter-spacing: .4px; font-weight: 800; }
+.menu-item { display: flex; align-items: center; padding: 9px 20px; color: var(--muted); text-decoration: none; font-size: 13px; transition: .18s; border-left: 3px solid transparent; }
+.menu-item:hover { background: var(--panel-soft); color: var(--primary); }
+.menu-item.active { background: var(--primary-soft); color: var(--primary); border-left-color: var(--primary); font-weight: 800; }
+.main-content { margin-left: 220px; padding: 24px 30px; min-height: calc(100vh - 58px); }
+.breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; font-weight: 700; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
-.page-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; }
-
-/* Buttons */
-.btn {
-  min-height: 36px; padding: 0 14px; border-radius: 10px;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  font-weight: 700; transition: .16s ease; text-decoration: none;
-}
-.btn:hover { filter: brightness(1.03); }
+.page-title { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 20px; }
+.card { background: #fff; border-radius: 18px; box-shadow: 0 10px 24px rgba(61, 102, 150, .08); padding: 20px; margin-bottom: 16px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.card-title { font-size: 16px; font-weight: 900; color: var(--text); }
+.btn { min-height: 36px; padding: 0 14px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; text-decoration: none; }
 .btn.primary { color: #fff; background: linear-gradient(90deg, var(--primary), var(--primary-2)); box-shadow: 0 10px 20px rgba(22, 93, 255, .18); }
 .btn.secondary { color: var(--muted); background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
-.btn.small { min-height: 30px; padding: 0 10px; font-size: 12px; border-radius: 8px; }
-
-/* Tags */
-.tag {
-  min-height: 22px; padding: 0 8px; border-radius: 999px;
-  display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700;
-}
-.tag.blue { color: var(--primary); background: var(--primary-soft); }
+.tag { min-height: 22px; padding: 0 8px; border-radius: 999px; display: inline-flex; align-items: center; font-size: 12px; font-weight: 800; }
 .tag.success { color: var(--success); background: #e8ffea; }
 .tag.warning { color: var(--warning); background: #fff4df; }
 .tag.danger { color: var(--danger); background: #ffecec; }
-.tag.gray { color: var(--soft); background: #f0f3f8; }
-
-/* Cards */
-.card { background: #fff; border-radius: var(--radius-lg); box-shadow: 0 10px 24px rgba(61, 102, 150, .08); padding: 20px; margin-bottom: 16px; }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.card-title { font-size: 16px; font-weight: 800; color: var(--text); }
-
-/* Steps */
+.alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+.alert-warning { background: #fff4df; color: #b06000; border: 1px solid #feefc3; }
 .steps { display: flex; margin-bottom: 20px; }
 .step { flex: 1; text-align: center; position: relative; font-size: 12px; color: var(--soft); }
-.step::before { content: ''; position: absolute; top: 15px; left: calc(50% + 16px); width: calc(100% - 32px); height: 2px; background: var(--line); z-index: 0; }
+.step::before { content: ''; position: absolute; top: 15px; left: 50%; right: -50%; height: 2px; background: var(--line); z-index: 0; }
 .step:last-child::before { display: none; }
-.step .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e8edf5; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; position: relative; z-index: 1; }
+.step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e8edf5; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; position: relative; z-index: 1; }
 .step.active .step-circle { background: var(--primary); color: #fff; }
-.step.active { color: var(--primary); font-weight: 700; }
+.step.active { color: var(--primary); font-weight: 800; }
 .step.done .step-circle { background: var(--success); color: #fff; }
 .step.done { color: var(--success); }
 .step.done::before { background: var(--success); }
-
-/* Stats */
-.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.task-summary {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;
+  padding: 12px; border-radius: 12px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 16px;
+}
+.task-summary.empty { display: block; color: var(--muted); }
+.task-summary-item { padding: 10px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
+.task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
+.task-summary-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; word-break: break-all; }
+.task-summary-item.wide { grid-column: 1 / -1; }
+.qc-image-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.qc-image-card { border-radius: 12px; background: #fff; overflow: hidden; cursor: pointer; box-shadow: inset 0 0 0 1px #edf2f9; transition: .16s ease; }
+.qc-image-card:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(22,93,255,.12), inset 0 0 0 1px #a8c8ff; }
+.qc-image-thumb { aspect-ratio: 16 / 9; background: #0d1117; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.qc-image-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qc-image-meta { padding: 10px 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.qc-image-meta strong { display: block; color: var(--text); font-size: 13px; word-break: break-all; }
+.qc-image-meta span { display: block; color: var(--soft); font-size: 12px; margin-top: 2px; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
 .stat { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; }
 .stat span { display: block; color: var(--soft); font-size: 12px; }
 .stat strong { display: block; margin-top: 6px; font-size: 20px; line-height: 1.2; color: var(--text); }
-
-/* Report Box */
-.report-box { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 10px; }
-.report-box p { margin: 6px 0; color: var(--muted); line-height: 1.7; }
-.report-box strong { color: var(--text); }
-
-/* Compare Grid */
-.compare-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+.native-report { border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; margin-bottom: 16px; }
+.native-page { padding: 24px 30px 20px; background: #fff; }
+.native-page + .native-page { border-top: 12px solid #f1f5fb; }
+.native-title { margin: 0 0 18px; color: #7b168e; font-size: 21px; font-weight: 900; }
+.native-subtitle { margin: 18px 0 10px; color: #1f2937; font-size: 14px; font-weight: 900; }
+.visual-matrix { display: grid; grid-template-columns: 58px repeat(4, minmax(120px, 1fr)); gap: 18px 20px; align-items: center; padding: 6px 0 22px; border-bottom: 1px solid #e5e7eb; }
+.visual-matrix.lesion { padding-top: 24px; border-bottom: 0; }
+.visual-head { justify-self: center; min-width: 76px; padding: 4px 10px; border-radius: 3px; background: #7b168e; color: #fff; text-align: center; font-size: 12px; font-weight: 900; }
+.eye-label { color: #374151; font-size: 13px; font-weight: 900; }
+.fundus-cell { min-height: 126px; display: flex; align-items: center; justify-content: center; }
+.fundus-art {
+  position: relative; width: 116px; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  background: radial-gradient(circle at 76% 45%, rgba(255,244,176,.95) 0 5%, transparent 7%), radial-gradient(circle at 52% 54%, rgba(82,23,12,.18) 0 8%, transparent 14%), radial-gradient(circle at 45% 48%, #d17634 0, #ad4d24 38%, #6e2b1c 70%, #2d1011 100%);
+  box-shadow: inset 0 0 14px rgba(80,20,6,.45), 0 8px 18px rgba(123,22,142,.12);
 }
-.compare-panel {
-  border-radius: 14px;
-  overflow: hidden;
-  background: #0b0b0b;
+.fundus-art.right { transform: scaleX(-1); }
+.fundus-art::before, .fundus-art::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.fundus-art::before {
+  background: radial-gradient(circle at 77% 46%, rgba(255,255,255,.8) 0 2%, transparent 4%), conic-gradient(from 40deg at 78% 45%, transparent 0 18deg, rgba(120,23,16,.5) 20deg 24deg, transparent 28deg 68deg, rgba(120,23,16,.45) 72deg 76deg, transparent 80deg 144deg, rgba(120,23,16,.45) 148deg 153deg, transparent 160deg 360deg);
+  opacity: .82;
 }
-.compare-label {
-  padding: 10px 14px;
-  background: #f7f9fd;
-  border-bottom: 1px solid var(--line);
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.fundus-art.vessel::after {
+  background: linear-gradient(22deg, transparent 44%, #d72b39 45%, transparent 47%), linear-gradient(152deg, transparent 44%, #d62839 45%, transparent 47%), linear-gradient(86deg, transparent 48%, #165dff 49%, transparent 51%), linear-gradient(118deg, transparent 52%, #1d4ed8 53%, transparent 55%);
+  mix-blend-mode: multiply; opacity: .85;
 }
-.compare-label .badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--primary-soft);
-  color: var(--primary);
+.marker-disc, .marker-macula, .marker-lesion { position: absolute; border-radius: 50%; z-index: 2; pointer-events: none; }
+.marker-disc { right: 14px; top: 42px; width: 22px; height: 22px; border: 2px solid #9b2cc0; box-shadow: 0 0 0 2px rgba(155,44,192,.16); }
+.marker-macula { left: 45px; top: 55px; width: 17px; height: 17px; border: 2px solid #ef4444; background: rgba(239,68,68,.1); }
+.marker-lesion { left: 30px; top: 38px; width: 22px; height: 18px; border: 2px solid #22c55e; background: rgba(34,197,94,.08); }
+.marker-lesion.alt { left: auto; top: auto; right: 24px; bottom: 24px; width: 30px; height: 24px; border-color: #06b6d4; background: rgba(6,182,212,.1); }
+.native-table-wrap { overflow-x: auto; margin-bottom: 16px; }
+.native-table { width: 100%; min-width: 760px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.native-table th { padding: 9px 8px; border: 1px solid #fff; background: #7b168e; color: #fff; text-align: center; font-weight: 900; }
+.native-table td { padding: 9px 8px; border: 1px solid #fff; background: #f6f6f7; color: #374151; text-align: center; }
+.native-table tr:nth-child(even) td { background: #fff; }
+.native-table .name { color: #7b168e; font-weight: 900; }
+.native-table-note { display: flex; justify-content: space-between; gap: 12px; color: #6b7280; font-size: 12px; margin: 0 0 8px; }
+.analysis-strip { display: grid; grid-template-columns: .8fr 1.2fr .8fr 1.2fr; gap: 18px; align-items: center; margin-bottom: 18px; }
+.quadrant-card { width: 112px; height: 112px; margin: 0 auto; border-radius: 4px; background: #f7eef8; display: grid; place-items: center; }
+.quadrant-card svg { width: 82px; height: 82px; }
+.lesion-eye-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.lesion-eye-label { margin-bottom: 10px; color: #374151; font-size: 14px; font-weight: 900; }
+.lesion-result-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
+.lesion-result-table th { padding: 11px 14px; background: #7b168e; color: #fff; border: 1px solid #fff; text-align: left; font-weight: 900; }
+.lesion-result-table th:last-child, .lesion-result-table td:last-child { text-align: right; }
+.lesion-result-table td { padding: 10px 14px; border: 1px solid #fff; background: #f6f6f7; color: #374151; }
+.lesion-result-table tr:nth-child(even) td { background: #fff; }
+.lesion-normal { color: #26b81f; font-weight: 900; white-space: nowrap; }
+.table-wrap { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; margin-bottom: 16px; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { padding: 11px 12px; background: var(--panel-soft); color: var(--soft); font-size: 12px; text-align: left; border-bottom: 1px solid var(--line); font-weight: 800; }
+.data-table td { padding: 11px 12px; border-bottom: 1px solid #f0f4f9; vertical-align: middle; }
+.image-preview-overlay {
+  position: fixed; inset: 0; z-index: 20000; background: rgba(0,0,0,.86);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: .2s ease; padding: 24px;
 }
-.compare-image {
-  aspect-ratio: 16/10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.compare-image svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* Legend */
-.legend-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 10px 14px;
-  background: rgba(0,0,0,0.5);
-  flex-wrap: wrap;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #e0e0e0;
-}
-.legend-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  flex: 0 0 auto;
-}
-
-/* Report box sub sections */
-.report-section { margin-bottom: 8px; }
-.report-section:last-child { margin-bottom: 0; }
-.report-section .section-title { font-weight: 700; color: var(--text); font-size: 13px; margin-bottom: 2px; }
-
+.image-preview-overlay.show { opacity: 1; visibility: visible; }
+.image-preview-overlay img { max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 8px; background: #111827; }
+.preview-filename { color: #fff; font-size: 14px; margin-top: 14px; text-align: center; }
+.preview-close { position: absolute; top: 22px; right: 22px; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 24px; }
 @media (max-width: 1024px) {
   .sidebar { width: 60px; }
   .sidebar .menu-item { padding: 9px 14px; justify-content: center; }
   .sidebar .menu-item span { display: none; }
-  .sidebar .menu-group-title { display: none; }
+  .menu-group-title { display: none; }
   .main-content { margin-left: 60px; }
-  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .compare-grid { grid-template-columns: 1fr; }
+  .stats, .task-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .qc-image-grid, .analysis-strip, .lesion-eye-grid { grid-template-columns: 1fr; }
+  .visual-matrix { grid-template-columns: 50px repeat(2, minmax(118px, 1fr)); }
+  .visual-spacer { display: none; }
 }
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
   .header .header-nav { margin-left: 0; }
   .sidebar { display: none; }
   .main-content { margin-left: 0; padding: 14px; }
-  .stats { grid-template-columns: 1fr; }
+  .stats, .task-summary { grid-template-columns: 1fr; }
+  .native-page { padding: 18px 12px 14px; }
 }
 </style>
 </head>
 <body>
 <div class="header">
-<a href="app-center.html" class="logo">生命医学主题库应用</a>
-<div class="header-nav">
-<a href="眼底图像输入.html" class="active">AI眼底疾病筛查</a>
-<a href="临床数据开放共享.html">生命医学开放数据平台</a>
-<a href="基础课程.html">生命医学AI教育平台</a>
-<a href="临床决策支撑.html">眼病/慢病专家系统</a>
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html" class="active">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
 </div>
-<div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
+
 <div class="sidebar" id="sidebar">
-<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查</div>
-<a class="menu-item" href="眼底图像输入.html">眼底图像输入</a>
-<a class="menu-item" href="图像质量质控.html">图像质量质控</a>
-<a class="menu-item" href="常见疾病筛查.html">常见疾病筛查</a>
-<a class="menu-item" href="多任务联合筛查.html" class="active">多任务联合筛查</a>
-<a class="menu-item" href="输出筛查报告.html">输出筛查报告</a></div></div>
-
-<div class="main-content">
-<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>多任务联合筛查</strong></div>
-<h1 class="page-title">多任务联合筛查</h1>
-
-<div class="card">
-  <div class="card-header">
-    <span class="card-title">多任务联合分析</span>
+  <div class="menu-group">
+    <div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_医生用户.html?role=doctor">常见疾病筛查</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a>
   </div>
-
-  <div class="steps">
-    <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
-    <div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>
-    <div class="step done"><div class="step-circle">&#10003;</div>疾病筛查</div>
-    <div class="step active"><div class="step-circle">4</div>联合筛查</div>
-    <div class="step"><div class="step-circle">5</div>输出报告</div>
-  </div>
-
-  <div class="compare-grid">
-    <!-- Original Image -->
-    <div class="compare-panel">
-      <div class="compare-label">
-        原始眼底图像
-        <span class="badge">右眼</span>
-      </div>
-      <div class="compare-image">
-        <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <radialGradient id="fundusBg" cx="50%" cy="50%" r="70%">
-              <stop offset="0%" stop-color="#ffbd2c"/>
-              <stop offset="52%" stop-color="#f18f10"/>
-              <stop offset="100%" stop-color="#d7600a"/>
-            </radialGradient>
-            <radialGradient id="fundusGlow" cx="50%" cy="48%" r="44%">
-              <stop offset="0%" stop-color="rgba(255,255,255,.42)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </radialGradient>
-          </defs>
-          <rect width="900" height="560" fill="#0b0b0b"/>
-          <g transform="translate(26,24)">
-            <ellipse cx="418" cy="256" rx="350" ry="226" fill="url(#fundusBg)"/>
-            <ellipse cx="438" cy="252" rx="332" ry="208" fill="url(#fundusGlow)" opacity=".18"/>
-            <g opacity=".75" stroke="#7d2d0a" stroke-width="4" fill="none">
-              <path d="M430 250C390 210 340 180 286 150"/>
-              <path d="M430 250C500 190 548 155 620 130"/>
-              <path d="M430 250C381 280 322 310 240 345"/>
-              <path d="M430 250C510 305 575 340 662 372"/>
-              <path d="M494 180C545 162 585 138 629 98"/>
-              <path d="M350 195C317 178 271 160 216 132"/>
-              <path d="M350 324C316 341 280 364 232 396"/>
-              <path d="M512 315C558 340 604 370 662 410"/>
-            </g>
-            <circle cx="604" cy="246" r="46" fill="#fff0b0" opacity=".86"/>
-            <circle cx="595" cy="238" r="28" fill="#ffed8e" opacity=".9"/>
-            <circle cx="440" cy="248" r="24" fill="#b65612" opacity=".8"/>
-          </g>
-          <rect x="660" y="38" width="190" height="86" rx="18" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.12)"/>
-          <text x="682" y="74" fill="#fff" font-size="18" font-weight="700">记录 FS-260626-001</text>
-          <text x="682" y="100" fill="#fff" font-size="14" opacity=".82">右眼_眼底彩照_001.jpg</text>
-        </svg>
-      </div>
-    </div>
-
-    <!-- Processed Image -->
-    <div class="compare-panel">
-      <div class="compare-label">
-        病灶分割结果
-        <span class="badge">AI自动标注</span>
-      </div>
-      <div class="compare-image">
-        <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <radialGradient id="fundusBg2" cx="50%" cy="50%" r="70%">
-              <stop offset="0%" stop-color="#ffbd2c"/>
-              <stop offset="52%" stop-color="#f18f10"/>
-              <stop offset="100%" stop-color="#d7600a"/>
-            </radialGradient>
-            <radialGradient id="fundusGlow2" cx="50%" cy="48%" r="44%">
-              <stop offset="0%" stop-color="rgba(255,255,255,.42)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </radialGradient>
-          </defs>
-          <rect width="900" height="560" fill="#0b0b0b"/>
-          <g transform="translate(26,24)">
-            <ellipse cx="418" cy="256" rx="350" ry="226" fill="url(#fundusBg2)"/>
-            <ellipse cx="438" cy="252" rx="332" ry="208" fill="url(#fundusGlow2)" opacity=".18"/>
-            <!-- Blood vessels -->
-            <g opacity=".65" stroke="#7d2d0a" stroke-width="4" fill="none">
-              <path d="M430 250C390 210 340 180 286 150"/>
-              <path d="M430 250C500 190 548 155 620 130"/>
-              <path d="M430 250C381 280 322 310 240 345"/>
-              <path d="M430 250C510 305 575 340 662 372"/>
-              <path d="M494 180C545 162 585 138 629 98"/>
-              <path d="M350 195C317 178 271 160 216 132"/>
-              <path d="M350 324C316 341 280 364 232 396"/>
-              <path d="M512 315C558 340 604 370 662 410"/>
-            </g>
-            <!-- Optic disc -->
-            <circle cx="604" cy="246" r="46" fill="#fff0b0" opacity=".56"/>
-            <circle cx="595" cy="238" r="28" fill="#ffed8e" opacity=".6"/>
-            <!-- Macula -->
-            <circle cx="440" cy="248" r="24" fill="#b65612" opacity=".5"/>
-
-            <!-- === Lesion Markings === -->
-
-            <!-- Microaneurysms (Red: #ff5a52) - small dots -->
-            <circle cx="360" cy="186" r="10" fill="none" stroke="#ff5a52" stroke-width="5" opacity=".9"/>
-            <circle cx="358" cy="184" r="4" fill="#ff5a52" opacity=".7"/>
-            <circle cx="310" cy="210" r="8" fill="none" stroke="#ff5a52" stroke-width="4" opacity=".85"/>
-            <circle cx="309" cy="209" r="3" fill="#ff5a52" opacity=".65"/>
-            <circle cx="280" cy="260" r="7" fill="none" stroke="#ff5a52" stroke-width="4" opacity=".8"/>
-            <circle cx="279" cy="259" r="3" fill="#ff5a52" opacity=".6"/>
-            <circle cx="530" cy="190" r="8" fill="none" stroke="#ff5a52" stroke-width="4" opacity=".85"/>
-            <circle cx="529" cy="189" r="3" fill="#ff5a52" opacity=".65"/>
-            <circle cx="560" cy="280" r="6" fill="none" stroke="#ff5a52" stroke-width="3" opacity=".75"/>
-
-            <!-- Hemorrhages (Dark red: #c5221f) - larger patches -->
-            <ellipse cx="334" cy="278" rx="20" ry="16" fill="none" stroke="#c5221f" stroke-width="5" opacity=".85"/>
-            <ellipse cx="334" cy="278" rx="12" ry="9" fill="#c5221f" opacity=".4"/>
-            <ellipse cx="380" cy="320" rx="18" ry="14" fill="none" stroke="#c5221f" stroke-width="5" opacity=".8"/>
-            <ellipse cx="380" cy="320" rx="10" ry="8" fill="#c5221f" opacity=".35"/>
-            <ellipse cx="480" cy="300" rx="22" ry="18" fill="none" stroke="#c5221f" stroke-width="5" opacity=".75"/>
-            <ellipse cx="480" cy="300" rx="13" ry="10" fill="#c5221f" opacity=".3"/>
-            <ellipse cx="590" cy="320" rx="15" ry="12" fill="none" stroke="#c5221f" stroke-width="4" opacity=".7"/>
-            <ellipse cx="590" cy="320" rx="8" ry="6" fill="#c5221f" opacity=".3"/>
-
-            <!-- Hard exudates (Yellow: #f6c22e) - bright spots -->
-            <circle cx="488" cy="324" r="12" fill="none" stroke="#f6c22e" stroke-width="5" opacity=".9"/>
-            <circle cx="488" cy="324" r="6" fill="#f6c22e" opacity=".5"/>
-            <circle cx="510" cy="340" r="9" fill="none" stroke="#f6c22e" stroke-width="4" opacity=".85"/>
-            <circle cx="510" cy="340" r="5" fill="#f6c22e" opacity=".45"/>
-            <circle cx="465" cy="345" r="8" fill="none" stroke="#f6c22e" stroke-width="4" opacity=".8"/>
-            <circle cx="465" cy="345" r="4" fill="#f6c22e" opacity=".4"/>
-            <circle cx="520" cy="310" r="7" fill="none" stroke="#f6c22e" stroke-width="3" opacity=".75"/>
-            <circle cx="520" cy="310" r="3" fill="#f6c22e" opacity=".4"/>
-
-            <!-- Optic disc boundary (Green: #21c06f) - contour line -->
-            <path d="M566 246c20 8 32 14 48 28c18 16 26 34 22 54c-4 18 -16 32 -34 38c-18 6 -36 0 -48 -14c-10 -12 -16 -28 -14 -46c2 -20 12 -38 26 -60z" fill="none" stroke="#21c06f" stroke-width="4" opacity=".85" stroke-dasharray="6 3"/>
-            <path d="M560 248c22 10 38 18 52 32" fill="none" stroke="#21c06f" stroke-width="3" opacity=".7" stroke-dasharray="4 2"/>
-          </g>
-          <rect x="660" y="38" width="190" height="86" rx="18" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.12)"/>
-          <text x="682" y="74" fill="#fff" font-size="18" font-weight="700">AI 标注结果</text>
-          <text x="682" y="100" fill="#fff" font-size="14" opacity=".82">4类病灶已标注</text>
-        </svg>
-      </div>
-      <!-- Legend -->
-      <div class="legend-row">
-        <span class="legend-item"><span class="legend-dot" style="background:#ff5a52;"></span>微动脉瘤</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#c5221f;"></span>出血点</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#f6c22e;"></span>硬性渗出</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#21c06f;"></span>视盘边界</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><span>病灶分割</span><strong style="color:var(--success);">完成</strong></div>
-    <div class="stat"><span>视盘/黄斑定位</span><strong style="color:var(--success);">完成</strong></div>
-    <div class="stat"><span>血管分布</span><strong style="color:var(--success);">完成</strong></div>
-    <div class="stat"><span>置信度均值</span><strong>92.5%</strong></div>
-  </div>
-
-  <div class="report-box">
-    <p><strong>联合筛查结论：</strong></p>
-    <div class="report-section">
-      <div class="section-title">1. 糖尿病视网膜病变（DR）评估</div>
-      <p>基于多任务联合分析结果，右眼眼底图像中检出微动脉瘤 5 处（主要分布于颞上及鼻下区域），出血灶 4 处（形态不规则，呈火焰状及点片状分布，集中在黄斑周围及颞下象限），硬性渗出 4 处（位于黄斑区颞侧，呈蜡黄色斑点状排列）。上述发现提示中度非增殖性糖尿病视网膜病变（NPDR）改变。微动脉瘤密度及出血灶数量较上次随访问卷（2026年4月）有所增加，建议结合血糖控制情况评估进展速度。</p>
-    </div>
-    <div class="report-section">
-      <div class="section-title">2. 青光眼相关评估</div>
-      <p>视盘边界清晰，经 AI 轮廓分割（绿色标注）测得杯盘比约 0.38，视盘形态呈椭圆形，盘沿宽度在各象限分布均匀，未见明显切迹或局灶性变薄。黄斑区定位正常，中心凹反射未见异常。当前未见明确青光眼性视神经损伤征象，建议结合眼压测量及视野检查进行综合评估，年度随访即可。</p>
-    </div>
-    <div class="report-section">
-      <div class="section-title">3. 年龄相关性黄斑变性（AMD）评估</div>
-      <p>黄斑区未见典型玻璃膜疣沉积，未见地图样萎缩或脉络膜新生血管等渗出性改变迹象。视网膜色素上皮层（RPE）边界完整，未见明显隆起或断裂。当前眼底彩照下未见明确 AMD 阳性征象，建议保留本次基线图像作为后续随访对照，半年至一年复查。</p>
-    </div>
-    <div class="report-section">
-      <div class="section-title">4. 高血压性视网膜病变评估</div>
-      <p>视网膜动脉呈现轻度缩窄及动静脉交叉压迫征（AV 比约 1:2.2），颞上支及鼻下支血管走形稍显僵硬，血管反光增强，提示轻度动脉硬化改变。未见明显棉绒斑、火焰状出血或视盘水肿等恶性高血压眼底改变。综合评估为轻度高血压性视网膜病变，建议结合血压管理并定期复查眼底。</p>
-    </div>
-    <div class="report-section">
-      <div class="section-title">综合风险评级</div>
-      <p><strong style="color:var(--warning);">中风险 —— 建议优先关注糖尿病视网膜病变进展。</strong> 4 项子任务中，DR 相关指标（微动脉瘤 + 出血灶 + 渗出）异常最为显著，与常见疾病筛查结果一致；建议 3 个月内眼底复查，同时控糖、降压并行管理。推荐进入输出报告模块生成完整筛查报告，以便临床医生综合会诊。</p>
-    </div>
-  </div>
-
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
-    <a class="btn primary" href="输出筛查报告.html">生成筛查报告</a>
-    <a class="btn secondary" href="常见疾病筛查.html">返回疾病筛查</a>
+  <div class="menu-group">
+    <div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a>
   </div>
 </div>
+
+<main class="main-content">
+  <div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>多任务联合筛查</strong></div>
+  <h1 class="page-title">多任务联合筛查</h1>
+
+  <div class="card" id="doctorOnlyNotice" style="display:none;">
+    <div class="card-header"><span class="card-title">多任务联合筛查权限说明</span></div>
+    <div class="alert alert-warning">当前筛查任务为普通用户任务，已完成常见疾病筛查；多任务联合筛查仅医生用户可进入。</div>
+    <a class="btn primary" href="输出筛查报告.html?role=normal">生成普通筛查报告</a>
+  </div>
+
+  <div class="card" id="multiTaskCard">
+    <div class="card-header"><span class="card-title">多任务联合分析</span></div>
+    <div class="steps" id="stepsBar"></div>
+    <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
+
+    <div class="card-header" style="margin-top:16px;"><span class="card-title">病灶切割图像</span></div>
+    <div class="native-report">
+      <div class="native-page">
+        <h2 class="native-title">可视化分析</h2>
+        <div class="visual-matrix">
+          <div class="visual-spacer"></div>
+          <div class="visual-head">血管</div><div class="visual-head">视神经</div><div class="visual-head">黄斑</div><div class="visual-head">视网膜</div>
+          <div class="eye-label">左眼</div>
+          <div class="fundus-cell"><div class="fundus-art vessel"></div></div>
+          <div class="fundus-cell"><div class="fundus-art"><span class="marker-disc"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art"><span class="marker-macula"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art"></div></div>
+          <div class="eye-label">右眼</div>
+          <div class="fundus-cell"><div class="fundus-art vessel right"></div></div>
+          <div class="fundus-cell"><div class="fundus-art right"><span class="marker-disc"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art right"><span class="marker-macula"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art right"></div></div>
+        </div>
+        <div class="visual-matrix lesion">
+          <div class="visual-spacer"></div>
+          <div class="visual-head">脉络膜黑色素瘤</div><div class="visual-head">出血</div><div class="visual-head">硬渗出</div><div class="visual-head">软渗出</div>
+          <div class="eye-label">左眼</div>
+          <div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion alt"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion alt"></span></div></div>
+          <div class="eye-label">右眼</div>
+          <div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion alt"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion"></span></div></div>
+          <div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion alt"></span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-header" style="margin-top:16px;"><span class="card-title">精确量化分析</span></div>
+    <div class="native-report">
+      <div class="native-page">
+        <h2 class="native-title">量化分析</h2>
+        <h3 class="native-subtitle">出血渗出</h3>
+        <div class="native-table-note"><span>统计范围：左眼、右眼眼底图像病灶区域</span><span>参考值：0</span></div>
+        <div class="native-table-wrap">
+          <table class="native-table">
+            <thead><tr><th rowspan="2">内容</th><th colspan="6">左眼</th><th colspan="6">右眼</th></tr><tr><th>总面积</th><th>最大面积</th><th>TS</th><th>TL</th><th>NS</th><th>个数</th><th>总面积</th><th>最大面积</th><th>TS</th><th>TL</th><th>NS</th><th>个数</th></tr></thead>
+            <tbody>
+              <tr><td class="name">出血</td><td>247957</td><td>117095</td><td>2</td><td>0</td><td>73</td><td>80</td><td>247130</td><td>117181</td><td>2</td><td>0</td><td>92</td><td>106</td></tr>
+              <tr><td class="name">硬性渗出</td><td>26</td><td>21</td><td>1</td><td>0</td><td>0</td><td>2</td><td>24</td><td>19</td><td>0</td><td>3</td><td>0</td><td>3</td></tr>
+              <tr><td class="name">软性渗出</td><td>6451</td><td>2160</td><td>124</td><td>77</td><td>54</td><td>5813</td><td>6471</td><td>2153</td><td>125</td><td>73</td><td>51</td><td>5605</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3 class="native-subtitle">血管参数</h3>
+        <div class="native-table-wrap">
+          <table class="native-table">
+            <thead><tr><th>血管参数</th><th>左眼</th><th>右眼</th><th>评估提示</th></tr></thead>
+            <tbody>
+              <tr><td class="name">B区视网膜中央动脉当量(CRAE/PX)</td><td>111.459</td><td>100.164</td><td><span class="tag success">稳定</span></td></tr>
+              <tr><td class="name">B区视网膜中央静脉当量(CRVE/PX)</td><td>141.872</td><td>127.572</td><td><span class="tag success">稳定</span></td></tr>
+              <tr><td class="name">B区视网膜动静脉比(AVR)</td><td>0.79</td><td>0.79</td><td><span class="tag success">稳定</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="native-page">
+        <h2 class="native-title">青光眼疑似特征分析</h2>
+        <div class="analysis-strip">
+          <div class="quadrant-card"><svg viewBox="0 0 100 100" aria-label="左眼象限"><circle cx="50" cy="50" r="40" fill="#fff" stroke="#e5d7eb" stroke-width="6"/><path d="M50 50 L50 10 A40 40 0 0 1 90 50 Z" fill="#facc15"/><path d="M50 50 L90 50 A40 40 0 0 1 50 90 Z" fill="#bbf7d0"/><path d="M50 50 L50 90 A40 40 0 0 1 10 50 Z" fill="#c4b5fd"/><path d="M50 50 L10 50 A40 40 0 0 1 50 10 Z" fill="#fbcfe8"/><circle cx="50" cy="50" r="13" fill="#7e22ce"/><text x="50" y="54" fill="#fff" font-size="10" text-anchor="middle">OD</text></svg></div>
+          <div class="fundus-cell"><div class="fundus-art" style="width:168px;"><span class="marker-disc"></span></div></div>
+          <div class="quadrant-card"><svg viewBox="0 0 100 100" aria-label="右眼象限"><circle cx="50" cy="50" r="40" fill="#fff" stroke="#e5d7eb" stroke-width="6"/><path d="M50 50 L50 10 A40 40 0 0 1 90 50 Z" fill="#facc15"/><path d="M50 50 L90 50 A40 40 0 0 1 50 90 Z" fill="#bbf7d0"/><path d="M50 50 L50 90 A40 40 0 0 1 10 50 Z" fill="#c4b5fd"/><path d="M50 50 L10 50 A40 40 0 0 1 50 10 Z" fill="#fbcfe8"/><circle cx="50" cy="50" r="13" fill="#7e22ce"/><text x="50" y="54" fill="#fff" font-size="10" text-anchor="middle">OS</text></svg></div>
+          <div class="fundus-cell"><div class="fundus-art right" style="width:168px;"><span class="marker-disc"></span></div></div>
+        </div>
+        <div class="native-table-wrap">
+          <table class="native-table">
+            <thead><tr><th>内容</th><th>是否发现疑似青光眼特征</th><th>疑似损伤位置</th><th>疑似损伤面积(mm²)</th></tr></thead>
+            <tbody><tr><td class="name">左眼</td><td>否</td><td>-</td><td>0</td></tr><tr><td class="name">右眼</td><td>否</td><td>-</td><td>0</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-header" style="margin-top:16px;"><span class="card-title">常见疾病筛查</span></div>
+    <div class="stats">
+      <div class="stat"><span>筛查完成</span><strong style="color:var(--success);">12/12</strong></div>
+      <div class="stat"><span>检出中高风险</span><strong style="color:var(--warning);">5</strong></div>
+      <div class="stat"><span>低风险结果</span><strong style="color:var(--success);">7</strong></div>
+      <div class="stat"><span>置信度均值</span><strong>86.6%</strong></div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>筛查项</th><th>风险等级</th><th>置信度</th></tr></thead>
+        <tbody>
+          <tr><td><strong>高血压病风险</strong></td><td><span class="tag warning">中风险</span></td><td>72%</td></tr>
+          <tr><td><strong>糖代谢风险</strong></td><td><span class="tag success">低风险</span></td><td>94%</td></tr>
+          <tr><td><strong>认知障碍风险</strong></td><td><span class="tag success">低风险</span></td><td>96%</td></tr>
+          <tr><td><strong>贫血风险</strong></td><td><span class="tag success">低风险</span></td><td>91%</td></tr>
+          <tr><td><strong>脑肿瘤风险</strong></td><td><span class="tag success">低风险</span></td><td>98%</td></tr>
+          <tr><td><strong>心脑血管风险</strong></td><td><span class="tag warning">中风险</span></td><td>68%</td></tr>
+          <tr><td><strong>病理性近视风险</strong></td><td><span class="tag danger">高风险</span></td><td>89%</td></tr>
+          <tr><td><strong>眼底肿瘤风险</strong></td><td><span class="tag success">低风险</span></td><td>97%</td></tr>
+          <tr><td><strong>青光眼风险</strong></td><td><span class="tag success">低风险</span></td><td>94%</td></tr>
+          <tr><td><strong>中心性浆液性脉络膜视网膜风险</strong></td><td><span class="tag success">低风险</span></td><td>93%</td></tr>
+          <tr><td><strong>黄斑视力损伤风险</strong></td><td><span class="tag warning">中风险</span></td><td>76%</td></tr>
+          <tr><td><strong>白内障风险</strong></td><td><span class="tag warning">中风险</span></td><td>71%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-header" style="margin-top:16px;"><span class="card-title">深度病种筛查</span></div>
+    <div class="native-report">
+      <div class="native-page">
+        <h2 class="native-title">当前眼底病灶分析结果</h2>
+        <div class="lesion-eye-grid">
+          <div>
+            <div class="lesion-eye-label">左眼</div>
+            <table class="lesion-result-table">
+              <thead><tr><th>病灶名称</th><th>AI分析结果</th></tr></thead>
+              <tbody>
+                <tr><td>豹纹状眼底</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>弥漫性视网膜萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>斑片样视网膜脉络膜萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>后巩膜葡萄肿</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>Fuchs斑</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>黄斑萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>脉络膜新生血管(CNV)</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>黄斑水肿</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="lesion-eye-label">右眼</div>
+            <table class="lesion-result-table">
+              <thead><tr><th>病灶名称</th><th>AI分析结果</th></tr></thead>
+              <tbody>
+                <tr><td>豹纹状眼底</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>弥漫性视网膜萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>斑片样视网膜脉络膜萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>后巩膜葡萄肿</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>Fuchs斑</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>黄斑萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>脉络膜新生血管(CNV)</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+                <tr><td>黄斑水肿</td><td><span class="lesion-normal">未见明显异常</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-header" style="margin-top:16px;"><span class="card-title">罕见疾病筛查</span></div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>筛查项</th><th>风险等级</th><th>置信度</th></tr></thead>
+        <tbody>
+          <tr><td><strong>葡萄膜黑色素肿瘤</strong></td><td><span class="tag success">低风险</span></td><td>96%</td></tr>
+          <tr><td><strong>视网膜色素变性</strong></td><td><span class="tag success">低风险</span></td><td>95%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
+      <a class="btn primary" id="reportBtn" href="输出筛查报告.html?role=doctor">生成筛查报告</a>
+      <a class="btn secondary" id="backBtn" href="图像质量质控.html?role=doctor">返回图像质控</a>
+    </div>
+  </div>
+</main>
+
+<div class="image-preview-overlay" id="qcImageOverlay">
+  <button class="preview-close" onclick="closeQcImage()">&times;</button>
+  <img id="qcPreviewImage" src="" alt="">
+  <div class="preview-filename" id="qcPreviewFilename"></div>
 </div>
 
 <script>
-function navigateTo(url) { window.location.href = url; }
+var FALLBACK_IMAGES = [
+  { name: '微信图片_20260729164627_44_3.png', slot: 'left', eye: '左眼', previewUrl: '' },
+  { name: '7084fe3b948d85bfa0d61a65188592e1.png', slot: 'right', eye: '右眼', previewUrl: '' }
+];
+
 function logout() {
   localStorage.removeItem('life_med_user');
   window.location.href = 'login.html';
 }
+function readFundusTask() {
+  try { return JSON.parse(localStorage.getItem('fundus_screening_task')) || null; } catch(e) { return null; }
+}
+function readCurrentUser() {
+  try { return JSON.parse(localStorage.getItem('life_med_user')) || {}; } catch(e) { return {}; }
+}
+function getFlowRoleFromUrl() {
+  var role = new URLSearchParams(window.location.search).get('role');
+  return role === 'doctor' || role === 'normal' ? role : '';
+}
+function getFlowRole() {
+  var role = getFlowRoleFromUrl();
+  if (role) return role;
+  var task = readFundusTask();
+  if (task && task.userType) return task.userType;
+  var user = readCurrentUser();
+  var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
+  if (/普通|患者|居民|公众/.test(text)) return 'normal';
+  return 'doctor';
+}
+function isDoctorAllowed(task) {
+  var role = getFlowRole();
+  if (role === 'normal') return false;
+  if (task && task.userType === 'normal') return false;
+  return true;
+}
+function roleQuery() {
+  return '?role=' + getFlowRole();
+}
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, function(ch) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+  });
+}
+function slotLabel(slot) {
+  if (slot === 'left' || slot === 'first') return '左眼';
+  if (slot === 'right' || slot === 'second') return '右眼';
+  return '单眼位';
+}
+function qcEyeLabel(task, img, index) {
+  if (img && img.eye) return img.eye;
+  if (img && img.slot) return slotLabel(img.slot);
+  if (task && task.uploadMode === 'double') return index === 0 ? '左眼' : '右眼';
+  return index === 0 ? '左眼' : '右眼';
+}
+function imageSrc(img, index) {
+  if (!img) return '';
+  return img.previewUrl || img.previewDataUrl || img.dataUrl || img.url || placeholderFundus(index);
+}
+function placeholderFundus(index) {
+  var isRight = index % 2 === 1;
+  var discX = isRight ? 675 : 225;
+  var maculaX = isRight ? 430 : 470;
+  var svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">' +
+    '<rect width="900" height="520" fill="#0b0b0b"/>' +
+    '<ellipse cx="450" cy="260" rx="350" ry="205" fill="#d86b16"/>' +
+    '<ellipse cx="450" cy="260" rx="315" ry="178" fill="#f08a12" opacity=".75"/>' +
+    '<circle cx="' + discX + '" cy="250" r="42" fill="#fff0a8" opacity=".9"/>' +
+    '<circle cx="' + maculaX + '" cy="260" r="20" fill="#9e4614" opacity=".55"/>' +
+    '<g stroke="#7b2c0b" stroke-width="5" fill="none" opacity=".7">' +
+    '<path d="M' + discX + ' 250 C560 210 500 190 420 165"/>' +
+    '<path d="M' + discX + ' 250 C560 305 500 335 420 365"/>' +
+    '<path d="M' + discX + ' 250 C355 220 310 195 240 160"/>' +
+    '<path d="M' + discX + ' 250 C360 300 305 330 235 370"/>' +
+    '</g></svg>';
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+function imageSummary(task) {
+  var imgs = task && task.images ? task.images : [];
+  if (!imgs.length) return '示例图像：左眼、右眼各一张';
+  return imgs.map(function(img, i) {
+    return qcEyeLabel(task, img, i) + '：' + (img.name || ('图像' + (i + 1)));
+  }).join('；');
+}
+function imageCards(task) {
+  var imgs = task && task.images && task.images.length ? task.images : FALLBACK_IMAGES;
+  var html = '<div class="qc-image-grid">';
+  for (var i = 0; i < imgs.length; i++) {
+    var img = imgs[i];
+    var eye = qcEyeLabel(task, img, i);
+    html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')"><div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div><div class="qc-image-meta"><div><strong>' + escapeHtml(img.name || ('眼底图像' + (i + 1))) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看原图</span></div><span class="tag success">' + eye + '</span></div></div>';
+  }
+  html += '</div>';
+  return html;
+}
+function renderFundusTaskSummary() {
+  var el = document.getElementById('taskSummary');
+  var task = readFundusTask();
+  var patient = task && task.patient ? task.patient : { name: '张教授', age: '—', gender: '—' };
+  el.className = 'task-summary';
+  el.innerHTML =
+    '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task && task.taskId ? task.taskId : 'FS-260626-001') + '</strong></div>' +
+    '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name || '—') + (patient.age ? ' · ' + escapeHtml(patient.age) + '岁' : '') + (patient.gender ? ' · ' + escapeHtml(patient.gender) : '') + '</strong></div>' +
+    '<div class="task-summary-item"><span>上传模式</span><strong>' + (task && task.uploadMode === 'double' ? '双眼图像' : '单眼/双眼图像') + '</strong></div>' +
+    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (getFlowRole() === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
+    '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
+    imageCards(task);
+}
+function renderSteps() {
+  var bar = document.getElementById('stepsBar');
+  if (!bar) return;
+  var isDoctor = getFlowRole() === 'doctor';
+  if (isDoctor) {
+    bar.innerHTML =
+      '<div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>' +
+      '<div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>' +
+      '<div class="step active"><div class="step-circle">3</div>联合筛查</div>' +
+      '<div class="step"><div class="step-circle">4</div>输出报告</div>';
+  } else {
+    bar.innerHTML =
+      '<div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>' +
+      '<div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>' +
+      '<div class="step done"><div class="step-circle">&#10003;</div>疾病筛查</div>' +
+      '<div class="step active"><div class="step-circle">4</div>联合筛查</div>' +
+      '<div class="step"><div class="step-circle">5</div>输出报告</div>';
+  }
+}
+function activateFlowSidebar() {
+  var role = getFlowRole();
+  document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
+    item.classList.toggle('active', item.getAttribute('data-flow-page') === '多任务联合筛查.html' && item.getAttribute('data-flow-role') === role);
+  });
+}
+function syncRoleLinks() {
+  var role = getFlowRole();
+  var reportBtn = document.getElementById('reportBtn');
+  var backBtn = document.getElementById('backBtn');
+  if (reportBtn) reportBtn.href = '输出筛查报告.html?role=' + role;
+  if (backBtn) backBtn.href = '图像质量质控.html?role=' + role;
+}
+function openQcImage(index) {
+  var task = readFundusTask();
+  var imgs = task && task.images && task.images.length ? task.images : FALLBACK_IMAGES;
+  var img = imgs[index];
+  if (!img) return;
+  document.getElementById('qcPreviewImage').src = imageSrc(img, index);
+  document.getElementById('qcPreviewFilename').textContent = (img.name || ('眼底图像' + (index + 1))) + ' · AI质控识别：' + qcEyeLabel(task, img, index);
+  document.getElementById('qcImageOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeQcImage() {
+  document.getElementById('qcImageOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
 document.addEventListener('DOMContentLoaded', function() {
   try {
-    var user = JSON.parse(localStorage.getItem('life_med_user'));
-    if (user && user.name) {
-      document.getElementById('headerUserName').textContent = user.name;
-    }
+    var user = readCurrentUser();
+    if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
   } catch(e) {}
-  var path = window.location.pathname.replace(/\\/g, '/');
-  var currentPage = path.split('/').pop();
-  var menuItems = document.querySelectorAll('.sidebar .menu-item');
-  menuItems.forEach(function(item) {
-    var href = item.getAttribute('href');
-    if (href && (href === currentPage || href.endsWith('/' + currentPage))) {
-      item.classList.add('active');
-    }
+  var task = readFundusTask();
+  if (!isDoctorAllowed(task)) {
+    document.getElementById('doctorOnlyNotice').style.display = 'block';
+    document.getElementById('multiTaskCard').style.display = 'none';
+  }
+  renderSteps();
+  renderFundusTaskSummary();
+  activateFlowSidebar();
+  syncRoleLinks();
+  var overlay = document.getElementById('qcImageOverlay');
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeQcImage();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeQcImage();
   });
 });
 </script>

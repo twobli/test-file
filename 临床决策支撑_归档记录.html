@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>归档记录 - 临床决策支撑</title>
+<style>
+:root{
+  --primary:#1a73e8;--primary-dark:#1557b0;--primary-light:#e8f0fe;
+  --success:#34a853;--success-light:#e6f4ea;--warning:#fbbc04;--warning-light:#fef7e0;
+  --danger:#ea4335;--danger-light:#fce8e6;--teal:#0891b2;--teal-light:#e0f7fb;
+  --gray-50:#f8f9fa;--gray-100:#f5f7fa;--gray-200:#e8ecf0;--gray-300:#dadce0;
+  --gray-400:#bdc1c6;--gray-500:#9aa0a6;--gray-600:#80868b;--gray-700:#5f6368;
+  --gray-800:#3c4043;--gray-900:#202124;--sidebar-width:220px;--header-height:56px;
+  --radius:8px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --transition:all .2s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','PingFang SC','Microsoft YaHei',Arial,sans-serif;font-size:14px;color:#333;background:var(--gray-50);min-height:100vh;line-height:1.6}
+a{text-decoration:none;color:inherit}.header{height:var(--header-height);background:linear-gradient(135deg,#1a56db 0%,#2563eb 52%,#1d4ed8 100%);color:#fff;display:flex;align-items:center;padding:0 24px;position:fixed;inset:0 0 auto 0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;white-space:nowrap}.header-nav{display:flex;gap:4px;margin-left:40px}.header-nav a{color:rgba(255,255,255,.85);padding:6px 14px;border-radius:6px;font-size:13px;transition:var(--transition);white-space:nowrap}.header-nav a:hover,.header-nav a.active{background:rgba(255,255,255,.15);color:#fff}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px}.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px}.btn-logout:hover{background:rgba(255,255,255,.35)}
+.sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100vh - var(--header-height));background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:999;padding:8px 0}.menu-group-title{padding:12px 20px 6px;font-size:11px;color:var(--gray-500);letter-spacing:1px;font-weight:600}.menu-item,.sub-menu-item{display:flex;align-items:center;color:var(--gray-700);transition:var(--transition);border-left:3px solid transparent;cursor:pointer}.menu-item{padding:10px 20px;font-size:13px}.sub-menu-item{padding:8px 20px 8px 36px;font-size:12px}.menu-item:hover,.sub-menu-item:hover{background:var(--gray-50);color:var(--primary)}.menu-item.active,.sub-menu-item.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+.main-content{margin-left:var(--sidebar-width);margin-top:var(--header-height);padding:24px;min-height:calc(100vh - var(--header-height))}.breadcrumb{font-size:13px;color:var(--gray-600);margin-bottom:16px;display:flex;align-items:center;gap:8px}.breadcrumb a{color:var(--primary)}.breadcrumb .sep{color:var(--gray-400)}
+.page-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.page-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:4px}.page-subtitle{color:var(--gray-600);font-size:13px}.title-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;transition:var(--transition);text-decoration:none;gap:6px;white-space:nowrap}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--gray-700)}.btn-outline:hover{background:var(--gray-50);border-color:var(--gray-400)}.btn-block{width:100%}
+.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:500;line-height:1.5}.tag-blue{background:var(--primary-light);color:var(--primary)}.tag-green{background:var(--success-light);color:#137333}.tag-orange{background:var(--warning-light);color:#b06000}.tag-gray{background:#f1f3f4;color:var(--gray-700)}
+.module-nav{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:10px;margin-bottom:16px}.module-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:12px;text-align:left;color:inherit;min-height:88px;transition:var(--transition);cursor:default}.module-card.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.08)}.module-card.done{border-color:rgba(52,168,83,.35);background:#fbfffc}.module-index{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--gray-100);color:var(--gray-600);font-size:12px;font-weight:700;margin-bottom:8px}.module-card.active .module-index{background:var(--primary);color:#fff}.module-card.done .module-index{background:var(--success);color:#fff}.module-card strong{display:block;font-size:14px;color:var(--gray-900)}.module-card span{font-size:11px;color:var(--gray-500);display:block;margin-top:2px}
+.workspace{display:grid;grid-template-columns:320px minmax(640px,1fr);gap:16px;align-items:start}.panel{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow)}.panel-header{padding:14px 16px;border-bottom:1px solid var(--gray-100);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.panel-title{font-size:15px;font-weight:700;color:var(--gray-900)}.panel-desc{font-size:12px;color:var(--gray-500);margin-top:2px}.panel-body{padding:16px}.left-stack,.center-stack{display:flex;flex-direction:column;gap:16px}
+.archive-number{border:1px solid rgba(26,115,232,.22);background:var(--primary-light);border-radius:8px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.archive-number span{font-size:12px;color:var(--gray-600)}.archive-number strong{font-size:18px;color:var(--primary);line-height:1.25}
+.record-list{display:flex;flex-direction:column;gap:8px}.record-card{border:1px solid var(--gray-200);border-radius:8px;padding:11px;background:#fff;cursor:pointer;transition:var(--transition)}.record-card:hover,.record-card.active{border-color:rgba(26,115,232,.45);background:#fbfdff}.record-card strong{display:block;color:var(--gray-900);font-size:13px}.record-card span{display:block;color:var(--gray-600);font-size:12px;margin-top:3px}
+.search-input{width:100%;border:1px solid var(--gray-300);border-radius:8px;padding:9px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:12px}.search-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.08)}
+.archive-table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:8px}.archive-table{width:100%;border-collapse:collapse;background:#fff;min-width:760px}.archive-table th{background:var(--gray-50);font-size:12px;color:var(--gray-600);text-align:left;padding:10px 12px;border-bottom:1px solid var(--gray-200);white-space:nowrap}.archive-table td{font-size:13px;color:var(--gray-700);line-height:1.65;padding:11px 12px;border-bottom:1px solid var(--gray-100);vertical-align:top}.archive-table tr:last-child td{border-bottom:0}.archive-table .part{width:110px;color:var(--gray-900);font-weight:800}.archive-table .item{width:160px;color:var(--gray-900);font-weight:700}.score-inline{font-size:20px;font-weight:800;color:var(--primary);line-height:1}.empty{padding:24px;text-align:center;color:var(--gray-500);background:var(--gray-50);border-radius:8px}.toast{position:fixed;right:24px;bottom:24px;background:var(--gray-900);color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:13px;display:none;z-index:2000;max-width:380px}
+@media(max-width:1500px){.workspace{grid-template-columns:300px minmax(520px,1fr)}.module-nav{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1100px){.sidebar{width:64px}.menu-group-title,.menu-item span,.sub-menu-item{display:none}.main-content{margin-left:64px}.workspace,.module-nav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html" class="active">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+
+<aside class="sidebar">
+  <div class="menu-group">
+    <div class="menu-group-title">专家系统</div>
+    <a class="menu-item active" href="临床决策支撑.html"><span>临床决策支撑</span></a>
+    <a class="sub-menu-item" href="临床决策支撑.html">病例采集确认</a>
+    <a class="sub-menu-item" href="临床决策支撑_辅助临床诊断.html">辅助临床诊断</a>
+    <a class="sub-menu-item" href="临床决策支撑_相似病历推荐.html">相似病历推荐</a>
+    <a class="sub-menu-item" href="临床决策支撑_治疗方案推荐.html">治疗方案推荐</a>
+    <a class="sub-menu-item" href="临床决策支撑_报告与质控.html">医学报告</a>
+    <a class="sub-menu-item" href="临床决策支撑_医嘱质控.html">医嘱质控</a>
+    <a class="sub-menu-item active" href="临床决策支撑_归档记录.html">归档记录</a>
+    <a class="menu-item" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
+  </div>
+</aside>
+
+<main class="main-content">
+  <div class="breadcrumb"><a href="app-center.html">应用中心</a><span class="sep">></span><a href="临床决策支撑.html">临床决策支撑</a><span class="sep">></span><span>归档记录</span></div>
+  <div class="page-title-row">
+    <div>
+      <h1 class="page-title">归档记录</h1>
+      <div class="page-subtitle">医嘱质控确认归档后，固化医学报告和医嘱质控结果，形成不可再编辑的诊疗闭环记录。</div>
+    </div>
+    <div class="title-actions">
+      <a class="btn btn-outline" href="临床决策支撑_医嘱质控.html">返回医嘱质控</a>
+      <a class="btn btn-primary" href="临床决策支撑.html">新建病例采集</a>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <div class="module-card done"><div class="module-index">1</div><strong>病例采集确认</strong><span>病例资料已确认</span></div>
+    <div class="module-card done"><div class="module-index">2</div><strong>辅助临床诊断</strong><span>诊断依据已形成</span></div>
+    <div class="module-card done"><div class="module-index">3</div><strong>相似病历推荐</strong><span>既往参考已形成</span></div>
+    <div class="module-card done"><div class="module-index">4</div><strong>治疗方案推荐</strong><span>方案已确认</span></div>
+    <div class="module-card done"><div class="module-index">5</div><strong>医学报告</strong><span>报告已生成</span></div>
+    <div class="module-card done"><div class="module-index">6</div><strong>医嘱质控</strong><span>评分已确认</span></div>
+    <div class="module-card active"><div class="module-index">7</div><strong>归档记录</strong><span>完整记录已固化</span></div>
+  </div>
+
+  <div class="workspace">
+    <div class="left-stack">
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">归档列表</div><div class="panel-desc">按归档时间倒序展示</div></div></div>
+        <div class="panel-body">
+          <input class="search-input" id="archiveSearch" placeholder="搜索归档编号、患者、报告编号" oninput="updateSearch(this.value)">
+          <div class="record-list" id="recordList"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="center-stack">
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-title">归档详情</div><div class="panel-desc">医学报告与医嘱质控结果合并展示</div></div><span class="tag tag-green">已归档</span></div>
+        <div class="panel-body">
+          <div id="recordStats"></div>
+          <div id="recordDetail"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var questionDefs=[
+  {key:'mainComplaint',label:'主诉'},
+  {key:'chronicHistory',label:'慢病史'},
+  {key:'eyeHistory',label:'眼病史'},
+  {key:'imagingFindings',label:'医学影像'},
+  {key:'physicalExam',label:'体格检查'},
+  {key:'labResults',label:'检验结果'}
+];
+var categoryDefs=[
+  {key:'checks',label:'检查检验'},
+  {key:'medication',label:'用药方案'},
+  {key:'procedures',label:'手术/处置'},
+  {key:'followup',label:'随访方案'}
+];
+var records=[];
+var currentArchiveId='';
+var searchKeyword='';
+
+document.addEventListener('DOMContentLoaded',function(){
+  try{var user=JSON.parse(localStorage.getItem('life_med_user'));if(user&&user.name)document.getElementById('headerUserName').textContent=user.name;}catch(e){}
+  records=loadRecords();
+  currentArchiveId=localStorage.getItem('clinical_decision_current_archive')||(records[0]&&records[0].archiveId)||'';
+  renderAll();
+});
+
+function loadRecords(){
+  var list=[];
+  try{var saved=JSON.parse(localStorage.getItem('clinical_decision_archives'));if(Array.isArray(saved))list=saved;}catch(e){}
+  return mergeDemoRecords(list);
+}
+function mergeDemoRecords(list){
+  var merged=list.slice();
+  getDemoRecords().forEach(function(record){
+    if(!merged.some(function(item){return item.archiveId===record.archiveId;}))merged.push(record);
+  });
+  return merged;
+}
+function getDemoRecords(){
+  return [
+    {
+      archiveId:'ARC-20260722-171026',archivedAt:'2026/7/22 17:10:26',reportId:'RPT-20260722-170812',reportGeneratedAt:'2026/7/22 17:08:12',
+      id:'CASE-20260722-014',patientName:'李某某',gender:'男',age:58,pastHistory:'2型糖尿病12年，高脂血症5年。',medicationHistory:'二甲双胍联合胰岛素治疗，血糖波动较大。',
+      mainComplaint:'右眼视物变形伴视力下降半月。',chronicHistory:'近3个月空腹血糖控制不稳。',eyeHistory:'既往提示非增殖期糖尿病视网膜病变。',imagingFindings:'OCT提示黄斑区囊样水肿。',physicalExam:'右眼视力0.4，眼底可见微血管瘤及硬性渗出。',labResults:'HbA1c 9.1%，血脂升高。',
+      diagnoses:[{name:'糖尿病黄斑水肿可能',probability:89,reason:'糖尿病病史、视物变形、OCT黄斑水肿共同支持。'}],
+      selectedPlan:{checks:['OCT黄斑扫描并量化中心凹厚度。','复查HbA1c、空腹血糖和血脂。'],medication:['强化血糖和血脂综合管理。'],procedures:['评估玻璃体腔抗VEGF治疗适应症。'],followup:['眼底病专科1个月随访。']},
+      qualityRules:[
+        {category:'检查检验',title:'OCT黄斑扫描并量化中心凹厚度。',score:95,reason:'存在视物变形和OCT黄斑水肿线索，该检查可支撑水肿量化与疗效对比。',basis:'病例摘要 + 检查适应症知识'},
+        {category:'检查检验',title:'复查HbA1c、空腹血糖和血脂。',score:92,reason:'患者糖尿病和高脂血症控制风险明确，复查检验可支撑慢病治疗调整。',basis:'慢病史 + 检验适应症知识'},
+        {category:'用药方案',title:'强化血糖和血脂综合管理。',score:90,reason:'血糖和血脂异常与眼底病变进展相关，综合管理与当前病情匹配。',basis:'病史 + 检验结果 + 药品说明书'},
+        {category:'手术/处置',title:'评估玻璃体腔抗VEGF治疗适应症。',score:88,reason:'黄斑水肿影响视力，进入抗VEGF适应症评估具备依据。',basis:'OCT + 诊断结果 + 处置适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260722-170812',avgScore:91,itemCount:4}
+    },
+    {
+      archiveId:'ARC-20260721-103618',archivedAt:'2026/7/21 10:36:18',reportId:'RPT-20260721-102944',reportGeneratedAt:'2026/7/21 10:29:44',
+      id:'CASE-20260721-006',patientName:'王某某',gender:'女',age:67,pastHistory:'高血压18年，慢性肾功能不全2年。',medicationHistory:'长期口服钙通道阻滞剂，近期偶有漏服。',
+      mainComplaint:'双眼视物模糊，晨起头痛1周。',chronicHistory:'血压控制不稳定，晨峰血压偏高。',eyeHistory:'无明确眼底病治疗史。',imagingFindings:'眼底照相提示动静脉交叉压迹。',physicalExam:'血压168/96mmHg，视乳头边界清。',labResults:'eGFR 58，尿微量白蛋白升高。',
+      diagnoses:[{name:'高血压性视网膜病变可能',probability:86,reason:'长期高血压、眼底血管改变和肾功能风险共同支持。'}],
+      selectedPlan:{checks:['完善24小时动态血压监测。','复查肾功能、电解质和尿微量白蛋白。'],medication:['优化长效降压药方案。'],procedures:[],followup:['心内科与眼科联合随访。']},
+      qualityRules:[
+        {category:'检查检验',title:'完善24小时动态血压监测。',score:93,reason:'晨起头痛和血压控制不稳提示需要评估血压波动模式。',basis:'主诉 + 慢病史 + 检查适应症知识'},
+        {category:'检查检验',title:'复查肾功能、电解质和尿微量白蛋白。',score:91,reason:'肾功能风险和降压药调整前需要基础安全性评估。',basis:'检验结果 + 历史用药 + 检验适应症知识'},
+        {category:'用药方案',title:'优化长效降压药方案。',score:87,reason:'长期高血压且近期漏服，优化方案有合理性，但需结合肾功能和血钾。',basis:'病史 + 历史用药 + 药品说明书'},
+        {category:'随访方案',title:'心内科与眼科联合随访。',score:84,reason:'眼底血管改变与慢病管理相关，联合随访可形成持续管理。',basis:'诊断结果 + 随访适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260721-102944',avgScore:89,itemCount:4}
+    },
+    {
+      archiveId:'ARC-20260720-151455',archivedAt:'2026/7/20 15:14:55',reportId:'RPT-20260720-150739',reportGeneratedAt:'2026/7/20 15:07:39',
+      id:'CASE-20260720-011',patientName:'陈某某',gender:'男',age:46,pastHistory:'高度近视20年。',medicationHistory:'无长期规律用药。',
+      mainComplaint:'左眼眼胀伴视野缺损感3天。',chronicHistory:'否认糖尿病和高血压。',eyeHistory:'高度近视，家族中有青光眼病史。',imagingFindings:'视神经纤维层变薄待进一步确认。',physicalExam:'眼压左眼26mmHg，杯盘比增大。',labResults:'常规检验未见明显异常。',
+      diagnoses:[{name:'开角型青光眼待排',probability:78,reason:'眼压升高、杯盘比增大、视神经纤维层改变提示需进一步排查。'}],
+      selectedPlan:{checks:['完善眼压昼夜曲线、视野检查和OCT-RNFL。'],medication:['必要时评估局部降眼压药物。'],procedures:[],followup:['青光眼专科2周内复诊。']},
+      qualityRules:[
+        {category:'检查检验',title:'完善眼压昼夜曲线、视野检查和OCT-RNFL。',score:94,reason:'眼压升高和视野缺损感明确支持青光眼相关检查。',basis:'主诉 + 体格检查 + 检查适应症知识'},
+        {category:'用药方案',title:'必要时评估局部降眼压药物。',score:82,reason:'存在疑似青光眼证据，但用药需在进一步检查和禁忌复核后确认。',basis:'诊断结果 + 药品说明书'},
+        {category:'随访方案',title:'青光眼专科2周内复诊。',score:88,reason:'疑似青光眼需要短期复核眼压、视野和结构变化。',basis:'疾病风险 + 随访适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260720-150739',avgScore:88,itemCount:3}
+    },
+    {
+      archiveId:'ARC-20260718-092208',archivedAt:'2026/7/18 09:22:08',reportId:'RPT-20260718-091630',reportGeneratedAt:'2026/7/18 09:16:30',
+      id:'CASE-20260718-003',patientName:'赵某某',gender:'女',age:72,pastHistory:'年龄相关性黄斑变性病史3年。',medicationHistory:'间断使用营养神经类药物。',
+      mainComplaint:'右眼中心暗影加重10天。',chronicHistory:'无糖尿病史，血压偶有升高。',eyeHistory:'既往诊断干性年龄相关性黄斑变性。',imagingFindings:'OCT提示黄斑区渗出性改变可疑。',physicalExam:'右眼中心视力下降，Amsler表变形。',labResults:'肝肾功能基本正常。',
+      diagnoses:[{name:'湿性年龄相关性黄斑变性可能',probability:83,reason:'中心暗影、变形视和OCT渗出性改变提示湿性转化风险。'}],
+      selectedPlan:{checks:['完善OCT-A和FFA评估脉络膜新生血管。'],medication:['评估抗VEGF治疗方案。'],procedures:['必要时进行玻璃体腔注药处置。'],followup:['治疗后1个月复查OCT。']},
+      qualityRules:[
+        {category:'检查检验',title:'完善OCT-A和FFA评估脉络膜新生血管。',score:93,reason:'中心暗影加重和OCT渗出性改变支持血管评估。',basis:'医学影像 + 检查适应症知识'},
+        {category:'用药方案',title:'评估抗VEGF治疗方案。',score:89,reason:'疑似湿性黄斑变性与抗VEGF适应症相关，但需确认影像证据。',basis:'诊断结果 + 药品说明书'},
+        {category:'手术/处置',title:'必要时进行玻璃体腔注药处置。',score:86,reason:'处置方向与疑似新生血管相关，但应以前置影像确认作为实施依据。',basis:'检查结果 + 处置适应症知识'},
+        {category:'随访方案',title:'治疗后1个月复查OCT。',score:90,reason:'OCT可用于观察渗出吸收和疗效变化，随访周期合理。',basis:'治疗方案 + 随访适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260718-091630',avgScore:90,itemCount:4}
+    },
+    {
+      archiveId:'ARC-20260716-164233',archivedAt:'2026/7/16 16:42:33',reportId:'RPT-20260716-163805',reportGeneratedAt:'2026/7/16 16:38:05',
+      id:'CASE-20260716-018',patientName:'周某某',gender:'男',age:63,pastHistory:'高血压12年，高脂血症6年。',medicationHistory:'口服降压药及他汀类药物，依从性一般。',
+      mainComplaint:'左眼突发视物遮挡伴视力下降2天。',chronicHistory:'近期血压波动，最高达176/102mmHg。',eyeHistory:'无眼外伤史，既往有轻度动脉硬化性眼底改变。',imagingFindings:'眼底照相提示视网膜出血及静脉迂曲，OCT提示黄斑水肿。',physicalExam:'左眼视力0.2，眼底可见火焰状出血和棉絮斑。',labResults:'血脂偏高，凝血功能未见明显异常。',
+      diagnoses:[{name:'视网膜静脉阻塞伴黄斑水肿可能',probability:84,reason:'突发视力下降、静脉迂曲出血和OCT黄斑水肿共同支持。'}],
+      selectedPlan:{checks:['完善FFA和OCT量化黄斑水肿。','复查血脂、血糖、凝血功能和血压记录。'],medication:['继续控制血压血脂并评估抗VEGF治疗。'],procedures:['根据黄斑水肿程度评估玻璃体腔注药。'],followup:['视网膜专科2周内复查影像。']},
+      qualityRules:[
+        {category:'检查检验',title:'完善FFA和OCT量化黄斑水肿。',score:94,reason:'已有出血、静脉迂曲和OCT水肿线索，进一步影像可明确缺血范围和水肿程度。',basis:'医学影像 + 检查适应症知识'},
+        {category:'检查检验',title:'复查血脂、血糖、凝血功能和血压记录。',score:89,reason:'患者存在高血压和高脂血症，复查可辅助判断血管风险及治疗安全性。',basis:'慢病史 + 检验适应症知识'},
+        {category:'用药方案',title:'继续控制血压血脂并评估抗VEGF治疗。',score:87,reason:'慢病控制与静脉阻塞复发风险相关，抗VEGF评估与黄斑水肿处理方向一致。',basis:'病史 + 诊断结果 + 药品说明书'},
+        {category:'手术/处置',title:'根据黄斑水肿程度评估玻璃体腔注药。',score:86,reason:'存在影响视力的黄斑水肿，但需结合FFA/OCT结果确认治疗窗口。',basis:'检查结果 + 处置适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260716-163805',avgScore:89,itemCount:4}
+    },
+    {
+      archiveId:'ARC-20260714-112640',archivedAt:'2026/7/14 11:26:40',reportId:'RPT-20260714-112018',reportGeneratedAt:'2026/7/14 11:20:18',
+      id:'CASE-20260714-009',patientName:'孙某某',gender:'女',age:69,pastHistory:'2型糖尿病9年，白内障病史2年。',medicationHistory:'二甲双胍规律口服，近期血糖自测偏高。',
+      mainComplaint:'双眼逐渐视物模糊1年，近1个月加重。',chronicHistory:'糖尿病控制一般，否认严重低血糖。',eyeHistory:'既往提示双眼年龄相关性白内障，未手术。',imagingFindings:'晶状体混浊影响眼底观察，OCT未见明显黄斑水肿。',physicalExam:'双眼矫正视力下降，裂隙灯见晶状体核性混浊。',labResults:'HbA1c 8.2%，肝肾功能基本正常。',
+      diagnoses:[{name:'年龄相关性白内障合并糖尿病术前评估',probability:81,reason:'长期渐进性视物模糊、晶状体混浊及糖尿病背景共同支持术前评估。'}],
+      selectedPlan:{checks:['完善IOL Master、角膜内皮计数和眼底OCT。','复查HbA1c和空腹血糖。'],medication:['围手术期优化血糖管理。'],procedures:['评估白内障手术时机。'],followup:['术前1周复核血糖和眼部检查。']},
+      qualityRules:[
+        {category:'检查检验',title:'完善IOL Master、角膜内皮计数和眼底OCT。',score:92,reason:'白内障手术前需要人工晶体测算、角膜安全性和眼底基础评估。',basis:'诊断结果 + 检查适应症知识'},
+        {category:'检查检验',title:'复查HbA1c和空腹血糖。',score:91,reason:'糖尿病控制状态会影响围手术期感染和恢复风险，复查具备必要性。',basis:'慢病史 + 检验适应症知识'},
+        {category:'用药方案',title:'围手术期优化血糖管理。',score:88,reason:'当前HbA1c偏高，术前优化血糖与降低围手术期风险相关。',basis:'检验结果 + 药品说明书'},
+        {category:'手术/处置',title:'评估白内障手术时机。',score:85,reason:'视力下降和晶状体混浊明确，但需在血糖控制和眼底评估后确认手术安排。',basis:'体格检查 + 处置适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260714-112018',avgScore:89,itemCount:4}
+    },
+    {
+      archiveId:'ARC-20260712-095516',archivedAt:'2026/7/12 09:55:16',reportId:'RPT-20260712-094902',reportGeneratedAt:'2026/7/12 09:49:02',
+      id:'CASE-20260712-005',patientName:'刘某某',gender:'女',age:42,pastHistory:'甲状腺功能亢进病史4年。',medicationHistory:'甲巯咪唑间断服用，近期自行减量。',
+      mainComplaint:'双眼突出伴干涩、复视2个月。',chronicHistory:'近期心悸和体重下降较前明显。',eyeHistory:'无眼部手术史，曾因干眼使用人工泪液。',imagingFindings:'眼眶CT提示眼外肌增粗可疑。',physicalExam:'双眼轻度突眼，眼球运动受限，结膜充血。',labResults:'FT3、FT4升高，TSH降低。',
+      diagnoses:[{name:'甲状腺相关眼病活动期可能',probability:82,reason:'甲亢病史、突眼复视、眼外肌增粗及甲功异常共同支持。'}],
+      selectedPlan:{checks:['完善CAS活动评分、眼眶CT复核和甲状腺功能。'],medication:['联合内分泌科调整抗甲状腺药物并评估眼表保护。'],procedures:['评估是否需要激素冲击或免疫治疗。'],followup:['眼眶病专科与内分泌科联合随访。']},
+      qualityRules:[
+        {category:'检查检验',title:'完善CAS活动评分、眼眶CT复核和甲状腺功能。',score:93,reason:'突眼、复视和甲功异常提示需同时评估眼病活动度与全身病情。',basis:'主诉 + 检验结果 + 检查适应症知识'},
+        {category:'用药方案',title:'联合内分泌科调整抗甲状腺药物并评估眼表保护。',score:90,reason:'历史用药不规律且甲功异常，调整抗甲状腺治疗和眼表保护与病情匹配。',basis:'历史用药 + 药品说明书'},
+        {category:'手术/处置',title:'评估是否需要激素冲击或免疫治疗。',score:80,reason:'存在活动期可能，但治疗强度需结合CAS评分、禁忌证和全身风险后确认。',basis:'诊断结果 + 处置适应症知识'},
+        {category:'随访方案',title:'眼眶病专科与内分泌科联合随访。',score:91,reason:'眼部表现与甲状腺控制高度相关，联合随访有助于闭环管理。',basis:'慢病史 + 随访适应症知识'}
+      ],
+      archiveSummary:{reportId:'RPT-20260712-094902',avgScore:89,itemCount:4}
+    }
+  ];
+}
+function getCurrentRecord(){
+  var list=filterRecords();
+  return list.find(function(record){return record.archiveId===currentArchiveId;})||list[0]||null;
+}
+function renderAll(){renderList();renderStats();renderDetail();}
+function renderList(){
+  var list=filterRecords();
+  if(!records.length){document.getElementById('recordList').innerHTML='<div class="empty">暂无归档记录</div>';return;}
+  if(!list.length){document.getElementById('recordList').innerHTML='<div class="empty">未找到匹配记录</div>';return;}
+  var current=getCurrentRecord();
+  document.getElementById('recordList').innerHTML=list.map(function(record){
+    var active=current&&record.archiveId===current.archiveId?' active':'';
+    var summary=record.archiveSummary||{};
+    return '<div class="record-card'+active+'" onclick="selectRecord(\''+escapeAttr(record.archiveId)+'\')"><strong>'+escapeHtml(record.archiveId||'未命名记录')+'</strong><span>'+escapeHtml(record.patientName||'未知患者')+' / '+escapeHtml(record.archivedAt||'待记录时间')+'</span><span>报告 '+escapeHtml(summary.reportId||record.reportId||'-')+'</span></div>';
+  }).join('');
+}
+function selectRecord(id){currentArchiveId=id;localStorage.setItem('clinical_decision_current_archive',id);renderAll();}
+function updateSearch(value){
+  searchKeyword=(value||'').trim().toLowerCase();
+  var list=filterRecords();
+  if(list.length&&!list.some(function(record){return record.archiveId===currentArchiveId;})){
+    currentArchiveId=list[0].archiveId;
+  }
+  renderAll();
+}
+function filterRecords(){
+  if(!searchKeyword)return records;
+  return records.filter(function(record){
+    var text=[
+      record.archiveId,record.reportId,record.patientName,record.id,record.archivedAt,record.reportGeneratedAt,
+      record.mainComplaint,record.pastHistory,record.medicationHistory
+    ].join(' ').toLowerCase();
+    return text.indexOf(searchKeyword)>-1;
+  });
+}
+function renderStats(){
+  var record=getCurrentRecord();
+  if(!record){document.getElementById('recordStats').innerHTML='<div class="empty">暂无可展示记录</div>';return;}
+  document.getElementById('recordStats').innerHTML='<div class="archive-number"><span>归档编号</span><strong>'+escapeHtml(record.archiveId||'-')+'</strong></div>';
+}
+function renderDetail(){
+  var record=getCurrentRecord();
+  if(!record){document.getElementById('recordDetail').innerHTML='<div class="empty">请先在医嘱质控页完成评估归档。</div>';return;}
+  var primary=(record.diagnoses&&record.diagnoses[0])||{};
+  var rows=[
+    row('医学报告','报告信息',[
+      '报告ID：'+(record.reportId||'-'),
+      '生成时间：'+(record.reportGeneratedAt||'-')
+    ],'报告由已确认病例资料、诊断结论和治疗方案生成'),
+    row('医学报告','患者与病史',[
+      '患者：'+(record.patientName||'-')+' / '+(record.gender||'-')+' / '+(record.age||'-')+'岁',
+      '既往病史：'+(record.pastHistory||record.chronicHistory||'未采集'),
+      '过往用药史：'+(record.medicationHistory||'未采集')
+    ],'作为归档病历的基础信息'),
+    row('医学报告','病例摘要',questionDefs.map(function(q){return q.label+'：'+(record[q.key]||'未采集');}),'包含采集确认后的病例核心字段'),
+    row('医学报告','辅助诊断结论',[
+      '首位诊断：'+(primary.name||'待确认')+'，可能性 '+(primary.probability||0)+'%',
+      primary.reason||''
+    ].concat((record.diagnoses||[]).slice(1).map(function(d){return (d.name||'待确认')+'：'+(d.probability||0)+'%，'+(d.reason||'');})),'写入医学报告的诊断依据'),
+    row('医学报告','医生确认治疗方案',planLines(record),'医生最终确认的检查检验、用药、手术/处置和随访方案')
+  ];
+  var rules=(record&&record.qualityRules)||[];
+  if(rules.length){
+    rules.forEach(function(item){
+      rows.push(row('医嘱质控',item.category||'评估项目',[
+        item.title||'未命名项目',
+        '合理性：'+(item.score||0)+'%',
+        item.reason||'已完成合理性研判。'
+      ],item.basis||item.suggestion||'归档时确认的质控结果'));
+    });
+  }else{
+    rows.push(row('医嘱质控','合理性评估','暂无医嘱合理性评分','归档时未生成评分'));
+  }
+  document.getElementById('recordDetail').innerHTML='<div class="archive-table-wrap"><table class="archive-table"><thead><tr><th>归档部分</th><th>记录项目</th><th>归档内容</th><th>说明</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div>';
+}
+function row(part,item,content,note){
+  var contentHtml=Array.isArray(content)?content.filter(Boolean).map(escapeHtml).join('<br>'):escapeHtml(content||'');
+  return '<tr><td class="part">'+escapeHtml(part)+'</td><td class="item">'+escapeHtml(item)+'</td><td>'+contentHtml+'</td><td>'+escapeHtml(note||'')+'</td></tr>';
+}
+function planLines(record){
+  var lines=[];
+  categoryDefs.forEach(function(cat){
+    var arr=(record.selectedPlan&&record.selectedPlan[cat.key])||[];
+    if(arr.length)lines.push(cat.label+'：'+arr.join('；'));
+  });
+  return lines.length?lines:['未记录治疗方案'];
+}
+function escapeAttr(text){return String(text==null?'':text).replace(/\\/g,'\\\\').replace(/'/g,'\\\'');}
+function escapeHtml(text){var div=document.createElement('div');div.appendChild(document.createTextNode(text==null?'':String(text)));return div.innerHTML;}
+function toast(message){var el=document.getElementById('toast');el.textContent=message;el.style.display='block';clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(function(){el.style.display='none';},2400);}
+function logout(){if(confirm('确定要退出登录吗？')){localStorage.removeItem('life_med_user');window.location.href='login.html';}}
+</script>
+</body>
+</html>

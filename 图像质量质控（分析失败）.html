@@ -173,6 +173,45 @@ input, select, textarea { font: inherit; outline: none; }
 .alert-warning { background: #fff4df; color: #b06000; border: 1px solid #feefc3; }
 .alert-danger { background: #ffecec; color: #c5221f; border: 1px solid #f5c6c2; }
 
+.task-summary {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;
+  padding: 12px; border-radius: 12px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 14px;
+}
+.task-summary.empty { display: block; color: var(--muted); }
+.task-summary-item { padding: 10px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
+.task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
+.task-summary-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; word-break: break-all; }
+.task-summary-item.wide { grid-column: 1 / -1; }
+.qc-image-grid {
+  grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.qc-image-card {
+  border-radius: 12px; background: #fff; overflow: hidden; cursor: pointer;
+  box-shadow: inset 0 0 0 1px #edf2f9; transition: .16s ease;
+}
+.qc-image-card:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(245,154,35,.12), inset 0 0 0 1px #ffd189; }
+.qc-image-thumb { aspect-ratio: 16 / 9; background: #0d1117; display: flex; align-items: center; justify-content: center; }
+.qc-image-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qc-image-meta { padding: 10px 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.qc-image-meta strong { display: block; color: var(--text); font-size: 13px; word-break: break-all; }
+.qc-image-meta span { display: block; color: var(--soft); font-size: 12px; margin-top: 2px; }
+.eye-tag { flex: 0 0 auto; }
+.image-preview-overlay {
+  position: fixed; inset: 0; z-index: 20000; background: rgba(0,0,0,.86);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: .2s ease; padding: 24px;
+}
+.image-preview-overlay.show { opacity: 1; visibility: visible; }
+.image-preview-overlay img { max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 8px; background: #111827; }
+.image-preview-overlay .preview-filename { color: #fff; font-size: 14px; margin-top: 14px; text-align: center; }
+.image-preview-overlay .preview-close {
+  position: absolute; top: 22px; right: 22px; width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,.16); color: #fff; font-size: 24px;
+}
+.image-preview-overlay .preview-close:hover { background: rgba(255,255,255,.28); }
+
 /* QC Progress */
 .qc-progress-shell {
   background: var(--panel-soft);
@@ -277,6 +316,8 @@ input, select, textarea { font: inherit; outline: none; }
   .main-content { margin-left: 60px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .result-grid { grid-template-columns: 1fr; }
+  .task-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .qc-image-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
@@ -285,6 +326,7 @@ input, select, textarea { font: inherit; outline: none; }
   .main-content { margin-left: 0; padding: 14px; }
   .stats { grid-template-columns: 1fr; }
   .form-row { flex-direction: column; }
+  .task-summary { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -320,20 +362,22 @@ input, select, textarea { font: inherit; outline: none; }
     <div class="step"><div class="step-circle">5</div>输出报告</div>
   </div>
 
+  <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
+
   <div class="stats">
-    <div class="stat"><span>质控评分</span><strong>--</strong></div>
-    <div class="stat"><span>图像清晰度</span><strong>--</strong></div>
-    <div class="stat"><span>视野完整性</span><strong>--</strong></div>
-    <div class="stat"><span>曝光均匀度</span><strong>--</strong></div>
+    <div class="stat"><span>眼底图像判定</span><strong style="color:var(--warning);">未完成</strong></div>
+    <div class="stat"><span>图像质量判定</span><strong style="color:var(--warning);">未完成</strong></div>
+    <div class="stat"><span>AI分析状态</span><strong style="color:var(--warning);">已中断</strong></div>
+    <div class="stat"><span>后续处理</span><strong>重试分析</strong></div>
   </div>
 
   <div class="qc-progress-shell qc-progress-loading">
     <div class="qc-progress-header">
       <div class="qc-progress-label">
         <span class="qc-progress-icon">⟳</span>
-        <span>AI分析进行中...</span>
+        <span>AI质控分析中断，尚未形成质控结论</span>
       </div>
-      <span class="qc-progress-pct">--</span>
+      <span class="qc-progress-pct">45%</span>
     </div>
     <div class="qc-progress-track">
       <div class="qc-progress-fill" id="qcProgressFill" style="width:45%;"></div>
@@ -341,43 +385,43 @@ input, select, textarea { font: inherit; outline: none; }
   </div>
 
   <div class="alert alert-warning">
-    <strong>分析超时：</strong>服务器响应超时，AI分析未能完成。请检查网络连接后重试，或重新上传图像。
+    <strong>分析失败：</strong>AI质控流程在图像真实性识别阶段中断，尚未完成“是否为眼底图像”的判定，因此不能形成眼别识别结果和“质量是否合格”的完整结论。请重试分析；若仍失败，再重新上传眼底彩照。
   </div>
 
-  <div class="card-header"><span class="card-title">质控检查项明细</span></div>
+  <div class="card-header"><span class="card-title">质控流程中断明细</span></div>
   <div class="table-wrap">
     <table class="data-table">
-      <thead><tr><th>检查项</th><th>结果</th><th>评分</th><th>说明</th></tr></thead>
+      <thead><tr><th>流程节点</th><th>状态</th><th>处理逻辑</th><th>当前结论</th></tr></thead>
       <tbody>
         <tr>
-          <td><strong>图像清晰度</strong></td>
-          <td><span class="tag gray">分析中断</span></td>
-          <td>--</td>
-          <td>分析未能完成</td>
+          <td><strong>文件读取</strong></td>
+          <td><span class="tag success">已完成</span></td>
+          <td>系统已读取上传文件并确认格式符合眼底彩照上传要求。</td>
+          <td>可进入AI质控。</td>
         </tr>
         <tr>
-          <td><strong>曝光均匀度</strong></td>
-          <td><span class="tag gray">分析中断</span></td>
-          <td>--</td>
-          <td>分析未能完成</td>
+          <td><strong>是否为眼底图像</strong></td>
+          <td><span class="tag warning">未完成</span></td>
+          <td>AI需要识别视盘、黄斑、血管树和眼底背景，但服务响应中断，未返回完整结构识别结果。</td>
+          <td>不能确认是否为眼底图像。</td>
         </tr>
         <tr>
-          <td><strong>视野完整性</strong></td>
-          <td><span class="tag gray">分析中断</span></td>
-          <td>--</td>
-          <td>分析未能完成</td>
+          <td><strong>关键结构完整性</strong></td>
+          <td><span class="tag gray">未执行</span></td>
+          <td>该节点依赖上一节点输出，需在确认眼底结构后继续判断视盘、黄斑和血管是否完整入镜。</td>
+          <td>暂无质量结论。</td>
         </tr>
         <tr>
-          <td><strong>色彩真实性</strong></td>
-          <td><span class="tag gray">分析中断</span></td>
-          <td>--</td>
-          <td>分析未能完成</td>
+          <td><strong>清晰度、曝光与遮挡</strong></td>
+          <td><span class="tag gray">未执行</span></td>
+          <td>AI尚未完成对血管边界、过曝欠曝、遮挡和伪影的综合判断。</td>
+          <td>不能进入疾病筛查。</td>
         </tr>
         <tr>
-          <td><strong>分辨率达标</strong></td>
-          <td><span class="tag gray">分析中断</span></td>
-          <td>--</td>
-          <td>分析未能完成</td>
+          <td><strong>质控结论生成</strong></td>
+          <td><span class="tag danger">失败</span></td>
+          <td>服务超时导致未生成“通过/不通过”结论，系统不会放行到疾病筛查。</td>
+          <td>建议重试分析或重新上传。</td>
         </tr>
       </tbody>
     </table>
@@ -411,6 +455,93 @@ function logout() {
   localStorage.removeItem('life_med_user');
   window.location.href = 'login.html';
 }
+function readFundusTask() {
+  try { return JSON.parse(localStorage.getItem('fundus_screening_task')) || null; } catch(e) { return null; }
+}
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, function(ch) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+  });
+}
+function slotLabel(slot) {
+  if (slot === 'left') return '左眼位';
+  if (slot === 'right') return '右眼位';
+  if (slot === 'first') return '第1张图像';
+  if (slot === 'second') return '第2张图像';
+  return '单眼位';
+}
+function qcEyeStatus() {
+  return '未形成结论';
+}
+function imageSummary(task) {
+  var imgs = task && task.images ? task.images : [];
+  if (!imgs.length) return '尚未同步图像';
+  return imgs.map(function(img) {
+    return slotLabel(img.slot) + '：' + img.name + '（眼底图像判定未完成，眼别未形成结论）';
+  }).join('；');
+}
+function fallbackFundusSrc(index) {
+  var discX = index % 2 === 0 ? '68%' : '32%';
+  var vesselX = index % 2 === 0 ? '70%' : '30%';
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">' +
+    '<defs><radialGradient id="bg" cx="50%" cy="50%" r="58%"><stop offset="0" stop-color="#f2a33a"/><stop offset=".62" stop-color="#b96b23"/><stop offset="1" stop-color="#2a1208"/></radialGradient><radialGradient id="disc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff2b8"/><stop offset="1" stop-color="#d89a4a"/></radialGradient></defs>' +
+    '<rect width="640" height="360" fill="#05070a"/><ellipse cx="320" cy="180" rx="230" ry="168" fill="url(#bg)"/><circle cx="' + discX + '" cy="184" r="30" fill="url(#disc)" opacity=".74"/>' +
+    '<path d="M' + vesselX + ' 184 C330 132 240 104 145 82" stroke="#6b1b16" stroke-width="8" fill="none" opacity=".48"/><path d="M' + vesselX + ' 184 C350 208 258 250 154 294" stroke="#7b2018" stroke-width="7" fill="none" opacity=".45"/><path d="M' + vesselX + ' 184 C420 134 480 112 548 90" stroke="#6f1e17" stroke-width="6" fill="none" opacity=".42"/><path d="M' + vesselX + ' 184 C430 230 498 260 562 304" stroke="#6f1e17" stroke-width="6" fill="none" opacity=".42"/>' +
+    '<rect width="640" height="360" fill="#f59a23" opacity=".12"/></svg>';
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+function imageSrc(img, index) {
+  return img.previewDataUrl || img.previewUrl || fallbackFundusSrc(index);
+}
+function imageCards(task) {
+  var imgs = task && task.images ? task.images : [];
+  if (!imgs.length) return '';
+  var html = '<div class="qc-image-grid">';
+  for (var i = 0; i < imgs.length; i++) {
+    var img = imgs[i];
+    html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')">' +
+      '<div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div>' +
+      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看图像</span></div><span class="tag warning eye-tag">' + qcEyeStatus() + '</span></div>' +
+      '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function renderFundusTaskSummary() {
+  var el = document.getElementById('taskSummary');
+  if (!el) return;
+  var task = readFundusTask();
+  if (!task) {
+    el.className = 'task-summary empty';
+    el.innerHTML = '暂无已创建的筛查任务，当前页面展示示例分析失败结果。';
+    return;
+  }
+  var patient = task.patient || {};
+  el.className = 'task-summary';
+  el.innerHTML =
+    '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
+    '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
+    '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
+    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (task.userType === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
+    '<div class="task-summary-item wide"><span>眼别状态</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
+    imageCards(task);
+}
+function openQcImage(index) {
+  var task = readFundusTask();
+  var imgs = task && task.images ? task.images : [];
+  var img = imgs[index];
+  if (!img) return;
+  var overlay = document.getElementById('qcImageOverlay');
+  document.getElementById('qcPreviewImage').src = imageSrc(img, index);
+  document.getElementById('qcPreviewFilename').textContent = img.name + ' · 眼别状态：' + qcEyeStatus();
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeQcImage() {
+  var overlay = document.getElementById('qcImageOverlay');
+  overlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
 document.addEventListener('DOMContentLoaded', function() {
   try {
     var user = JSON.parse(localStorage.getItem('life_med_user'));
@@ -427,6 +558,16 @@ document.addEventListener('DOMContentLoaded', function() {
       item.classList.add('active');
     }
   });
+  renderFundusTaskSummary();
+  var overlay = document.getElementById('qcImageOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeQcImage();
+    });
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeQcImage();
+  });
 });
 
 function retryAnalysis() {
@@ -438,6 +579,12 @@ function retryAnalysis() {
   }, 2000);
 }
 </script>
+
+<div class="image-preview-overlay" id="qcImageOverlay">
+  <button class="preview-close" onclick="closeQcImage()">&times;</button>
+  <img id="qcPreviewImage" src="" alt="">
+  <div class="preview-filename" id="qcPreviewFilename"></div>
+</div>
 
 </body>
 </html>

@@ -3,28 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>常见疾病筛查分流</title>
-<script>
-(function() {
-  function readJson(key, fallback) {
-    try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch(e) { return fallback; }
-  }
-  function isDoctorUser() {
-    var params = new URLSearchParams(window.location.search);
-    var role = params.get('role');
-    if (role === 'doctor') return true;
-    if (role === 'normal') return false;
-    var task = readJson('fundus_screening_task', null);
-    if (task && task.userType) return task.userType === 'doctor';
-    var user = readJson('life_med_user', {});
-    var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
-    if (/普通|患者|居民|公众/.test(text)) return false;
-    return /医生|医师|主任|教授|专家|管理员|技师/.test(text);
-  }
-  var target = isDoctorUser() ? '多任务联合筛查.html' : '常见疾病筛查_普通用户.html';
-  window.location.replace(target + window.location.search + window.location.hash);
-})();
-</script>
+<title>常见疾病筛查（医生用户）</title>
 <style>
 :root {
   --primary: #165dff;
@@ -306,212 +285,32 @@ input, select, textarea { font: inherit; outline: none; }
 <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div><div class="main-content">
-<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>常见疾病筛查</strong></div>
-<h1 class="page-title">常见疾病筛查</h1>
+<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>常见疾病筛查（医生用户）</strong></div>
+<h1 class="page-title">常见疾病筛查（医生用户）</h1>
 
 <div class="card">
-  <div class="card-header"><span class="card-title">AI筛查结果</span></div>
-  <div class="steps">
-    <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
-    <div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>
-    <div class="step active"><div class="step-circle">3</div>疾病筛查</div>
-    <div class="step"><div class="step-circle">4</div>联合筛查</div>
-    <div class="step"><div class="step-circle">5</div>输出报告</div>
-  </div>
-
-  <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
-
-  <div class="stats">
-    <div class="stat"><span>筛查完成</span><strong style="color:var(--success);">4/4</strong></div>
-    <div class="stat"><span>检出异常</span><strong style="color:var(--warning);">2</strong></div>
-    <div class="stat"><span>阴性结果</span><strong style="color:var(--success);">2</strong></div>
-    <div class="stat"><span>置信度均值</span><strong>88.3%</strong></div>
-  </div>
-
-  <div class="result-grid">
-    <div class="result-card" style="border-left:3px solid var(--warning);">
-      <div class="result-name">糖尿病视网膜病变（DR）</div>
-      <span class="tag warning result-status">中度 · 87%</span>
-      <div class="result-desc">检测到中度非增殖性糖尿病视网膜病变特征，存在多发微动脉瘤与少量出血灶。</div>
-      <div class="result-tips">建议：3个月内复查 · 关注血糖控制 · 必要时转诊眼底专科</div>
-    </div>
-    <div class="result-card" style="border-left:3px solid var(--success);">
-      <div class="result-name">青光眼相关病变</div>
-      <span class="tag success result-status">阴性 · 94%</span>
-      <div class="result-desc">视盘边界清晰，杯盘比未见明显异常，当前未见明确青光眼倾向。</div>
-      <div class="result-tips">建议：年度随访 · 结合眼压和视野检查 · 保持规律复查</div>
-    </div>
-    <div class="result-card" style="border-left:3px solid var(--success);">
-      <div class="result-name">年龄相关性黄斑变性（AMD）</div>
-      <span class="tag success result-status">阴性 · 91%</span>
-      <div class="result-desc">黄斑区未见典型渗出或萎缩灶，当前未见明显 AMD 图像学表现。</div>
-      <div class="result-tips">建议：半年至一年复查 · 关注视物变形症状 · 保留基线图像</div>
-    </div>
-    <div class="result-card" style="border-left:3px solid var(--primary);">
-      <div class="result-name">高血压性视网膜病变</div>
-      <span class="tag blue result-status">轻度 · 81%</span>
-      <div class="result-desc">可见轻度动静脉交叉压迫迹象与血管轻度扭曲，建议结合血压情况综合评估。</div>
-      <div class="result-tips">建议：血压管理 · 复查眼底和血压 · 保留随访记录</div>
-    </div>
-  </div>
-
-  <div id="nextActionArea" style="display:flex;gap:12px;flex-wrap:wrap;">
-    <a class="btn primary" href="多任务联合筛查.html">进入联合筛查</a>
+  <div class="card-header"><span class="card-title">医生用户流程提示</span></div>
+  <div class="alert alert-info" style="text-align:center;padding:40px 20px;font-size:15px;">
+    <strong>医生用户已跳过常见疾病筛查，正在跳转到多任务联合筛查...</strong>
   </div>
 </div>
 </div>
 <script>
-function navigateTo(url) { window.location.href = url; }
 function logout() {
   localStorage.removeItem('life_med_user');
   window.location.href = 'login.html';
 }
-function readFundusTask() {
-  try { return JSON.parse(localStorage.getItem('fundus_screening_task')) || null; } catch(e) { return null; }
-}
-function readCurrentUser() {
-  try { return JSON.parse(localStorage.getItem('life_med_user')) || {}; } catch(e) { return {}; }
-}
-function isDoctorAllowed(task) {
-  if (task && task.userType) return task.userType === 'doctor';
-  var user = readCurrentUser();
-  var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
-  if (/普通|患者|居民|公众/.test(text)) return false;
-  return /医生|医师|主任|教授|专家|管理员|技师/.test(text) || !text.trim();
-}
-function escapeHtml(str) {
-  return String(str || '').replace(/[&<>"']/g, function(ch) {
-    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
-  });
-}
-function slotLabel(slot) {
-  if (slot === 'left') return '左眼位';
-  if (slot === 'right') return '右眼位';
-  if (slot === 'first') return '第1张图像';
-  if (slot === 'second') return '第2张图像';
-  return '单眼位';
-}
-function qcEyeLabel(task, img, index) {
-  if (img.qcEye) return img.qcEye;
-  if (img.detectedEye && img.detectedEye !== '未识别') return img.detectedEye;
-  if (task && task.uploadMode === 'double') return index === 0 ? '左眼' : '右眼';
-  return '右眼';
-}
-function imageSummary(task) {
-  var imgs = task && task.images ? task.images : [];
-  if (!imgs.length) return '尚未同步图像';
-  return imgs.map(function(img, index) {
-    return slotLabel(img.slot) + '：' + img.name + '（AI质控识别：' + qcEyeLabel(task, img, index) + '）';
-  }).join('；');
-}
-function fallbackFundusSrc(index) {
-  var discX = index % 2 === 0 ? '68%' : '32%';
-  var vesselX = index % 2 === 0 ? '70%' : '30%';
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">' +
-    '<defs><radialGradient id="bg" cx="50%" cy="50%" r="58%"><stop offset="0" stop-color="#f2a33a"/><stop offset=".62" stop-color="#b96b23"/><stop offset="1" stop-color="#2a1208"/></radialGradient><radialGradient id="disc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff2b8"/><stop offset="1" stop-color="#d89a4a"/></radialGradient></defs>' +
-    '<rect width="640" height="360" fill="#05070a"/><ellipse cx="320" cy="180" rx="230" ry="168" fill="url(#bg)"/><circle cx="' + discX + '" cy="184" r="30" fill="url(#disc)" opacity=".95"/>' +
-    '<path d="M' + vesselX + ' 184 C330 132 240 104 145 82" stroke="#6b1b16" stroke-width="8" fill="none" opacity=".62"/><path d="M' + vesselX + ' 184 C350 208 258 250 154 294" stroke="#7b2018" stroke-width="7" fill="none" opacity=".58"/><path d="M' + vesselX + ' 184 C420 134 480 112 548 90" stroke="#6f1e17" stroke-width="6" fill="none" opacity=".54"/><path d="M' + vesselX + ' 184 C430 230 498 260 562 304" stroke="#6f1e17" stroke-width="6" fill="none" opacity=".54"/>' +
-    '<circle cx="310" cy="182" r="28" fill="#663018" opacity=".36"/></svg>';
-  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-}
-function imageSrc(img, index) {
-  return img.previewDataUrl || img.previewUrl || fallbackFundusSrc(index);
-}
-function imageCards(task) {
-  var imgs = task && task.images ? task.images : [];
-  if (!imgs.length) return '';
-  var html = '<div class="qc-image-grid">';
-  for (var i = 0; i < imgs.length; i++) {
-    var img = imgs[i];
-    var eye = qcEyeLabel(task, img, i);
-    html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')">' +
-      '<div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div>' +
-      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看原图</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
-      '</div>';
+(function() {
+  var user;
+  try { user = JSON.parse(localStorage.getItem('life_med_user')); } catch(e) {}
+  if (user && user.name) {
+    document.getElementById('headerUserName').textContent = user.name;
   }
-  html += '</div>';
-  return html;
-}
-function renderFundusTaskSummary() {
-  var el = document.getElementById('taskSummary');
-  if (!el) return;
-  var task = readFundusTask();
-  if (!task) {
-    el.className = 'task-summary empty';
-    el.innerHTML = '暂无已创建的筛查任务，当前页面展示示例筛查结果。';
-    return;
-  }
-  var patient = task.patient || {};
-  el.className = 'task-summary';
-  el.innerHTML =
-    '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
-    '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
-    '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (task.userType === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
-    '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
-    imageCards(task);
-}
-function openQcImage(index) {
-  var task = readFundusTask();
-  var imgs = task && task.images ? task.images : [];
-  var img = imgs[index];
-  if (!img) return;
-  var overlay = document.getElementById('qcImageOverlay');
-  document.getElementById('qcPreviewImage').src = imageSrc(img, index);
-  document.getElementById('qcPreviewFilename').textContent = img.name + ' · AI质控识别：' + qcEyeLabel(task, img, index);
-  overlay.classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeQcImage() {
-  var overlay = document.getElementById('qcImageOverlay');
-  overlay.classList.remove('show');
-  document.body.style.overflow = '';
-}
-function renderNextAction() {
-  var area = document.getElementById('nextActionArea');
-  if (!area) return;
-  var task = readFundusTask();
-  if (isDoctorAllowed(task)) {
-    area.innerHTML = '<a class="btn primary" href="多任务联合筛查.html">进入联合筛查</a><a class="btn secondary" href="输出筛查报告.html">直接生成报告</a>';
-  } else {
-    area.innerHTML = '<a class="btn primary" href="输出筛查报告.html">生成普通筛查报告</a><span class="tag gray">普通用户不可进入多任务联合筛查</span>';
-  }
-}
-document.addEventListener('DOMContentLoaded', function() {
-  try {
-    var user = JSON.parse(localStorage.getItem('life_med_user'));
-    if (user && user.name) {
-      document.getElementById('headerUserName').textContent = user.name;
-    }
-  } catch(e) {}
-  var path = window.location.pathname.replace(/\\/g, '/');
-  var currentPage = path.split('/').pop();
-  var menuItems = document.querySelectorAll('.sidebar .menu-item');
-  menuItems.forEach(function(item) {
-    var href = item.getAttribute('href');
-    if (href && (href === currentPage || href.endsWith('/' + currentPage))) {
-      item.classList.add('active');
-    }
-  });
-  renderFundusTaskSummary();
-  renderNextAction();
-  var overlay = document.getElementById('qcImageOverlay');
-  if (overlay) {
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeQcImage();
-    });
-  }
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeQcImage();
-  });
-});
+  setTimeout(function() {
+    window.location.href = '多任务联合筛查.html?role=doctor';
+  }, 800);
+})();
 </script>
-
-<div class="image-preview-overlay" id="qcImageOverlay">
-  <button class="preview-close" onclick="closeQcImage()">&times;</button>
-  <img id="qcPreviewImage" src="" alt="">
-  <div class="preview-filename" id="qcPreviewFilename"></div>
-</div>
 
 </body>
 </html>

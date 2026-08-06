@@ -157,6 +157,78 @@ input, select, textarea { font: inherit; outline: none; }
 }
 .upload-zone .upload-hint { color: var(--soft); font-size: 12px; margin-top: 6px; }
 
+.task-panel {
+  padding: 14px 16px; border-radius: 14px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 14px;
+}
+.task-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.task-panel-title { font-size: 14px; font-weight: 800; color: var(--text); }
+.required { color: var(--danger); font-weight: 800; }
+.task-meta-line { color: var(--soft); font-size: 12px; }
+.upload-control-row {
+  display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+.segment-control {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px;
+  border-radius: 12px; background: #f0f4fa; box-shadow: inset 0 0 0 1px #dde7f4;
+}
+.segment-control button {
+  min-height: 32px; padding: 0 14px; border-radius: 9px; color: var(--muted);
+  background: transparent; font-size: 13px; font-weight: 800;
+}
+.segment-control button.active {
+  color: #fff; background: linear-gradient(90deg, var(--primary), var(--primary-2));
+  box-shadow: 0 8px 16px rgba(22,93,255,.14);
+}
+.slot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.slot-grid.single { grid-template-columns: 1fr; }
+.upload-slot {
+  border: 1px dashed #b5c7e6; border-radius: 14px; background: #fbfdff;
+  padding: 14px; min-height: 248px; transition: .16s ease;
+}
+.upload-slot:hover { border-color: var(--primary); background: #f5f9ff; }
+.upload-slot.uploaded { border-style: solid; border-color: #8bb9ff; background: #f8fbff; }
+.slot-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.slot-title { font-size: 14px; font-weight: 800; color: var(--text); }
+.slot-state { color: var(--soft); font-size: 12px; line-height: 1.7; }
+.slot-file-name { font-size: 13px; color: var(--text); font-weight: 700; word-break: break-all; margin-bottom: 6px; }
+.slot-preview {
+  min-height: 140px; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden;
+  background: #eef3fa; box-shadow: inset 0 0 0 1px #e3ebf6;
+  display: flex; align-items: center; justify-content: center; color: var(--soft);
+  margin-bottom: 10px;
+}
+.slot-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slot-empty {
+  min-height: 140px; border-radius: 12px; background: #f4f8fd;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: var(--soft); font-size: 12px; margin-bottom: 10px;
+}
+.slot-empty .plus {
+  width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: #e8f3ff; color: var(--primary); font-size: 22px; margin-bottom: 8px;
+}
+.slot-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+.slot-actions select {
+  min-height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: #fff; color: var(--muted); font-size: 12px; font-weight: 700;
+}
+.inline-check {
+  display: inline-flex; align-items: center; gap: 8px; color: var(--muted);
+  font-size: 13px; font-weight: 700;
+}
+.inline-check input { width: 16px; height: 16px; accent-color: var(--primary); }
+.task-summary-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;
+}
+.task-summary-item {
+  padding: 10px 12px; border-radius: 10px; background: #fff;
+  box-shadow: inset 0 0 0 1px #edf2f9;
+}
+.task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
+.task-summary-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; }
+
 /* Thumbnail Area */
 #thumbnailArea { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
 .thumb-card {
@@ -397,6 +469,7 @@ input, select, textarea { font: inherit; outline: none; }
   .main-content { margin-left: 60px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .result-grid { grid-template-columns: 1fr; }
+  .slot-grid, .task-summary-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
@@ -405,6 +478,7 @@ input, select, textarea { font: inherit; outline: none; }
   .main-content { margin-left: 0; padding: 14px; }
   .stats { grid-template-columns: 1fr; }
   .form-row { flex-direction: column; }
+  .upload-control-row, .task-panel-head { align-items: flex-start; flex-direction: column; }
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -420,17 +494,21 @@ input, select, textarea { font: inherit; outline: none; }
 </div>
 <div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
 <div class="sidebar" id="sidebar">
-<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查</div>
-<a class="menu-item" href="眼底图像输入.html" class="active">眼底图像输入</a>
-<a class="menu-item" href="图像质量质控.html">图像质量质控</a>
-<a class="menu-item" href="常见疾病筛查.html">常见疾病筛查</a>
-<a class="menu-item" href="多任务联合筛查.html">多任务联合筛查</a>
-<a class="menu-item" href="输出筛查报告.html">输出筛查报告</a></div></div><div class="main-content">
+<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
+<a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a></div>
+<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
+<a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
+<a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
+<a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
+<a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div><div class="main-content">
 <div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>眼底图像输入</strong></div>
 <h1 class="page-title">眼底图像输入</h1>
 
 <div class="card">
-  <div class="card-header"><span class="card-title">眼底图像上传</span></div>
+  <div class="card-header"><span class="card-title">图像上传</span></div>
   <div class="steps">
     <div class="step active"><div class="step-circle">1</div>上传图像</div>
     <div class="step"><div class="step-circle">2</div>质量质控</div>
@@ -439,15 +517,69 @@ input, select, textarea { font: inherit; outline: none; }
     <div class="step"><div class="step-circle">5</div>输出报告</div>
   </div>
 
-  <div class="upload-zone" onclick="document.getElementById('fi').click()" id="uploadZone">
-    <div>
-      <div class="plus">+</div>
-      <div style="font-weight:700;color:var(--text);">点击或拖拽上传眼底图像</div>
-      <div class="upload-hint">支持 JPG / PNG / DICOM / TIFF 格式，单文件最大 50MB</div>
-      <div id="filePickState" class="upload-hint" style="color:var(--primary);font-weight:700;">尚未选择文件</div>
-      <input type="file" id="fi" accept="image/*,.dcm,.dicom" multiple style="display:none" onchange="handleFiles(this.files)">
+  <div class="task-panel">
+    <div class="task-panel-head">
+      <div>
+        <div class="task-panel-title">筛查任务创建</div>
+        <div class="task-meta-line">先确认患者身份，再上传眼底彩照；图像真实性、眼别和质量判定统一在图像质量质控模块完成。</div>
+      </div>
+      <span class="tag blue" id="userPermissionNote">权限识别中</span>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>患者姓名 <span class="required">*</span></label>
+        <input id="taskPatientName" type="text" placeholder="请输入患者姓名">
+      </div>
+      <div class="form-group">
+        <label>年龄 <span class="required">*</span></label>
+        <input id="taskPatientAge" type="number" min="0" max="120" placeholder="请输入年龄">
+      </div>
+      <div class="form-group">
+        <label>性别 <span class="required">*</span></label>
+        <select id="taskPatientGender">
+          <option value="">请选择</option>
+          <option>男</option>
+          <option>女</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <button class="btn primary" onclick="createScreeningTask()">创建筛查任务</button>
+      <button class="btn secondary" onclick="clearScreeningTask()">重新创建</button>
+      <span class="task-meta-line" id="taskCreatedState">尚未创建筛查任务，上传功能暂不可用。</span>
     </div>
   </div>
+
+  <div class="task-panel" id="createdTaskSummary" style="display:none;">
+    <div class="task-panel-head">
+      <div>
+        <div class="task-panel-title">当前筛查任务</div>
+        <div class="task-meta-line">患者信息会同步到质控、常见疾病筛查、多任务联合筛查和报告页面。</div>
+      </div>
+      <span class="tag success">任务已创建</span>
+    </div>
+    <div class="task-summary-grid">
+      <div class="task-summary-item"><span>任务编号</span><strong id="summaryTaskId">—</strong></div>
+      <div class="task-summary-item"><span>患者</span><strong id="summaryPatient">—</strong></div>
+      <div class="task-summary-item"><span>筛查权限</span><strong id="summaryPermission">—</strong></div>
+      <div class="task-summary-item"><span>图像数量</span><strong id="summaryMode">—</strong></div>
+    </div>
+  </div>
+
+  <div class="upload-control-row">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span class="task-meta-line" style="font-weight:800;color:var(--muted);">上传模式：</span>
+      <div class="segment-control" id="uploadModeControl">
+        <button type="button" class="active" data-mode="single" onclick="setUploadMode('single')">单眼</button>
+        <button type="button" data-mode="double" onclick="setUploadMode('double')">双眼</button>
+      </div>
+    </div>
+  </div>
+  <input type="file" id="fi" accept=".jpg,.jpeg,.png,image/jpeg,image/png" style="display:none" onchange="handleFiles(this.files)">
+
+  <div id="singleSlotShell" class="slot-grid single"></div>
+  <div id="doubleSlotShell" class="slot-grid" style="display:none;"></div>
+  <div id="uploadReview" style="margin-top:12px;"></div>
 
   <div id="thumbnailArea" style="display:none;"></div>
 
@@ -456,14 +588,14 @@ input, select, textarea { font: inherit; outline: none; }
   <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
     <button class="btn primary lg" onclick="startProc()">开始处理</button>
     <button class="btn secondary" onclick="resetUp()">重置</button>
-    <span style="color:var(--soft);font-size:12px;">上传后自动进入质控流程，支持批量上传，每个文件生成独立记录。</span>
+    <span style="color:var(--soft);font-size:12px;">提交后进入质控流程；常见疾病筛查对所有用户开放，多任务联合筛查仅医生用户可进入。</span>
   </div>
 </div>
 
 <div class="card">
   <div class="card-header">
     <span class="card-title">筛查记录</span>
-    <button class="btn primary small" onclick="location.href='眼底图像输入.html'">刷新</button>
+    <button class="btn primary small" onclick="location.href='眼底图像输入.html' + roleQuery()">刷新</button>
   </div>
   <div class="stats">
     <div class="stat stat-active" onclick="switchTab('全部', this)"><span>总记录</span><strong id="statTotal">4</strong></div>
@@ -504,21 +636,531 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // 初始化表格
-  updateStats();
-  renderTable();
+  initScreeningInputPage();
+  activateFlowSidebar();
 });
 </script>
 <script>
-/* ====== 筛查记录 Tab 切换 ====== */
+/* ====== 筛查任务与记录 ====== */
+var FUNDUS_TASK_KEY = 'fundus_screening_task';
+var uploadMode = 'single';
+var selectedSlot = 'bulk';
+var currentTask = null;
+var uploadFiles = { single: null, first: null, second: null };
+var currentTab = '全部';
+
 var screeningRecords = [
-  { taskName: '右眼_眼底彩照_001.jpg', taskSub: 'FS-260626-001 · 市中心门诊', patientName: '李*', patientId: 'OPD-202606-001', uploadTime: '2026-06-26 14:30', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-001' },
-  { taskName: '右眼_眼底彩照_004.dcm', taskSub: 'FS-260626-004 · 社区筛查', patientName: '赵*', patientId: 'OPD-202606-003', uploadTime: '2026-06-26 10:05', qcStatus: '质控不合格', analysisStatus: '等待重传', taskId: 'FS-260626-004' },
-  { taskName: '左眼_眼底彩照_002.jpg', taskSub: 'FS-260626-002 · 院内复查', patientName: '王*', patientId: 'OPD-202606-002', uploadTime: '2026-06-26 14:35', qcStatus: '质控通过', analysisStatus: '分析失败', taskId: 'FS-260626-002' },
-  { taskName: '双眼_眼底OCT_003.png', taskSub: 'FS-260626-003 · 眼科专科门诊', patientName: '陈*', patientId: 'OPD-202606-004', uploadTime: '2026-06-26 09:12', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-003' }
+  { taskName: '眼底彩照_001.jpg', taskSub: 'FS-260626-001 · 市中心门诊', patientName: '李*', patientId: 'OPD-202606-001', uploadTime: '2026-06-26 14:30', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-001' },
+  { taskName: '眼底彩照_004.jpg', taskSub: 'FS-260626-004 · 社区筛查', patientName: '赵*', patientId: 'OPD-202606-003', uploadTime: '2026-06-26 10:05', qcStatus: '质控不合格', analysisStatus: '等待重传', taskId: 'FS-260626-004' },
+  { taskName: '眼底彩照_002.jpg', taskSub: 'FS-260626-002 · 院内复查', patientName: '王*', patientId: 'OPD-202606-002', uploadTime: '2026-06-26 14:35', qcStatus: '质控通过', analysisStatus: '分析失败', taskId: 'FS-260626-002' },
+  { taskName: '双眼_眼底彩照_003.jpg', taskSub: 'FS-260626-003 · 眼科专科门诊', patientName: '陈*', patientId: 'OPD-202606-004', uploadTime: '2026-06-26 09:12', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-003' }
 ];
 
-var currentTab = '全部';
+function initScreeningInputPage() {
+  updateUserPermissionNote();
+  restoreScreeningTask();
+  renderUploadSlots();
+  refreshUploadReview();
+  mergeCurrentTaskRecord();
+  updateStats();
+  renderTable();
+}
+
+function getCurrentUser() {
+  try { return JSON.parse(localStorage.getItem('life_med_user')) || {}; } catch(e) { return {}; }
+}
+
+function getFlowRoleFromUrl() {
+  var role = new URLSearchParams(window.location.search).get('role');
+  return role === 'doctor' || role === 'normal' ? role : '';
+}
+
+function isDoctorUser() {
+  var flowRole = getFlowRoleFromUrl();
+  if (flowRole) return flowRole === 'doctor';
+  var user = getCurrentUser();
+  var text = ((user.role || '') + ' ' + (user.name || '')).toLowerCase();
+  if (/普通|患者|居民|公众/.test(text)) return false;
+  return /医生|医师|主任|教授|专家|管理员|技师/.test(text) || !text.trim();
+}
+
+function getUserTypeText() {
+  return isDoctorUser() ? '医生用户：普通筛查 + 多任务联合筛查' : '普通用户：仅支持常见疾病筛查';
+}
+
+function getFlowRole() {
+  return isDoctorUser() ? 'doctor' : 'normal';
+}
+
+function roleQuery() {
+  return '?role=' + getFlowRole();
+}
+
+function activateFlowSidebar() {
+  var currentPage = window.location.pathname.replace(/\\/g, '/').split('/').pop();
+  var role = getFlowRole();
+  document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
+    var itemPage = item.getAttribute('data-flow-page');
+    var itemRole = item.getAttribute('data-flow-role');
+    item.classList.toggle('active', itemPage === currentPage && itemRole === role);
+  });
+}
+
+function updateUserPermissionNote() {
+  var note = document.getElementById('userPermissionNote');
+  if (!note) return;
+  if (isDoctorUser()) {
+    note.className = 'tag blue';
+    note.textContent = '医生用户';
+  } else {
+    note.className = 'tag gray';
+    note.textContent = '普通用户';
+  }
+}
+
+function makeTaskId() {
+  var d = new Date();
+  var y = String(d.getFullYear()).slice(2);
+  var m = String(d.getMonth() + 1).padStart(2, '0');
+  var day = String(d.getDate()).padStart(2, '0');
+  var seq = String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0') + String(d.getSeconds()).padStart(2, '0');
+  return 'FS-' + y + m + day + '-' + seq;
+}
+
+function formatNow() {
+  var d = new Date();
+  var pad = function(n) { return String(n).padStart(2, '0'); };
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+function setFilePickState(text) {
+  var el = document.getElementById('filePickState');
+  if (el) el.textContent = text;
+}
+
+function createScreeningTask() {
+  var name = document.getElementById('taskPatientName').value.trim();
+  var age = document.getElementById('taskPatientAge').value.trim();
+  var gender = document.getElementById('taskPatientGender').value;
+  if (!name || !age || !gender) {
+    alert('请先填写患者姓名、年龄、性别，再创建筛查任务。');
+    return;
+  }
+  currentTask = {
+    taskId: makeTaskId(),
+    patient: { name: name, age: age, gender: gender },
+    userType: isDoctorUser() ? 'doctor' : 'normal',
+    userTypeText: getUserTypeText(),
+    uploadMode: uploadMode,
+    createdAt: formatNow(),
+    updatedAt: formatNow(),
+    status: '待选择图像',
+    images: [],
+    samePatientConfirmed: false
+  };
+  persistCurrentTask();
+  renderTaskSummary();
+  refreshUploadReview();
+  mergeCurrentTaskRecord();
+  updateStats();
+  renderTable();
+}
+
+function clearScreeningTask() {
+  if (!confirm('确认重新创建筛查任务？当前未提交的上传信息会被清空。')) return;
+  var clearedTaskId = currentTask ? currentTask.taskId : '';
+  localStorage.removeItem(FUNDUS_TASK_KEY);
+  currentTask = null;
+  uploadFiles = { single: null, first: null, second: null };
+  if (clearedTaskId) {
+    screeningRecords = screeningRecords.filter(function(rec) { return rec.taskId !== clearedTaskId; });
+  }
+  document.getElementById('taskPatientName').value = '';
+  document.getElementById('taskPatientAge').value = '';
+  document.getElementById('taskPatientGender').value = '';
+  renderTaskSummary();
+  renderUploadSlots();
+  refreshUploadReview();
+  resetUp();
+  mergeCurrentTaskRecord();
+  updateStats();
+  renderTable();
+}
+
+function restoreScreeningTask() {
+  try { currentTask = JSON.parse(localStorage.getItem(FUNDUS_TASK_KEY)) || null; } catch(e) { currentTask = null; }
+  if (currentTask && currentTask.patient) {
+    var flowRole = getFlowRoleFromUrl();
+    if (flowRole && currentTask.userType !== flowRole) {
+      currentTask.userType = flowRole;
+      currentTask.userTypeText = getUserTypeText();
+    }
+    document.getElementById('taskPatientName').value = currentTask.patient.name || '';
+    document.getElementById('taskPatientAge').value = currentTask.patient.age || '';
+    document.getElementById('taskPatientGender').value = currentTask.patient.gender || '';
+    uploadMode = currentTask.uploadMode || 'single';
+    for (var i = 0; i < (currentTask.images || []).length; i++) {
+      var img = currentTask.images[i];
+      var slot = img.slot || 'single';
+      if (slot === 'left') slot = 'first';
+      if (slot === 'right') slot = 'second';
+      img.slot = slot;
+      if (img.previewDataUrl && !img.previewUrl) img.previewUrl = img.previewDataUrl;
+      uploadFiles[slot] = img;
+    }
+  }
+  renderTaskSummary();
+  setUploadMode(uploadMode, true);
+}
+
+function persistCurrentTask() {
+  if (!currentTask) return;
+  currentTask.uploadMode = uploadMode;
+  currentTask.updatedAt = formatNow();
+  currentTask.images = collectImageMetas();
+  localStorage.setItem(FUNDUS_TASK_KEY, JSON.stringify(currentTask));
+}
+
+function renderTaskSummary() {
+  var state = document.getElementById('taskCreatedState');
+  var box = document.getElementById('createdTaskSummary');
+  if (!currentTask) {
+    state.textContent = '尚未创建筛查任务，上传功能暂不可用。';
+    box.style.display = 'none';
+    return;
+  }
+  state.textContent = '已创建任务：' + currentTask.taskId + '，可继续上传图像。';
+  box.style.display = 'block';
+  document.getElementById('summaryTaskId').textContent = currentTask.taskId;
+  document.getElementById('summaryPatient').textContent = currentTask.patient.name + ' · ' + currentTask.patient.age + '岁 · ' + currentTask.patient.gender;
+  document.getElementById('summaryPermission').textContent = currentTask.userTypeText;
+  document.getElementById('summaryMode').textContent = uploadMode === 'double' ? '2张眼底彩照' : '1张眼底彩照';
+}
+
+function setUploadMode(mode, silent) {
+  uploadMode = mode;
+  var buttons = document.querySelectorAll('#uploadModeControl button');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].classList.toggle('active', buttons[i].getAttribute('data-mode') === mode);
+  }
+  document.getElementById('singleSlotShell').style.display = mode === 'single' ? 'grid' : 'none';
+  document.getElementById('doubleSlotShell').style.display = mode === 'double' ? 'grid' : 'none';
+  if (currentTask) persistCurrentTask();
+  renderUploadSlots();
+  refreshUploadReview();
+  renderTaskSummary();
+  if (!silent) setFilePickState(mode === 'double' ? '双眼模式：请上传 2 张眼底彩照' : '单眼模式：请上传 1 张眼底彩照');
+}
+
+function triggerSlotUpload(slot) {
+  if (!ensureTaskCreated()) return;
+  selectedSlot = slot;
+  var input = document.getElementById('fi');
+  input.multiple = false;
+  input.click();
+}
+
+function ensureTaskCreated() {
+  if (currentTask) return true;
+  alert('请先创建筛查任务，再上传眼底图像。');
+  return false;
+}
+
+function makeFileMeta(file, slot) {
+  return {
+    slot: slot,
+    name: file.name,
+    size: file.size,
+    type: file.type || '',
+    previewUrl: URL.createObjectURL(file),
+    fileObj: file
+  };
+}
+
+function handleFiles(files) {
+  if (!ensureTaskCreated()) {
+    document.getElementById('fi').value = '';
+    return;
+  }
+  if (!files || !files.length) return;
+  var invalidFiles = [];
+  for (var fileIndex = 0; fileIndex < files.length; fileIndex++) {
+    if (!/\.(jpg|jpeg|png)$/i.test(files[fileIndex].name)) invalidFiles.push(files[fileIndex].name);
+  }
+  if (invalidFiles.length) {
+    alert('当前模块仅支持上传眼底彩照，文件格式限定为 JPG / PNG。请重新选择：' + invalidFiles.join('、'));
+    document.getElementById('fi').value = '';
+    return;
+  }
+  if (uploadMode === 'single') {
+    uploadFiles.single = makeFileMeta(files[0], 'single');
+  } else if (selectedSlot === 'first' || selectedSlot === 'second') {
+    uploadFiles[selectedSlot] = makeFileMeta(files[0], selectedSlot);
+  } else {
+    if (files[0]) uploadFiles.first = makeFileMeta(files[0], 'first');
+    if (files[1]) uploadFiles.second = makeFileMeta(files[1], 'second');
+  }
+
+  selectedSlot = 'bulk';
+  enrichUploadedFilesWithPreviews(function() {
+    persistCurrentTask();
+    renderUploadSlots();
+    refreshUploadReview();
+    renderSelectedFileList();
+    hideFloatingThumbnails();
+    mergeCurrentTaskRecord();
+    updateStats();
+    renderTable();
+  });
+}
+
+function enrichUploadedFilesWithPreviews(callback) {
+  var slots = uploadMode === 'double' ? ['first', 'second'] : ['single'];
+  var pending = 0;
+  function done() {
+    pending--;
+    if (pending <= 0 && callback) callback();
+  }
+  for (var i = 0; i < slots.length; i++) {
+    var meta = uploadFiles[slots[i]];
+    if (!meta || !meta.fileObj || meta.previewDataUrl) continue;
+    pending++;
+    readFileAsDataUrl(meta, done);
+  }
+  if (!pending && callback) callback();
+}
+
+function readFileAsDataUrl(meta, callback) {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var rawData = e.target.result;
+    var image = new Image();
+    image.onload = function() {
+      try {
+        var maxSide = 1000;
+        var scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        var canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        meta.previewDataUrl = canvas.toDataURL('image/jpeg', 0.84);
+      } catch(e) {
+        meta.previewDataUrl = rawData;
+      }
+      meta.previewUrl = meta.previewDataUrl;
+      callback();
+    };
+    image.onerror = function() {
+      meta.previewDataUrl = rawData;
+      meta.previewUrl = meta.previewDataUrl;
+      callback();
+    };
+    image.src = rawData;
+  };
+  reader.onerror = function() {
+    callback();
+  };
+  reader.readAsDataURL(meta.fileObj);
+}
+
+function renderSelectedFileList() {
+  var p = document.getElementById('up');
+  var files = collectImageMetas();
+  if (!files.length) {
+    p.style.display = 'none';
+    p.innerHTML = '';
+    return;
+  }
+  p.style.display = 'block';
+  var required = uploadMode === 'double' ? 2 : 1;
+  var html = '<div class="alert alert-info">当前已上传 ' + files.length + '/' + required + ' 张眼底彩照</div>';
+  for (var i = 0; i < files.length; i++) {
+    html += '<p style="font-size:13px;margin:4px 0;color:var(--muted);">' + escapeHtml(files[i].name) + ' (' + (files[i].size/1024).toFixed(1) + ' KB)</p>';
+  }
+  p.innerHTML = html;
+  setFilePickState(uploadMode === 'double' ? getDoubleFileStateText() : getSingleFileStateText());
+}
+
+function hideFloatingThumbnails() {
+  var ta = document.getElementById('thumbnailArea');
+  if (!ta) return;
+  ta.style.display = 'none';
+  ta.innerHTML = '';
+}
+
+function renderThumbnails(files) {
+  var ta = document.getElementById('thumbnailArea');
+  ta.style.display = 'flex';
+  ta.innerHTML = '';
+  for (var j = 0; j < files.length; j++) {
+    var file = files[j];
+    var card = document.createElement('div');
+    card.className = 'thumb-card';
+    var isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|tiff?)$/i.test(file.name);
+    if (isImage) {
+      var img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.alt = file.name;
+      card.appendChild(img);
+    } else {
+      var ph = document.createElement('div');
+      ph.className = 'thumb-placeholder';
+      var ext = file.name.split('.').pop().toUpperCase();
+      ph.textContent = ext || 'FILE';
+      card.appendChild(ph);
+    }
+    var nameLabel = document.createElement('div');
+    nameLabel.className = 'thumb-name';
+    nameLabel.textContent = file.name;
+    card.appendChild(nameLabel);
+    card.onclick = (function(fileObj) { return function() { openImagePreview(fileObj); }; })(file);
+    ta.appendChild(card);
+  }
+}
+
+function getSingleFileStateText() {
+  return uploadFiles.single ? '已上传：' + uploadFiles.single.name : '单眼模式：尚未上传眼底彩照';
+}
+
+function getDoubleFileStateText() {
+  var count = (uploadFiles.first ? 1 : 0) + (uploadFiles.second ? 1 : 0);
+  return '双眼模式：已上传 ' + count + '/2 张眼底彩照';
+}
+
+function renderUploadSlots() {
+  var singleShell = document.getElementById('singleSlotShell');
+  var doubleShell = document.getElementById('doubleSlotShell');
+  if (!singleShell || !doubleShell) return;
+  singleShell.innerHTML = buildSlotHtml('single', '图像上传位', '请上传 1 张眼底彩照，格式限定 JPG/PNG');
+  doubleShell.innerHTML = buildSlotHtml('first', '第1张图像上传位', '请上传第 1 张眼底彩照，格式限定 JPG/PNG') + buildSlotHtml('second', '第2张图像上传位', '请上传第 2 张眼底彩照，格式限定 JPG/PNG');
+}
+
+function buildSlotHtml(slot, title, hint) {
+  var meta = uploadFiles[slot];
+  var preview = meta ? buildSlotPreview(meta) : '<div class="slot-empty"><div class="plus">+</div><div>尚未上传图像</div></div>';
+  var state = meta ? preview + '<div class="slot-file-name">' + escapeHtml(meta.name) + '</div><div class="slot-state">已上传。提交后进入图像质量质控，由AI统一判定是否为眼底图像、眼别与图像质量。</div>' : preview + '<div class="slot-state">' + hint + '</div>';
+  var actions = meta ? '<div class="slot-actions" onclick="event.stopPropagation();"><button class="btn secondary small" type="button" onclick="removeSlotFile(\'' + slot + '\')">移除</button></div>' : '';
+  return '<div class="upload-slot' + (meta ? ' uploaded' : '') + '" onclick="triggerSlotUpload(\'' + slot + '\')"><div class="slot-header"><span class="slot-title">' + title + '</span><button class="btn secondary small" type="button" onclick="event.stopPropagation();triggerSlotUpload(\'' + slot + '\')">图像上传</button></div>' + state + actions + '</div>';
+}
+
+function buildSlotPreview(meta) {
+  if (meta && meta.previewUrl) {
+    return '<div class="slot-preview" onclick="event.stopPropagation();openUploadedPreview(\'' + meta.slot + '\')"><img src="' + escapeHtml(meta.previewUrl) + '" alt="' + escapeHtml(meta.name) + '"></div>';
+  }
+  return '<div class="slot-preview"><span>已选择图像，刷新页面后需重新选择文件以预览</span></div>';
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, function(ch) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+  });
+}
+
+function removeSlotFile(slot) {
+  uploadFiles[slot] = null;
+  persistCurrentTask();
+  renderUploadSlots();
+  refreshUploadReview();
+  renderSelectedFileList();
+  setFilePickState(uploadMode === 'double' ? getDoubleFileStateText() : getSingleFileStateText());
+}
+
+function collectImageMetas() {
+  var slots = uploadMode === 'double' ? ['first', 'second'] : ['single'];
+  var list = [];
+  for (var i = 0; i < slots.length; i++) {
+    var meta = uploadFiles[slots[i]];
+    if (!meta) continue;
+    list.push({
+      slot: meta.slot,
+      name: meta.name,
+      size: meta.size,
+      type: meta.type || '',
+      previewDataUrl: meta.previewDataUrl || ''
+    });
+  }
+  return list;
+}
+
+function refreshUploadReview() {
+  var box = document.getElementById('uploadReview');
+  if (!box) return;
+  if (!currentTask) {
+    box.innerHTML = '<div class="alert alert-warning">请先创建筛查任务，再上传眼底彩照。</div>';
+    return;
+  }
+  var messages = [];
+  var type = 'info';
+  if (uploadMode === 'single') {
+    if (!uploadFiles.single) messages.push('单眼模式需要上传 1 张眼底彩照。');
+    else {
+      messages.push('已上传 1 张眼底彩照。提交后进入图像质量质控模块，由AI完成是否为眼底图像、眼别和质量判定。');
+      type = 'success';
+    }
+  } else {
+    var first = uploadFiles.first;
+    var second = uploadFiles.second;
+    var count = (first ? 1 : 0) + (second ? 1 : 0);
+    if (count < 2) {
+      messages.push('双眼模式需要上传 2 张眼底彩照，当前已上传 ' + count + '/2 张。');
+      type = 'warning';
+    } else {
+      messages.push('已上传 2 张眼底彩照。提交后进入图像质量质控模块，由AI完成是否为眼底图像、眼别和质量判定。');
+      type = 'success';
+    }
+  }
+  box.innerHTML = '<div class="alert alert-' + type + '">' + messages.join(' ') + '</div>';
+  if (currentTask) persistCurrentTask();
+}
+
+function mergeCurrentTaskRecord() {
+  var next = [];
+  for (var i = 0; i < screeningRecords.length; i++) {
+    if (!currentTask || screeningRecords[i].taskId !== currentTask.taskId) next.push(screeningRecords[i]);
+  }
+  screeningRecords = next;
+  if (!currentTask) return;
+  var images = collectImageMetas();
+  var imageCount = images.length;
+  if (!imageCount) return;
+  var modeText = uploadMode === 'double' ? '双眼图像' : '单眼图像';
+  var taskName = uploadMode === 'double' ? '双眼眼底彩照任务' : images[0].name;
+  var patient = currentTask.patient || {};
+  screeningRecords.unshift({
+    taskName: taskName,
+    taskSub: currentTask.taskId + ' · ' + (currentTask.userType === 'doctor' ? '医生筛查任务' : '普通筛查任务') + ' · ' + modeText,
+    patientName: patient.name || '—',
+    patientId: (patient.age || '—') + '岁 · ' + (patient.gender || '—'),
+    uploadTime: currentTask.updatedAt || currentTask.createdAt || formatNow(),
+    qcStatus: currentTask.qcStatus && currentTask.qcStatus !== '待上传' ? currentTask.qcStatus : '待质控',
+    analysisStatus: currentTask.analysisStatus && currentTask.analysisStatus !== '待上传' ? currentTask.analysisStatus : '待提交',
+    taskId: currentTask.taskId
+  });
+}
+
+function validateBeforeSubmit() {
+  if (!currentTask) {
+    alert('请先创建筛查任务。');
+    return false;
+  }
+  if (uploadMode === 'single') {
+    var single = uploadFiles.single;
+    if (!single) {
+      alert('请先上传单眼眼底图像。');
+      return false;
+    }
+    return true;
+  }
+
+  var first = uploadFiles.first;
+  var second = uploadFiles.second;
+  if (!first || !second) {
+    alert('双眼模式需要上传 2 张眼底图像。');
+    return false;
+  }
+  return true;
+}
 
 function switchTab(tab, el) {
   currentTab = tab;
@@ -530,12 +1172,13 @@ function switchTab(tab, el) {
 }
 
 function updateStats() {
-  var total = screeningRecords.length;
+  var visibleRecords = getVisibleScreeningRecords();
+  var total = visibleRecords.length;
   var qcPass = 0, qcFail = 0, analysisFail = 0;
-  for (var i = 0; i < screeningRecords.length; i++) {
-    if (screeningRecords[i].qcStatus === '质控通过') qcPass++;
-    if (screeningRecords[i].qcStatus === '质控不合格') qcFail++;
-    if (screeningRecords[i].analysisStatus === '分析失败') analysisFail++;
+  for (var i = 0; i < visibleRecords.length; i++) {
+    if (visibleRecords[i].qcStatus === '质控通过') qcPass++;
+    if (visibleRecords[i].qcStatus === '质控不合格') qcFail++;
+    if (visibleRecords[i].analysisStatus === '分析失败') analysisFail++;
   }
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statQcPass').textContent = qcPass;
@@ -543,9 +1186,16 @@ function updateStats() {
   document.getElementById('statAnalysisFail').textContent = analysisFail;
 }
 
+function getVisibleScreeningRecords() {
+  return screeningRecords.filter(function(rec) {
+    return rec.qcStatus !== '待上传' && rec.analysisStatus !== '待上传';
+  });
+}
+
 function getQcTag(status) {
   if (status === '质控通过') return '<span class="tag success">质控通过</span>';
   if (status === '质控不合格') return '<span class="tag danger">质控不合格</span>';
+  if (status === '待质控') return '<span class="tag warning">待质控</span>';
   return '<span class="tag gray">' + status + '</span>';
 }
 
@@ -553,6 +1203,9 @@ function getAnalysisTag(status) {
   if (status === '已出报告') return '<span class="tag success">已出报告</span>';
   if (status === '分析失败') return '<span class="tag warning">分析失败</span>';
   if (status === '等待重传') return '<span class="tag danger">等待重传</span>';
+  if (status === '待提交') return '<span class="tag warning">待提交</span>';
+  if (status === '待质控') return '<span class="tag warning">待质控</span>';
+  if (status === '待筛查') return '<span class="tag blue">待筛查</span>';
   return '<span class="tag gray">' + status + '</span>';
 }
 
@@ -561,18 +1214,25 @@ function getActionBtn(rec) {
     return '<a class="btn secondary small" href="javascript:void(0)" onclick="openReportModal(\'' + rec.taskId + '\', \'' + rec.patientName + '\', \'' + rec.patientId + '\', \'' + rec.uploadTime + '\')">查看报告</a>';
   }
   if (rec.qcStatus === '质控不合格') {
-    return '<a class="btn secondary small" href="眼底图像输入.html">重新上传</a>';
+    return '<a class="btn secondary small" href="眼底图像输入.html' + roleQuery() + '">重新上传</a>';
   }
   if (rec.analysisStatus === '分析失败') {
-    return '<a class="btn secondary small" href="图像质量质控.html">重试分析</a>';
+    return '<a class="btn secondary small" href="图像质量质控.html' + roleQuery() + '">重试分析</a>';
+  }
+  if (rec.analysisStatus === '待提交') {
+    return '<button class="btn primary small" onclick="startProc()">提交质控</button>';
+  }
+  if (rec.analysisStatus === '待质控' || rec.analysisStatus === '待筛查' || rec.qcStatus === '待质控') {
+    return '<a class="btn secondary small" href="图像质量质控.html' + roleQuery() + '">进入质控</a>';
   }
   return '<span class="tag gray">—</span>';
 }
 
 function renderTable() {
   var filtered = [];
-  for (var i = 0; i < screeningRecords.length; i++) {
-    var r = screeningRecords[i];
+  var visibleRecords = getVisibleScreeningRecords();
+  for (var i = 0; i < visibleRecords.length; i++) {
+    var r = visibleRecords[i];
     if (currentTab === '全部') { filtered.push(r); }
     else if (currentTab === '质控通过' && r.qcStatus === '质控通过') { filtered.push(r); }
     else if (currentTab === '质控不合格' && r.qcStatus === '质控不合格') { filtered.push(r); }
@@ -598,54 +1258,6 @@ function renderTable() {
   document.getElementById('recordsTableBody').innerHTML = html;
 }
 
-function handleFiles(f) {
-  var p = document.getElementById('up');
-  p.style.display = 'block';
-  var html = '<div class="alert alert-info">已选择 ' + f.length + ' 个文件</div>';
-  for (var i = 0; i < f.length; i++) {
-    html += '<p style="font-size:13px;margin:4px 0;color:var(--muted);">' + f[i].name + ' (' + (f[i].size/1024).toFixed(1) + ' KB)</p>';
-  }
-  p.innerHTML = html;
-  document.getElementById('filePickState').textContent = '已选择 ' + f.length + ' 个文件';
-
-  // Generate thumbnails
-  var ta = document.getElementById('thumbnailArea');
-  ta.style.display = 'flex';
-  ta.innerHTML = '';
-  for (var j = 0; j < f.length; j++) {
-    var file = f[j];
-    var card = document.createElement('div');
-    card.className = 'thumb-card';
-
-    var isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|tiff?)$/i.test(file.name);
-    if (isImage) {
-      var img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
-      img.alt = file.name;
-      card.appendChild(img);
-    } else {
-      var ph = document.createElement('div');
-      ph.className = 'thumb-placeholder';
-      var ext = file.name.split('.').pop().toUpperCase();
-      ph.textContent = ext || 'FILE';
-      card.appendChild(ph);
-    }
-
-    var nameLabel = document.createElement('div');
-    nameLabel.className = 'thumb-name';
-    nameLabel.textContent = file.name;
-    card.appendChild(nameLabel);
-
-    card.onclick = (function(fileObj) {
-      return function() {
-        openImagePreview(fileObj);
-      };
-    })(file);
-
-    ta.appendChild(card);
-  }
-}
-
 function openImagePreview(file) {
   var overlay = document.getElementById('imagePreviewOverlay');
   var previewImg = document.getElementById('previewImage');
@@ -665,38 +1277,75 @@ function openImagePreview(file) {
   document.body.style.overflow = 'hidden';
 }
 
+function openUploadedPreview(slot) {
+  var meta = uploadFiles[slot];
+  if (meta && meta.fileObj) {
+    openImagePreview(meta.fileObj);
+    return;
+  }
+  if (meta && meta.previewUrl) {
+    var overlay = document.getElementById('imagePreviewOverlay');
+    var previewImg = document.getElementById('previewImage');
+    var previewName = document.getElementById('previewFilename');
+    previewImg.src = meta.previewUrl;
+    previewImg.style.display = '';
+    previewName.textContent = meta.name;
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
 function closeImagePreview() {
   var overlay = document.getElementById('imagePreviewOverlay');
   overlay.classList.remove('show');
   document.body.style.overflow = '';
 }
 
-document.getElementById('imagePreviewOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeImagePreview();
+document.addEventListener('DOMContentLoaded', function() {
+  var overlay = document.getElementById('imagePreviewOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) closeImagePreview();
+    });
+  }
 });
 
 function startProc() {
-  if (confirm('确认提交眼底图像进行质控分析？')) {
-    alert('已提交，系统将自动进入质控阶段。');
-    location.href = '图像质量质控.html';
-  }
+  if (!validateBeforeSubmit()) return;
+  if (!confirm('确认提交当前筛查任务进入图像质量质控？')) return;
+  currentTask.status = '已提交质控';
+  currentTask.qcStatus = '待质控';
+  currentTask.analysisStatus = '待质控';
+  currentTask.submittedAt = formatNow();
+  persistCurrentTask();
+  mergeCurrentTaskRecord();
+  updateStats();
+  renderTable();
+  alert('已提交，系统将自动进入质控阶段。');
+  location.href = '图像质量质控.html' + roleQuery();
 }
 
 function resetUp() {
   document.getElementById('fi').value = '';
   document.getElementById('up').style.display = 'none';
-  document.getElementById('filePickState').textContent = '尚未选择文件';
+  setFilePickState(uploadMode === 'double' ? '双眼模式：尚未上传图像' : '单眼模式：尚未上传图像');
+  uploadFiles = { single: null, first: null, second: null };
+  if (currentTask) {
+    currentTask.images = [];
+    currentTask.status = '待选择图像';
+    delete currentTask.qcStatus;
+    delete currentTask.analysisStatus;
+    persistCurrentTask();
+  }
   var ta = document.getElementById('thumbnailArea');
   ta.style.display = 'none';
   ta.innerHTML = '';
+  renderUploadSlots();
+  refreshUploadReview();
+  mergeCurrentTaskRecord();
+  updateStats();
+  renderTable();
 }
-
-document.getElementById('uploadZone').addEventListener('dragover', function(e) { e.preventDefault(); this.style.borderColor = 'var(--primary)'; });
-document.getElementById('uploadZone').addEventListener('dragleave', function() { this.style.borderColor = '#b5c7e6'; });
-document.getElementById('uploadZone').addEventListener('drop', function(e) {
-  e.preventDefault(); this.style.borderColor = '#b5c7e6';
-  if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
-});
 
 // 初始化调用已在 DOMContentLoaded 中执行
 </script>
@@ -758,7 +1407,7 @@ document.getElementById('uploadZone').addEventListener('drop', function(e) {
           <span class="info-value" id="infoImage">—</span>
         </div>
         <div class="info-card" style="grid-column:1/-1;">
-          <span class="info-label">质控评分</span>
+          <span class="info-label">质控结论</span>
           <span class="info-value" id="infoQcScore">—</span>
         </div>
       </div>
@@ -805,14 +1454,14 @@ document.getElementById('uploadZone').addEventListener('drop', function(e) {
 </div>
 
 <script>
-var currentReportData = { taskId: '', patientName: '', opdId: '', time: '', reportId: '', risk: '', followUp: '', source: '', image: '', qcScore: '' };
+var currentReportData = { taskId: '', patientName: '', opdId: '', time: '', reportId: '', risk: '', followUp: '', source: '', image: '', qcConclusion: '' };
 
 // 根据 taskId 模拟报告数据（与输出筛查报告.html 一致）
 function getReportData(taskId) {
   var dataMap = {
     'FS-260626-001': {
       reportId: 'RP-260626-001', risk: '中度', riskColor: '#f59a23', followUp: '3个月内',
-      source: '市中心门诊', image: '右眼_眼底彩照_001.jpg', qcScore: '96%',
+      source: '市中心门诊', image: '眼底彩照_001.jpg', qcConclusion: '质控通过',
       results: [
         { name: '糖尿病视网膜病变（DR）', status: '中度 · 87%', tag: 'warning', desc: '检测到中度非增殖性糖尿病视网膜病变特征，存在多发微动脉瘤与少量出血灶。', tips: '建议3个月内复查，关注血糖控制，必要时转诊眼底专科。', border: 'var(--warning)' },
         { name: '青光眼相关病变', status: '阴性 · 94%', tag: 'success', desc: '视盘边界清晰，杯盘比未见明显异常。', tips: '建议年度随访，结合眼压和视野检查。', border: 'var(--success)' },
@@ -822,7 +1471,7 @@ function getReportData(taskId) {
     },
     'FS-260626-003': {
       reportId: 'RP-260626-002', risk: '低风险', riskColor: '#00b42a', followUp: '年度随访',
-      source: '眼科专科门诊', image: '双眼_眼底OCT_003.png', qcScore: '92%',
+    source: '眼科专科门诊', image: '双眼_眼底彩照_003.jpg', qcConclusion: '质控通过',
       results: [
         { name: '糖尿病视网膜病变（DR）', status: '阴性 · 96%', tag: 'success', desc: '未见明显糖尿病视网膜病变特征。', tips: '建议年度随访，关注血糖控制。', border: 'var(--success)' },
         { name: '青光眼相关病变', status: '阴性 · 93%', tag: 'success', desc: '视盘形态正常，未见杯盘比增大。', tips: '建议年度随访。', border: 'var(--success)' },
@@ -833,7 +1482,7 @@ function getReportData(taskId) {
   };
   return dataMap[taskId] || {
     reportId: 'RP-260626-001', risk: '中度', riskColor: '#f59a23', followUp: '3个月内',
-    source: '市中心门诊', image: '右眼_眼底彩照_001.jpg', qcScore: '96%',
+    source: '市中心门诊', image: '眼底彩照_001.jpg', qcConclusion: '质控通过',
     results: [
       { name: '糖尿病视网膜病变（DR）', status: '中度 · 87%', tag: 'warning', desc: '检测到中度非增殖性糖尿病视网膜病变特征，存在多发微动脉瘤与少量出血灶。', tips: '建议3个月内复查，关注血糖控制，必要时转诊眼底专科。', border: 'var(--warning)' },
       { name: '青光眼相关病变', status: '阴性 · 94%', tag: 'success', desc: '视盘边界清晰，杯盘比未见明显异常。', tips: '建议年度随访，结合眼压和视野检查。', border: 'var(--success)' },
@@ -847,7 +1496,7 @@ function getReportData(taskId) {
 function buildTimeline(time) {
   var steps = [
     { label: '上传图像', desc: '已完成图像上传', time: time },
-    { label: '图像质控', desc: '质量合格，评分96%，可进入筛查', time: time },
+    { label: '图像质控', desc: '质量合格，可进入筛查', time: time },
     { label: '常见疾病筛查', desc: '4项筛查完成，检出2项异常', time: time },
     { label: '多任务联合筛查', desc: '病灶分割、视盘定位、血管分析均已完成', time: time },
     { label: '输出筛查报告', desc: '结构化报告已生成，可下载或打印', time: time }
@@ -879,7 +1528,7 @@ function openReportModal(taskId, patientName, opdId, time) {
   currentReportData = {
     taskId: taskId, patientName: patientName, opdId: opdId, time: time,
     reportId: reportData.reportId, risk: reportData.risk, followUp: reportData.followUp,
-    source: reportData.source, image: reportData.image, qcScore: reportData.qcScore
+    source: reportData.source, image: reportData.image, qcConclusion: reportData.qcConclusion
   };
 
   document.getElementById('modalTitle').textContent = '筛查报告详情 — ' + taskId + ' · ' + patientName;
@@ -899,7 +1548,7 @@ function openReportModal(taskId, patientName, opdId, time) {
   // 报告信息
   document.getElementById('infoSource').textContent = reportData.source;
   document.getElementById('infoImage').textContent = reportData.image;
-  document.getElementById('infoQcScore').textContent = reportData.qcScore;
+  document.getElementById('infoQcScore').textContent = reportData.qcConclusion;
 
   // 时间线
   document.getElementById('modalTimeline').innerHTML = buildTimeline(time);
@@ -1026,7 +1675,7 @@ function downloadReportPDF() {
       ['筛查时间：', currentReportData.time],
       ['来源机构：', currentReportData.source || '—'],
       ['图片来源：', currentReportData.image || '—'],
-      ['质控评分：', currentReportData.qcScore || '—']
+      ['质控结论：', currentReportData.qcConclusion || '—']
     ];
     infoLines.forEach(function(row) {
       doc.setTextColor(124, 139, 161);
