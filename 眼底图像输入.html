@@ -509,13 +509,7 @@ input, select, textarea { font: inherit; outline: none; }
 
 <div class="card">
   <div class="card-header"><span class="card-title">图像上传</span></div>
-  <div class="steps">
-    <div class="step active"><div class="step-circle">1</div>上传图像</div>
-    <div class="step"><div class="step-circle">2</div>质量质控</div>
-    <div class="step"><div class="step-circle">3</div>疾病筛查</div>
-    <div class="step"><div class="step-circle">4</div>联合筛查</div>
-    <div class="step"><div class="step-circle">5</div>输出报告</div>
-  </div>
+  <div class="steps" id="inputStepsBar"></div>
 
   <div class="task-panel">
     <div class="task-panel-head">
@@ -523,7 +517,7 @@ input, select, textarea { font: inherit; outline: none; }
         <div class="task-panel-title">筛查任务创建</div>
         <div class="task-meta-line">先确认患者身份，再上传眼底彩照；图像真实性、眼别和质量判定统一在图像质量质控模块完成。</div>
       </div>
-      <span class="tag blue" id="userPermissionNote">权限识别中</span>
+      <span class="tag blue" id="userPermissionNote">筛查任务识别中</span>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -554,14 +548,14 @@ input, select, textarea { font: inherit; outline: none; }
     <div class="task-panel-head">
       <div>
         <div class="task-panel-title">当前筛查任务</div>
-        <div class="task-meta-line">患者信息会同步到质控、常见疾病筛查、多任务联合筛查和报告页面。</div>
+        <div class="task-meta-line" id="taskFlowSyncNote">患者信息会同步到后续筛查流程。</div>
       </div>
       <span class="tag success">任务已创建</span>
     </div>
     <div class="task-summary-grid">
       <div class="task-summary-item"><span>任务编号</span><strong id="summaryTaskId">—</strong></div>
       <div class="task-summary-item"><span>患者</span><strong id="summaryPatient">—</strong></div>
-      <div class="task-summary-item"><span>筛查权限</span><strong id="summaryPermission">—</strong></div>
+      <div class="task-summary-item"><span>筛查任务</span><strong id="summaryPermission">—</strong></div>
       <div class="task-summary-item"><span>图像数量</span><strong id="summaryMode">—</strong></div>
     </div>
   </div>
@@ -588,7 +582,7 @@ input, select, textarea { font: inherit; outline: none; }
   <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
     <button class="btn primary lg" onclick="startProc()">开始处理</button>
     <button class="btn secondary" onclick="resetUp()">重置</button>
-    <span style="color:var(--soft);font-size:12px;">提交后进入质控流程；常见疾病筛查对所有用户开放，多任务联合筛查仅医生用户可进入。</span>
+    <span id="uploadFlowHint" style="color:var(--soft);font-size:12px;">提交后进入质控流程。</span>
   </div>
 </div>
 
@@ -650,13 +644,15 @@ var uploadFiles = { single: null, first: null, second: null };
 var currentTab = '全部';
 
 var screeningRecords = [
-  { taskName: '眼底彩照_001.jpg', taskSub: 'FS-260626-001 · 市中心门诊', patientName: '李*', patientId: 'OPD-202606-001', uploadTime: '2026-06-26 14:30', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-001' },
-  { taskName: '眼底彩照_004.jpg', taskSub: 'FS-260626-004 · 社区筛查', patientName: '赵*', patientId: 'OPD-202606-003', uploadTime: '2026-06-26 10:05', qcStatus: '质控不合格', analysisStatus: '等待重传', taskId: 'FS-260626-004' },
-  { taskName: '眼底彩照_002.jpg', taskSub: 'FS-260626-002 · 院内复查', patientName: '王*', patientId: 'OPD-202606-002', uploadTime: '2026-06-26 14:35', qcStatus: '质控通过', analysisStatus: '分析失败', taskId: 'FS-260626-002' },
-  { taskName: '双眼_眼底彩照_003.jpg', taskSub: 'FS-260626-003 · 眼科专科门诊', patientName: '陈*', patientId: 'OPD-202606-004', uploadTime: '2026-06-26 09:12', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-003' }
+  { taskName: '眼底彩照_001.jpg', taskSub: 'FS-260626-001 · 市中心门诊', patientName: '李明', patientId: 'OPD-202606-001', uploadTime: '2026-06-26 14:30', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-001' },
+  { taskName: '眼底彩照_004.jpg', taskSub: 'FS-260626-004 · 社区筛查', patientName: '赵强', patientId: 'OPD-202606-003', uploadTime: '2026-06-26 10:05', qcStatus: '质控不合格', analysisStatus: '等待重传', taskId: 'FS-260626-004' },
+  { taskName: '眼底彩照_002.jpg', taskSub: 'FS-260626-002 · 院内复查', patientName: '王磊', patientId: 'OPD-202606-002', uploadTime: '2026-06-26 14:35', qcStatus: '质控通过', analysisStatus: '分析失败', taskId: 'FS-260626-002' },
+  { taskName: '双眼_眼底彩照_003.jpg', taskSub: 'FS-260626-003 · 眼科专科门诊', patientName: '陈华', patientId: 'OPD-202606-004', uploadTime: '2026-06-26 09:12', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-003' }
 ];
 
 function initScreeningInputPage() {
+  renderInputSteps();
+  syncInputFlowCopy();
   updateUserPermissionNote();
   restoreScreeningTask();
   renderUploadSlots();
@@ -685,7 +681,11 @@ function isDoctorUser() {
 }
 
 function getUserTypeText() {
-  return isDoctorUser() ? '医生用户：普通筛查 + 多任务联合筛查' : '普通用户：仅支持常见疾病筛查';
+  return isDoctorUser() ? '多任务联合筛查' : '常见疾病筛查';
+}
+
+function getScreeningTaskText() {
+  return isDoctorUser() ? '多任务联合筛查' : '常见疾病筛查';
 }
 
 function getFlowRole() {
@@ -694,6 +694,36 @@ function getFlowRole() {
 
 function roleQuery() {
   return '?role=' + getFlowRole();
+}
+
+function renderInputSteps() {
+  var bar = document.getElementById('inputStepsBar');
+  if (!bar) return;
+  if (getFlowRole() === 'doctor') {
+    bar.innerHTML =
+      '<div class="step active"><div class="step-circle">1</div>上传图像</div>' +
+      '<div class="step"><div class="step-circle">2</div>质量质控</div>' +
+      '<div class="step"><div class="step-circle">3</div>多任务联合筛查</div>' +
+      '<div class="step"><div class="step-circle">4</div>输出报告</div>';
+  } else {
+    bar.innerHTML =
+      '<div class="step active"><div class="step-circle">1</div>上传图像</div>' +
+      '<div class="step"><div class="step-circle">2</div>质量质控</div>' +
+      '<div class="step"><div class="step-circle">3</div>常见疾病筛查</div>' +
+      '<div class="step"><div class="step-circle">4</div>输出报告</div>';
+  }
+}
+
+function syncInputFlowCopy() {
+  var note = document.getElementById('taskFlowSyncNote');
+  var hint = document.getElementById('uploadFlowHint');
+  if (getFlowRole() === 'doctor') {
+    if (note) note.textContent = '患者信息会同步到图像质量质控、多任务联合筛查和报告页面。';
+    if (hint) hint.textContent = '提交后进入图像质量质控；质控通过后进入多任务联合筛查。';
+  } else {
+    if (note) note.textContent = '患者信息会同步到图像质量质控、常见疾病筛查和报告页面。';
+    if (hint) hint.textContent = '提交后进入图像质量质控；质控通过后进入常见疾病筛查。';
+  }
 }
 
 function activateFlowSidebar() {
@@ -711,10 +741,10 @@ function updateUserPermissionNote() {
   if (!note) return;
   if (isDoctorUser()) {
     note.className = 'tag blue';
-    note.textContent = '医生用户';
+    note.textContent = '多任务联合筛查';
   } else {
     note.className = 'tag gray';
-    note.textContent = '普通用户';
+    note.textContent = '常见疾病筛查';
   }
 }
 
@@ -833,7 +863,7 @@ function renderTaskSummary() {
   box.style.display = 'block';
   document.getElementById('summaryTaskId').textContent = currentTask.taskId;
   document.getElementById('summaryPatient').textContent = currentTask.patient.name + ' · ' + currentTask.patient.age + '岁 · ' + currentTask.patient.gender;
-  document.getElementById('summaryPermission').textContent = currentTask.userTypeText;
+  document.getElementById('summaryPermission').textContent = getScreeningTaskText();
   document.getElementById('summaryMode').textContent = uploadMode === 'double' ? '2张眼底彩照' : '1张眼底彩照';
 }
 
@@ -1129,7 +1159,7 @@ function mergeCurrentTaskRecord() {
   var patient = currentTask.patient || {};
   screeningRecords.unshift({
     taskName: taskName,
-    taskSub: currentTask.taskId + ' · ' + (currentTask.userType === 'doctor' ? '医生筛查任务' : '普通筛查任务') + ' · ' + modeText,
+    taskSub: currentTask.taskId + ' · ' + getScreeningTaskText() + ' · ' + modeText,
     patientName: patient.name || '—',
     patientId: (patient.age || '—') + '岁 · ' + (patient.gender || '—'),
     uploadTime: currentTask.updatedAt || currentTask.createdAt || formatNow(),
@@ -1214,10 +1244,10 @@ function getActionBtn(rec) {
     return '<a class="btn secondary small" href="javascript:void(0)" onclick="openReportModal(\'' + rec.taskId + '\', \'' + rec.patientName + '\', \'' + rec.patientId + '\', \'' + rec.uploadTime + '\')">查看报告</a>';
   }
   if (rec.qcStatus === '质控不合格') {
-    return '<a class="btn secondary small" href="眼底图像输入.html' + roleQuery() + '">重新上传</a>';
+    return '<a class="btn secondary small" href="图像质量质控（不合格）.html' + roleQuery() + '">查看不合格原因</a>';
   }
   if (rec.analysisStatus === '分析失败') {
-    return '<a class="btn secondary small" href="图像质量质控.html' + roleQuery() + '">重试分析</a>';
+    return '<a class="btn secondary small" href="图像质量质控（分析失败）.html' + roleQuery() + '">查看失败原因</a>';
   }
   if (rec.analysisStatus === '待提交') {
     return '<button class="btn primary small" onclick="startProc()">提交质控</button>';
@@ -1247,8 +1277,8 @@ function renderTable() {
     var d = display[j];
     var isActive = (d.qcStatus === '质控不合格') ? ' class="active"' : '';
     html += '<tr' + isActive + '>';
-    html += '<td><div class="row-main"><strong>' + d.taskName + '</strong><span>' + d.taskSub + '</span></div></td>';
-    html += '<td><div class="row-main"><strong>' + d.patientName + '</strong><span>' + d.patientId + '</span></div></td>';
+    html += '<td><div class="row-main"><strong>' + d.taskId + '</strong></div></td>';
+    html += '<td><div class="row-main"><strong>' + d.patientName + '</strong></div></td>';
     html += '<td>' + d.uploadTime + '</td>';
     html += '<td>' + getQcTag(d.qcStatus) + '</td>';
     html += '<td>' + getAnalysisTag(d.analysisStatus) + '</td>';

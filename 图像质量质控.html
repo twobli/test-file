@@ -58,6 +58,7 @@ input, select, textarea { font: inherit; outline: none; }
 .sidebar .menu-group { margin-bottom: 4px; }
 .sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 .sidebar .menu-item { display: flex; align-items: center; padding: 9px 20px; color: var(--muted); text-decoration: none; font-size: 13px; transition: .18s; border-left: 3px solid transparent; }
+.sidebar .menu-item.sub { padding-left: 34px; font-size: 12px; color: var(--soft); }
 .sidebar .menu-item:hover { background: var(--panel-soft); color: var(--primary); }
 .sidebar .menu-item.active { background: var(--primary-soft); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
 
@@ -140,6 +141,21 @@ input, select, textarea { font: inherit; outline: none; }
 .step.done .step-circle { background: var(--success); color: #fff; }
 .step.done { color: var(--success); }
 .step.done::before { background: var(--success); }
+.qc-state-switch {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 10px 12px; border-radius: 12px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #e8eef8; margin: -6px 0 14px;
+}
+.qc-state-switch-label { color: var(--soft); font-size: 12px; font-weight: 700; margin-right: 2px; }
+.qc-state-pill {
+  min-height: 32px; padding: 0 12px; border-radius: 8px; display: inline-flex;
+  align-items: center; justify-content: center; color: var(--muted); background: #fff;
+  box-shadow: inset 0 0 0 1px #edf2f9; font-size: 13px; font-weight: 700;
+}
+.qc-state-pill:hover { color: var(--primary); box-shadow: inset 0 0 0 1px #b8d2ff; }
+.qc-state-pill.active { color: #fff; background: var(--primary); box-shadow: none; }
+.qc-state-pill.fail.active { background: var(--danger); }
+.qc-state-pill.warning.active { background: var(--warning); }
 
 /* Upload Zone */
 .upload-zone {
@@ -313,11 +329,15 @@ input, select, textarea { font: inherit; outline: none; }
 <div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
+<a class="menu-item sub" data-flow-role="doctor" data-flow-page="图像质量质控（不合格）.html" href="图像质量质控（不合格）.html?role=doctor">质控不合格</a>
+<a class="menu-item sub" data-flow-role="doctor" data-flow-page="图像质量质控（分析失败）.html" href="图像质量质控（分析失败）.html?role=doctor">分析失败</a>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a></div>
 <div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
 <a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
+<a class="menu-item sub" data-flow-role="normal" data-flow-page="图像质量质控（不合格）.html" href="图像质量质控（不合格）.html?role=normal">质控不合格</a>
+<a class="menu-item sub" data-flow-role="normal" data-flow-page="图像质量质控（分析失败）.html" href="图像质量质控（分析失败）.html?role=normal">分析失败</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div><div class="main-content">
 <div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>图像质量质控</strong></div>
@@ -325,12 +345,12 @@ input, select, textarea { font: inherit; outline: none; }
 
 <div class="card">
   <div class="card-header"><span class="card-title">质控检测结果</span></div>
-  <div class="steps">
-    <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
-    <div class="step active"><div class="step-circle">2</div>质量质控</div>
-    <div class="step"><div class="step-circle">3</div>疾病筛查</div>
-    <div class="step"><div class="step-circle">4</div>联合筛查</div>
-    <div class="step"><div class="step-circle">5</div>输出报告</div>
+  <div class="steps" id="stepsBar"></div>
+  <div class="qc-state-switch" aria-label="质控结果状态切换">
+    <span class="qc-state-switch-label">质控结果展示</span>
+    <a class="qc-state-pill active" href="图像质量质控.html" onclick="this.href='图像质量质控.html' + roleQuery()">分析合格</a>
+    <a class="qc-state-pill fail" href="图像质量质控（不合格）.html" onclick="this.href='图像质量质控（不合格）.html' + roleQuery()">分析不合格</a>
+    <a class="qc-state-pill warning" href="图像质量质控（分析失败）.html" onclick="this.href='图像质量质控（分析失败）.html' + roleQuery()">分析失败</a>
   </div>
 
   <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
@@ -470,8 +490,13 @@ function roleQuery() {
 function commonScreeningHref() {
   return getFlowRole() === 'doctor' ? '多任务联合筛查.html?role=doctor' : '常见疾病筛查_普通用户.html?role=normal';
 }
+function imageCountText(task) {
+  if (task && task.uploadMode === 'double') return '2张眼底彩照';
+  if (task && task.images && task.images.length) return task.images.length + '张眼底彩照';
+  return '1张眼底彩照';
+}
 function activateFlowSidebar() {
-  var currentPage = window.location.pathname.replace(/\\/g, '/').split('/').pop();
+  var currentPage = decodeURIComponent(window.location.pathname.replace(/\\/g, '/').split('/').pop());
   var role = getFlowRole();
   document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
     var itemPage = item.getAttribute('data-flow-page');
@@ -561,7 +586,7 @@ function imageCards(task) {
     var eye = qcEyeLabel(task, img, i);
     html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')">' +
       '<div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div>' +
-      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看原图</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
+      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看眼底图像</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
       '</div>';
   }
   html += '</div>';
@@ -582,7 +607,7 @@ function renderFundusTaskSummary() {
     '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
     '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
     '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (getFlowRole() === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
+    '<div class="task-summary-item"><span>图像数量</span><strong>' + imageCountText(task) + '</strong></div>' +
     '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
     imageCards(task);
 }
@@ -644,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('headerUserName').textContent = user.name;
     }
   } catch(e) {}
-  var path = window.location.pathname.replace(/\\/g, '/');
+  var path = decodeURIComponent(window.location.pathname.replace(/\\/g, '/'));
   var currentPage = path.split('/').pop();
   var menuItems = document.querySelectorAll('.sidebar .menu-item');
   menuItems.forEach(function(item) {

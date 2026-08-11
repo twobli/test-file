@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>常见疾病筛查（普通用户）</title>
+<title>常见疾病筛查</title>
 <style>
 :root {
   --primary: #165dff;
@@ -285,11 +285,11 @@ input, select, textarea { font: inherit; outline: none; }
 <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div><div class="main-content">
-<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>常见疾病筛查（普通用户）</strong></div>
-<h1 class="page-title">常见疾病筛查（普通用户）</h1>
+<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>常见疾病筛查</strong></div>
+<h1 class="page-title">常见疾病筛查</h1>
 
 <div class="card">
-  <div class="card-header"><span class="card-title">普通用户筛查结果</span></div>
+  <div class="card-header"><span class="card-title">常见疾病筛查结果</span></div>
   <div class="steps">
     <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
     <div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>
@@ -381,8 +381,7 @@ input, select, textarea { font: inherit; outline: none; }
   </div>
 
   <div id="nextActionArea" style="display:flex;gap:12px;flex-wrap:wrap;">
-    <a class="btn primary" href="输出筛查报告.html?role=normal">生成并下载常见疾病筛查报告</a>
-    <span class="tag gray">报告仅包含常见疾病筛查结果</span>
+    <a class="btn primary" href="输出筛查报告.html?role=normal">生成筛查报告</a>
   </div>
 </div>
 </div>
@@ -460,11 +459,16 @@ function imageCards(task) {
     var eye = qcEyeLabel(task, img, i);
     html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')">' +
       '<div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div>' +
-      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看原图</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
+      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看眼底图像</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
       '</div>';
   }
   html += '</div>';
   return html;
+}
+function imageCountText(task) {
+  if (task && task.uploadMode === 'double') return '2张眼底彩照';
+  if (task && task.images && task.images.length) return task.images.length + '张眼底彩照';
+  return '1张眼底彩照';
 }
 function renderFundusTaskSummary() {
   var el = document.getElementById('taskSummary');
@@ -481,7 +485,7 @@ function renderFundusTaskSummary() {
     '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
     '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
     '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>页面类型</span><strong>普通用户筛查</strong></div>' +
+    '<div class="task-summary-item"><span>图像数量</span><strong>' + imageCountText(task) + '</strong></div>' +
     '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
     imageCards(task);
 }
@@ -504,7 +508,7 @@ function closeQcImage() {
 function renderNextAction() {
   var area = document.getElementById('nextActionArea');
   if (!area) return;
-  area.innerHTML = '<a class="btn primary" href="输出筛查报告.html?role=normal">生成并下载常见疾病筛查报告</a><span class="tag gray">报告仅包含常见疾病筛查结果</span>';
+  area.innerHTML = '<a class="btn primary" href="输出筛查报告.html?role=normal">生成筛查报告</a>';
 }
 document.addEventListener('DOMContentLoaded', function() {
   try {

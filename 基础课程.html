@@ -97,13 +97,22 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .progress-detail .progress-info-row .pi-label { font-size: 12px; color: var(--gray-600); }
 
 /* ===== 筛选栏 ===== */
-.filter-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 18px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; }
-.filter-bar .filter-label { font-size: 13px; color: var(--gray-700); font-weight: 500; white-space: nowrap; margin-right: 4px; }
+.filter-bar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 14px 18px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; }
+.filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-width: 0; }
+.filter-row + .filter-row { padding-top: 2px; }
+.filter-system-row { flex: 1; min-width: 0; }
+.filter-bar .filter-label { width: 64px; flex-shrink: 0; font-size: 13px; color: var(--gray-700); font-weight: 600; white-space: nowrap; margin-right: 4px; }
+.filter-options { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
 .filter-select { padding: 6px 34px 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--gray-300); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA0A6' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center; color: var(--gray-700); transition: var(--transition); font-family: inherit; white-space: nowrap; appearance: none; outline: none; min-width: 128px; }
 .filter-select:hover, .filter-select:focus { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.08); }
 .filter-pill { padding: 6px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); transition: var(--transition); font-family: inherit; white-space: nowrap; }
 .filter-pill:hover { border-color: var(--primary); color: var(--primary); }
 .filter-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.filter-system-row .filter-pill { border-radius: 8px; padding: 7px 16px; }
+.filter-topic-row .filter-pill { border-radius: 999px; }
+.filter-bottom-row { justify-content: space-between; }
+.filter-advanced { display: flex; align-items: center; gap: 10px; }
+.filter-advanced .filter-label { width: auto; margin-right: 0; font-weight: 500; }
 .filter-bar .search-box { position: relative; margin-left: auto; }
 .filter-bar .search-box input { padding: 7px 14px 7px 36px; border: 1px solid var(--gray-300); border-radius: 20px; font-size: 13px; font-family: inherit; outline: none; width: 220px; transition: var(--transition); }
 .filter-bar .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
@@ -249,6 +258,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-stats .rs-item { text-align: center; }
 .result-stats .rs-item .rs-val { font-size: 20px; font-weight: 600; color: var(--primary); }
 .result-stats .rs-item .rs-label { font-size: 12px; color: var(--gray-600); }
+.result-learning-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.result-learning-meta .result-meta-pill { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; background: var(--gray-50); border: 1px solid var(--gray-200); color: var(--gray-700); font-size: 12px; }
 .result-stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
 .result-stat-cards .rsc { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; text-align: center; }
 .result-stat-cards .rsc .rsc-num { font-size: 28px; font-weight: 700; }
@@ -257,6 +268,39 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-stat-cards .rsc .rsc-num.unanswered-color { color: var(--gray-400); }
 .result-stat-cards .rsc .rsc-num.total-color { color: var(--primary); }
 .result-stat-cards .rsc .rsc-label { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+.knowledge-mastery { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 20px; }
+.knowledge-mastery .km-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.knowledge-mastery .km-title { font-size: 16px; color: var(--gray-900); font-weight: 700; }
+.knowledge-mastery .km-subtitle { margin-top: 4px; color: var(--gray-600); font-size: 12px; }
+.knowledge-mastery .km-summary { flex-shrink: 0; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 600; }
+.knowledge-mastery .km-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.knowledge-mastery .km-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; background: var(--gray-50); }
+.knowledge-mastery .km-item-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.knowledge-mastery .km-item-name { color: var(--gray-800); font-size: 13px; font-weight: 600; line-height: 1.4; }
+.knowledge-mastery .km-item-status { flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; }
+.knowledge-mastery .km-item-status.mastered { color: #137333; background: #e6f4ea; }
+.knowledge-mastery .km-item-status.basic { color: #b06000; background: #fef7e0; }
+.knowledge-mastery .km-item-status.weak { color: #c5221f; background: #fce8e6; }
+.knowledge-mastery .km-item-progress { height: 6px; border-radius: 999px; overflow: hidden; background: var(--gray-200); }
+.knowledge-mastery .km-item-progress-fill { height: 100%; border-radius: inherit; background: var(--primary); }
+.knowledge-mastery .km-item-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; color: var(--gray-500); font-size: 11px; }
+.quiz-history { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 20px; }
+.quiz-history .qh-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.quiz-history .qh-title { font-size: 16px; color: var(--gray-900); font-weight: 700; }
+.quiz-history .qh-subtitle { margin-top: 4px; color: var(--gray-600); font-size: 12px; }
+.quiz-history .qh-list { display: grid; gap: 10px; }
+.quiz-history .qh-item { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 12px 14px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--gray-50); }
+.quiz-history .qh-item.current { border-color: var(--primary); background: var(--primary-light); }
+.quiz-history .qh-attempt { font-size: 14px; color: var(--gray-900); font-weight: 700; }
+.quiz-history .qh-time { margin-top: 2px; color: var(--gray-500); font-size: 11px; }
+.quiz-history .qh-main { min-width: 0; }
+.quiz-history .qh-score-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.quiz-history .qh-score { color: var(--primary); font-size: 16px; font-weight: 700; }
+.quiz-history .qh-score.good { color: var(--success); }
+.quiz-history .qh-detail { color: var(--gray-600); font-size: 12px; }
+.quiz-history .qh-current { color: var(--primary); font-size: 11px; font-weight: 700; }
+.quiz-history .qh-action { flex-shrink: 0; }
+.quiz-history .qh-empty { padding: 14px; border: 1px dashed var(--gray-300); border-radius: 8px; color: var(--gray-500); text-align: center; font-size: 13px; }
 
 /* ===== 强化建议 ===== */
 .reinforce-alert { background: #fffaf0; border: 1px solid #f7d27a; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
@@ -315,10 +359,23 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     .learning-layout { flex-direction: column; height: auto; }
     .chapter-sidebar { width: 100%; max-height: 300px; }
     .result-overview { flex-direction: column; text-align: center; }
+    .filter-bar { align-items: stretch; flex-direction: column; }
+    .filter-bar .search-box { width: 100%; margin-left: 0; }
+    .filter-bar .search-box input { width: 100%; }
+    .knowledge-mastery .km-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .filter-bottom-row { align-items: flex-start; flex-direction: column; }
+    .filter-bottom-row .search-box { width: 100%; margin-left: 0; }
+    .filter-bottom-row .search-box input { width: 100%; }
 }
 @media (max-width: 600px) {
     .course-grid { grid-template-columns: 1fr; }
     .overview-card { flex-direction: column; align-items: flex-start; }
+    .knowledge-mastery .km-grid { grid-template-columns: 1fr; }
+    .knowledge-mastery .km-header { flex-direction: column; }
+    .quiz-history .qh-header { flex-direction: column; }
+    .quiz-history .qh-item { grid-template-columns: 1fr; gap: 8px; }
+    .quiz-history .qh-action { width: 100%; }
+    .quiz-history .qh-action .btn { width: 100%; }
 }
 
 /* ===== 星标难度 ===== */
@@ -478,18 +535,16 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
     <!-- 筛选栏 -->
     <div class="filter-bar" id="filterBar">
-        <span class="filter-label">筛选：</span>
-        <select class="filter-select" id="courseCategoryFilter" onchange="filterCourseCategory(this.value)">
-            <option value="all">课程方向</option>
-            <option value="eye-base">眼科基础</option>
-            <option value="ai-diagnosis">AI诊疗</option>
-            <option value="image-reading">影像判读</option>
-        </select>
-        <button class="filter-pill" data-filter="DR" onclick="filterCourses('DR', this)">糖尿病视网膜病变</button>
-        <button class="filter-pill" data-filter="glaucoma" onclick="filterCourses('glaucoma', this)">青光眼</button>
-        <button class="filter-pill" data-filter="AMD" onclick="filterCourses('AMD', this)">AMD</button>
-        <button class="filter-pill" data-filter="hypertension" onclick="filterCourses('hypertension', this)">高血压视网膜病变</button>
-        <button class="filter-pill" data-filter="RVO" onclick="filterCourses('RVO', this)">RVO</button>
+        <div class="filter-row filter-system-row">
+            <span class="filter-label">知识体系</span>
+            <div class="filter-options" id="knowledgeSystemFilters">
+                <button class="filter-pill active" data-system-filter="all" onclick="filterKnowledgeSystem('all', this)">全部</button>
+                <button class="filter-pill" data-system-filter="anatomy" onclick="filterKnowledgeSystem('anatomy', this)">解剖学</button>
+                <button class="filter-pill" data-system-filter="physiology" onclick="filterKnowledgeSystem('physiology', this)">生理学</button>
+                <button class="filter-pill" data-system-filter="bioinformatics" onclick="filterKnowledgeSystem('bioinformatics', this)">生物信息学</button>
+                <button class="filter-pill" data-system-filter="medical-ai" onclick="filterKnowledgeSystem('medical-ai', this)">医学AI基础</button>
+            </div>
+        </div>
         <div class="search-box">
             <span class="search-icon">🔍</span>
             <input type="text" id="courseSearch" placeholder="搜索课程名称" oninput="renderCourseList()">
@@ -613,6 +668,11 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             <div class="rs-row">
                 <div class="rs-item"><div class="rs-val" id="resultPct">80%</div><div class="rs-label">做题准确率</div></div>
             </div>
+            <div class="result-learning-meta">
+                <span class="result-meta-pill" id="resultLearningProgress">本章学习进度：100%</span>
+                <span class="result-meta-pill" id="resultAttempts">测验次数：1次</span>
+                <span class="result-meta-pill" id="resultBestAccuracy">历史最高：80%</span>
+            </div>
         </div>
     </div>
     <div class="result-stat-cards">
@@ -620,6 +680,27 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <div class="rsc"><div class="rsc-num wrong-color" id="rWrong">2</div><div class="rsc-label">答错</div></div>
         <div class="rsc"><div class="rsc-num unanswered-color" id="rUnanswered">0</div><div class="rsc-label">未答</div></div>
         <div class="rsc"><div class="rsc-num total-color" id="rTotal">8</div><div class="rsc-label">总题数</div></div>
+    </div>
+
+    <div class="knowledge-mastery" id="knowledgeMastery">
+        <div class="km-header">
+            <div>
+                <div class="km-title">知识点掌握情况</div>
+                <div class="km-subtitle">根据本次测验结果判断知识点掌握程度，学习进度仍以课程内容完成情况为准。</div>
+            </div>
+            <div class="km-summary" id="knowledgeMasterySummary">已掌握 0 项</div>
+        </div>
+        <div class="km-grid" id="knowledgeMasteryGrid"></div>
+    </div>
+    <div class="quiz-history" id="quizHistory">
+        <div class="qh-header">
+            <div>
+                <div class="qh-title">历次测验记录</div>
+                <div class="qh-subtitle">每次重新测验都会单独保留，点击“查看本次结果”可回看对应答题表现。</div>
+            </div>
+            <span class="result-meta-pill" id="quizHistoryCount">共 0 次</span>
+        </div>
+        <div class="qh-list" id="quizHistoryList"></div>
     </div>
 
     <!-- 建议强化内容 -->
@@ -902,6 +983,7 @@ let currentSectionIndex = null;
 let currentSectionId = null;
 let currentFilter = 'all';
 let currentCategoryFilter = 'all';
+let currentKnowledgeSystemFilter = 'all';
 let quizAnswers = {};
 let quizStartTime = null;
 let currentQuizCourseId = null;
@@ -912,6 +994,10 @@ let videoDuration = 0;
 let videoInterval = null;
 let playbackSpeed = 1;
 let currentQuizData = [];
+let completedSectionIdsByCourse = {};
+const COMPLETION_STORAGE_KEY = 'life_med_basic_course_completion';
+let quizRecordsByCourse = {};
+const QUIZ_STORAGE_KEY = 'life_med_basic_course_quiz_records';
 
 // ==================== 章节测验数据映射 ====================
 const CHAPTER_QUIZZES = {
@@ -976,8 +1062,20 @@ function getChapterQuiz(chapterId) {
 function getLearningStats() {
     let totalAllSections = 0, doneAllSections = 0;
     MOCK_COURSES.forEach(c => { totalAllSections += c.totalSections; doneAllSections += Math.round(c.totalSections * c.progress / 100); });
-    let quizTotal = 38;
-    let quizCorrect = 31;
+    let quizTotal = 0;
+    let quizCorrect = 0;
+    MOCK_COURSES.forEach(course => {
+        const records = quizRecordsByCourse[course.id] || {};
+        Object.keys(records).forEach(chapterId => {
+            const record = records[chapterId];
+            quizTotal += record.total || 0;
+            quizCorrect += record.latestCorrect || 0;
+        });
+    });
+    if (!quizTotal) {
+        quizTotal = 38;
+        quizCorrect = 31;
+    }
     return {
         learnedSections: doneAllSections,
         totalSections: totalAllSections,
@@ -1007,12 +1105,186 @@ function isCourseVideoComplete(course) {
     return !!course && course.progress >= 100;
 }
 
+function isSectionComplete(course, chapterIndex, sectionIndex) {
+    if (!course || !course.chapters || !course.chapters[chapterIndex]) return false;
+    if (isCourseVideoComplete(course)) return true;
+    const section = course.chapters[chapterIndex].sections[sectionIndex];
+    return !!(section && completedSectionIdsByCourse[course.id] && completedSectionIdsByCourse[course.id][section.id]);
+}
+
+function isChapterComplete(course, chapterIndex) {
+    if (!course || !course.chapters || !course.chapters[chapterIndex]) return false;
+    const sections = course.chapters[chapterIndex].sections || [];
+    return sections.length > 0 && sections.every((section, sectionIndex) => isSectionComplete(course, chapterIndex, sectionIndex));
+}
+
+function persistCompletedSections() {
+    try {
+        localStorage.setItem(COMPLETION_STORAGE_KEY, JSON.stringify(completedSectionIdsByCourse));
+    } catch (e) {}
+}
+
+function markSectionComplete(course, sectionId) {
+    if (!course || !sectionId) return;
+    if (!completedSectionIdsByCourse[course.id]) completedSectionIdsByCourse[course.id] = {};
+    completedSectionIdsByCourse[course.id][sectionId] = true;
+    persistCompletedSections();
+}
+
+function persistQuizRecords() {
+    try {
+        localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(quizRecordsByCourse));
+    } catch (e) {}
+}
+
+function getChapterQuizRecord(courseId, chapterId) {
+    const courseRecords = quizRecordsByCourse[courseId];
+    return courseRecords && courseRecords[chapterId] ? courseRecords[chapterId] : null;
+}
+
+function getQuizHistory(record) {
+    if (!record) return [];
+    if (Array.isArray(record.history)) return record.history.slice();
+    if (record.completedAt) {
+        return [{
+            attempt: record.attempts || 1,
+            accuracy: record.latestAccuracy || 0,
+            correct: record.latestCorrect || 0,
+            wrong: record.latestWrong || 0,
+            unanswered: record.latestUnanswered || 0,
+            total: record.total || 0,
+            elapsedSeconds: record.elapsedSeconds || 0,
+            mastery: record.mastery || [],
+            answers: Object.assign({}, record.answers || {}),
+            completedAt: record.completedAt
+        }];
+    }
+    return [];
+}
+
+function getChapterLearningProgress(course, chapterIndex) {
+    if (!course || !course.chapters || !course.chapters[chapterIndex]) return 0;
+    const sections = course.chapters[chapterIndex].sections || [];
+    if (!sections.length) return 0;
+    const done = sections.filter((section, sectionIndex) => isSectionComplete(course, chapterIndex, sectionIndex)).length;
+    return Math.round(done / sections.length * 100);
+}
+
+function getMasteryState(accuracy) {
+    if (accuracy >= 80) return { text: '已掌握', cls: 'mastered' };
+    if (accuracy >= 60) return { text: '基本掌握', cls: 'basic' };
+    return { text: '需要强化', cls: 'weak' };
+}
+
+function calculateQuizResult(quizData, answers) {
+    let total = quizData.length;
+    let correct = 0, wrong = 0, unanswered = 0;
+    let wrongItems = [];
+    let masteryMap = {};
+
+    quizData.forEach((q, index) => {
+        const keyword = extractKeyword(q.q, q.explain);
+        if (!masteryMap[keyword]) masteryMap[keyword] = { keyword: keyword, total: 0, correct: 0 };
+        masteryMap[keyword].total++;
+
+        if (answers[q.id] === undefined) {
+            unanswered++;
+            wrongItems.push({ ...q, userAnswer: -1, questionNo: index + 1 });
+        } else if (answers[q.id] === q.correct) {
+            correct++;
+            masteryMap[keyword].correct++;
+        } else {
+            wrong++;
+            wrongItems.push({ ...q, userAnswer: answers[q.id], questionNo: index + 1 });
+        }
+    });
+
+    const mastery = Object.keys(masteryMap).map(keyword => {
+        const item = masteryMap[keyword];
+        const accuracy = Math.round(item.correct / item.total * 100);
+        return {
+            keyword: keyword,
+            total: item.total,
+            correct: item.correct,
+            accuracy: accuracy,
+            state: getMasteryState(accuracy)
+        };
+    }).sort((a, b) => a.accuracy - b.accuracy);
+
+    return {
+        total: total,
+        correct: correct,
+        wrong: wrong,
+        unanswered: unanswered,
+        accuracy: total ? Math.round(correct / total * 100) : 0,
+        wrongItems: wrongItems,
+        mastery: mastery
+    };
+}
+
+function saveQuizRecord(course, chapterIndex, quizData, answers, elapsedSeconds) {
+    const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
+    if (!course || !chapter) return null;
+    const result = calculateQuizResult(quizData, answers);
+    if (!quizRecordsByCourse[course.id]) quizRecordsByCourse[course.id] = {};
+    const previous = quizRecordsByCourse[course.id][chapter.id];
+    const previousHistory = getQuizHistory(previous);
+    const attempt = {
+        attempt: previousHistory.length + 1,
+        accuracy: result.accuracy,
+        correct: result.correct,
+        wrong: result.wrong,
+        unanswered: result.unanswered,
+        total: result.total,
+        elapsedSeconds: elapsedSeconds || 0,
+        mastery: result.mastery,
+        answers: Object.assign({}, answers),
+        completedAt: Date.now()
+    };
+    const history = previousHistory.concat(attempt);
+    const record = {
+        chapterId: chapter.id,
+        chapterTitle: chapter.title,
+        attempts: history.length,
+        latestAccuracy: result.accuracy,
+        bestAccuracy: history.reduce((best, item) => Math.max(best, item.accuracy || 0), 0),
+        latestCorrect: result.correct,
+        latestWrong: result.wrong,
+        latestUnanswered: result.unanswered,
+        total: result.total,
+        elapsedSeconds: elapsedSeconds || 0,
+        learningProgress: getChapterLearningProgress(course, chapterIndex),
+        mastery: result.mastery,
+        answers: Object.assign({}, answers),
+        completedAt: attempt.completedAt,
+        history: history
+    };
+    quizRecordsByCourse[course.id][chapter.id] = record;
+    persistQuizRecords();
+    return record;
+}
+
+function getQuizChapterList(course) {
+    if (!course || !course.chapters) return [];
+    return course.chapters.filter(ch => !!getChapterQuiz(ch.id));
+}
+
+function getLatestQuizRecord(course) {
+    if (!course || !quizRecordsByCourse[course.id]) return null;
+    const records = Object.keys(quizRecordsByCourse[course.id]).map(chapterId => quizRecordsByCourse[course.id][chapterId]);
+    if (!records.length) return null;
+    return records.sort((a, b) => (b.completedAt || 0) - (a.completedAt || 0))[0];
+}
+
 function isCourseQuizPending(course) {
     return isCourseVideoComplete(course) && course.quizStatus !== 'completed';
 }
 
 function isCourseQuizCompleted(course) {
-    return !!course && course.quizStatus === 'completed';
+    if (!course) return false;
+    if (course.quizStatus === 'completed') return true;
+    const quizChapters = getQuizChapterList(course);
+    return quizChapters.length > 0 && quizChapters.every(ch => !!getChapterQuizRecord(course.id, ch.id));
 }
 
 function getCourseCardAction(course) {
@@ -1028,13 +1300,25 @@ function getCourseCategory(course) {
     return 'eye-base';
 }
 
+function getKnowledgeSystem(course) {
+    const systemByCategory = {
+        'eye-base': 'physiology',
+        'ai-diagnosis': 'medical-ai',
+        'image-reading': 'bioinformatics'
+    };
+    return systemByCategory[getCourseCategory(course)] || 'physiology';
+}
+
 // ==================== 页面导航 ====================
 function showPage(pageId) {
     document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
     const page = document.getElementById(pageId);
     if (page) page.classList.add('active');
     const aiEntry = document.getElementById('aiChatToggle');
-    if (aiEntry) aiEntry.style.display = pageId === 'page-ai-qa' ? 'none' : 'flex';
+    if (aiEntry) {
+        const hideAiEntryPages = ['page-ai-qa', 'page-quiz', 'page-quiz-result'];
+        aiEntry.style.display = hideAiEntryPages.indexOf(pageId) >= 0 ? 'none' : 'flex';
+    }
 }
 
 function navToCourseList() {
@@ -1053,9 +1337,10 @@ function renderCourseList() {
     let searchTerm = (document.getElementById('courseSearch').value || '').toLowerCase();
     let filtered = MOCK_COURSES.filter(c => {
         let categoryMatch = (currentCategoryFilter === 'all') ? true : getCourseCategory(c) === currentCategoryFilter;
+        let systemMatch = (currentKnowledgeSystemFilter === 'all') ? true : getKnowledgeSystem(c) === currentKnowledgeSystemFilter;
         let typeMatch = (currentFilter === 'all') ? true : c.diseaseType === currentFilter;
         let searchMatch = !searchTerm || c.name.toLowerCase().includes(searchTerm);
-        return categoryMatch && typeMatch && searchMatch;
+        return categoryMatch && systemMatch && typeMatch && searchMatch;
     });
 
     if (filtered.length === 0) {
@@ -1119,7 +1404,7 @@ function updateOverview(stats) {
 
 function filterCourses(type, el) {
     currentFilter = type;
-    document.querySelectorAll('#filterBar .filter-pill').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-topic-row .filter-pill').forEach(b => b.classList.remove('active'));
     if (el) el.classList.add('active');
     renderCourseList();
 }
@@ -1127,7 +1412,15 @@ function filterCourses(type, el) {
 function filterCourseCategory(category) {
     currentCategoryFilter = category;
     currentFilter = 'all';
-    document.querySelectorAll('#filterBar .filter-pill').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-topic-row .filter-pill').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-topic-row .filter-pill[data-filter="all"]').classList.add('active');
+    renderCourseList();
+}
+
+function filterKnowledgeSystem(system, el) {
+    currentKnowledgeSystemFilter = system;
+    document.querySelectorAll('#knowledgeSystemFilters .filter-pill').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
     renderCourseList();
 }
 
@@ -1168,6 +1461,14 @@ function viewResult(courseId) {
     currentCourseId = courseId;
     currentChapterIndex = 0;
     let course = getCourseById(courseId);
+    const latestRecord = getLatestQuizRecord(course);
+    if (latestRecord && course && course.chapters) {
+        const recordChapterIndex = course.chapters.findIndex(ch => ch.id === latestRecord.chapterId);
+        if (recordChapterIndex >= 0) {
+            viewChapterResult(courseId, recordChapterIndex);
+            return;
+        }
+    }
     currentQuizCourseId = courseId;
     currentQuizChapterIndex = 0;
     // 模拟最后一次测验结果
@@ -1176,6 +1477,45 @@ function viewResult(courseId) {
     quizData.forEach((q, i) => { simulatedAnswers[q.id] = i % 3 === 0 ? q.correct : (q.correct + 1) % 4; });
     quizAnswers = simulatedAnswers;
     showResultPage(course.name, quizData, 725); // ~12分05秒
+}
+
+function viewChapterResult(courseId, chapterIndex) {
+    const course = getCourseById(courseId);
+    const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
+    if (!course || !chapter) return;
+    const quizData = getChapterQuiz(chapter.id) || course.quiz || [];
+    const record = getChapterQuizRecord(course.id, chapter.id);
+    if (!record) {
+        viewResult(courseId);
+        return;
+    }
+    currentCourseId = courseId;
+    currentChapterIndex = chapterIndex;
+    currentQuizCourseId = courseId;
+    currentQuizChapterIndex = chapterIndex;
+    currentQuizData = quizData;
+    const history = getQuizHistory(record);
+    const latestAttempt = history[history.length - 1];
+    quizAnswers = Object.assign({}, (latestAttempt && latestAttempt.answers) || record.answers || {});
+    showResultPage(course.name, quizData, latestAttempt ? latestAttempt.elapsedSeconds : record.elapsedSeconds, record, latestAttempt);
+}
+
+function viewQuizAttempt(courseId, chapterIndex, attemptIndex) {
+    const course = getCourseById(courseId);
+    const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
+    const record = chapter ? getChapterQuizRecord(courseId, chapter.id) : null;
+    const history = getQuizHistory(record);
+    const attempt = history[attemptIndex];
+    if (!course || !chapter || !record || !attempt) return;
+
+    const quizData = getChapterQuiz(chapter.id) || course.quiz || [];
+    currentCourseId = courseId;
+    currentChapterIndex = chapterIndex;
+    currentQuizCourseId = courseId;
+    currentQuizChapterIndex = chapterIndex;
+    currentQuizData = quizData;
+    quizAnswers = Object.assign({}, attempt.answers || {});
+    showResultPage(course.name, quizData, attempt.elapsedSeconds, record, attempt);
 }
 
 // ==================== 视频学习页 ====================
@@ -1193,7 +1533,7 @@ function renderChapterTree() {
             totalSections++;
             let cls = '';
             let isActive = (sec.id === currentSectionId);
-            let isDone = isCourseVideoComplete(course) || ci < currentChapterIndex || (ci === currentChapterIndex && (si < currentSectionIndex || (si === currentSectionIndex && videoCurrentTime >= videoDuration)));
+            let isDone = isSectionComplete(course, ci, si);
             if (isActive) cls = 'active';
             if (isDone) {
                 cls += ' done';
@@ -1227,14 +1567,14 @@ function renderChapterQuizEntry(course) {
     if (!panel || !course || currentChapterIndex === null) return;
     const ch = course.chapters[currentChapterIndex];
     const hasQuiz = ch && getChapterQuiz(ch.id);
-    const currentSectionInChapter = ch ? ch.sections.findIndex(s => s.id === currentSectionId) : -1;
-    const chapterLearned = isCourseVideoComplete(course) || (ch && currentSectionInChapter === ch.sections.length - 1 && videoCurrentTime >= videoDuration);
-    if (isCourseQuizCompleted(course)) {
+    const quizRecord = ch ? getChapterQuizRecord(course.id, ch.id) : null;
+    const chapterLearned = isChapterComplete(course, currentChapterIndex);
+    if (quizRecord || (course.quizStatus === 'completed' && isCourseVideoComplete(course))) {
         panel.innerHTML = `
-            <button class="chapter-quiz-entry" type="button" onclick="viewResult(${course.id})">
+            <button class="chapter-quiz-entry" type="button" onclick="viewChapterResult(${course.id}, ${currentChapterIndex})">
                 <span>📊</span><span>查看学习测验结果</span>
             </button>
-            <div class="quiz-note">${course.name} 已完成测验</div>
+            <div class="quiz-note">本章学习进度 ${quizRecord ? quizRecord.learningProgress : 100}% · 最近正确率 ${quizRecord ? quizRecord.latestAccuracy : '--'}%</div>
         `;
     } else if (hasQuiz && chapterLearned) {
         panel.innerHTML = `
@@ -1363,8 +1703,10 @@ function updateVideoUI() {
 function onVideoEnd() {
     document.getElementById('videoHint').textContent = '播放完成';
     document.getElementById('sectionCompleteHint').style.display = 'flex';
+    const course = getCourseById(currentCourseId);
+    if (course && currentSectionId) markSectionComplete(course, currentSectionId);
     renderChapterTree();
-    checkLastSection(getCourseById(currentCourseId));
+    checkLastSection(course);
 }
 
 function changeSpeed() {
@@ -1557,38 +1899,109 @@ function confirmSubmitQuiz() {
     closeModal('modalSubmitConfirm');
     const course = getCourseById(currentQuizCourseId);
     if (!course) return;
-    course.progress = 100;
-    course.quizStatus = 'completed';
     let elapsed = Math.round((Date.now() - quizStartTime) / 1000);
-    showResultPage(course.name, currentQuizData, elapsed);
+    const record = saveQuizRecord(course, currentQuizChapterIndex, currentQuizData, quizAnswers, elapsed);
+    if (getQuizChapterList(course).length && getQuizChapterList(course).every(ch => !!getChapterQuizRecord(course.id, ch.id))) {
+        course.quizStatus = 'completed';
+    } else if (course.quizStatus === 'locked') {
+        course.quizStatus = 'pending';
+    }
+    const history = getQuizHistory(record);
+    const latestAttempt = history[history.length - 1];
+    showResultPage(course.name, currentQuizData, elapsed, record, latestAttempt);
 }
 
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
+function renderKnowledgeMastery(mastery) {
+    const items = mastery || [];
+    const mastered = items.filter(item => item.state.cls === 'mastered').length;
+    const basic = items.filter(item => item.state.cls === 'basic').length;
+    const weak = items.filter(item => item.state.cls === 'weak').length;
+    document.getElementById('knowledgeMasterySummary').textContent = '已掌握 ' + mastered + ' 项 · 基本掌握 ' + basic + ' 项 · 需强化 ' + weak + ' 项';
+    document.getElementById('knowledgeMasteryGrid').innerHTML = items.length ? items.map(item => `
+        <div class="km-item">
+            <div class="km-item-head">
+                <span class="km-item-name">${item.keyword}</span>
+                <span class="km-item-status ${item.state.cls}">${item.state.text}</span>
+            </div>
+            <div class="km-item-progress"><div class="km-item-progress-fill" style="width:${item.accuracy}%;"></div></div>
+            <div class="km-item-meta"><span>${item.correct}/${item.total} 题答对</span><span>${item.accuracy}%</span></div>
+        </div>
+    `).join('') : '<div class="detail-text">本次测验暂未形成知识点记录。</div>';
+}
+
 // ==================== 测验结果页 ====================
-function showResultPage(courseName, quizData, elapsedSeconds) {
+function formatQuizDate(timestamp) {
+    if (!timestamp) return '--';
+    const date = new Date(timestamp);
+    const pad = value => String(value).padStart(2, '0');
+    return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate())
+        + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
+}
+
+function renderQuizHistory(course, chapterIndex, record, selectedAttempt) {
+    const countEl = document.getElementById('quizHistoryCount');
+    const listEl = document.getElementById('quizHistoryList');
+    if (!countEl || !listEl) return;
+
+    const history = getQuizHistory(record);
+    countEl.textContent = '共 ' + history.length + ' 次';
+    if (!history.length) {
+        listEl.innerHTML = '<div class="qh-empty">当前章节还没有历史测验记录。</div>';
+        return;
+    }
+
+    const selectedCompletedAt = selectedAttempt && selectedAttempt.completedAt;
+    listEl.innerHTML = history.slice().reverse().map((item, reverseIndex) => {
+        const attemptIndex = history.length - reverseIndex - 1;
+        const isCurrent = selectedCompletedAt
+            ? item.completedAt === selectedCompletedAt
+            : attemptIndex === history.length - 1;
+        const scoreClass = item.accuracy >= 80 ? 'good' : '';
+        return `
+            <div class="qh-item ${isCurrent ? 'current' : ''}">
+                <div>
+                    <div class="qh-attempt">第 ${item.attempt || attemptIndex + 1} 次</div>
+                    <div class="qh-time">${formatQuizDate(item.completedAt)}</div>
+                </div>
+                <div class="qh-main">
+                    <div class="qh-score-row">
+                        <span class="qh-score ${scoreClass}">${item.accuracy || 0}%</span>
+                        <span class="qh-detail">${item.correct || 0}/${item.total || 0} 题答对 · 答错 ${item.wrong || 0} 题 · 未答 ${item.unanswered || 0} 题 · 用时 ${formatTime(item.elapsedSeconds || 0)}</span>
+                        ${isCurrent ? '<span class="qh-current">当前查看</span>' : ''}
+                    </div>
+                </div>
+                <div class="qh-action">
+                    <button class="btn btn-outline btn-sm" type="button" onclick="viewQuizAttempt(${course.id}, ${chapterIndex}, ${attemptIndex})">查看本次结果</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, selectedAttempt) {
     showPage('page-quiz-result');
     document.getElementById('resultBreadcrumbCourse').textContent = courseName;
-    document.getElementById('resultTitle').textContent = '测验结果';
 
-    let total = quizData.length;
-    let correct = 0, wrong = 0, unanswered = 0;
-    let wrongItems = [];
-    quizData.forEach((q, index) => {
-        if (quizAnswers[q.id] === undefined) {
-            unanswered++;
-            wrongItems.push({ ...q, userAnswer: -1, questionNo: index + 1 });
-        } else if (quizAnswers[q.id] === q.correct) {
-            correct++;
-        } else {
-            wrong++;
-            wrongItems.push({ ...q, userAnswer: quizAnswers[q.id], questionNo: index + 1 });
-        }
-    });
-
-    let pct = Math.round(correct / total * 100);
+    const result = calculateQuizResult(quizData, quizAnswers);
+    const total = result.total;
+    const correct = result.correct;
+    const wrong = result.wrong;
+    const unanswered = result.unanswered;
+    const wrongItems = result.wrongItems;
+    const pct = result.accuracy;
+    const course = getCourseById(currentCourseId);
+    const resultChapter = course && course.chapters ? course.chapters[currentQuizChapterIndex] : null;
+    const learningProgress = storedRecord ? storedRecord.learningProgress : getChapterLearningProgress(course, currentQuizChapterIndex);
+    const history = getQuizHistory(storedRecord);
+    const attempts = history.length || (storedRecord ? storedRecord.attempts : 1);
+    const bestAccuracy = storedRecord
+        ? Math.max(storedRecord.bestAccuracy || 0, ...history.map(item => item.accuracy || 0))
+        : pct;
+    document.getElementById('resultTitle').textContent = (resultChapter ? resultChapter.title + ' - ' : '') + '测验结果';
 
     document.getElementById('resultScore').textContent = pct + '%';
     document.getElementById('resultPct').textContent = pct + '%';
@@ -1596,6 +2009,11 @@ function showResultPage(courseName, quizData, elapsedSeconds) {
     document.getElementById('rWrong').textContent = wrong;
     document.getElementById('rUnanswered').textContent = unanswered;
     document.getElementById('rTotal').textContent = total;
+    document.getElementById('resultLearningProgress').textContent = '本章学习进度：' + learningProgress + '%';
+    document.getElementById('resultAttempts').textContent = '测验次数：' + attempts + '次';
+    document.getElementById('resultBestAccuracy').textContent = '历史最高：' + bestAccuracy + '%';
+    renderKnowledgeMastery(result.mastery);
+    renderQuizHistory(course, currentQuizChapterIndex, storedRecord, selectedAttempt);
 
     // 环形图
     let circumference = 389.6;
@@ -1727,12 +2145,32 @@ function extractKeyword(q, explain) {
 }
 
 function retryQuiz() {
-    const course = getCourseById(currentQuizCourseId);
-    if (course && currentQuizData.length > 0) {
-        openQuizWithData(course, currentQuizData, (course.chapters[currentQuizChapterIndex] ? course.chapters[currentQuizChapterIndex].title : '章节'));
-    } else {
+    const retryCourseId = currentQuizCourseId || currentCourseId;
+    const course = getCourseById(retryCourseId);
+    if (!course) {
         navToCourseList();
+        return;
     }
+
+    const chapterIndex = Number.isInteger(currentQuizChapterIndex)
+        ? currentQuizChapterIndex
+        : (Number.isInteger(currentChapterIndex) ? currentChapterIndex : 0);
+    const chapter = course.chapters && course.chapters[chapterIndex];
+    const quizData = (chapter && getChapterQuiz(chapter.id))
+        || (currentQuizData && currentQuizData.length ? currentQuizData : course.quiz)
+        || [];
+
+    if (!quizData.length) {
+        alert('当前章节暂无测验数据。');
+        return;
+    }
+
+    currentCourseId = course.id;
+    currentChapterIndex = chapterIndex;
+    currentQuizCourseId = course.id;
+    currentQuizChapterIndex = chapterIndex;
+    currentQuizData = quizData;
+    openQuizWithData(course, quizData, chapter ? chapter.title : '章节');
 }
 
 // ==================== 工具函数 ====================
@@ -1755,6 +2193,17 @@ document.addEventListener('DOMContentLoaded', function() {
         var user = JSON.parse(localStorage.getItem('life_med_user'));
         if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
     } catch(e) {}
+
+    try {
+        completedSectionIdsByCourse = JSON.parse(localStorage.getItem(COMPLETION_STORAGE_KEY) || '{}') || {};
+    } catch (e) {
+        completedSectionIdsByCourse = {};
+    }
+    try {
+        quizRecordsByCourse = JSON.parse(localStorage.getItem(QUIZ_STORAGE_KEY) || '{}') || {};
+    } catch (e) {
+        quizRecordsByCourse = {};
+    }
 
     // 初始化课程列表
     renderCourseList();

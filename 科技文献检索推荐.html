@@ -143,6 +143,11 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 .recommend-card .rec-item .rec-item-meta { font-size: 11px; color: var(--gray-500); line-height: 1.5; }
 .recommend-card .rec-item .rec-item-meta span { margin-right: 8px; }
 
+/* 关键词标签 */
+.keyword-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 0; align-items: center; }
+.keyword-tags .kw-label { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-right: 4px; white-space: nowrap; }
+.keyword-tags .kw-tag { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 16px; background: var(--gray-200); color: var(--gray-700); font-size: 12px; font-weight: 500; white-space: nowrap; }
+
 /* 语义向量检索说明 */
 .semantic-note { background: linear-gradient(135deg, #e8f0fe 0%, #f0f4ff 100%); border: 1px solid #d2e3fc; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; font-size: 13px; color: #1a56db; display: flex; align-items: flex-start; gap: 10px; }
 .semantic-note .note-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
@@ -224,7 +229,7 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 
             <!-- 搜索栏 -->
             <div class="filter-bar">
-                <input id="searchInput" class="search-input" placeholder="输入关键词(标题、摘要、作者)进行检索或者输入文章内容进行语义向量检索" oninput="doSearch(currentMode)" onkeydown="if(event.key==='Enter')doSearch(currentMode)">
+                <input id="searchInput" class="search-input" placeholder="输入关键词(标题、摘要、作者)进行检索或者输入文章内容进行语义向量检索" onkeydown="if(event.key==='Enter')doSearch(currentMode)">
                 <button class="btn btn-primary" onclick="doSearch('keyword')" style="padding:7px 20px;font-size:13px;">检索</button>
                 <button class="btn btn-outline" onclick="doSearch('semantic')" style="padding:7px 20px;font-size:13px;">语义向量检索</button>
                 <select id="yearFilter" class="filter-select" onchange="doSearch(currentMode)">
@@ -235,23 +240,19 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
                     <option value="2023">2023年</option>
                     <option value="2022">2022年及以前</option>
                 </select>
-                <select id="journalFilter" class="filter-select" onchange="doSearch(currentMode)">
-                    <option value="">期刊来源：全部</option>
-                    <option value="中华眼科杂志">中华眼科杂志</option>
-                    <option value="中华医学杂志">中华医学杂志</option>
-                    <option value="中国医学影像技术">中国医学影像技术</option>
-                    <option value="国际眼科杂志">国际眼科杂志</option>
-                    <option value="中国数字医学">中国数字医学</option>
-                    <option value="中华糖尿病杂志">中华糖尿病杂志</option>
-                </select>
                 <select id="typeFilter" class="filter-select" onchange="doSearch(currentMode)">
                     <option value="">文献类型：全部</option>
-                    <option value="研究论文">研究论文</option>
-                    <option value="临床研究">临床研究</option>
-                    <option value="系统评价">系统评价</option>
-                    <option value="综述">综述</option>
-                    <option value="方法学研究">方法学研究</option>
+                    <option value="期刊论文">期刊论文</option>
+                    <option value="学位论文">学位论文</option>
+                    <option value="会议论文">会议论文</option>
+                    <option value="专利">专利</option>
                 </select>
+            </div>
+
+            <div id="keywordTags" class="keyword-tags"></div>
+            <div id="semanticNote" class="semantic-note" style="display:none;">
+                <span class="note-icon">&#x1F50D;</span>
+                <span>系统已将查询语句转化为语义向量，并通过向量检索引擎与文献库中的文献进行语义匹配，结果按相关度排序。</span>
             </div>
 
             <div class="result-toolbar">
@@ -297,16 +298,12 @@ var mockData = [
         affiliation: "眼底影像智能分析联合实验室",
         correspondingAuthor: "韦伯斯特",
         correspondingEmail: "webster@example.org",
-        journal: "中华眼科杂志",
-        volumeIssuePages: "52(12): 901-910",
         doi: "10.3760/cma.j.issn.0412-4081.2016.12.001",
         abstract: "糖尿病视网膜病变是工作年龄人群视力损伤的重要原因。本研究基于大规模眼底彩照训练深度学习模型，对可转诊糖尿病视网膜病变和黄斑水肿进行自动识别，验证结果显示模型具备较高敏感度和特异度，可辅助基层筛查与分级转诊。",
         year: 2016,
         citations: 3245,
         field: "眼科",
-        type: "临床研究",
-        recommended: true,
-        recommendReason: "高被引眼底筛查研究"
+        type: "期刊论文"
     },
     {
         id: 102,
@@ -315,16 +312,12 @@ var mockData = [
         affiliation: "深圳大学医学人工智能研究中心",
         correspondingAuthor: "沈琳琳",
         correspondingEmail: "llshen@example.edu.cn",
-        journal: "国际眼科杂志",
-        volumeIssuePages: "23(8): 1186-1195",
         doi: "10.3980/j.issn.1672-5123.2023.08.008",
         abstract: "针对糖尿病视网膜病变分级中病灶细粒度信息难以充分利用的问题，本文构建基于注意力机制的多实例学习框架，结合图像级与病灶级标注实现可解释分级，为眼底筛查模型落地提供了可追溯依据。",
         year: 2023,
         citations: 892,
         field: "眼科",
-        type: "研究论文",
-        recommended: true,
-        recommendReason: "与眼底智能分级高度相关"
+        type: "期刊论文"
     },
     {
         id: 103,
@@ -333,16 +326,12 @@ var mockData = [
         affiliation: "医学影像智能计算重点实验室",
         correspondingAuthor: "陈昊",
         correspondingEmail: "hchen@example.edu",
-        journal: "中国医学影像技术",
-        volumeIssuePages: "38(9): 1321-1329",
         doi: "10.13929/j.issn.1003-3289.2022.09.011",
         abstract: "OCT影像能够呈现视网膜层结构的横断面信息。研究提出共享编码器与任务特异解码头组成的多任务网络，同时完成视网膜层分割和疾病分类，并通过跨任务注意力增强病灶定位能力。",
         year: 2022,
         citations: 567,
         field: "医学影像",
-        type: "方法学研究",
-        recommended: true,
-        recommendReason: "适合OCT诊断模型建设"
+        type: "会议论文"
     },
     {
         id: 104,
@@ -351,16 +340,12 @@ var mockData = [
         affiliation: "北京协和医院眼科",
         correspondingAuthor: "王芳",
         correspondingEmail: "wangfang@example.cn",
-        journal: "中华眼科杂志",
-        volumeIssuePages: "60(2): 121-134",
         doi: "10.3760/cma.j.cn112142-20230912-00072",
         abstract: "研究系统评价人工智能算法在青光眼筛查中的诊断性能。纳入多中心眼底照相和OCT研究后发现，深度学习模型在敏感度和特异度方面整体优于传统机器学习方法，但前瞻性验证和外部泛化仍是临床部署的关键。",
         year: 2024,
         citations: 234,
         field: "眼科",
-        type: "系统评价",
-        recommended: true,
-        recommendReason: "覆盖青光眼筛查证据"
+        type: "期刊论文"
     },
     {
         id: 105,
@@ -369,16 +354,12 @@ var mockData = [
         affiliation: "上海医学影像人工智能工程中心",
         correspondingAuthor: "沈定刚",
         correspondingEmail: "dgshen@example.edu.cn",
-        journal: "中国数字医学",
-        volumeIssuePages: "18(11): 3-12",
         doi: "10.3969/j.issn.1673-7571.2023.11.001",
         abstract: "基础模型正在推动医学影像分割、分类、配准和生成任务的统一建模。本文梳理视觉Transformer、自监督预训练和多模态对齐等关键进展，并分析数据稀缺、跨域偏移、可解释性和算力成本等临床转化挑战。",
         year: 2023,
         citations: 678,
         field: "医学影像",
-        type: "综述",
-        recommended: true,
-        recommendReason: "适合技术路线调研"
+        type: "期刊论文"
     },
     {
         id: 106,
@@ -387,16 +368,12 @@ var mockData = [
         affiliation: "多模态眼科影像研究中心",
         correspondingAuthor: "朴俊英",
         correspondingEmail: "jypark@example.kr",
-        journal: "国际眼科杂志",
-        volumeIssuePages: "24(3): 401-412",
         doi: "10.3980/j.issn.1672-5123.2024.03.015",
         abstract: "视网膜疾病在不同影像模态中呈现互补特征。本文构建眼底彩照与OCT融合诊断框架，通过模态特异编码器和跨模态注意力学习互补病灶特征，提升年龄相关性黄斑变性、糖尿病黄斑水肿和青光眼等疾病识别能力。",
         year: 2024,
         citations: 156,
         field: "眼科",
-        type: "研究论文",
-        recommended: true,
-        recommendReason: "匹配多模态诊断场景"
+        type: "期刊论文"
     },
     {
         id: 107,
@@ -405,16 +382,12 @@ var mockData = [
         affiliation: "医学图像质量控制联合实验室",
         correspondingAuthor: "刘江",
         correspondingEmail: "jiangliu@example.sg",
-        journal: "中国医学影像技术",
-        volumeIssuePages: "40(4): 511-520",
         doi: "10.13929/j.issn.1003-3289.2024.04.009",
         abstract: "图像质量直接影响自动筛查系统的可靠性。研究建立眼底图像质量评估网络，从清晰度、视野完整性、照明均衡和伪影干扰等维度判断图像是否可用于后续诊断，并证明质量控制可降低误判风险。",
         year: 2024,
         citations: 89,
         field: "眼科",
-        type: "方法学研究",
-        recommended: true,
-        recommendReason: "支撑筛查质控流程"
+        type: "会议论文"
     },
     {
         id: 108,
@@ -423,16 +396,12 @@ var mockData = [
         affiliation: "医学影像重建与合成研究中心",
         correspondingAuthor: "王革",
         correspondingEmail: "wangge@example.edu",
-        journal: "中国数字医学",
-        volumeIssuePages: "19(2): 44-55",
         doi: "10.3969/j.issn.1673-7571.2024.02.006",
         abstract: "跨模态医学影像合成可减少辐射暴露并降低成像成本。文章重点综述生成式模型在MRI到CT转换中的应用，讨论解剖结构保持、配准误差、合成图像评价指标以及临床验证路径。",
         year: 2024,
         citations: 312,
         field: "医学影像",
-        type: "综述",
-        recommended: true,
-        recommendReason: "拓展影像生成方向"
+        type: "期刊论文"
     },
     {
         id: 109,
@@ -441,16 +410,12 @@ var mockData = [
         affiliation: "多中心医学人工智能协作组",
         correspondingAuthor: "巴卡斯",
         correspondingEmail: "bakas@example.org",
-        journal: "中华医学杂志",
-        volumeIssuePages: "104(18): 1401-1410",
         doi: "10.3760/cma.j.cn112137-20240116-00088",
         abstract: "医学影像数据共享受隐私合规和数据治理限制。研究采用联邦学习框架，使多家医疗机构在不交换原始数据的情况下完成模型训练，并在脑肿瘤分割与分类任务上验证了多中心协作的性能收益。",
         year: 2024,
         citations: 445,
         field: "医学影像",
-        type: "方法学研究",
-        recommended: true,
-        recommendReason: "关联数据安全共享"
+        type: "会议论文"
     },
     {
         id: 110,
@@ -459,16 +424,12 @@ var mockData = [
         affiliation: "上海交通大学医学影像计算中心",
         correspondingAuthor: "刘曼华",
         correspondingEmail: "mhliu@example.edu.cn",
-        journal: "中华医学杂志",
-        volumeIssuePages: "104(9): 681-692",
         doi: "10.3760/cma.j.cn112137-20240221-00137",
         abstract: "早期识别阿尔茨海默病有助于及时干预。本文基于结构MRI建立三维卷积网络，用于阿尔茨海默病识别和轻度认知障碍转归预测，注意力热图显示海马、内嗅皮层等区域对模型判断贡献较高。",
         year: 2024,
         citations: 523,
         field: "临床医学",
-        type: "临床研究",
-        recommended: true,
-        recommendReason: "慢病智能诊断参考"
+        type: "期刊论文"
     },
     {
         id: 111,
@@ -477,16 +438,12 @@ var mockData = [
         affiliation: "临床智能系统研究组",
         correspondingAuthor: "辛格哈尔",
         correspondingEmail: "singhal@example.org",
-        journal: "中国数字医学",
-        volumeIssuePages: "19(5): 1-13",
         doi: "10.3969/j.issn.1673-7571.2024.05.001",
         abstract: "大语言模型在医学问答、病历生成、临床决策支持和文献综述中展现出应用潜力。本文总结相关研究证据，指出真实临床场景中仍需解决事实一致性、时序推理、责任边界和多模态融合评价等问题。",
         year: 2024,
         citations: 1890,
         field: "临床医学",
-        type: "综述",
-        recommended: true,
-        recommendReason: "支撑智能问答与文献推荐"
+        type: "期刊论文"
     },
     {
         id: 112,
@@ -495,16 +452,12 @@ var mockData = [
         affiliation: "区域眼病慢病协同诊疗中心",
         correspondingAuthor: "周宁",
         correspondingEmail: "zhouning@example.cn",
-        journal: "中华眼科杂志",
-        volumeIssuePages: "61(1): 35-45",
         doi: "10.3760/cma.j.cn112142-20250108-00019",
         abstract: "单一眼底影像难以完整反映患者全身慢病状态。研究融合眼底彩照、OCT、血糖、血压和病史信息构建多模态诊断模型，在糖尿病视网膜病变、青光眼和高血压视网膜病变识别中取得更稳定表现。",
         year: 2025,
         citations: 126,
         field: "眼科",
-        type: "研究论文",
-        recommended: true,
-        recommendReason: "贴合眼病慢病联合诊断"
+        type: "期刊论文"
     },
     {
         id: 113,
@@ -513,16 +466,12 @@ var mockData = [
         affiliation: "省级慢病管理与眼健康协作网络",
         correspondingAuthor: "韩莉",
         correspondingEmail: "hanli@example.cn",
-        journal: "中华糖尿病杂志",
-        volumeIssuePages: "17(6): 421-431",
         doi: "10.3760/cma.j.cn115791-20250511-00204",
         abstract: "研究基于社区卫生服务中心、区域影像中心和三甲医院眼科协作数据，评估糖尿病患者眼底筛查、阳性转诊、复诊随访和干预反馈的闭环管理效果，为基层慢病协同管理提供流程证据。",
         year: 2025,
         citations: 74,
         field: "内分泌",
-        type: "临床研究",
-        recommended: true,
-        recommendReason: "关联慢病随访闭环"
+        type: "期刊论文"
     },
     {
         id: 114,
@@ -531,16 +480,12 @@ var mockData = [
         affiliation: "生命医学知识工程实验室",
         correspondingAuthor: "周明",
         correspondingEmail: "zhouming@example.edu.cn",
-        journal: "中国数字医学",
-        volumeIssuePages: "21(2): 22-31",
         doi: "10.3969/j.issn.1673-7571.2026.02.004",
         abstract: "为提升眼病筛查领域文献发现效率，研究构建中文医学文献语义向量模型，对标题、摘要、关键词和作者信息进行统一编码，并结合用户检索意图返回高相关文献，显著改善同义表达和长文本检索场景下的召回效果。",
         year: 2026,
         citations: 28,
         field: "医学信息学",
-        type: "方法学研究",
-        recommended: true,
-        recommendReason: "直接对应语义向量检索"
+        type: "会议论文"
     }
 ];
 
@@ -559,6 +504,19 @@ function init() {
 
 function doSearch(mode) {
     currentMode = mode || currentMode || 'keyword';
+
+    // 两个独立模块：关键词检索显示分词标签，语义向量检索显示向量说明
+    var keywordTags = document.getElementById('keywordTags');
+    var semanticNote = document.getElementById('semanticNote');
+    if (currentMode === 'keyword') {
+        keywordTags.style.display = 'flex';
+        semanticNote.style.display = 'none';
+        renderKeywordTags();
+    } else {
+        keywordTags.style.display = 'none';
+        semanticNote.style.display = 'flex';
+    }
+
     var keywordBtn = document.querySelector('button[onclick="doSearch(\'keyword\')"]');
     var semanticBtn = document.querySelector('button[onclick="doSearch(\'semantic\')"]');
     if (keywordBtn && semanticBtn) {
@@ -568,7 +526,6 @@ function doSearch(mode) {
 
     var keyword = (document.getElementById('searchInput').value || '').trim();
     var year = document.getElementById('yearFilter').value;
-    var journal = document.getElementById('journalFilter').value;
     var type = document.getElementById('typeFilter').value;
 
     filteredData = mockData.filter(function(item) {
@@ -579,17 +536,37 @@ function doSearch(mode) {
                 return false;
             }
         }
-        if (journal && item.journal !== journal) return false;
         if (type && item.type !== type) return false;
 
         if (currentMode === 'keyword' && keyword) {
-            var haystack = [item.title, item.abstract, item.authors.join('、')].join(' ').toLowerCase();
-            if (haystack.indexOf(keyword.toLowerCase()) < 0) return false;
+            var terms = extractSemanticTerms(keyword.toLowerCase());
+            if (!terms.length) {
+                var haystack = [item.title, item.abstract, item.authors.join('、')].join(' ').toLowerCase();
+                if (haystack.indexOf(keyword.toLowerCase()) < 0) return false;
+            } else {
+                var haystack = [item.title, item.abstract, item.authors.join('、')].join(' ').toLowerCase();
+                var hits = terms.some(function(t) { return haystack.indexOf(t) >= 0; });
+                if (!hits) return false;
+            }
         }
         return true;
     });
 
-    if (currentMode === 'semantic') {
+    if (currentMode === 'keyword' && keyword) {
+        var terms = extractSemanticTerms(keyword.toLowerCase());
+        if (terms.length) {
+            filteredData = filteredData.map(function(item) {
+                var cloned = Object.assign({}, item);
+                cloned._keywordScore = computeKeywordScore(item, terms);
+                return cloned;
+            }).sort(function(a, b) {
+                if (b._keywordScore !== a._keywordScore) return b._keywordScore - a._keywordScore;
+                return b.citations - a.citations;
+            });
+        } else {
+            filteredData.sort(function(a, b) { return b.citations - a.citations; });
+        }
+    } else if (currentMode === 'semantic') {
         filteredData = filteredData.map(function(item) {
             var cloned = Object.assign({}, item);
             cloned._semanticScore = computeSemanticScore(item, keyword);
@@ -612,30 +589,58 @@ function doSearch(mode) {
 }
 
 function computeSemanticScore(item, query) {
-    var baseText = [item.title, item.abstract, item.field, item.type, item.journal].join(' ').toLowerCase();
+    var baseText = [item.title, item.abstract, item.field, item.type].join(' ').toLowerCase();
     var score = Math.min(item.citations / 80, 35);
     if (!query) return score;
 
     var normalizedQuery = query.toLowerCase();
-    if (baseText.indexOf(normalizedQuery) >= 0) score += 45;
+    if (baseText.indexOf(normalizedQuery) >= 0) score += 30;
 
-    var terms = extractSemanticTerms(normalizedQuery);
-    terms.forEach(function(term) {
-        if (item.title.toLowerCase().indexOf(term) >= 0) score += 16;
-        if (item.abstract.toLowerCase().indexOf(term) >= 0) score += 8;
-        if (item.field.toLowerCase().indexOf(term) >= 0 || item.type.toLowerCase().indexOf(term) >= 0) score += 4;
-    });
+    // 语义向量相似度模拟：字符级 bigram 构建向量，与关键词分词完全无关
+    var queryGrams = getCharBigrams(normalizedQuery);
+    var itemGrams = getCharBigrams(baseText);
+    if (queryGrams.length) {
+        var hitCount = 0;
+        queryGrams.forEach(function(gram) { if (itemGrams.indexOf(gram) >= 0) hitCount++; });
+        score += (hitCount / queryGrams.length) * 50;
+    }
 
-    var domainBoosts = [
-        ['眼底', '视网膜', '糖尿病', 'OCT', '青光眼', '筛查'],
-        ['语义', '向量', '检索', '推荐', '文献'],
-        ['慢病', '随访', '基层', '临床', '诊断'],
-        ['多模态', '融合', '影像', '模型']
+    // 语义主题簇加权（模拟向量引擎的语义空间映射）
+    var semanticClusters = [
+        ['眼底', '视网膜', '黄斑', 'OCT', '眼底影像', '视网膜病变', '青光眼'],
+        ['糖尿病', '血糖', '慢病', '代谢'],
+        ['筛查', '诊断', '检测', '评估', '风险'],
+        ['语义', '向量', '检索', '推荐', '匹配', '知识图谱'],
+        ['多模态', '融合', '影像', '模型', '深度学习', '大语言模型'],
+        ['随访', '基层', '临床', '队列', '干预'],
+        ['隐私', '联邦学习', '安全', '质量']
     ];
-    domainBoosts.forEach(function(group) {
-        var queryHit = group.some(function(term) { return normalizedQuery.indexOf(term.toLowerCase()) >= 0; });
-        var itemHit = group.some(function(term) { return baseText.indexOf(term.toLowerCase()) >= 0; });
-        if (queryHit && itemHit) score += 10;
+    semanticClusters.forEach(function(cluster) {
+        var queryHit = cluster.some(function(term) { return normalizedQuery.indexOf(term) >= 0; });
+        var itemHit = cluster.some(function(term) { return baseText.indexOf(term) >= 0; });
+        if (queryHit && itemHit) score += 8;
+    });
+    return score;
+}
+
+function getCharBigrams(text) {
+    var clean = text.replace(/[\s,，。；;、:：""''（）()【】《》]/g, '');
+    var grams = [];
+    for (var i = 0; i < clean.length - 1; i++) {
+        grams.push(clean.substr(i, 2));
+    }
+    return Array.from(new Set(grams));
+}
+
+function computeKeywordScore(item, terms) {
+    var score = 0;
+    var titleLower = item.title.toLowerCase();
+    var abstractLower = item.abstract.toLowerCase();
+    var fieldLower = (item.field || '').toLowerCase();
+    terms.forEach(function(term) {
+        if (titleLower.indexOf(term) >= 0) score += 10;
+        if (abstractLower.indexOf(term) >= 0) score += 5;
+        if (fieldLower.indexOf(term) >= 0) score += 3;
     });
     return score;
 }
@@ -649,6 +654,25 @@ function extractSemanticTerms(text) {
     return Array.from(new Set(terms));
 }
 
+function renderKeywordTags() {
+    var input = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+    var container = document.getElementById('keywordTags');
+    if (!input) {
+        container.innerHTML = '';
+        return;
+    }
+    var terms = extractSemanticTerms(input);
+    if (!terms.length) {
+        container.innerHTML = '';
+        return;
+    }
+    var html = '<span class="kw-label">&#x5206;&#x8BCD;&#x7ED3;&#x679C;&#xFF1A;</span>';
+    html += terms.map(function(t) {
+        return '<span class="kw-tag">' + escapeHtml(t) + '</span>';
+    }).join('');
+    container.innerHTML = html;
+}
+
 function renderResults() {
     var list = document.getElementById('resultList');
     var noResult = document.getElementById('resultNoResult');
@@ -659,7 +683,7 @@ function renderResults() {
     var pageData = filteredData.slice(start, start + pageSize);
 
     summary.textContent = '共检索到 ' + filteredData.length + ' 条文献';
-    modeLabel.textContent = currentMode === 'semantic' ? '语义向量检索结果' : '关键词检索结果';
+    modeLabel.textContent = currentMode === 'semantic' ? '语义向量检索结果' : '分词检索结果';
 
     if (!filteredData.length) {
         list.innerHTML = '';
@@ -672,29 +696,26 @@ function renderResults() {
     list.innerHTML = pageData.map(function(item) {
         var authors = item.authors.join('、');
         var snippet = item.abstract.length > 150 ? item.abstract.substring(0, 150) + '...' : item.abstract;
-        var semanticBadge = currentMode === 'semantic'
-            ? '<span class="semantic-score">语义相关度：' + item._semanticRelevance + '%</span>'
-            : '';
+        var relevanceBadge = '';
+        if (currentMode === 'semantic') {
+            relevanceBadge = '<span class="semantic-score">语义相关度：' + item._semanticRelevance + '%</span>';
+        } else if (currentMode === 'keyword' && item._keywordScore !== undefined) {
+            relevanceBadge = '<span class="semantic-score">关键词匹配度：' + item._keywordScore + '分</span>';
+        }
         return '' +
             '<article class="literature-item">' +
                 '<div class="literature-head">' +
                     '<div class="literature-title" onclick="openDetail(' + item.id + ')">' + escapeHtml(item.title) + '</div>' +
                     '<div class="literature-badges">' +
-                        '<span class="recommend-badge">为您推荐</span>' +
-                        semanticBadge +
+                        relevanceBadge +
                     '</div>' +
                 '</div>' +
                 '<div class="literature-meta">' +
                     '<span><strong>作者：</strong>' + escapeHtml(authors) + '</span>' +
-                    '<span><strong>期刊名称：</strong>' + escapeHtml(item.journal) + '</span>' +
                     '<span><strong>发表年份：</strong>' + item.year + '</span>' +
                     '<span><strong>文献类型：</strong>' + escapeHtml(item.type) + '</span>' +
                 '</div>' +
                 '<div class="literature-abstract"><strong>摘要片段：</strong>' + escapeHtml(snippet) + '</div>' +
-                '<div class="literature-actions">' +
-                    '<span class="literature-type">' + escapeHtml(item.recommendReason) + ' · 引用 ' + item.citations.toLocaleString() + ' 次</span>' +
-                    '<button class="btn btn-sm btn-outline" onclick="openDetail(' + item.id + ')">查看详情</button>' +
-                '</div>' +
             '</article>';
     }).join('');
     renderPagination(pagination);
@@ -737,11 +758,8 @@ function openDetail(id) {
         '<div class="detail-field"><div class="detail-label">全部作者</div><div class="author-list">' + authorTags + '</div></div>' +
         '<div class="detail-field"><div class="detail-label">作者单位</div><div class="detail-value">' + escapeHtml(item.affiliation) + '</div></div>' +
         '<div class="detail-field"><div class="detail-label">通信作者及邮箱</div><div class="detail-value">' + escapeHtml(item.correspondingAuthor) + ' &lt;<a href="mailto:' + escapeHtml(item.correspondingEmail) + '" style="color:var(--primary);text-decoration:none;">' + escapeHtml(item.correspondingEmail) + '</a>&gt;</div></div>' +
-        '<div class="detail-field"><div class="detail-label">期刊名称</div><div class="detail-value">' + escapeHtml(item.journal) + '</div></div>' +
         '<div class="detail-field"><div class="detail-label">发表年份 / 文献类型</div><div class="detail-value">' + item.year + ' / ' + escapeHtml(item.type) + '</div></div>' +
-        '<div class="detail-field"><div class="detail-label">卷期页码</div><div class="detail-value">' + escapeHtml(item.volumeIssuePages) + '</div></div>' +
         '<div class="detail-field"><div class="detail-label">DOI</div><div class="detail-value">' + doiHtml + '</div></div>' +
-        '<div class="detail-field"><div class="detail-label">推荐说明</div><div class="detail-value"><span class="recommend-badge">为您推荐</span> ' + escapeHtml(item.recommendReason) + '</div></div>' +
         '<div class="detail-field"><div class="detail-label">摘要全文</div><div class="detail-abstract">' + escapeHtml(item.abstract) + '</div></div>';
 
     document.getElementById('detailModal').style.display = 'flex';
@@ -763,7 +781,6 @@ function renderRecommend() {
         html += '<div class="rec-item-title">' + escapeHtml(item.title) + '</div>';
         html += '<div class="rec-item-meta">';
         html += '<span>' + escapeHtml(item.authors[0]) + ' 等</span>';
-        html += '<span>' + escapeHtml(item.journal) + '</span>';
         html += '<span>' + item.year + '</span>';
         html += '</div>';
         html += '</div>';

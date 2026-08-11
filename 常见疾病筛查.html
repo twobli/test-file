@@ -426,11 +426,16 @@ function imageCards(task) {
     var eye = qcEyeLabel(task, img, i);
     html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')">' +
       '<div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div>' +
-      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看原图</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
+      '<div class="qc-image-meta"><div><strong>' + escapeHtml(img.name) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看眼底图像</span></div><span class="tag success eye-tag">' + eye + '</span></div>' +
       '</div>';
   }
   html += '</div>';
   return html;
+}
+function imageCountText(task) {
+  if (task && task.uploadMode === 'double') return '2张眼底彩照';
+  if (task && task.images && task.images.length) return task.images.length + '张眼底彩照';
+  return '1张眼底彩照';
 }
 function renderFundusTaskSummary() {
   var el = document.getElementById('taskSummary');
@@ -447,7 +452,7 @@ function renderFundusTaskSummary() {
     '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
     '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
     '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (task.userType === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
+    '<div class="task-summary-item"><span>图像数量</span><strong>' + imageCountText(task) + '</strong></div>' +
     '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
     imageCards(task);
 }
@@ -474,7 +479,7 @@ function renderNextAction() {
   if (isDoctorAllowed(task)) {
     area.innerHTML = '<a class="btn primary" href="多任务联合筛查.html">进入联合筛查</a><a class="btn secondary" href="输出筛查报告.html">直接生成报告</a>';
   } else {
-    area.innerHTML = '<a class="btn primary" href="输出筛查报告.html">生成普通筛查报告</a><span class="tag gray">普通用户不可进入多任务联合筛查</span>';
+    area.innerHTML = '<a class="btn primary" href="输出筛查报告.html?role=normal">生成筛查报告</a>';
   }
 }
 document.addEventListener('DOMContentLoaded', function() {

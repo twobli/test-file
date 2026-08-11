@@ -72,16 +72,27 @@ button { font: inherit; border: 0; cursor: pointer; }
 .step.done .step-circle { background: var(--success); color: #fff; }
 .step.done { color: var(--success); }
 .step.done::before { background: var(--success); }
-.task-summary {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;
-  padding: 12px; border-radius: 12px; background: var(--panel-soft);
-  box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 16px;
+.task-panel {
+  padding: 16px 18px; border-radius: 16px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #dbe8fb; margin-bottom: 16px;
 }
-.task-summary.empty { display: block; color: var(--muted); }
-.task-summary-item { padding: 10px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
+.task-panel.empty { color: var(--muted); }
+.task-panel-head {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  margin-bottom: 14px;
+}
+.task-panel-title { font-size: 16px; font-weight: 900; color: var(--text); }
+.task-meta-line { margin-top: 4px; color: var(--soft); font-size: 13px; }
+.task-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.task-summary-item { padding: 14px 16px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
 .task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
-.task-summary-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; word-break: break-all; }
-.task-summary-item.wide { grid-column: 1 / -1; }
+.task-summary-item strong { display: block; margin-top: 5px; color: var(--text); font-size: 14px; word-break: break-all; }
+.qc-eye-summary {
+  padding: 14px 16px; border-radius: 12px; background: #fff;
+  box-shadow: inset 0 0 0 1px #edf2f9; margin-bottom: 12px;
+}
+.qc-eye-summary span { display: block; color: var(--soft); font-size: 12px; }
+.qc-eye-summary strong { display: block; margin-top: 6px; color: var(--text); font-size: 14px; word-break: break-all; }
 .qc-image-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .qc-image-card { border-radius: 12px; background: #fff; overflow: hidden; cursor: pointer; box-shadow: inset 0 0 0 1px #edf2f9; transition: .16s ease; }
 .qc-image-card:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(22,93,255,.12), inset 0 0 0 1px #a8c8ff; }
@@ -126,11 +137,16 @@ button { font: inherit; border: 0; cursor: pointer; }
 .marker-lesion.alt { left: auto; top: auto; right: 24px; bottom: 24px; width: 30px; height: 24px; border-color: #06b6d4; background: rgba(6,182,212,.1); }
 .native-table-wrap { overflow-x: auto; margin-bottom: 16px; }
 .native-table { width: 100%; min-width: 760px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.native-table.wide { min-width: 1080px; }
+.native-table.compact { min-width: 620px; }
 .native-table th { padding: 9px 8px; border: 1px solid #fff; background: #7b168e; color: #fff; text-align: center; font-weight: 900; }
 .native-table td { padding: 9px 8px; border: 1px solid #fff; background: #f6f6f7; color: #374151; text-align: center; }
 .native-table tr:nth-child(even) td { background: #fff; }
 .native-table .name { color: #7b168e; font-weight: 900; }
 .native-table-note { display: flex; justify-content: space-between; gap: 12px; color: #6b7280; font-size: 12px; margin: 0 0 8px; }
+.quant-page-stack { display: grid; gap: 12px; }
+.quant-group { display: grid; gap: 12px; }
+.quant-group + .quant-group { margin-top: 14px; }
 .analysis-strip { display: grid; grid-template-columns: .8fr 1.2fr .8fr 1.2fr; gap: 18px; align-items: center; margin-bottom: 18px; }
 .quadrant-card { width: 112px; height: 112px; margin: 0 auto; border-radius: 4px; background: #f7eef8; display: grid; place-items: center; }
 .quadrant-card svg { width: 82px; height: 82px; }
@@ -161,7 +177,7 @@ button { font: inherit; border: 0; cursor: pointer; }
   .sidebar .menu-item span { display: none; }
   .menu-group-title { display: none; }
   .main-content { margin-left: 60px; }
-  .stats, .task-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats, .task-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .qc-image-grid, .analysis-strip, .lesion-eye-grid { grid-template-columns: 1fr; }
   .visual-matrix { grid-template-columns: 50px repeat(2, minmax(118px, 1fr)); }
   .visual-spacer { display: none; }
@@ -171,7 +187,7 @@ button { font: inherit; border: 0; cursor: pointer; }
   .header .header-nav { margin-left: 0; }
   .sidebar { display: none; }
   .main-content { margin-left: 0; padding: 14px; }
-  .stats, .task-summary { grid-template-columns: 1fr; }
+  .stats, .task-summary-grid { grid-template-columns: 1fr; }
   .native-page { padding: 18px 12px 14px; }
 }
 </style>
@@ -193,7 +209,6 @@ button { font: inherit; border: 0; cursor: pointer; }
     <div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
     <a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
     <a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
-    <a class="menu-item" data-flow-role="doctor" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_医生用户.html?role=doctor">常见疾病筛查</a>
     <a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
     <a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a>
   </div>
@@ -210,16 +225,11 @@ button { font: inherit; border: 0; cursor: pointer; }
   <div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>多任务联合筛查</strong></div>
   <h1 class="page-title">多任务联合筛查</h1>
 
-  <div class="card" id="doctorOnlyNotice" style="display:none;">
-    <div class="card-header"><span class="card-title">多任务联合筛查权限说明</span></div>
-    <div class="alert alert-warning">当前筛查任务为普通用户任务，已完成常见疾病筛查；多任务联合筛查仅医生用户可进入。</div>
-    <a class="btn primary" href="输出筛查报告.html?role=normal">生成普通筛查报告</a>
-  </div>
 
   <div class="card" id="multiTaskCard">
     <div class="card-header"><span class="card-title">多任务联合分析</span></div>
     <div class="steps" id="stepsBar"></div>
-    <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
+    <div id="taskSummary" class="task-panel empty">正在读取当前筛查任务...</div>
 
     <div class="card-header" style="margin-top:16px;"><span class="card-title">病灶切割图像</span></div>
     <div class="native-report">
@@ -260,43 +270,95 @@ button { font: inherit; border: 0; cursor: pointer; }
     <div class="native-report">
       <div class="native-page">
         <h2 class="native-title">量化分析</h2>
-        <h3 class="native-subtitle">出血渗出</h3>
-        <div class="native-table-note"><span>统计范围：左眼、右眼眼底图像病灶区域</span><span>参考值：0</span></div>
-        <div class="native-table-wrap">
-          <table class="native-table">
-            <thead><tr><th rowspan="2">内容</th><th colspan="6">左眼</th><th colspan="6">右眼</th></tr><tr><th>总面积</th><th>最大面积</th><th>TS</th><th>TL</th><th>NS</th><th>个数</th><th>总面积</th><th>最大面积</th><th>TS</th><th>TL</th><th>NS</th><th>个数</th></tr></thead>
-            <tbody>
-              <tr><td class="name">出血</td><td>247957</td><td>117095</td><td>2</td><td>0</td><td>73</td><td>80</td><td>247130</td><td>117181</td><td>2</td><td>0</td><td>92</td><td>106</td></tr>
-              <tr><td class="name">硬性渗出</td><td>26</td><td>21</td><td>1</td><td>0</td><td>0</td><td>2</td><td>24</td><td>19</td><td>0</td><td>3</td><td>0</td><td>3</td></tr>
-              <tr><td class="name">软性渗出</td><td>6451</td><td>2160</td><td>124</td><td>77</td><td>54</td><td>5813</td><td>6471</td><td>2153</td><td>125</td><td>73</td><td>51</td><td>5605</td></tr>
-            </tbody>
-          </table>
+        <div class="quant-group">
+          <h3 class="native-subtitle">出血渗出</h3>
+          <div class="native-table-note"><span>统计范围：左眼、右眼眼底图像病灶区域</span><span>参考值：0</span></div>
+          <div class="native-table-wrap">
+            <table class="native-table wide">
+              <thead>
+                <tr><th rowspan="2">内容</th><th colspan="7">左眼</th><th colspan="7">右眼</th></tr>
+                <tr><th>总面积(PX)</th><th>最大面积(PX)</th><th>TS</th><th>TL</th><th>NS</th><th>NL</th><th>总个数</th><th>总面积(PX)</th><th>最大面积(PX)</th><th>TS</th><th>TL</th><th>NS</th><th>NL</th><th>总个数</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="name">出血</td><td>247957</td><td>117095</td><td>2</td><td>0</td><td>73</td><td>5</td><td>80</td><td>247130</td><td>117181</td><td>2</td><td>0</td><td>92</td><td>12</td><td>106</td></tr>
+                <tr><td class="name">硬性渗出</td><td>26</td><td>21</td><td>1</td><td>0</td><td>0</td><td>1</td><td>2</td><td>24</td><td>19</td><td>0</td><td>3</td><td>0</td><td>0</td><td>3</td></tr>
+                <tr><td class="name">软性渗出</td><td>6451</td><td>2160</td><td>124</td><td>77</td><td>54</td><td>58</td><td>313</td><td>6471</td><td>2153</td><td>125</td><td>73</td><td>51</td><td>56</td><td>305</td></tr>
+                <tr><td class="name">微动脉瘤</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>17</td><td>6</td><td>5</td><td>0</td><td>0</td><td>0</td><td>5</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <h3 class="native-subtitle">血管参数</h3>
-        <div class="native-table-wrap">
-          <table class="native-table">
-            <thead><tr><th>血管参数</th><th>左眼</th><th>右眼</th><th>评估提示</th></tr></thead>
-            <tbody>
-              <tr><td class="name">B区视网膜中央动脉当量(CRAE/PX)</td><td>111.459</td><td>100.164</td><td><span class="tag success">稳定</span></td></tr>
-              <tr><td class="name">B区视网膜中央静脉当量(CRVE/PX)</td><td>141.872</td><td>127.572</td><td><span class="tag success">稳定</span></td></tr>
-              <tr><td class="name">B区视网膜动静脉比(AVR)</td><td>0.79</td><td>0.79</td><td><span class="tag success">稳定</span></td></tr>
-            </tbody>
-          </table>
+        <div class="quant-group">
+          <h3 class="native-subtitle">血管参数</h3>
+          <div class="native-table-wrap">
+            <table class="native-table compact">
+              <thead><tr><th>血管参数</th><th>左眼</th><th>右眼</th><th>评估提示</th></tr></thead>
+              <tbody>
+                <tr><td class="name">B区视网膜中央动脉当量(CRAE/PX)</td><td>111.459</td><td>100.164</td><td><span class="tag success">稳定</span></td></tr>
+                <tr><td class="name">B区视网膜中央静脉当量(CRVE/PX)</td><td>141.872</td><td>127.572</td><td><span class="tag success">稳定</span></td></tr>
+                <tr><td class="name">B区视网膜动静脉比(AVR)</td><td>0.79</td><td>0.79</td><td><span class="tag success">稳定</span></td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="native-page">
-        <h2 class="native-title">青光眼疑似特征分析</h2>
-        <div class="analysis-strip">
-          <div class="quadrant-card"><svg viewBox="0 0 100 100" aria-label="左眼象限"><circle cx="50" cy="50" r="40" fill="#fff" stroke="#e5d7eb" stroke-width="6"/><path d="M50 50 L50 10 A40 40 0 0 1 90 50 Z" fill="#facc15"/><path d="M50 50 L90 50 A40 40 0 0 1 50 90 Z" fill="#bbf7d0"/><path d="M50 50 L50 90 A40 40 0 0 1 10 50 Z" fill="#c4b5fd"/><path d="M50 50 L10 50 A40 40 0 0 1 50 10 Z" fill="#fbcfe8"/><circle cx="50" cy="50" r="13" fill="#7e22ce"/><text x="50" y="54" fill="#fff" font-size="10" text-anchor="middle">OD</text></svg></div>
-          <div class="fundus-cell"><div class="fundus-art" style="width:168px;"><span class="marker-disc"></span></div></div>
-          <div class="quadrant-card"><svg viewBox="0 0 100 100" aria-label="右眼象限"><circle cx="50" cy="50" r="40" fill="#fff" stroke="#e5d7eb" stroke-width="6"/><path d="M50 50 L50 10 A40 40 0 0 1 90 50 Z" fill="#facc15"/><path d="M50 50 L90 50 A40 40 0 0 1 50 90 Z" fill="#bbf7d0"/><path d="M50 50 L50 90 A40 40 0 0 1 10 50 Z" fill="#c4b5fd"/><path d="M50 50 L10 50 A40 40 0 0 1 50 10 Z" fill="#fbcfe8"/><circle cx="50" cy="50" r="13" fill="#7e22ce"/><text x="50" y="54" fill="#fff" font-size="10" text-anchor="middle">OS</text></svg></div>
-          <div class="fundus-cell"><div class="fundus-art right" style="width:168px;"><span class="marker-disc"></span></div></div>
+        <h2 class="native-title">视神经参数</h2>
+        <div class="quant-group">
+          <h3 class="native-subtitle">视神经纤维层缺损分析</h3>
+          <div class="native-table-wrap">
+            <table class="native-table compact">
+              <thead><tr><th>内容</th><th>左眼</th><th>右眼</th></tr></thead>
+              <tbody>
+                <tr><td class="name">是否发现缺损</td><td><span class="tag success">否</span></td><td><span class="tag success">否</span></td></tr>
+                <tr><td class="name">损伤位置</td><td>-</td><td>-</td></tr>
+                <tr><td class="name">损伤面积(mm²)</td><td>0</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="native-table-wrap">
-          <table class="native-table">
-            <thead><tr><th>内容</th><th>是否发现疑似青光眼特征</th><th>疑似损伤位置</th><th>疑似损伤面积(mm²)</th></tr></thead>
-            <tbody><tr><td class="name">左眼</td><td>否</td><td>-</td><td>0</td></tr><tr><td class="name">右眼</td><td>否</td><td>-</td><td>0</td></tr></tbody>
-          </table>
+        <div class="quant-group">
+          <h3 class="native-subtitle">杯盘比分析</h3>
+          <div class="native-table-wrap">
+            <table class="native-table wide">
+              <thead>
+                <tr><th>项目</th><th>左眼 H</th><th>左眼 V</th><th>左眼 Avg</th><th>右眼 H</th><th>右眼 V</th><th>右眼 Avg</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="name">视杯直径</td><td>308.250</td><td>398.250</td><td>353.250</td><td>263.250</td><td>312.750</td><td>288.000</td></tr>
+                <tr><td class="name">视盘直径</td><td>567.000</td><td>798.750</td><td>682.875</td><td>535.500</td><td>753.750</td><td>644.625</td></tr>
+                <tr><td class="name">杯盘比值</td><td>0.544</td><td>0.499</td><td>0.522</td><td>0.492</td><td>0.415</td><td>0.454</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="quant-group">
+          <h3 class="native-subtitle">盘沿分析</h3>
+          <div class="native-table-wrap">
+            <table class="native-table compact">
+              <thead><tr><th>盘沿分区</th><th>左眼</th><th>右眼</th></tr></thead>
+              <tbody>
+                <tr><td class="name">I区</td><td>202.500</td><td>213.750</td></tr>
+                <tr><td class="name">S区</td><td>182.250</td><td>211.500</td></tr>
+                <tr><td class="name">N区</td><td>130.500</td><td>146.250</td></tr>
+                <tr><td class="name">D区</td><td>105.750</td><td>105.750</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="quant-group">
+          <h3 class="native-subtitle">视盘面积分析</h3>
+          <div class="native-table-wrap">
+            <table class="native-table compact">
+              <thead><tr><th>项目</th><th>左眼</th><th>右眼</th></tr></thead>
+              <tbody>
+                <tr><td class="name">视盘面积</td><td>0.339</td><td>0.311</td></tr>
+                <tr><td class="name">视杯面积</td><td>0.098</td><td>0.066</td></tr>
+                <tr><td class="name">盘沿面积</td><td>0.241</td><td>0.245</td></tr>
+                <tr><td class="name">视杯/视盘面积比</td><td>0.290</td><td>0.213</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -328,10 +390,10 @@ button { font: inherit; border: 0; cursor: pointer; }
       </table>
     </div>
 
-    <div class="card-header" style="margin-top:16px;"><span class="card-title">深度病种筛查</span></div>
+    <div class="card-header" style="margin-top:16px;"><span class="card-title">扩展病种精细筛查</span></div>
     <div class="native-report">
       <div class="native-page">
-        <h2 class="native-title">当前眼底病灶分析结果</h2>
+        <h2 class="native-title">当前眼底扩展病种分析结果</h2>
         <div class="lesion-eye-grid">
           <div>
             <div class="lesion-eye-label">左眼</div>
@@ -382,7 +444,6 @@ button { font: inherit; border: 0; cursor: pointer; }
 
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
       <a class="btn primary" id="reportBtn" href="输出筛查报告.html?role=doctor">生成筛查报告</a>
-      <a class="btn secondary" id="backBtn" href="图像质量质控.html?role=doctor">返回图像质控</a>
     </div>
   </div>
 </main>
@@ -423,12 +484,7 @@ function getFlowRole() {
   if (/普通|患者|居民|公众/.test(text)) return 'normal';
   return 'doctor';
 }
-function isDoctorAllowed(task) {
-  var role = getFlowRole();
-  if (role === 'normal') return false;
-  if (task && task.userType === 'normal') return false;
-  return true;
-}
+
 function roleQuery() {
   return '?role=' + getFlowRole();
 }
@@ -473,9 +529,9 @@ function placeholderFundus(index) {
 }
 function imageSummary(task) {
   var imgs = task && task.images ? task.images : [];
-  if (!imgs.length) return '示例图像：左眼、右眼各一张';
+  if (!imgs.length) return '第1张图像：左眼_眼底彩照_001.jpg（AI质控识别：左眼）；第2张图像：右眼_眼底彩照_002.jpg（AI质控识别：右眼）';
   return imgs.map(function(img, i) {
-    return qcEyeLabel(task, img, i) + '：' + (img.name || ('图像' + (i + 1)));
+    return slotLabel(img.slot) + '：' + (img.name || ('眼底图像' + (i + 1))) + '（AI质控识别：' + qcEyeLabel(task, img, i) + '）';
   }).join('；');
 }
 function imageCards(task) {
@@ -484,22 +540,36 @@ function imageCards(task) {
   for (var i = 0; i < imgs.length; i++) {
     var img = imgs[i];
     var eye = qcEyeLabel(task, img, i);
-    html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')"><div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div><div class="qc-image-meta"><div><strong>' + escapeHtml(img.name || ('眼底图像' + (i + 1))) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看原图</span></div><span class="tag success">' + eye + '</span></div></div>';
+    html += '<div class="qc-image-card" onclick="openQcImage(' + i + ')"><div class="qc-image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name) + '"></div><div class="qc-image-meta"><div><strong>' + escapeHtml(img.name || ('眼底图像' + (i + 1))) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看眼底图像</span></div><span class="tag success">' + eye + '</span></div></div>';
   }
   html += '</div>';
   return html;
+}
+function screeningTaskText() {
+  return getFlowRole() === 'doctor' ? '多任务联合筛查' : '常见疾病筛查';
+}
+function imageCountText(task) {
+  if (task && task.uploadMode === 'double') return '2张眼底彩照';
+  if (task && task.images && task.images.length) return task.images.length + '张眼底彩照';
+  return '2张眼底彩照';
 }
 function renderFundusTaskSummary() {
   var el = document.getElementById('taskSummary');
   var task = readFundusTask();
   var patient = task && task.patient ? task.patient : { name: '张教授', age: '—', gender: '—' };
-  el.className = 'task-summary';
+  el.className = 'task-panel';
   el.innerHTML =
-    '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task && task.taskId ? task.taskId : 'FS-260626-001') + '</strong></div>' +
-    '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name || '—') + (patient.age ? ' · ' + escapeHtml(patient.age) + '岁' : '') + (patient.gender ? ' · ' + escapeHtml(patient.gender) : '') + '</strong></div>' +
-    '<div class="task-summary-item"><span>上传模式</span><strong>' + (task && task.uploadMode === 'double' ? '双眼图像' : '单眼/双眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (getFlowRole() === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
-    '<div class="task-summary-item wide"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
+    '<div class="task-panel-head">' +
+      '<div><div class="task-panel-title">当前筛查任务</div><div class="task-meta-line">患者信息已同步到图像质量质控、多任务联合筛查和报告页面。</div></div>' +
+      '<span class="tag success">质控通过</span>' +
+    '</div>' +
+    '<div class="task-summary-grid">' +
+      '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task && task.taskId ? task.taskId : 'FS-260626-001') + '</strong></div>' +
+      '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name || '—') + (patient.age ? ' · ' + escapeHtml(patient.age) + '岁' : '') + (patient.gender ? ' · ' + escapeHtml(patient.gender) : '') + '</strong></div>' +
+      '<div class="task-summary-item"><span>筛查任务</span><strong>' + screeningTaskText() + '</strong></div>' +
+      '<div class="task-summary-item"><span>图像数量</span><strong>' + imageCountText(task) + '</strong></div>' +
+    '</div>' +
+    '<div class="qc-eye-summary" style="margin-top:12px;"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>' +
     imageCards(task);
 }
 function renderSteps() {
@@ -530,9 +600,7 @@ function activateFlowSidebar() {
 function syncRoleLinks() {
   var role = getFlowRole();
   var reportBtn = document.getElementById('reportBtn');
-  var backBtn = document.getElementById('backBtn');
   if (reportBtn) reportBtn.href = '输出筛查报告.html?role=' + role;
-  if (backBtn) backBtn.href = '图像质量质控.html?role=' + role;
 }
 function openQcImage(index) {
   var task = readFundusTask();
@@ -553,11 +621,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var user = readCurrentUser();
     if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
   } catch(e) {}
-  var task = readFundusTask();
-  if (!isDoctorAllowed(task)) {
-    document.getElementById('doctorOnlyNotice').style.display = 'block';
-    document.getElementById('multiTaskCard').style.display = 'none';
-  }
+
   renderSteps();
   renderFundusTaskSummary();
   activateFlowSidebar();

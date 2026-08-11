@@ -1529,8 +1529,6 @@
         <div class="toolbar">
           <div class="tabs" data-tab-group="literatureTabs">
             <button class="tab active" data-tab="literatureManage">文献库管理</button>
-            <button class="tab" data-tab="literatureRecommend">推荐位管理</button>
-            <button class="tab" data-tab="literatureSearchConfig">检索配置</button>
           </div>
           <div class="top-actions">
             <a class="btn" href="../科技文献检索推荐.html">前台页面</a>
@@ -1542,29 +1540,19 @@
           <div class="panel kpi-card">
             <div class="kpi-row"><span class="label">文献总量</span><span class="metric-dot">文</span></div>
             <div class="value">14</div>
-            <div class="note">对应前台“共检索到 14 条文献”，覆盖眼科、医学影像、临床医学、医学信息学等领域。</div>
-          </div>
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">前台推荐</span><span class="metric-dot amber">荐</span></div>
-            <div class="value">8</div>
-            <div class="note">右侧“为您推荐”列表按推荐权重、引用量和相关性排序展示。</div>
-          </div>
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">语义检索模型</span><span class="metric-dot green">向</span></div>
-            <div class="value">92%</div>
-            <div class="note">用于长文本和同义表达召回，支持标题、摘要、关键词、作者统一向量。</div>
+            <div class="note">对应前台已录入的科技文献总量，覆盖眼科、医学影像、临床医学、医学信息学等领域。</div>
           </div>
           <div class="panel kpi-card">
             <div class="kpi-row"><span class="label">待完善元数据</span><span class="metric-dot violet">审</span></div>
             <div class="value">3</div>
-            <div class="note">缺少 DOI、通讯作者邮箱或推荐说明的文献进入待处理队列。</div>
+            <div class="note">缺少完整作者信息、通讯邮箱或摘要的文献进入待处理队列。</div>
           </div>
         </div>
 
         <div class="tab-pane active" id="literatureManage" style="margin-top:14px;">
           <div class="panel">
             <div class="panel-head">
-              <div><h2 class="panel-title">文献数据管理</h2><p class="panel-subtitle">维护前台检索结果卡片所需字段：题名、作者、期刊、年份、类型、摘要、引用次数和推荐状态。</p></div>
+              <div><h2 class="panel-title">文献数据管理</h2><p class="panel-subtitle">管理已上传的科技文献元数据：题名、作者、期刊、年份、类型、摘要等。</p></div>
             </div>
             <div class="toolbar" style="padding:0 18px;">
               <div class="filters">
@@ -1589,72 +1577,14 @@
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>文献题名</th><th>作者/机构</th><th>期刊与年份</th><th>类型</th><th>推荐状态</th><th>引用/热度</th><th>操作</th></tr></thead>
+                <thead><tr><th>文献题名</th><th>作者/机构</th><th>期刊与年份</th><th>类型</th><th>操作</th></tr></thead>
                 <tbody id="literatureRows"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <div class="tab-pane" id="literatureRecommend" style="margin-top:14px;">
-          <div class="grid two">
-            <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">右侧“为您推荐”配置</h2><p class="panel-subtitle">管理前台右侧推荐栏的展示顺序、推荐理由、启停状态和点击统计。</p></div><button class="btn primary small" onclick="openDrawer('推荐规则', '配置推荐排序、召回范围、推荐理由模板和前台展示数量。', 'recommend-rule')">配置规则</button></div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>排序</th><th>推荐文献</th><th>推荐理由</th><th>展示位置</th><th>点击</th><th>状态</th><th>操作</th></tr></thead>
-                  <tbody id="recommendRows"></tbody>
-                </table>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">推荐策略闭环</h2><p class="panel-subtitle">把前台检索结果与右侧推荐列表统一到同一套文献数据源。</p></div></div>
-              <div class="panel-body">
-                <div class="rules">
-                  <div class="rule-box"><b>召回来源</b><p>从已发布文献中选择推荐项，支持按引用量、关键词相关度、年份新鲜度和人工置顶排序。</p></div>
-                  <div class="rule-box"><b>推荐理由</b><p>对应前台卡片右上角“为您推荐”和详情页推荐说明，缺失时进入待完善元数据。</p></div>
-                  <div class="rule-box"><b>前台展示</b><p>右侧最多展示 8 条，列表页文献卡片仍按检索、筛选和语义向量结果展示。</p></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-pane" id="literatureSearchConfig" style="margin-top:14px;">
-          <div class="grid two">
-            <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">关键词与语义向量检索配置</h2><p class="panel-subtitle">对应前台“检索 / 语义向量检索”两个按钮和期刊、年份、文献类型筛选器。</p></div></div>
-              <div class="panel-body">
-                <div class="split-form">
-                  <div class="form-field"><label>关键词字段权重</label><input class="input" value="题名 45% / 摘要 35% / 作者 20%"></div>
-                  <div class="form-field"><label>语义模型版本</label><select class="select"><option>Chinese-Med-Embedding v2.1</option><option>Chinese-Med-Embedding v2.0</option></select></div>
-                  <div class="form-field"><label>年份筛选</label><select class="select"><option>全部 / 近1年 / 近3年 / 近5年</option></select></div>
-                  <div class="form-field"><label>默认排序</label><select class="select"><option>综合相关度</option><option>引用次数优先</option><option>发表年份优先</option></select></div>
-                  <div class="form-field" style="grid-column:1/-1;"><label>同义词与扩展词</label><textarea>糖网=糖尿病视网膜病变=DR；OCT=光学相干断层扫描；眼底筛查=视网膜筛查；多模态=眼底彩照+OCT+临床指标。</textarea></div>
-                </div>
-                <div class="toolbar"><button class="btn primary" onclick="showToast('检索配置已保存，前台文献检索将在刷新后使用新配置。')">保存配置</button><button class="btn">测试召回</button></div>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">检索运营观察</h2><p class="panel-subtitle">用于后续补充真实埋点和模型评估。</p></div></div>
-              <div class="panel-body">
-                <div class="bars">
-                  <div class="bar-row"><span>关键词检索</span><div class="progress"><span style="width:78%"></span></div><b>78%</b></div>
-                  <div class="bar-row"><span>语义检索</span><div class="progress"><span style="width:64%"></span></div><b>64%</b></div>
-                  <div class="bar-row"><span>推荐点击</span><div class="progress"><span style="width:52%"></span></div><b>52%</b></div>
-                  <div class="bar-row"><span>详情查看</span><div class="progress"><span style="width:86%"></span></div><b>86%</b></div>
-                </div>
-                <div class="rules" style="margin-top:14px;">
-                  <div class="rule-box"><b>低召回词</b><p>黄斑水肿、基层随访、联邦学习等词需要补充同义词和人工推荐。</p></div>
-                  <div class="rule-box"><b>高频筛选</b><p>用户最常使用“期刊来源：中国数字医学”和“文献类型：综述”。</p></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="audit">
+        <section class="section" id="audit">
         <div class="panel">
           <div class="panel-head"><div><h2 class="panel-title">内容审核与运营日志</h2><p class="panel-subtitle">记录后台关键操作，便于后续独立部署时迁移审计逻辑。</p></div></div>
           <div class="table-wrap">
@@ -1701,7 +1631,7 @@
       aiqa: ['AI答疑与模型配置', '配置医学语言模型问答范围、课程难点讲解语料和答疑运营日志。'],
       knowledge: ['智能教学服务管理后台', '统一管理阅片影像、系统编号、题目与答案解析、知识点关联、错题高亮、学习记录和前台发布状态，覆盖智能教学服务完整业务链路。'],
       knowledgeGraph: ['知识图谱管理', '统一维护图谱实体、关系和病例推理规则，并与前台知识图谱查询与推理页面共享同一套节点、边和筛选口径。'],
-      literature: ['科技文献检索管理', '管理科技文献检索推荐页面的文献元数据、关键词检索、语义向量检索、推荐理由和右侧推荐位。'],
+      literature: ['科技文献检索管理', '管理科技文献元数据的录入、编辑和审核，为前台检索推荐提供数据基础。'],
       audit: ['内容审核与运营日志', '记录课程、测验、考试、比赛、AI答疑、证书等后台操作，便于独立迁移和审计。']
     };
 
@@ -1728,16 +1658,16 @@
     ];
 
     var literatureItems = [
-      { title: '基于深度学习的糖尿病视网膜病变自动筛查研究', authors: '古尔山、彭磊、科拉姆、韦伯斯特', org: '眼底影像智能分析联合实验室', journal: '中华眼科杂志', year: 2016, type: '临床研究', citations: 3245, recommended: true, reason: '高被引眼底筛查研究', status: '已发布', clicks: 426 },
-      { title: '临床医学大语言模型应用、局限与发展方向', authors: '辛格哈尔、涂涛、戈特韦斯、赛尔斯、侯乐', org: '临床智能系统研究组', journal: '中国数字医学', year: 2024, type: '综述', citations: 1890, recommended: true, reason: '支撑智能问答与文献推荐', status: '已发布', clicks: 388 },
-      { title: '注意力机制多实例学习在糖尿病视网膜病变分级中的应用', authors: '李晓萌、沈琳琳、余俊、洪鹏安', org: '深圳大学医学人工智能研究中心', journal: '国际眼科杂志', year: 2023, type: '研究论文', citations: 892, recommended: true, reason: '与眼底智能分级高度相关', status: '已发布', clicks: 274 },
-      { title: '医学影像基础模型的发展机遇与临床挑战', authors: '张磊、刘洋、陈晓刚、黄俊洲、沈定刚', org: '上海医学影像人工智能工程中心', journal: '中国数字医学', year: 2023, type: '综述', citations: 678, recommended: true, reason: '适合技术路线调研', status: '已发布', clicks: 251 },
-      { title: '视网膜OCT图像分割与疾病分类的多任务学习方法', authors: '王宇、张一凡、刘天明、陈昊', org: '医学影像智能计算重点实验室', journal: '中国医学影像技术', year: 2022, type: '方法学研究', citations: 567, recommended: true, reason: '适合OCT诊断模型建设', status: '已发布', clicks: 236 },
-      { title: '基于联邦学习的多中心医学影像隐私保护分析', authors: '谢勒、雷纳、爱德华兹、马丁、巴卡斯', org: '多中心医学人工智能协作组', journal: '中华医学杂志', year: 2024, type: '方法学研究', citations: 445, recommended: true, reason: '关联数据安全共享', status: '已发布', clicks: 194 },
-      { title: '人工智能用于青光眼筛查的系统评价与Meta分析', authors: '陈欢、周伟、李静、王芳、张雨婷', org: '北京协和医院眼科', journal: '中华眼科杂志', year: 2024, type: '系统评价', citations: 234, recommended: true, reason: '覆盖青光眼筛查证据', status: '待完善', clicks: 163 },
-      { title: '眼底彩照与OCT融合的视网膜疾病综合诊断模型', authors: '金素英、朴俊英、李东贤、崔慧贞', org: '多模态眼科影像研究中心', journal: '国际眼科杂志', year: 2024, type: '研究论文', citations: 156, recommended: true, reason: '匹配多模态诊断场景', status: '已发布', clicks: 141 },
-      { title: '眼底图像质量自动评估及其在智能筛查中的应用', authors: '傅华珠、程军、徐彦武、黄伟基、刘江', org: '医学图像质量控制联合实验室', journal: '中国医学影像技术', year: 2024, type: '方法学研究', citations: 89, recommended: false, reason: '支撑筛查质控流程', status: '草稿', clicks: 0 },
-      { title: '面向眼病筛查的中文医学文献语义检索模型构建', authors: '郑源、林珂、许晴、周明', org: '生命医学知识工程实验室', journal: '中国数字医学', year: 2026, type: '方法学研究', citations: 28, recommended: false, reason: '直接对应语义向量检索', status: '待审核', clicks: 0 }
+      { title: '基于深度学习的糖尿病视网膜病变自动筛查研究', authors: '古尔山、彭磊、科拉姆、韦伯斯特', org: '眼底影像智能分析联合实验室', journal: '中华眼科杂志', year: 2016, type: '临床研究', citations: 3245, status: '已发布' },
+      { title: '临床医学大语言模型应用、局限与发展方向', authors: '辛格哈尔、涂涛、戈特韦斯、赛尔斯、侯乐', org: '临床智能系统研究组', journal: '中国数字医学', year: 2024, type: '综述', citations: 1890, status: '已发布' },
+      { title: '注意力机制多实例学习在糖尿病视网膜病变分级中的应用', authors: '李晓萌、沈琳琳、余俊、洪鹏安', org: '深圳大学医学人工智能研究中心', journal: '国际眼科杂志', year: 2023, type: '研究论文', citations: 892, status: '已发布' },
+      { title: '医学影像基础模型的发展机遇与临床挑战', authors: '张磊、刘洋、陈晓刚、黄俊洲、沈定刚', org: '上海医学影像人工智能工程中心', journal: '中国数字医学', year: 2023, type: '综述', citations: 678, status: '已发布' },
+      { title: '视网膜OCT图像分割与疾病分类的多任务学习方法', authors: '王宇、张一凡、刘天明、陈昊', org: '医学影像智能计算重点实验室', journal: '中国医学影像技术', year: 2022, type: '方法学研究', citations: 567, status: '已发布' },
+      { title: '基于联邦学习的多中心医学影像隐私保护分析', authors: '谢勒、雷纳、爱德华兹、马丁、巴卡斯', org: '多中心医学人工智能协作组', journal: '中华医学杂志', year: 2024, type: '方法学研究', citations: 445, status: '已发布' },
+      { title: '人工智能用于青光眼筛查的系统评价与Meta分析', authors: '陈欢、周伟、李静、王芳、张雨婷', org: '北京协和医院眼科', journal: '中华眼科杂志', year: 2024, type: '系统评价', citations: 234, status: '待完善' },
+      { title: '眼底彩照与OCT融合的视网膜疾病综合诊断模型', authors: '金素英、朴俊英、李东贤、崔慧贞', org: '多模态眼科影像研究中心', journal: '国际眼科杂志', year: 2024, type: '研究论文', citations: 156, status: '已发布' },
+      { title: '眼底图像质量自动评估及其在智能筛查中的应用', authors: '傅华珠、程军、徐彦武、黄伟基、刘江', org: '医学图像质量控制联合实验室', journal: '中国医学影像技术', year: 2024, type: '方法学研究', citations: 89, status: '草稿' },
+      { title: '面向眼病筛查的中文医学文献智能检索研究', authors: '郑源、林珂、许晴、周明', org: '生命医学知识工程实验室', journal: '中国数字医学', year: 2026, type: '方法学研究', citations: 28, status: '待审核' }
     ];
 
     function stars(count) {
@@ -1811,33 +1741,16 @@
       document.getElementById('literatureMatchCount').textContent = '当前显示 ' + rows.length + ' 条';
       document.getElementById('literatureRows').innerHTML = rows.map(function(item) {
         return '<tr>'
-          + '<td><strong>' + item.title + '</strong><div class="muted">' + item.reason + '</div></td>'
+          + '<td><strong>' + item.title + '</strong><div class="muted">' + item.org + '</div></td>'
           + '<td>' + item.authors + '<div class="muted">' + item.org + '</div></td>'
           + '<td>' + item.journal + '<div class="muted">' + item.year + '</div></td>'
           + '<td><span class="status info">' + item.type + '</span></td>'
-          + '<td>' + (item.recommended ? '<span class="status wait">为您推荐</span>' : '<span class="status gray">普通文献</span>') + '<div class="muted">' + item.status + '</div></td>'
-          + '<td>引用 ' + item.citations.toLocaleString() + ' 次<div class="progress-label">详情点击 ' + item.clicks + '</div></td>'
-          + '<td><div class="table-actions"><button class="btn small" onclick="openDrawer(&quot;编辑文献&quot;, &quot;维护文献元数据、摘要、DOI、推荐理由和展示状态。&quot;, &quot;literature&quot;)">编辑</button><button class="btn small">预览</button><button class="btn small warning">推荐</button></div></td>'
+          + '<td><div class="table-actions"><button class="btn small" onclick="openDrawer(&quot;编辑文献&quot;, &quot;编辑文献元数据、摘要和基础信息。&quot;, &quot;literature&quot;)">编辑</button><button class="btn small">预览</button></div></td>'
           + '</tr>';
       }).join('');
     }
 
-    function renderRecommendations() {
-      var recs = literatureItems.filter(function(item) { return item.recommended; }).sort(function(a, b) {
-        return b.citations - a.citations;
-      }).slice(0, 8);
-      document.getElementById('recommendRows').innerHTML = recs.map(function(item, index) {
-        return '<tr>'
-          + '<td><span class="status info">#' + (index + 1) + '</span></td>'
-          + '<td><strong>' + item.title + '</strong><div class="muted">' + item.journal + ' · ' + item.year + '</div></td>'
-          + '<td>' + item.reason + '</td>'
-          + '<td>右侧推荐栏</td>'
-          + '<td>' + item.clicks + '</td>'
-          + '<td><span class="status ok">展示中</span></td>'
-          + '<td><div class="table-actions"><button class="btn small">上移</button><button class="btn small">下线</button></div></td>'
-          + '</tr>';
-      }).join('');
-    }
+
 
     function initNav() {
       document.querySelectorAll('.nav-item').forEach(function(btn) {
@@ -1948,8 +1861,8 @@
       'kg-relation': '<div class="split-form"><div class="form-field"><label>源实体</label><select class="select"><option>糖尿病视网膜病变</option><option>青光眼</option><option>高血压视网膜病变</option><option>视网膜静脉阻塞</option></select></div><div class="form-field"><label>目标实体</label><select class="select"><option>抗VEGF药物治疗</option><option>激光光凝治疗</option><option>血压测量</option><option>视力下降</option></select></div><div class="form-field"><label>关系筛选归属</label><select class="select"><option>药物相关</option><option>手术操作相关</option><option>检验检查相关</option><option>症状信息相关</option></select></div><div class="form-field"><label>前台展示状态</label><select class="select"><option>前台展示</option><option>暂不展示</option></select></div><div class="form-field"><label>连线标签</label><input class="input" value="治疗"></div><div class="form-field"><label>关系来源</label><select class="select"><option>人工维护/规则配置</option><option>指南规则</option><option>病例沉淀</option></select></div><div class="form-field" style="grid-column:1/-1;"><label>关系说明</label><textarea>疾病可采用对应药物或手术操作作为临床干预路径，需要结合分期、病灶位置和禁忌证判断。</textarea></div><div style="grid-column:1/-1;" class="kg-mini-graph"><div class="kg-mini-node disease">源实体</div><div class="kg-mini-edge"><b>连线标签</b><span>同步到前台关系文字</span><span>→</span></div><div class="kg-mini-node drug">目标实体</div></div></div>',
       'kg-reasoning': '<div class="split-form"><div class="form-field"><label>推理名称</label><input class="input" value="共病风险"></div><div class="form-field"><label>展示状态</label><select class="select"><option>展示中</option><option>暂不展示</option></select></div><div class="form-field"><label>源实体</label><select class="select"><option>糖尿病视网膜病变</option><option>2型糖尿病</option><option>高血压</option></select></div><div class="form-field"><label>目标实体</label><select class="select"><option>高血压</option><option>高脂血症</option><option>青光眼</option></select></div><div class="form-field"><label>前台关系标签</label><input class="input" value="推理：共病风险"></div><div class="form-field"><label>推理类型</label><input class="input" value="病例之间的推理" readonly></div><div class="form-field" style="grid-column:1/-1;"><label>触发依据</label><textarea>DR患者常合并高血压，二者共同加重视网膜微血管损害，因此推理出共病风险关系。</textarea></div><div class="form-field" style="grid-column:1/-1;"><label>前台展示说明</label><textarea>运行图谱推理后，以橙色虚线展示在图谱中，并在右侧推理结果列表保留当前逻辑。</textarea></div></div>',
       'kg-entity-preview': '<div class="rules"><div class="rule-box"><b>糖尿病视网膜病变</b><p>疾病 · Diabetic Retinopathy (DR) · E11.301+H36.0</p></div><div class="rule-box"><b>实体说明</b><p>长期高血糖导致视网膜微血管损伤，出现微血管瘤、出血、渗出、缺血和新生血管等改变。</p></div><div class="rule-box"><b>关联实体</b><p>抗VEGF药物治疗、激光光凝治疗、糖尿病黄斑水肿、2型糖尿病、视力下降等。</p></div><div class="rule-box"><b>前台同步位置</b><p>图谱节点、右侧实体详情、实体筛选、关系详情和搜索结果。</p></div></div>',
-      literature: '<div class="split-form"><div class="form-field" style="grid-column:1/-1;"><label>文献题名</label><input class="input" value="基于深度学习的糖尿病视网膜病变自动筛查研究"></div><div class="form-field"><label>作者</label><input class="input" value="古尔山、彭磊、科拉姆、韦伯斯特"></div><div class="form-field"><label>期刊来源</label><input class="input" value="中华眼科杂志"></div><div class="form-field"><label>发表年份</label><input class="input" value="2016"></div><div class="form-field"><label>文献类型</label><select class="select"><option>临床研究</option><option>研究论文</option><option>综述</option><option>方法学研究</option><option>系统评价</option></select></div><div class="form-field"><label>推荐状态</label><select class="select"><option>为您推荐</option><option>普通文献</option><option>草稿</option></select></div><div class="form-field"><label>引用次数</label><input class="input" value="3245"></div><div class="form-field" style="grid-column:1/-1;"><label>摘要片段</label><textarea>糖尿病视网膜病变是工作年龄人群视力损伤的重要原因。本研究基于大规模眼底彩照训练深度学习模型。</textarea></div><div class="form-field" style="grid-column:1/-1;"><label>推荐理由</label><textarea>高被引眼底筛查研究</textarea></div></div>',
-      'recommend-rule': '<div class="rules"><div class="rule-box"><b>排序优先级</b><p>人工置顶 > 语义相关度 > 引用次数 > 发表年份；最多展示 8 条。</p></div><div class="rule-box"><b>推荐理由</b><p>必须维护简短理由，前台卡片和详情页共同展示。</p></div><div class="rule-box"><b>下线规则</b><p>草稿、待审核、元数据缺失文献不进入前台推荐栏。</p></div></div>'
+      literature: '<div class="split-form"><div class="form-field" style="grid-column:1/-1;"><label>文献题名</label><input class="input" value="基于深度学习的糖尿病视网膜病变自动筛查研究"></div><div class="form-field"><label>作者</label><input class="input" value="古尔山、彭磊、科拉姆、韦伯斯特"></div><div class="form-field"><label>期刊来源</label><input class="input" value="中华眼科杂志"></div><div class="form-field"><label>发表年份</label><input class="input" value="2016"></div><div class="form-field"><label>文献类型</label><select class="select"><option>临床研究</option><option>研究论文</option><option>综述</option><option>方法学研究</option><option>系统评价</option></select></div><div class="form-field"><label>引用次数</label><input class="input" value="3245"></div><div class="form-field" style="grid-column:1/-1;"><label>摘要片段</label><textarea>糖尿病视网膜病变是工作年龄人群视力损伤的重要原因。本研究基于大规模眼底彩照训练深度学习模型。</textarea></div></div>',
+      'recommend-rule': ''
     };
 
     function previewTeachingImage(input, targetId) {
@@ -2080,7 +1993,6 @@
     renderQuestions();
     renderExams();
     renderLiterature();
-    renderRecommendations();
     initNav();
     initTabs();
   </script>

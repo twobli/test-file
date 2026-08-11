@@ -23,16 +23,13 @@
   --shadow: 0 14px 40px rgba(41, 76, 131, 0.12);
   --radius: 12px;
   --radius-lg: 18px;
-  --radius-xl: 24px;
   --font: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
 body { font-size: 14px; line-height: 1.6; }
 button { font: inherit; border: 0; cursor: pointer; }
-input, select, textarea { font: inherit; outline: none; }
 
-/* Header */
 .header {
   height: 58px; display: flex; align-items: center; padding: 0 24px;
   background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%);
@@ -44,12 +41,9 @@ input, select, textarea { font: inherit; outline: none; }
 .header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; transition: .18s; }
 .header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
 .header .header-right { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; }
-.header .header-right .user-info { cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: .18s; }
-.header .header-right .user-info:hover { background: rgba(255,255,255,0.15); }
-.header .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: .18s; font-weight: 600; }
+.header .btn-logout { background: rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 6px; font-size: 12px; transition: .18s; font-weight: 600; }
 .header .btn-logout:hover { background: rgba(255,255,255,0.35); }
 
-/* Sidebar */
 .sidebar {
   position: fixed; top: 58px; left: 0; width: 220px;
   height: calc(100vh - 58px); background: #fff; border-right: 1px solid var(--line);
@@ -61,13 +55,13 @@ input, select, textarea { font: inherit; outline: none; }
 .sidebar .menu-item:hover { background: var(--panel-soft); color: var(--primary); }
 .sidebar .menu-item.active { background: var(--primary-soft); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
 
-/* Main Content */
-.main-content { margin-left: 220px; margin-top: 0; padding: 24px; min-height: calc(100vh - 58px); }
+.main-content { margin-left: 220px; padding: 24px; min-height: calc(100vh - 58px); }
 .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
-.page-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; }
+.page-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+.page-title { font-size: 24px; font-weight: 900; color: var(--text); }
+.page-subtitle { margin-top: 4px; color: var(--muted); font-size: 13px; }
 
-/* Buttons */
 .btn {
   min-height: 36px; padding: 0 14px; border-radius: 10px;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -76,14 +70,13 @@ input, select, textarea { font: inherit; outline: none; }
 .btn:hover { filter: brightness(1.03); }
 .btn.primary { color: #fff; background: linear-gradient(90deg, var(--primary), var(--primary-2)); box-shadow: 0 10px 20px rgba(22, 93, 255, .18); }
 .btn.secondary { color: var(--muted); background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
-.btn.danger { color: #fff; background: linear-gradient(90deg, #f45b5b, #e73d3d); }
 .btn.small { min-height: 30px; padding: 0 10px; font-size: 12px; border-radius: 8px; }
-.btn.lg { min-height: 44px; padding: 0 20px; font-size: 15px; }
+.btn.lg { min-height: 44px; padding: 0 22px; font-size: 15px; }
 
-/* Tags */
 .tag {
   min-height: 22px; padding: 0 8px; border-radius: 999px;
   display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700;
+  white-space: nowrap;
 }
 .tag.blue { color: var(--primary); background: var(--primary-soft); }
 .tag.success { color: var(--success); background: #e8ffea; }
@@ -91,246 +84,262 @@ input, select, textarea { font: inherit; outline: none; }
 .tag.danger { color: var(--danger); background: #ffecec; }
 .tag.gray { color: var(--soft); background: #f0f3f8; }
 
-/* Cards & Panels */
 .card { background: #fff; border-radius: var(--radius-lg); box-shadow: 0 10px 24px rgba(61, 102, 150, .08); padding: 20px; margin-bottom: 16px; }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.card-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.section-title { font-size: 17px; font-weight: 900; color: var(--text); }
+.section-note { color: var(--soft); font-size: 12px; }
 
-/* Stats */
-.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-.stat {
-  padding: 14px 16px; border-radius: 12px; background: var(--panel-soft);
-  box-shadow: inset 0 0 0 1px #e8eef8;
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.info-panel { border-radius: 14px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; padding: 16px; }
+.info-panel h3 { font-size: 14px; margin-bottom: 10px; color: var(--text); }
+.task-panel {
+  grid-column: 1 / -1; padding: 16px 18px; border-radius: 16px; background: var(--panel-soft);
+  box-shadow: inset 0 0 0 1px #dbe8fb;
 }
-.stat span { display: block; color: var(--soft); font-size: 12px; }
-.stat strong { display: block; margin-top: 6px; font-size: 20px; line-height: 1.2; color: var(--text); }
+.task-panel-head {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  margin-bottom: 14px;
+}
+.task-panel-title { font-size: 16px; font-weight: 900; color: var(--text); }
+.task-meta-line { margin-top: 4px; color: var(--soft); font-size: 13px; }
+.task-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.task-summary-item { padding: 14px 16px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
+.task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
+.task-summary-item strong { display: block; margin-top: 5px; color: var(--text); font-size: 14px; word-break: break-all; }
+.kv-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.kv { min-width: 0; padding: 10px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
+.kv span { display: block; color: var(--soft); font-size: 12px; }
+.kv strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; word-break: break-all; }
+.kv.wide { grid-column: 1 / -1; }
 
-/* Tables */
-.table-wrap { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.metric { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; }
+.metric span { display: block; color: var(--soft); font-size: 12px; }
+.metric strong { display: block; margin-top: 6px; font-size: 20px; line-height: 1.2; color: var(--text); }
+
+.table-wrap { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; margin-top: 10px; }
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table thead th {
   padding: 11px 12px; background: var(--panel-soft); color: var(--soft); font-size: 12px; text-align: left;
-  border-bottom: 1px solid var(--line); font-weight: 600;
+  border-bottom: 1px solid var(--line); font-weight: 700;
 }
 .data-table tbody td { padding: 11px 12px; border-bottom: 1px solid #f0f4f9; vertical-align: middle; }
-.data-table tbody tr { transition: .14s; }
+.data-table tbody tr:last-child td { border-bottom: 0; }
 .data-table tbody tr:hover { background: #f9fcff; }
-.data-table tbody tr.active { background: #eef7ff; }
-.row-main { display: flex; flex-direction: column; gap: 2px; }
-.row-main strong { font-size: 13px; }
-.row-main span { color: var(--soft); font-size: 12px; }
 
-/* Report Box */
-.report-box { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 10px; }
-.report-box p { margin: 6px 0; color: var(--muted); line-height: 1.7; }
-.report-box strong { color: var(--text); }
+.summary-box { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; margin-top: 12px; color: var(--muted); }
+.summary-box strong { color: var(--text); }
+.summary-box p { margin: 6px 0; }
 
-/* Alerts */
-.alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
-.alert-info { background: #e8f3ff; color: #1a56db; border: 1px solid #d2e3fc; }
-.alert-success { background: #e8ffea; color: #137333; border: 1px solid #ceead6; }
-.alert-warning { background: #fff4df; color: #b06000; border: 1px solid #feefc3; }
-.alert-danger { background: #ffecec; color: #c5221f; border: 1px solid #f5c6c2; }
-
-.task-summary {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;
-  padding: 12px; border-radius: 12px; background: var(--panel-soft);
-  box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 14px;
+.qc-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.subsection-title { margin: 16px 0 10px; font-size: 14px; font-weight: 900; color: var(--text); }
+.qc-eye-summary {
+  padding: 14px 16px; border-radius: 12px; background: #fff;
+  box-shadow: inset 0 0 0 1px #edf2f9; margin-bottom: 12px;
 }
-.task-summary.empty { display: block; color: var(--muted); }
-.task-summary-item { padding: 10px 12px; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px #edf2f9; }
-.task-summary-item span { display: block; color: var(--soft); font-size: 12px; }
-.task-summary-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 13px; word-break: break-all; }
-.task-summary-item.wide { grid-column: 1 / -1; }
-
-/* Result Grid */
+.qc-eye-summary span { display: block; color: var(--soft); font-size: 12px; }
+.qc-eye-summary strong { display: block; margin-top: 6px; color: var(--text); font-size: 14px; word-break: break-all; }
+.image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.image-card { border-radius: 12px; overflow: hidden; background: #fff; cursor: pointer; box-shadow: inset 0 0 0 1px #edf2f9; transition: .16s ease; }
+.image-card:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(22,93,255,.12), inset 0 0 0 1px #a8c8ff; }
+.image-thumb { aspect-ratio: 16 / 9; background: #0b1020; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.image-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.image-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; }
+.image-meta strong { display: block; color: var(--text); font-size: 13px; word-break: break-all; }
+.image-meta span { display: block; color: var(--soft); font-size: 12px; }
+.image-preview-overlay {
+  position: fixed; inset: 0; z-index: 20000; background: rgba(0,0,0,.86);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: .2s ease; padding: 24px;
+}
+.image-preview-overlay.show { opacity: 1; visibility: visible; }
+.image-preview-overlay img { max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 8px; background: #111827; }
+.preview-filename { color: #fff; font-size: 14px; margin-top: 14px; text-align: center; }
+.preview-close {
+  position: absolute; top: 22px; right: 22px; width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,.16); color: #fff; font-size: 24px;
+}
+.preview-close:hover { background: rgba(255,255,255,.28); }
+.report-block { border-radius: 14px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; padding: 14px; margin-top: 12px; }
+.report-block:first-child { margin-top: 0; }
+.report-block-title { margin-bottom: 10px; font-size: 14px; font-weight: 900; color: var(--text); }
+.card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+.card-title { font-size: 16px; font-weight: 900; color: var(--text); }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.stat { padding: 14px 16px; border-radius: 12px; background: var(--panel-soft); box-shadow: inset 0 0 0 1px #e8eef8; }
+.stat span { display: block; color: var(--soft); font-size: 12px; }
+.stat strong { display: block; margin-top: 6px; font-size: 20px; line-height: 1.2; color: var(--text); }
+.alert { padding: 12px 14px; border-radius: 12px; margin-bottom: 14px; line-height: 1.75; }
+.alert-info { background: #eef6ff; color: #155d91; border: 1px solid #bfdbfe; }
+.alert-warning { background: #fff8e8; color: #92400e; border: 1px solid #fde68a; }
+.qc-progress-shell { padding: 14px; border-radius: 14px; background: #f8fbff; box-shadow: inset 0 0 0 1px #e8eef8; margin-bottom: 14px; }
+.qc-progress-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.qc-progress-label { display: flex; align-items: center; gap: 8px; color: var(--text); font-weight: 800; }
+.qc-progress-icon { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: var(--success); font-size: 13px; }
+.qc-progress-pct { color: var(--primary); font-weight: 900; }
+.qc-progress-track { height: 8px; border-radius: 999px; background: #e5edf7; overflow: hidden; }
+.qc-progress-fill { width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--primary-2)); }
+.native-report { border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; margin-bottom: 16px; }
+.native-page { padding: 24px 30px 20px; background: #fff; }
+.native-page + .native-page { border-top: 12px solid #f1f5fb; }
+.native-title { margin: 0 0 18px; color: #7b168e; font-size: 21px; font-weight: 900; }
+.native-subtitle { margin: 18px 0 10px; color: #1f2937; font-size: 14px; font-weight: 900; }
+.visual-matrix { display: grid; grid-template-columns: 58px repeat(4, minmax(120px, 1fr)); gap: 18px 20px; align-items: center; padding: 6px 0 22px; border-bottom: 1px solid #e5e7eb; }
+.visual-matrix.lesion { padding-top: 24px; border-bottom: 0; }
+.visual-head { justify-self: center; min-width: 76px; padding: 4px 10px; border-radius: 3px; background: #7b168e; color: #fff; text-align: center; font-size: 12px; font-weight: 900; }
+.eye-label { color: #374151; font-size: 13px; font-weight: 900; }
+.fundus-cell { min-height: 126px; display: flex; align-items: center; justify-content: center; }
+.fundus-art { position: relative; width: 116px; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: radial-gradient(circle at 76% 45%, rgba(255,244,176,.95) 0 5%, transparent 7%), radial-gradient(circle at 52% 54%, rgba(82,23,12,.18) 0 8%, transparent 14%), radial-gradient(circle at 45% 48%, #d17634 0, #ad4d24 38%, #6e2b1c 70%, #2d1011 100%); box-shadow: inset 0 0 14px rgba(80,20,6,.45), 0 8px 18px rgba(123,22,142,.12); }
+.fundus-art.right { transform: scaleX(-1); }
+.fundus-art::before, .fundus-art::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.fundus-art::before { background: radial-gradient(circle at 77% 46%, rgba(255,255,255,.8) 0 2%, transparent 4%), conic-gradient(from 40deg at 78% 45%, transparent 0 18deg, rgba(120,23,16,.5) 20deg 24deg, transparent 28deg 68deg, rgba(120,23,16,.45) 72deg 76deg, transparent 80deg 144deg, rgba(120,23,16,.45) 148deg 153deg, transparent 160deg 360deg); opacity: .82; }
+.fundus-art.vessel::after { background: linear-gradient(22deg, transparent 44%, #d72b39 45%, transparent 47%), linear-gradient(152deg, transparent 44%, #d62839 45%, transparent 47%), linear-gradient(86deg, transparent 48%, #165dff 49%, transparent 51%), linear-gradient(118deg, transparent 52%, #1d4ed8 53%, transparent 55%); mix-blend-mode: multiply; opacity: .85; }
+.marker-disc, .marker-macula, .marker-lesion { position: absolute; border-radius: 50%; z-index: 2; pointer-events: none; }
+.marker-disc { right: 14px; top: 42px; width: 22px; height: 22px; border: 2px solid #9b2cc0; box-shadow: 0 0 0 2px rgba(155,44,192,.16); }
+.marker-macula { left: 45px; top: 55px; width: 17px; height: 17px; border: 2px solid #ef4444; background: rgba(239,68,68,.1); }
+.marker-lesion { left: 30px; top: 38px; width: 22px; height: 18px; border: 2px solid #22c55e; background: rgba(34,197,94,.08); }
+.marker-lesion.alt { left: auto; top: auto; right: 24px; bottom: 24px; width: 30px; height: 24px; border-color: #06b6d4; background: rgba(6,182,212,.1); }
+.native-table-wrap { overflow-x: auto; margin-top: 10px; }
+.native-table-note { display: flex; justify-content: space-between; gap: 12px; color: var(--soft); font-size: 12px; margin-bottom: 8px; }
+.native-table { width: 100%; min-width: 760px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.native-table.wide { min-width: 1080px; }
+.native-table.compact { min-width: 620px; }
+.native-table th { padding: 9px 8px; background: #7b168e; color: #fff; border: 1px solid #fff; text-align: center; font-weight: 900; }
+.native-table td { padding: 9px 8px; border: 1px solid #fff; background: #f6f6f7; color: #374151; text-align: center; }
+.native-table tr:nth-child(even) td { background: #fff; }
+.native-table .name { color: #7b168e; font-weight: 900; }
+.quant-group { display: grid; gap: 12px; }
+.quant-group + .quant-group { margin-top: 14px; }
+.lesion-eye-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.lesion-eye-label { margin-bottom: 10px; color: #374151; font-size: 14px; font-weight: 900; }
+.lesion-result-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
+.lesion-result-table th { padding: 11px 14px; background: #7b168e; color: #fff; border: 1px solid #fff; text-align: left; font-weight: 900; }
+.lesion-result-table th:last-child, .lesion-result-table td:last-child { text-align: right; }
+.lesion-result-table td { padding: 10px 14px; border: 1px solid #fff; background: #f6f6f7; color: #374151; }
+.lesion-result-table tr:nth-child(even) td { background: #fff; }
+.lesion-normal { color: #26b81f; font-weight: 900; white-space: nowrap; }
 .result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
 .result-card { padding: 14px; border-radius: 12px; background: #f8fbff; box-shadow: inset 0 0 0 1px #e8eef8; }
 .result-card .result-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
 .result-card .result-status { display: inline-block; margin-bottom: 6px; }
 .result-card .result-desc { color: var(--muted); font-size: 12px; line-height: 1.5; }
-.result-card .result-tips { margin-top: 8px; font-size: 12px; color: var(--soft); }
-
-/* Steps */
-.steps { display: flex; margin-bottom: 20px; }
-.step { flex: 1; text-align: center; position: relative; font-size: 12px; color: var(--soft); }
-.step::before { content: ''; position: absolute; top: 15px; left: 50%; right: -50%; height: 2px; background: var(--line); z-index: 0; }
-.step:last-child::before { display: none; }
-.step .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e8edf5; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; position: relative; z-index: 1; }
-.step.active .step-circle { background: var(--primary); color: #fff; }
-.step.active { color: var(--primary); font-weight: 700; }
-.step.done .step-circle { background: var(--success); color: #fff; }
-.step.done { color: var(--success); }
-.step.done::before { background: var(--success); }
-
-/* Report section title */
-.report-section-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  background: #fff;
-  border-radius: 6px;
-  display: inline-block;
-}
+.download-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: linear-gradient(135deg, #f8fbff, #eef7ff); }
+.download-card p { color: var(--muted); margin-top: 4px; }
 
 @media (max-width: 1024px) {
   .sidebar { width: 60px; }
-  .sidebar .menu-item span { display: none; }
+  .sidebar .menu-item { padding: 10px 12px; font-size: 0; }
   .sidebar .menu-group-title { display: none; }
   .main-content { margin-left: 60px; }
-  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .result-grid { grid-template-columns: 1fr; }
-  .task-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .info-grid, .task-summary-grid, .metric-grid, .qc-list, .image-grid, .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .visual-matrix { grid-template-columns: 50px repeat(2, minmax(118px, 1fr)); }
+  .visual-spacer { display: none; }
+  .lesion-eye-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
-  .header .header-nav { margin-left: 0; }
+  .header .header-nav { margin-left: 0; flex-wrap: wrap; }
   .sidebar { display: none; }
   .main-content { margin-left: 0; padding: 14px; }
-  .stats { grid-template-columns: 1fr; }
-  .form-row { flex-direction: column; }
-  .task-summary { grid-template-columns: 1fr; }
+  .page-title-row, .download-card { flex-direction: column; align-items: stretch; }
+  .info-grid, .task-summary-grid, .kv-grid, .metric-grid, .qc-list, .image-grid, .stats, .result-grid { grid-template-columns: 1fr; }
+  .image-thumb { height: 150px; }
+  .native-page { padding: 18px 12px 14px; }
 }
 </style>
 </head>
 <body>
 <div class="header">
-<a href="app-center.html" class="logo">生命医学主题库应用</a>
-<div class="header-nav">
-<a href="眼底图像输入.html" class="active">AI眼底疾病筛查</a>
-<a href="临床数据开放共享.html">生命医学开放数据平台</a>
-<a href="基础课程.html">生命医学AI教育平台</a>
-<a href="临床决策支撑.html">眼病/慢病专家系统</a>
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html" class="active">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
 </div>
-<div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
+
 <div class="sidebar" id="sidebar">
-<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
-<a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
-<a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
-<a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
-<a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a></div>
-<div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
-<a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
-<a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
-<a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
-<a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div>
-
-<div class="main-content">
-<div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>输出筛查报告</strong></div>
-<h1 class="page-title">输出筛查报告</h1>
-
-<div class="card">
-  <div class="card-header"><span class="card-title">AI眼底疾病筛查报告</span></div>
-
-  <div class="steps">
-    <div class="step done"><div class="step-circle">&#10003;</div>上传图像</div>
-    <div class="step done"><div class="step-circle">&#10003;</div>质量质控</div>
-    <div class="step done"><div class="step-circle">&#10003;</div>疾病筛查</div>
-    <div class="step done"><div class="step-circle">&#10003;</div>联合筛查</div>
-    <div class="step active"><div class="step-circle">5</div>输出报告</div>
+  <div class="menu-group">
+    <div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
+    <a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a>
   </div>
-
-  <div id="taskSummary" class="task-summary empty">正在读取当前筛查任务...</div>
-
-  <div class="stats">
-    <div class="stat"><span>报告编号</span><strong id="reportId">RP-260626-001</strong></div>
-    <div class="stat"><span>生成时间</span><strong id="reportTime">2026-06-26 15:30</strong></div>
-    <div class="stat"><span>综合风险</span><strong style="color:var(--warning);">中度</strong></div>
-    <div class="stat"><span>复查建议</span><strong>3个月内</strong></div>
-  </div>
-
-  <!-- 常见疾病筛查 -->
-  <div class="card-header"><span class="card-title">常见疾病筛查</span></div>
-  <div class="result-grid">
-    <div class="result-card" style="border-left:3px solid var(--warning);">
-      <div class="result-name">糖尿病视网膜病变（DR）</div>
-      <span class="tag warning result-status">中度 · 87%</span>
-      <div class="result-desc">检测到中度非增殖性糖尿病视网膜病变特征，存在多发微动脉瘤与少量出血灶。</div>
-      <div class="result-tips">建议3个月内复查，关注血糖控制，必要时转诊眼底专科。</div>
-    </div>
-    <div class="result-card" style="border-left:3px solid var(--success);">
-      <div class="result-name">青光眼相关病变</div>
-      <span class="tag success result-status">阴性 · 94%</span>
-      <div class="result-desc">视盘边界清晰，杯盘比未见明显异常。</div>
-      <div class="result-tips">建议年度随访，结合眼压和视野检查。</div>
-    </div>
-    <div class="result-card" style="border-left:3px solid var(--success);">
-      <div class="result-name">年龄相关性黄斑变性（AMD）</div>
-      <span class="tag success result-status">阴性 · 91%</span>
-      <div class="result-desc">黄斑区未见典型渗出或萎缩灶。</div>
-      <div class="result-tips">建议半年至一年复查，关注视物变形症状。</div>
-    </div>
-    <div class="result-card" style="border-left:3px solid var(--primary);">
-      <div class="result-name">高血压性视网膜病变</div>
-      <span class="tag blue result-status">轻度 · 81%</span>
-      <div class="result-desc">可见轻度动静脉交叉压迫迹象与血管轻度扭曲。</div>
-      <div class="result-tips">建议血压管理，复查眼底和血压。</div>
-    </div>
-  </div>
-
-  <!-- 多任务联合筛查 -->
-  <div id="multiTaskReportSection">
-  <div class="card-header"><span class="card-title">多任务联合筛查</span></div>
-  <div class="report-box" id="multiTaskReportBox">
-    <p><strong>病灶分割：</strong>在右眼眼底图像中检出微动脉瘤5处（颞上及鼻下区域）、出血灶4处（火焰状及点片状，集中分布于黄斑周围及颞下象限）、硬性渗出4处（黄斑区颞侧，蜡黄色斑点状排列）。综合病灶密度与分布模式，提示中度 NPDR 改变。</p>
-    <p><strong>视盘/黄斑定位：</strong>AI 视盘分割测得杯盘比约0.38，盘沿宽度各象限分布均匀，未见切迹或局灶性变薄。黄斑中心凹定位正常，未见明显渗出或水肿信号。</p>
-    <p><strong>血管分布分析：</strong>视网膜动脉轻度缩窄，AV 比约1:2.2，颞上支及鼻下支走形稍显僵硬，血管反光增强，提示轻度动脉硬化改变。未见棉绒斑或新生血管。</p>
-    <p><strong>综合分析：</strong>4项子任务均已完成，置信度均值92.5%。DR 相关指标异常最为显著（微动脉瘤+出血+渗出），与常见疾病筛查结论一致。综合风险评级：<strong style="color:var(--warning);">中度</strong>，建议3个月内眼底复查并联合控糖、降压管理。</p>
-  </div>
-  </div>
-
-  <!-- 报告信息 -->
-  <div class="report-box">
-    <p><strong>患者信息：</strong><span id="reportPatientInfo">李* · OPD-202606-001</span></p>
-    <p><strong>筛查任务：</strong><span id="reportTaskInfo">FS-260626-001 · 医生筛查任务</span></p>
-    <p><strong>图片来源：</strong><span id="reportImageInfo">右眼_眼底彩照_001.jpg</span></p>
-    <p><strong>质控评分：</strong>96%</p>
-  </div>
-
-  <div class="report-box">
-    <p><strong>质控说明：</strong>图像清晰，视盘、黄斑与血管分布完整，可进入AI分析。</p>
-  </div>
-
-  <div class="report-box" id="reportAdviceBox">
-    <p><strong>医生建议：</strong>综合AI筛查结果，建议患者3个月内行眼底复查，重点关注糖尿病视网膜病变进展。同时建议控制血糖、血压，必要时转诊眼底专科进行进一步检查和治疗。</p>
-  </div>
-
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
-    <button class="btn primary lg" onclick="alert('报告下载功能已触发，文件将保存至本地。')">下载报告（PDF）</button>
-    <button class="btn secondary lg" onclick="window.print()">打印报告</button>
+  <div class="menu-group">
+    <div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
+    <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-header"><span class="card-title">历史报告</span></div>
-  <div class="table-wrap">
-    <table class="data-table">
-      <thead><tr><th>报告编号</th><th>患者</th><th>生成时间</th><th>风险等级</th><th>操作</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>RP-260626-001</strong></td>
-          <td>李*</td>
-          <td>2026-06-26 15:30</td>
-          <td><span class="tag warning">中度</span></td>
-          <td><button class="btn secondary small" onclick="alert('报告已下载。')">下载</button></td>
-        </tr>
-        <tr>
-          <td><strong>RP-260626-002</strong></td>
-          <td>陈*</td>
-          <td>2026-06-26 16:05</td>
-          <td><span class="tag success">低风险</span></td>
-          <td><button class="btn secondary small" onclick="alert('报告已下载。')">下载</button></td>
-        </tr>
-      </tbody>
-    </table>
+<main class="main-content">
+  <div class="breadcrumb"><a href="app-center.html">首页</a><span>&rsaquo;</span><a href="#">AI眼底疾病筛查</a><span>&rsaquo;</span><strong>输出筛查报告</strong></div>
+  <div class="page-title-row">
+    <div>
+      <h1 class="page-title">输出筛查报告</h1>
+      <div class="page-subtitle" id="reportSubtitle">正在读取报告类型...</div>
+    </div>
+    <span class="tag blue" id="roleBadge">报告类型</span>
   </div>
-</div>
+
+  <section class="card">
+    <div class="section-head">
+      <span class="section-title">用户信息 + 报告基础信息</span>
+      <span class="section-note" id="sourceNote">报告来源</span>
+    </div>
+    <div class="info-grid" id="baseInfoGrid"></div>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <span class="section-title" id="screeningTitle">筛查信息</span>
+      <span class="section-note" id="screeningNote">按当前用户类型展示</span>
+    </div>
+    <div id="screeningContent"></div>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <span class="section-title">质控信息</span>
+      <span class="section-note">来自图像质量质控模块</span>
+    </div>
+    <div id="qcContent"></div>
+  </section>
+
+  <section class="card download-card">
+    <div>
+      <div class="section-title">下载报告</div>
+      <p id="downloadHint">下载当前筛查报告。</p>
+    </div>
+    <button class="btn primary lg" id="downloadReportBtn" onclick="downloadReport()">下载报告</button>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <span class="section-title">历史报告</span>
+      <span class="section-note" id="historyNote">仅展示当前用户类型的报告</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>报告编号</th><th>患者</th><th>报告类型</th><th>生成时间</th><th>操作</th></tr></thead>
+        <tbody id="historyRows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<div class="image-preview-overlay" id="reportImageOverlay">
+  <button class="preview-close" onclick="closeReportImage()">&times;</button>
+  <img id="reportPreviewImage" src="" alt="">
+  <div class="preview-filename" id="reportPreviewFilename"></div>
 </div>
 
 <script>
-function navigateTo(url) { window.location.href = url; }
 function logout() {
   localStorage.removeItem('life_med_user');
   window.location.href = 'login.html';
@@ -355,100 +364,387 @@ function getFlowRole() {
   if (/普通|患者|居民|公众/.test(text)) return 'normal';
   return 'doctor';
 }
-function activateFlowSidebar() {
-  document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
-    item.classList.toggle('active', item.getAttribute('data-flow-page') === '输出筛查报告.html' && item.getAttribute('data-flow-role') === getFlowRole());
-  });
-}
-function applyReportRole() {
-  var isNormal = getFlowRole() !== 'doctor';
-  var multiSection = document.getElementById('multiTaskReportSection');
-  if (multiSection && isNormal) multiSection.remove();
-  var steps = document.querySelectorAll('.steps .step');
-  if (isNormal && steps.length >= 5) {
-    steps[3].style.display = 'none';
-    var outputCircle = steps[4].querySelector('.step-circle');
-    if (outputCircle) outputCircle.textContent = '4';
-  }
-  var adviceBox = document.getElementById('reportAdviceBox');
-  if (adviceBox && isNormal) {
-    adviceBox.innerHTML = '<p><strong>筛查提示：</strong>本报告仅包含常见疾病筛查结果，不包含多任务联合筛查内容，不提供用药或治疗方案。</p>';
-  }
-}
 function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, function(ch) {
     return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
   });
 }
+function tag(text, type) {
+  return '<span class="tag ' + type + '">' + escapeHtml(text) + '</span>';
+}
+function reportId(task) {
+  return task && task.taskId ? task.taskId.replace('FS-', 'RP-') : 'RP-260626-001';
+}
+function reportTime(task) {
+  return task && (task.updatedAt || task.submittedAt) ? (task.updatedAt || task.submittedAt) : '2026-06-26 15:30';
+}
+function displayPatientName(name) {
+  if (!name) return '—';
+  return name;
+}
+function patientInfo(task) {
+  return task && task.patient ? task.patient : { name: '李子明', age: '23', gender: '男' };
+}
 function slotLabel(slot) {
-  if (slot === 'left') return '左眼位';
-  if (slot === 'right') return '右眼位';
+  if (slot === 'left' || slot === 'first') return '左眼位';
+  if (slot === 'right' || slot === 'second') return '右眼位';
   return '单眼位';
+}
+function eyeLabel(task, img, index) {
+  if (img && img.qcEye) return img.qcEye;
+  if (img && img.detectedEye && img.detectedEye !== '未识别') return img.detectedEye;
+  if (img && img.eye) return img.eye;
+  if (task && task.uploadMode === 'double') return index === 0 ? '左眼' : '右眼';
+  return '右眼';
 }
 function imageSummary(task) {
   var imgs = task && task.images ? task.images : [];
-  if (!imgs.length) return '尚未同步图像';
-  return imgs.map(function(img) {
-    var eye = img.detectedEye || '未识别';
-    return slotLabel(img.slot) + '：' + img.name + '（' + eye + '）';
+  if (!imgs.length) return '第1张图像：左眼_眼底彩照_001.jpg（AI质控识别：左眼）；第2张图像：右眼_眼底彩照_002.jpg（AI质控识别：右眼）';
+  return imgs.map(function(img, i) {
+    return slotLabel(img.slot) + '：' + (img.name || ('眼底图像' + (i + 1))) + '（AI质控识别：' + eyeLabel(task, img, i) + '）';
   }).join('；');
 }
-function renderFundusTaskSummary() {
-  var el = document.getElementById('taskSummary');
-  if (!el) return;
-  var task = readFundusTask();
-  if (!task) {
-    el.className = 'task-summary empty';
-    el.innerHTML = '暂无已创建的筛查任务，当前页面展示示例筛查报告。';
-    return;
-  }
-  var patient = task.patient || {};
-  el.className = 'task-summary';
-  el.innerHTML =
-    '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task.taskId) + '</strong></div>' +
-    '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(patient.name) + ' · ' + escapeHtml(patient.age) + '岁 · ' + escapeHtml(patient.gender) + '</strong></div>' +
-    '<div class="task-summary-item"><span>上传模式</span><strong>' + (task.uploadMode === 'double' ? '双眼图像' : '单眼图像') + '</strong></div>' +
-    '<div class="task-summary-item"><span>筛查权限</span><strong>' + (getFlowRole() === 'doctor' ? '医生用户' : '普通用户') + '</strong></div>' +
-    '<div class="task-summary-item wide"><span>图像与眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div>';
+function screeningTaskText(role) {
+  return role === 'doctor' ? '多任务联合筛查' : '常见疾病筛查';
 }
-function renderReportByTask() {
+function imageCountText(task) {
+  if (task && task.uploadMode === 'double') return '2张眼底彩照';
+  if (task && task.images && task.images.length) return task.images.length + '张眼底彩照';
+  return '2张眼底彩照';
+}
+function fallbackFundusSrc(index) {
+  var discX = index % 2 === 0 ? 675 : 225;
+  var maculaX = index % 2 === 0 ? 430 : 470;
+  var svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">' +
+    '<rect width="900" height="520" fill="#05070a"/>' +
+    '<ellipse cx="450" cy="260" rx="350" ry="205" fill="#d86b16"/>' +
+    '<ellipse cx="450" cy="260" rx="315" ry="178" fill="#f08a12" opacity=".75"/>' +
+    '<circle cx="' + discX + '" cy="250" r="42" fill="#fff0a8" opacity=".9"/>' +
+    '<circle cx="' + maculaX + '" cy="260" r="20" fill="#9e4614" opacity=".55"/>' +
+    '<g stroke="#7b2c0b" stroke-width="5" fill="none" opacity=".7">' +
+    '<path d="M' + discX + ' 250 C560 210 500 190 420 165"/>' +
+    '<path d="M' + discX + ' 250 C560 305 500 335 420 365"/>' +
+    '<path d="M' + discX + ' 250 C355 220 310 195 240 160"/>' +
+    '<path d="M' + discX + ' 250 C360 300 305 330 235 370"/>' +
+    '</g></svg>';
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+function imageSrc(img, index) {
+  if (!img) return fallbackFundusSrc(index);
+  return img.previewDataUrl || img.previewUrl || img.dataUrl || img.url || fallbackFundusSrc(index);
+}
+function imageCardsHtml(task, dense) {
+  var imgs = task && task.images && task.images.length ? task.images : [
+    { name: '左眼_眼底彩照_001.jpg', slot: 'left' },
+    { name: '右眼_眼底彩照_002.jpg', slot: 'right' }
+  ];
+  var html = '<div class="qc-eye-summary"><span>AI质控识别眼别</span><strong>' + escapeHtml(imageSummary(task)) + '</strong></div><div class="image-grid">';
+  for (var i = 0; i < imgs.length; i++) {
+    var img = imgs[i];
+    var eye = eyeLabel(task, img, i);
+    html += '<div class="image-card" onclick="openReportImage(' + i + ')">'
+      + '<div class="image-thumb"><img src="' + escapeHtml(imageSrc(img, i)) + '" alt="' + escapeHtml(img.name || ('眼底图像' + (i + 1))) + '"></div>'
+      + '<div class="image-meta">'
+      +   '<div><strong>' + escapeHtml(img.name || ('眼底图像' + (i + 1))) + '</strong><span>' + escapeHtml(slotLabel(img.slot)) + ' · 点击查看眼底图像</span></div>'
+      +   '<span class="tag success">' + escapeHtml(eye) + '</span>'
+      + '</div>'
+      + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function reportImages(task) {
+  return task && task.images && task.images.length ? task.images : [
+    { name: '左眼_眼底彩照_001.jpg', slot: 'left' },
+    { name: '右眼_眼底彩照_002.jpg', slot: 'right' }
+  ];
+}
+function openReportImage(index) {
   var task = readFundusTask();
-  if (!task) return;
-  var patient = task.patient || {};
-  var reportId = document.getElementById('reportId');
-  var reportTime = document.getElementById('reportTime');
-  var reportPatientInfo = document.getElementById('reportPatientInfo');
-  var reportTaskInfo = document.getElementById('reportTaskInfo');
-  var reportImageInfo = document.getElementById('reportImageInfo');
-  if (reportId) reportId.textContent = task.taskId ? task.taskId.replace('FS-', 'RP-') : 'RP-260626-001';
-  if (reportTime) reportTime.textContent = task.updatedAt || task.submittedAt || '2026-06-26 15:30';
-  if (reportPatientInfo) reportPatientInfo.textContent = (patient.name || '—') + ' · ' + (patient.age || '—') + '岁 · ' + (patient.gender || '—');
-  if (reportTaskInfo) reportTaskInfo.textContent = task.taskId + ' · ' + (getFlowRole() === 'doctor' ? '医生筛查任务' : '普通筛查任务');
-  if (reportImageInfo) reportImageInfo.textContent = imageSummary(task);
-  applyReportRole();
+  var imgs = reportImages(task);
+  var img = imgs[index];
+  if (!img) return;
+  var overlay = document.getElementById('reportImageOverlay');
+  document.getElementById('reportPreviewImage').src = imageSrc(img, index);
+  document.getElementById('reportPreviewFilename').textContent = (img.name || ('眼底图像' + (index + 1))) + ' · AI质控识别：' + eyeLabel(task, img, index);
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeReportImage() {
+  var overlay = document.getElementById('reportImageOverlay');
+  overlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+function baseInfoHtml(role, task) {
+  var patient = patientInfo(task);
+  var reportType = role === 'doctor' ? '多任务联合筛查报告' : '常见疾病筛查报告';
+  var source = '筛查+质控';
+  return ''
+    + '<div class="task-panel">'
+      + '<div class="task-panel-head">'
+        + '<div><div class="task-panel-title">当前筛查任务</div><div class="task-meta-line">患者信息已同步到筛查结果、质控信息和报告归档。</div></div>'
+        + '<span class="tag success">报告已生成</span>'
+      + '</div>'
+      + '<div class="task-summary-grid">'
+        + '<div class="task-summary-item"><span>任务编号</span><strong>' + escapeHtml(task && task.taskId ? task.taskId : 'FS-260626-001') + '</strong></div>'
+        + '<div class="task-summary-item"><span>患者</span><strong>' + escapeHtml(displayPatientName(patient.name)) + (patient.age ? ' · ' + escapeHtml(patient.age) + '岁' : '') + (patient.gender ? ' · ' + escapeHtml(patient.gender) : '') + '</strong></div>'
+        + '<div class="task-summary-item"><span>筛查任务</span><strong>' + screeningTaskText(role) + '</strong></div>'
+        + '<div class="task-summary-item"><span>图像数量</span><strong>' + imageCountText(task) + '</strong></div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="task-panel">'
+      + '<div class="task-panel-head">'
+        + '<div><div class="task-panel-title">报告基础信息</div><div class="task-meta-line">报告根据当前筛查任务自动生成。</div></div>'
+        + '<span class="tag blue">' + escapeHtml(source) + '</span>'
+      + '</div>'
+      + '<div class="task-summary-grid">'
+        + '<div class="task-summary-item"><span>报告编号</span><strong>' + escapeHtml(reportId(task)) + '</strong></div>'
+        + '<div class="task-summary-item"><span>生成时间</span><strong>' + escapeHtml(reportTime(task)) + '</strong></div>'
+        + '<div class="task-summary-item"><span>报告类型</span><strong>' + escapeHtml(reportType) + '</strong></div>'
+        + '<div class="task-summary-item"><span>结果来源</span><strong>' + escapeHtml(source) + '</strong></div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="report-block" style="grid-column:1/-1;">'
+    + imageCardsHtml(task, false)
+    + '</div>';
+}
+function doctorScreeningHtml(task) {
+  return ''
+    + '<div class="report-block">'
+    + '<div class="report-block-title">病灶切割图像</div>'
+    + '<div class="native-report"><div class="native-page">'
+    + '<h2 class="native-title">可视化分析</h2>'
+    + '<div class="visual-matrix">'
+    + '<div class="visual-spacer"></div>'
+    + '<div class="visual-head">血管</div><div class="visual-head">视神经</div><div class="visual-head">黄斑</div><div class="visual-head">视网膜</div>'
+    + '<div class="eye-label">左眼</div>'
+    + '<div class="fundus-cell"><div class="fundus-art vessel"></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art"><span class="marker-disc"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art"><span class="marker-macula"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art"></div></div>'
+    + '<div class="eye-label">右眼</div>'
+    + '<div class="fundus-cell"><div class="fundus-art vessel right"></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"><span class="marker-disc"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"><span class="marker-macula"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"></div></div>'
+    + '</div>'
+    + '<div class="visual-matrix lesion">'
+    + '<div class="visual-spacer"></div>'
+    + '<div class="visual-head">脉络膜黑色素瘤</div><div class="visual-head">出血</div><div class="visual-head">硬渗出</div><div class="visual-head">软渗出</div>'
+    + '<div class="eye-label">左眼</div>'
+    + '<div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion alt"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art"><span class="marker-lesion alt"></span></div></div>'
+    + '<div class="eye-label">右眼</div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion alt"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion"></span></div></div>'
+    + '<div class="fundus-cell"><div class="fundus-art right"><span class="marker-lesion alt"></span></div></div>'
+    + '</div></div></div>'
+    + '</div>'
+    + '<div class="report-block">'
+    + '<div class="report-block-title">精确量化分析</div>'
+    + '<div class="native-report">'
+    + '<div class="native-page"><h2 class="native-title">量化分析</h2>'
+    + '<div class="quant-group"><h3 class="native-subtitle">出血渗出</h3>'
+    + '<div class="native-table-note"><span>统计范围：左眼、右眼眼底图像病灶区域</span><span>参考值：0</span></div>'
+    + '<div class="native-table-wrap"><table class="native-table wide"><thead><tr><th rowspan="2">内容</th><th colspan="7">左眼</th><th colspan="7">右眼</th></tr><tr><th>总面积(PX)</th><th>最大面积(PX)</th><th>TS</th><th>TL</th><th>NS</th><th>NL</th><th>总个数</th><th>总面积(PX)</th><th>最大面积(PX)</th><th>TS</th><th>TL</th><th>NS</th><th>NL</th><th>总个数</th></tr></thead><tbody>'
+    + '<tr><td class="name">出血</td><td>247957</td><td>117095</td><td>2</td><td>0</td><td>73</td><td>5</td><td>80</td><td>247130</td><td>117181</td><td>2</td><td>0</td><td>92</td><td>12</td><td>106</td></tr>'
+    + '<tr><td class="name">硬性渗出</td><td>26</td><td>21</td><td>1</td><td>0</td><td>0</td><td>1</td><td>2</td><td>24</td><td>19</td><td>0</td><td>3</td><td>0</td><td>0</td><td>3</td></tr>'
+    + '<tr><td class="name">软性渗出</td><td>6451</td><td>2160</td><td>124</td><td>77</td><td>54</td><td>58</td><td>313</td><td>6471</td><td>2153</td><td>125</td><td>73</td><td>51</td><td>56</td><td>305</td></tr>'
+    + '<tr><td class="name">微动脉瘤</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>17</td><td>6</td><td>5</td><td>0</td><td>0</td><td>0</td><td>5</td></tr>'
+    + '</tbody></table></div></div>'
+    + '<div class="quant-group"><h3 class="native-subtitle">血管参数</h3><div class="native-table-wrap"><table class="native-table compact"><thead><tr><th>血管参数</th><th>左眼</th><th>右眼</th><th>评估提示</th></tr></thead><tbody>'
+    + '<tr><td class="name">B区视网膜中央动脉当量(CRAE/PX)</td><td>111.459</td><td>100.164</td><td><span class="tag success">稳定</span></td></tr>'
+    + '<tr><td class="name">B区视网膜中央静脉当量(CRVE/PX)</td><td>141.872</td><td>127.572</td><td><span class="tag success">稳定</span></td></tr>'
+    + '<tr><td class="name">B区视网膜动静脉比(AVR)</td><td>0.79</td><td>0.79</td><td><span class="tag success">稳定</span></td></tr>'
+    + '</tbody></table></div></div></div>'
+    + '<div class="native-page"><h2 class="native-title">视神经参数</h2>'
+    + '<div class="quant-group"><h3 class="native-subtitle">视神经纤维层缺损分析</h3><div class="native-table-wrap"><table class="native-table compact"><thead><tr><th>内容</th><th>左眼</th><th>右眼</th></tr></thead><tbody>'
+    + '<tr><td class="name">是否发现缺损</td><td><span class="tag success">否</span></td><td><span class="tag success">否</span></td></tr><tr><td class="name">损伤位置</td><td>-</td><td>-</td></tr><tr><td class="name">损伤面积(mm²)</td><td>0</td><td>0</td></tr>'
+    + '</tbody></table></div></div>'
+    + '<div class="quant-group"><h3 class="native-subtitle">杯盘比分析</h3><div class="native-table-wrap"><table class="native-table wide"><thead><tr><th>项目</th><th>左眼 H</th><th>左眼 V</th><th>左眼 Avg</th><th>右眼 H</th><th>右眼 V</th><th>右眼 Avg</th></tr></thead><tbody>'
+    + '<tr><td class="name">视杯直径</td><td>308.250</td><td>398.250</td><td>353.250</td><td>263.250</td><td>312.750</td><td>288.000</td></tr>'
+    + '<tr><td class="name">视盘直径</td><td>567.000</td><td>798.750</td><td>682.875</td><td>535.500</td><td>753.750</td><td>644.625</td></tr>'
+    + '<tr><td class="name">杯盘比值</td><td>0.544</td><td>0.499</td><td>0.522</td><td>0.492</td><td>0.415</td><td>0.454</td></tr>'
+    + '</tbody></table></div></div>'
+    + '<div class="quant-group"><h3 class="native-subtitle">盘沿分析</h3><div class="native-table-wrap"><table class="native-table compact"><thead><tr><th>盘沿分区</th><th>左眼</th><th>右眼</th></tr></thead><tbody>'
+    + '<tr><td class="name">I区</td><td>202.500</td><td>213.750</td></tr><tr><td class="name">S区</td><td>182.250</td><td>211.500</td></tr><tr><td class="name">N区</td><td>130.500</td><td>146.250</td></tr><tr><td class="name">D区</td><td>105.750</td><td>105.750</td></tr>'
+    + '</tbody></table></div></div>'
+    + '<div class="quant-group"><h3 class="native-subtitle">视盘面积分析</h3><div class="native-table-wrap"><table class="native-table compact"><thead><tr><th>项目</th><th>左眼</th><th>右眼</th></tr></thead><tbody>'
+    + '<tr><td class="name">视盘面积</td><td>0.339</td><td>0.311</td></tr><tr><td class="name">视杯面积</td><td>0.098</td><td>0.066</td></tr><tr><td class="name">盘沿面积</td><td>0.241</td><td>0.245</td></tr><tr><td class="name">视杯/视盘面积比</td><td>0.290</td><td>0.213</td></tr>'
+    + '</tbody></table></div></div></div></div>'
+    + '</div>'
+    + '<div class="report-block">'
+    + '<div class="report-block-title">常见疾病筛查</div>'
+    + commonDiseaseModuleHtml()
+    + '</div>'
+    + '<div class="report-block">'
+    + '<div class="report-block-title">扩展病种精细筛查</div>'
+    + extendedDiseaseModuleHtml()
+    + '</div>'
+    + '<div class="report-block">'
+    + '<div class="report-block-title">罕见疾病筛查</div>'
+    + rareDiseaseModuleHtml()
+    + '</div>';
+}
+function normalScreeningHtml(task) {
+  return ''
+    + '<div class="report-block">'
+    + '<div class="report-block-title">常见疾病筛查结果</div>'
+    + commonDiseaseModuleHtml()
+    + '<div class="alert alert-warning" style="display:flex;align-items:flex-start;gap:10px;margin-top:14px;">'
+    + '<strong style="flex-shrink:0;font-size:15px;">&#9888;</strong>'
+    + '<div><strong>重要提示：</strong>以上筛查结果由AI辅助分析生成，仅供健康参考，不能替代专业医疗诊断。请勿依据本结果自行判断病情或自行用药，建议携带筛查报告前往正规医疗机构的相关科室，由执业医师结合临床检查进行综合评估与诊断。</div>'
+    + '</div>'
+    + '</div>';
+}
+function commonDiseaseModuleHtml() {
+  return ''
+    + '<div class="stats">'
+    + '<div class="stat"><span>筛查完成</span><strong style="color:var(--success);">12/12</strong></div>'
+    + '<div class="stat"><span>检出中高风险</span><strong style="color:var(--warning);">5</strong></div>'
+    + '<div class="stat"><span>低风险结果</span><strong style="color:var(--success);">7</strong></div>'
+    + '<div class="stat"><span>置信度均值</span><strong>86.6%</strong></div>'
+    + '</div>'
+    + '<div class="table-wrap" style="margin-bottom:16px;"><table class="data-table"><thead><tr><th>筛查项</th><th>风险等级</th><th>置信度</th></tr></thead><tbody>'
+    + '<tr><td><strong>高血压病风险</strong></td><td><span class="tag warning">中风险</span></td><td>72%</td></tr>'
+    + '<tr><td><strong>糖代谢风险</strong></td><td><span class="tag success">低风险</span></td><td>94%</td></tr>'
+    + '<tr><td><strong>认知障碍风险</strong></td><td><span class="tag success">低风险</span></td><td>96%</td></tr>'
+    + '<tr><td><strong>贫血风险</strong></td><td><span class="tag success">低风险</span></td><td>91%</td></tr>'
+    + '<tr><td><strong>脑肿瘤风险</strong></td><td><span class="tag success">低风险</span></td><td>98%</td></tr>'
+    + '<tr><td><strong>心脑血管风险</strong></td><td><span class="tag warning">中风险</span></td><td>68%</td></tr>'
+    + '<tr><td><strong>病理性近视风险</strong></td><td><span class="tag danger">高风险</span></td><td>89%</td></tr>'
+    + '<tr><td><strong>眼底肿瘤风险</strong></td><td><span class="tag success">低风险</span></td><td>97%</td></tr>'
+    + '<tr><td><strong>青光眼风险</strong></td><td><span class="tag success">低风险</span></td><td>94%</td></tr>'
+    + '<tr><td><strong>中心性浆液性脉络膜视网膜风险</strong></td><td><span class="tag success">低风险</span></td><td>93%</td></tr>'
+    + '<tr><td><strong>黄斑视力损伤风险</strong></td><td><span class="tag warning">中风险</span></td><td>76%</td></tr>'
+    + '<tr><td><strong>白内障风险</strong></td><td><span class="tag warning">中风险</span></td><td>71%</td></tr>'
+    + '</tbody></table></div>';
+}
+function extendedDiseaseModuleHtml() {
+  var rows = ''
+    + '<tr><td>豹纹状眼底</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>弥漫性视网膜萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>斑片样视网膜脉络膜萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>后巩膜葡萄肿</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>Fuchs斑</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>黄斑萎缩</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>脉络膜新生血管(CNV)</td><td><span class="lesion-normal">未见明显异常</span></td></tr>'
+    + '<tr><td>黄斑水肿</td><td><span class="lesion-normal">未见明显异常</span></td></tr>';
+  return ''
+    + '<div class="native-report"><div class="native-page">'
+    + '<h2 class="native-title">当前眼底扩展病种分析结果</h2>'
+    + '<div class="lesion-eye-grid">'
+    + '<div><div class="lesion-eye-label">左眼</div><table class="lesion-result-table"><thead><tr><th>病灶名称</th><th>AI分析结果</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+    + '<div><div class="lesion-eye-label">右眼</div><table class="lesion-result-table"><thead><tr><th>病灶名称</th><th>AI分析结果</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+    + '</div></div></div>';
+}
+function rareDiseaseModuleHtml() {
+  return ''
+    + '<div class="table-wrap"><table class="data-table"><thead><tr><th>筛查项</th><th>风险等级</th><th>置信度</th></tr></thead><tbody>'
+    + '<tr><td><strong>葡萄膜黑色素肿瘤</strong></td><td><span class="tag success">低风险</span></td><td>96%</td></tr>'
+    + '<tr><td><strong>视网膜色素变性</strong></td><td><span class="tag success">低风险</span></td><td>95%</td></tr>'
+    + '</tbody></table></div>';
+}
+function qcInfoHtml(task) {
+  return ''
+    + '<div class="report-block">'
+    + '<div class="report-block-title">质控检测结果</div>'
+    + '<div class="stats" style="margin-top:14px;">'
+    + '<div class="stat"><span>眼底图像判定</span><strong style="color:var(--success);">通过</strong></div>'
+    + '<div class="stat"><span>图像质量判定</span><strong style="color:var(--success);">通过</strong></div>'
+    + '<div class="stat"><span>AI分析状态</span><strong>已完成</strong></div>'
+    + '<div class="stat"><span>后续处理</span><strong>可筛查</strong></div>'
+    + '</div>'
+    + '<div class="qc-progress-shell"><div class="qc-progress-header"><div class="qc-progress-label"><span class="qc-progress-icon">✓</span><span>AI质控分析已完成，图像通过质控</span></div><span class="qc-progress-pct">100%</span></div><div class="qc-progress-track"><div class="qc-progress-fill"></div></div></div>'
+    + '<div class="alert alert-info"><strong>质控通过：</strong>AI先确认上传内容为眼底彩照，再判断视盘、黄斑、血管等关键结构可见且图像质量满足筛查要求。</div>'
+    + '</div>'
+    + '<div class="report-block">'
+    + '<div class="report-block-title">质控判定逻辑明细</div>'
+    + '<div class="table-wrap"><table class="data-table"><thead><tr><th>判定项</th><th>结果</th><th>判定逻辑</th><th>处理结论</th></tr></thead><tbody>'
+    + '<tr><td><strong>是否为眼底图像</strong></td><td><span class="tag success">通过</span></td><td>AI识别到视盘、黄斑暗区、视网膜血管树和橙红色眼底背景，符合眼底彩照的基本结构特征。</td><td>确认是眼底彩照，可继续质量判断。</td></tr>'
+    + '<tr><td><strong>关键结构完整性</strong></td><td><span class="tag success">通过</span></td><td>视盘、黄斑及主要血管弓均位于有效视野内，未出现关键区域缺失。</td><td>满足后续病灶识别和疾病筛查需要。</td></tr>'
+    + '<tr><td><strong>清晰度与对焦</strong></td><td><span class="tag success">通过</span></td><td>血管边界连续可辨，视盘边缘清楚，未见明显对焦失败或运动模糊。</td><td>图像细节足以支撑AI筛查。</td></tr>'
+    + '<tr><td><strong>曝光与色彩</strong></td><td><span class="tag success">通过</span></td><td>黄斑区、视盘区无明显过曝或欠曝，整体色彩符合眼底彩照表现。</td><td>不会影响基础病变识别。</td></tr>'
+    + '<tr><td><strong>遮挡与伪影</strong></td><td><span class="tag success">通过</span></td><td>未检测到大面积眼睑、睫毛、反光斑或黑边遮挡关键眼底区域。</td><td>通过质控，允许进入AI疾病筛查。</td></tr>'
+    + '<tr><td><strong>眼别逻辑匹配</strong></td><td><span class="tag success">通过</span></td><td>AI已完成眼别识别，双眼模式下确认左右眼各一张，眼别组合逻辑正确；单眼模式下无需额外匹配。</td><td>眼别匹配通过，符合筛查流程要求。</td></tr>'
+    + '</tbody></table></div>'
+    + '</div>'
+    + '<div class="report-block">'
+    + '<div class="report-block-title">图像脱敏处理</div>'
+    + '<div class="table-wrap"><table class="data-table"><thead><tr><th>处理项</th><th>处理状态</th><th>处理说明</th><th>安全声明</th></tr></thead><tbody>'
+    + '<tr><td><strong>患者信息脱敏</strong></td><td><span class="tag success">已处理</span></td><td>从眼底图像输入板块传入的图像已自动剥离DICOM头文件中的患者姓名、ID、出生日期等个人身份信息。</td><td>符合HIPAA/GDPR及国内个人信息保护法合规要求。</td></tr>'
+    + '<tr><td><strong>设备与机构信息脱敏</strong></td><td><span class="tag success">已处理</span></td><td>图像元数据中的采集设备序列号、医疗机构名称、检查科室等可追溯信息已做匿名化处理。</td><td>杜绝设备与机构信息泄露风险，保护机构隐私。</td></tr>'
+    + '<tr><td><strong>地理位置脱敏</strong></td><td><span class="tag success">已处理</span></td><td>如原始图像含有GPS坐标或地理位置标签，已统一清除。</td><td>防止患者活动轨迹与就诊地点被关联追溯。</td></tr>'
+    + '<tr><td><strong>图像唯一标识生成</strong></td><td><span class="tag success">已处理</span></td><td>脱敏后的图像分配系统内部唯一标识符，替代原始文件名，确保后续流程中的数据关联不依赖敏感信息。</td><td>实现数据可用不可见，保障隐私安全的同时支撑AI分析。</td></tr>'
+    + '</tbody></table></div>'
+    + '</div>';
+}
+function historyHtml(role, task) {
+  var currentType = role === 'doctor' ? '多任务联合筛查报告' : '常见疾病筛查报告';
+  var patient = patientInfo(task);
+  var historyPatientName = displayPatientName(patient.name);
+  var rows = [
+    [reportId(task), historyPatientName, currentType, reportTime(task)],
+    [role === 'doctor' ? 'RP-260626-018' : 'RP-260626-009', role === 'doctor' ? '陈华' : historyPatientName, currentType, '2026-06-26 16:05'],
+    [role === 'doctor' ? 'RP-260625-021' : 'RP-260625-014', role === 'doctor' ? '赵强' : historyPatientName, currentType, '2026-06-25 11:20']
+  ];
+  return rows.map(function(row) {
+    return '<tr><td><strong>' + escapeHtml(row[0]) + '</strong></td><td>' + escapeHtml(row[1]) + '</td><td>' + escapeHtml(row[2]) + '</td><td>' + escapeHtml(row[3]) + '</td><td><button class="btn secondary small" onclick="alert(&quot;报告已下载。&quot;)">下载</button></td></tr>';
+  }).join('');
+}
+function activateFlowSidebar() {
+  var role = getFlowRole();
+  document.querySelectorAll('.sidebar .menu-item').forEach(function(item) {
+    item.classList.toggle('active', item.getAttribute('data-flow-page') === '输出筛查报告.html' && item.getAttribute('data-flow-role') === role);
+  });
+}
+function downloadReport() {
+  var role = getFlowRole();
+  var label = role === 'doctor' ? '多任务联合筛查报告' : '常见疾病筛查报告';
+  alert(label + '下载功能已触发，文件将保存至本地。');
+}
+function renderReport() {
+  var task = readFundusTask();
+  var role = getFlowRole();
+  var isDoctor = role === 'doctor';
+  var sourceText = '结果来源：筛查+质控';
+  var reportText = isDoctor ? '多任务联合筛查报告' : '常见疾病筛查报告';
+
+  document.getElementById('roleBadge').textContent = isDoctor ? '多任务联合筛查' : '常见疾病筛查';
+  document.getElementById('roleBadge').className = 'tag ' + (isDoctor ? 'blue' : 'success');
+  document.getElementById('reportSubtitle').textContent = isDoctor
+    ? '报告根据多任务联合筛查结果生成。'
+    : '报告根据常见疾病筛查结果生成。';
+  document.getElementById('sourceNote').textContent = sourceText;
+  document.getElementById('baseInfoGrid').innerHTML = baseInfoHtml(role, task);
+  document.getElementById('screeningTitle').textContent = isDoctor ? '筛查信息：多任务联合筛查' : '筛查信息：常见疾病筛查';
+  document.getElementById('screeningNote').textContent = sourceText;
+  document.getElementById('screeningContent').innerHTML = isDoctor ? doctorScreeningHtml(task) : normalScreeningHtml(task);
+  document.getElementById('qcContent').innerHTML = qcInfoHtml(task);
+  document.getElementById('downloadHint').textContent = '下载' + reportText + '。';
+  document.getElementById('downloadReportBtn').textContent = '下载' + reportText;
+  document.getElementById('historyNote').textContent = isDoctor ? '仅展示多任务联合筛查报告' : '仅展示常见疾病筛查报告';
+  document.getElementById('historyRows').innerHTML = historyHtml(role, task);
 }
 document.addEventListener('DOMContentLoaded', function() {
-  try {
-    var user = JSON.parse(localStorage.getItem('life_med_user'));
-    if (user && user.name) {
-      document.getElementById('headerUserName').textContent = user.name;
-    }
-  } catch(e) {}
-  var path = window.location.pathname.replace(/\\/g, '/');
-  var currentPage = path.split('/').pop();
-  var menuItems = document.querySelectorAll('.sidebar .menu-item');
-  menuItems.forEach(function(item) {
-    var href = item.getAttribute('href');
-    if (href && (href === currentPage || href.endsWith('/' + currentPage))) {
-      item.classList.add('active');
-    }
-  });
+  var user = readCurrentUser();
+  if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
   activateFlowSidebar();
-  applyReportRole();
-  renderFundusTaskSummary();
-  renderReportByTask();
+  renderReport();
+  var overlay = document.getElementById('reportImageOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeReportImage();
+    });
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeReportImage();
+  });
 });
 </script>
-
 </body>
 </html>
