@@ -54,10 +54,29 @@ a{text-decoration:none;color:inherit}
 .source-panel{animation:slideUp .18s}
 .detail-desc{background:var(--gray-50);border-radius:6px;padding:14px 16px;color:var(--gray-800);white-space:pre-wrap;margin-bottom:16px}
 .task-tags{display:flex;flex-wrap:wrap;gap:6px}
-.distribution-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
-.dist-item{border:1px solid var(--gray-200);border-radius:8px;padding:10px 12px;background:var(--gray-50)}
-.dist-item strong{display:block;color:var(--gray-900);font-size:17px}
-.dist-item span{display:block;color:var(--gray-700);font-size:12px;font-weight:700;margin-top:2px}
+.distribution-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:16px 0}
+.dist-item{position:relative;overflow:hidden;border:1px solid #dbe7ff;border-radius:10px;padding:20px 22px 20px 26px;background:linear-gradient(135deg,#fff 0%,#f7fbff 52%,#eef5ff 100%);box-shadow:0 8px 22px rgba(26,115,232,.08)}
+.dist-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--primary)}
+.dist-item strong{display:block;color:var(--primary-dark);font-size:34px;line-height:1;font-weight:900;margin-bottom:12px}
+.dist-item span{display:block;color:var(--gray-900);font-size:18px;font-weight:900}
+.dist-item.dist-action{width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;transition:var(--transition)}
+.dist-item.dist-action:hover{transform:translateY(-1px);border-color:var(--primary);box-shadow:0 10px 24px rgba(26,115,232,.14)}
+.dist-item.dist-action.active{border-color:var(--primary);background:linear-gradient(135deg,#fff 0%,#edf5ff 48%,#dfeeff 100%);box-shadow:0 0 0 2px rgba(26,115,232,.12),0 10px 24px rgba(26,115,232,.15)}
+.dist-item.dist-action.active::after{content:"已选择";position:absolute;top:14px;right:16px;border-radius:999px;background:var(--primary);color:#fff;padding:2px 9px;font-size:12px;font-weight:800}
+.public-browser{margin-top:18px;padding-top:18px;border-top:1px solid var(--gray-200)}
+.public-browser-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px}
+.public-browser-head h3{font-size:17px;color:var(--gray-900)}
+.public-browser-head span{font-size:12px;color:var(--gray-600)}
+.public-category-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.public-category-btn{min-height:58px;border:1px solid var(--gray-200);border-radius:8px;background:#fff;padding:10px 12px;text-align:left;cursor:pointer;font:inherit;color:var(--gray-800);transition:var(--transition)}
+.public-category-btn:hover{border-color:var(--primary);background:#f8fbff}
+.public-category-btn.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary-dark);box-shadow:0 0 0 2px rgba(26,115,232,.08)}
+.public-category-name{display:block;font-size:13px;font-weight:800;line-height:1.35}
+.public-category-count{display:inline-flex;align-items:center;justify-content:center;margin-top:7px;min-width:42px;height:22px;border-radius:999px;background:var(--gray-100);color:var(--gray-700);font-size:12px;font-weight:800}
+.public-category-btn.active .public-category-count{background:var(--primary);color:#fff}
+.public-selected-list{margin-top:16px;border:1px solid var(--gray-200);border-radius:10px;background:#fff;overflow:hidden}
+.public-selected-list .list-title-row{margin:0;padding:14px 16px;border-bottom:1px solid var(--gray-200);background:#f8fbff}
+.public-dataset-code{font-family:Consolas,"Courier New",monospace;font-size:12px;font-weight:800;color:var(--primary-dark);white-space:nowrap}
 .dataset-meta{margin-top:3px;color:var(--gray-600);font-size:12px}
 .list-block{margin-top:16px;border-top:1px solid var(--gray-200);padding-top:16px}
 .list-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
@@ -105,9 +124,9 @@ tbody tr:hover{background:var(--gray-50)}
 .success-icon{width:60px;height:60px;border-radius:50%;background:#e6f4ea;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:28px}
 .success-box h3{color:var(--success);font-size:18px;margin-bottom:8px}.success-box p{color:var(--gray-600);margin-bottom:18px}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-@media(max-width:1180px){.source-tabs,.distribution-grid{grid-template-columns:1fr}}
+@media(max-width:1180px){.source-tabs,.distribution-grid{grid-template-columns:1fr}.public-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:1024px){.sidebar{width:60px}.sidebar .menu-item{font-size:0;padding:12px}.menu-group-title{display:none}.main-content{margin-left:60px}.summary-strip{flex-direction:column}.filter-bar input{min-width:220px}.match-count{margin-left:0}.detail-grid{grid-template-columns:1fr}}
-@media(max-width:720px){.header-nav{display:none}.filter-bar{align-items:stretch}.filter-bar input,.filter-bar select,.filter-bar button{width:100%}}
+@media(max-width:720px){.header-nav{display:none}.filter-bar{align-items:stretch}.filter-bar input,.filter-bar select,.filter-bar button{width:100%}.public-category-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -165,6 +184,7 @@ var currentUser = { name:'张教授', role:'医学教授', org:'深圳市眼科�
 var currentSortOrder = { original:'desc', public:'desc' };
 var currentPage = { original:1, public:1 };
 var activeSource = 'original';
+var publicBrowseState = { modalityIndex:0, categoryIndex:0 };
 var pageSize = 6;
 
 var sourceDefinitions = {
@@ -178,9 +198,9 @@ var sourceDefinitions = {
     scale:'7.4万条原始记录',
     tag:'tag-orange',
     distribution:[
-      {label:'临床试验数据',value:2,desc:'药物、干预、疗效随访'},
-      {label:'病历数据',value:3,desc:'门诊、住院、随访病历'},
-      {label:'影像数据',value:2,desc:'配套眼底图像与检查影像'}
+      {label:'临床试验数据集',value:2},
+      {label:'病历数据集',value:3},
+      {label:'影像数据集',value:2}
     ],
     subtypes:[
       {name:'临床试验数据',count:2,tip:'干预试验、药物疗效随访'},
@@ -194,18 +214,72 @@ var sourceDefinitions = {
     subtitle:'平台整理的代表性公开数据',
     short:'来自公开数据库和经典学术数据集，便于教学与科研。',
     desc:'平台公开一些由生命医学主题库整理的代表性数据集，方便用户进行科研和教学活动。这类数据主要由眼底图像、OCT、OCTA三种医学影像模态构成。',
-    datasets:10,
-    scale:'102883张示例图像',
+    datasets:11,
+    scale:'11个公开细分数据集',
     tag:'tag-blue',
     distribution:[
-      {label:'眼底图像数据集',value:5,desc:'糖网、AMD、青光眼等'},
-      {label:'OCT数据集',value:3,desc:'视网膜积液、视网膜层分割'},
-      {label:'OCTA数据集',value:2,desc:'血管与FAZ分析'}
+      {label:'眼底图像数据集',value:6},
+      {label:'OCT数据集',value:3},
+      {label:'OCTA数据集',value:2}
     ],
     subtypes:[
-      {name:'眼底图像数据集',count:5,tip:'DDR、Diaretdb、IDRID、Messidor'},
+      {name:'眼底图像数据集',count:6,tip:'DDR、Diaretdb、IDRID、Messidor'},
       {name:'OCT数据集',count:3,tip:'RETOUCH、DUKE、UNM'},
       {name:'OCTA数据集',count:2,tip:'OCTA-500系列'}
+    ],
+    publicBrowse:[
+      {
+        modality:'眼底图像数据集',
+        count:6,
+        categories:[
+          {name:'糖尿病视网膜病变分级',datasets:[
+            {code:'PUB-FUNDUS-202607-0001',subtype:'DDR数据集',scale:'13673张图像的糖尿病视网膜病变五分类标注数据'},
+            {code:'PUB-FUNDUS-202607-0002',subtype:'diaretdb0',scale:'130张图像的糖尿病视网膜病变二分类标注数据'},
+            {code:'PUB-FUNDUS-202607-0003',subtype:'Diaretdb1',scale:'89张图像的糖尿病视网膜病变二分类标注数据'},
+            {code:'PUB-FUNDUS-202607-0004',subtype:'DRD(kaggle)',scale:'87275张图像的糖尿病视网膜病变五分类标注数据'},
+            {code:'PUB-FUNDUS-202607-0005',subtype:'IDRID',scale:'516张图像的糖尿病视网膜病变五分类标注数据'},
+            {code:'PUB-FUNDUS-202607-0006',subtype:'Messidor',scale:'1200张图像的糖尿病视网膜病变四分类标注数据'}
+          ]},
+          {name:'糖尿病视网膜病灶分割',datasets:[]},
+          {name:'老年黄斑病变分级',datasets:[]},
+          {name:'眼底图像质量评价',datasets:[]},
+          {name:'青光眼分级',datasets:[]},
+          {name:'病灶检测',datasets:[]},
+          {name:'黄斑中心凹定位',datasets:[]},
+          {name:'病理性近视分级',datasets:[]},
+          {name:'病理性近视病灶分割',datasets:[]},
+          {name:'血管分割',datasets:[]}
+        ]
+      },
+      {
+        modality:'OCT数据集',
+        count:3,
+        categories:[
+          {name:'视网膜积液病变分割',datasets:[
+            {code:'PUB-OCT-202607-0001',subtype:'RETOUCH数据集',scale:'IRF、SRF、PED三类病灶，总计79组三维OCT数据，6936张二维OCT图像'},
+            {code:'PUB-OCT-202607-0002',subtype:'DUKE数据集',scale:'针对IRF病灶，总计10组三维OCT数据，110张二维OCT图像'},
+            {code:'PUB-OCT-202607-0003',subtype:'UNM数据集',scale:'含29组三维OCT数据，每组25张二维图像，共725张二维图像'}
+          ]},
+          {name:'视网膜层分割',datasets:[]},
+          {name:'青光眼分级',datasets:[]},
+          {name:'老年黄斑病变分级',datasets:[]},
+          {name:'多疾病联合分级',datasets:[]},
+          {name:'开闭角分类',datasets:[]},
+          {name:'孔膜突定位',datasets:[]}
+        ]
+      },
+      {
+        modality:'OCTA数据集',
+        count:2,
+        categories:[
+          {name:'视网膜血管分割',datasets:[
+            {code:'PUB-OCTA-202607-0001',subtype:'OCTA-500视网膜血管分割数据集',scale:'含500张三维OCTA数据'}
+          ]},
+          {name:'黄斑中心凹无血管区分割',datasets:[
+            {code:'PUB-OCTA-202607-0002',subtype:'OCTA-500黄斑中心凹无血管区数据集',scale:'含500张三维OCTA数据'}
+          ]}
+        ]
+      }
     ]
   }
 };
@@ -223,6 +297,7 @@ var allDatasets = [
   {id:10,sourceKey:'public',name:'Diaretdb1眼底图像数据集',subtype:'眼底图像数据集',disease:'糖尿病视网膜病变',task:'糖网病灶标注',taskKind:'分割',scale:'89张眼底图像',format:'JPG / PNG',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-30 15:10',desc:'包含糖网相关微血管瘤、出血、渗出等病灶标注，便于进行病灶识别教学与模型测试。',attachments:[{name:'Diaretdb1_dataset.zip',size:'368 MB',url:'data/diaretdb1_dataset.zip'}]},
   {id:11,sourceKey:'public',name:'DRD(Kaggle)糖网五分类数据集',subtype:'眼底图像数据集',disease:'糖尿病视网膜病变',task:'糖网五分类',taskKind:'分类',scale:'87275张眼底图像',format:'JPG / CSV',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-29 09:40',desc:'大规模糖尿病视网膜病变分级数据，可用于模型预训练、筛查任务评估和科研复现实验。',attachments:[{name:'DRD_kaggle_images.zip',size:'38.6 GB',url:'data/drd_kaggle_images.zip'},{name:'DRD_kaggle_labels.csv',size:'22 MB',url:'data/drd_kaggle_labels.csv'}]},
   {id:12,sourceKey:'public',name:'IDRID糖网病灶分割数据集',subtype:'眼底图像数据集',disease:'糖尿病视网膜病变',task:'糖网病灶分割',taskKind:'分割',scale:'516张眼底图像',format:'JPG / PNG / CSV',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-28 11:30',desc:'提供糖网分级与病灶级标注，适合进行病灶定位、分割和筛查报告生成相关验证。',attachments:[{name:'IDRID_images_annotations.zip',size:'1.9 GB',url:'data/idrid_images_annotations.zip'}]},
+  {id:18,sourceKey:'public',name:'Messidor糖网四分类数据集',subtype:'眼底图像数据集',disease:'糖尿病视网膜病变',task:'糖网四分类',taskKind:'分类',scale:'1200张眼底图像',format:'JPG / CSV',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-27 17:20',desc:'包含糖尿病视网膜病变四分类标注，可用于分级模型训练、课程示例和不同公开数据集间的结果对比。',attachments:[{name:'messidor_images.zip',size:'2.6 GB',url:'data/messidor_images.zip'},{name:'messidor_labels.csv',size:'3.2 MB',url:'data/messidor_labels.csv'}]},
   {id:13,sourceKey:'public',name:'RETOUCH视网膜积液OCT数据集',subtype:'OCT数据集',disease:'视网膜积液 / 黄斑疾病',task:'IRF、SRF、PED分割',taskKind:'分割',scale:'79组三维OCT / 6936张二维图像',format:'OCT / PNG / NIfTI',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-26 14:00',desc:'包含多类视网膜积液病灶标注，适合OCT病灶分割、算法对比和临床教学使用。',attachments:[{name:'RETOUCH_oct.zip',size:'9.8 GB',url:'data/retouch_oct.zip'}]},
   {id:14,sourceKey:'public',name:'DUKE视网膜积液OCT数据集',subtype:'OCT数据集',disease:'视网膜积液 / 黄斑疾病',task:'IRF病灶分割',taskKind:'分割',scale:'10组三维OCT / 110张二维图像',format:'OCT / PNG',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-25 13:10',desc:'针对IRF病灶提供OCT图像和标注，可用于小样本分割训练、结果解释和课程实训。',attachments:[{name:'DUKE_IRF_oct.zip',size:'740 MB',url:'data/duke_irf_oct.zip'}]},
   {id:15,sourceKey:'public',name:'UNM视网膜积液OCT数据集',subtype:'OCT数据集',disease:'视网膜积液 / 黄斑疾病',task:'视网膜积液分割',taskKind:'分割',scale:'29组三维OCT / 725张二维图像',format:'OCT / PNG',source:'生命医学主题库数据库',org:'公开整理数据',updateTime:'2026-06-24 18:30',desc:'每组三维OCT包含连续二维切片，可用于病灶连续性观察和视网膜积液识别模型验证。',attachments:[{name:'UNM_oct_fluid.zip',size:'2.2 GB',url:'data/unm_oct_fluid.zip'}]},
@@ -261,25 +336,92 @@ function renderPanel(){
   html += '<section class="card source-panel" id="panel-' + key + '">';
   html += '<div class="card-header"><span class="card-title">' + escapeHtml(def.title) + '</span><span class="page-subtitle">' + escapeHtml(def.subtitle) + '</span></div>';
   html += '<div class="detail-desc">' + escapeHtml(def.desc) + '</div>';
-  html += '<div class="distribution-grid">';
-  def.distribution.forEach(function(item){
-    html += '<div class="dist-item"><strong>' + item.value + '</strong><span>' + escapeHtml(item.label) + '</span><div class="dataset-meta">' + escapeHtml(item.desc) + '</div></div>';
-  });
-  html += '</div>';
-  html += '<div class="list-block"><div class="list-title-row"><h3>' + escapeHtml(def.title) + '列表</h3><span>' + escapeHtml(def.scale) + '</span></div>';
-  html += '<div class="filter-bar"><label>关键词搜索</label>';
-  html += '<input id="search-' + key + '" placeholder="按数据集名称、疾病、来源机构搜索..." oninput="filterDatasets(\'' + key + '\')">';
-  html += '<select id="subtype-' + key + '" onchange="filterDatasets(\'' + key + '\')"><option value="">小类：全部</option>' + def.subtypes.map(function(item){ return '<option value="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</option>'; }).join('') + '</select>';
-  html += '<select id="task-' + key + '" onchange="filterDatasets(\'' + key + '\')"><option value="">任务：全部</option>' + getTaskOptions(key).map(function(item){ return '<option value="' + escapeHtml(item) + '">' + escapeHtml(item) + '</option>'; }).join('') + '</select>';
-  html += '<button class="btn btn-outline btn-sm" id="sort-' + key + '" onclick="toggleSort(\'' + key + '\')">' + (currentSortOrder[key] === 'desc' ? '最新更新 ↓' : '最新更新 ↑') + '</button><button class="btn btn-outline btn-sm" onclick="resetFilters(\'' + key + '\')">重置筛选</button><span class="match-count" id="match-' + key + '"></span></div>';
-  html += '<div class="table-wrap"><table><thead><tr><th>数据集名称</th><th>细分类型</th><th>关联疾病/主题</th><th>任务类型</th><th>数据规模</th><th>来源机构</th><th>更新时间</th><th>操作</th></tr></thead><tbody id="tbody-' + key + '"></tbody></table></div>';
-  html += '<div class="pagination" id="page-' + key + '"></div></div></section>';
+  if (key === 'public') {
+    html += renderPublicBrowser(def);
+  } else {
+    html += '<div class="distribution-grid">';
+    def.distribution.forEach(function(item){
+      html += '<div class="dist-item"><strong>' + item.value + '</strong><span>' + escapeHtml(item.label) + '</span></div>';
+    });
+    html += '</div>';
+    html += '<div class="list-block"><div class="list-title-row"><h3>' + escapeHtml(def.title) + '列表</h3><span>' + escapeHtml(def.scale) + '</span></div>';
+    html += '<div class="filter-bar"><label>关键词搜索</label>';
+    html += '<input id="search-' + key + '" placeholder="按数据集名称、疾病搜索..." oninput="filterDatasets(\'' + key + '\')">';
+    html += '<select id="subtype-' + key + '" onchange="filterDatasets(\'' + key + '\')"><option value="">小类：全部</option>' + def.subtypes.map(function(item){ return '<option value="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</option>'; }).join('') + '</select>';
+    html += '<button class="btn btn-outline btn-sm" id="sort-' + key + '" onclick="toggleSort(\'' + key + '\')">' + (currentSortOrder[key] === 'desc' ? '最新更新 ↓' : '最新更新 ↑') + '</button><button class="btn btn-outline btn-sm" onclick="resetFilters(\'' + key + '\')">重置筛选</button><span class="match-count" id="match-' + key + '"></span></div>';
+    html += '<div class="table-wrap"><table><thead><tr><th>数据集名称</th><th>细分类型</th><th>关联疾病/主题</th><th>数据规模</th><th>更新时间</th><th>操作</th></tr></thead><tbody id="tbody-' + key + '"></tbody></table></div>';
+    html += '<div class="pagination" id="page-' + key + '"></div></div>';
+  }
+  html += '</section>';
   document.getElementById('sourcePanel').innerHTML = html;
-  renderTable(key);
+  if (key !== 'public') renderTable(key);
 }
 
-function getTaskOptions(key){
-  return key === 'original' ? ['干预效果评价','药物疗效评价','随访结局分析','诊疗路径分析','影像质量评价','随访趋势分析'] : ['分类','分割','评价'];
+function renderPublicBrowser(def){
+  var modalities = def.publicBrowse || [];
+  var modality = getPublicModality(def);
+  var category = getPublicCategory(modality);
+  var html = '<div class="distribution-grid">';
+  modalities.forEach(function(item,index){
+    html += '<button type="button" class="dist-item dist-action' + (index === publicBrowseState.modalityIndex ? ' active' : '') + '" onclick="switchPublicModality(' + index + ')">';
+    html += '<strong>' + item.count + '</strong><span>' + escapeHtml(item.modality) + '</span>';
+    html += '</button>';
+  });
+  html += '</div>';
+  html += '<div class="public-browser">';
+  html += '<div class="public-browser-head"><h3>' + escapeHtml(modality.modality) + '疾病/任务分类</h3><span>点击分类查看下方细分数据集</span></div>';
+  html += '<div class="public-category-grid">';
+  modality.categories.forEach(function(item,index){
+    var count = item.datasets.length;
+    html += '<button type="button" class="public-category-btn' + (index === publicBrowseState.categoryIndex ? ' active' : '') + '" onclick="switchPublicCategory(' + index + ')">';
+    html += '<span class="public-category-name">' + escapeHtml(item.name) + '</span><span class="public-category-count">' + count + ' 个</span>';
+    html += '</button>';
+  });
+  html += '</div>';
+  html += renderPublicDatasetList(modality,category);
+  html += '</div>';
+  return html;
+}
+
+function renderPublicDatasetList(modality,category){
+  var datasets = category.datasets || [];
+  var html = '<div class="public-selected-list">';
+  html += '<div class="list-title-row"><h3>' + escapeHtml(category.name) + '细分数据集列表</h3><span>' + escapeHtml(modality.modality) + ' / ' + datasets.length + ' 个</span></div>';
+  html += '<div class="table-wrap"><table><thead><tr><th>自动生成编号</th><th>细分类型</th><th>数据规模</th></tr></thead><tbody>';
+  if (datasets.length) {
+    datasets.forEach(function(item){
+      html += '<tr><td><span class="public-dataset-code">' + escapeHtml(item.code) + '</span></td><td><div class="dataset-name">' + escapeHtml(item.subtype) + '</div></td><td>' + escapeHtml(item.scale) + '</td></tr>';
+    });
+  } else {
+    html += '<tr><td colspan="3"><div class="empty">暂无细分数据集</div></td></tr>';
+  }
+  html += '</tbody></table></div></div>';
+  return html;
+}
+
+function getPublicModality(def){
+  var modalities = def.publicBrowse || [];
+  if (!modalities.length) return {modality:'公开数据库数据集',categories:[]};
+  if (!modalities[publicBrowseState.modalityIndex]) publicBrowseState.modalityIndex = 0;
+  return modalities[publicBrowseState.modalityIndex];
+}
+
+function getPublicCategory(modality){
+  var categories = modality.categories || [];
+  if (!categories.length) return {name:'暂无分类',datasets:[]};
+  if (!categories[publicBrowseState.categoryIndex]) publicBrowseState.categoryIndex = 0;
+  return categories[publicBrowseState.categoryIndex];
+}
+
+function switchPublicModality(index){
+  publicBrowseState.modalityIndex = index;
+  publicBrowseState.categoryIndex = 0;
+  renderPanel();
+}
+
+function switchPublicCategory(index){
+  publicBrowseState.categoryIndex = index;
+  renderPanel();
 }
 
 function filterDatasets(key){ currentPage[key] = 1; renderTable(key); }
@@ -287,7 +429,6 @@ function filterDatasets(key){ currentPage[key] = 1; renderTable(key); }
 function resetFilters(key){
   document.getElementById('search-' + key).value = '';
   document.getElementById('subtype-' + key).value = '';
-  document.getElementById('task-' + key).value = '';
   currentPage[key] = 1;
   renderTable(key);
 }
@@ -295,13 +436,11 @@ function resetFilters(key){
 function getFilteredDatasets(key){
   var keyword = document.getElementById('search-' + key).value.trim().toLowerCase();
   var subtype = document.getElementById('subtype-' + key).value;
-  var task = document.getElementById('task-' + key).value;
   return allDatasets.filter(function(ds){
     if (ds.sourceKey !== key) return false;
-    var text = [ds.name,ds.subtype,ds.disease,ds.task,ds.taskKind,ds.org,ds.desc].join(' ').toLowerCase();
+    var text = [ds.name,ds.subtype,ds.disease,ds.desc].join(' ').toLowerCase();
     if (keyword && text.indexOf(keyword) === -1) return false;
     if (subtype && ds.subtype !== subtype) return false;
-    if (task && ds.task !== task && ds.taskKind !== task) return false;
     return true;
   });
 }
@@ -319,14 +458,13 @@ function renderTable(key){
   var pageData = sorted.slice((currentPage[key] - 1) * pageSize, currentPage[key] * pageSize);
   var html = '';
   pageData.forEach(function(ds){
-    html += '<tr><td><div class="dataset-name">' + escapeHtml(ds.name) + '</div><div class="dataset-meta">' + escapeHtml(ds.source) + '</div></td>';
+    html += '<tr><td><div class="dataset-name">' + escapeHtml(ds.name) + '</div></td>';
     html += '<td>' + renderSubtype(ds) + '</td><td>' + escapeHtml(ds.disease) + '</td>';
-    html += '<td><div class="dataset-name">' + escapeHtml(ds.task) + '</div><div class="dataset-meta">' + escapeHtml(ds.taskKind) + '</div></td>';
     html += '<td>' + escapeHtml(ds.scale) + '<div class="dataset-meta">' + escapeHtml(ds.format) + '</div></td>';
-    html += '<td>' + escapeHtml(ds.org) + '</td><td>' + ds.updateTime + '</td>';
+    html += '<td>' + ds.updateTime + '</td>';
     html += '<td><div class="action-cell"><button class="btn btn-outline btn-sm" onclick="openDetail(' + ds.id + ')">查看详情</button><button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载</button></div></td></tr>';
   });
-  document.getElementById('tbody-' + key).innerHTML = html || '<tr><td colspan="8"><div class="empty">暂无符合条件的数据集</div></td></tr>';
+  document.getElementById('tbody-' + key).innerHTML = html || '<tr><td colspan="6"><div class="empty">暂无符合条件的数据集</div></td></tr>';
   renderPagination(key,totalPages);
 }
 
@@ -363,9 +501,7 @@ function openDetail(id){
   html += '<div class="detail-item"><span>来源大类</span><strong>' + escapeHtml(sourceDefinitions[ds.sourceKey].title) + '</strong></div>';
   html += '<div class="detail-item"><span>细分类型</span><strong>' + escapeHtml(ds.subtype) + '</strong></div>';
   html += '<div class="detail-item"><span>关联疾病/主题</span><strong>' + escapeHtml(ds.disease) + '</strong></div>';
-  html += '<div class="detail-item"><span>任务类型</span><strong>' + escapeHtml(ds.task) + '</strong></div>';
   html += '<div class="detail-item"><span>数据规模</span><strong>' + escapeHtml(ds.scale) + '</strong></div>';
-  html += '<div class="detail-item"><span>来源机构</span><strong>' + escapeHtml(ds.org) + '</strong></div>';
   html += '<div class="detail-item"><span>更新时间</span><strong>' + escapeHtml(ds.updateTime) + '</strong></div>';
   html += '</div><div class="section-label">数据集简介</div><div class="detail-desc">' + escapeHtml(ds.desc) + '</div><div class="section-label">下载文件</div>';
   ds.attachments.forEach(function(att){

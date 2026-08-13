@@ -116,6 +116,19 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .kg-legend .legend-line.defined { background: var(--edge-defined); }
 .kg-legend .legend-line.disease-link { background: var(--edge-inferred); }
 
+.relation-label-panel { position: absolute; top: 330px; left: 12px; width: 170px; background: rgba(255,255,255,0.97); border: 1px solid var(--gray-200); border-radius: 8px; box-shadow: var(--shadow); padding: 10px 12px; z-index: 11; }
+.relation-label-head { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+.relation-label-title { font-size: 12px; font-weight: 600; color: var(--gray-800); }
+.relation-label-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; flex-shrink: 0; }
+.relation-label-action,
+.relation-label-chip { border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); border-radius: 6px; font: inherit; font-size: 12px; cursor: pointer; transition: var(--transition); }
+.relation-label-action { padding: 4px 0; }
+.relation-label-chip { padding: 5px 8px; width: 100%; text-align: left; }
+.relation-label-action:hover,
+.relation-label-chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.relation-label-chip.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+.relation-label-options { display: flex; flex-wrap: wrap; gap: 7px; }
+
 /* SVG 节点和边样式 */
 .kg-node { cursor: pointer; transition: opacity 0.2s; }
 .kg-node text { font-size: 11px; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #333; text-anchor: middle; pointer-events: none; user-select: none; }
@@ -284,6 +297,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     .sidebar .menu-item span { display: none; }
     .sidebar .menu-group-title { display: none; }
     .main-content { margin-left: 60px; }
+    .relation-label-panel { top: 300px; left: 12px; }
     .kg-detail-panel { width: 280px; }
     .ai-answer-overlay { left: 60px; }
 }
@@ -361,6 +375,23 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 <div class="legend-item"><span class="legend-dot case"></span> 病例报告</div>
                 <div class="legend-item" style="margin-top:4px;"><span class="legend-line defined"></span> 其他实体关系</div>
                 <div class="legend-item"><span class="legend-line disease-link"></span> 疾病之间关联</div>
+            </div>
+            <div class="relation-label-panel" id="relationLabelPanel">
+                <div class="relation-label-head">
+                    <div class="relation-label-title">关系标签显示</div>
+                    <div class="relation-label-actions">
+                        <button type="button" class="relation-label-action" onclick="setAllRelationLabels(true)">全部显示</button>
+                        <button type="button" class="relation-label-action" onclick="setAllRelationLabels(false)">全部隐藏</button>
+                    </div>
+                </div>
+                <div class="relation-label-options" id="relationLabelOptions">
+                    <button type="button" class="relation-label-chip" data-relation-label="drug" onclick="toggleRelationLabel('drug')">疾病-药物</button>
+                    <button type="button" class="relation-label-chip" data-relation-label="surgery" onclick="toggleRelationLabel('surgery')">疾病-手术操作</button>
+                    <button type="button" class="relation-label-chip" data-relation-label="exam" onclick="toggleRelationLabel('exam')">疾病-检验检查</button>
+                    <button type="button" class="relation-label-chip" data-relation-label="symptom" onclick="toggleRelationLabel('symptom')">疾病-症状信息</button>
+                    <button type="button" class="relation-label-chip" data-relation-label="case" onclick="toggleRelationLabel('case')">疾病-病例报告</button>
+                    <button type="button" class="relation-label-chip" data-relation-label="inferred" onclick="toggleRelationLabel('inferred')">疾病之间推理</button>
+                </div>
             </div>
             <div class="kg-zoom-controls">
                 <button onclick="zoomIn()" title="放大">+</button>
@@ -813,6 +844,14 @@ var dragStart = { x: 0, y: 0 };
 var nodeDragging = null;
 var showInferred = true;
 var relationFilter = 'all';
+var relationLabelState = {
+    drug: false,
+    surgery: false,
+    exam: false,
+    symptom: false,
+    'case': false,
+    inferred: false
+};
 
 var graphArea = document.getElementById('graphArea');
 var svg = document.getElementById('kgSvg');
@@ -1185,26 +1224,28 @@ function renderGraph() {
         line.setAttribute('marker-end', 'url(#arrow-' + markerType + ')');
         g.appendChild(line);
 
-        var labelPlacement = getRelationLabelPlacement(edge, x1, y1, x2, y2, placedLabelBoxes, renderNodes);
-        var labelGroup = document.createElementNS(NS, 'g');
-        labelGroup.classList.add('edge-label');
+        if (shouldShowRelationLabel(edge)) {
+            var labelPlacement = getRelationLabelPlacement(edge, x1, y1, x2, y2, placedLabelBoxes, renderNodes);
+            var labelGroup = document.createElementNS(NS, 'g');
+            labelGroup.classList.add('edge-label');
 
-        var labelBg = document.createElementNS(NS, 'rect');
-        labelBg.classList.add('edge-label-bg');
-        labelBg.setAttribute('x', labelPlacement.x - labelPlacement.width / 2);
-        labelBg.setAttribute('y', labelPlacement.y - labelPlacement.height / 2);
-        labelBg.setAttribute('width', labelPlacement.width);
-        labelBg.setAttribute('height', labelPlacement.height);
-        labelBg.setAttribute('rx', 5);
-        labelBg.setAttribute('ry', 5);
-        labelGroup.appendChild(labelBg);
+            var labelBg = document.createElementNS(NS, 'rect');
+            labelBg.classList.add('edge-label-bg');
+            labelBg.setAttribute('x', labelPlacement.x - labelPlacement.width / 2);
+            labelBg.setAttribute('y', labelPlacement.y - labelPlacement.height / 2);
+            labelBg.setAttribute('width', labelPlacement.width);
+            labelBg.setAttribute('height', labelPlacement.height);
+            labelBg.setAttribute('rx', 5);
+            labelBg.setAttribute('ry', 5);
+            labelGroup.appendChild(labelBg);
 
-        var text = document.createElementNS(NS, 'text');
-        text.setAttribute('x', labelPlacement.x);
-        text.setAttribute('y', labelPlacement.y);
-        text.textContent = edge.label;
-        labelGroup.appendChild(text);
-        g.appendChild(labelGroup);
+            var text = document.createElementNS(NS, 'text');
+            text.setAttribute('x', labelPlacement.x);
+            text.setAttribute('y', labelPlacement.y);
+            text.textContent = edge.label;
+            labelGroup.appendChild(text);
+            g.appendChild(labelGroup);
+        }
 
         g.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1370,6 +1411,22 @@ function isDiseaseDiseaseEdge(edge) {
 
 function edgeTouchesType(edge, type) {
     return getNodeTypeById(edge.from) === type || getNodeTypeById(edge.to) === type;
+}
+
+function getRelationLabelCategory(edge) {
+    if (edge.type === 'inferred' || isDiseaseDiseaseEdge(edge)) return 'inferred';
+    var label = cleanRelationLabel(edge);
+    if (edgeTouchesType(edge, 'drug') || /用药|药物|一线治疗|二线治疗|包含药物|基础用药/.test(label)) return 'drug';
+    if (edgeTouchesType(edge, 'surgery') || /手术|激光|光凝|切割|切除|治疗/.test(label)) return 'surgery';
+    if (edgeTouchesType(edge, 'exam') || /检验|检查|测量|监测/.test(label)) return 'exam';
+    if (edgeTouchesType(edge, 'symptom') || /症状|表现/.test(label)) return 'symptom';
+    if (edgeTouchesType(edge, 'case') || /病例|个案|期刊|文献/.test(label)) return 'case';
+    return '';
+}
+
+function shouldShowRelationLabel(edge) {
+    var category = getRelationLabelCategory(edge);
+    return !!(category && relationLabelState[category]);
 }
 
 function edgePassesFilter(edge) {
@@ -2119,6 +2176,31 @@ function resetView() {
     renderGraph();
 }
 
+function syncRelationLabelControls() {
+    var chips = document.querySelectorAll('.relation-label-chip');
+    chips.forEach(function(chip) {
+        var key = chip.getAttribute('data-relation-label');
+        chip.classList.toggle('active', !!relationLabelState[key]);
+    });
+}
+
+function toggleRelationLabel(key) {
+    if (!Object.prototype.hasOwnProperty.call(relationLabelState, key)) return;
+    relationLabelState[key] = !relationLabelState[key];
+    syncRelationLabelControls();
+    renderGraph();
+    showSearchToast(relationLabelState[key] ? '已显示该类关系标签' : '已隐藏该类关系标签');
+}
+
+function setAllRelationLabels(visible) {
+    Object.keys(relationLabelState).forEach(function(key) {
+        relationLabelState[key] = !!visible;
+    });
+    syncRelationLabelControls();
+    renderGraph();
+    showSearchToast(visible ? '已显示全部关系标签' : '已隐藏全部关系标签');
+}
+
 function changeRelationFilter() {
     if (!activeDiseaseId) {
         document.getElementById('relationFilter').value = 'all';
@@ -2293,6 +2375,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch(e) {}
     calculateLayout();
     syncInferenceControls();
+    syncRelationLabelControls();
     renderDiseaseTree();
     setDefaultDetailContext();
     renderGraph();

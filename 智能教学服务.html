@@ -1479,9 +1479,6 @@ function renderKnowledgeContent(topic) {
     var sectionHtml = (data.sections || []).map(function(section) {
         return '<div class="km-section"><h3>' + section.title + '</h3>' + section.content + '</div>';
     }).join('');
-    var relatedHtml = (data.related || []).map(function(item) {
-        return '<div class="related-card"><strong>' + item.label + '</strong><span>' + item.value + '</span></div>';
-    }).join('');
     var questionCodes = getKnowledgeQuestionCodes(data);
     var questionHtml = questionCodes.map(function(code) {
         var q = getQuestionByCode(code);
@@ -1508,8 +1505,7 @@ function renderKnowledgeContent(topic) {
         + '</div>' +
         (questionHtml ? '<div class="km-section"><h3>关联题目</h3><div class="km-related">' + questionHtml + '</div></div>' : '') +
         sectionHtml +
-        (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '') +
-        (relatedHtml ? '<div class="km-section"><h3>关联内容</h3><div class="km-related">' + relatedHtml + '</div></div>' : '');
+        (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '');
 }
 
 // ===== 统计更新 =====

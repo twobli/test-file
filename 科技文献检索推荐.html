@@ -59,10 +59,12 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); display: flex; gap: 24px; align-items: flex-start; }
 .main-left { flex: 1; min-width: 0; }
 .main-content.single-column { display: block; }
-.page-title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.page-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
 .page-title-row .page-title { margin-bottom: 0; }
+.recommend-action { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; max-width: 560px; text-align: right; }
 .recommend-entry { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 7px; color: var(--primary); background: #fff; border: 1px solid #cfe0ff; text-decoration: none; font-size: 13px; font-weight: 600; transition: var(--transition); white-space: nowrap; }
 .recommend-entry:hover { background: var(--primary-light); border-color: var(--primary); }
+.recommend-hint { color: var(--gray-600); font-size: 12px; line-height: 1.6; }
 
 .breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
@@ -183,7 +185,8 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 }
 @media (max-width: 620px) {
     .page-title-row { align-items: flex-start; flex-direction: column; }
-    .recommend-entry { align-self: stretch; justify-content: center; }
+    .recommend-action { align-items: stretch; text-align: left; max-width: none; }
+    .recommend-entry { justify-content: center; }
 }
 </style>
 </head>
@@ -222,7 +225,10 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
         <div class="breadcrumb"><a href="#">开放数据平台</a><span class="sep">&gt;</span><span>科技文献检索推荐</span></div>
         <div class="page-title-row">
             <h1 class="page-title">科技文献检索推荐</h1>
-            <a class="recommend-entry" href="科技文献检索推荐_为您推荐.html">查看为您推荐 <span aria-hidden="true">&rarr;</span></a>
+            <div class="recommend-action">
+                <div class="recommend-hint">平台将根据您的搜索历史和行为，采用协同过滤等推荐算法，为您推荐感兴趣的科研文献</div>
+                <a class="recommend-entry" href="科技文献检索推荐_为您推荐.html">查看为您推荐 <span aria-hidden="true">&rarr;</span></a>
+            </div>
         </div>
 
         <div class="card">
