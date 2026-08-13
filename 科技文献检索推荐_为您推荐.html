@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>科技文献检索推荐 - 为您推荐</title>
+<style>
+:root {
+  --primary: #1a73e8;
+  --primary-dark: #1557b0;
+  --primary-light: #e8f0fe;
+  --success: #34a853;
+  --warning: #b06000;
+  --gray-50: #f8f9fa;
+  --gray-100: #f5f7fa;
+  --gray-200: #e8ecf0;
+  --gray-300: #dadce0;
+  --gray-500: #9aa0a6;
+  --gray-600: #80868b;
+  --gray-700: #5f6368;
+  --gray-800: #3c4043;
+  --gray-900: #202124;
+  --sidebar-width: 220px;
+  --header-height: 56px;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
+  --transition: all 0.2s ease;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; color: #333; background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
+button { font: inherit; }
+.header { height: var(--header-height); background: linear-gradient(135deg,#1a56db 0%,#2563eb 50%,#1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; inset: 0 0 auto; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.logo { color: #fff; text-decoration: none; font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
+.header-nav { display: flex; gap: 4px; margin-left: 40px; }
+.header-nav a { color: rgba(255,255,255,.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; }
+.header-nav a:hover, .header-nav a.active { background: rgba(255,255,255,.15); color: #fff; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; }
+.btn-logout { background: rgba(255,255,255,.2); color: #fff; border: 0; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+.sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 8px 0; }
+.menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); letter-spacing: 1px; font-weight: 600; }
+.menu-item { display: flex; align-items: center; padding: 10px 20px; color: var(--gray-700); text-decoration: none; font-size: 13px; border-left: 3px solid transparent; }
+.menu-item:hover { background: var(--gray-50); color: var(--primary); }
+.menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
+.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.breadcrumb a { color: var(--primary); text-decoration: none; }
+.page-title-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+.page-title { font-size: 24px; font-weight: 700; color: var(--gray-900); }
+.page-subtitle { margin-top: 4px; color: var(--gray-600); font-size: 13px; }
+.back-link { color: var(--primary); text-decoration: none; font-size: 13px; white-space: nowrap; }
+.hero { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(260px,.75fr); gap: 16px; margin-bottom: 18px; }
+.hero-main, .hero-side { background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; box-shadow: var(--shadow); }
+.hero-main { padding: 22px 24px; background: linear-gradient(135deg,#f1f6ff 0%,#fff 72%); }
+.eyebrow { color: var(--primary); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.hero-main h2 { color: var(--gray-900); font-size: 21px; margin-bottom: 7px; }
+.hero-main p { color: var(--gray-700); font-size: 13px; max-width: 720px; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.topic-chip { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 999px; background: #fff; color: var(--gray-700); border: 1px solid #d7e3fb; font-size: 12px; }
+.hero-side { padding: 20px; }
+.hero-side h3 { color: var(--gray-800); font-size: 15px; margin-bottom: 12px; }
+.metric-row { display: flex; align-items: baseline; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--gray-100); }
+.metric-row:last-child { border-bottom: 0; }
+.metric-row span { color: var(--gray-600); font-size: 12px; }
+.metric-row strong { color: var(--primary); font-size: 18px; }
+.toolbar-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.toolbar-label { color: var(--gray-700); font-size: 13px; font-weight: 600; }
+.topic-tabs { display: flex; flex-wrap: wrap; gap: 7px; }
+.topic-tab { border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+.topic-tab:hover, .topic-tab.active { color: var(--primary); border-color: var(--primary); background: var(--primary-light); }
+.recommend-section { background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; box-shadow: var(--shadow); padding: 20px; margin-bottom: 18px; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); margin-bottom: 14px; }
+.section-heading h2 { font-size: 17px; color: var(--gray-800); }
+.section-heading span { color: var(--gray-500); font-size: 12px; }
+.featured-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.featured-card { padding: 16px; border: 1px solid #d9e5fb; border-radius: 8px; background: linear-gradient(180deg,#fbfdff,#f5f9ff); }
+.featured-label { display: inline-flex; padding: 3px 8px; border-radius: 4px; color: #1557b0; background: #e8f0fe; font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+.featured-card h3 { font-size: 16px; line-height: 1.5; color: var(--gray-900); margin-bottom: 7px; }
+.featured-meta, .paper-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--gray-600); font-size: 12px; }
+.featured-reason { margin-top: 11px; padding: 10px 11px; background: #fff; border-left: 3px solid var(--primary); color: var(--gray-700); font-size: 12px; line-height: 1.6; }
+.paper-list { display: grid; gap: 12px; }
+.paper-card { border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; transition: var(--transition); }
+.paper-card:hover { border-color: #bdd2f5; box-shadow: 0 4px 12px rgba(26,115,232,.08); }
+.paper-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+.paper-card h3 { font-size: 16px; line-height: 1.5; color: var(--gray-900); }
+.paper-type { color: var(--gray-600); font-size: 12px; white-space: nowrap; }
+.paper-meta { margin-top: 7px; }
+.paper-abstract { color: var(--gray-700); font-size: 13px; line-height: 1.7; margin-top: 10px; }
+.paper-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.paper-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.paper-tag { color: #1557b0; background: #eef4ff; border-radius: 4px; padding: 3px 8px; font-size: 11px; }
+.paper-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn { border: 0; border-radius: 6px; padding: 7px 12px; font-size: 12px; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
+.btn-outline:hover { background: var(--gray-50); }
+.empty { text-align: center; padding: 34px; color: var(--gray-500); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+.modal { background: #fff; border-radius: 12px; box-shadow: var(--shadow-lg); width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--gray-200); }
+.modal-header h3 { font-size: 17px; color: var(--gray-900); }
+.modal-close { background: none; border: 0; font-size: 20px; cursor: pointer; color: var(--gray-500); width: 32px; height: 32px; }
+.modal-body { padding: 24px; }
+.detail-field { margin-bottom: 16px; }
+.detail-label { font-size: 12px; color: var(--gray-600); font-weight: 600; margin-bottom: 4px; }
+.detail-value { font-size: 14px; color: var(--gray-900); line-height: 1.7; }
+.detail-abstract { background: var(--gray-50); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.8; color: var(--gray-800); margin-top: 4px; }
+.modal-footer { padding: 14px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; }
+@media (max-width: 1024px) {
+  .sidebar { width: 60px; }
+  .menu-group-title { display: none; }
+  .menu-item { padding: 10px 14px; justify-content: center; }
+  .main-content { margin-left: 60px; }
+  .hero { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .header { height: auto; min-height: var(--header-height); flex-wrap: wrap; padding: 10px 16px; gap: 8px; }
+  .header-nav { margin-left: 0; }
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding: 16px; }
+  .page-title-row, .paper-card-head, .paper-bottom { align-items: flex-start; flex-direction: column; }
+  .featured-grid { grid-template-columns: 1fr; }
+  .paper-actions { width: 100%; }
+  .paper-actions .btn { flex: 1; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <a href="app-center.html" class="logo">生命医学主题库应用</a>
+  <div class="header-nav">
+    <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+    <a href="基础课程.html">生命医学AI教育平台</a>
+    <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+  </div>
+  <div class="header-right"><span id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+<div class="sidebar">
+  <div class="menu-group"><div class="menu-group-title">开放数据平台</div>
+    <a class="menu-item" href="临床数据开放共享.html">临床数据开放共享</a>
+    <a class="menu-item" href="科技文献检索推荐.html">科技文献检索推荐</a>
+    <a class="menu-item active" href="科技文献检索推荐_为您推荐.html">为您推荐</a>
+    <a class="menu-item" href="智能教学服务.html">智能教学服务</a>
+    <a class="menu-item" href="知识图谱查询与推理.html">知识图谱查询与推理</a>
+  </div>
+</div>
+<main class="main-content">
+  <div class="breadcrumb"><a href="科技文献检索推荐.html">科技文献检索推荐</a><span>&gt;</span><span>为您推荐</span></div>
+  <div class="page-title-row">
+    <div><h1 class="page-title">为您推荐</h1><p class="page-subtitle">根据眼底筛查、医学影像与临床智能方向整理的相关文献</p></div>
+    <a class="back-link" href="科技文献检索推荐.html">&larr; 返回文献检索</a>
+  </div>
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">医学文献推荐中心</div>
+      <h2>围绕当前研究方向，快速发现值得阅读的文献</h2>
+      <p>推荐内容按照研究主题、发表年份、文献类型和引用热度整理，帮助你从眼底筛查、医学影像、临床智能和数据治理等方向进入深度阅读。</p>
+      <div class="hero-tags"><span class="topic-chip">眼底筛查</span><span class="topic-chip">医学影像AI</span><span class="topic-chip">临床智能</span><span class="topic-chip">多模态融合</span><span class="topic-chip">数据治理</span></div>
+    </div>
+    <div class="hero-side">
+      <h3>推荐概况</h3>
+      <div class="metric-row"><span>当前推荐文献</span><strong id="totalCount">8</strong></div>
+      <div class="metric-row"><span>覆盖研究方向</span><strong>4</strong></div>
+      <div class="metric-row"><span>重点推荐</span><strong>2</strong></div>
+      <div class="metric-row"><span>更新状态</span><strong style="font-size:13px;">已更新</strong></div>
+    </div>
+  </section>
+  <div class="toolbar-card">
+    <span class="toolbar-label">按研究方向筛选</span>
+    <div class="topic-tabs">
+      <button class="topic-tab active" data-topic="全部">全部</button>
+      <button class="topic-tab" data-topic="眼底筛查">眼底筛查</button>
+      <button class="topic-tab" data-topic="医学影像">医学影像</button>
+      <button class="topic-tab" data-topic="临床智能">临床智能</button>
+      <button class="topic-tab" data-topic="数据治理">数据治理</button>
+    </div>
+  </div>
+  <section class="recommend-section">
+    <div class="section-heading"><h2>重点推荐</h2><span>优先阅读 · 2 篇</span></div>
+    <div id="featuredList" class="featured-grid"></div>
+  </section>
+  <section class="recommend-section">
+    <div class="section-heading"><h2>推荐文献</h2><span id="listSummary">共 8 篇</span></div>
+    <div id="paperList" class="paper-list"></div>
+    <div id="emptyState" class="empty" style="display:none;">当前方向暂无推荐文献</div>
+  </section>
+</main>
+<div class="modal-overlay" id="detailModal" style="display:none;" onclick="closeDetail(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="modalTitle">文献详情</h3><button class="modal-close" onclick="closeDetail()">&times;</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeDetail()">关闭</button></div>
+  </div>
+</div>
+<script>
+var recommendationData = [
+  { id: 101, title: '基于深度学习的糖尿病视网膜病变自动筛查研究', authors: ['古尔山','彭磊','科拉姆','韦伯斯特'], affiliation: '眼底影像智能分析联合实验室', year: 2016, citations: 3245, type: '期刊论文', topic: '眼底筛查', tags: ['糖尿病视网膜病变','深度学习','眼底彩照'], reason: '与眼底筛查流程最直接相关，可作为糖尿病视网膜病变自动识别方向的基础研究入口。', abstract: '糖尿病视网膜病变是工作年龄人群视力损伤的重要原因。本研究基于大规模眼底彩照训练深度学习模型，对可转诊糖尿病视网膜病变和黄斑水肿进行自动识别，验证结果显示模型具备较高敏感度和特异度，可辅助基层筛查与分级转诊。', doi: '10.3760/cma.j.issn.0412-4081.2016.12.001' },
+  { id: 102, title: '注意力机制多实例学习在糖尿病视网膜病变分级中的应用', authors: ['李晓萌','沈琳琳','余俊','洪鹏安'], affiliation: '深圳大学医学人工智能研究中心', year: 2023, citations: 892, type: '期刊论文', topic: '眼底筛查', tags: ['多实例学习','病灶分级','可解释AI'], reason: '重点关注病灶级信息和模型可解释性，适合继续研究筛查结果如何支撑分级判断。', abstract: '针对糖尿病视网膜病变分级中病灶细粒度信息难以充分利用的问题，本文构建基于注意力机制的多实例学习框架，结合图像级与病灶级标注实现可解释分级，为眼底筛查模型落地提供了可追溯依据。', doi: '10.3980/j.issn.1672-5123.2023.08.008' },
+  { id: 103, title: '视网膜OCT图像分割与疾病分类的多任务学习方法', authors: ['王宇','张一凡','刘天明','陈昊'], affiliation: '医学影像智能计算重点实验室', year: 2022, citations: 567, type: '会议论文', topic: '医学影像', tags: ['OCT','图像分割','多任务学习'], reason: '补充眼底彩照之外的 OCT 结构信息，适合拓展多任务联合筛查的影像类型。', abstract: 'OCT影像能够呈现视网膜层结构的横断面信息。研究提出共享编码器与任务特异解码头组成的多任务网络，同时完成视网膜层分割和疾病分类，并通过跨任务注意力增强病灶定位能力。', doi: '10.13929/j.issn.1003-3289.2022.09.011' },
+  { id: 104, title: '人工智能用于青光眼筛查的系统评价与Meta分析', authors: ['陈欢','周伟','李静','王芳','张雨婷'], affiliation: '北京协和医院眼科', year: 2024, citations: 234, type: '期刊论文', topic: '眼底筛查', tags: ['青光眼','系统评价','临床验证'], reason: '从临床证据角度梳理 AI 青光眼筛查性能，适合用于理解模型落地和验证要求。', abstract: '研究系统评价人工智能算法在青光眼筛查中的诊断性能。纳入多中心眼底照相和OCT研究后发现，深度学习模型在敏感度和特异度方面整体优于传统机器学习方法，但前瞻性验证和外部泛化仍是临床部署的关键。', doi: '10.3760/cma.j.cn112142-20230912-00072' },
+  { id: 105, title: '医学影像基础模型的发展机遇与临床挑战', authors: ['张磊','刘洋','陈晓刚','黄俊洲','沈定刚'], affiliation: '上海医学影像人工智能工程中心', year: 2023, citations: 678, type: '期刊论文', topic: '医学影像', tags: ['基础模型','医学影像','临床转化'], reason: '帮助建立对医学影像基础模型、跨任务能力和临床转化难点的整体认识。', abstract: '基础模型正在推动医学影像分割、分类、配准和生成任务的统一建模。本文梳理视觉Transformer、自监督预训练和多模态对齐等关键进展，并分析数据稀缺、跨域偏移、可解释性和算力成本等临床转化挑战。', doi: '10.3969/j.issn.1673-7571.2023.11.001' },
+  { id: 106, title: '眼底彩照与OCT融合的视网膜疾病综合诊断模型', authors: ['金素英','朴俊英','李东贤','崔慧贞'], affiliation: '多模态眼科影像研究中心', year: 2024, citations: 156, type: '期刊论文', topic: '医学影像', tags: ['多模态融合','眼底彩照','OCT'], reason: '围绕多模态影像融合，适合支撑彩照与 OCT 联合分析的产品设计。', abstract: '视网膜疾病在不同影像模态中呈现互补特征。本文构建眼底彩照与OCT融合诊断框架，通过模态特异编码器和跨模态注意力学习互补病灶特征，提升年龄相关性黄斑变性、糖尿病黄斑水肿和青光眼等疾病识别能力。', doi: '10.3980/j.issn.1672-5123.2024.03.015' },
+  { id: 107, title: '眼底图像质量自动评估及其在智能筛查中的应用', authors: ['傅华珠','程军','徐彦武','黄伟基','刘江'], affiliation: '医学图像质量控制联合实验室', year: 2024, citations: 89, type: '会议论文', topic: '临床智能', tags: ['图像质控','眼底筛查','可靠性'], reason: '与眼底图像质量质控环节直接相关，可用于完善筛查前的质量判断和失败处理逻辑。', abstract: '图像质量直接影响自动筛查系统的可靠性。研究建立眼底图像质量评估网络，从清晰度、视野完整性、照明均衡和伪影干扰等维度判断图像是否可用于后续诊断，并证明质量控制可降低误判风险。', doi: '10.13929/j.issn.1003-3289.2024.04.009' },
+  { id: 108, title: '跨模态医学影像合成技术在MRI到CT转换中的应用进展', authors: ['杨清松','严平昆','张彦博','余恒永','王革'], affiliation: '医学影像重建与合成研究中心', year: 2024, citations: 312, type: '期刊论文', topic: '数据治理', tags: ['跨模态合成','MRI','CT'], reason: '用于了解不同影像模态之间的数据转换与标准化思路，适合数据平台和影像服务建设参考。', abstract: '跨模态医学影像合成可减少辐射暴露并降低成像成本。文章重点综述生成式模型在MRI到CT转换中的应用，讨论解剖结构保持、配准误差、合成图像评价指标以及临床验证路径。', doi: '10.3969/j.issn.1673-7571.2024.02.006' }
+];
+var activeTopic = '全部';
+function esc(value) { var div = document.createElement('div'); div.textContent = String(value == null ? '' : value); return div.innerHTML; }
+function visibleItems() { return activeTopic === '全部' ? recommendationData : recommendationData.filter(function(item) { return item.topic === activeTopic; }); }
+function renderPage() {
+  var items = visibleItems();
+  var featured = items.slice(0, 2);
+  document.getElementById('totalCount').textContent = items.length;
+  document.getElementById('listSummary').textContent = '共 ' + items.length + ' 篇';
+  document.getElementById('featuredList').innerHTML = featured.length ? featured.map(function(item, index) {
+    return '<article class="featured-card"><span class="featured-label">重点推荐 ' + (index + 1) + '</span><h3>' + esc(item.title) + '</h3><div class="featured-meta"><span>' + esc(item.authors.slice(0, 2).join('、')) + ' 等</span><span>' + item.year + ' 年</span><span>' + esc(item.type) + '</span><span>引用 ' + item.citations + '</span></div><div class="featured-reason"><strong>推荐理由：</strong>' + esc(item.reason) + '</div><div style="margin-top:12px;"><button class="btn btn-primary" onclick="openDetail(' + item.id + ')">查看文献详情</button></div></article>';
+  }).join('') : '<div class="empty">当前方向暂无重点推荐</div>';
+  var list = items.slice(2);
+  document.getElementById('paperList').innerHTML = list.map(function(item) {
+    return '<article class="paper-card"><div class="paper-card-head"><div><h3>' + esc(item.title) + '</h3><div class="paper-meta"><span>' + esc(item.authors.join('、')) + '</span><span>' + item.year + ' 年</span><span>' + esc(item.affiliation) + '</span><span>引用 ' + item.citations + '</span></div></div><span class="paper-type">' + esc(item.type) + '</span></div><p class="paper-abstract">' + esc(item.abstract) + '</p><div class="paper-bottom"><div class="paper-tags">' + item.tags.map(function(tag) { return '<span class="paper-tag">' + esc(tag) + '</span>'; }).join('') + '</div><div class="paper-actions"><button class="btn btn-outline" onclick="openDetail(' + item.id + ')">查看详情</button><a class="btn btn-primary" href="科技文献检索推荐.html?keyword=' + encodeURIComponent(item.title) + '">进入检索</a></div></div></article>';
+  }).join('');
+  document.getElementById('emptyState').style.display = list.length ? 'none' : 'block';
+}
+function openDetail(id) {
+  var item = recommendationData.find(function(candidate) { return candidate.id === id; });
+  if (!item) return;
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalBody').innerHTML = '<div class="detail-field"><div class="detail-label">作者</div><div class="detail-value">' + esc(item.authors.join('、')) + '</div></div><div class="detail-field"><div class="detail-label">来源信息</div><div class="detail-value">' + item.year + ' 年 · ' + esc(item.type) + ' · ' + esc(item.affiliation) + ' · 引用 ' + item.citations + ' 次</div></div><div class="detail-field"><div class="detail-label">推荐理由</div><div class="detail-value">' + esc(item.reason) + '</div></div><div class="detail-field"><div class="detail-label">DOI</div><div class="detail-value">' + esc(item.doi) + '</div></div><div class="detail-field"><div class="detail-label">摘要</div><div class="detail-abstract">' + esc(item.abstract) + '</div></div>';
+  document.getElementById('detailModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeDetail(event) {
+  if (event && event.target !== event.currentTarget) return;
+  document.getElementById('detailModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
+document.addEventListener('keydown', function(event) { if (event.key === 'Escape') closeDetail(); });
+document.addEventListener('DOMContentLoaded', function() {
+  try { var user = JSON.parse(localStorage.getItem('life_med_user')); if (user && user.name) document.getElementById('headerUserName').textContent = user.name; } catch(e) {}
+  document.querySelectorAll('.topic-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      activeTopic = tab.getAttribute('data-topic');
+      document.querySelectorAll('.topic-tab').forEach(function(other) { other.classList.toggle('active', other === tab); });
+      renderPage();
+    });
+  });
+  renderPage();
+});
+</script>
+</body>
+</html>

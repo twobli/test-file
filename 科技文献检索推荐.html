@@ -58,7 +58,11 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
 .main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); display: flex; gap: 24px; align-items: flex-start; }
 .main-left { flex: 1; min-width: 0; }
-.main-right { width: 300px; flex-shrink: 0; position: sticky; top: calc(var(--header-height) + 24px); }
+.main-content.single-column { display: block; }
+.page-title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.page-title-row .page-title { margin-bottom: 0; }
+.recommend-entry { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 7px; color: var(--primary); background: #fff; border: 1px solid #cfe0ff; text-decoration: none; font-size: 13px; font-weight: 600; transition: var(--transition); white-space: nowrap; }
+.recommend-entry:hover { background: var(--primary-light); border-color: var(--primary); }
 
 .breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
@@ -133,16 +137,6 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 .detail-field .doi-link:hover { text-decoration: underline; }
 .detail-abstract { background: var(--gray-50); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.8; color: var(--gray-800); margin-top: 4px; }
 
-/* ===== 为您推荐 ===== */
-.recommend-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
-.recommend-card .rec-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--primary-light); }
-.recommend-card .rec-item { padding: 12px 0; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: var(--transition); }
-.recommend-card .rec-item:last-child { border-bottom: none; }
-.recommend-card .rec-item:hover { background: var(--gray-50); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 6px; }
-.recommend-card .rec-item .rec-item-title { font-size: 13px; font-weight: 600; color: var(--gray-800); line-height: 1.5; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.recommend-card .rec-item .rec-item-meta { font-size: 11px; color: var(--gray-500); line-height: 1.5; }
-.recommend-card .rec-item .rec-item-meta span { margin-right: 8px; }
-
 /* 关键词标签 */
 .keyword-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 0; align-items: center; }
 .keyword-tags .kw-label { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-right: 4px; white-space: nowrap; }
@@ -183,10 +177,13 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
     .sidebar { width: 60px; }
     .sidebar .menu-item span { display: none; }
     .sidebar .menu-group-title { display: none; }
-    .main-content { margin-left: 60px; flex-direction: column; }
-    .main-right { width: 100%; position: static; }
+    .main-content { margin-left: 60px; }
     .literature-head, .literature-actions { flex-direction: column; align-items: flex-start; }
     .literature-badges { justify-content: flex-start; }
+}
+@media (max-width: 620px) {
+    .page-title-row { align-items: flex-start; flex-direction: column; }
+    .recommend-entry { align-self: stretch; justify-content: center; }
 }
 </style>
 </head>
@@ -212,6 +209,7 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
     <div class="menu-group"><div class="menu-group-title">开放数据平台</div>
         <a class="menu-item" href="临床数据开放共享.html">临床数据开放共享</a>
         <a class="menu-item active" href="科技文献检索推荐.html">科技文献检索推荐</a>
+        <a class="menu-item" href="科技文献检索推荐_为您推荐.html">为您推荐</a>
         <a class="menu-item" href="智能教学服务.html">智能教学服务</a>
         <a class="menu-item" href="知识图谱查询与推理.html">知识图谱查询与推理</a>
     </div>
@@ -222,7 +220,10 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
     <!-- 左侧主体 -->
     <div class="main-left">
         <div class="breadcrumb"><a href="#">开放数据平台</a><span class="sep">&gt;</span><span>科技文献检索推荐</span></div>
-        <h1 class="page-title">科技文献检索推荐</h1>
+        <div class="page-title-row">
+            <h1 class="page-title">科技文献检索推荐</h1>
+            <a class="recommend-entry" href="科技文献检索推荐_为您推荐.html">查看为您推荐 <span aria-hidden="true">&rarr;</span></a>
+        </div>
 
         <div class="card">
             <div class="card-header"><span class="card-title">文献检索</span></div>
@@ -265,13 +266,6 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
         </div>
     </div>
 
-    <!-- 右侧「为您推荐」 -->
-    <div class="main-right">
-        <div class="recommend-card" id="recommendPanel">
-            <div class="rec-title">为您推荐</div>
-            <div id="recommendList"></div>
-        </div>
-    </div>
 </div>
 
 <!-- ===== 详情弹窗 ===== -->
@@ -498,8 +492,12 @@ var pageSize = 5;
 var filteredData = mockData.slice();
 
 function init() {
+    var params = new URLSearchParams(window.location.search);
+    var keyword = params.get('keyword');
+    if (keyword) {
+        document.getElementById('searchInput').value = keyword;
+    }
     doSearch('keyword');
-    renderRecommend();
 }
 
 function doSearch(mode) {
@@ -771,21 +769,6 @@ function closeDetailModal(event) {
     var modal = document.getElementById('detailModal');
     if (modal) modal.style.display = 'none';
     document.body.style.overflow = '';
-}
-
-function renderRecommend() {
-    var container = document.getElementById('recommendList');
-    var html = '';
-    recommendData.forEach(function(item) {
-        html += '<div class="rec-item" onclick="openDetail(' + item.id + ')" title="点击查看详情">';
-        html += '<div class="rec-item-title">' + escapeHtml(item.title) + '</div>';
-        html += '<div class="rec-item-meta">';
-        html += '<span>' + escapeHtml(item.authors[0]) + ' 等</span>';
-        html += '<span>' + item.year + '</span>';
-        html += '</div>';
-        html += '</div>';
-    });
-    container.innerHTML = html;
 }
 
 function escapeHtml(str) {

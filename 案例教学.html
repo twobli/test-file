@@ -370,6 +370,28 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .resource-list li a { color: var(--primary); text-decoration: none; font-size: 13px; }
 .resource-list li a:hover { text-decoration: underline; }
 .report-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 20px; border-top: 1px solid var(--gray-100); margin-top: 20px; }
+.report-assessment-note { padding: 12px 14px; margin: 0 0 20px; border: 1px solid #d8e7ff; border-radius: 8px; background: #f6f9ff; color: var(--gray-700); font-size: 12px; line-height: 1.7; }
+.case-library-modal { max-width: 920px; }
+.case-library-modal .modal-body { padding: 18px 22px 22px; }
+.library-overview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.library-overview-item { padding: 12px; background: var(--gray-50); border-radius: 8px; }
+.library-overview-item strong { display: block; color: var(--primary); font-size: 20px; margin-bottom: 2px; }
+.library-overview-item span { color: var(--gray-600); font-size: 11px; }
+.library-record-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-height: 48vh; overflow-y: auto; }
+.library-record { border: 1px solid var(--gray-200); border-radius: 9px; padding: 12px; background: #fff; }
+.library-record-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.library-record-title { color: var(--gray-900); font-size: 13px; font-weight: 700; line-height: 1.5; }
+.library-record-meta { color: var(--gray-500); font-size: 11px; line-height: 1.6; }
+.library-record-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+.library-record-tags span { padding: 2px 7px; border-radius: 999px; background: var(--primary-light); color: var(--primary); font-size: 10px; }
+.library-record-action { display: flex; justify-content: flex-end; margin-top: 8px; }
+@media (max-width: 760px) {
+    .smart-assessment-grid, .library-overview { grid-template-columns: 1fr 1fr; }
+    .library-record-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+    .smart-assessment-grid, .library-overview { grid-template-columns: 1fr; }
+}
 
 .new-discussion-form { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
 .new-discussion-form h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
@@ -391,7 +413,20 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .case-tree-panel { background: #fff; border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
 .case-tree-header { padding: 16px 18px; background: linear-gradient(135deg, #1E3F8A 0%, #2563eb 100%); color: #fff; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .case-tree-header .tree-icon { font-size: 18px; }
+.case-tree-header .library-count { margin-left: auto; font-size: 11px; font-weight: 500; opacity: .82; }
+.case-tree-header .case-library-manage-btn { margin-left: 6px; padding: 4px 8px; border: 1px solid rgba(255,255,255,0.45); border-radius: 6px; background: rgba(255,255,255,0.12); color: #fff; font: inherit; font-size: 11px; cursor: pointer; }
+.case-tree-header .case-library-manage-btn:hover { background: rgba(255,255,255,0.22); }
 .case-tree-body { flex: 1; overflow-y: auto; padding: 4px 0; }
+.case-library-tools { padding: 12px; background: #fbfcff; border-bottom: 1px solid var(--gray-100); }
+.case-library-summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+.case-library-summary strong { color: var(--gray-800); font-size: 12px; }
+.case-library-summary span { color: var(--gray-500); font-size: 11px; white-space: nowrap; }
+.case-library-filter { display: grid; gap: 7px; }
+.case-library-filter input, .case-library-filter select { width: 100%; height: 32px; padding: 0 9px; border: 1px solid var(--gray-200); border-radius: 7px; background: #fff; color: var(--gray-700); font: inherit; font-size: 12px; outline: none; }
+.case-library-filter input:focus, .case-library-filter select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.08); }
+.case-library-filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.case-library-filter-tip { margin-top: 7px; color: var(--gray-500); font-size: 11px; line-height: 1.5; }
+.case-library-empty { padding: 24px 12px; color: var(--gray-500); text-align: center; font-size: 12px; line-height: 1.6; }
 .tree-category { margin-bottom: 2px; }
 .tree-category-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--gray-700); transition: var(--transition); user-select: none; }
 .tree-category-header:hover { background: var(--gray-50); }
@@ -471,6 +506,16 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .score-detail-item .sd-bar { height: 6px; background: #e0e4ea; border-radius: 3px; overflow: hidden; }
 .score-detail-item .sd-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
 .score-detail-item .sd-comment { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+.smart-assessment { margin-top: 20px; padding: 16px; border: 1px solid #d8e7ff; border-radius: 10px; background: #f6f9ff; }
+.smart-assessment-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+.smart-assessment-title { color: var(--primary); font-size: 14px; font-weight: 700; }
+.smart-assessment-status { color: #137333; background: #e6f4ea; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 700; }
+.smart-assessment-desc { color: var(--gray-600); font-size: 12px; line-height: 1.7; margin-bottom: 12px; }
+.smart-assessment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.smart-assessment-item { background: #fff; border: 1px solid #e5edfb; border-radius: 8px; padding: 10px 11px; }
+.smart-assessment-item strong { display: block; color: var(--gray-800); font-size: 12px; margin-bottom: 3px; }
+.smart-assessment-item span { color: var(--gray-600); font-size: 12px; line-height: 1.5; }
+.smart-assessment-focus { margin-top: 10px; padding: 9px 11px; background: #fff; border-left: 3px solid var(--warning); border-radius: 6px; color: var(--gray-700); font-size: 12px; line-height: 1.6; }
 
 /* 辅助检查复选框 */
 .check-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -504,7 +549,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* ===== 共享布局：左侧病例树 + 右侧三级Tab内容区 ===== */
 .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; min-height: calc(100vh - 180px); }
 .main-layout .case-tree-panel { background: #fff; border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; height: fit-content; max-height: calc(100vh - 180px); position: sticky; top: 80px; }
-.main-layout .case-tree-header { padding: 16px 20px; font-size: 15px; font-weight: 700; color: #1E3F8A; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 8px; }
+.main-layout .case-tree-header { padding: 16px 20px; font-size: 15px; font-weight: 700; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.18); display: flex; align-items: center; gap: 8px; }
 .main-layout .case-tree-body { padding: 8px 12px; overflow-y: auto; flex: 1; }
 .tab-content-right { min-width: 0; }
 .tab-content-inner { display: none; }
@@ -686,7 +731,30 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <!-- 左侧：共享病例树面板（三个Tab共用） -->
         <div class="case-tree-panel" id="sharedCaseTree">
             <div class="case-tree-header">
-                <span class="tree-icon">☰</span>病例列表
+                <span class="tree-icon">☰</span>标准病例库
+                <span class="library-count" id="caseLibraryCount">0例</span>
+                <button class="case-library-manage-btn" type="button" onclick="showCaseLibraryManager()">管理</button>
+            </div>
+            <div class="case-library-tools">
+                <div class="case-library-summary">
+                    <strong>病例检索与分层</strong>
+                    <span>多病种 · 多模态影像</span>
+                </div>
+                <div class="case-library-filter">
+                    <input id="caseLibrarySearch" type="text" placeholder="搜索病例名称、病种、检查资料..." oninput="updateCaseLibraryFilter()">
+                    <div class="case-library-filter-row">
+                        <select id="caseLibraryLevelFilter" onchange="updateCaseLibraryFilter()">
+                            <option value="all">全部层级</option>
+                            <option value="basic">基础病例</option>
+                            <option value="advanced">进阶病例</option>
+                            <option value="research">科研病例</option>
+                        </select>
+                        <select id="caseLibraryDiseaseFilter" onchange="updateCaseLibraryFilter()">
+                            <option value="all">全部病种</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="case-library-filter-tip">病例库按基础、进阶、科研分层，病例资料包含病史、眼底、OCT/FFA等结构化信息。</div>
             </div>
             <div class="case-tree-body" id="caseTreeBody"></div>
         </div>
@@ -915,6 +983,80 @@ let currentPost = null;
 let currentCompareCase = null;
 let pendingNewPostVoice = '';
 let pendingQuickVoice = '';
+let caseLibraryFilters = { search: '', level: 'all', disease: 'all' };
+
+function getCaseLevelName(level) {
+    return level === 'basic' ? '基础病例' : level === 'advanced' ? '进阶病例' : '科研病例';
+}
+
+function getAllCaseRecords() {
+    const records = [];
+    Object.keys(caseData).forEach(level => {
+        (caseData[level] || []).forEach(caseObj => {
+            records.push({ level: level, levelName: getCaseLevelName(level), caseObj: caseObj });
+        });
+    });
+    return records;
+}
+
+function getCaseSearchText(caseObj) {
+    const answer = caseObj && caseObj.answer ? caseObj.answer : {};
+    const compare = getCompareCaseForCurrentCase(caseObj);
+    const summary = compare && compare.summary && compare.summary.tabs ? compare.summary.tabs : {};
+    return [
+        caseObj && caseObj.title,
+        caseObj && caseObj.disease,
+        caseObj && caseObj.info,
+        answer.features,
+        answer.diagnosis,
+        answer.checks && answer.checks.join(' '),
+        summary.basic && summary.basic.initialDiagnosis,
+        summary.eyeExam && summary.eyeExam.fundus,
+        summary.imaging && Object.values(summary.imaging).join(' ')
+    ].filter(Boolean).join(' ').toLowerCase();
+}
+
+function getFilteredCaseRecords() {
+    const search = (caseLibraryFilters.search || '').trim().toLowerCase();
+    return getAllCaseRecords().filter(record => {
+        const caseObj = record.caseObj;
+        const levelMatch = caseLibraryFilters.level === 'all' || caseLibraryFilters.level === record.level;
+        const diseaseMatch = caseLibraryFilters.disease === 'all' || caseLibraryFilters.disease === caseObj.disease;
+        const searchMatch = !search || getCaseSearchText(caseObj).includes(search);
+        return levelMatch && diseaseMatch && searchMatch;
+    });
+}
+
+function initCaseLibraryFilters() {
+    const select = document.getElementById('caseLibraryDiseaseFilter');
+    if (!select) return;
+    const diseases = [...new Set(getAllCaseRecords().map(record => record.caseObj.disease))].sort();
+    select.innerHTML = '<option value="all">全部病种</option>' + diseases.map(disease =>
+        '<option value="' + escHtml(disease) + '">' + escHtml(disease) + '</option>'
+    ).join('');
+}
+
+function updateCaseLibraryFilter() {
+    caseLibraryFilters.search = document.getElementById('caseLibrarySearch')?.value || '';
+    caseLibraryFilters.level = document.getElementById('caseLibraryLevelFilter')?.value || 'all';
+    caseLibraryFilters.disease = document.getElementById('caseLibraryDiseaseFilter')?.value || 'all';
+    renderSharedCaseTree();
+}
+
+function resetCaseLibraryFilter() {
+    caseLibraryFilters = { search: '', level: 'all', disease: 'all' };
+    const search = document.getElementById('caseLibrarySearch');
+    const level = document.getElementById('caseLibraryLevelFilter');
+    const disease = document.getElementById('caseLibraryDiseaseFilter');
+    if (search) search.value = '';
+    if (level) level.value = 'all';
+    if (disease) disease.value = 'all';
+    renderSharedCaseTree();
+    if (document.getElementById('caseLibraryOverlay')) {
+        closeCaseLibraryManager();
+        showCaseLibraryManager();
+    }
+}
 
 // ==================== Tab 切换 ====================
 document.getElementById('mainTabs').addEventListener('click', function(e){
@@ -943,11 +1085,17 @@ function renderSharedCaseTree(){
         { key:'advanced', name:'进阶病例', desc:'适合有一定基础 · 合并症与不典型表现', icon:'◆', cls:'advanced' },
         { key:'research', name:'科研病例', desc:'罕见或复杂 · 高难度鉴别诊断', icon:'▲', cls:'research' }
     ];
+    const filteredRecords = getFilteredCaseRecords();
+    const visibleIds = new Set(filteredRecords.map(record => record.caseObj.id));
+    const totalCount = getAllCaseRecords().length;
+    const countEl = document.getElementById('caseLibraryCount');
+    if (countEl) countEl.textContent = filteredRecords.length + '/' + totalCount + '例';
     let html = '';
     categories.forEach(cat=>{
-        const cases = caseData[cat.key];
+        const cases = (caseData[cat.key] || []).filter(c => visibleIds.has(c.id));
         const doneCount = cases.filter(c=>c.status==='completed').length;
         const totalCount = cases.length;
+        if (!cases.length) return;
         html += '<div class="tree-category '+cat.cls+'">';
         html += '<div class="tree-category-header" onclick="toggleCategory(\''+cat.key+'\')">';
         html += '<div style="display:flex;align-items:center;flex:1;">';
@@ -968,6 +1116,9 @@ function renderSharedCaseTree(){
         });
         html += '</div></div>';
     });
+    if (!html) {
+        html = '<div class="case-library-empty">没有找到符合条件的标准病例。<br>请调整关键词、层级或病种筛选。</div>';
+    }
     document.getElementById('caseTreeBody').innerHTML = html;
 }
 
@@ -981,6 +1132,84 @@ function toggleCategory(key){
         sub.classList.add('collapsed');
         arrow.classList.remove('open');
     }
+}
+
+function showCaseLibraryManager() {
+    const records = getFilteredCaseRecords();
+    const allRecords = getAllCaseRecords();
+    const diseaseCount = new Set(allRecords.map(record => record.caseObj.disease)).size;
+    const completedCount = allRecords.filter(record => record.caseObj.status === 'completed').length;
+    const multimodalCount = allRecords.filter(record => {
+        const compare = getCompareCaseForCurrentCase(record.caseObj);
+        const imaging = compare && compare.summary && compare.summary.tabs ? compare.summary.tabs.imaging : null;
+        return imaging && Object.keys(imaging).length > 0;
+    }).length;
+    const listHtml = records.map(record => {
+        const caseObj = record.caseObj;
+        const answer = caseObj.answer || {};
+        const checks = (answer.checks || []).slice(0, 4);
+        const statusText = caseObj.status === 'completed' ? '已完成' : '未完成';
+        return `
+            <div class="library-record">
+                <div class="library-record-header">
+                    <div>
+                        <div class="library-record-title">${escHtml(caseObj.title)}</div>
+                        <div class="library-record-meta">${escHtml(record.levelName)} · ${escHtml(caseObj.disease)} · 难度 ${caseObj.difficulty} 星</div>
+                    </div>
+                    <span class="tag ${caseObj.status === 'completed' ? 'tag-green' : 'tag-gray'}">${statusText}</span>
+                </div>
+                <div class="library-record-meta">${escHtml(caseObj.info)}</div>
+                <div class="library-record-tags">
+                    <span>结构化病史</span>
+                    <span>病程演变</span>
+                    ${checks.map(check => '<span>' + escHtml(check) + '</span>').join('')}
+                </div>
+                <div class="library-record-action">
+                    <button class="btn btn-primary btn-sm" onclick="selectLibraryCase('${record.level}','${caseObj.id}')">进入病例</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    const html = `
+        <div class="modal case-library-modal">
+            <div class="modal-header">
+                <h3>标准病例库管理</h3>
+                <button class="modal-close" onclick="closeCaseLibraryManager()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">病例库用于统一管理疑难、典型病例，支持按病例分层、病种和多模态医学影像资料检索；当前页面为前端原型展示，后台可继续承接病例上传、脱敏、标注和审核流程。</div>
+                <div class="library-overview">
+                    <div class="library-overview-item"><strong>${allRecords.length}</strong><span>标准病例总量</span></div>
+                    <div class="library-overview-item"><strong>${diseaseCount}</strong><span>覆盖病种方向</span></div>
+                    <div class="library-overview-item"><strong>${multimodalCount}</strong><span>含多模态影像</span></div>
+                    <div class="library-overview-item"><strong>${completedCount}</strong><span>已完成实训</span></div>
+                </div>
+                <div class="library-record-list">${listHtml || '<div class="case-library-empty">当前筛选条件下暂无病例。</div>'}</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="resetCaseLibraryFilter()">重置筛选</button>
+                <button class="btn btn-primary" onclick="closeCaseLibraryManager()">关闭</button>
+            </div>
+        </div>
+    `;
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.id = 'caseLibraryOverlay';
+    overlay.innerHTML = html;
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeCaseLibraryManager();
+    });
+    document.body.appendChild(overlay);
+}
+
+function closeCaseLibraryManager() {
+    const overlay = document.getElementById('caseLibraryOverlay');
+    if (overlay) overlay.remove();
+}
+
+function selectLibraryCase(level, caseId) {
+    closeCaseLibraryManager();
+    openSharedCase(level, caseId);
 }
 
 function openSharedCase(level, caseId){
@@ -1226,6 +1455,38 @@ function prevStep_new(){
     if(currentStep>0){ currentStep--; renderStepCards(); }
 }
 
+function getAssessmentLevel(score) {
+    if (score >= 90) return '优秀';
+    if (score >= 75) return '良好';
+    if (score >= 60) return '达标';
+    return '需强化';
+}
+
+function getWeakestScoreItem(scoreItems) {
+    return scoreItems.slice().sort((a, b) => a.score - b.score)[0];
+}
+
+function buildSmartAssessmentHtml(scoreItems, totalScore) {
+    const weakest = getWeakestScoreItem(scoreItems);
+    const strongItems = scoreItems.filter(item => item.score >= 80).map(item => item.name);
+    const weakItems = scoreItems.filter(item => item.score < 70).map(item => item.name);
+    return `
+        <div class="smart-assessment">
+            <div class="smart-assessment-header">
+                <div class="smart-assessment-title">智能评估与报告生成</div>
+                <div class="smart-assessment-status">已生成能力画像</div>
+            </div>
+            <div class="smart-assessment-desc">系统已根据诊断准确率、逻辑完整度、检查合理性和治疗规范性自动评估本次病例学习表现，并形成可导出的学习报告。</div>
+            <div class="smart-assessment-grid">
+                <div class="smart-assessment-item"><strong>综合等级</strong><span>${getAssessmentLevel(totalScore)} · ${totalScore}分</span></div>
+                <div class="smart-assessment-item"><strong>优势能力</strong><span>${strongItems.length ? strongItems.join('、') : '暂未形成稳定优势'}</span></div>
+                <div class="smart-assessment-item"><strong>需强化</strong><span>${weakItems.length ? weakItems.join('、') : weakest.name}</span></div>
+            </div>
+            <div class="smart-assessment-focus">复盘重点：优先查看“${weakest.name}”对应的答题过程，核对是否存在关键证据遗漏、鉴别诊断排序不清或检查选择不足。</div>
+        </div>
+    `;
+}
+
 function submitReasoning_new(){
     saveAnswers_new();
     const answer = currentCase.answer;
@@ -1294,8 +1555,10 @@ function submitReasoning_new(){
         resultHtml += '</div>';
     });
     resultHtml += '</div>';
+    resultHtml += buildSmartAssessmentHtml(scoreItems, totalScore);
     resultHtml += '<div style="text-align:right;margin-top:20px;display:flex;justify-content:flex-end;gap:10px;">';
     resultHtml += '<button class="btn btn-outline" onclick="resetCase()">重新练习</button>';
+    resultHtml += '<button class="btn-report-gen" onclick="generateReasoningReport()">生成智能评估报告</button>';
     resultHtml += '<button class="btn-report-submit" onclick="switchToCompareAfterSubmit()">查看AI诊断对比</button>';
     resultHtml += '</div></div></div>';
 
@@ -1353,6 +1616,11 @@ function generateReasoningReport(){
         html += '<div class="score-bar-item"><div class="score-bar-header"><span>'+k+'</span><span>'+v+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+v+'%;background:'+(v>=90?'var(--success)':v>=70?'var(--primary)':'var(--warning)')+'"></div></div></div>';
     }
     html += '</div></div>';
+    const reportScoreItems = Object.entries(scores).map(([name, score]) => ({ name: name, score: score }));
+    const weakestReportItem = reportScoreItems.length ? getWeakestScoreItem(reportScoreItems) : { name: '综合推理能力', score: total };
+    const strongReportItems = reportScoreItems.filter(item => item.score >= 80).map(item => item.name);
+    const weakReportItems = reportScoreItems.filter(item => item.score < 70).map(item => item.name);
+    html += '<div class="report-assessment-note"><strong>智能评估结论：</strong>本次病例综合等级为'+getAssessmentLevel(total)+'。优势能力：'+(strongReportItems.length ? strongReportItems.join('、') : '暂未形成稳定优势')+'；需强化：'+(weakReportItems.length ? weakReportItems.join('、') : weakestReportItem.name)+'。建议优先复盘“'+weakestReportItem.name+'”，检查关键证据、鉴别诊断和辅助检查之间的对应关系。</div>';
     html += '<div class="report-suggest"><h4>下一步学习建议</h4><div class="suggest-grid">';
     if(total<70){ html += '<div class="suggest-item"><div class="suggest-icon">📚</div><div class="suggest-title">加强基础知识</div><div class="suggest-desc">建议复习'+currentCase.disease+'相关基础课程内容，巩固疾病分类和诊断标准。</div></div>'; }
     html += '<div class="suggest-item"><div class="suggest-icon">🔍</div><div class="suggest-title">扩大鉴别诊断范围</div><div class="suggest-desc">建议多接触不同类型病例，拓展鉴别诊断思路，注意非典型表现。</div></div>';
@@ -1864,6 +2132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    initCaseLibraryFilters();
     renderSharedCaseTree();
     // 默认选中第一个病例
     openSharedCase('basic', 'B1');

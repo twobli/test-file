@@ -38,6 +38,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-serif; font-size: 14px; color: var(--text); background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
+body.ai-qa-page-open { overflow: hidden; }
 
 /* ===== 顶部导航 ===== */
 .header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
@@ -70,6 +71,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
 /* ===== 主内容区 ===== */
 .main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
+body.ai-qa-page-open .main-content { height: calc(100vh - var(--header-height)); overflow: hidden; }
 .breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
 .breadcrumb span.sep { color: var(--gray-400); }
@@ -77,6 +79,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* ===== 页面容器 - 所有视图 ===== */
 .page-view { display: none; }
 .page-view.active { display: block; }
+body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 
 /* ===== 学习概览 ===== */
 .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 20px; }
@@ -89,6 +92,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .overview-card.quiz .ring-chart-wrap .ring-center .ring-pct { color: var(--success); }
 .progress-detail { flex: 1; }
 .progress-detail h3 { font-size: 16px; font-weight: 600; color: var(--gray-900); margin-bottom: 12px; }
+.progress-detail .metric-note { color: var(--gray-500); font-size: 12px; line-height: 1.5; margin: -4px 0 10px; }
 .progress-detail .progress-info-row { display: flex; gap: 32px; margin-top: 12px; }
 .progress-detail .progress-info-row .pi-item { text-align: center; }
 .progress-detail .progress-info-row .pi-num { font-size: 22px; font-weight: 700; color: var(--primary); }
@@ -144,6 +148,9 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .course-card .card-body .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.4s ease; }
 .course-card .card-body .progress-text { font-size: 11px; color: var(--gray-500); }
 .course-card .card-body .card-btn { width: 100%; }
+.course-card .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.course-card .card-actions .btn { padding-left: 8px; padding-right: 8px; }
+.course-card .card-result-link { margin-top: 8px; width: 100%; color: var(--primary); background: var(--primary-light); }
 .empty-state { text-align: center; padding: 60px 0; color: var(--gray-500); }
 .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
 .empty-state p { font-size: 14px; }
@@ -190,6 +197,9 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .chapter-quiz-panel { padding: 12px 16px; border-top: 1px solid var(--gray-100); background: #fff; }
 .chapter-quiz-panel .chapter-quiz-entry { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--primary); background: var(--primary); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); }
 .chapter-quiz-panel .chapter-quiz-entry:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.chapter-quiz-panel .chapter-quiz-entry + .chapter-quiz-entry { margin-top: 8px; }
+.chapter-quiz-panel .chapter-quiz-entry.secondary { background: #fff; color: var(--primary); }
+.chapter-quiz-panel .chapter-quiz-entry.secondary:hover { background: var(--primary-light); border-color: var(--primary); }
 .chapter-quiz-panel .chapter-quiz-entry.locked { background: var(--gray-50); border-color: var(--gray-200); color: var(--gray-500); cursor: not-allowed; }
 .chapter-quiz-panel .chapter-quiz-entry.locked:hover { background: var(--gray-50); border-color: var(--gray-200); }
 .chapter-quiz-panel .quiz-note { margin-top: 6px; font-size: 11px; color: var(--gray-500); text-align: center; line-height: 1.4; }
@@ -198,7 +208,19 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .learning-toolbar .toolbar-title { font-size: 16px; font-weight: 600; color: var(--gray-900); display: flex; align-items: center; gap: 12px; }
 .learning-toolbar .toolbar-title .section-badge { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; background: var(--primary-light); color: var(--primary); }
 .learning-toolbar .toolbar-actions { display: flex; gap: 10px; }
+.learning-mode-bar { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.learning-mode-tabs { display: inline-flex; gap: 6px; padding: 4px; border-radius: 10px; background: var(--gray-100); }
+.learning-mode-tab { min-width: 132px; height: 34px; border: none; border-radius: 8px; background: transparent; color: var(--gray-700); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); }
+.learning-mode-tab.active { background: #fff; color: var(--primary); box-shadow: var(--shadow); }
+.learning-mode-status { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--gray-600); font-size: 12px; }
+.learning-part-pill { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: var(--gray-50); border: 1px solid var(--gray-200); color: var(--gray-600); font-weight: 700; }
+.learning-part-pill.done { color: #137333; background: #e6f4ea; border-color: #b7e1c1; }
+.learning-rule-tip { color: var(--gray-500); line-height: 1.6; }
+.learning-panel { display: none; }
+.learning-panel.active { display: block; }
 .video-section { background: #000; border-radius: var(--radius); overflow: hidden; position: relative; }
+.video-learn-tip { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.video-handout-section { margin-top: 12px; }
 .video-section .video-placeholder { width: 100%; height: 360px; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; cursor: pointer; position: relative; }
 .video-section .video-placeholder .play-btn { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 28px; transition: var(--transition); border: 3px solid rgba(255,255,255,0.6); }
 .video-section .video-placeholder:hover .play-btn { background: rgba(255,255,255,0.35); transform: scale(1.08); }
@@ -211,6 +233,10 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .video-controls .ctrl-progress-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 35%; }
 .video-controls .ctrl-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
 .handout-section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; flex: 1; overflow-y: auto; }
+.article-content-section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; min-height: 420px; max-height: 560px; overflow-y: auto; }
+.article-read-tip { margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--gray-50); color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.article-read-progress { height: 6px; margin-top: 8px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.article-read-progress span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: inherit; transition: width .2s ease; }
 .handout-section .handout-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
 .handout-section .handout-heading { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .handout-section .handout-header h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); }
@@ -219,6 +245,13 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .handout-section .handout-body p { margin-bottom: 10px; }
 .handout-section .handout-body ul { padding-left: 20px; margin-bottom: 10px; }
 .handout-section .handout-body ul li { margin-bottom: 4px; }
+.article-content-heading { padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid var(--gray-100); }
+.article-content-heading h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.article-content-body { font-size: 14px; color: var(--gray-800); line-height: 1.9; }
+.article-content-body h4 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin: 18px 0 8px; }
+.article-content-body p { margin-bottom: 12px; }
+.article-content-body ul { padding-left: 20px; margin-bottom: 12px; }
+.article-content-body ul li { margin-bottom: 5px; }
 .section-complete-hint { background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: var(--radius); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
 .section-complete-hint .complete-text { font-size: 13px; color: #2e7d32; font-weight: 500; }
 
@@ -260,12 +293,15 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .result-stats .rs-item .rs-label { font-size: 12px; color: var(--gray-600); }
 .result-learning-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .result-learning-meta .result-meta-pill { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; background: var(--gray-50); border: 1px solid var(--gray-200); color: var(--gray-700); font-size: 12px; }
-.result-stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.attempt-filter { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: var(--gray-50); border: 1px solid var(--gray-200); }
+.attempt-filter label { color: var(--gray-700); font-size: 12px; font-weight: 700; }
+.attempt-filter select { min-width: 250px; height: 34px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-800); padding: 0 10px; font-family: inherit; }
+.attempt-filter .attempt-filter-summary { color: var(--gray-500); font-size: 12px; }
+.result-stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
 .result-stat-cards .rsc { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; text-align: center; }
 .result-stat-cards .rsc .rsc-num { font-size: 28px; font-weight: 700; }
 .result-stat-cards .rsc .rsc-num.correct-color { color: var(--success); }
 .result-stat-cards .rsc .rsc-num.wrong-color { color: var(--danger); }
-.result-stat-cards .rsc .rsc-num.unanswered-color { color: var(--gray-400); }
 .result-stat-cards .rsc .rsc-num.total-color { color: var(--primary); }
 .result-stat-cards .rsc .rsc-label { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
 .knowledge-mastery { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 20px; }
@@ -279,61 +315,106 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .knowledge-mastery .km-item-name { color: var(--gray-800); font-size: 13px; font-weight: 600; line-height: 1.4; }
 .knowledge-mastery .km-item-status { flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; }
 .knowledge-mastery .km-item-status.mastered { color: #137333; background: #e6f4ea; }
-.knowledge-mastery .km-item-status.basic { color: #b06000; background: #fef7e0; }
 .knowledge-mastery .km-item-status.weak { color: #c5221f; background: #fce8e6; }
 .knowledge-mastery .km-item-progress { height: 6px; border-radius: 999px; overflow: hidden; background: var(--gray-200); }
 .knowledge-mastery .km-item-progress-fill { height: 100%; border-radius: inherit; background: var(--primary); }
 .knowledge-mastery .km-item-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; color: var(--gray-500); font-size: 11px; }
-.quiz-history { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 20px; }
-.quiz-history .qh-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
-.quiz-history .qh-title { font-size: 16px; color: var(--gray-900); font-weight: 700; }
-.quiz-history .qh-subtitle { margin-top: 4px; color: var(--gray-600); font-size: 12px; }
-.quiz-history .qh-list { display: grid; gap: 10px; }
-.quiz-history .qh-item { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 12px 14px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--gray-50); }
-.quiz-history .qh-item.current { border-color: var(--primary); background: var(--primary-light); }
-.quiz-history .qh-attempt { font-size: 14px; color: var(--gray-900); font-weight: 700; }
-.quiz-history .qh-time { margin-top: 2px; color: var(--gray-500); font-size: 11px; }
-.quiz-history .qh-main { min-width: 0; }
-.quiz-history .qh-score-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.quiz-history .qh-score { color: var(--primary); font-size: 16px; font-weight: 700; }
-.quiz-history .qh-score.good { color: var(--success); }
-.quiz-history .qh-detail { color: var(--gray-600); font-size: 12px; }
-.quiz-history .qh-current { color: var(--primary); font-size: 11px; font-weight: 700; }
-.quiz-history .qh-action { flex-shrink: 0; }
-.quiz-history .qh-empty { padding: 14px; border: 1px dashed var(--gray-300); border-radius: 8px; color: var(--gray-500); text-align: center; font-size: 13px; }
-
 /* ===== 强化建议 ===== */
 .reinforce-alert { background: #fffaf0; border: 1px solid #f7d27a; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
 .reinforce-alert .ra-title { font-weight: 700; color: #7d5200; font-size: 15px; margin-bottom: 4px; }
 .reinforce-alert .ra-subtitle { color: #8a6a21; font-size: 12px; margin-bottom: 14px; }
 .reinforce-alert .ra-list { display: grid; gap: 12px; }
 .reinforce-alert .ra-item { background: #fff; border: 1px solid #f5e3b1; border-radius: 8px; padding: 14px 16px; }
-.reinforce-alert .ra-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
 .reinforce-alert .ra-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .reinforce-alert .ra-badge { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: #fff3d0; color: #a56400; font-size: 12px; font-weight: 700; }
 .reinforce-alert .ra-name { font-size: 14px; color: var(--gray-900); font-weight: 700; }
 .reinforce-alert .ra-meta { color: var(--gray-500); font-size: 12px; margin-top: 4px; }
-.reinforce-alert .ra-suggestion { min-width: 300px; color: var(--gray-700); font-size: 13px; line-height: 1.6; }
-.reinforce-alert .ra-suggestion-label { display: block; color: var(--primary); font-size: 12px; font-weight: 700; margin-bottom: 2px; }
-.reinforce-alert .ra-path { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-.reinforce-alert .ra-step { padding: 5px 10px; border-radius: 999px; background: var(--primary-light); color: var(--primary); font-size: 12px; }
-.reinforce-alert .ra-arrow { color: #bd8b1d; font-size: 12px; }
+.reinforce-alert .ra-track { margin-top: 8px; color: var(--gray-700); font-size: 13px; line-height: 1.7; }
+.reinforce-alert .ra-config-note { margin-bottom: 12px; padding: 10px 12px; border-radius: 8px; background: #fff; border: 1px dashed #e9bf62; color: #7d5200; font-size: 12px; line-height: 1.6; }
+.reinforce-alert .ra-recommend-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; }
+.reinforce-alert .ra-section { border: 1px solid var(--gray-200); border-radius: 8px; background: #fbfcff; padding: 12px; }
+.reinforce-alert .ra-section-title { color: var(--primary); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.reinforce-alert .ra-course-list, .reinforce-alert .ra-ref-list { display: grid; gap: 8px; }
+.reinforce-alert .ra-course-card, .reinforce-alert .ra-ref-item { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 10px 12px; }
+.reinforce-alert .ra-course-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.reinforce-alert .ra-course-name { color: var(--gray-900); font-weight: 700; font-size: 13px; line-height: 1.5; }
+.reinforce-alert .ra-course-meta, .reinforce-alert .ra-course-reason, .reinforce-alert .ra-ref-source { color: var(--gray-500); font-size: 12px; line-height: 1.6; }
+.reinforce-alert .ra-status { flex-shrink: 0; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+.reinforce-alert .ra-status.learned { color: #137333; background: #e6f4ea; }
+.reinforce-alert .ra-status.unlearned { color: #b06000; background: #fef7e0; }
+.reinforce-alert .ra-link-btn { margin-top: 8px; height: 28px; padding: 0 10px; border: 1px solid var(--primary); border-radius: 7px; background: #fff; color: var(--primary); font-size: 12px; font-weight: 700; cursor: pointer; }
+.reinforce-alert .ra-ref-name { color: var(--gray-800); font-weight: 700; font-size: 13px; margin-bottom: 2px; }
 .reinforce-alert .ra-empty { background: #fff; border: 1px solid #d7ead9; border-radius: 8px; padding: 14px 16px; color: #1e7e34; font-size: 13px; }
 @media (max-width: 900px) {
-    .reinforce-alert .ra-main { flex-direction: column; }
-    .reinforce-alert .ra-suggestion { min-width: 0; }
+    .reinforce-alert .ra-recommend-grid { grid-template-columns: 1fr; }
 }
 
-/* ===== 错题解析 ===== */
-.wrong-analysis { margin-bottom: 20px; }
-.wrong-analysis .wa-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 22px; margin-bottom: 14px; border-left: 4px solid var(--danger); }
-.wrong-analysis .wa-card .wa-header { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 10px; }
-.wrong-analysis .wa-card .wa-question { font-size: 14px; color: var(--gray-800); margin-bottom: 10px; line-height: 1.6; }
-.wrong-analysis .wa-card .wa-answer-row { display: flex; gap: 24px; margin-bottom: 8px; font-size: 13px; }
-.wrong-analysis .wa-card .wa-answer-row .your-answer { color: var(--danger); font-weight: 500; }
-.wrong-analysis .wa-card .wa-answer-row .correct-answer { color: var(--success); font-weight: 500; }
-.wrong-analysis .wa-card .wa-explanation { font-size: 13px; color: var(--gray-700); background: var(--gray-50); padding: 10px 14px; border-radius: 6px; line-height: 1.6; }
-.wrong-analysis .wa-card .wa-explanation strong { color: var(--gray-900); }
+/* ===== 课程反馈 ===== */
+.course-feedback { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 22px; margin-bottom: 20px; border: 1px solid var(--gray-200); }
+.course-feedback .cf-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.course-feedback .cf-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+.course-feedback .cf-subtitle { color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.course-feedback .cf-context { flex-shrink: 0; max-width: 320px; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.course-feedback .cf-form { display: grid; grid-template-columns: 220px minmax(0, 1fr) 144px; gap: 12px; align-items: start; }
+.course-feedback label { display: block; color: var(--gray-700); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.course-feedback select, .course-feedback textarea { width: 100%; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-800); font-family: inherit; font-size: 13px; outline: none; transition: var(--transition); }
+.course-feedback select { height: 38px; padding: 0 10px; }
+.course-feedback textarea { min-height: 72px; resize: vertical; padding: 10px 12px; line-height: 1.6; }
+.course-feedback select:focus, .course-feedback textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,109,1,.12); }
+.course-feedback select:disabled, .course-feedback textarea:disabled { background: var(--gray-50); color: var(--gray-500); cursor: not-allowed; }
+.course-feedback .cf-submit-field { display: flex; flex-direction: column; }
+.course-feedback .cf-submit-field label { visibility: hidden; }
+.course-feedback .cf-submit-field .btn { width: 100%; height: 38px; }
+.course-feedback .cf-submit-field .btn:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+.course-feedback .cf-tip { margin-top: 10px; color: var(--gray-500); font-size: 12px; }
+.course-feedback .cf-record { margin-top: 12px; border: 1px solid #b7e1c1; background: #f0f8f2; border-radius: 10px; padding: 12px 14px; display: none; }
+.course-feedback .cf-record.show { display: block; }
+.course-feedback .cf-record-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.course-feedback .cf-record-title { color: #137333; font-size: 13px; font-weight: 800; }
+.course-feedback .cf-record-time { color: var(--gray-500); font-size: 12px; }
+.course-feedback .cf-record-content { color: var(--gray-800); font-size: 13px; line-height: 1.7; }
+.course-feedback .cf-record-meta { margin-top: 6px; color: var(--gray-600); font-size: 12px; }
+@media (max-width: 900px) {
+    .course-feedback .cf-head { flex-direction: column; }
+    .course-feedback .cf-context { max-width: 100%; }
+    .course-feedback .cf-form { grid-template-columns: 1fr; }
+    .course-feedback .cf-submit-field label { display: none; }
+}
+
+/* ===== 答题明细与解析 ===== */
+.question-review { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 22px; margin-bottom: 20px; }
+.question-review .qr-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.question-review .qr-title { font-size: 16px; color: var(--gray-900); font-weight: 700; margin-bottom: 4px; }
+.question-review .qr-subtitle { color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.question-review .qr-summary { flex-shrink: 0; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 600; }
+.question-review .qr-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.question-review .qr-filter { height: 30px; padding: 0 12px; border: 1px solid var(--gray-200); border-radius: 999px; background: #fff; color: var(--gray-700); font-size: 12px; font-weight: 700; cursor: pointer; }
+.question-review .qr-filter.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.question-review .qr-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 14px; align-items: start; }
+.question-review .qr-number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 12px; border: 1px solid var(--gray-200); border-radius: 10px; background: var(--gray-50); }
+.question-review .qr-number { height: 34px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-700); font-size: 13px; font-weight: 800; cursor: pointer; }
+.question-review .qr-number.correct { border-color: #b7e1c1; color: #137333; background: #e6f4ea; }
+.question-review .qr-number.wrong { border-color: #f5b5af; color: #c5221f; background: #fce8e6; }
+.question-review .qr-number.active { box-shadow: 0 0 0 3px rgba(255,109,1,.15); border-color: var(--primary); }
+.question-review .qr-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; color: var(--gray-500); font-size: 12px; }
+.question-review .qr-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.question-review .qr-dot.correct { background: var(--success); }
+.question-review .qr-dot.wrong { background: var(--danger); }
+.question-review .qr-detail { border: 1px solid var(--gray-200); border-radius: 10px; padding: 16px; background: #fff; min-height: 220px; }
+.question-review .qr-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.question-review .qr-detail-title { color: var(--gray-900); font-weight: 800; font-size: 15px; }
+.question-review .qr-status { border-radius: 999px; padding: 3px 9px; font-size: 12px; font-weight: 800; }
+.question-review .qr-status.correct { color: #137333; background: #e6f4ea; }
+.question-review .qr-status.wrong { color: #c5221f; background: #fce8e6; }
+.question-review .qr-question { color: var(--gray-900); font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+.question-review .qr-options { display: grid; gap: 8px; margin-bottom: 12px; }
+.question-review .qr-option { display: flex; gap: 8px; align-items: flex-start; border: 1px solid var(--gray-200); border-radius: 8px; padding: 9px 11px; color: var(--gray-700); font-size: 13px; line-height: 1.5; background: var(--gray-50); }
+.question-review .qr-option.correct-answer { border-color: #b7e1c1; background: #f0f8f2; color: #137333; }
+.question-review .qr-option.user-wrong { border-color: #f5b5af; background: #fff5f4; color: #c5221f; }
+.question-review .qr-option .qr-option-tag { flex-shrink: 0; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: #fff; border: 1px solid var(--gray-200); font-weight: 800; font-size: 12px; }
+.question-review .qr-explanation { font-size: 13px; color: var(--gray-700); background: var(--gray-50); padding: 11px 13px; border-radius: 8px; line-height: 1.7; }
+.question-review .qr-explanation strong { color: var(--gray-900); }
+.question-review .qr-empty { padding: 18px; border: 1px dashed var(--gray-300); border-radius: 8px; color: var(--gray-500); text-align: center; font-size: 13px; }
 
 /* ===== 弹窗 ===== */
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; justify-content: center; }
@@ -366,16 +447,18 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     .filter-bottom-row { align-items: flex-start; flex-direction: column; }
     .filter-bottom-row .search-box { width: 100%; margin-left: 0; }
     .filter-bottom-row .search-box input { width: 100%; }
+    .question-review .qr-layout { grid-template-columns: 1fr; }
+    .question-review .qr-number-grid { grid-template-columns: repeat(6, 1fr); }
 }
 @media (max-width: 600px) {
     .course-grid { grid-template-columns: 1fr; }
     .overview-card { flex-direction: column; align-items: flex-start; }
     .knowledge-mastery .km-grid { grid-template-columns: 1fr; }
     .knowledge-mastery .km-header { flex-direction: column; }
-    .quiz-history .qh-header { flex-direction: column; }
-    .quiz-history .qh-item { grid-template-columns: 1fr; gap: 8px; }
-    .quiz-history .qh-action { width: 100%; }
-    .quiz-history .qh-action .btn { width: 100%; }
+    .attempt-filter { align-items: stretch; }
+    .attempt-filter select { width: 100%; min-width: 0; }
+    .question-review .qr-head { flex-direction: column; }
+    .question-review .qr-number-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* ===== 星标难度 ===== */
@@ -384,35 +467,62 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* ===== AI智能答疑系统 ===== */
 .ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; height: 48px; padding: 0 18px; border-radius: 24px; background: linear-gradient(135deg, #2563eb, #6d5bd0); color: #fff; border: none; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(37,99,235,0.28); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
 .ai-chat-toggle:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.34); }
-.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 640px; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
-.ai-qa-sidebar { background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
+.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
+.ai-qa-sidebar { min-height: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
 .ai-qa-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--gray-900); }
 .ai-qa-brand .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; }
-.ai-new-chat { width: 100%; height: 40px; border: none; border-radius: 6px; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
-.ai-history-title { font-size: 12px; color: var(--gray-500); font-weight: 700; margin-top: 4px; }
-.ai-history-group { display: flex; flex-direction: column; gap: 8px; }
-.ai-history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 38px; padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--gray-700); cursor: pointer; transition: var(--transition); }
-.ai-history-item.active, .ai-history-item:hover { background: var(--primary-light); color: var(--gray-900); }
-.ai-history-time { color: var(--gray-500); font-size: 11px; flex-shrink: 0; }
-.ai-qa-main { min-width: 0; display: flex; flex-direction: column; }
-.ai-qa-topbar { height: 58px; padding: 0 22px; background: #fff; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ai-scope-card { border: 1px solid var(--gray-200); border-radius: 8px; background: #f8fbff; padding: 12px; }
+.ai-scope-card h4 { font-size: 13px; color: var(--gray-900); margin-bottom: 8px; }
+.ai-scope-card p { font-size: 12px; color: var(--gray-600); line-height: 1.7; }
+.ai-context-title { font-size: 12px; color: var(--gray-500); font-weight: 700; margin-top: 2px; }
+.ai-context-group { display: flex; flex-direction: column; gap: 8px; }
+.ai-context-item { min-height: 38px; padding: 9px 10px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; font-size: 13px; color: var(--gray-700); transition: var(--transition); }
+.ai-context-item strong { display: block; color: var(--gray-900); margin-bottom: 2px; }
+.ai-context-item span { display: block; color: var(--gray-500); font-size: 12px; line-height: 1.5; }
+.ai-context-item.active { background: var(--primary-light); border-color: #cfe0ff; color: var(--gray-900); }
+.ai-context-item.clickable { cursor: pointer; }
+.ai-context-item.clickable:hover { border-color: var(--primary); color: var(--primary); }
+.ai-kp-card.clickable { cursor: pointer; }
+.ai-kp-card.clickable:hover { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.06); }
+.ai-qa-main { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.ai-qa-topbar { flex-shrink: 0; min-height: 58px; padding: 10px 22px; background: #fff; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ai-qa-heading { min-width: 0; }
 .ai-qa-title { font-size: 15px; font-weight: 800; color: var(--gray-900); }
+.ai-qa-subtitle { margin-top: 2px; font-size: 12px; color: var(--gray-500); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .ai-qa-actions { display: flex; align-items: center; gap: 10px; }
 .ai-model-select { height: 36px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 0 12px; color: var(--gray-700); font-family: inherit; }
-.ai-qa-content { flex: 1; overflow-y: auto; padding: 28px 40px 22px; display: flex; flex-direction: column; gap: 18px; }
+.ai-function-tabs { flex-shrink: 0; display: none; align-items: center; gap: 8px; padding: 12px 22px; background: #fff; border-bottom: 1px solid var(--gray-200); }
+.ai-function-tabs.active { display: flex; }
+.ai-mode-tab { min-width: 132px; height: 34px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-700); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); }
+.ai-mode-tab.active, .ai-mode-tab:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+.ai-qa-content { flex: 1; min-height: 0; overflow-y: auto; padding: 28px 40px 22px; display: flex; flex-direction: column; gap: 18px; }
 .ai-welcome-card { align-self: center; width: min(520px, 100%); background: #fff; border: 1px solid var(--gray-200); border-radius: 12px; padding: 26px; text-align: center; box-shadow: var(--shadow); }
 .ai-welcome-icon { width: 48px; height: 48px; margin: 0 auto 12px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; }
 .ai-welcome-card h3 { font-size: 17px; margin-bottom: 8px; color: var(--gray-900); }
 .ai-welcome-card p { font-size: 13px; color: var(--gray-600); margin-bottom: 14px; }
 .ai-welcome-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
 .ai-welcome-tags span { padding: 4px 14px; border-radius: 999px; background: var(--primary-light); color: var(--primary); font-size: 12px; }
+.ai-scope-notice { padding: 10px 14px; border: 1px solid #d8e7ff; border-radius: 8px; background: #f6f9ff; color: var(--gray-700); font-size: 12px; line-height: 1.6; }
+.ai-difficulty-panel { display: grid; gap: 12px; }
+.ai-difficulty-head { padding: 14px 16px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; }
+.ai-difficulty-title { color: var(--gray-900); font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+.ai-difficulty-desc { color: var(--gray-600); font-size: 12px; line-height: 1.7; }
+.ai-kp-switcher { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.ai-kp-switcher label { flex-shrink: 0; color: var(--gray-600); font-size: 12px; font-weight: 700; }
+.ai-kp-switcher select { min-width: 220px; height: 34px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-800); padding: 0 10px; font-family: inherit; }
+.ai-kp-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.ai-kp-card { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 14px 16px; }
+.ai-kp-card.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.08); }
+.ai-kp-name { color: var(--primary); font-size: 14px; font-weight: 800; margin-bottom: 8px; }
+.ai-kp-text { color: var(--gray-700); font-size: 13px; line-height: 1.75; }
+.ai-kp-meta { margin-top: 8px; color: var(--gray-500); font-size: 12px; line-height: 1.6; }
 .ai-qa-content .chat-msg { max-width: 66%; padding: 12px 16px; border-radius: 12px; font-size: 13px; line-height: 1.75; word-wrap: break-word; animation: fadeIn 0.2s; }
 .ai-qa-content .chat-msg.user { align-self: flex-end; background: #eaf2ff; color: var(--gray-900); border: 1px solid #d8e7ff; }
 .ai-qa-content .chat-msg.ai { align-self: flex-start; background: #fff; color: var(--gray-800); border: 1px solid var(--gray-200); box-shadow: var(--shadow); }
 .ai-qa-content .chat-msg.ai .ai-label { font-size: 12px; color: var(--primary); font-weight: 700; margin-bottom: 4px; }
 .ai-qa-content .chat-msg.ai p { margin-bottom: 6px; }
 .ai-qa-content .chat-msg.ai p:last-child { margin-bottom: 0; }
-.ai-qa-footer { background: #fff; border-top: 1px solid var(--gray-200); padding: 14px 22px; }
+.ai-qa-footer { flex-shrink: 0; background: #fff; border-top: 1px solid var(--gray-200); padding: 14px 22px; }
 .chat-quick-questions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .chat-quick-questions .quick-btn { padding: 6px 14px; border-radius: 18px; border: 1px solid var(--gray-200); background: #fff; color: var(--gray-700); font-size: 12px; cursor: pointer; font-family: inherit; transition: var(--transition); white-space: nowrap; }
 .chat-quick-questions .quick-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
@@ -501,8 +611,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                     <div class="progress-bar-fill" id="learningProgressBar" style="width:45%;"></div>
                 </div>
                 <div class="progress-info-row">
-                    <div class="pi-item"><div class="pi-num" id="learnedSections">0</div><div class="pi-label">已学章节</div></div>
-                    <div class="pi-item"><div class="pi-num warn" id="unlearnedSections">0</div><div class="pi-label">未学章节</div></div>
+                    <div class="pi-item"><div class="pi-num" id="learnedSections">0</div><div class="pi-label">已学完章节</div></div>
+                    <div class="pi-item"><div class="pi-num warn" id="unlearnedSections">0</div><div class="pi-label">未学完章节</div></div>
                     <div class="pi-item"><div class="pi-num" id="totalSections">0</div><div class="pi-label">总章节</div></div>
                 </div>
             </div>
@@ -516,18 +626,19 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 </svg>
                 <div class="ring-center">
                     <div class="ring-pct" id="quizAccuracyPct">82%</div>
-                    <div class="ring-label">测验准确率</div>
+                    <div class="ring-label">首次正确率</div>
                 </div>
             </div>
             <div class="progress-detail">
-                <h3>章节测验准确率</h3>
+                <h3>章节测验表现</h3>
+                <div class="metric-note">仅统计每个课程章节完成后的首次测验，后续重新测验不影响本概览。</div>
                 <div class="progress-bar" style="height:10px; margin-bottom:8px;">
                     <div class="progress-bar-fill" id="quizAccuracyBar" style="width:82%; background:var(--success);"></div>
                 </div>
                 <div class="progress-info-row">
-                    <div class="pi-item"><div class="pi-num ok" id="quizCorrectCount">0</div><div class="pi-label">答对</div></div>
-                    <div class="pi-item"><div class="pi-num warn" id="quizWrongCount">0</div><div class="pi-label">待强化</div></div>
-                    <div class="pi-item"><div class="pi-num" id="quizTotalCount">0</div><div class="pi-label">已测题数</div></div>
+                    <div class="pi-item"><div class="pi-num ok" id="quizBestAccuracy">0%</div><div class="pi-label">首次最高</div></div>
+                    <div class="pi-item"><div class="pi-num warn" id="quizAvgAccuracy">0%</div><div class="pi-label">首次平均</div></div>
+                    <div class="pi-item"><div class="pi-num" id="quizAttemptCount">0</div><div class="pi-label">已首测章节</div></div>
                 </div>
             </div>
         </div>
@@ -583,38 +694,63 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                     <span class="section-badge" id="toolbarSectionBadge">1.1 当前节</span>
                 </div>
                 <div class="toolbar-actions">
+                    <button class="btn btn-primary btn-sm" onclick="openAiQaSystem()">AI答疑</button>
                     <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回列表</button>
                 </div>
             </div>
-            <div class="video-section" id="videoSection">
-                <div class="video-placeholder" id="videoPlaceholder" onclick="togglePlay()">
-                    <div class="play-btn" id="playBtn">▶</div>
-                    <div class="video-hint" id="videoHint">点击播放</div>
+            <div class="learning-mode-bar">
+                <div class="learning-mode-tabs">
+                    <button class="learning-mode-tab active" id="modeVideoTab" type="button" onclick="switchLearningMode('video')">视频学习</button>
+                    <button class="learning-mode-tab" id="modeArticleTab" type="button" onclick="switchLearningMode('article')">图文学习</button>
                 </div>
-                <div class="video-controls">
-                    <button class="ctrl-btn" onclick="togglePlay()" id="ctrlPlayBtn">⏸</button>
-                    <span class="time-display" id="currentTime">00:00</span>
-                    <div class="ctrl-progress"><div class="ctrl-progress-fill" id="videoProgressFill" style="width:0%"></div></div>
-                    <span class="time-display" id="totalTime">00:00</span>
-                    <div class="ctrl-right">
-                        <button class="ctrl-btn" onclick="changeSpeed()" id="speedBtn">1.0x</button>
-                        <button class="ctrl-btn">⛶</button>
+                <div class="learning-mode-status">
+                    <span class="learning-part-pill" id="videoPartStatus">视频未完成</span>
+                    <span class="learning-part-pill" id="articlePartStatus">图文未完成</span>
+                    <span class="learning-rule-tip">首次学习需视频完整播放、图文从头读到尾，二者完成后才开放章节测验。</span>
+                </div>
+            </div>
+            <div class="learning-panel active" id="videoLearningPanel">
+                <div class="video-section" id="videoSection">
+                    <div class="video-placeholder" id="videoPlaceholder" onclick="togglePlay()">
+                        <div class="play-btn" id="playBtn">▶</div>
+                        <div class="video-hint" id="videoHint">点击播放</div>
                     </div>
+                    <div class="video-controls">
+                        <button class="ctrl-btn" onclick="togglePlay()" id="ctrlPlayBtn">⏸</button>
+                        <span class="time-display" id="currentTime">00:00</span>
+                        <div class="ctrl-progress"><div class="ctrl-progress-fill" id="videoProgressFill" style="width:0%"></div></div>
+                        <span class="time-display" id="totalTime">00:00</span>
+                        <div class="ctrl-right">
+                            <button class="ctrl-btn" onclick="changeSpeed()" id="speedBtn">1.0x</button>
+                            <button class="ctrl-btn">⛶</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-learn-tip" id="videoLearnTip">完成条件：视频播放到 100% 后，本节视频学习才会标记完成。</div>
+                <div class="handout-section video-handout-section">
+                    <div class="handout-header">
+                        <div class="handout-heading">
+                            <h3 id="handoutTitle">在线讲义</h3>
+                            <button class="btn btn-outline btn-sm" onclick="downloadHandout()">📥 讲义下载</button>
+                        </div>
+                        <span style="font-size:12px;color:var(--gray-500);" id="handoutMeta"></span>
+                    </div>
+                    <div class="handout-body" id="handoutBody"></div>
                 </div>
             </div>
             <div class="section-complete-hint" id="sectionCompleteHint" style="display:none;">
                 <span class="complete-text">✅ 你已完成本章节的学习</span>
                 <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
             </div>
-            <div class="handout-section" id="handoutSection">
-                <div class="handout-header">
-                    <div class="handout-heading">
-                        <h3 id="handoutTitle">在线讲义</h3>
-                        <button class="btn btn-outline btn-sm" onclick="downloadHandout()">📥 讲义下载</button>
-                    </div>
-                    <span style="font-size:12px;color:var(--gray-500);" id="handoutMeta"></span>
+            <div class="learning-panel" id="articleLearningPanel">
+            <div class="article-content-section" id="articleContentSection" onscroll="handleArticleScroll()">
+                <div class="article-read-tip">
+                    完成条件：从本页图文顶部阅读到页面底部后，本节图文学习才会标记完成。
+                    <div class="article-read-progress"><span id="articleReadProgressFill"></span></div>
                 </div>
-                <div class="handout-body" id="handoutBody"></div>
+                <div class="article-content-heading"><h3 id="articleContentTitle">图文学习</h3></div>
+                <div class="article-content-body" id="articleContentBody"></div>
+            </div>
             </div>
         </div>
     </div>
@@ -629,7 +765,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     </div>
     <div class="quiz-header">
         <div class="quiz-info">
-            <h2 id="quizTitle">第1章 章节测验</h2>
+            <h2 id="quizTitle">课程内容 - 测验</h2>
             <div class="quiz-meta">
                 <span>共 <b id="quizTotal">8</b> 题</span>
                 <span>用于查缺补漏，不计分不限时</span>
@@ -639,7 +775,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     </div>
     <div id="quizQuestionsContainer"></div>
     <div class="quiz-footer">
-        <button class="btn btn-outline" onclick="navToCourseList()" style="margin-right:12px;">返回课程</button>
+        <button class="btn btn-outline" onclick="returnToCurrentCourseContent()" style="margin-right:12px;">返回本课程目录</button>
         <button class="btn btn-success btn-lg" onclick="submitQuiz()" id="btnSubmitQuiz">提交测验</button>
     </div>
 </div>
@@ -664,7 +800,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             </div>
         </div>
         <div class="result-stats">
-            <h2 id="resultTitle">第1章 章节测验 - 测验结果</h2>
+            <h2 id="resultTitle">课程内容 - 测验结果</h2>
             <div class="rs-row">
                 <div class="rs-item"><div class="rs-val" id="resultPct">80%</div><div class="rs-label">做题准确率</div></div>
             </div>
@@ -673,12 +809,16 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 <span class="result-meta-pill" id="resultAttempts">测验次数：1次</span>
                 <span class="result-meta-pill" id="resultBestAccuracy">历史最高：80%</span>
             </div>
+            <div class="attempt-filter">
+                <label for="quizAttemptSelect">测验记录</label>
+                <select id="quizAttemptSelect" onchange="selectQuizAttempt(this.value)"></select>
+                <span class="attempt-filter-summary" id="quizAttemptSummary">当前查看本次测验结果</span>
+            </div>
         </div>
     </div>
     <div class="result-stat-cards">
         <div class="rsc"><div class="rsc-num correct-color" id="rCorrect">6</div><div class="rsc-label">答对</div></div>
         <div class="rsc"><div class="rsc-num wrong-color" id="rWrong">2</div><div class="rsc-label">答错</div></div>
-        <div class="rsc"><div class="rsc-num unanswered-color" id="rUnanswered">0</div><div class="rsc-label">未答</div></div>
         <div class="rsc"><div class="rsc-num total-color" id="rTotal">8</div><div class="rsc-label">总题数</div></div>
     </div>
 
@@ -692,30 +832,51 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         </div>
         <div class="km-grid" id="knowledgeMasteryGrid"></div>
     </div>
-    <div class="quiz-history" id="quizHistory">
-        <div class="qh-header">
-            <div>
-                <div class="qh-title">历次测验记录</div>
-                <div class="qh-subtitle">每次重新测验都会单独保留，点击“查看本次结果”可回看对应答题表现。</div>
-            </div>
-            <span class="result-meta-pill" id="quizHistoryCount">共 0 次</span>
-        </div>
-        <div class="qh-list" id="quizHistoryList"></div>
-    </div>
-
     <!-- 建议强化内容 -->
     <div class="reinforce-alert" id="reinforceAlert">
         <div class="ra-title">知识追踪与学习路径优化</div>
-        <div class="ra-subtitle">AI根据本次测验表现识别薄弱知识点，并推荐下一步学习内容。</div>
+        <div class="ra-subtitle">根据后台预配置知识点与测验题目绑定关系，定位薄弱知识点并推荐下一步学习内容。</div>
         <div id="reinforceItems"></div>
     </div>
 
-    <!-- 错题解析 -->
-    <div class="wrong-analysis" id="wrongAnalysis"></div>
+    <!-- 答题明细与解析 -->
+    <div class="question-review" id="questionReview"></div>
 
-    <div style="display:flex; justify-content:center; gap:16px; margin-top:20px;">
-        <button class="btn btn-primary btn-lg" onclick="retryQuiz()">重新测验</button>
-        <button class="btn btn-outline btn-lg" onclick="navToCourseList()">返回课程列表</button>
+    <div class="course-feedback">
+        <div class="cf-head">
+            <div>
+                <div class="cf-title">课程反馈</div>
+                <div class="cf-subtitle">针对当前章节课程内容、章节测验或学习体验提交反馈；同一次测验只能提交一次，提交后会在本页形成记录并进入教师课程管理端。</div>
+            </div>
+            <div class="cf-context" id="courseFeedbackContext">当前章节</div>
+        </div>
+        <div class="cf-form">
+            <div>
+                <label for="courseFeedbackType">反馈类型</label>
+                <select id="courseFeedbackType">
+                    <option>课程内容</option>
+                    <option>测验题目</option>
+                    <option>学习体验</option>
+                    <option>其他</option>
+                </select>
+            </div>
+            <div>
+                <label for="courseFeedbackContent">反馈内容</label>
+                <textarea id="courseFeedbackContent" placeholder="请描述需要教师端关注的问题，例如讲义不清楚、题目解析不足、学习进度展示不明确等。"></textarea>
+            </div>
+            <div class="cf-submit-field">
+                <label>提交</label>
+                <button class="btn btn-primary btn-lg" id="courseFeedbackSubmitBtn" type="button" onclick="submitCourseFeedback()">提交反馈</button>
+            </div>
+        </div>
+        <div class="cf-record" id="courseFeedbackRecord"></div>
+        <div class="cf-tip" id="courseFeedbackTip">每次测验仅可提交一次反馈；提交后会在本页形成记录，并进入教师课程管理端。</div>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:16px; margin-top:20px; flex-wrap:wrap;">
+        <button class="btn btn-primary btn-lg" onclick="returnToCurrentCourseContent()">再次学习课程</button>
+        <button class="btn btn-success btn-lg" onclick="retryQuiz()">再次进行章节测验</button>
+        <button class="btn btn-outline btn-lg" onclick="returnToCurrentCourseContent()">返回本课程目录</button>
     </div>
 </div>
 
@@ -729,51 +890,61 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     <div class="ai-qa-shell">
         <aside class="ai-qa-sidebar">
             <div class="ai-qa-brand"><span class="brand-dot">AI</span><span>AI智能答疑</span></div>
-            <button class="ai-new-chat" onclick="startNewAiDialog()">＋ 新建对话</button>
-            <div class="ai-history-title">历史对话</div>
-            <div class="ai-history-group">
-                <div class="ai-history-item active"><span>课程难点讲解</span><span class="ai-history-time">14:35</span></div>
-                <div class="ai-history-item"><span>DR分级标准咨询</span><span class="ai-history-time">10:23</span></div>
-                <div class="ai-history-item"><span>OCT检查结果咨询</span><span class="ai-history-time">昨天</span></div>
-                <div class="ai-history-item"><span>治疗方案与预后</span><span class="ai-history-time">上周</span></div>
+            <div class="ai-scope-card">
+                <h4>当前问答范围</h4>
+                <p id="aiScopeDescription">仅围绕当前课程小节回答；课程难点讲解只围绕当前小节绑定知识点。</p>
+            </div>
+            <div class="ai-context-title" id="aiContextTitle">当前课程与小节</div>
+            <div class="ai-context-group" id="aiContextGroup">
+                <div class="ai-context-item active">
+                    <strong>当前范围</strong>
+                    <span>打开课程小节后自动绑定问答范围</span>
+                </div>
             </div>
         </aside>
         <section class="ai-qa-main">
             <div class="ai-qa-topbar">
-                <div class="ai-qa-title">课程难点讲解与医学问答</div>
+                <div class="ai-qa-heading">
+                    <div class="ai-qa-title" id="aiQaTitle">医学课程问答</div>
+                    <div class="ai-qa-subtitle" id="aiQaSubtitle">基于当前医学课程范围进行自然语言问答</div>
+                </div>
                 <div class="ai-qa-actions">
                     <select class="ai-model-select" aria-label="模型选择">
                         <option>医学课程专科模型</option>
                         <option>眼底图像分析模型</option>
                         <option>通用医学语言模型</option>
                     </select>
-                    <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回课程</button>
-                    <button class="btn btn-outline btn-sm" onclick="startNewAiDialog()">清空对话</button>
+                    <button class="btn btn-outline btn-sm" onclick="returnFromAiQa()">返回课程</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetCurrentAiDialog()">重置当前问答</button>
                 </div>
+            </div>
+            <div class="ai-function-tabs" id="aiFunctionTabs">
+                <button class="ai-mode-tab active" id="aiModeQaTab" type="button" onclick="switchAiMode('qa')">自然语言问答</button>
+                <button class="ai-mode-tab" id="aiModeDifficultyTab" type="button" onclick="switchAiMode('difficulty')">课程难点讲解</button>
             </div>
             <div class="ai-qa-content" id="aiChatBody">
                 <div class="ai-welcome-card">
                     <div class="ai-welcome-icon">✚</div>
                     <h3>欢迎使用AI智能答疑系统</h3>
-                    <p>基于医学语言模型提供自然语言问答、课程难点讲解与知识点梳理。</p>
+                    <p>当前问答基于当前医学课程范围，请勿询问与医学无关的内容。</p>
                     <div class="ai-welcome-tags">
-                        <span>课程难点讲解</span>
+                        <span>医学课程问答</span>
                         <span>疾病知识问答</span>
                         <span>诊断标准梳理</span>
                     </div>
                 </div>
                 <div class="chat-msg ai">
                     <div class="ai-label">AI助手</div>
-                    <p>你好！我是AI学习助手，可以为你解答课程相关问题。试试点击下方的快捷问题，或者直接输入你的问题吧。</p>
+                    <p>你好，我是AI学习助手。当前只回答医学课程相关问题，请勿询问与医学无关的内容。</p>
                 </div>
             </div>
             <div class="ai-qa-footer">
                 <div class="chat-quick-questions" id="aiQuickQuestions">
-                    <button class="quick-btn" onclick="askQuickQuestion('这个疾病的发病机制是什么？')">发病机制</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('有哪些典型临床表现？')">典型临床表现</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('诊断标准有哪些？')">诊断标准</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('治疗方案和预后如何？')">治疗方案与预后</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('最新的研究进展有哪些？')">最新研究进展</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('糖尿病视网膜病变怎么分级？')">DR分级</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('高血压视网膜病变KWB分级怎么理解？')">KWB分级</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('OCT和FFA有什么区别？')">OCT/FFA区别</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('青光眼视野检查怎么看？')">青光眼视野</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('抗VEGF治疗有什么作用？')">抗VEGF治疗</button>
                 </div>
                 <div class="chat-input-area">
                     <input type="text" id="aiChatInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')sendAiMessage()">
@@ -993,11 +1164,42 @@ let videoCurrentTime = 0;
 let videoDuration = 0;
 let videoInterval = null;
 let playbackSpeed = 1;
+let currentLearningMode = 'video';
 let currentQuizData = [];
+let currentResultContext = null;
 let completedSectionIdsByCourse = {};
 const COMPLETION_STORAGE_KEY = 'life_med_basic_course_completion';
 let quizRecordsByCourse = {};
 const QUIZ_STORAGE_KEY = 'life_med_basic_course_quiz_records';
+const COURSE_FEEDBACK_STORAGE_KEY = 'life_med_basic_course_feedback';
+let currentPageId = 'page-course-list';
+let aiQaContextType = 'home';
+let aiQaMode = 'qa';
+let aiReturnPageId = 'page-course-list';
+let aiActiveKnowledgePoint = '';
+
+const SECTION_KNOWLEDGE_POINTS = {
+    's1_1_1': ['DR流行病学', 'DR危险因素', '威胁视力DR'],
+    's1_1_2': ['糖尿病病程', 'DR发生率', '1型与2型糖尿病差异'],
+    's1_1_3': ['血糖控制目标', '血压控制目标', 'DR预防策略'],
+    's1_2_1': ['ETDRS分级', '重度NPDR', '4-2-1规则'],
+    's1_2_2': ['国际临床DR严重程度量表', 'NPDR与PDR边界', 'IRMA识别'],
+    's1_3_1': ['眼底照相筛查', '散瞳拍摄规范', '图像质量要求'],
+    's1_3_2': ['OCT黄斑水肿评估', 'OCTA与FFA鉴别', 'CST指标'],
+    's2_1_1': ['房水生成与排出机制', '小梁网途径', '葡萄膜巩膜途径'],
+    's2_1_2': ['视神经损伤机制', '筛板机械压迫', 'RGC凋亡'],
+    's2_2_1': ['青光眼视野检查', '旁中心暗点', '鼻侧阶梯'],
+    's2_2_2': ['RNFL厚度评估', 'GCC结构评估', '结构功能关系'],
+    's3_1_1': ['AMD流行病学', '年龄相关危险因素', '疾病负担'],
+    's3_1_2': ['干性AMD', '湿性AMD', '抗VEGF治疗机制'],
+    's4_1_1': ['Keith-Wagener-Barker分级', '动静脉交叉压迫征', '视盘水肿'],
+    's4_1_2': ['Scheie分级', '高血压分期', '动脉硬化分期'],
+    's5_1_1': ['CRVO与BRVO差异', 'RVO分类', '新生血管性青光眼'],
+    's6_1_1': ['SD-OCT与SS-OCT', 'OCT扫描速度', 'OCT成像原理'],
+    's6_1_2': ['OCT结构分层', '椭圆体带', '黄斑中心凹厚度'],
+    's7_1_1': ['激光组织相互作用', '光热效应', 'PRP全视网膜光凝'],
+    's8_1_1': ['荧光素钠药代动力学', 'FFA判读要点', '血-视网膜屏障']
+};
 
 // ==================== 章节测验数据映射 ====================
 const CHAPTER_QUIZZES = {
@@ -1062,29 +1264,35 @@ function getChapterQuiz(chapterId) {
 function getLearningStats() {
     let totalAllSections = 0, doneAllSections = 0;
     MOCK_COURSES.forEach(c => { totalAllSections += c.totalSections; doneAllSections += Math.round(c.totalSections * c.progress / 100); });
-    let quizTotal = 0;
-    let quizCorrect = 0;
+    let firstAttemptCount = 0;
+    let accuracySum = 0;
+    let bestAccuracy = 0;
     MOCK_COURSES.forEach(course => {
         const records = quizRecordsByCourse[course.id] || {};
         Object.keys(records).forEach(chapterId => {
             const record = records[chapterId];
-            quizTotal += record.total || 0;
-            quizCorrect += record.latestCorrect || 0;
+            const firstAttempt = getFirstQuizAttempt(record);
+            if (!firstAttempt) return;
+            firstAttemptCount++;
+            accuracySum += firstAttempt.accuracy || 0;
+            bestAccuracy = Math.max(bestAccuracy, firstAttempt.accuracy || 0);
         });
     });
-    if (!quizTotal) {
-        quizTotal = 38;
-        quizCorrect = 31;
+    if (!firstAttemptCount) {
+        firstAttemptCount = 6;
+        accuracySum = 426;
+        bestAccuracy = 82;
     }
+    const firstAverageAccuracy = firstAttemptCount ? Math.round(accuracySum / firstAttemptCount) : 0;
     return {
         learnedSections: doneAllSections,
         totalSections: totalAllSections,
         unlearnedSections: Math.max(totalAllSections - doneAllSections, 0),
         learningPct: totalAllSections ? Math.round(doneAllSections / totalAllSections * 100) : 0,
-        quizCorrect: quizCorrect,
-        quizTotal: quizTotal,
-        quizWrong: Math.max(quizTotal - quizCorrect, 0),
-        quizAccuracy: quizTotal ? Math.round(quizCorrect / quizTotal * 100) : 0
+        quizFirstAccuracy: firstAverageAccuracy,
+        quizFirstAverageAccuracy: firstAverageAccuracy,
+        quizFirstBestAccuracy: bestAccuracy,
+        quizFirstAttemptCount: firstAttemptCount
     };
 }
 
@@ -1105,11 +1313,30 @@ function isCourseVideoComplete(course) {
     return !!course && course.progress >= 100;
 }
 
+function getSectionCompletionState(course, sectionId) {
+    if (!course || !sectionId) return { video: false, article: false };
+    if (isCourseVideoComplete(course)) return { video: true, article: true };
+    const raw = completedSectionIdsByCourse[course.id] && completedSectionIdsByCourse[course.id][sectionId];
+    if (raw === true) return { video: true, article: true };
+    if (raw && typeof raw === 'object') return {
+        video: !!raw.video,
+        article: !!raw.article
+    };
+    return { video: false, article: false };
+}
+
+function isSectionPartComplete(course, sectionId, part) {
+    if (isCourseVideoComplete(course)) return true;
+    return !!getSectionCompletionState(course, sectionId)[part];
+}
+
 function isSectionComplete(course, chapterIndex, sectionIndex) {
     if (!course || !course.chapters || !course.chapters[chapterIndex]) return false;
     if (isCourseVideoComplete(course)) return true;
     const section = course.chapters[chapterIndex].sections[sectionIndex];
-    return !!(section && completedSectionIdsByCourse[course.id] && completedSectionIdsByCourse[course.id][section.id]);
+    if (!section) return false;
+    const state = getSectionCompletionState(course, section.id);
+    return state.video && state.article;
 }
 
 function isChapterComplete(course, chapterIndex) {
@@ -1124,10 +1351,19 @@ function persistCompletedSections() {
     } catch (e) {}
 }
 
+function markSectionPartComplete(course, sectionId, part) {
+    if (!course || !sectionId) return;
+    if (!completedSectionIdsByCourse[course.id]) completedSectionIdsByCourse[course.id] = {};
+    const current = getSectionCompletionState(course, sectionId);
+    current[part] = true;
+    completedSectionIdsByCourse[course.id][sectionId] = current;
+    persistCompletedSections();
+}
+
 function markSectionComplete(course, sectionId) {
     if (!course || !sectionId) return;
     if (!completedSectionIdsByCourse[course.id]) completedSectionIdsByCourse[course.id] = {};
-    completedSectionIdsByCourse[course.id][sectionId] = true;
+    completedSectionIdsByCourse[course.id][sectionId] = { video: true, article: true };
     persistCompletedSections();
 }
 
@@ -1151,7 +1387,6 @@ function getQuizHistory(record) {
             accuracy: record.latestAccuracy || 0,
             correct: record.latestCorrect || 0,
             wrong: record.latestWrong || 0,
-            unanswered: record.latestUnanswered || 0,
             total: record.total || 0,
             elapsedSeconds: record.elapsedSeconds || 0,
             mastery: record.mastery || [],
@@ -1162,6 +1397,11 @@ function getQuizHistory(record) {
     return [];
 }
 
+function getFirstQuizAttempt(record) {
+    const history = getQuizHistory(record);
+    return history.length ? history[0] : null;
+}
+
 function getChapterLearningProgress(course, chapterIndex) {
     if (!course || !course.chapters || !course.chapters[chapterIndex]) return 0;
     const sections = course.chapters[chapterIndex].sections || [];
@@ -1170,33 +1410,94 @@ function getChapterLearningProgress(course, chapterIndex) {
     return Math.round(done / sections.length * 100);
 }
 
+function getCourseLearningProgress(course) {
+    if (!course || !course.chapters) return 0;
+    if (isCourseVideoComplete(course)) return 100;
+    let total = 0;
+    let done = 0;
+    course.chapters.forEach((chapter, chapterIndex) => {
+        (chapter.sections || []).forEach((section, sectionIndex) => {
+            total++;
+            if (isSectionComplete(course, chapterIndex, sectionIndex)) done++;
+        });
+    });
+    const storedProgress = total ? Math.round(done / total * 100) : 0;
+    if (storedProgress > 0) return Math.max(storedProgress, course.progress || 0);
+    return course.progress || 0;
+}
+
+function canEnterChapterQuiz(course, chapterIndex) {
+    const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
+    if (!course || !chapter || !getChapterQuiz(chapter.id)) return false;
+    if (getChapterQuizRecord(course.id, chapter.id)) return true;
+    return isChapterComplete(course, chapterIndex);
+}
+
+function findCourseQuizTarget(course, preferRetake) {
+    if (!course || !course.chapters) return null;
+    const chaptersWithQuiz = course.chapters
+        .map((chapter, index) => ({
+            chapter,
+            index,
+            quizData: getChapterQuiz(chapter.id),
+            record: getChapterQuizRecord(course.id, chapter.id)
+        }))
+        .filter(item => !!item.quizData);
+
+    if (!chaptersWithQuiz.length) return null;
+
+    if (preferRetake) {
+        const latestRecord = getLatestQuizRecord(course);
+        if (latestRecord) {
+            const latest = chaptersWithQuiz.find(item => item.chapter.id === latestRecord.chapterId);
+            if (latest) return latest;
+        }
+    }
+
+    const firstNewEligible = chaptersWithQuiz.find(item => !item.record && isChapterComplete(course, item.index));
+    if (firstNewEligible) return firstNewEligible;
+
+    const firstRetake = chaptersWithQuiz.find(item => !!item.record);
+    if (firstRetake) return firstRetake;
+
+    const firstCompleted = chaptersWithQuiz.find(item => isChapterComplete(course, item.index));
+    return firstCompleted || null;
+}
+
 function getMasteryState(accuracy) {
     if (accuracy >= 80) return { text: '已掌握', cls: 'mastered' };
-    if (accuracy >= 60) return { text: '基本掌握', cls: 'basic' };
-    return { text: '需要强化', cls: 'weak' };
+    return { text: '需强化', cls: 'weak' };
 }
 
 function calculateQuizResult(quizData, answers) {
     let total = quizData.length;
-    let correct = 0, wrong = 0, unanswered = 0;
+    let correct = 0, wrong = 0;
     let wrongItems = [];
+    let questionItems = [];
     let masteryMap = {};
 
     quizData.forEach((q, index) => {
         const keyword = extractKeyword(q.q, q.explain);
         if (!masteryMap[keyword]) masteryMap[keyword] = { keyword: keyword, total: 0, correct: 0 };
         masteryMap[keyword].total++;
+        let userAnswer = answers[q.id];
+        let status = 'wrong';
 
-        if (answers[q.id] === undefined) {
-            unanswered++;
-            wrongItems.push({ ...q, userAnswer: -1, questionNo: index + 1 });
-        } else if (answers[q.id] === q.correct) {
+        if (userAnswer === undefined) {
+            wrong++;
+            userAnswer = -1;
+            status = 'wrong';
+            wrongItems.push({ ...q, userAnswer, questionNo: index + 1, status });
+        } else if (userAnswer === q.correct) {
             correct++;
             masteryMap[keyword].correct++;
+            status = 'correct';
         } else {
             wrong++;
-            wrongItems.push({ ...q, userAnswer: answers[q.id], questionNo: index + 1 });
+            wrongItems.push({ ...q, userAnswer, questionNo: index + 1, status });
         }
+
+        questionItems.push({ ...q, userAnswer, questionNo: index + 1, status, keyword });
     });
 
     const mastery = Object.keys(masteryMap).map(keyword => {
@@ -1215,9 +1516,9 @@ function calculateQuizResult(quizData, answers) {
         total: total,
         correct: correct,
         wrong: wrong,
-        unanswered: unanswered,
         accuracy: total ? Math.round(correct / total * 100) : 0,
         wrongItems: wrongItems,
+        questionItems: questionItems,
         mastery: mastery
     };
 }
@@ -1234,7 +1535,6 @@ function saveQuizRecord(course, chapterIndex, quizData, answers, elapsedSeconds)
         accuracy: result.accuracy,
         correct: result.correct,
         wrong: result.wrong,
-        unanswered: result.unanswered,
         total: result.total,
         elapsedSeconds: elapsedSeconds || 0,
         mastery: result.mastery,
@@ -1250,7 +1550,6 @@ function saveQuizRecord(course, chapterIndex, quizData, answers, elapsedSeconds)
         bestAccuracy: history.reduce((best, item) => Math.max(best, item.accuracy || 0), 0),
         latestCorrect: result.correct,
         latestWrong: result.wrong,
-        latestUnanswered: result.unanswered,
         total: result.total,
         elapsedSeconds: elapsedSeconds || 0,
         learningProgress: getChapterLearningProgress(course, chapterIndex),
@@ -1277,7 +1576,8 @@ function getLatestQuizRecord(course) {
 }
 
 function isCourseQuizPending(course) {
-    return isCourseVideoComplete(course) && course.quizStatus !== 'completed';
+    if (!course || isCourseQuizCompleted(course)) return false;
+    return !!findCourseQuizTarget(course, false);
 }
 
 function isCourseQuizCompleted(course) {
@@ -1288,9 +1588,7 @@ function isCourseQuizCompleted(course) {
 }
 
 function getCourseCardAction(course) {
-    if (isCourseQuizCompleted(course)) return 'viewResult(' + course.id + ')';
-    if (isCourseQuizPending(course)) return 'goCourseQuiz(' + course.id + ')';
-    return 'startLearning(' + course.id + ')';
+    return getCourseLearningProgress(course) > 0 ? 'continueCourse(' + course.id + ')' : 'startLearning(' + course.id + ')';
 }
 
 function getCourseCategory(course) {
@@ -1311,12 +1609,19 @@ function getKnowledgeSystem(course) {
 
 // ==================== 页面导航 ====================
 function showPage(pageId) {
+    currentPageId = pageId;
     document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
     const page = document.getElementById(pageId);
     if (page) page.classList.add('active');
+    document.body.classList.toggle('ai-qa-page-open', pageId === 'page-ai-qa');
+    if (pageId === 'page-ai-qa') {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+    }
     const aiEntry = document.getElementById('aiChatToggle');
     if (aiEntry) {
-        const hideAiEntryPages = ['page-ai-qa', 'page-quiz', 'page-quiz-result'];
+        const hideAiEntryPages = ['page-video-learning', 'page-ai-qa', 'page-quiz', 'page-quiz-result'];
         aiEntry.style.display = hideAiEntryPages.indexOf(pageId) >= 0 ? 'none' : 'flex';
     }
 }
@@ -1356,12 +1661,20 @@ function renderCourseList() {
         if (c.progress === 0) {
             btnHtml = '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();startLearning(' + c.id + ')">开始学习</button>';
         } else if (isCourseQuizCompleted(c)) {
-            btnHtml = '<button class="btn btn-success btn-sm card-btn" onclick="event.stopPropagation();viewResult(' + c.id + ')">查看学习测验结果</button>';
+            btnHtml = '<div class="card-actions">'
+                + '<button class="btn btn-primary btn-sm" onclick="event.stopPropagation();continueCourse(' + c.id + ')">再次学习</button>'
+                + '<button class="btn btn-success btn-sm" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">再次测验</button>'
+                + '</div>'
+                + '<button class="btn btn-sm card-result-link" onclick="event.stopPropagation();viewResult(' + c.id + ')">查看学习测验结果</button>';
         } else if (isCourseQuizPending(c)) {
-            btnHtml = '<button class="btn btn-warning btn-sm card-btn" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">去进行章节测验</button>';
+            btnHtml = '<div class="card-actions">'
+                + '<button class="btn btn-primary btn-sm" onclick="event.stopPropagation();continueCourse(' + c.id + ')">再次学习</button>'
+                + '<button class="btn btn-warning btn-sm" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">去进行章节测验</button>'
+                + '</div>';
         } else {
             btnHtml = '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();continueCourse(' + c.id + ')">继续学习</button>';
         }
+        const learningProgress = getCourseLearningProgress(c);
         html += `
             <div class="course-card" onclick="${cardAction}">
                 <div class="card-cover ${c.coverClass}">${c.icon}</div>
@@ -1375,8 +1688,8 @@ function renderCourseList() {
                         <span>📑 ${c.chapterCount}章 · ${c.totalSections}节</span>
                     </div>
                     <div class="card-progress">
-                        <div class="progress-bar"><div class="progress-bar-fill" style="width:${c.progress}%;"></div></div>
-                        <div class="progress-text">学习进度 ${c.progress}%</div>
+                        <div class="progress-bar"><div class="progress-bar-fill" style="width:${learningProgress}%;"></div></div>
+                        <div class="progress-text">学习进度 ${learningProgress}%</div>
                     </div>
                     ${btnHtml}
                 </div>
@@ -1394,12 +1707,12 @@ function updateOverview(stats) {
     document.getElementById('unlearnedSections').textContent = stats.unlearnedSections;
     document.getElementById('totalSections').textContent = stats.totalSections;
 
-    document.getElementById('quizAccuracyPct').textContent = stats.quizAccuracy + '%';
-    document.getElementById('quizAccuracyBar').style.width = stats.quizAccuracy + '%';
-    document.getElementById('quizAccuracyRing').setAttribute('stroke-dashoffset', circumference - (stats.quizAccuracy / 100 * circumference));
-    document.getElementById('quizCorrectCount').textContent = stats.quizCorrect;
-    document.getElementById('quizWrongCount').textContent = stats.quizWrong;
-    document.getElementById('quizTotalCount').textContent = stats.quizTotal;
+    document.getElementById('quizAccuracyPct').textContent = stats.quizFirstAccuracy + '%';
+    document.getElementById('quizAccuracyBar').style.width = stats.quizFirstAccuracy + '%';
+    document.getElementById('quizAccuracyRing').setAttribute('stroke-dashoffset', circumference - (stats.quizFirstAccuracy / 100 * circumference));
+    document.getElementById('quizBestAccuracy').textContent = stats.quizFirstBestAccuracy + '%';
+    document.getElementById('quizAvgAccuracy').textContent = stats.quizFirstAverageAccuracy + '%';
+    document.getElementById('quizAttemptCount').textContent = stats.quizFirstAttemptCount;
 }
 
 function filterCourses(type, el) {
@@ -1428,6 +1741,7 @@ function startLearning(courseId) {
     currentCourseId = courseId;
     currentChapterIndex = 0;
     currentSectionIndex = 0;
+    currentLearningMode = 'video';
     let course = getCourseById(courseId);
     if (!course || !course.chapters || course.chapters.length === 0) return;
     currentSectionId = course.chapters[0].sections[0].id;
@@ -1438,23 +1752,44 @@ function startLearning(courseId) {
 }
 
 function continueCourse(courseId) {
-    startLearning(courseId);
+    const course = getCourseById(courseId);
+    if (!course || !course.chapters || !course.chapters.length) return;
+    currentCourseId = courseId;
+    currentLearningMode = 'video';
+    let found = null;
+    course.chapters.some((chapter, ci) => chapter.sections.some((section, si) => {
+        if (!isSectionComplete(course, ci, si)) {
+            found = { ci, si, section };
+            return true;
+        }
+        return false;
+    }));
+    if (!found) {
+        found = { ci: 0, si: 0, section: course.chapters[0].sections[0] };
+    }
+    currentChapterIndex = found.ci;
+    currentSectionIndex = found.si;
+    currentSectionId = found.section.id;
+    showPage('page-video-learning');
+    document.getElementById('videoBreadcrumbCourse').textContent = course.name;
+    renderChapterTree();
+    renderVideoSection();
 }
 
 function goCourseQuiz(courseId) {
     const course = getCourseById(courseId);
     if (!course) return;
-    currentCourseId = courseId;
-    currentQuizCourseId = courseId;
-    currentChapterIndex = 0;
-    currentQuizChapterIndex = 0;
-    const ch = course.chapters[0];
-    const quizData = ch ? (getChapterQuiz(ch.id) || course.quiz || []) : (course.quiz || []);
-    if (!quizData.length) {
-        alert('当前课程暂无章节测验数据。');
+    const target = findCourseQuizTarget(course, true);
+    if (!target) {
+        alert('请先完成任意一个章节的全部视频和图文学习，再进入章节测验。');
+        continueCourse(courseId);
         return;
     }
-    openQuizWithData(course, quizData, ch ? ch.title : '章节');
+    currentCourseId = courseId;
+    currentQuizCourseId = courseId;
+    currentChapterIndex = target.index;
+    currentQuizChapterIndex = target.index;
+    openQuizWithData(course, target.quizData, target.chapter.title);
 }
 
 function viewResult(courseId) {
@@ -1524,12 +1859,11 @@ function renderChapterTree() {
     if (!course) return;
     const tree = document.getElementById('chapterTree');
     let html = '';
-    let totalSections = 0, doneSections = 0, activeSectionOrder = 0, sectionOrder = 0;
+    let totalSections = 0, doneSections = 0;
     course.chapters.forEach((ch, ci) => {
         let isOpen = (ci === currentChapterIndex);
         let sectionHtml = '';
         ch.sections.forEach((sec, si) => {
-            sectionOrder++;
             totalSections++;
             let cls = '';
             let isActive = (sec.id === currentSectionId);
@@ -1539,7 +1873,6 @@ function renderChapterTree() {
                 cls += ' done';
                 doneSections++;
             }
-            if (isActive) activeSectionOrder = sectionOrder;
             sectionHtml += `<div class="section-item ${cls}" onclick="selectSection('${sec.id}', ${ci}, ${si})" data-section-id="${sec.id}">${sec.title}</div>`;
         });
         html += `<div class="chapter-node">
@@ -1553,8 +1886,7 @@ function renderChapterTree() {
     });
     tree.innerHTML = html;
 
-    let progressPosition = Math.max(doneSections, activeSectionOrder);
-    let progressPct = totalSections ? Math.round(progressPosition / totalSections * 100) : 0;
+    let progressPct = getCourseLearningProgress(course);
     const progressText = document.getElementById('courseProgressText');
     if (progressText) progressText.textContent = progressPct + '%';
     const progressFill = document.getElementById('courseProgressFill');
@@ -1569,10 +1901,13 @@ function renderChapterQuizEntry(course) {
     const hasQuiz = ch && getChapterQuiz(ch.id);
     const quizRecord = ch ? getChapterQuizRecord(course.id, ch.id) : null;
     const chapterLearned = isChapterComplete(course, currentChapterIndex);
-    if (quizRecord || (course.quizStatus === 'completed' && isCourseVideoComplete(course))) {
+    if (quizRecord) {
         panel.innerHTML = `
-            <button class="chapter-quiz-entry" type="button" onclick="viewChapterResult(${course.id}, ${currentChapterIndex})">
-                <span>📊</span><span>查看学习测验结果</span>
+            <button class="chapter-quiz-entry" type="button" onclick="startChapterQuiz()">
+                <span>📝</span><span>再次进行章节测验</span>
+            </button>
+            <button class="chapter-quiz-entry secondary" type="button" onclick="viewChapterResult(${course.id}, ${currentChapterIndex})">
+                <span>📊</span><span>查看测验结果</span>
             </button>
             <div class="quiz-note">本章学习进度 ${quizRecord ? quizRecord.learningProgress : 100}% · 最近正确率 ${quizRecord ? quizRecord.latestAccuracy : '--'}%</div>
         `;
@@ -1593,9 +1928,59 @@ function renderChapterQuizEntry(course) {
     }
 }
 
+function switchLearningMode(mode) {
+    currentLearningMode = mode === 'article' ? 'article' : 'video';
+    document.getElementById('modeVideoTab').classList.toggle('active', currentLearningMode === 'video');
+    document.getElementById('modeArticleTab').classList.toggle('active', currentLearningMode === 'article');
+    document.getElementById('videoLearningPanel').classList.toggle('active', currentLearningMode === 'video');
+    document.getElementById('articleLearningPanel').classList.toggle('active', currentLearningMode === 'article');
+    if (currentLearningMode === 'article') {
+        window.setTimeout(handleArticleScroll, 0);
+    }
+}
+
+function updateLearningPartStatus() {
+    const course = getCourseById(currentCourseId);
+    const section = course && currentSectionId ? getSectionCompletionState(course, currentSectionId) : { video: false, article: false };
+    const videoEl = document.getElementById('videoPartStatus');
+    const articleEl = document.getElementById('articlePartStatus');
+    if (videoEl) {
+        videoEl.textContent = section.video ? '视频已完成' : '视频未完成';
+        videoEl.classList.toggle('done', section.video);
+    }
+    if (articleEl) {
+        articleEl.textContent = section.article ? '图文已完成' : '图文未完成';
+        articleEl.classList.toggle('done', section.article);
+    }
+}
+
+function handleArticleScroll() {
+    const course = getCourseById(currentCourseId);
+    const panel = document.getElementById('articleContentSection');
+    const fill = document.getElementById('articleReadProgressFill');
+    if (!course || !currentSectionId || !panel) return;
+    const maxScroll = panel.scrollHeight - panel.clientHeight;
+    const pct = maxScroll <= 0 ? 100 : Math.min(100, Math.round(panel.scrollTop / maxScroll * 100));
+    if (fill) fill.style.width = pct + '%';
+    if (pct >= 98) {
+        markSectionPartComplete(course, currentSectionId, 'article');
+        updateLearningPartStatus();
+        renderChapterTree();
+        checkSectionLearningComplete(course);
+    }
+}
+
 function toggleChapter(ci) {
+    const course = getCourseById(currentCourseId);
+    const chapter = course && course.chapters ? course.chapters[ci] : null;
+    if (!chapter) return;
+    clearVideoInterval();
     currentChapterIndex = ci;
+    currentSectionIndex = 0;
+    currentLearningMode = 'video';
+    currentSectionId = chapter.sections && chapter.sections[0] ? chapter.sections[0].id : null;
     renderChapterTree();
+    renderVideoSection();
 }
 
 function selectSection(sectionId, ci, si) {
@@ -1606,8 +1991,9 @@ function selectSection(sectionId, ci, si) {
     // 如果跳到之前已完成的节，标记为done
     renderChapterTree();
     renderVideoSection();
-    // 滚动讲义到顶部
-    document.getElementById('handoutSection').scrollTop = 0;
+    // 滚动图文内容到顶部
+    const articlePanel = document.getElementById('articleContentSection');
+    if (articlePanel) articlePanel.scrollTop = 0;
 }
 
 function renderVideoSection() {
@@ -1628,18 +2014,28 @@ function renderVideoSection() {
     const diff = getDifficultyLabel(course.difficulty);
     document.getElementById('handoutMeta').textContent = '时长：' + section.duration + ' | 难度等级：' + diff.text + ' ' + diff.stars;
     document.getElementById('handoutBody').innerHTML = section.handout || '<p>暂无讲义内容</p>';
+    document.getElementById('articleContentTitle').textContent = section.title;
+    document.getElementById('articleContentBody').innerHTML = section.handout || '<p>暂无图文内容</p>';
+    const articlePanel = document.getElementById('articleContentSection');
+    if (articlePanel) articlePanel.scrollTop = 0;
+    const articleFill = document.getElementById('articleReadProgressFill');
+    if (articleFill) articleFill.style.width = isSectionPartComplete(course, currentSectionId, 'article') ? '100%' : '0%';
+    switchLearningMode(currentLearningMode);
+    updateLearningPartStatus();
 
     // 视频相关
     resetVideo(section.duration);
+    if (isSectionPartComplete(course, currentSectionId, 'video')) {
+        videoCurrentTime = videoDuration;
+        updateVideoUI();
+        document.getElementById('videoHint').textContent = '视频已完成，可再次播放复习';
+    }
     const completeHint = document.getElementById('sectionCompleteHint');
     completeHint.style.display = 'none';
     completeHint.innerHTML = `
-        <span class="complete-text">✅ 你已完成本章节的学习</span>
+        <span class="complete-text">✅ 本节视频和图文均已完成。</span>
         <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
     `;
-
-    // 检查是否是最后一节
-    checkLastSection(course);
 
     // 更新章节测验按钮状态
     updateQuizButtonState();
@@ -1667,6 +2063,10 @@ function togglePlay() {
 }
 
 function playVideo() {
+    if (videoCurrentTime >= videoDuration) {
+        videoCurrentTime = 0;
+        updateVideoUI();
+    }
     videoPlaying = true;
     document.getElementById('playBtn').textContent = '⏸';
     document.getElementById('videoHint').textContent = '播放中...';
@@ -1702,11 +2102,31 @@ function updateVideoUI() {
 
 function onVideoEnd() {
     document.getElementById('videoHint').textContent = '播放完成';
-    document.getElementById('sectionCompleteHint').style.display = 'flex';
     const course = getCourseById(currentCourseId);
-    if (course && currentSectionId) markSectionComplete(course, currentSectionId);
+    if (course && currentSectionId) markSectionPartComplete(course, currentSectionId, 'video');
+    updateLearningPartStatus();
     renderChapterTree();
-    checkLastSection(course);
+    checkSectionLearningComplete(course);
+}
+
+function checkSectionLearningComplete(course) {
+    if (!course || !currentSectionId) return;
+    const hint = document.getElementById('sectionCompleteHint');
+    const state = getSectionCompletionState(course, currentSectionId);
+    if (state.video && state.article) {
+        hint.style.display = 'flex';
+        hint.innerHTML = `
+            <span class="complete-text">✅ 本节视频和图文均已完成。你可以继续学习任意章节，完成本章全部小节后开放章节测验。</span>
+            <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
+        `;
+        checkLastSection(course);
+    } else {
+        hint.style.display = 'flex';
+        hint.innerHTML = `
+            <span class="complete-text">当前小节尚未完成：${state.video ? '视频已完成' : '请完整播放视频'}；${state.article ? '图文已完成' : '请阅读图文到底'}。</span>
+            <button class="btn btn-outline btn-sm" onclick="switchLearningMode('${state.video ? 'article' : 'video'}')">${state.video ? '去读图文' : '去看视频'}</button>
+        `;
+    }
 }
 
 function changeSpeed() {
@@ -1722,7 +2142,7 @@ function checkLastSection(course) {
     let ch = course.chapters[currentChapterIndex];
     if (!ch) return;
     let lastSec = ch.sections[ch.sections.length - 1];
-    if (currentSectionId === lastSec.id && videoCurrentTime >= videoDuration) {
+    if (currentSectionId === lastSec.id && isChapterComplete(course, currentChapterIndex)) {
         document.getElementById('sectionCompleteHint').style.display = 'flex';
         document.getElementById('sectionCompleteHint').innerHTML = `
             <span class="complete-text">✅ 你已完成本章节（${ch.title}）的学习，是否进行章节测验？</span>
@@ -1741,12 +2161,19 @@ function nextSection() {
         document.getElementById('sectionCompleteHint').style.display = 'none';
         selectSection(nextSec.id, currentChapterIndex, currentSectionIndex + 1);
     } else {
-        // 当前章最后一节完成，提示测验
+        // 当前章最后一节完成，按本章学习完成状态提示
         document.getElementById('sectionCompleteHint').style.display = 'flex';
-        document.getElementById('sectionCompleteHint').innerHTML = `
-            <span class="complete-text">✅ 你已完成本章节（${ch.title}）的学习，是否进行章节测验？</span>
-            <button class="btn btn-primary btn-sm" onclick="startChapterQuiz()">立即测验</button>
-        `;
+        if (isChapterComplete(course, currentChapterIndex)) {
+            document.getElementById('sectionCompleteHint').innerHTML = `
+                <span class="complete-text">✅ 你已完成本章节（${ch.title}）的学习，是否进行章节测验？</span>
+                <button class="btn btn-primary btn-sm" onclick="startChapterQuiz()">立即测验</button>
+            `;
+        } else {
+            document.getElementById('sectionCompleteHint').innerHTML = `
+                <span class="complete-text">本章还有视频或图文未完成，你可以在目录中自由选择任意章节继续学习。</span>
+                <button class="btn btn-outline btn-sm" onclick="switchLearningMode('video')">继续学习</button>
+            `;
+        }
     }
 }
 
@@ -1765,6 +2192,10 @@ function startChapterQuiz() {
         alert('当前章节暂无测验数据，请选择其他章节。');
         return;
     }
+    if (!canEnterChapterQuiz(course, currentChapterIndex)) {
+        alert('请先完成本章全部课程学习，再进入章节测验。');
+        return;
+    }
     document.getElementById('sectionCompleteHint').style.display = 'none';
     currentQuizCourseId = currentCourseId;
     currentQuizChapterIndex = currentChapterIndex;
@@ -1779,6 +2210,10 @@ function jumpToChapterQuiz(ci, chapterId) {
     }
     const course = getCourseById(currentCourseId);
     if (!course) return;
+    if (!canEnterChapterQuiz(course, ci)) {
+        alert('请先完成本章全部课程学习，再进入章节测验。');
+        return;
+    }
     currentChapterIndex = ci;
     currentQuizCourseId = currentCourseId;
     currentQuizChapterIndex = ci;
@@ -1820,6 +2255,10 @@ function startQuiz() {
     closeModalQuizPrompt();
     const course = getCourseById(currentCourseId);
     if (!course) return;
+    if (!canEnterChapterQuiz(course, currentChapterIndex)) {
+        alert('请先完成本章全部课程学习，再进入章节测验。');
+        return;
+    }
     currentQuizCourseId = currentCourseId;
     currentQuizChapterIndex = currentChapterIndex;
     let ch = course.chapters[currentChapterIndex];
@@ -1833,7 +2272,7 @@ function openQuizWithData(course, quizData, chapterTitle) {
     showPage('page-quiz');
     document.getElementById('quizBreadcrumbCourse').textContent = course.name;
     document.getElementById('quizTotal').textContent = quizData.length;
-    document.getElementById('quizTitle').textContent = chapterTitle + ' 章节测验';
+    document.getElementById('quizTitle').textContent = getQuizDisplayTitle(chapterTitle) + ' - 测验';
     document.getElementById('quizProgress').textContent = '0/' + quizData.length;
 
     quizAnswers = {};
@@ -1888,10 +2327,10 @@ function submitQuiz() {
     if (!course) return;
     let unanswered = currentQuizData.length - Object.keys(quizAnswers).length;
     if (unanswered > 0) {
-        document.getElementById('modalSubmitMsg').textContent = '还有 ' + unanswered + ' 道题未作答，提交后将一起生成查缺补漏分析。';
-    } else {
-        document.getElementById('modalSubmitMsg').textContent = '提交后将生成查缺补漏分析。';
+        alert('还有 ' + unanswered + ' 道题未作答，请完成全部题目后再提交。');
+        return;
     }
+    document.getElementById('modalSubmitMsg').textContent = '提交后将生成查缺补漏分析。';
     document.getElementById('modalSubmitConfirm').style.display = 'flex';
 }
 
@@ -1918,9 +2357,8 @@ function closeModal(id) {
 function renderKnowledgeMastery(mastery) {
     const items = mastery || [];
     const mastered = items.filter(item => item.state.cls === 'mastered').length;
-    const basic = items.filter(item => item.state.cls === 'basic').length;
     const weak = items.filter(item => item.state.cls === 'weak').length;
-    document.getElementById('knowledgeMasterySummary').textContent = '已掌握 ' + mastered + ' 项 · 基本掌握 ' + basic + ' 项 · 需强化 ' + weak + ' 项';
+    document.getElementById('knowledgeMasterySummary').textContent = '已掌握 ' + mastered + ' 项 · 需强化 ' + weak + ' 项';
     document.getElementById('knowledgeMasteryGrid').innerHTML = items.length ? items.map(item => `
         <div class="km-item">
             <div class="km-item-head">
@@ -1942,44 +2380,54 @@ function formatQuizDate(timestamp) {
         + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
 }
 
+function getQuizDisplayTitle(title) {
+    const text = (title || '').trim();
+    return text.replace(/^第[一二三四五六七八九十百\d]+章\s*/, '') || '章节';
+}
+
+function getSelectedAttemptIndex(history, selectedAttempt) {
+    if (!history.length) return -1;
+    if (!selectedAttempt) return history.length - 1;
+    const sameObjectIndex = history.findIndex(item => item === selectedAttempt);
+    if (sameObjectIndex >= 0) return sameObjectIndex;
+    const sameTimeIndex = history.findIndex(item => item.completedAt && item.completedAt === selectedAttempt.completedAt);
+    return sameTimeIndex >= 0 ? sameTimeIndex : history.length - 1;
+}
+
 function renderQuizHistory(course, chapterIndex, record, selectedAttempt) {
-    const countEl = document.getElementById('quizHistoryCount');
-    const listEl = document.getElementById('quizHistoryList');
-    if (!countEl || !listEl) return;
+    const selectEl = document.getElementById('quizAttemptSelect');
+    const summaryEl = document.getElementById('quizAttemptSummary');
+    if (!selectEl || !summaryEl) return;
 
     const history = getQuizHistory(record);
-    countEl.textContent = '共 ' + history.length + ' 次';
     if (!history.length) {
-        listEl.innerHTML = '<div class="qh-empty">当前章节还没有历史测验记录。</div>';
+        selectEl.innerHTML = '<option value="">暂无测验记录</option>';
+        selectEl.disabled = true;
+        summaryEl.textContent = '当前章节还没有历史测验记录';
         return;
     }
 
-    const selectedCompletedAt = selectedAttempt && selectedAttempt.completedAt;
-    listEl.innerHTML = history.slice().reverse().map((item, reverseIndex) => {
+    const selectedIndex = getSelectedAttemptIndex(history, selectedAttempt);
+    const selectedDisplayIndex = selectedIndex >= 0 ? selectedIndex + 1 : history.length;
+    selectEl.disabled = false;
+    selectEl.innerHTML = history.slice().reverse().map((item, reverseIndex) => {
         const attemptIndex = history.length - reverseIndex - 1;
-        const isCurrent = selectedCompletedAt
-            ? item.completedAt === selectedCompletedAt
-            : attemptIndex === history.length - 1;
-        const scoreClass = item.accuracy >= 80 ? 'good' : '';
-        return `
-            <div class="qh-item ${isCurrent ? 'current' : ''}">
-                <div>
-                    <div class="qh-attempt">第 ${item.attempt || attemptIndex + 1} 次</div>
-                    <div class="qh-time">${formatQuizDate(item.completedAt)}</div>
-                </div>
-                <div class="qh-main">
-                    <div class="qh-score-row">
-                        <span class="qh-score ${scoreClass}">${item.accuracy || 0}%</span>
-                        <span class="qh-detail">${item.correct || 0}/${item.total || 0} 题答对 · 答错 ${item.wrong || 0} 题 · 未答 ${item.unanswered || 0} 题 · 用时 ${formatTime(item.elapsedSeconds || 0)}</span>
-                        ${isCurrent ? '<span class="qh-current">当前查看</span>' : ''}
-                    </div>
-                </div>
-                <div class="qh-action">
-                    <button class="btn btn-outline btn-sm" type="button" onclick="viewQuizAttempt(${course.id}, ${chapterIndex}, ${attemptIndex})">查看本次结果</button>
-                </div>
-            </div>
-        `;
+        const displayAttempt = attemptIndex + 1;
+        const isLatest = attemptIndex === history.length - 1;
+        const title = isLatest ? '本次测验（第 ' + displayAttempt + ' 次）' : '第 ' + displayAttempt + ' 次';
+        return '<option value="' + attemptIndex + '">' + title + '｜' + (item.accuracy || 0) + '%｜' + formatQuizDate(item.completedAt) + '</option>';
     }).join('');
+    selectEl.value = String(selectedIndex);
+    summaryEl.textContent = selectedIndex === history.length - 1
+        ? '当前显示本次测验结果，共 ' + history.length + ' 次记录'
+        : '当前回看第 ' + selectedDisplayIndex + ' 次测验结果，共 ' + history.length + ' 次记录';
+}
+
+function selectQuizAttempt(value) {
+    if (value === '') return;
+    const attemptIndex = Number(value);
+    if (!Number.isInteger(attemptIndex)) return;
+    viewQuizAttempt(currentQuizCourseId, currentQuizChapterIndex, attemptIndex);
 }
 
 function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, selectedAttempt) {
@@ -1990,30 +2438,43 @@ function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, sele
     const total = result.total;
     const correct = result.correct;
     const wrong = result.wrong;
-    const unanswered = result.unanswered;
     const wrongItems = result.wrongItems;
+    const questionItems = result.questionItems;
     const pct = result.accuracy;
     const course = getCourseById(currentCourseId);
     const resultChapter = course && course.chapters ? course.chapters[currentQuizChapterIndex] : null;
     const learningProgress = storedRecord ? storedRecord.learningProgress : getChapterLearningProgress(course, currentQuizChapterIndex);
     const history = getQuizHistory(storedRecord);
     const attempts = history.length || (storedRecord ? storedRecord.attempts : 1);
+    const selectedAttemptIndex = getSelectedAttemptIndex(history, selectedAttempt);
+    const selectedAttemptNo = selectedAttemptIndex >= 0 ? selectedAttemptIndex + 1 : attempts;
+    const attemptLabel = selectedAttemptIndex === history.length - 1
+        ? '本次：第' + selectedAttemptNo + '次 / 共' + attempts + '次'
+        : '当前查看：第' + selectedAttemptNo + '次 / 共' + attempts + '次';
     const bestAccuracy = storedRecord
         ? Math.max(storedRecord.bestAccuracy || 0, ...history.map(item => item.accuracy || 0))
         : pct;
-    document.getElementById('resultTitle').textContent = (resultChapter ? resultChapter.title + ' - ' : '') + '测验结果';
+    currentResultContext = {
+        feedbackKey: getFeedbackKey(course, resultChapter, selectedAttemptNo),
+        attemptNo: selectedAttemptNo,
+        attempts,
+        learningProgress,
+        accuracy: pct,
+        questionItems
+    };
+    document.getElementById('resultTitle').textContent = (resultChapter ? getQuizDisplayTitle(resultChapter.title) + ' - ' : '') + '测验结果';
 
     document.getElementById('resultScore').textContent = pct + '%';
     document.getElementById('resultPct').textContent = pct + '%';
     document.getElementById('rCorrect').textContent = correct;
     document.getElementById('rWrong').textContent = wrong;
-    document.getElementById('rUnanswered').textContent = unanswered;
     document.getElementById('rTotal').textContent = total;
     document.getElementById('resultLearningProgress').textContent = '本章学习进度：' + learningProgress + '%';
-    document.getElementById('resultAttempts').textContent = '测验次数：' + attempts + '次';
+    document.getElementById('resultAttempts').textContent = attemptLabel;
     document.getElementById('resultBestAccuracy').textContent = '历史最高：' + bestAccuracy + '%';
     renderKnowledgeMastery(result.mastery);
     renderQuizHistory(course, currentQuizChapterIndex, storedRecord, selectedAttempt);
+    renderCourseFeedbackContext(course, resultChapter);
 
     // 环形图
     let circumference = 389.6;
@@ -2024,31 +2485,438 @@ function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, sele
     document.getElementById('reinforceAlert').style.display = 'block';
     document.getElementById('reinforceItems').innerHTML = buildLearningPathHtml(wrongItems, pct);
 
-    // 错题解析
-    let analysisHtml = '';
-    if (wrongItems.length === 0) {
-        analysisHtml = '<div style="text-align:center;padding:30px;color:var(--success);font-size:16px;">🎉 全部回答正确！</div>';
-    } else {
-        wrongItems.forEach((w, i) => {
-            let userAns = w.userAnswer === -1 ? '未作答' : (String.fromCharCode(65 + w.userAnswer) + '. ' + w.opts[w.userAnswer]);
-            let correctAns = String.fromCharCode(65 + w.correct) + '. ' + w.opts[w.correct];
-            analysisHtml += `<div class="wa-card">
-                <div class="wa-header">第${w.questionNo}题</div>
-                <div class="wa-question">${w.q}</div>
-                <div class="wa-answer-row">
-                    <span class="your-answer">你的答案：${userAns}</span>
-                    <span class="correct-answer">正确答案：${correctAns}</span>
-                </div>
-                <div class="wa-explanation"><strong>解析：</strong>${w.explain}</div>
-            </div>`;
-        });
-    }
-    document.getElementById('wrongAnalysis').innerHTML = analysisHtml;
+    renderQuestionReview(questionItems);
 }
+
+function getQuestionStatusLabel(status) {
+    if (status === 'correct') return '答对';
+    return '答错';
+}
+
+function escapeResultHtml(text) {
+    return String(text == null ? '' : text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function formatAnswerText(question, answerIndex) {
+    if (answerIndex === -1 || answerIndex === undefined || answerIndex === null) return '未作答';
+    return String.fromCharCode(65 + answerIndex) + '. ' + question.opts[answerIndex];
+}
+
+function renderQuestionReview(items, filter, activeQuestionNo) {
+    const target = document.getElementById('questionReview');
+    if (!target) return;
+    const questions = items || [];
+    const currentFilter = filter || 'all';
+    const filtered = currentFilter === 'all' ? questions : questions.filter(item => item.status === currentFilter);
+    const defaultQuestion = questions.find(item => item.status !== 'correct') || questions[0];
+    const activeNo = activeQuestionNo
+        || (currentFilter === 'all' && defaultQuestion ? defaultQuestion.questionNo : null)
+        || (filtered[0] ? filtered[0].questionNo : null);
+    const active = activeNo ? (questions.find(item => item.questionNo === activeNo) || null) : null;
+    const counts = {
+        correct: questions.filter(item => item.status === 'correct').length,
+        wrong: questions.filter(item => item.status === 'wrong').length
+    };
+    const filterItems = [
+        { key: 'all', text: '全部 ' + questions.length },
+        { key: 'wrong', text: '答错 ' + counts.wrong },
+        { key: 'correct', text: '答对 ' + counts.correct }
+    ];
+    target.dataset.filter = currentFilter;
+    target.innerHTML = `
+        <div class="qr-head">
+            <div>
+                <div class="qr-title">答题明细与解析</div>
+                <div class="qr-subtitle">提交前必须完成全部题目；提交后通过题号快速查看每道题对错，再点击题号查看完整解析。正确题也保留解析，便于复盘干扰选项和相关知识点。</div>
+            </div>
+            <div class="qr-summary">答对 ${counts.correct} 题 · 答错 ${counts.wrong} 题</div>
+        </div>
+        <div class="qr-filters">
+            ${filterItems.map(item => `<button class="qr-filter ${item.key === currentFilter ? 'active' : ''}" type="button" onclick="filterQuestionReview('${item.key}')">${item.text}</button>`).join('')}
+        </div>
+        <div class="qr-layout">
+            <div>
+                <div class="qr-number-grid">
+                    ${filtered.length ? filtered.map(item => `<button class="qr-number ${item.status} ${active && item.questionNo === active.questionNo ? 'active' : ''}" type="button" onclick="selectQuestionReview(${item.questionNo})">${item.questionNo}</button>`).join('') : '<div class="qr-empty">当前筛选下暂无题目</div>'}
+                </div>
+                <div class="qr-legend">
+                    <span><i class="qr-dot correct"></i>答对</span>
+                    <span><i class="qr-dot wrong"></i>答错</span>
+                </div>
+            </div>
+            <div class="qr-detail" id="questionReviewDetail">${active ? buildQuestionReviewDetail(active) : '<div class="qr-empty">请选择题号查看解析</div>'}</div>
+        </div>
+    `;
+}
+
+function filterQuestionReview(filter) {
+    if (!currentResultContext || !currentResultContext.questionItems) return;
+    renderQuestionReview(currentResultContext.questionItems, filter);
+}
+
+function selectQuestionReview(questionNo) {
+    if (!currentResultContext || !currentResultContext.questionItems) return;
+    const filter = document.getElementById('questionReview') ? document.getElementById('questionReview').dataset.filter : 'all';
+    renderQuestionReview(currentResultContext.questionItems, filter || 'all', questionNo);
+}
+
+function buildQuestionReviewDetail(question) {
+    const userAnswerText = formatAnswerText(question, question.userAnswer);
+    const correctAnswerText = formatAnswerText(question, question.correct);
+    const optionsHtml = question.opts.map((option, index) => {
+        const isCorrect = index === question.correct;
+        const isUserWrong = question.userAnswer === index && !isCorrect;
+        const classes = ['qr-option'];
+        if (isCorrect) classes.push('correct-answer');
+        if (isUserWrong) classes.push('user-wrong');
+        const suffix = isCorrect ? '正确答案' : (isUserWrong ? '你的选择' : '');
+        return `<div class="${classes.join(' ')}">
+            <span class="qr-option-tag">${String.fromCharCode(65 + index)}</span>
+            <span>${escapeResultHtml(option)}${suffix ? ' · ' + suffix : ''}</span>
+        </div>`;
+    }).join('');
+    return `
+        <div class="qr-detail-head">
+            <div class="qr-detail-title">第${question.questionNo}题</div>
+            <span class="qr-status ${question.status}">${getQuestionStatusLabel(question.status)}</span>
+        </div>
+        <div class="qr-question">${escapeResultHtml(question.q)}</div>
+        <div class="qr-options">${optionsHtml}</div>
+        <div class="qr-explanation">
+            <strong>你的答案：</strong>${escapeResultHtml(userAnswerText)}<br>
+            <strong>正确答案：</strong>${escapeResultHtml(correctAnswerText)}<br>
+            <strong>解析：</strong>${escapeResultHtml(question.explain)}
+        </div>
+    `;
+}
+
+function renderCourseFeedbackContext(course, chapter) {
+    const contextEl = document.getElementById('courseFeedbackContext');
+    const tipEl = document.getElementById('courseFeedbackTip');
+    if (!contextEl) return;
+    const courseName = course ? course.name : '基础课程';
+    const chapterName = chapter ? getQuizDisplayTitle(chapter.title) : '当前章节';
+    const contextParts = [courseName, chapterName];
+    if (currentResultContext && currentResultContext.attemptNo) {
+        contextParts.push('第' + currentResultContext.attemptNo + '次测验');
+    }
+    contextEl.textContent = contextParts.join('｜');
+    renderCourseFeedbackState();
+}
+
+function readCourseFeedbackList() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(COURSE_FEEDBACK_STORAGE_KEY) || '[]');
+        return Array.isArray(stored) ? stored : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function getFeedbackKey(course, chapter, attemptNo) {
+    const courseId = course ? course.id : (currentQuizCourseId || currentCourseId || 'course');
+    const chapterId = chapter ? chapter.id : ('chapter_' + (Number.isInteger(currentQuizChapterIndex) ? currentQuizChapterIndex : 0));
+    return [courseId, chapterId, attemptNo || 1].join('_');
+}
+
+function getCurrentAttemptFeedback() {
+    const context = currentResultContext || {};
+    if (!context.feedbackKey) return null;
+    return readCourseFeedbackList().find(item => item.feedbackKey === context.feedbackKey) || null;
+}
+
+function setCourseFeedbackDisabled(disabled) {
+    const typeEl = document.getElementById('courseFeedbackType');
+    const contentEl = document.getElementById('courseFeedbackContent');
+    const submitBtn = document.getElementById('courseFeedbackSubmitBtn');
+    if (typeEl) typeEl.disabled = disabled;
+    if (contentEl) contentEl.disabled = disabled;
+    if (submitBtn) {
+        submitBtn.disabled = disabled;
+        submitBtn.textContent = disabled ? '本次已反馈' : '提交反馈';
+    }
+}
+
+function renderCourseFeedbackState() {
+    const tipEl = document.getElementById('courseFeedbackTip');
+    const recordEl = document.getElementById('courseFeedbackRecord');
+    const contentEl = document.getElementById('courseFeedbackContent');
+    const existing = getCurrentAttemptFeedback();
+    if (existing) {
+        setCourseFeedbackDisabled(true);
+        if (contentEl) contentEl.value = '';
+        if (recordEl) {
+            recordEl.classList.add('show');
+            recordEl.innerHTML = `
+                <div class="cf-record-head">
+                    <div class="cf-record-title">本次测验反馈记录</div>
+                    <div class="cf-record-time">${escapeResultHtml(existing.time)}</div>
+                </div>
+                <div class="cf-record-content">${escapeResultHtml(existing.content)}</div>
+                <div class="cf-record-meta">反馈类型：${escapeResultHtml(existing.type)} · 状态：${escapeResultHtml(existing.status)}</div>
+            `;
+        }
+        if (tipEl) tipEl.textContent = '本次测验已提交反馈，不能重复提交；重新测验后可对新的测验结果再次反馈。';
+    } else {
+        setCourseFeedbackDisabled(false);
+        if (recordEl) {
+            recordEl.classList.remove('show');
+            recordEl.innerHTML = '';
+        }
+        if (tipEl) tipEl.textContent = '每次测验仅可提交一次反馈；提交后会在本页形成记录，并进入教师课程管理端。';
+    }
+}
+
+function getCurrentStudentName() {
+    try {
+        const user = JSON.parse(localStorage.getItem('life_med_user') || '{}');
+        return user.name || user.username || user.realName || '当前学生';
+    } catch (e) {
+        return '当前学生';
+    }
+}
+
+function submitCourseFeedback() {
+    const typeEl = document.getElementById('courseFeedbackType');
+    const contentEl = document.getElementById('courseFeedbackContent');
+    const tipEl = document.getElementById('courseFeedbackTip');
+    if (!contentEl) return;
+    if (getCurrentAttemptFeedback()) {
+        renderCourseFeedbackState();
+        return;
+    }
+
+    const content = contentEl.value.trim();
+    if (!content) {
+        if (tipEl) tipEl.textContent = '请先填写反馈内容。';
+        contentEl.focus();
+        return;
+    }
+
+    const course = getCourseById(currentQuizCourseId || currentCourseId);
+    const chapterIndex = Number.isInteger(currentQuizChapterIndex)
+        ? currentQuizChapterIndex
+        : (Number.isInteger(currentChapterIndex) ? currentChapterIndex : 0);
+    const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
+    const context = currentResultContext || {};
+    const feedback = {
+        feedbackKey: context.feedbackKey || getFeedbackKey(course, chapter, context.attemptNo || 1),
+        time: formatQuizDate(Date.now()),
+        student: getCurrentStudentName(),
+        course: course ? course.name : '基础课程',
+        chapter: chapter ? getQuizDisplayTitle(chapter.title) : '当前章节',
+        chapterId: chapter ? chapter.id : '',
+        attemptNo: context.attemptNo || 1,
+        attempts: context.attempts || 1,
+        learningProgress: context.learningProgress,
+        accuracy: context.accuracy,
+        type: typeEl ? typeEl.value : '课程内容',
+        content,
+        status: '待处理'
+    };
+
+    const list = readCourseFeedbackList();
+    list.unshift(feedback);
+    try {
+        localStorage.setItem(COURSE_FEEDBACK_STORAGE_KEY, JSON.stringify(list));
+    } catch (e) {}
+
+    contentEl.value = '';
+    renderCourseFeedbackState();
+}
+
+const KNOWLEDGE_POINT_RECOMMENDATIONS = {
+    'DR国际临床分级标准': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_2', reason: '对应国际临床DR严重程度量表，适合回看分级边界。' },
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_1', reason: '补充分级体系的来源、级别对应和临床处理。' }
+        ],
+        references: [
+            { title: '国际临床糖尿病视网膜病变严重程度量表', source: 'AAO/EyeNet糖尿病视网膜病变分级相关资料', focus: '五级分级、NPDR/PDR边界。' },
+            { title: '《眼科学》糖尿病视网膜病变章节', source: '人民卫生出版社《眼科学》眼底病相关章节', focus: '临床表现、筛查和随访原则。' }
+        ]
+    },
+    '4-2-1规则': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_1', reason: '重点覆盖ETDRS分级和重度NPDR判定条件。' },
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_2', reason: '把4-2-1规则放回临床分级场景中理解。' }
+        ],
+        references: [
+            { title: 'ETDRS糖尿病视网膜病变分级资料', source: 'ETDRS研究分级体系与眼底图谱资料', focus: '四象限出血、静脉串珠、IRMA。' },
+            { title: '糖尿病视网膜病变防治指南', source: '中华医学会/眼科学会糖尿病视网膜病变指南', focus: '重度NPDR风险和随访处理。' }
+        ]
+    },
+    'ETDRS分级': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_1', reason: '直接对应ETDRS分级体系详解。' },
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_2', reason: '帮助建立ETDRS与临床分级之间的对应关系。' }
+        ],
+        references: [
+            { title: 'ETDRS Report分级标准', source: 'Early Treatment Diabetic Retinopathy Study公开研究资料', focus: 'ETDRS等级、53级含义。' },
+            { title: '眼底病图谱：糖尿病视网膜病变', source: '临床眼底病学/眼底病图谱', focus: '不同严重程度眼底表现。' }
+        ]
+    },
+    'DCCT强化血糖控制': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_1', sectionId: 's1_1_3', reason: '对应血糖管理和预防策略。' },
+            { courseId: 1, chapterId: 'c1_1', sectionId: 's1_1_1', reason: '补充DR流行病学和风险因素背景。' }
+        ],
+        references: [
+            { title: 'DCCT/EDIC研究结论', source: 'NEJM DCCT/EDIC糖尿病并发症研究资料', focus: '强化血糖控制与微血管并发症风险降低。' },
+            { title: '糖尿病医学诊疗标准', source: 'ADA Standards of Care糖尿病视网膜病变筛查章节', focus: 'HbA1c目标和并发症管理。' }
+        ]
+    },
+    'DR危险因素': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_1', sectionId: 's1_1_1', reason: '梳理DR总体流行趋势和危险因素。' },
+            { courseId: 1, chapterId: 'c1_1', sectionId: 's1_1_2', reason: '重点理解糖尿病病程与DR发生率关系。' },
+            { courseId: 1, chapterId: 'c1_1', sectionId: 's1_1_3', reason: '补强血糖、血压、血脂等可控因素。' }
+        ],
+        references: [
+            { title: '糖尿病视网膜病变筛查共识', source: '中华医学会眼科学分会/糖尿病学分会相关共识', focus: '病程、血糖、血压、血脂等危险因素。' },
+            { title: '《眼科学》糖尿病眼病章节', source: '人民卫生出版社《眼科学》', focus: 'DR病因、分期和预防。' }
+        ]
+    },
+    'DR筛查策略': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_3', sectionId: 's1_3_1', reason: '对应眼底照相筛查技术规范。' },
+            { courseId: 1, chapterId: 'c1_3', sectionId: 's1_3_2', reason: '补充OCT/OCTA在DR诊断中的应用。' }
+        ],
+        references: [
+            { title: '糖尿病视网膜病变筛查指南', source: 'ADA Standards of Care/国内糖尿病视网膜病变筛查指南', focus: '起始筛查时间、筛查频率、首选检查方式。' },
+            { title: '眼底照相筛查规范', source: '眼科影像检查技术规范资料', focus: '拍摄视野、散瞳、图像质量。' }
+        ]
+    },
+    'OCTA与FFA鉴别': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_3', sectionId: 's1_3_2', reason: '对应OCT/OCTA在DR中的应用。' },
+            { courseId: 8, chapterId: 'c8_1', sectionId: 's8_1_1', reason: '补充FFA造影原理和时相判读基础。' }
+        ],
+        references: [
+            { title: 'OCTA与FFA检查对比', source: '眼科影像学教材OCT/OCTA与FFA章节', focus: '无创血流成像、渗漏显示差异。' },
+            { title: '荧光素眼底血管造影判读', source: '临床眼底病学血管造影章节', focus: '高荧光、低荧光、渗漏和无灌注。' }
+        ]
+    },
+    '血压控制目标': {
+        courses: [
+            { courseId: 1, chapterId: 'c1_1', sectionId: 's1_1_3', reason: '对应DR预防策略中的血压管理。' },
+            { courseId: 4, chapterId: 'c4_1', sectionId: 's4_1_1', reason: '补充高血压眼底改变的临床表现。' }
+        ],
+        references: [
+            { title: '糖尿病合并高血压管理建议', source: 'ADA Standards of Care心血管风险管理章节', focus: '血压目标和并发症风险控制。' },
+            { title: '高血压防治指南', source: '中国高血压防治指南', focus: '高血压分级与靶器官损害。' }
+        ]
+    },
+    '房水生成与排出机制': {
+        courses: [
+            { courseId: 2, chapterId: 'c2_1', sectionId: 's2_1_1', reason: '对应房水生成与排出机制。' },
+            { courseId: 2, chapterId: 'c2_1', sectionId: 's2_1_2', reason: '帮助理解眼压升高后的视神经损伤。' }
+        ],
+        references: [
+            { title: '青光眼基础病理生理', source: 'AAO BCSC Glaucoma章节/青光眼学教材', focus: '房水循环、小梁网、葡萄膜巩膜通路。' },
+            { title: '《眼科学》青光眼章节', source: '人民卫生出版社《眼科学》', focus: '眼压形成和青光眼发病机制。' }
+        ]
+    },
+    '青光眼视野检查': {
+        courses: [
+            { courseId: 2, chapterId: 'c2_2', sectionId: 's2_2_1', reason: '对应视野检查与解读。' },
+            { courseId: 2, chapterId: 'c2_2', sectionId: 's2_2_2', reason: '结合OCT结构评估理解结构功能关系。' }
+        ],
+        references: [
+            { title: '标准自动视野检查判读', source: 'AAO BCSC Glaucoma视野检查章节', focus: '旁中心暗点、鼻侧阶梯、弓形暗点。' },
+            { title: '青光眼诊疗指南', source: '中华医学会眼科学分会青光眼诊疗相关指南', focus: '视野缺损模式和随访判断。' }
+        ]
+    },
+    'RNFL厚度评估': {
+        courses: [
+            { courseId: 2, chapterId: 'c2_2', sectionId: 's2_2_2', reason: '直接对应OCT在青光眼结构评估中的应用。' },
+            { courseId: 6, chapterId: 'c6_1', sectionId: 's6_1_2', reason: '补充OCT视网膜层次结构基础。' }
+        ],
+        references: [
+            { title: '青光眼OCT结构评估', source: 'AAO BCSC Glaucoma OCT章节', focus: 'RNFL、GCC、视盘参数。' },
+            { title: 'OCT读片基础', source: '眼科影像学/OCT图谱教材', focus: '视网膜层次和结构指标。' }
+        ]
+    },
+    'AMD发病机制': {
+        courses: [
+            { courseId: 3, chapterId: 'c3_1', sectionId: 's3_1_1', reason: '对应AMD流行病学背景。' },
+            { courseId: 3, chapterId: 'c3_1', sectionId: 's3_1_2', reason: '重点学习干性/湿性AMD病理差异。' }
+        ],
+        references: [
+            { title: 'AMD临床诊疗资料', source: 'AAO Retina/Vitreous AMD章节', focus: '玻璃膜疣、地图样萎缩、CNV。' },
+            { title: '《眼科学》年龄相关性黄斑变性章节', source: '人民卫生出版社《眼科学》', focus: 'AMD分类和临床表现。' }
+        ]
+    },
+    '抗VEGF治疗机制': {
+        courses: [
+            { courseId: 3, chapterId: 'c3_1', sectionId: 's3_1_2', reason: '对应湿性AMD与CNV形成机制。' },
+            { courseId: 1, chapterId: 'c1_3', sectionId: 's1_3_2', reason: '补充黄斑水肿和影像评估基础。' }
+        ],
+        references: [
+            { title: '抗VEGF治疗专家共识', source: '眼底病抗VEGF治疗专家共识/指南', focus: '药物作用机制、适应证和随访。' },
+            { title: '湿性AMD治疗资料', source: 'AAO Retina AMD治疗章节', focus: 'CNV渗漏控制和治疗反应。' }
+        ]
+    },
+    '高血压视网膜病变分级': {
+        courses: [
+            { courseId: 4, chapterId: 'c4_1', sectionId: 's4_1_1', reason: '对应Keith-Wagener-Barker分级。' },
+            { courseId: 4, chapterId: 'c4_1', sectionId: 's4_1_2', reason: '对应Scheie分级与临床应用。' }
+        ],
+        references: [
+            { title: '高血压性视网膜病变教材章节', source: '人民卫生出版社《眼科学》高血压眼底改变章节', focus: 'KWB分级、视网膜出血、棉绒斑、视盘水肿。' },
+            { title: '高血压视网膜病变图谱', source: '临床眼底病学/眼底病图谱', focus: '动静脉交叉压迫征和分级图像对照。' }
+        ]
+    },
+    'RVO分类与并发症': {
+        courses: [
+            { courseId: 5, chapterId: 'c5_1', sectionId: 's5_1_1', reason: '对应CRVO与BRVO差异和并发症。' },
+            { courseId: 8, chapterId: 'c8_1', sectionId: 's8_1_1', reason: '补充血管造影在缺血评估中的作用。' }
+        ],
+        references: [
+            { title: '视网膜静脉阻塞临床指南', source: 'AAO Retina/Vitreous RVO章节或国内RVO诊疗指南', focus: 'BRVO/CRVO分类、缺血型判断、NVG风险。' },
+            { title: '眼底血管病教材章节', source: '临床眼底病学视网膜静脉阻塞章节', focus: '发病部位、黄斑水肿和新生血管并发症。' }
+        ]
+    },
+    'OCT结构分层': {
+        courses: [
+            { courseId: 6, chapterId: 'c6_1', sectionId: 's6_1_1', reason: '对应SD-OCT和SS-OCT技术差异。' },
+            { courseId: 6, chapterId: 'c6_1', sectionId: 's6_1_2', reason: '直接对应正常黄斑OCT结构分层。' }
+        ],
+        references: [
+            { title: 'OCT基础读片资料', source: '眼科OCT图谱/眼科影像学教材', focus: '中心凹、EZ、RPE/Bruch膜复合体。' },
+            { title: 'OCT设备与成像原理', source: 'OCT影像技术教材或设备培训资料', focus: 'SD-OCT、SS-OCT扫描速度和穿透深度。' }
+        ]
+    },
+    'PRP全视网膜光凝': {
+        courses: [
+            { courseId: 7, chapterId: 'c7_1', sectionId: 's7_1_1', reason: '对应激光组织相互作用和光热效应。' },
+            { courseId: 1, chapterId: 'c1_2', sectionId: 's1_2_1', reason: '结合PDR/重度NPDR干预时机理解PRP应用。' }
+        ],
+        references: [
+            { title: '全视网膜光凝治疗资料', source: 'DRS/ETDRS研究和眼底激光治疗教材', focus: 'PRP适应证、光斑参数和治疗风险。' },
+            { title: '眼底激光治疗章节', source: '临床眼底病学/眼底激光治疗教材', focus: '光热效应、治疗范围和并发症管理。' }
+        ]
+    },
+    'FFA判读要点': {
+        courses: [
+            { courseId: 8, chapterId: 'c8_1', sectionId: 's8_1_1', reason: '对应FFA基本原理与时相判定。' },
+            { courseId: 1, chapterId: 'c1_3', sectionId: 's1_3_2', reason: '补充FFA与OCTA/OCT检查差异。' }
+        ],
+        references: [
+            { title: '荧光素眼底血管造影判读', source: '眼科影像学/眼底血管造影教材', focus: '臂-视网膜循环、高荧光、低荧光。' },
+            { title: 'FFA临床图谱', source: '临床眼底病图谱FFA章节', focus: '渗漏、染色、无灌注和CNV表现。' }
+        ]
+    }
+};
 
 function buildLearningPathHtml(wrongItems, accuracy) {
     if (wrongItems.length === 0) {
-        return `<div class="ra-empty">本次测验正确率 ${accuracy}%，当前知识掌握较稳定。建议下一步进入本课程后续章节或选择更高难度病例训练，继续扩展临床应用能力。</div>`;
+        return `<div class="ra-empty">本次测验正确率 ${accuracy}%，当前知识掌握较稳定。建议继续学习本课程后续章节；若需要扩展，可结合教材或指南复盘本章核心概念。</div>`;
     }
 
     const weakMap = new Map();
@@ -2063,59 +2931,145 @@ function buildLearningPathHtml(wrongItems, accuracy) {
     });
 
     const weakItems = Array.from(weakMap.values()).sort((a, b) => b.count - a.count);
+    const configNote = `<div class="ra-config-note">配置逻辑：后台运营人员需先维护知识点库，再在章节课程和测验题目上传时绑定同一知识点；系统根据本次错题命中的知识点，反查课程内容和外部参考资料。</div>`;
     const cards = weakItems.map((item, index) => {
-        const advice = getLearningPathAdvice(item.keyword);
-        const questionText = item.questions.map(n => '第' + n + '题').join('、');
+        const wrongQuestions = uniqueNumbers(item.questions);
+        const relatedQuestions = getKnowledgeQuestionNumbers(item.keyword, currentQuizData);
         return `<div class="ra-item">
-            <div class="ra-main">
-                <div>
-                    <div class="ra-line">
-                        <span class="ra-badge">薄弱项${index + 1}</span>
-                        <span class="ra-name">${item.keyword}</span>
-                    </div>
-                    <div class="ra-meta">知识追踪：关联 ${questionText}，本次出错 ${item.count} 次</div>
-                </div>
-                <div class="ra-suggestion">
-                    <span class="ra-suggestion-label">推荐下一步学习内容</span>
-                    ${advice}
-                </div>
+            <div class="ra-line">
+                <span class="ra-badge">薄弱项${index + 1}</span>
+                <span class="ra-name">${item.keyword}</span>
             </div>
-            <div class="ra-path">
-                <span class="ra-step">回看对应讲义</span>
-                <span class="ra-arrow">→</span>
-                <span class="ra-step">梳理核心概念</span>
-                <span class="ra-arrow">→</span>
-                <span class="ra-step">完成同类题巩固</span>
+            <div class="ra-track">知识追踪：此知识点关联本章节的${formatQuestionList(relatedQuestions)}；你在${formatQuestionList(wrongQuestions)}出错。</div>
+            <div class="ra-recommend-grid">
+                <div class="ra-section">
+                    <div class="ra-section-title">推荐下一步学习内容：基础课程内课程内容</div>
+                    ${buildInternalCourseRecommendations(item.keyword)}
+                </div>
+                <div class="ra-section">
+                    <div class="ra-section-title">推荐下一步学习内容：外部参考学习</div>
+                    ${buildExternalReferenceRecommendations(item.keyword)}
+                </div>
             </div>
         </div>`;
     }).join('');
 
-    return `<div class="ra-list">${cards}</div>`;
+    return configNote + `<div class="ra-list">${cards}</div>`;
 }
 
-function getLearningPathAdvice(keyword) {
-    const adviceMap = [
-        { key: 'DR国际临床分级标准', text: '优先复习DR分级体系、NPDR/PDR边界和临床分级对应的处理策略。' },
-        { key: '4-2-1规则', text: '重点回看重度NPDR判定条件，建议把四象限出血、静脉串珠和IRMA分别做成对照表。' },
-        { key: 'ETDRS分级', text: '补强ETDRS级别与临床分级的对应关系，尤其是53级、随访频率和干预时机。' },
-        { key: 'DCCT强化血糖控制', text: '回看循证医学研究结论，重点记忆风险降低比例及其对应的临床意义。' },
-        { key: 'DR危险因素', text: '建议复习病程、HbA1c、血压、血脂等危险因素，并区分无关干扰项。' },
-        { key: 'DR筛查策略', text: '下一步学习筛查起始时间、筛查频率和首选检查方式，建立不同糖尿病类型的判断路径。' },
-        { key: 'OCTA与FFA鉴别', text: '建议对比OCTA和FFA的成像原理、优势限制，重点掌握OCTA不能显示渗漏这一点。' },
-        { key: '血压控制目标', text: '回看DR合并高血压管理目标，结合指南推荐和风险控制逻辑进行记忆。' },
-        { key: '房水生成与排出机制', text: '建议复习房水主动分泌、小梁网排出和葡萄膜巩膜途径之间的比例与机制。' },
-        { key: '青光眼视野检查', text: '下一步强化旁中心暗点、鼻侧阶梯、弓形暗点等典型视野缺损模式。' },
-        { key: 'RNFL厚度评估', text: '回看RNFL早期受累区域和OCT结构评估指标，建立结构损伤与功能损伤的对应关系。' },
-        { key: 'AMD发病机制', text: '重点复习干性/湿性AMD差异、CNV形成机制以及VEGF在湿性AMD中的作用。' },
-        { key: '抗VEGF治疗机制', text: '建议补强抗VEGF药物作用机制、适应证和对渗漏/新生血管的影响。' },
-        { key: '高血压视网膜病变分级', text: '回看KWB分级和Scheie分级，重点区分动静脉交叉压迫征、棉绒斑和视盘水肿。' },
-        { key: 'RVO分类与并发症', text: '建议复习BRVO/CRVO发生部位、缺血型判断标准和新生血管性青光眼风险。' },
-        { key: 'OCT结构分层', text: '下一步学习OCT关键层次、中心凹厚度和椭圆体带等结构与预后的关系。' },
-        { key: 'PRP全视网膜光凝', text: '重点复习PRP适应证、治疗参数和降低严重视力丧失风险的循证依据。' },
-        { key: 'FFA判读要点', text: '建议回看FFA时相、荧光素钠循环时间、高/低荧光原因和CNV典型表现。' }
-    ];
-    const match = adviceMap.find(item => keyword.includes(item.key) || item.key.includes(keyword));
-    return match ? match.text : '建议回看本题对应讲义段落，先明确概念定义，再对照临床场景完成同类题巩固。';
+function uniqueNumbers(numbers) {
+    return Array.from(new Set((numbers || []).filter(n => Number.isFinite(n)))).sort((a, b) => a - b);
+}
+
+function formatQuestionList(numbers) {
+    const list = uniqueNumbers(numbers);
+    return list.length ? list.map(n => '第' + n + '题').join('、') : '暂无绑定题目';
+}
+
+function getKnowledgeQuestionNumbers(keyword, quizData) {
+    const list = quizData || [];
+    const numbers = [];
+    list.forEach((q, index) => {
+        if (extractKeyword(q.q, q.explain) === keyword) numbers.push(index + 1);
+    });
+    return numbers.length ? numbers : [];
+}
+
+function getRecommendationConfig(keyword) {
+    if (KNOWLEDGE_POINT_RECOMMENDATIONS[keyword]) return KNOWLEDGE_POINT_RECOMMENDATIONS[keyword];
+    const matchedKey = Object.keys(KNOWLEDGE_POINT_RECOMMENDATIONS).find(key => keyword.includes(key) || key.includes(keyword));
+    return matchedKey ? KNOWLEDGE_POINT_RECOMMENDATIONS[matchedKey] : {
+        courses: [{ courseId: currentQuizCourseId || currentCourseId, chapterIndex: currentQuizChapterIndex || 0, sectionIndex: 0, reason: '回到当前章节首节内容，重新梳理本题相关概念。' }],
+        references: [
+            { title: '本课程配套教材对应章节', source: '课程建设时绑定的教材章节或讲义出处', focus: '概念定义、适用场景和易错点。' },
+            { title: '专业指南或综述资料', source: '中华医学会指南、AAO/WHO等公开专业资料', focus: '临床应用边界和最新共识。' }
+        ]
+    };
+}
+
+function resolveCourseResource(ref) {
+    const course = getCourseById(ref.courseId);
+    if (!course || !course.chapters) return null;
+    const chapterIndex = Number.isInteger(ref.chapterIndex) ? ref.chapterIndex : course.chapters.findIndex(ch => ch.id === ref.chapterId);
+    const chapter = course.chapters[chapterIndex];
+    if (!chapter || !chapter.sections) return null;
+    const sectionIndex = Number.isInteger(ref.sectionIndex) ? ref.sectionIndex : chapter.sections.findIndex(sec => sec.id === ref.sectionId);
+    const section = chapter.sections[sectionIndex];
+    if (!section) return null;
+    return { course, chapter, section, chapterIndex, sectionIndex, reason: ref.reason || '' };
+}
+
+function buildInternalCourseRecommendations(keyword) {
+    const config = getRecommendationConfig(keyword);
+    const cards = (config.courses || []).map(resolveCourseResource).filter(Boolean).map(item => {
+        const learned = isSectionComplete(item.course, item.chapterIndex, item.sectionIndex);
+        const statusText = learned ? '已学习' : '未学习';
+        const statusClass = learned ? 'learned' : 'unlearned';
+        return `<div class="ra-course-card">
+            <div class="ra-course-head">
+                <div class="ra-course-name">${item.course.name}｜${item.section.title}</div>
+                <span class="ra-status ${statusClass}">${statusText}</span>
+            </div>
+            <div class="ra-course-meta">${getQuizDisplayTitle(item.chapter.title)} · ${item.section.duration}</div>
+            <div class="ra-course-reason">${item.reason}</div>
+            <button class="ra-link-btn" type="button" onclick="openRecommendedSection(${item.course.id}, ${item.chapterIndex}, ${item.sectionIndex})">进入课程内容</button>
+        </div>`;
+    }).join('');
+    return `<div class="ra-course-list">${cards || '<div class="ra-course-card">当前知识点暂未绑定基础课程内容，请先在后台知识点库完成课程小节绑定。</div>'}</div>`;
+}
+
+function buildExternalReferenceRecommendations(keyword) {
+    const config = getRecommendationConfig(keyword);
+    const refs = (config.references || []).map(ref => `<div class="ra-ref-item">
+        <div class="ra-ref-name">${ref.title}</div>
+        <div class="ra-ref-source">出处：${ref.source}</div>
+        <div class="ra-ref-source">建议关注：${ref.focus}</div>
+    </div>`).join('');
+    return `<div class="ra-ref-list">${refs || '<div class="ra-ref-item">当前知识点暂未配置外部参考资料。</div>'}</div>`;
+}
+
+function openRecommendedSection(courseId, chapterIndex, sectionIndex) {
+    const course = getCourseById(courseId);
+    const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
+    const section = chapter && chapter.sections ? chapter.sections[sectionIndex] : null;
+    if (!course || !chapter || !section) return;
+    clearVideoInterval();
+    currentCourseId = courseId;
+    currentChapterIndex = chapterIndex;
+    currentSectionIndex = sectionIndex;
+    currentSectionId = section.id;
+    showPage('page-video-learning');
+    document.getElementById('videoBreadcrumbCourse').textContent = course.name;
+    renderChapterTree();
+    renderVideoSection();
+}
+
+function returnToCurrentCourseContent() {
+    const course = getCourseById(currentQuizCourseId || currentCourseId);
+    if (!course || !course.chapters || !course.chapters.length) {
+        navToCourseList();
+        return;
+    }
+
+    const chapterIndex = Number.isInteger(currentQuizChapterIndex)
+        ? currentQuizChapterIndex
+        : (Number.isInteger(currentChapterIndex) ? currentChapterIndex : 0);
+    const safeChapterIndex = Math.min(Math.max(chapterIndex, 0), course.chapters.length - 1);
+    const chapter = course.chapters[safeChapterIndex];
+    const section = chapter.sections && chapter.sections.length
+        ? (chapter.sections[currentSectionIndex] || chapter.sections[0])
+        : null;
+
+    clearVideoInterval();
+    currentCourseId = course.id;
+    currentChapterIndex = safeChapterIndex;
+    currentSectionIndex = section ? chapter.sections.indexOf(section) : 0;
+    currentSectionId = section ? section.id : null;
+    showPage('page-video-learning');
+    document.getElementById('videoBreadcrumbCourse').textContent = course.name;
+    renderChapterTree();
+    renderVideoSection();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function extractKeyword(q, explain) {
@@ -2240,23 +3194,74 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    function getAIContext() {
+    function getCurrentLearningContext() {
         const course = getCourseById(currentCourseId);
-        if (!course) return '';
-        let ctx = '';
-        if (currentChapterIndex !== null && course.chapters[currentChapterIndex]) {
-            let ch = course.chapters[currentChapterIndex];
-            ctx += '当前课程: ' + course.name + ' > ' + ch.title;
-            if (currentSectionIndex !== null && ch.sections[currentSectionIndex]) {
-                ctx += ' > ' + ch.sections[currentSectionIndex].title;
-            }
-        } else {
-            ctx += '当前课程: ' + course.name;
-        }
-        return ctx;
+        if (!course) return null;
+        const chapter = currentChapterIndex !== null ? course.chapters[currentChapterIndex] : null;
+        const section = chapter && currentSectionIndex !== null ? chapter.sections[currentSectionIndex] : null;
+        return { course, chapter, section };
     }
 
-    function getAIResponse(msg) {
+    function getSectionKnowledgePoints(sectionId) {
+        return SECTION_KNOWLEDGE_POINTS[sectionId] || [];
+    }
+
+    function stripHtmlText(html) {
+        const temp = document.createElement('div');
+        temp.innerHTML = html || '';
+        return (temp.textContent || temp.innerText || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function getSectionIntro(section) {
+        const text = stripHtmlText(section && section.handout);
+        return text.length > 150 ? text.slice(0, 150) + '...' : text;
+    }
+
+    function getAIContextLabel() {
+        if (aiQaContextType !== 'section') return '当前医学课程范围';
+        const ctx = getCurrentLearningContext();
+        if (!ctx || !ctx.course || !ctx.chapter || !ctx.section) return '当前小节';
+        return getSectionScopeTitle(ctx);
+    }
+
+    function getSectionScopeTitle(ctx) {
+        if (!ctx || !ctx.course || !ctx.chapter || !ctx.section) return '当前小节';
+        return ctx.course.name + ' - ' + getQuizDisplayTitle(ctx.chapter.title) + ' - ' + ctx.section.title;
+    }
+
+    function getKnowledgePointScopeLabel() {
+        return aiActiveKnowledgePoint || '当前小节绑定知识点';
+    }
+
+    function getKnowledgePointExplanation(point, ctx) {
+        const explainMap = {
+            'Keith-Wagener-Barker分级': 'KWB分级把高血压造成的眼底改变分成四级：先看动脉是否变细，再看有没有动静脉交叉压迫，严重时会出现出血、棉绒斑，最重时出现视盘水肿。学习时不要死背级别，重点理解“血管改变逐步加重”的顺序。',
+            '动静脉交叉压迫征': '这是长期高血压导致视网膜动脉硬化后，对交叉处静脉形成压迫的表现。它提示血管已经出现慢性改变，是高血压视网膜病变分级中的关键观察点。',
+            '视盘水肿': '视盘水肿在高血压眼底改变中通常提示病情已经很重，尤其要警惕恶性高血压或高血压急症。它不是单纯眼底小改变，而是需要和全身血压管理联系起来看。',
+            '房水生成与排出机制': '房水可以理解为眼内维持压力和营养循环的液体。青光眼学习的关键，是弄清楚房水产生后从哪里排出去，以及排出受阻为什么会让眼压升高。',
+            '小梁网途径': '小梁网是房水排出的主通道。原发性开角型青光眼常见问题就是这个通道阻力变大，房水排不顺，眼压就更容易升高。',
+            '葡萄膜巩膜途径': '葡萄膜巩膜途径是房水排出的另一条通路，不完全依赖眼压差。理解它的意义，是知道有些降眼压药物可以通过增加这条通路的排出来降低眼压。',
+            '青光眼视野检查': '视野检查看的是功能损伤，也就是患者视野里哪些地方已经看不清。青光眼常从旁中心暗点、鼻侧阶梯、弓形暗点这些模式开始出现。',
+            'RNFL厚度评估': 'RNFL是视网膜神经纤维层。OCT测它的厚度，可以帮助发现青光眼早期结构损伤，尤其要关注颞上、颞下区域变薄。',
+            '国际临床DR严重程度量表': '这个量表把DR分成无DR、轻度NPDR、中度NPDR、重度NPDR和PDR五档。学习重点是会根据眼底表现判断病变从轻到重的台阶。',
+            '4-2-1规则': '4-2-1规则是识别重度NPDR的简化抓手：四个象限大量出血、两个象限静脉串珠、一个象限IRMA，满足任一条都要警惕病情进展风险。',
+            'ETDRS分级': 'ETDRS分级更偏研究和标准化照片判读，临床学习时可把它理解成DR严重程度的精细版本，重点掌握它和临床分级之间的对应关系。',
+            'OCT黄斑水肿评估': 'OCT能直接看到黄斑区是否增厚、是否有囊样改变或视网膜下液。判断DME时，中心凹视网膜厚度是很重要的量化指标。',
+            'OCTA与FFA鉴别': 'OCTA无创、看血流结构；FFA需要注射造影剂，能看渗漏和动态灌注。两者不是互相替代，而是回答的问题不同。',
+            '干性AMD': '干性AMD主要表现为玻璃膜疣和RPE萎缩，进展通常较慢。学习时要把它和湿性AMD的新生血管、渗漏出血区分开。',
+            '湿性AMD': '湿性AMD的核心是脉络膜新生血管，容易造成渗出、出血和快速视力下降，因此抗VEGF治疗非常关键。',
+            '抗VEGF治疗机制': '抗VEGF药物的作用是抑制异常新生血管形成并减少渗漏。它不是“修复视网膜”，而是控制导致水肿和出血的关键因子。',
+            'CRVO与BRVO差异': 'CRVO是中央静脉阻塞，影响范围更广；BRVO是分支静脉阻塞，常发生在动静脉交叉处。两者都可能导致黄斑水肿和视力下降。',
+            'OCT结构分层': 'OCT像给视网膜做横切面扫描，能看到不同层次。学习时重点认清中心凹、椭圆体带、RPE等结构和视力预后的关系。',
+            '激光组织相互作用': '眼底激光治疗主要利用光热效应，让目标组织产生可控凝固反应。关键是理解治疗区域、能量和周围组织保护之间的平衡。',
+            'FFA判读要点': 'FFA判读要先看时相，再看高荧光或低荧光的原因。渗漏、着染、窗样缺损和遮蔽荧光是最容易混淆的点。'
+        };
+        if (explainMap[point]) return explainMap[point];
+        const sectionIntro = ctx && ctx.section ? getSectionIntro(ctx.section) : '';
+        return '这个知识点来自当前小节的核心内容。建议先把它放回小节主题中理解：' + (sectionIntro || '先明确概念、适用场景和常见混淆点，再结合测验题目巩固。');
+    }
+
+    function getHomeAIResponse(msg) {
         let msgLower = msg.toLowerCase();
         let bestMatch = null;
         for (let key in AI_KNOWLEDGE_BASE) {
@@ -2270,21 +3275,41 @@ document.addEventListener('DOMContentLoaded', function() {
             if (bestMatch) break;
         }
 
-        if (bestMatch) {
-            let ctx = getAIContext();
-            let prefix = ctx ? '【' + ctx + '】\n\n' : '';
-            return prefix + bestMatch.default;
-        }
+        if (bestMatch) return '【医学课程问答】\n\n' + bestMatch.default;
 
         const genericResponses = [
-            '这是一个很好的问题。在眼底疾病的学习中，建议结合OCT和眼底照相的多模态影像来加深理解。您可以尝试查看课程讲义中的相关部分获取更详细的解答。',
-            '根据课程内容，该知识点涉及多个交叉领域。建议您先完成当前章节的学习，相关知识点会在后续章节中详细展开。',
-            '这个问题涉及的知识点较为深入。您可以参考相关临床指南和专家共识获取更多信息，或在课程讨论区与其他学员交流。',
-            '这是一个值得深入探讨的问题。课程讲义中包含了相关的基本概念和临床应用，请参考当前章节的讲义内容。'
+            '当前问答基于基础课程内的医学学习内容。这个问题建议先明确对应的疾病、检查、分级或治疗主题，再结合课程中的眼底照相、OCT/FFA和临床分级知识理解。',
+            '这个问题可以作为医学课程问答处理。建议把问题拆成“疾病是什么、关键表现是什么、检查如何判断、临床处理怎么做”四步，这样更容易和课程内容对应起来。',
+            '如果问题和医学课程无关，系统不会展开回答。若你想问课程内容，可以补充疾病名称、检查项目或分级标准，例如DR分级、KWB分级、OCT判读等。'
         ];
         let idx = 0;
         for (let i = 0; i < msg.length; i++) idx = (idx * 31 + msg.charCodeAt(i)) % genericResponses.length;
         return genericResponses[idx];
+    }
+
+    function getSectionAIResponse(msg) {
+        const ctx = getCurrentLearningContext();
+        if (!ctx || !ctx.section) return getHomeAIResponse(msg);
+        const points = getSectionKnowledgePoints(ctx.section.id);
+        const matchedPoint = points.find(point => msg.includes(point) || point.toLowerCase().includes(msg.toLowerCase()) || msg.toLowerCase().includes(point.toLowerCase()));
+        const targetPoint = aiQaMode === 'difficulty'
+            ? ((aiActiveKnowledgePoint && points.includes(aiActiveKnowledgePoint)) ? aiActiveKnowledgePoint : points[0])
+            : (matchedPoint || points[0]);
+        const prefix = aiQaMode === 'difficulty'
+            ? '【课程难点讲解｜' + getKnowledgePointScopeLabel() + '】\n\n'
+            : '【自然语言问答｜' + getAIContextLabel() + '】\n\n';
+        if (targetPoint) {
+            if (aiQaMode === 'difficulty') {
+                return prefix + getKnowledgePointExplanation(targetPoint, ctx) + '\n\n后续问答会继续围绕“' + targetPoint + '”展开。你可以追问它的临床意义、易错考法、和其他通路/概念的区别。';
+            }
+            return prefix + getKnowledgePointExplanation(targetPoint, ctx) + '\n\n这个回答已限定在当前课程小节内，不会扩展到新的对话主题。';
+        }
+        return prefix + '当前问题会优先结合本小节内容回答。' + (getSectionIntro(ctx.section) || '建议先围绕本节标题提出具体问题。') + '\n\n你也可以直接围绕房水生成、排出通路或眼压升高原因继续追问。';
+    }
+
+    function getAIResponse(msg) {
+        if (aiQaContextType === 'section') return getSectionAIResponse(msg);
+        return getHomeAIResponse(msg);
     }
 
     function addAiChatMsg(type, text) {
@@ -2292,32 +3317,223 @@ document.addEventListener('DOMContentLoaded', function() {
         let bubble = document.createElement('div');
         bubble.className = 'chat-msg ' + (type === 'user' ? 'user' : 'ai');
         if (type === 'ai') {
-            bubble.innerHTML = '<div class="ai-label">AI助手</div><p>' + text.replace(/\n/g, '</p><p>') + '</p>';
+            bubble.innerHTML = '<div class="ai-label">AI助手</div><p>' + escapeResultHtml(text).replace(/\n/g, '</p><p>') + '</p>';
         } else {
-            bubble.innerHTML = text;
+            bubble.innerHTML = escapeResultHtml(text);
         }
         body.appendChild(bubble);
         body.scrollTop = body.scrollHeight;
         return bubble;
     }
 
+    function renderAiContextPanel() {
+        const group = document.getElementById('aiContextGroup');
+        const scope = document.getElementById('aiScopeDescription');
+        const contextTitle = document.getElementById('aiContextTitle');
+        if (!group || !scope) return;
+        if (aiQaContextType !== 'section') {
+            if (contextTitle) contextTitle.textContent = '问答边界';
+            scope.textContent = '当前问答基于基础课程内的医学内容，仅提供自然语言问答解析，请勿询问与医学无关的内容。';
+            group.innerHTML = `
+                <div class="ai-context-item active">
+                    <strong>首页问答</strong>
+                    <span>面向基础课程整体内容，不进入具体课程难点讲解。</span>
+                </div>
+                <div class="ai-context-item">
+                    <strong>回答边界</strong>
+                    <span>疾病概念、检查判读、分级标准、治疗原则等医学课程问题。</span>
+                </div>
+            `;
+            return;
+        }
+        const ctx = getCurrentLearningContext();
+        if (!ctx || !ctx.course || !ctx.chapter || !ctx.section) {
+            scope.textContent = '当前仅提供医学课程相关问答。';
+            group.innerHTML = `
+                <div class="ai-context-item active">
+                    <strong>当前范围</strong>
+                    <span>请先进入具体课程小节后再使用课程内AI问答。</span>
+                </div>
+            `;
+            return;
+        }
+        const scopeTitle = getSectionScopeTitle(ctx);
+        const points = getSectionKnowledgePoints(ctx.section.id);
+        if (aiQaMode === 'difficulty') {
+            if (!aiActiveKnowledgePoint || !points.includes(aiActiveKnowledgePoint)) {
+                aiActiveKnowledgePoint = points[0] || '';
+            }
+            if (contextTitle) contextTitle.textContent = '当前知识点';
+            scope.textContent = '当前问答范围：' + (aiActiveKnowledgePoint || '当前小节绑定知识点') + '。后续问答只围绕这个知识点展开。';
+            group.innerHTML = `
+                <div class="ai-context-item active">
+                    <strong>当前知识点</strong>
+                    <span>${escapeResultHtml(aiActiveKnowledgePoint || '当前小节暂未配置知识点')}</span>
+                </div>
+            `;
+            return;
+        }
+        if (contextTitle) contextTitle.textContent = '当前课程与小节';
+        scope.textContent = '自然语言问答固定在“' + scopeTitle + '”内；课程难点讲解固定在当前小节绑定知识点内，先给出解析再继续追问。';
+        group.innerHTML = `
+            <div class="ai-context-item active">
+                <strong>当前课程</strong>
+                <span>${escapeResultHtml(ctx.course.name)}</span>
+            </div>
+            <div class="ai-context-item active">
+                <strong>当前章节</strong>
+                <span>${escapeResultHtml(ctx.chapter.title)}</span>
+            </div>
+            <div class="ai-context-item active">
+                <strong>当前小节</strong>
+                <span>${escapeResultHtml(ctx.section.title)}</span>
+            </div>
+            <div class="ai-context-item active">
+                <strong>当前模式</strong>
+                <span>${aiQaMode === 'difficulty' ? '课程难点讲解' : '自然语言问答'}</span>
+            </div>
+        `;
+    }
+
+    function renderAiQuickQuestions() {
+        const quick = document.getElementById('aiQuickQuestions');
+        if (!quick) return;
+        if (aiQaContextType === 'section') {
+            const ctx = getCurrentLearningContext();
+            const points = ctx && ctx.section ? getSectionKnowledgePoints(ctx.section.id) : [];
+            const scopeTitle = ctx && ctx.section ? getSectionScopeTitle(ctx) : '当前小节';
+            const first = points[0] || '当前小节核心知识点';
+            const second = points[1] || '本节易混点';
+            const third = points[2] || '本节高频考点';
+            if (aiQaMode === 'difficulty') {
+                const activePoint = aiActiveKnowledgePoint || first;
+                quick.innerHTML = `
+                    <button class="quick-btn" onclick="askQuickQuestion('${escapeResultHtml(activePoint)}有什么临床意义？')">临床意义</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('${escapeResultHtml(activePoint)}在测验里通常怎么考？')">测验考法</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('请把${escapeResultHtml(activePoint)}再讲得更白话一点。')">白话讲解</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('请举一个${escapeResultHtml(activePoint)}的临床理解例子。')">举例说明</button>
+                `;
+            } else {
+                quick.innerHTML = `
+                    <button class="quick-btn" onclick="askQuickQuestion('请概括当前小节的核心内容。')">核心内容</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('请用白话解释当前小节的核心机制。')">白话理解</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('当前小节和临床判断有什么关系？')">临床联系</button>
+                    <button class="quick-btn" onclick="askQuickQuestion('把这个小节最容易混淆的点再梳理一遍。')">易错点梳理</button>
+                `;
+            }
+        } else {
+            quick.innerHTML = `
+                <button class="quick-btn" onclick="askQuickQuestion('糖尿病视网膜病变怎么分级？')">DR分级</button>
+                <button class="quick-btn" onclick="askQuickQuestion('高血压视网膜病变KWB分级怎么理解？')">KWB分级</button>
+                <button class="quick-btn" onclick="askQuickQuestion('OCT和FFA有什么区别？')">OCT/FFA区别</button>
+                <button class="quick-btn" onclick="askQuickQuestion('青光眼视野检查怎么看？')">青光眼视野</button>
+                <button class="quick-btn" onclick="askQuickQuestion('抗VEGF治疗有什么作用？')">抗VEGF治疗</button>
+            `;
+        }
+    }
+
+    function renderAiDifficultyPanel() {
+        const body = document.getElementById('aiChatBody');
+        const ctx = getCurrentLearningContext();
+        if (!body || !ctx || !ctx.section) return;
+        const points = getSectionKnowledgePoints(ctx.section.id);
+        if (!aiActiveKnowledgePoint || !points.includes(aiActiveKnowledgePoint)) {
+            aiActiveKnowledgePoint = points[0] || '';
+        }
+        const activePoint = aiActiveKnowledgePoint || points[0] || '当前小节绑定知识点';
+        const pointOptions = points.map(point => `
+            <option value="${escapeResultHtml(point)}" ${point === activePoint ? 'selected' : ''}>${escapeResultHtml(point)}</option>
+        `).join('');
+        const activeExplain = getKnowledgePointExplanation(activePoint, ctx);
+        body.innerHTML = `
+            <div class="ai-difficulty-panel">
+                <div class="ai-difficulty-head">
+                    <div class="ai-difficulty-title">课程难点讲解：${escapeResultHtml(activePoint)}</div>
+                    <div class="ai-difficulty-desc">当前问答范围限定在“${escapeResultHtml(activePoint)}”。先给出这个知识点的白话解析，再围绕它继续追问。</div>
+                    <div class="ai-kp-switcher">
+                        <label for="aiKnowledgePointSelect">选择知识点</label>
+                        <select id="aiKnowledgePointSelect" onchange="selectAiKnowledgePoint(this.value)">
+                            ${pointOptions || '<option value="">当前小节暂未配置知识点</option>'}
+                        </select>
+                    </div>
+                </div>
+                <div class="chat-msg ai">
+                    <div class="ai-label">AI助手</div>
+                    <p>当前问答范围：${escapeResultHtml(activePoint)}。</p>
+                    <p>${escapeResultHtml(activeExplain)}</p>
+                    <p>接下来你可以继续追问它的临床意义、容易混淆的地方、以及在题目里通常怎么问。</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateAiQaHeader() {
+        const title = document.getElementById('aiQaTitle');
+        const subtitle = document.getElementById('aiQaSubtitle');
+        const tabs = document.getElementById('aiFunctionTabs');
+        const input = document.getElementById('aiChatInput');
+        if (aiQaContextType === 'section') {
+            const ctx = getCurrentLearningContext();
+            const scopeTitle = ctx && ctx.section ? getSectionScopeTitle(ctx) : '当前小节';
+            if (aiQaMode === 'difficulty' && ctx && ctx.section) {
+                const points = getSectionKnowledgePoints(ctx.section.id);
+                if (!aiActiveKnowledgePoint || !points.includes(aiActiveKnowledgePoint)) {
+                    aiActiveKnowledgePoint = points[0] || '';
+                }
+            }
+            if (aiQaMode === 'difficulty') {
+                if (title) title.textContent = '课程难点讲解：' + getKnowledgePointScopeLabel();
+                if (subtitle) subtitle.textContent = '先给出知识点解析，再围绕当前知识点连续追问。';
+                if (input) input.placeholder = '围绕当前知识点继续提问...';
+            } else {
+                if (title) title.textContent = '基于' + scopeTitle + ' 的知识问答';
+                if (subtitle) subtitle.textContent = '自然语言问答固定在当前小节范围内，不新建对话主题。';
+                if (input) input.placeholder = '围绕当前小节输入问题...';
+            }
+            if (tabs) tabs.classList.add('active');
+        } else {
+            if (title) title.textContent = '医学课程问答';
+            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答，不涉及课程难点讲解。';
+            if (tabs) tabs.classList.remove('active');
+            if (input) input.placeholder = '请输入医学课程相关问题...';
+        }
+        document.getElementById('aiModeQaTab')?.classList.toggle('active', aiQaMode === 'qa');
+        document.getElementById('aiModeDifficultyTab')?.classList.toggle('active', aiQaMode === 'difficulty');
+        renderAiContextPanel();
+        renderAiQuickQuestions();
+    }
+
     function renderAiWelcome() {
         const body = document.getElementById('aiChatBody');
         if (!body) return;
+        updateAiQaHeader();
+        if (aiQaContextType === 'section' && aiQaMode === 'difficulty') {
+            renderAiDifficultyPanel();
+            return;
+        }
+        const isSection = aiQaContextType === 'section';
+        const tags = isSection
+            ? ['当前小节问答', '知识点解析', '连续追问']
+            : ['医学课程问答', '疾病知识问答', '诊断标准梳理'];
+        const welcomeText = isSection
+            ? '当前问答已固定在本小节内。你可以围绕本节课程内容进行自然语言问答，也可以切换到课程难点讲解查看本节绑定知识点。'
+            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。这里仅提供课程相关问答解析，不展示课程难点讲解。';
+        const firstMsg = isSection
+            ? '你好，我会基于“' + getAIContextLabel() + '”回答问题。你可以直接问本小节概念、房水排出通路、眼压变化原因或测验易错点。'
+            : '你好，我是AI学习助手。当前只回答医学课程相关问题，请勿询问与医学无关的内容。';
         body.innerHTML = `
             <div class="ai-welcome-card">
                 <div class="ai-welcome-icon">✚</div>
                 <h3>欢迎使用AI智能答疑系统</h3>
-                <p>基于医学语言模型提供自然语言问答、课程难点讲解与知识点梳理。</p>
+                <p>${escapeResultHtml(welcomeText)}</p>
                 <div class="ai-welcome-tags">
-                    <span>课程难点讲解</span>
-                    <span>疾病知识问答</span>
-                    <span>诊断标准梳理</span>
+                    ${tags.map(tag => '<span>' + escapeResultHtml(tag) + '</span>').join('')}
                 </div>
             </div>
+            <div class="ai-scope-notice">${escapeResultHtml(welcomeText)}</div>
             <div class="chat-msg ai">
                 <div class="ai-label">AI助手</div>
-                <p>你好！我是AI学习助手，可以为你解答课程相关问题。试试点击下方的快捷问题，或者直接输入你的问题吧。</p>
+                <p>${escapeResultHtml(firstMsg)}</p>
             </div>
         `;
     }
@@ -2341,23 +3557,90 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 800 + Math.random() * 600);
     };
 
+    function canOpenSectionAiQa() {
+        const ctx = getCurrentLearningContext();
+        if (!ctx || !ctx.course || !ctx.section) return false;
+        return !!getSectionCompletionState(ctx.course, ctx.section.id).video && !!getSectionCompletionState(ctx.course, ctx.section.id).article;
+    }
+
     window.openAiQaSystem = function() {
+        if (currentPageId === 'page-video-learning') {
+            const ctx = getCurrentLearningContext();
+            if (!ctx || !ctx.section) {
+                alert('请先进入具体课程小节后再使用课程内AI答疑。');
+                return;
+            }
+            if (!canOpenSectionAiQa()) {
+                alert('请先学完当前小节：视频播放到100%，图文从头阅读到页面底部后，才能打开课程内AI智能答疑系统。');
+                return;
+            }
+            aiQaContextType = 'section';
+            aiQaMode = 'qa';
+            aiReturnPageId = 'page-video-learning';
+        } else {
+            aiQaContextType = 'home';
+            aiQaMode = 'qa';
+            aiReturnPageId = 'page-course-list';
+        }
+        renderAiWelcome();
         showPage('page-ai-qa');
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        const body = document.getElementById('aiChatBody');
+        if (body) body.scrollTop = 0;
         const input = document.getElementById('aiChatInput');
-        if (input) input.focus();
+        if (input) input.focus({ preventScroll: true });
     };
 
     window.startNewAiDialog = function() {
+        resetCurrentAiDialog();
+    };
+
+    window.resetCurrentAiDialog = function() {
+        const ctx = getCurrentLearningContext();
+        if (aiQaContextType === 'section' && ctx && ctx.section) {
+            if (aiQaMode === 'difficulty') {
+                const points = getSectionKnowledgePoints(ctx.section.id);
+                aiActiveKnowledgePoint = points[0] || '';
+            }
+        }
         renderAiWelcome();
         const input = document.getElementById('aiChatInput');
         if (input) {
             input.value = '';
-            input.focus();
+            input.focus({ preventScroll: true });
         }
+    };
+
+    window.selectAiKnowledgePoint = function(point) {
+        if (!point) return;
+        aiQaContextType = 'section';
+        aiQaMode = 'difficulty';
+        aiActiveKnowledgePoint = point;
+        renderAiWelcome();
+        const input = document.getElementById('aiChatInput');
+        if (input) input.focus({ preventScroll: true });
     };
 
     window.askQuickQuestion = function(q) {
         sendAiMessage(q);
+    };
+
+    window.switchAiMode = function(mode) {
+        if (aiQaContextType !== 'section') return;
+        aiQaMode = mode === 'difficulty' ? 'difficulty' : 'qa';
+        renderAiWelcome();
+    };
+
+    window.returnFromAiQa = function() {
+        if (aiReturnPageId === 'page-video-learning') {
+            showPage('page-video-learning');
+            renderChapterTree();
+            renderVideoSection();
+            return;
+        }
+        navToCourseList();
     };
 });
 </script>

@@ -856,8 +856,7 @@
 
       <div class="nav-group-title">业务工作台</div>
       <button class="nav-item active" data-section="dashboard"><span class="nav-icon">▣</span>总览驾驶舱</button>
-      <button class="nav-item" data-section="courses"><span class="nav-icon">▤</span>课程与章节管理</button>
-      <button class="nav-item" data-section="quizzes"><span class="nav-icon">☑</span>章节测验与题库</button>
+      <button class="nav-item" data-section="courses"><span class="nav-icon">▤</span>教师课程管理端</button>
       <button class="nav-item" data-section="cases"><span class="nav-icon">◫</span>案例教学管理</button>
       <button class="nav-item" data-section="practice"><span class="nav-icon">◉</span>技能实践管理</button>
       <button class="nav-item" data-section="contest"><span class="nav-icon">★</span>读片/病例大赛</button>
@@ -994,100 +993,199 @@
 
       <section class="section" id="courses">
         <div class="toolbar">
-          <div class="filters">
-            <input class="input" placeholder="搜索课程/章节/知识点">
-            <select class="select"><option>全部分类</option><option>眼科基础</option><option>AI诊疗</option><option>影像判读</option></select>
-            <select class="select"><option>全部状态</option><option>已发布</option><option>草稿</option><option>待补测验</option></select>
+          <div class="tabs" data-tab-group="teacherCourseTabs">
+            <button class="tab active" data-tab="teacherCourseContent">课程与章节资源</button>
+            <button class="tab" data-tab="teacherKnowledgeAi">知识点与AI讲解</button>
+            <button class="tab" data-tab="teacherAssignments">章节测验配置</button>
+            <button class="tab" data-tab="teacherQuestionBank">题库与解析</button>
+            <button class="tab" data-tab="teacherStudents">学员学习管理</button>
+            <button class="tab" data-tab="teacherFeedback">教学反馈闭环</button>
           </div>
-          <button class="btn primary" onclick="openDrawer('新建课程', '配置课程分类、难度星级、章节树、讲义和测验开放规则。', 'course')">新建课程</button>
-        </div>
-        <div class="grid two">
-          <div class="panel">
-            <div class="panel-head">
-              <div><h2 class="panel-title">课程列表</h2><p class="panel-subtitle">对应学生端“基础课程”列表，后台维护分类、难度等级、章节进度与测验入口状态。</p></div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>课程</th><th>分类/难度</th><th>章节</th><th>前台状态规则</th><th>测验状态</th><th>操作</th></tr></thead>
-                <tbody id="courseRows"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-head">
-              <div><h2 class="panel-title">章节树与进度规则</h2><p class="panel-subtitle">学生端课程详情页的竖向课程进度由这里的章节节点驱动。</p></div>
-            </div>
-            <div class="panel-body">
-              <div class="chapter-tree">
-                <div class="chapter-node"><span class="chapter-line done"></span><div><b>第1章 DR流行病学与筛查</b><span>视频完成，测验已完成，学生端显示“查看测验结果”</span></div><span class="status ok">已闭环</span></div>
-                <div class="chapter-node"><span class="chapter-line pending"></span><div><b>第2章 分期与影像特征</b><span>视频完成，测验未做，学生端显示“去进行章节测验”</span></div><span class="status wait">可测验</span></div>
-                <div class="chapter-node"><span class="chapter-line locked"></span><div><b>第3章 治疗与随访管理</b><span>视频未完成，学生端显示“继续学习/开始学习”并锁定测验</span></div><span class="status gray">学习中</span></div>
-              </div>
-              <div class="rules" style="margin-top:14px;">
-                <div class="rule-box"><b>讲义管理</b><p>在线讲义与讲义下载共用同一章节资源版本，发布时同步显示在学生端讲义区域。</p></div>
-                <div class="rule-box"><b>测验门槛</b><p>章节全部视频完成后才开放测验；测验结果仅展示准确率、正确/错误题数和重点强化内容。</p></div>
-              </div>
-            </div>
+          <div class="top-actions">
+            <button class="btn primary" onclick="openDrawer('新建课程', '配置课程分类、难度星级、章节树、视频/图文资源、讲义下载、知识点绑定和章节测验规则。', 'course')">新建课程</button>
+            <button class="btn" onclick="openDrawer('配置章节测验', '章节测验在本章全部小节视频和图文完成后开放，可配置题目范围、重测规则、结果展示和反馈规则。', 'assignment')">配置章节测验</button>
+            <button class="btn" onclick="openDrawer('配置课程AI答疑', '维护首页课程问答范围、课程详情页当前小节答疑、知识点难点讲解和非医学问题拦截规则。', 'course-aiqa')">配置AI答疑</button>
           </div>
         </div>
-      </section>
 
-      <section class="section" id="quizzes">
-        <div class="toolbar">
-          <div class="tabs" data-tab-group="quizTabs">
-            <button class="tab active" data-tab="chapterQuiz">章节测验</button>
-            <button class="tab" data-tab="questionBank">混合题库</button>
-            <button class="tab" data-tab="paperRules">组卷规则</button>
+        <div class="grid kpi" style="margin-bottom:14px;">
+          <div class="panel kpi-card">
+            <div class="kpi-row"><span class="label">课程与章节资源</span><span class="metric-dot">课</span></div>
+            <div class="value">18</div>
+            <div class="note">维护课程卡片、章节树、视频学习、图文学习、在线讲义和讲义下载。</div>
           </div>
-          <button class="btn primary" onclick="openDrawer('新增题目', '题目必须维护题型、知识点、难度、解析和适用场景。', 'question')">新增题目</button>
+          <div class="panel kpi-card">
+            <div class="kpi-row"><span class="label">知识点绑定</span><span class="metric-dot green">知</span></div>
+            <div class="value">64</div>
+            <div class="note">课程小节、测验题、AI难点讲解共用预配置知识点，支撑知识追踪推荐。</div>
+          </div>
+          <div class="panel kpi-card">
+            <div class="kpi-row"><span class="label">章节测验</span><span class="metric-dot amber">测</span></div>
+            <div class="value">42</div>
+            <div class="note">本章全部小节完成后开放；支持反复重测，课程概览只统计每章首测。</div>
+          </div>
+          <div class="panel kpi-card">
+            <div class="kpi-row"><span class="label">待处理反馈</span><span class="metric-dot violet">馈</span></div>
+            <div class="value" id="teacherFeedbackPending">5</div>
+            <div class="note">学生端每次测验仅可反馈一次，教师端按课程、章节、类型和状态闭环处理。</div>
+          </div>
         </div>
 
-        <div class="tab-pane active" id="chapterQuiz">
+        <div class="tab-pane active" id="teacherCourseContent">
           <div class="grid two">
             <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">章节测验配置</h2><p class="panel-subtitle">对应基础课程里的章节测验，不作为考试处理，不设置分数和倒计时。</p></div></div>
+              <div class="panel-head">
+                <div><h2 class="panel-title">课程列表与章节资源</h2><p class="panel-subtitle">对应学生端“基础课程”列表和课程详情页，后台需同时维护视频学习、图文学习和讲义资源。</p></div>
+              </div>
               <div class="table-wrap">
                 <table>
-                  <thead><tr><th>章节</th><th>开放条件</th><th>前台展示</th><th>强化内容</th><th>状态</th><th>操作</th></tr></thead>
-                  <tbody>
-                    <tr><td>DR 第1章</td><td>视频完成率 100%</td><td>准确率 92%，无分数/倒计时</td><td>危险因素、筛查周期</td><td><span class="status ok">已发布</span></td><td><button class="btn small">编辑</button></td></tr>
-                    <tr><td>青光眼 第2章</td><td>视频完成率 100%</td><td>入口显示“去进行章节测验”</td><td>视野缺损、OCT结构评估</td><td><span class="status wait">待作答</span></td><td><button class="btn small">配置</button></td></tr>
-                    <tr><td>AMD 第1章</td><td>视频未完成</td><td>入口锁定，显示“继续学习”</td><td>玻璃膜疣、湿性AMD</td><td><span class="status gray">未开放</span></td><td><button class="btn small">预置</button></td></tr>
-                  </tbody>
+                  <thead><tr><th>课程</th><th>分类/难度</th><th>章节资源</th><th>学习完成规则</th><th>前台入口状态</th><th>操作</th></tr></thead>
+                  <tbody id="courseRows"></tbody>
                 </table>
               </div>
             </div>
+
             <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">结果页规则</h2><p class="panel-subtitle">保证学生端测验结果符合“查缺补漏”的定位。</p></div></div>
+              <div class="panel-head">
+                <div><h2 class="panel-title">学生端课程学习规则</h2><p class="panel-subtitle">后台配置必须和学生端真实交互保持一致。</p></div>
+              </div>
               <div class="panel-body">
                 <div class="rules">
-                  <div class="rule-box"><b>展示准确率</b><p>显示正确率、正确题数、错误题数和每题解析，不显示总分、排名、倒计时。</p></div>
-                  <div class="rule-box"><b>薄弱点提示</b><p>根据错题知识点汇总“重点强化内容”，不提供强制跳转按钮，避免无法定位具体页面。</p></div>
-                  <div class="rule-box"><b>入口状态</b><p>未学完为锁定，学完未测为“去进行章节测验”，测完为“查看测验结果”。</p></div>
+                  <div class="rule-box"><b>视频与图文分开维护</b><p>每个小节至少包含视频学习和图文学习两个资源；讲义下载放在视频学习侧，不和图文混在一起。</p></div>
+                  <div class="rule-box"><b>小节完成条件</b><p>首次学习时，视频需播放到100%，图文需从顶部阅读到页面底部；二者都完成后，小节才算学完。</p></div>
+                  <div class="rule-box"><b>章节可自由跳学</b><p>学生可以先学第一章再学第三章，不要求线性顺序；但章节测验仍要求本章全部小节已学完。</p></div>
+                  <div class="rule-box"><b>课程列表指标</b><p>“已学完章节/未学完章节”统计课程内容完成情况；“章节测验表现”只统计每个课程章节完成后的首次测验。</p></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="tab-pane" id="questionBank">
-          <div class="panel">
-            <div class="panel-head"><div><h2 class="panel-title">题库管理</h2><p class="panel-subtitle">考试中心使用混合题型，所有题目必须标注知识点和难度等级。</p></div></div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>题型</th><th>题干摘要</th><th>知识点</th><th>难度</th><th>适用范围</th><th>评分方式</th><th>状态</th></tr></thead>
-                <tbody id="questionRows"></tbody>
-              </table>
+        <div class="tab-pane" id="teacherKnowledgeAi">
+          <div class="grid two">
+            <div class="panel">
+              <div class="panel-head">
+                <div><h2 class="panel-title">知识点库与绑定关系</h2><p class="panel-subtitle">后台先配置知识点，再绑定课程小节、测验题和AI难点讲解。</p></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>知识点</th><th>绑定课程小节</th><th>绑定测验题</th><th>AI难点讲解</th><th>外部参考</th><th>状态</th></tr></thead>
+                  <tbody id="knowledgeRows"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><div><h2 class="panel-title">课程AI答疑配置</h2><p class="panel-subtitle">对应学生端两个AI入口，不混用场景。</p></div></div>
+              <div class="panel-body">
+                <div class="rules">
+                  <div class="rule-box"><b>首页AI答疑</b><p>只提供医学课程范围内的自然语言问答，进入时提示“请勿询问与医学无关的内容”，不展示课程难点讲解。</p></div>
+                  <div class="rule-box"><b>课程详情AI答疑</b><p>只有当前小节视频和图文都完成后才能打开；未完成时学生端提示先学完当前小节。</p></div>
+                  <div class="rule-box"><b>当前小节知识问答</b><p>问答标题按“基于当前章节 - 当前小节的知识问答”生成，回答范围收敛在当前小节。</p></div>
+                  <div class="rule-box"><b>课程难点讲解</b><p>AI只展示当前小节绑定的知识点，并按后台配置的白话化讲解、教材/指南出处和常见误区组织内容。</p></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="tab-pane" id="paperRules">
-          <div class="grid three">
-            <div class="panel score-card"><strong>单课程测评</strong><p>从当前课程知识点抽题，题量较轻，允许 2-3 次考试。次数满额后学生端隐藏“再考一次”。</p><span class="status info">课程级</span></div>
-            <div class="panel score-card"><strong>模块考核</strong><p>按模块知识点覆盖率组卷，题型混合，结果进入能力评估和错误率分析。</p><span class="status wait">模块级</span></div>
-            <div class="panel score-card"><strong>全周期综合考试</strong><p>覆盖多课程、多模块和综合病例，生成历次成绩对比、能力提升曲线。</p><span class="status ok">全周期</span></div>
+        <div class="tab-pane" id="teacherAssignments">
+          <div class="grid two">
+            <div class="panel">
+              <div class="panel-head"><div><h2 class="panel-title">章节测验配置</h2><p class="panel-subtitle">需规中的“作业布置”在基础课程中对应章节测验，不作为正式考试处理。</p></div></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>课程/章节</th><th>开放条件</th><th>题目与知识点</th><th>重测与统计</th><th>前台结果展示</th><th>操作</th></tr></thead>
+                  <tbody id="assignmentRows"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><div><h2 class="panel-title">测验结果页规则</h2><p class="panel-subtitle">保持学生端“查缺补漏”的定位，区别于正式考试。</p></div></div>
+              <div class="panel-body">
+                <div class="rules">
+                  <div class="rule-box"><b>未答完不可提交</b><p>学生必须完成全部题目才能提交，因此结果页不存在“未答题”统计，只展示答对、答错、总题数。</p></div>
+                  <div class="rule-box"><b>展示所有题解析</b><p>正确题和错误题都需要解析；前台用题号列表和“全部/答对/答错”筛选避免页面过长。</p></div>
+                  <div class="rule-box"><b>可重复测验</b><p>每次重新测验都保留结果，学生端通过“测验记录”下拉查看本次或历史结果。</p></div>
+                  <div class="rule-box"><b>概览只统计首测</b><p>课程首页“章节测验表现”只统计每个章节首次测验，后续重测只进入历史记录，不改变概览指标。</p></div>
+                  <div class="rule-box"><b>学习路径推荐</b><p>错题知识点优先推荐基础课程内绑定小节，并标注已学习/未学习，再推荐教材、指南或公开专业资料。</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="teacherQuestionBank">
+          <div class="panel">
+            <div class="panel-head">
+              <div><h2 class="panel-title">题库与解析管理</h2><p class="panel-subtitle">章节测验题目必须绑定知识点，并维护正确题和错误题都可学习的解析内容。</p></div>
+              <button class="btn primary" onclick="openDrawer('新增题目', '题目必须维护题型、知识点、难度、答案、完整解析和适用场景。', 'question')">新增题目</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>题型</th><th>题干摘要</th><th>绑定知识点</th><th>解析配置</th><th>适用范围</th><th>状态</th></tr></thead>
+                <tbody id="questionRows"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="grid three" style="margin-top:14px;">
+            <div class="panel score-card"><strong>章节测验</strong><p>从当前章节绑定知识点抽题，用于查缺补漏，不设置分数和倒计时。</p><span class="status info">课程内</span></div>
+            <div class="panel score-card"><strong>题目解析</strong><p>学生答对也要能看解析，帮助理解干扰项、临床边界和常见混淆点。</p><span class="status ok">必填</span></div>
+            <div class="panel score-card"><strong>提交校验</strong><p>题目未答完不能提交，后台无需维护“未答”结果状态。</p><span class="status wait">前台校验</span></div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="teacherStudents">
+          <div class="grid two">
+            <div class="panel">
+              <div class="panel-head"><div><h2 class="panel-title">学员学习管理</h2><p class="panel-subtitle">按班级/课题组查看视频、图文、章节测验、首测表现、重测记录和薄弱知识点。</p></div></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>学员</th><th>班级/分组</th><th>课程内容进度</th><th>章节测验记录</th><th>薄弱知识点</th><th>跟进状态</th></tr></thead>
+                  <tbody id="studentRows"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><div><h2 class="panel-title">学员干预规则</h2><p class="panel-subtitle">把“学员管理”落到具体可操作动作，而不是只展示名单。</p></div></div>
+              <div class="panel-body">
+                <div class="rules">
+                  <div class="rule-box"><b>视频/图文分项跟进</b><p>教师可看到学员是视频未完成、图文未读完，还是章节已学完但未测验。</p></div>
+                  <div class="rule-box"><b>首测与重测分开看</b><p>首测用于课程概览统计；重测用于观察本次学习后是否改善，不回写首测指标。</p></div>
+                  <div class="rule-box"><b>错题与知识点跟进</b><p>结合章节测验记录，识别薄弱知识点，推荐回看已绑定课程小节。</p></div>
+                  <div class="rule-box"><b>分组管理</b><p>支持按班级、课题组、培训批次或指定人员分配课程和章节作业。</p></div>
+                  <div class="rule-box"><b>反馈闭环</b><p>学生提交课程反馈后，教师端记录处理状态，并可反向调整课程内容或题目解析。</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="teacherFeedback">
+          <div class="grid two">
+            <div class="panel">
+              <div class="panel-head">
+                <div><h2 class="panel-title">教学反馈闭环</h2><p class="panel-subtitle">收集学生端基础课程反馈，按测验次数、课程章节、问题类型和处理状态跟踪。</p></div>
+                <button class="btn" onclick="renderTeachingFeedback()">刷新反馈</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>提交时间</th><th>学员</th><th>课程/章节</th><th>反馈类型</th><th>反馈内容</th><th>处理状态</th></tr></thead>
+                  <tbody id="feedbackRows"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><div><h2 class="panel-title">反馈处理规则</h2><p class="panel-subtitle">教师端不仅收集反馈，还要能推动内容改进。</p></div></div>
+              <div class="panel-body">
+                <div class="rules">
+                  <div class="rule-box"><b>每次测验仅一次反馈</b><p>学生针对同一次测验提交反馈后，本次反馈入口置为已提交；后续重新测验可形成新的反馈记录。</p></div>
+                  <div class="rule-box"><b>课程内容反馈</b><p>如讲义看不懂、视频节奏过快、知识点解释不清，进入课程内容优化队列。</p></div>
+                  <div class="rule-box"><b>测验题目反馈</b><p>如题干歧义、解析不足、答案争议，进入题库复核队列，并保留处理记录。</p></div>
+                  <div class="rule-box"><b>学习体验反馈</b><p>如入口难找、测验记录切换不清楚，进入前台交互优化队列。</p></div>
+                  <div class="rule-box"><b>闭环状态</b><p>状态建议为：待处理、处理中、已采纳、已回复、不采纳；处理结果可回写学生端通知。</p></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1620,8 +1718,7 @@
   <script>
     var sectionMeta = {
       dashboard: ['总览驾驶舱', '面向 AI 教育平台的课程、案例、技能实践、考试、能力评估、证书学分与 AI 答疑统一后台，和学生端业务状态保持闭环。'],
-      courses: ['课程与章节管理', '维护学生端基础课程列表、课程详情、章节树、学习进度、在线讲义、讲义下载和章节测验开放条件。'],
-      quizzes: ['章节测验与题库', '区分章节测验与正式考试：章节测验用于查缺补漏，只展示准确率；考试题库支持多题型、知识点和难度分级。'],
+      courses: ['教师课程管理端', '作为基础课程管理后台，统一支持课程创建、章节资源上传、知识点配置、章节测验配置、学员管理与教学反馈收集。'],
       cases: ['案例教学管理', '管理病例推理实训、AI诊断对比学习和病例讨论，保证先提交推理再解锁AI对比。'],
       practice: ['技能实践管理', '管理虚拟临床、经典病例报告、疑难病例研讨、数据标注与AI模型实训，并将实训结果回写能力评估。'],
       contest: ['读片/病例大赛管理', '管理比赛有效期、固定答题时长、报名、进度保存、剩余时间，以及完成、退赛、缺考三种结果。'],
@@ -1636,18 +1733,45 @@
     };
 
     var courses = [
-      { name: '糖尿病视网膜病变基础', category: '眼科基础', difficulty: 2, chapters: '12章 / 28节', progress: 100, front: '查看章节测验结果', quiz: '已完成 92%', status: '已发布' },
-      { name: '青光眼诊疗基础', category: '眼科基础', difficulty: 3, chapters: '15章 / 32节', progress: 100, front: '去进行章节测验', quiz: '视频完成，未测验', status: '已发布' },
-      { name: 'AMD诊疗规范', category: 'AI诊疗', difficulty: 3, chapters: '10章 / 22节', progress: 0, front: '开始学习，测验锁定', quiz: '未开放', status: '待补测验' },
-      { name: '眼底血管造影判读', category: '影像判读', difficulty: 2, chapters: '11章 / 24节', progress: 45, front: '继续学习，测验锁定', quiz: '未开放', status: '已发布' }
+      { name: '糖尿病视网膜病变基础', category: '眼科基础', difficulty: 2, chapters: '12章 / 28节', resources: '视频28节｜图文28节｜讲义28份', completeRule: '视频100% + 图文读到底；可自由跳章节', progress: 65, front: '继续学习｜章节测验锁定至本章学完', status: '已发布' },
+      { name: '青光眼诊疗基础', category: '眼科基础', difficulty: 3, chapters: '15章 / 32节', resources: '视频32节｜图文32节｜讲义32份', completeRule: '已学完，可直接重学或进入章节测验', progress: 100, front: '再次学习｜去进行章节测验', status: '已发布' },
+      { name: '高血压视网膜病变', category: '眼科基础', difficulty: 1, chapters: '8章 / 16节', resources: '视频16节｜图文16节｜讲义16份', completeRule: '已学完；测验结果可回看和重测', progress: 100, front: '再次学习｜再次测验｜查看学习测验结果', status: '已发布' },
+      { name: '眼底血管造影判读', category: '影像判读', difficulty: 2, chapters: '11章 / 24节', resources: '视频24节｜图文24节｜讲义24份', completeRule: '视频/图文分项追踪；本章未学完锁测验', progress: 45, front: '继续学习｜章节测验锁定', status: '已发布' }
     ];
 
     var questions = [
-      { type: '单选题', q: '糖尿病视网膜病变早期微血管改变...', knowledge: 'DR分期', diff: '基础', scope: '章节测验/单课程', score: '客观题自动评分', status: '已发布' },
-      { type: '多选题', q: 'DR进展的关键危险因素包括...', knowledge: 'DR危险因素', diff: '基础', scope: '模块考核', score: '全选正确得分', status: '已发布' },
-      { type: '简答题', q: '简述DR随访管理重点指标...', knowledge: '随访管理', diff: '进阶', scope: '单课程/综合考试', score: '关键词+教师复核', status: '已审核' },
-      { type: '病例分析题', q: '根据病例资料判断处理策略...', knowledge: 'DR分级与处置', diff: '高阶', scope: '模块/全周期', score: 'Rubric评分', status: '已发布' },
-      { type: '代码题', q: '补全正确率计算函数...', knowledge: '测评结果计算', diff: '进阶', scope: 'AI实训考试', score: '用例+人工复核', status: '草稿' }
+      { type: '单选题', q: 'KWB分级中，出现动静脉交叉压迫征属于？', knowledge: 'Keith-Wagener-Barker分级', analysis: '答案、干扰项解释和临床观察点均已配置', scope: '章节测验', status: '已发布' },
+      { type: '单选题', q: '青光眼视野最早出现的典型异常是？', knowledge: '青光眼视野检查', analysis: '正确题/错题均展示解析，支持题号筛选', scope: '章节测验/单课程', status: '已发布' },
+      { type: '单选题', q: 'OCTA无法直接显示以下哪项？', knowledge: 'OCTA与FFA鉴别', analysis: '解析覆盖为什么OCTA不能显示渗漏', scope: '章节测验', status: '已发布' },
+      { type: '单选题', q: '抗VEGF药物治疗湿性AMD的主要作用机制是？', knowledge: '抗VEGF治疗机制', analysis: '解析覆盖药物作用、适应证和易混干扰项', scope: '章节测验/单课程', status: '已发布' },
+      { type: '单选题', q: '补充RNFL厚度评估与视野缺损关系题...', knowledge: 'RNFL厚度评估', analysis: '待补全解析，暂不发布', scope: '章节测验', status: '草稿' }
+    ];
+
+    var assignments = [
+      { chapter: '高血压视网膜病变｜高血压视网膜病变分级', condition: '本章全部小节视频100% + 图文读到底', knowledge: 'KWB分级、Scheie分级、动静脉交叉压迫征', retake: '不限次数；概览只统计首测', result: '正确率、测验记录、全部题解析、知识追踪', status: '已发布' },
+      { chapter: '青光眼诊疗基础｜青光眼诊断技术与标准', condition: '本章全部小节已学完后自动开放', knowledge: '青光眼视野检查、RNFL厚度评估、OCT结构评估', retake: '可重测；每次结果单独保留', result: '薄弱知识点 + 基础课程内推荐 + 外部参考', status: '待发布' },
+      { chapter: '糖尿病视网膜病变基础｜DR国际临床分级标准', condition: '本章全部小节完成，教师可补充指定学员开放', knowledge: 'ETDRS分级、4-2-1规则、国际临床DR分级', retake: '不限次数；首测进入课程概览', result: '答对/答错/总题数 + 全题解析', status: '草稿' }
+    ];
+
+    var students = [
+      { name: '李子明', group: '规培医师A组', progress: 100, latest: '首测67%｜重测2次｜当前查看第3次', weak: 'KWB分级、动静脉交叉压迫征', follow: '需跟进' },
+      { name: '王珂', group: '青光眼专题班', progress: 82, latest: '视频已完成，图文未读完，章节测验锁定', weak: 'RNFL厚度评估', follow: '待提醒' },
+      { name: '刘敏', group: '眼底影像进阶班', progress: 100, latest: '首测92%｜已提交本次反馈', weak: '无明显薄弱项', follow: '正常' },
+      { name: '陈华', group: 'DR专题班', progress: 58, latest: '课程学习中，可自由跳学章节', weak: 'DR筛查策略', follow: '学习中' }
+    ];
+
+    var defaultFeedback = [
+      { time: '2026-08-12 14:34', student: '张教授', course: '高血压视网膜病变｜高血压视网膜病变分级', type: '课程内容', content: '[第1次测验｜学习进度100%｜正确率0%] 哈哈哈', status: '待处理' },
+      { time: '2026-08-11 16:42', student: '李子明', course: '高血压视网膜病变｜KWB分级', type: '测验题目', content: '第1题解析可以再补充动静脉交叉压迫征的图像表现。', status: '待处理' },
+      { time: '2026-08-11 15:18', student: '王珂', course: '青光眼诊疗基础｜OCT结构评估', type: '课程内容', content: 'RNFL厚度评估和视野缺损之间的关系希望讲得更直观。', status: '处理中' },
+      { time: '2026-08-10 19:05', student: '刘敏', course: 'DR基础｜筛查策略', type: '学习体验', content: '测验记录下拉切换后能快速看到不同结果，这部分比较清楚。', status: '已回复' }
+    ];
+
+    var knowledgeBindings = [
+      { point: 'Keith-Wagener-Barker分级', section: '高血压视网膜病变｜1.1 Keith-Wagener-Barker分级', questions: '第1题、第2题', ai: '白话讲解、四级递进、常见误区已配置', reference: '《眼科学》高血压眼底改变章节', status: '已配置' },
+      { point: 'RNFL厚度评估', section: '青光眼诊疗基础｜2.2 OCT在青光眼结构评估中的应用', questions: '第2题、第4题', ai: '待补充结构-功能关系示例', reference: 'AAO BCSC Glaucoma OCT章节', status: '待完善' },
+      { point: 'OCTA与FFA鉴别', section: '糖尿病视网膜病变基础｜3.2 OCT/OCTA在DR中的应用', questions: '第7题', ai: '无创/渗漏/动态灌注差异已配置', reference: '眼科影像学FFA/OCTA章节', status: '已配置' },
+      { point: '抗VEGF治疗机制', section: 'AMD诊疗规范｜1.2 干性AMD与湿性AMD的病理差异', questions: '第5题', ai: '药物作用机制和适应证已配置', reference: '眼底病抗VEGF治疗专家共识', status: '已配置' }
     ];
 
     var exams = [
@@ -1677,35 +1801,135 @@
     }
 
     function statusClass(text) {
-      if (/已发布|已完成|已审核|已生效/.test(text)) return 'ok';
-      if (/待|未测验|草稿|可再考/.test(text)) return 'wait';
-      if (/未开放|锁定|次数已满/.test(text)) return 'gray';
+      if (/已发布|已完成|已审核|已生效|已配置|已回复|已采纳|正常/.test(text)) return 'ok';
+      if (/待|未测验|草稿|可再考|需跟进|学习中|处理中|待完善/.test(text)) return 'wait';
+      if (/未开放|锁定|次数已满|下线|不采纳/.test(text)) return 'gray';
       return 'info';
     }
 
+    function escapeHtml(text) {
+      return String(text == null ? '' : text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function renderCourses() {
-      document.getElementById('courseRows').innerHTML = courses.map(function(item) {
+      var target = document.getElementById('courseRows');
+      if (!target) return;
+      target.innerHTML = courses.map(function(item) {
         return '<tr>'
-          + '<td><strong>' + item.name + '</strong><div class="muted">学生端课程卡片同步展示</div></td>'
-          + '<td>' + item.category + '<br><span class="muted">难度等级 ' + stars(item.difficulty) + '</span></td>'
-          + '<td>' + item.chapters + '<div class="progress-label">总体学习进度</div><div class="progress"><span style="width:' + item.progress + '%"></span></div><div class="progress-label">' + item.progress + '%</div></td>'
-          + '<td>' + item.front + '</td>'
-          + '<td><span class="status ' + statusClass(item.quiz) + '">' + item.quiz + '</span></td>'
-          + '<td><div class="table-actions"><button class="btn small" onclick="openDrawer(&quot;编辑课程&quot;, &quot;维护章节、讲义、测验和发布规则。&quot;, &quot;course&quot;)">编辑</button><button class="btn small">预览</button></div></td>'
+          + '<td><strong>' + escapeHtml(item.name) + '</strong><div class="muted">' + escapeHtml(item.chapters) + '｜学生端课程卡片同步</div></td>'
+          + '<td>' + escapeHtml(item.category) + '<br><span class="muted">难度等级 ' + stars(item.difficulty) + '</span></td>'
+          + '<td>' + escapeHtml(item.resources) + '<div class="progress-label">课程内容进度</div><div class="progress"><span style="width:' + item.progress + '%"></span></div><div class="progress-label">' + item.progress + '%</div></td>'
+          + '<td>' + escapeHtml(item.completeRule) + '</td>'
+          + '<td>' + escapeHtml(item.front) + '<br><span class="status ' + statusClass(item.status) + '">' + escapeHtml(item.status) + '</span></td>'
+          + '<td><div class="table-actions"><button class="btn small" onclick="openDrawer(&quot;编辑课程&quot;, &quot;维护视频学习、图文学习、讲义、知识点绑定、章节测验开放和AI答疑入口。&quot;, &quot;course&quot;)">编辑</button><button class="btn small">预览</button></div></td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    function renderKnowledgeBindings() {
+      var target = document.getElementById('knowledgeRows');
+      if (!target) return;
+      target.innerHTML = knowledgeBindings.map(function(item) {
+        return '<tr>'
+          + '<td><strong>' + escapeHtml(item.point) + '</strong><div class="muted">需先在知识点库预配置</div></td>'
+          + '<td>' + escapeHtml(item.section) + '</td>'
+          + '<td>' + escapeHtml(item.questions) + '</td>'
+          + '<td>' + escapeHtml(item.ai) + '</td>'
+          + '<td>' + escapeHtml(item.reference) + '</td>'
+          + '<td><span class="status ' + statusClass(item.status) + '">' + escapeHtml(item.status) + '</span></td>'
           + '</tr>';
       }).join('');
     }
 
     function renderQuestions() {
-      document.getElementById('questionRows').innerHTML = questions.map(function(item) {
+      var target = document.getElementById('questionRows');
+      if (!target) return;
+      target.innerHTML = questions.map(function(item) {
         return '<tr>'
-          + '<td><span class="status info">' + item.type + '</span></td>'
-          + '<td>' + item.q + '</td>'
-          + '<td>' + item.knowledge + '</td>'
-          + '<td>' + item.diff + '</td>'
-          + '<td>' + item.scope + '</td>'
-          + '<td>' + item.score + '</td>'
-          + '<td><span class="status ' + statusClass(item.status) + '">' + item.status + '</span></td>'
+          + '<td><span class="status info">' + escapeHtml(item.type) + '</span></td>'
+          + '<td>' + escapeHtml(item.q) + '</td>'
+          + '<td>' + escapeHtml(item.knowledge) + '</td>'
+          + '<td>' + escapeHtml(item.analysis) + '</td>'
+          + '<td>' + escapeHtml(item.scope) + '</td>'
+          + '<td><span class="status ' + statusClass(item.status) + '">' + escapeHtml(item.status) + '</span></td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    function renderAssignments() {
+      var target = document.getElementById('assignmentRows');
+      if (!target) return;
+      target.innerHTML = assignments.map(function(item) {
+        return '<tr>'
+          + '<td><strong>' + escapeHtml(item.chapter) + '</strong><div class="muted">需规作业布置对应：章节测验</div></td>'
+          + '<td>' + escapeHtml(item.condition) + '</td>'
+          + '<td>' + escapeHtml(item.knowledge) + '</td>'
+          + '<td>' + escapeHtml(item.retake) + '</td>'
+          + '<td>' + escapeHtml(item.result) + '<br><span class="status ' + statusClass(item.status) + '">' + escapeHtml(item.status) + '</span></td>'
+          + '<td><div class="table-actions"><button class="btn small" onclick="openDrawer(&quot;编辑章节测验&quot;, &quot;配置开放条件、题目范围、知识点绑定、重测记录、全题解析和反馈规则。&quot;, &quot;assignment&quot;)">编辑</button><button class="btn small">预览</button></div></td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    function renderStudents() {
+      var target = document.getElementById('studentRows');
+      if (!target) return;
+      target.innerHTML = students.map(function(item) {
+        var status = item.follow === '正常' ? 'ok' : (item.follow === '学习中' ? 'info' : 'wait');
+        return '<tr>'
+          + '<td><strong>' + item.name + '</strong><div class="muted">学生端学习记录同步</div></td>'
+          + '<td>' + item.group + '</td>'
+          + '<td><div class="progress"><span style="width:' + item.progress + '%"></span></div><div class="progress-label">' + item.progress + '%</div></td>'
+          + '<td>' + item.latest + '</td>'
+          + '<td>' + item.weak + '</td>'
+          + '<td><span class="status ' + status + '">' + item.follow + '</span></td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    function readStudentFeedback() {
+      try {
+        var stored = JSON.parse(localStorage.getItem('life_med_basic_course_feedback') || '[]');
+        return Array.isArray(stored) ? stored : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function renderTeachingFeedback() {
+      var target = document.getElementById('feedbackRows');
+      if (!target) return;
+      var studentFeedback = readStudentFeedback().map(function(item) {
+        var context = [];
+        if (item.attemptNo) context.push('第' + item.attemptNo + '次测验');
+        if (item.learningProgress !== undefined && item.learningProgress !== null) context.push('学习进度' + item.learningProgress + '%');
+        if (item.accuracy !== undefined && item.accuracy !== null) context.push('正确率' + item.accuracy + '%');
+        return {
+          time: item.time || item.createdAt || '刚刚',
+          student: item.student || item.studentName || '当前学生',
+          course: (item.course || '基础课程') + (item.chapter ? '｜' + item.chapter : ''),
+          type: item.type || '课程反馈',
+          content: (context.length ? '[' + context.join('｜') + '] ' : '') + (item.content || item.detail || '学生提交了课程反馈。'),
+          status: item.status || '待处理'
+        };
+      });
+      var rows = studentFeedback.concat(defaultFeedback);
+      var pending = rows.filter(function(item) { return /待处理|处理中/.test(item.status); }).length;
+      var pendingEl = document.getElementById('teacherFeedbackPending');
+      if (pendingEl) pendingEl.textContent = pending;
+      target.innerHTML = rows.map(function(item) {
+        return '<tr>'
+          + '<td>' + escapeHtml(item.time) + '</td>'
+          + '<td><strong>' + escapeHtml(item.student) + '</strong></td>'
+          + '<td>' + escapeHtml(item.course) + '</td>'
+          + '<td><span class="status info">' + escapeHtml(item.type) + '</span></td>'
+          + '<td>' + escapeHtml(item.content) + '</td>'
+          + '<td><span class="status ' + statusClass(item.status) + '">' + escapeHtml(item.status) + '</span></td>'
           + '</tr>';
       }).join('');
     }
@@ -1784,8 +2008,41 @@
 
     var drawerTemplates = {
       'rule-check': '<div class="rules"><div class="rule-box"><b>课程</b><p>校验分类、难度星级、章节树、在线讲义、讲义下载、章节测验是否完整。</p></div><div class="rule-box"><b>考试</b><p>校验题型混合、知识点覆盖、难度比例、次数限制和成绩报告字段。</p></div><div class="rule-box"><b>比赛</b><p>校验有效期、固定时长、进度保存、完成/退赛/缺考结果生成。</p></div><div class="rule-box"><b>个人中心</b><p>校验课程、测验、考试、实训、AI答疑、证书学分是否可进入能力评估。</p></div></div>',
-      course: '<div class="split-form"><div class="form-field"><label>课程分类</label><select class="select"><option>眼科基础</option><option>AI诊疗</option><option>影像判读</option></select></div><div class="form-field"><label>难度等级</label><select class="select"><option>一星</option><option>二星</option><option>三星</option></select></div><div class="form-field"><label>章节测验开放</label><select class="select"><option>章节视频完成后开放</option><option>教师手动开放</option></select></div><div class="form-field"><label>发布状态</label><select class="select"><option>草稿</option><option>已发布</option><option>下线</option></select></div><div class="form-field" style="grid-column:1/-1;"><label>课程说明</label><textarea>用于学生端课程列表和课程详情页，需同步维护讲义、下载资源和章节树进度。</textarea></div></div>',
-      question: '<div class="split-form"><div class="form-field"><label>题型</label><select class="select"><option>单选题</option><option>多选题</option><option>简答题</option><option>病例分析题</option><option>代码题</option></select></div><div class="form-field"><label>难度</label><select class="select"><option>基础</option><option>进阶</option><option>高阶</option></select></div><div class="form-field"><label>知识点</label><input class="input" value="DR分级与处置"></div><div class="form-field"><label>适用场景</label><select class="select"><option>章节测验</option><option>单课程测评</option><option>模块考核</option><option>全周期考试</option></select></div><div class="form-field" style="grid-column:1/-1;"><label>解析/评分要点</label><textarea>客观题配置正确答案；主观题配置关键词、评分Rubric和教师复核规则。</textarea></div></div>',
+      course: `<div class="split-form">
+        <div class="form-field"><label>课程分类</label><select class="select"><option>眼科基础</option><option>AI诊疗</option><option>影像判读</option></select></div>
+        <div class="form-field"><label>难度等级</label><select class="select"><option>一星</option><option>二星</option><option>三星</option></select></div>
+        <div class="form-field"><label>章节资源</label><select class="select"><option>视频学习 + 图文学习 + 视频侧讲义</option><option>仅维护草稿资源</option></select></div>
+        <div class="form-field"><label>章节测验开放</label><select class="select"><option>本章全部小节视频100% + 图文读到底后开放</option><option>指定学员补充开放</option></select></div>
+        <div class="form-field"><label>知识点绑定</label><select class="select"><option>每个小节必须绑定至少1个知识点</option><option>暂存，待知识点补齐</option></select></div>
+        <div class="form-field"><label>发布状态</label><select class="select"><option>草稿</option><option>已发布</option><option>下线</option></select></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>课程说明</label><textarea>用于学生端课程列表和课程详情页。视频学习与图文学习分开维护，讲义放在视频学习侧；首次学习时二者都完成才算当前小节学完，后续可再次学习或直接重测。</textarea></div>
+      </div>`,
+      assignment: `<div class="split-form">
+        <div class="form-field"><label>课程章节</label><select class="select"><option>高血压视网膜病变｜高血压视网膜病变分级</option><option>青光眼诊疗基础｜青光眼诊断技术与标准</option><option>糖尿病视网膜病变基础｜DR国际临床分级标准</option></select></div>
+        <div class="form-field"><label>开放条件</label><select class="select"><option>本章全部小节视频100% + 图文读到底</option><option>教师指定学员补充开放</option></select></div>
+        <div class="form-field"><label>题目来源</label><select class="select"><option>按本章绑定知识点抽题</option><option>教师手动选题</option><option>固定题组</option></select></div>
+        <div class="form-field"><label>重测规则</label><select class="select"><option>不限次数，每次结果单独记录</option><option>限制次数，仍保留历次记录</option></select></div>
+        <div class="form-field"><label>概览统计</label><select class="select"><option>只统计每章首次测验</option><option>重测仅进入历史记录</option></select></div>
+        <div class="form-field"><label>发布范围</label><select class="select"><option>全班</option><option>课题组</option><option>指定学员</option></select></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>结果页展示</label><textarea>学生必须答完全部题目才可提交；结果页展示本次正确率、测验记录、答对/答错题号筛选、全部题解析、知识追踪和推荐学习内容。</textarea></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>绑定知识点</label><textarea>高血压视网膜病变分级、RNFL厚度评估。知识点需先在知识点库维护，再绑定章节课程和测验题目，用于错题知识追踪和课程内推荐。</textarea></div>
+      </div>`,
+      question: `<div class="split-form">
+        <div class="form-field"><label>题型</label><select class="select"><option>单选题</option><option>多选题</option><option>简答题</option><option>病例分析题</option></select></div>
+        <div class="form-field"><label>难度</label><select class="select"><option>基础</option><option>进阶</option><option>高阶</option></select></div>
+        <div class="form-field"><label>绑定知识点</label><input class="input" value="Keith-Wagener-Barker分级"></div>
+        <div class="form-field"><label>适用范围</label><select class="select"><option>章节测验</option><option>单课程测评</option><option>模块考核</option></select></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>题干与选项</label><textarea>维护题干、正确答案和干扰项。前台提交前会校验全部题目已作答，因此后台不配置未答结果状态。</textarea></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>完整解析</label><textarea>正确题和错误题都展示解析。解析需覆盖正确答案理由、其他选项为什么不选、关联知识点和常见误区，便于学生答对后也能复盘。</textarea></div>
+      </div>`,
+      'course-aiqa': `<div class="split-form">
+        <div class="form-field"><label>首页AI答疑范围</label><select class="select"><option>仅医学课程自然语言问答</option><option>暂不开放</option></select></div>
+        <div class="form-field"><label>首页入场提示</label><input class="input" value="当前问答基于医学课程内容，请勿询问与医学无关的内容"></div>
+        <div class="form-field"><label>课程详情入口</label><select class="select"><option>当前小节视频和图文均完成后开放</option><option>未完成时提示先学完当前小节</option></select></div>
+        <div class="form-field"><label>详情页功能</label><select class="select"><option>当前小节问答 + 当前小节知识点难点讲解</option><option>仅当前小节问答</option></select></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>知识点难点讲解</label><textarea>AI只读取当前小节绑定的知识点，按白话解释、临床例子、常见误区、教材/指南出处组织内容；未绑定知识点的小节不能发布难点讲解。</textarea></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>问题拦截规则</label><textarea>首页AI答疑不提供课程难点讲解；非医学问题、与当前课程无关的问题需提示收敛到医学课程学习范围。</textarea></div>
+      </div>`,
       case: '<div class="rules"><div class="rule-box"><b>病例推理</b><p>配置病例资料、影像、检查结果、推理问题和提交模板。</p></div><div class="rule-box"><b>AI诊断对比</b><p>学生提交后才解锁，展示AI诊断、依据和差异分析。</p></div><div class="rule-box"><b>讨论区</b><p>支持发帖、回复、语音回复、审核和专家置顶。</p></div></div>',
       practice: '<div class="rules"><div class="rule-box"><b>评分标准</b><p>按诊断路径、报告完整性、标注一致性、模型指标和讨论质量配置评分。</p></div><div class="rule-box"><b>能力映射</b><p>每项实训结果回写个人中心，更新临床推理、影像判读、模型构建等能力。</p></div></div>',
       contest: '<div class="split-form"><div class="form-field"><label>有效期</label><input class="input" value="2026-07-01 至 2026-07-20"></div><div class="form-field"><label>固定答题时长</label><input class="input" value="90分钟"></div><div class="form-field"><label>退出后进度</label><select class="select"><option>保留作答与剩余时间</option></select></div><div class="form-field"><label>结束结果</label><select class="select"><option>完成/退赛/缺考均生成结果</option></select></div></div>',
@@ -1990,7 +2247,11 @@
     }
 
     renderCourses();
+    renderKnowledgeBindings();
     renderQuestions();
+    renderAssignments();
+    renderStudents();
+    renderTeachingFeedback();
     renderExams();
     renderLiterature();
     initNav();
