@@ -75,7 +75,9 @@ a{text-decoration:none;color:inherit}
 .public-category-count{display:inline-flex;align-items:center;justify-content:center;margin-top:7px;min-width:42px;height:22px;border-radius:999px;background:var(--gray-100);color:var(--gray-700);font-size:12px;font-weight:800}
 .public-category-btn.active .public-category-count{background:var(--primary);color:#fff}
 .public-selected-list{margin-top:16px;border:1px solid var(--gray-200);border-radius:10px;background:#fff;overflow:hidden}
-.public-selected-list .list-title-row{margin:0;padding:14px 16px;border-bottom:1px solid var(--gray-200);background:#f8fbff}
+.public-selected-list .list-title-row{margin:0;padding:14px 16px 0;border-bottom:0;background:#fff}
+.public-filter-bar{margin:14px 16px 16px}
+.public-filter-bar .filter-select{min-width:170px}
 .public-dataset-code{font-family:Consolas,"Courier New",monospace;font-size:12px;font-weight:800;color:var(--primary-dark);white-space:nowrap}
 .dataset-meta{margin-top:3px;color:var(--gray-600);font-size:12px}
 .list-block{margin-top:16px;border-top:1px solid var(--gray-200);padding-top:16px}
@@ -126,7 +128,7 @@ tbody tr:hover{background:var(--gray-50)}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 @media(max-width:1180px){.source-tabs,.distribution-grid{grid-template-columns:1fr}.public-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:1024px){.sidebar{width:60px}.sidebar .menu-item{font-size:0;padding:12px}.menu-group-title{display:none}.main-content{margin-left:60px}.summary-strip{flex-direction:column}.filter-bar input{min-width:220px}.match-count{margin-left:0}.detail-grid{grid-template-columns:1fr}}
-@media(max-width:720px){.header-nav{display:none}.filter-bar{align-items:stretch}.filter-bar input,.filter-bar select,.filter-bar button{width:100%}.public-category-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.header-nav{display:none}.filter-bar{align-items:stretch}.filter-bar input,.filter-bar select,.filter-bar button{width:100%}.public-category-grid{grid-template-columns:1fr}.public-selected-list .list-title-row{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -185,6 +187,7 @@ var currentSortOrder = { original:'desc', public:'desc' };
 var currentPage = { original:1, public:1 };
 var activeSource = 'original';
 var publicBrowseState = { modalityIndex:0, categoryIndex:0 };
+var publicListState = { keyword:'', subtype:'', sort:'desc' };
 var pageSize = 6;
 
 var sourceDefinitions = {
@@ -233,12 +236,12 @@ var sourceDefinitions = {
         count:6,
         categories:[
           {name:'糖尿病视网膜病变分级',datasets:[
-            {code:'PUB-FUNDUS-202607-0001',subtype:'DDR数据集',scale:'13673张图像的糖尿病视网膜病变五分类标注数据'},
-            {code:'PUB-FUNDUS-202607-0002',subtype:'diaretdb0',scale:'130张图像的糖尿病视网膜病变二分类标注数据'},
-            {code:'PUB-FUNDUS-202607-0003',subtype:'Diaretdb1',scale:'89张图像的糖尿病视网膜病变二分类标注数据'},
-            {code:'PUB-FUNDUS-202607-0004',subtype:'DRD(kaggle)',scale:'87275张图像的糖尿病视网膜病变五分类标注数据'},
-            {code:'PUB-FUNDUS-202607-0005',subtype:'IDRID',scale:'516张图像的糖尿病视网膜病变五分类标注数据'},
-            {code:'PUB-FUNDUS-202607-0006',subtype:'Messidor',scale:'1200张图像的糖尿病视网膜病变四分类标注数据'}
+            {datasetId:8,code:'PUB-FUNDUS-202607-0001',subtype:'DDR数据集',scale:'13673张图像的糖尿病视网膜病变五分类标注数据'},
+            {datasetId:9,code:'PUB-FUNDUS-202607-0002',subtype:'diaretdb0',scale:'130张图像的糖尿病视网膜病变二分类标注数据'},
+            {datasetId:10,code:'PUB-FUNDUS-202607-0003',subtype:'Diaretdb1',scale:'89张图像的糖尿病视网膜病变二分类标注数据'},
+            {datasetId:11,code:'PUB-FUNDUS-202607-0004',subtype:'DRD(kaggle)',scale:'87275张图像的糖尿病视网膜病变五分类标注数据'},
+            {datasetId:12,code:'PUB-FUNDUS-202607-0005',subtype:'IDRID',scale:'516张图像的糖尿病视网膜病变五分类标注数据'},
+            {datasetId:18,code:'PUB-FUNDUS-202607-0006',subtype:'Messidor',scale:'1200张图像的糖尿病视网膜病变四分类标注数据'}
           ]},
           {name:'糖尿病视网膜病灶分割',datasets:[]},
           {name:'老年黄斑病变分级',datasets:[]},
@@ -256,9 +259,9 @@ var sourceDefinitions = {
         count:3,
         categories:[
           {name:'视网膜积液病变分割',datasets:[
-            {code:'PUB-OCT-202607-0001',subtype:'RETOUCH数据集',scale:'IRF、SRF、PED三类病灶，总计79组三维OCT数据，6936张二维OCT图像'},
-            {code:'PUB-OCT-202607-0002',subtype:'DUKE数据集',scale:'针对IRF病灶，总计10组三维OCT数据，110张二维OCT图像'},
-            {code:'PUB-OCT-202607-0003',subtype:'UNM数据集',scale:'含29组三维OCT数据，每组25张二维图像，共725张二维图像'}
+            {datasetId:13,code:'PUB-OCT-202607-0001',subtype:'RETOUCH数据集',scale:'IRF、SRF、PED三类病灶，总计79组三维OCT数据，6936张二维OCT图像'},
+            {datasetId:14,code:'PUB-OCT-202607-0002',subtype:'DUKE数据集',scale:'针对IRF病灶，总计10组三维OCT数据，110张二维OCT图像'},
+            {datasetId:15,code:'PUB-OCT-202607-0003',subtype:'UNM数据集',scale:'含29组三维OCT数据，每组25张二维图像，共725张二维图像'}
           ]},
           {name:'视网膜层分割',datasets:[]},
           {name:'青光眼分级',datasets:[]},
@@ -273,10 +276,10 @@ var sourceDefinitions = {
         count:2,
         categories:[
           {name:'视网膜血管分割',datasets:[
-            {code:'PUB-OCTA-202607-0001',subtype:'OCTA-500视网膜血管分割数据集',scale:'含500张三维OCTA数据'}
+            {datasetId:16,code:'PUB-OCTA-202607-0001',subtype:'OCTA-500视网膜血管分割数据集',scale:'含500张三维OCTA数据'}
           ]},
           {name:'黄斑中心凹无血管区分割',datasets:[
-            {code:'PUB-OCTA-202607-0002',subtype:'OCTA-500黄斑中心凹无血管区数据集',scale:'含500张三维OCTA数据'}
+            {datasetId:17,code:'PUB-OCTA-202607-0002',subtype:'OCTA-500黄斑中心凹无血管区数据集',scale:'含500张三维OCTA数据'}
           ]}
         ]
       }
@@ -384,19 +387,39 @@ function renderPublicBrowser(def){
 }
 
 function renderPublicDatasetList(modality,category){
-  var datasets = category.datasets || [];
+  var datasets = getPublicFilteredDatasets(modality, category);
+  var totalCount = (category.datasets || []).length;
+  var subtypeOptions = getPublicSubtypeOptions(category);
   var html = '<div class="public-selected-list">';
-  html += '<div class="list-title-row"><h3>' + escapeHtml(category.name) + '细分数据集列表</h3><span>' + escapeHtml(modality.modality) + ' / ' + datasets.length + ' 个</span></div>';
-  html += '<div class="table-wrap"><table><thead><tr><th>自动生成编号</th><th>细分类型</th><th>数据规模</th></tr></thead><tbody>';
+  html += '<div class="list-title-row"><h3>' + escapeHtml(category.name) + '细分数据集列表</h3><span>' + escapeHtml(modality.modality) + ' / 当前类别共 ' + totalCount + ' 个细分数据集</span></div>';
+  html += '<div class="filter-bar public-filter-bar">';
+  html += '<label>关键词搜索</label>';
+  html += '<input id="publicListKeyword" value="' + escapeHtml(publicListState.keyword) + '" placeholder="按编号、类型、规模搜索" oninput="updatePublicListKeyword(this.value)">';
+  html += '<label>小类</label>';
+  html += '<select class="filter-select" id="publicListSubtype" onchange="updatePublicListSubtype(this.value)"><option value="">小类：全部</option>' + subtypeOptions.map(function(item){ return '<option value="' + escapeHtml(item) + '"' + (publicListState.subtype === item ? ' selected' : '') + '>' + escapeHtml(item) + '</option>'; }).join('') + '</select>';
+  html += '<button type="button" class="btn btn-outline btn-sm" id="publicListSort" onclick="togglePublicListSort()">' + (publicListState.sort === 'desc' ? '最新更新 ↓' : '最新更新 ↑') + '</button>';
+  html += '<button type="button" class="btn btn-outline btn-sm" onclick="resetPublicListFilter()">重置筛选</button>';
+  html += '<span class="match-count">当前显示 <strong>' + datasets.length + '</strong> 条 / 本类收录 <strong>' + totalCount + '</strong> 个数据集</span>';
+  html += '</div>';
+  html += '<div class="table-wrap"><table><thead><tr><th>自动生成编号</th><th>细分类型</th><th>数据规模</th><th>更新时间</th><th>操作</th></tr></thead><tbody>';
   if (datasets.length) {
     datasets.forEach(function(item){
-      html += '<tr><td><span class="public-dataset-code">' + escapeHtml(item.code) + '</span></td><td><div class="dataset-name">' + escapeHtml(item.subtype) + '</div></td><td>' + escapeHtml(item.scale) + '</td></tr>';
+      var ds = findDataset(item.datasetId);
+      html += '<tr><td><span class="public-dataset-code">' + escapeHtml(item.code) + '</span></td><td><div class="dataset-name">' + escapeHtml(item.subtype) + '</div></td><td>' + escapeHtml(item.scale) + '</td><td>' + escapeHtml(ds ? ds.updateTime : '--') + '</td><td><div class="action-cell">' + (ds ? '<button class="btn btn-outline btn-sm" onclick="openDetail(' + ds.id + ')">查看详情</button><button class="btn btn-success btn-sm" onclick="downloadDataset(' + ds.id + ')">下载</button>' : '<span class="tag tag-gray">待配置</span>') + '</div></td></tr>';
     });
   } else {
-    html += '<tr><td colspan="3"><div class="empty">暂无细分数据集</div></td></tr>';
+    html += '<tr><td colspan="5"><div class="empty">暂无细分数据集</div></td></tr>';
   }
   html += '</tbody></table></div></div>';
   return html;
+}
+
+function getPublicSubtypeOptions(category){
+  var list = [];
+  (category.datasets || []).forEach(function(item){
+    if (item.subtype && list.indexOf(item.subtype) === -1) list.push(item.subtype);
+  });
+  return list;
 }
 
 function getPublicModality(def){
@@ -416,12 +439,61 @@ function getPublicCategory(modality){
 function switchPublicModality(index){
   publicBrowseState.modalityIndex = index;
   publicBrowseState.categoryIndex = 0;
+  publicListState.keyword = '';
+  publicListState.subtype = '';
+  publicListState.sort = 'desc';
   renderPanel();
 }
 
 function switchPublicCategory(index){
   publicBrowseState.categoryIndex = index;
+  publicListState.keyword = '';
+  publicListState.subtype = '';
+  publicListState.sort = 'desc';
   renderPanel();
+}
+
+function updatePublicListKeyword(value){
+  publicListState.keyword = value || '';
+  renderPanel();
+}
+
+function updatePublicListSubtype(value){
+  publicListState.subtype = value || '';
+  renderPanel();
+}
+
+function togglePublicListSort(){
+  publicListState.sort = publicListState.sort === 'desc' ? 'asc' : 'desc';
+  renderPanel();
+}
+
+function resetPublicListFilter(){
+  publicListState.keyword = '';
+  publicListState.subtype = '';
+  publicListState.sort = 'desc';
+  renderPanel();
+}
+
+function getPublicFilteredDatasets(modality, category){
+  var keyword = (publicListState.keyword || '').trim().toLowerCase();
+  var list = (category.datasets || []).map(function(item){
+    var ds = findDataset(item.datasetId);
+    return { item:item, ds:ds };
+  }).filter(function(entry){
+    if (!keyword) return true;
+    var ds = entry.ds || {};
+    var text = [entry.item.code, entry.item.subtype, entry.item.scale, ds.name, ds.disease, ds.desc, ds.updateTime].join(' ').toLowerCase();
+    return text.indexOf(keyword) !== -1;
+  }).filter(function(entry){
+    if (!publicListState.subtype) return true;
+    return entry.item.subtype === publicListState.subtype;
+  }).sort(function(a, b){
+    var timeA = a.ds ? new Date(a.ds.updateTime).getTime() : 0;
+    var timeB = b.ds ? new Date(b.ds.updateTime).getTime() : 0;
+    return publicListState.sort === 'asc' ? timeA - timeB : timeB - timeA;
+  }).map(function(entry){ return entry.item; });
+  return list;
 }
 
 function filterDatasets(key){ currentPage[key] = 1; renderTable(key); }

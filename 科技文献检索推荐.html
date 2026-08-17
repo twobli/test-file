@@ -166,8 +166,9 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
 .literature-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--gray-700); font-size: 13px; margin-bottom: 10px; }
 .literature-meta strong { color: var(--gray-800); font-weight: 600; }
 .literature-abstract { color: var(--gray-700); line-height: 1.75; font-size: 13px; margin-bottom: 12px; }
-.literature-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.literature-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid var(--gray-100); }
 .literature-type { color: var(--gray-500); font-size: 12px; }
+.literature-actions .view-detail-btn { min-width: 96px; }
 
 /* 无结果提示 */
 .no-result { text-align: center; padding: 40px; color: var(--gray-500); font-size: 14px; }
@@ -720,6 +721,10 @@ function renderResults() {
                     '<span><strong>文献类型：</strong>' + escapeHtml(item.type) + '</span>' +
                 '</div>' +
                 '<div class="literature-abstract"><strong>摘要片段：</strong>' + escapeHtml(snippet) + '</div>' +
+                '<div class="literature-actions">' +
+                    '<span class="literature-type">点击查看完整题录、作者单位、DOI 和全文摘要</span>' +
+                    '<button class="btn btn-outline btn-sm view-detail-btn" onclick="openDetail(' + item.id + ')">查看详情</button>' +
+                '</div>' +
             '</article>';
     }).join('');
     renderPagination(pagination);

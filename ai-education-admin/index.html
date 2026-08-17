@@ -1198,14 +1198,27 @@
             <button class="tab" data-tab="aiCompare">AI诊断对比</button>
             <button class="tab" data-tab="caseDiscuss">病例讨论</button>
           </div>
-          <button class="btn primary" onclick="openDrawer('发布病例', '配置病例资料、难度、标准答案、AI诊断对比和讨论区权限。', 'case')">发布病例</button>
+          <button class="btn primary" onclick="openDrawer('发布病例', '配置标准病例库资料：病种、多模态医学影像、结构化病历、标准答案、AI诊断对比和讨论区权限。', 'case')">发布病例</button>
         </div>
         <div class="tab-pane active" id="caseReason">
+          <div class="panel">
+            <div class="panel-head"><div><h2 class="panel-title">标准病例库管理</h2><p class="panel-subtitle">对应学生端左侧病例列表与右侧“标准病例库资料”，统一维护多病种、多模态医学影像和结构化病历信息。</p></div></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>标准病例</th><th>病种/分层</th><th>多模态医学影像</th><th>结构化病历信息</th><th>同步到前端</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody>
+                  <tr><td>轻度非增殖期糖尿病视网膜病变</td><td>糖尿病视网膜病变 / 基础病例</td><td>眼底、OCT、FFA</td><td>脱敏患者信息、主诉现病史、既往史、眼部检查、辅助影像</td><td>病例资料 + 推理任务</td><td><span class="status ok">已发布</span></td><td><button class="btn small">编辑</button></td></tr>
+                  <tr><td>DR合并黄斑水肿病例</td><td>糖尿病视网膜病变 / 进阶病例</td><td>眼底、OCT、FFA、OCTA</td><td>病史、血糖控制、黄斑中心凹厚度、荧光渗漏、治疗决策信息</td><td>病例资料 + AI对比</td><td><span class="status ok">已发布</span></td><td><button class="btn small">编辑</button></td></tr>
+                  <tr><td>眼内淋巴瘤伪装综合征</td><td>眼内肿瘤 / 科研病例</td><td>眼底、OCT、FFA、ICGA</td><td>既往肿瘤史、葡萄膜炎治疗史、玻璃体混浊、视网膜下浸润灶</td><td>病例资料 + 讨论区</td><td><span class="status wait">待完善</span></td><td><button class="btn small">完善</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
           <div class="panel">
             <div class="panel-head"><div><h2 class="panel-title">案例教学闭环</h2><p class="panel-subtitle">学生必须先完成自己的病例推理提交，才能解锁AI诊断对比学习。</p></div></div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>病例</th><th>分类/难度</th><th>推理任务</th><th>AI对比解锁</th><th>报告生成</th><th>讨论状态</th><th>操作</th></tr></thead>
+                <thead><tr><th>标准病例库病例</th><th>病种/分层</th><th>推理任务</th><th>AI对比解锁</th><th>报告生成</th><th>讨论状态</th><th>操作</th></tr></thead>
                 <tbody>
                   <tr><td>糖网合并黄斑水肿病例</td><td>DR / 高阶</td><td>诊断依据、鉴别诊断、处置路径</td><td><span class="status ok">提交后开放</span></td><td>自动生成学习报告</td><td><span class="status info">开放讨论</span></td><td><button class="btn small">审核</button></td></tr>
                   <tr><td>青光眼视野进展病例</td><td>青光眼 / 进阶</td><td>视野判读、OCT结构分析</td><td><span class="status ok">提交后开放</span></td><td>补充薄弱知识点</td><td><span class="status wait">待回复</span></td><td><button class="btn small">回复</button></td></tr>
@@ -1715,7 +1728,7 @@
     var sectionMeta = {
       dashboard: ['总览驾驶舱', '面向 AI 教育平台的课程、案例、技能实践、考试、能力评估、证书学分与 AI 答疑统一后台，和学生端业务状态保持闭环。'],
       courses: ['教师课程管理端', '作为基础课程管理后台，统一支持课程创建、章节资源上传、知识点配置、章节测验配置、学员管理与教学反馈收集。'],
-      cases: ['案例教学管理', '管理病例推理实训、AI诊断对比学习和病例讨论，保证先提交推理再解锁AI对比。'],
+      cases: ['案例教学管理', '管理标准病例库、病例推理实训、AI诊断对比学习和病例讨论；标准病例库需维护病种、多模态医学影像和结构化病历信息。'],
       practice: ['技能实践管理', '管理虚拟临床、经典病例报告、疑难病例研讨、数据标注与AI模型实训，并将实训结果回写能力评估。'],
       contest: ['读片/病例大赛管理', '管理比赛有效期、固定答题时长、报名、进度保存、剩余时间，以及完成、退赛、缺考三种结果。'],
       exams: ['考试中心管理', '管理单课程测评、模块考核、全周期综合考试，覆盖混合题型、考试次数、历次成绩和成绩报告。'],
@@ -2046,7 +2059,7 @@
         <div class="form-field" style="grid-column:1/-1;"><label>知识点难点讲解</label><textarea>AI只读取当前小节绑定的知识点，按白话解释、临床例子、常见误区、教材/指南出处组织内容；未绑定知识点的小节不能发布难点讲解。</textarea></div>
         <div class="form-field" style="grid-column:1/-1;"><label>问题拦截规则</label><textarea>首页AI答疑不提供课程难点讲解；非医学问题、与当前课程无关的问题需提示收敛到医学课程学习范围。</textarea></div>
       </div>`,
-      case: '<div class="rules"><div class="rule-box"><b>病例推理</b><p>配置病例资料、影像、检查结果、推理问题和提交模板。</p></div><div class="rule-box"><b>AI诊断对比</b><p>学生提交后才解锁，展示AI诊断、依据和差异分析。</p></div><div class="rule-box"><b>讨论区</b><p>支持发帖、回复、语音回复、审核和专家置顶。</p></div></div>',
+      case: '<div class="rules"><div class="rule-box"><b>标准病例库</b><p>维护病种、病例分层、多模态医学影像（眼底、OCT、FFA/OCTA等）和结构化病历信息，并同步到学生端病例资料。</p></div><div class="rule-box"><b>病例推理</b><p>配置开放式推理题要求、标准答案和评分规则；学生诊断、必要检查和置信度均由学员文本填写，后台不逐项配置选项。</p></div><div class="rule-box"><b>AI诊断对比</b><p>学生提交后才解锁，展示AI诊断、依据和差异分析。</p></div><div class="rule-box"><b>讨论区</b><p>支持发帖、回复、语音回复、审核和专家置顶。</p></div></div>',
       practice: '<div class="rules"><div class="rule-box"><b>评分标准</b><p>按诊断路径、报告完整性、标注一致性、模型指标和讨论质量配置评分。</p></div><div class="rule-box"><b>能力映射</b><p>每项实训结果回写个人中心，更新临床推理、影像判读、模型构建等能力。</p></div></div>',
       contest: '<div class="split-form"><div class="form-field"><label>有效期</label><input class="input" value="2026-07-01 至 2026-07-20"></div><div class="form-field"><label>固定答题时长</label><input class="input" value="90分钟"></div><div class="form-field"><label>退出后进度</label><select class="select"><option>保留作答与剩余时间</option></select></div><div class="form-field"><label>结束结果</label><select class="select"><option>完成/退赛/缺考均生成结果</option></select></div></div>',
       exam: '<div class="split-form"><div class="form-field"><label>考试范围</label><select class="select"><option>单课程测评</option><option>模块考核</option><option>全周期综合考试</option></select></div><div class="form-field"><label>考试次数</label><select class="select"><option>2次</option><option>3次</option></select></div><div class="form-field"><label>题型组合</label><input class="input" value="单选/多选/简答/病例/代码"></div><div class="form-field"><label>报告维度</label><input class="input" value="分布、错误率、能力曲线、历次成绩"></div><div class="form-field" style="grid-column:1/-1;"><label>次数满额规则</label><textarea>当考试次数达到上限时，前台操作栏隐藏“再考一次”，仅保留“查看报告”。</textarea></div></div>',

@@ -76,8 +76,9 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .page-title { font-size:20px; font-weight:700; color:var(--gray-900); }
 .case-selector { display:flex; align-items:center; gap:10px; }
 .case-selector label { font-size:13px; color:var(--gray-600); font-weight:500; }
-.case-selector select { padding:7px 12px; border:1px solid var(--gray-300); border-radius:6px; font-size:13px; font-family:inherit; outline:none; background:#fff; cursor:pointer; }
-.case-selector select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+.case-current { min-width:220px; padding:7px 12px; border:1px solid var(--gray-200); border-radius:6px; background:#fff; color:var(--gray-800); font-size:13px; font-weight:600; }
+.case-refresh-btn { display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:1px solid var(--primary); border-radius:6px; background:var(--primary); color:#fff; font-size:13px; font-family:inherit; font-weight:600; cursor:pointer; transition:var(--transition); }
+.case-refresh-btn:hover { background:var(--primary-dark); border-color:var(--primary-dark); box-shadow:var(--shadow-md); }
 
 /* Two-Column Layout */
 .content-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -107,7 +108,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .vital-item .vs-value { font-weight:600; color:var(--gray-800); }
 .vital-item .vs-value.abnormal { color:var(--danger); }
 
-/* ===== Card 2: 问诊对话记录 ===== */
+/* ===== Card 2: 临床问诊对话 ===== */
 .dialogue-area { display:flex; flex-direction:column; }
 .dialogue-list { max-height:360px; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
 .dialogue-item { display:flex; gap:8px; align-items:flex-start; }
@@ -157,6 +158,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .voice-btn:hover { border-color:var(--primary); background:var(--primary-light); }
 
 /* ===== Card 3: 患者影像资料 ===== */
+.imaging-type-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:12px; color:var(--gray-600); }
+.imaging-type-row strong { color:var(--primary-dark); background:var(--primary-light); border-radius:999px; padding:3px 10px; font-weight:700; }
 .imaging-tabs { display:flex; gap:2px; margin-bottom:12px; border-bottom:2px solid var(--gray-200); }
 .imaging-tab { padding:8px 16px; border:none; background:none; cursor:pointer; font-size:12px; color:var(--gray-500); font-family:inherit; border-bottom:2px solid transparent; margin-bottom:-2px; transition:var(--transition); font-weight:500; }
 .imaging-tab:hover { color:var(--primary); }
@@ -173,6 +176,20 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .imaging-nav-dot { width:8px; height:8px; border-radius:50%; background:var(--gray-300); cursor:pointer; transition:var(--transition); }
 .imaging-nav-dot.active { background:var(--primary); width:20px; border-radius:4px; }
 
+/* ===== Card 4: 影像判读训练 ===== */
+.interpret-section { margin-bottom:14px; }
+.interpret-section .is-label { font-size:13px; font-weight:600; color:var(--gray-700); margin-bottom:8px; }
+.interpret-select { width:100%; height:36px; padding:0 12px; border:1px solid var(--gray-300); border-radius:6px; font-size:13px; font-family:inherit; outline:none; background:#fff; }
+.interpret-select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+.textarea-interpret { width:100%; min-height:66px; padding:9px 12px; border:1px solid var(--gray-300); border-radius:6px; font-size:13px; font-family:inherit; resize:vertical; outline:none; }
+.textarea-interpret:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+.btn-submit-interpret { width:100%; padding:10px; background:#fff; color:var(--primary); border:1px solid var(--primary); border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; transition:var(--transition); }
+.btn-submit-interpret:hover { background:var(--primary-light); }
+.btn-submit-interpret:disabled { border-color:var(--gray-300); color:var(--gray-400); background:var(--gray-50); cursor:not-allowed; }
+.interpret-reference { margin-top:12px; padding:12px 14px; background:var(--success-light); border:1px solid #A7F3D0; border-radius:8px; font-size:12px; line-height:1.6; color:#065F46; }
+.interpret-reference strong { color:#064E3B; }
+.interpret-summary { margin-bottom:10px; padding:10px 12px; background:var(--primary-light); border-radius:8px; font-size:12px; color:#1E40AF; line-height:1.6; }
+
 /* Image Lightbox */
 .lightbox-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:3000; display:none; align-items:center; justify-content:center; }
 .lightbox-overlay.show { display:flex; }
@@ -181,7 +198,10 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .lightbox-close { position:absolute; top:-36px; right:0; color:#fff; background:none; border:none; font-size:28px; cursor:pointer; }
 .lightbox-caption { text-align:center; color:#fff; margin-top:8px; font-size:13px; }
 
-/* ===== Card 4: 诊断决策 ===== */
+/* ===== Card 5: 临床诊断 ===== */
+.clinical-subsection-title { display:flex; align-items:center; gap:8px; padding:12px 0 10px; margin-top:4px; border-top:1px solid var(--gray-100); font-size:14px; font-weight:700; color:var(--gray-800); }
+.clinical-subsection-title:first-child { border-top:none; padding-top:0; }
+.clinical-subsection-title span { width:20px; height:20px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--primary-light); color:var(--primary); font-size:12px; font-weight:800; }
 .diagnosis-section { margin-bottom:16px; }
 .diagnosis-section .ds-label { font-size:13px; font-weight:600; color:var(--gray-700); margin-bottom:8px; }
 .diagnosis-options { display:flex; flex-direction:column; gap:6px; }
@@ -190,6 +210,10 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .diagnosis-option.selected { border-color:var(--primary); background:var(--primary-light); }
 .diagnosis-option input[type="radio"] { accent-color:var(--primary); width:16px; height:16px; }
 .diagnosis-option .opt-code { font-size:10px; color:var(--gray-400); margin-left:auto; }
+.action-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.action-chip { display:flex; align-items:center; gap:7px; min-height:34px; padding:7px 10px; border:1px solid var(--gray-200); border-radius:6px; font-size:12px; color:var(--gray-700); cursor:pointer; transition:var(--transition); }
+.action-chip:hover { border-color:var(--primary); background:var(--primary-light); color:var(--primary-dark); }
+.action-chip input { accent-color:var(--primary); }
 .checklist-compact { display:flex; flex-wrap:wrap; gap:8px; }
 .checklist-compact label { display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer; padding:6px 12px; border:1px solid var(--gray-200); border-radius:20px; transition:var(--transition); }
 .checklist-compact label:hover { border-color:var(--primary); }
@@ -305,14 +329,9 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     <div class="page-header">
         <h1 class="page-title">虚拟临床技能实训</h1>
         <div class="case-selector">
-            <label for="caseSelect">切换病例：</label>
-            <select id="caseSelect" onchange="loadCase(this.value)">
-                <option value="0">病例一：2型糖尿病 - 中度NPDR</option>
-                <option value="1">病例二：1型糖尿病 - 轻度NPDR</option>
-                <option value="2">病例三：2型糖尿病 - 重度NPDR</option>
-                <option value="3">病例四：2型糖尿病 - PDR</option>
-                <option value="4">病例五：体检筛查 - 无DR</option>
-            </select>
+            <label>当前病例：</label>
+            <span class="case-current" id="caseCurrentLabel">病例加载中</span>
+            <button class="case-refresh-btn" onclick="refreshCase()">刷新病例</button>
         </div>
     </div>
 
@@ -328,12 +347,24 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                 <div class="card-body" id="patientInfoBody"></div>
             </div>
 
-            <!-- Card 2: 问诊对话记录 -->
+            <!-- Card 2: 患者影像资料 -->
+            <div class="card" id="cardImaging">
+                <div class="card-header">
+                    <span class="card-icon">🖼️</span>
+                    <span class="card-title">患者影像资料</span>
+                </div>
+                <div class="card-body" id="imagingBody"></div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-col">
+            <!-- Card 3: 临床问诊对话 -->
             <div class="card" id="cardDialogue">
                 <div class="card-header">
                     <span class="card-icon">💬</span>
-                    <span class="card-title">问诊对话记录</span>
-                    <span class="card-badge">文本 / 语音</span>
+                    <span class="card-title">临床问诊对话</span>
+                    <span class="card-badge">图像、文本、语音</span>
                 </div>
                 <div class="card-body">
                     <div class="dialogue-list" id="dialogueList"></div>
@@ -354,28 +385,21 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Right Column -->
-        <div class="right-col">
-            <!-- Card 3: 患者影像资料 -->
-            <div class="card" id="cardImaging">
-                <div class="card-header">
-                    <span class="card-icon">🖼️</span>
-                    <span class="card-title">患者影像资料</span>
-                </div>
-                <div class="card-body" id="imagingBody"></div>
-            </div>
-
-            <!-- Card 4: 诊断决策 -->
-            <div class="card" id="cardDiagnosis">
+            <!-- Card 4: 临床诊断 -->
+            <div class="card" id="cardClinicalDiagnosis">
                 <div class="card-header">
                     <span class="card-icon">🩺</span>
-                    <span class="card-title">诊断决策</span>
+                    <span class="card-title">临床诊断</span>
+                    <span class="card-badge">影像判读 + 诊断决策</span>
                 </div>
                 <div class="card-body">
+                    <div class="clinical-subsection-title"><span>1</span>影像判读</div>
+                    <div id="imageInterpretationBody"></div>
+
+                    <div class="clinical-subsection-title"><span>2</span>诊断决策</div>
                     <div class="diagnosis-section">
-                        <div class="ds-label">初步诊断（单选）</div>
+                        <div class="ds-label">综合临床诊断（单选）</div>
                         <div class="diagnosis-options" id="diagnosisOptions">
                             <label class="diagnosis-option" onclick="selectDiagnosis(this)">
                                 <input type="radio" name="diagnosis" value="none"> 无明确糖尿病视网膜病变
@@ -395,10 +419,33 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                         </div>
                     </div>
                     <div class="diagnosis-section">
-                        <div class="ds-label">补充诊断说明（可选）</div>
-                        <textarea class="textarea-diagnosis" id="diagNotes" placeholder="请输入补充诊断说明、鉴别诊断或治疗方案建议..."></textarea>
+                        <div class="ds-label">临床风险分层（单选）</div>
+                        <div class="diagnosis-options" id="riskOptions">
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="low"> 常规管理
+                            </label>
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="followup"> 定期复查
+                            </label>
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="urgent"> 尽快专科处理
+                            </label>
+                        </div>
                     </div>
-                    <button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交诊断</button>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">下一步处理建议（可多选）</div>
+                        <div class="action-grid">
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="routine"> 常规复查</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="oct"> 完善OCT/相关检查</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="referral"> 眼科专科复诊</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="control"> 强化血糖血压管理</label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">综合诊断说明 <span style="color:var(--danger);">*</span></div>
+                        <textarea class="textarea-diagnosis" id="diagNotes" placeholder="请结合问诊信息、影像判读和风险分层，说明您的综合判断与处理思路..."></textarea>
+                    </div>
+                    <button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交临床诊断</button>
                 </div>
             </div>
 
@@ -424,8 +471,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 <div class="confirm-overlay" id="confirmModal">
     <div class="confirm-box">
         <div class="cb-icon">⚠️</div>
-        <div class="cb-title">确认提交诊断</div>
-        <div class="cb-text" id="confirmText">您确定要提交当前诊断结果吗？提交后将立即显示判定结果。</div>
+        <div class="cb-title">确认提交临床诊断</div>
+        <div class="cb-text" id="confirmText">您确定要提交当前临床诊断吗？提交后系统将统一判定影像判读与诊断决策。</div>
         <div class="cb-actions">
             <button class="btn-cancel" onclick="closeConfirm()">取消</button>
             <button class="btn-confirm" onclick="doSubmitDiagnosis()">确认提交</button>
@@ -477,8 +524,7 @@ var cases = [
         ],
         imagingTabs: [
             { name:"眼底彩照（右眼）", desc:"右眼眼底彩色照相：视盘边界清晰，黄斑区可见少量硬性渗出，后极部散在微血管瘤及点片状出血，未见明显新生血管。", annotations:[{x:55,y:42,label:"硬性渗出"},{x:38,y:55,label:"微血管瘤"},{x:62,y:35,label:"出血点"}] },
-            { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：黄斑区颞侧可见较多硬性渗出及棉绒斑，出血斑范围较右眼大，视网膜静脉轻度串珠样改变。", annotations:[{x:58,y:48,label:"棉绒斑"},{x:45,y:52,label:"出血斑"},{x:35,y:40,label:"硬性渗出"},{x:65,y:38,label:"静脉串珠"}] },
-            { name:"OCT（左眼）", desc:"左眼黄斑区OCT扫描：中心凹形态尚存，颞侧视网膜内层可见多个高反射点，局部视网膜增厚，提示糖尿病性黄斑水肿（DME）可能。", annotations:[{x:48,y:45,label:"高反射点"},{x:52,y:50,label:"视网膜增厚"}] }
+            { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：黄斑区颞侧可见较多硬性渗出及棉绒斑，出血斑范围较右眼大，视网膜静脉轻度串珠样改变。", annotations:[{x:58,y:48,label:"棉绒斑"},{x:45,y:52,label:"出血斑"},{x:35,y:40,label:"硬性渗出"},{x:65,y:38,label:"静脉串珠"}] }
         ],
         correctDiagnosis: "moderate",
         correctLabel: "中度非增殖性DR（中度NPDR）",
@@ -517,8 +563,8 @@ var cases = [
             "每年都查一次眼底，去年医生说有轻度改变，让我今年继续复查。"
         ],
         imagingTabs: [
-            { name:"眼底彩照（双眼）", desc:"双眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。后极部可见散在微血管瘤约5-8个，未见明显出血、渗出或棉绒斑。视网膜血管走行正常。", annotations:[{x:42,y:38,label:"微血管瘤"},{x:58,y:45,label:"微血管瘤"},{x:35,y:55,label:"微血管瘤"}] },
-            { name:"OCT（右眼）", desc:"右眼黄斑区OCT：中心凹形态正常，各层结构清晰，未见视网膜内或视网膜下积液。", annotations:[] }
+            { name:"眼底彩照（右眼）", desc:"右眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。后极部可见少量散在微血管瘤，未见明显出血、渗出或棉绒斑。", annotations:[{x:42,y:38,label:"微血管瘤"},{x:58,y:45,label:"微血管瘤"}] },
+            { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：视盘边界清晰，视网膜血管走行正常。后极部可见少量微血管瘤，未见硬性渗出、棉绒斑或新生血管。", annotations:[{x:35,y:55,label:"微血管瘤"},{x:54,y:42,label:"微血管瘤"}] }
         ],
         correctDiagnosis: "mild",
         correctLabel: "轻度非增殖性DR（轻度NPDR）",
@@ -558,8 +604,7 @@ var cases = [
         ],
         imagingTabs: [
             { name:"眼底彩照（右眼）", desc:"右眼眼底彩色照相：视盘边界欠清晰，后极部及中周部大量出血斑（火焰状+点片状混合），四个象限均可见大量微血管瘤、硬性渗出及棉绒斑。颞上血管弓处可见静脉串珠及IRMA（视网膜内微血管异常）。", annotations:[{x:30,y:35,label:"火焰状出血"},{x:55,y:42,label:"IRMA"},{x:45,y:55,label:"静脉串珠"},{x:60,y:30,label:"棉绒斑"},{x:38,y:48,label:"大量渗出"}] },
-            { name:"FFA（右眼）", desc:"右眼荧光血管造影：动脉期可见广泛微血管瘤高荧光点，静脉期大片区域无灌注（>20DD），晚期弥漫性荧光渗漏，提示广泛血-视网膜屏障破坏。", annotations:[{x:40,y:38,label:"无灌注区"},{x:58,y:50,label:"荧光渗漏"},{x:32,y:52,label:"微血管瘤"}] },
-            { name:"OCT（右眼）", desc:"右眼黄斑区OCT：中心凹轮廓消失，视网膜明显增厚伴囊样间隙，可见视网膜内积液及硬性渗出。黄斑中心凹厚度（CMT）= 485μm。", annotations:[{x:50,y:45,label:"囊样水肿"},{x:48,y:55,label:"CMT 485μm"}] }
+            { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：后极部及中周部可见大量点片状出血、硬性渗出及棉绒斑，静脉串珠样改变较明显，未见明确新生血管。", annotations:[{x:36,y:40,label:"点片状出血"},{x:58,y:44,label:"硬性渗出"},{x:50,y:58,label:"棉绒斑"},{x:64,y:36,label:"静脉串珠"}] }
         ],
         correctDiagnosis: "severe",
         correctLabel: "重度非增殖性DR（重度NPDR）",
@@ -599,8 +644,7 @@ var cases = [
         ],
         imagingTabs: [
             { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：玻璃体积血，眼底窥入模糊。隐约可见视盘及后极部大片视网膜前出血，上方新生血管膜伴纤维增殖。", annotations:[{x:50,y:42,label:"玻璃体积血"},{x:45,y:55,label:"视网膜前出血"},{x:38,y:35,label:"新生血管膜"}] },
-            { name:"B超（左眼）", desc:"左眼B超：玻璃体腔内可见大量点状及团块状回声，与视网膜粘连。颞上方可见牵引性视网膜脱离，范围约3个钟点。", annotations:[{x:48,y:38,label:"玻璃体浑浊"},{x:42,y:55,label:"牵拉性RD"}] },
-            { name:"FFA（右眼）", desc:"右眼FFA：广泛毛细血管无灌注区，视盘及多处视网膜新生血管（NVD/NVE），晚期大量荧光渗漏。已行PRP区域可见激光斑。", annotations:[{x:40,y:40,label:"NVD"},{x:58,y:48,label:"NVE"},{x:35,y:52,label:"无灌注区"}] }
+            { name:"眼底彩照（右眼）", desc:"右眼眼底彩色照相：视盘及血管弓周围可见新生血管，后极部散在出血斑，周边视网膜可见既往PRP激光斑。", annotations:[{x:40,y:40,label:"视盘新生血管"},{x:58,y:48,label:"视网膜新生血管"},{x:35,y:52,label:"出血斑"}] }
         ],
         correctDiagnosis: "pdr",
         correctLabel: "增殖性DR（PDR）",
@@ -639,8 +683,8 @@ var cases = [
             "没有长期吃药，偶尔吃点维生素。"
         ],
         imagingTabs: [
-            { name:"眼底彩照（双眼）", desc:"双眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。视网膜血管走行正常，无微血管瘤、出血、渗出或棉绒斑。视网膜平伏，未见明显异常。", annotations:[] },
-            { name:"OCT（右眼）", desc:"右眼黄斑区OCT：中心凹形态正常，各层结构清晰，CMT=228μm（正常范围）。视网膜内、下无积液。", annotations:[] }
+            { name:"眼底彩照（右眼）", desc:"右眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。视网膜血管走行正常，无微血管瘤、出血、渗出或棉绒斑。", annotations:[] },
+            { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。视网膜平伏，未见微血管瘤、出血、渗出或棉绒斑。", annotations:[] }
         ],
         correctDiagnosis: "none",
         correctLabel: "无明确糖尿病视网膜病变",
@@ -653,20 +697,45 @@ var currentCaseIndex = 0;
 var currentDialogue = [];
 var currentImagingIndex = 0;
 var selectedDiagnosis = null;
+var selectedRiskLevel = null;
+var selectedNextActions = [];
 var diagnosisSubmitted = false;
+var caseDisplayNames = [
+    '病例一：2型糖尿病 - 中度NPDR',
+    '病例二：1型糖尿病 - 轻度NPDR',
+    '病例三：2型糖尿病 - 重度NPDR',
+    '病例四：2型糖尿病 - PDR',
+    '病例五：体检筛查 - 无DR'
+];
+var imagingInterpretation = { notes:'' };
 
 // ===== Load Case =====
 function loadCase(index) {
     currentCaseIndex = parseInt(index);
+    if (isNaN(currentCaseIndex) || currentCaseIndex < 0 || currentCaseIndex >= cases.length) currentCaseIndex = 0;
     currentDialogue = getInitialDialogue(cases[currentCaseIndex]);
     currentImagingIndex = 0;
     selectedDiagnosis = null;
+    selectedRiskLevel = null;
     diagnosisSubmitted = false;
+    updateCaseIndicator();
     renderPatientInfo();
     renderDialogue();
     renderImaging();
+    resetImageInterpretation();
     resetDiagnosis();
     resetScore();
+}
+
+function updateCaseIndicator() {
+    var label = document.getElementById('caseCurrentLabel');
+    if (label) label.textContent = caseDisplayNames[currentCaseIndex] || ('病例' + (currentCaseIndex + 1));
+}
+
+function refreshCase() {
+    var nextIndex = (currentCaseIndex + 1) % cases.length;
+    localStorage.setItem('virtual_clinical_case_index', String(nextIndex));
+    window.location.reload();
 }
 
 function getInitialDialogue(c) {
@@ -863,11 +932,12 @@ function renderImaging() {
     if (currentImagingIndex >= tabs.length) currentImagingIndex = 0;
 
     var html = '';
+    html += '<div class="imaging-type-row"><span>影像类型</span><strong>'+getImagingModality(tabs[0].name)+'</strong></div>';
 
     // Tabs
     html += '<div class="imaging-tabs">';
     tabs.forEach(function(t, i){
-        html += '<button class="imaging-tab'+(i===currentImagingIndex?' active':'')+'" onclick="switchImaging('+i+')">'+t.name+'</button>';
+        html += '<button class="imaging-tab'+(i===currentImagingIndex?' active':'')+'" onclick="switchImaging('+i+')">'+getEyeSideLabel(t.name)+'</button>';
     });
     html += '</div>';
 
@@ -903,6 +973,15 @@ function renderImaging() {
     document.getElementById('imagingBody').innerHTML = html;
 }
 
+function getImagingModality(name) {
+    return String(name || '').split('（')[0] || '医学影像';
+}
+
+function getEyeSideLabel(name) {
+    var match = String(name || '').match(/（(.+?)）/);
+    return match ? match[1] : name;
+}
+
 function switchImaging(index) {
     currentImagingIndex = index;
     renderImaging();
@@ -925,10 +1004,54 @@ function closeLightbox() {
     document.getElementById('lightbox').classList.remove('show');
 }
 
+// ===== Image Interpretation =====
+function resetImageInterpretation() {
+    imagingInterpretation = { notes:'' };
+    renderImageInterpretation();
+}
+
+function renderImageInterpretation() {
+    var c = cases[currentCaseIndex];
+    var locked = diagnosisSubmitted;
+    var disabled = locked ? ' disabled' : '';
+    var ref = getReferenceImageInterpretation(c);
+    var html = '';
+
+    if (diagnosisSubmitted) html += '<div class="interpret-summary"><strong>影像判读依据已记录。</strong>系统将结合下方诊断决策进行整体判定。</div>';
+
+    html += '<div class="interpret-section">';
+    html += '<div class="is-label">判读依据 <span style="color:var(--danger);">*</span></div>';
+    html += '<textarea class="textarea-interpret" id="imageInterpretNotes" placeholder="请填写判读依据，例如病变位置、眼别、分期判断依据..."'+disabled+'>'+escapeHtml(imagingInterpretation.notes)+'</textarea>';
+    html += '</div>';
+
+    if (diagnosisSubmitted) {
+        html += '<div class="interpret-reference">';
+        html += '<strong>参考判读：</strong>'+escapeHtml(ref.conclusion)+'<br>';
+        html += '<strong>判读要点：</strong>'+escapeHtml(ref.points);
+        html += '</div>';
+    }
+
+    document.getElementById('imageInterpretationBody').innerHTML = html;
+}
+
+function getReferenceImageInterpretation(c) {
+    var pointMap = {
+        none:'眼底未见微血管瘤、出血、渗出或棉绒斑，OCT黄斑结构正常。',
+        mild:'后极部可见少量微血管瘤，未见明显出血、渗出、棉绒斑或静脉串珠。',
+        moderate:'可见微血管瘤、点片状出血及硬性渗出，部分病例可见棉绒斑或轻度静脉改变，OCT需关注黄斑水肿。',
+        severe:'四象限大量微血管瘤和出血，可见棉绒斑、静脉串珠或IRMA，提示向PDR进展风险高。',
+        pdr:'出现视盘或视网膜新生血管，可伴玻璃体积血、视网膜前出血或牵拉性视网膜脱离。'
+    };
+    return {
+        conclusion:c.correctLabel,
+        points:pointMap[c.correctDiagnosis] || c.diagnosisBasis
+    };
+}
+
 // ===== Diagnosis =====
 function selectDiagnosis(el) {
     if (diagnosisSubmitted) return;
-    document.querySelectorAll('.diagnosis-option').forEach(function(opt){
+    document.querySelectorAll('#diagnosisOptions .diagnosis-option').forEach(function(opt){
         opt.classList.remove('selected');
         opt.querySelector('input').checked = false;
     });
@@ -937,24 +1060,56 @@ function selectDiagnosis(el) {
     selectedDiagnosis = el.querySelector('input').value;
 }
 
-function resetDiagnosis() {
-    selectedDiagnosis = null;
-    document.querySelectorAll('.diagnosis-option').forEach(function(opt){
+function selectRiskLevel(el) {
+    if (diagnosisSubmitted) return;
+    document.querySelectorAll('#riskOptions .risk-option').forEach(function(opt){
         opt.classList.remove('selected');
         opt.querySelector('input').checked = false;
     });
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    selectedRiskLevel = el.querySelector('input').value;
+}
+
+function resetDiagnosis() {
+    selectedDiagnosis = null;
+    selectedRiskLevel = null;
+    selectedNextActions = [];
+    document.querySelectorAll('#diagnosisOptions .diagnosis-option, #riskOptions .risk-option').forEach(function(opt){
+        opt.classList.remove('selected');
+        opt.querySelector('input').checked = false;
+    });
+    document.querySelectorAll('input[name="nextAction"]').forEach(function(input){ input.checked = false; });
     document.getElementById('diagNotes').value = '';
 }
 
 function submitDiagnosis() {
+    var imageNotes = document.getElementById('imageInterpretNotes').value.trim();
+    if (!imageNotes) {
+        alert('请填写影像判读依据');
+        return;
+    }
     if (!selectedDiagnosis) {
-        alert('请先选择一个初步诊断');
+        alert('请先选择综合临床诊断');
+        return;
+    }
+    if (!selectedRiskLevel) {
+        alert('请先选择临床风险分层');
+        return;
+    }
+    var diagNotes = document.getElementById('diagNotes').value.trim();
+    if (!diagNotes) {
+        alert('请填写综合诊断说明');
         return;
     }
     if (diagnosisSubmitted) {
-        alert('您已提交过诊断，如需重新诊断请切换病例或点击"重新诊断"按钮。');
+        alert('您已提交过诊断，如需查看新病例请点击刷新病例，或点击"重新诊断"按钮。');
         return;
     }
+    imagingInterpretation = { notes:imageNotes };
+    selectedNextActions = Array.prototype.slice.call(document.querySelectorAll('input[name="nextAction"]:checked')).map(function(input){
+        return input.value;
+    });
     document.getElementById('confirmModal').classList.add('show');
 }
 
@@ -966,60 +1121,127 @@ function doSubmitDiagnosis() {
     closeConfirm();
     diagnosisSubmitted = true;
     var c = cases[currentCaseIndex];
-    var isCorrect = (selectedDiagnosis === c.correctDiagnosis);
+    var diagnosisCorrect = (selectedDiagnosis === c.correctDiagnosis);
+    var expectedRisk = getExpectedRiskLevel(c.correctDiagnosis);
+    var riskCorrect = (selectedRiskLevel === expectedRisk);
+    var isCorrect = diagnosisCorrect && riskCorrect;
 
-    renderDiagnosisJudgement(isCorrect, c);
+    renderDiagnosisJudgement(isCorrect, c, diagnosisCorrect, riskCorrect, expectedRisk);
 }
 
-function renderDiagnosisJudgement(isCorrect, c) {
+function renderDiagnosisJudgement(isCorrect, c, diagnosisCorrect, riskCorrect, expectedRisk) {
+    renderImageInterpretation();
     document.getElementById('scorePlaceholder').style.display = 'none';
     var resultDiv = document.getElementById('scoreResult');
     resultDiv.style.display = 'block';
     resultDiv.className = 'score-result '+(isCorrect ? 'correct' : 'wrong');
 
-    var badgeText = isCorrect ? '诊断正确' : '诊断错误';
+    var badgeText = isCorrect ? '临床诊断整体正确' : '需要复核临床诊断';
     var badgeClass = isCorrect ? 'correct' : 'wrong';
-    var feedback = getDiagnosisFeedback(selectedDiagnosis, c.correctDiagnosis, isCorrect);
+    var feedback = getClinicalDiagnosisFeedback(diagnosisCorrect, riskCorrect, selectedDiagnosis, c.correctDiagnosis, expectedRisk);
+    var diagnosisNotes = document.getElementById('diagNotes').value.trim();
+    var nextActionText = getActionLabels(selectedNextActions).join('、') || '未选择';
+    var expectedActionText = getActionLabels(getExpectedActions(c.correctDiagnosis)).join('、');
 
     var html = '';
 
-    // Judgement header
     html += '<div class="score-header">';
     html += '<div class="judgement-icon '+badgeClass+'">'+(isCorrect?'✓':'!')+'</div>';
     html += '<div class="score-badge '+badgeClass+'">'+badgeText+'</div>';
     html += '</div>';
 
-    // Detail
     html += '<div class="score-detail">';
-    html += '<div class="sd-row"><span class="sd-label">您的诊断</span><span class="sd-value">'+getDiagLabel(selectedDiagnosis)+'</span></div>';
-    html += '<div class="sd-row"><span class="sd-label">参考答案</span><span class="sd-value">'+c.correctLabel+'</span></div>';
-    html += '<div class="sd-row"><span class="sd-label">判定标准</span><span class="sd-value">以DR临床分期为主，结合ETDRS 4-2-1原则与PDR新生血管/玻璃体出血等关键体征，单选结果需与参考分期一致。</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">影像判读</span><span class="sd-value">'+escapeHtml(imagingInterpretation.notes)+'</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">临床诊断</span><span class="sd-value">'+getDiagLabel(selectedDiagnosis)+'（'+(diagnosisCorrect?'正确':'需复核')+'）</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">风险分层</span><span class="sd-value">'+getRiskLabel(selectedRiskLevel)+'（参考：'+getRiskLabel(expectedRisk)+'）</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">处理建议</span><span class="sd-value">'+nextActionText+'</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">诊断说明</span><span class="sd-value">'+escapeHtml(diagnosisNotes)+'</span></div>';
     html += '</div>';
 
-    // Feedback
     html += '<div class="score-feedback '+(isCorrect?'success':'warning')+'"><strong>诊断提示：</strong>'+feedback.tip+'</div>';
     html += '<div class="score-feedback info"><strong>反馈建议：</strong>'+feedback.suggestion+'</div>';
+    html += '<div class="score-feedback info"><strong>参考处理方向：</strong>'+expectedActionText+'</div>';
 
-    // Answer reference
     html += '<div class="score-feedback info">';
     html += '<strong>参考答案与解析</strong><br><br>';
     html += '<strong>正确诊断：</strong>'+c.correctLabel+'<br><br>';
+    html += '<strong>参考风险分层：</strong>'+getRiskLabel(expectedRisk)+'<br><br>';
     html += '<strong>诊断依据：</strong>'+c.diagnosisBasis+'<br><br>';
     html += '<strong>关键鉴别点：</strong>'+c.keyPoints;
     html += '</div>';
 
-    // Retry button
     html += '<button class="btn-retry" onclick="retryDiagnosis()">重新诊断</button>';
 
     resultDiv.innerHTML = html;
 
-    // Disable diagnosis options
-    document.querySelectorAll('.diagnosis-option').forEach(function(opt){
+    document.querySelectorAll('#diagnosisOptions .diagnosis-option, #riskOptions .risk-option').forEach(function(opt){
         opt.style.pointerEvents = 'none';
         opt.style.opacity = '0.7';
     });
+    document.querySelectorAll('input[name="nextAction"]').forEach(function(input){
+        input.disabled = true;
+    });
+    document.querySelectorAll('.action-chip').forEach(function(chip){
+        chip.style.pointerEvents = 'none';
+        chip.style.opacity = '0.7';
+    });
     document.getElementById('diagNotes').disabled = true;
     document.querySelector('.btn-submit-diag').style.display = 'none';
+}
+
+function getExpectedRiskLevel(correctDiagnosis) {
+    var map = {
+        none:'low',
+        mild:'followup',
+        moderate:'followup',
+        severe:'urgent',
+        pdr:'urgent'
+    };
+    return map[correctDiagnosis] || 'followup';
+}
+
+function getRiskLabel(value) {
+    var map = { low:'常规管理', followup:'定期复查', urgent:'尽快专科处理' };
+    return map[value] || value || '未选择';
+}
+
+function getExpectedActions(correctDiagnosis) {
+    var map = {
+        none:['routine','control'],
+        mild:['routine','control'],
+        moderate:['oct','referral','control'],
+        severe:['oct','referral','control'],
+        pdr:['referral','oct','control']
+    };
+    return map[correctDiagnosis] || ['routine'];
+}
+
+function getActionLabels(values) {
+    var map = {
+        routine:'常规复查',
+        oct:'完善OCT/相关检查',
+        referral:'眼科专科复诊',
+        control:'强化血糖血压管理'
+    };
+    return (values || []).map(function(value){ return map[value] || value; });
+}
+
+function getClinicalDiagnosisFeedback(diagnosisCorrect, riskCorrect, userDiagnosis, correctDiagnosis, expectedRisk) {
+    if (diagnosisCorrect && riskCorrect) {
+        return {
+            tip: '您的影像判读依据已记录，综合诊断分期与风险分层均与参考判断一致。',
+            suggestion: '后续可围绕黄斑水肿、全身代谢控制和复查节奏继续完善临床处理方案。'
+        };
+    }
+
+    if (!diagnosisCorrect) {
+        return getDiagnosisFeedback(userDiagnosis, correctDiagnosis, false);
+    }
+
+    return {
+        tip: '您的综合诊断分期正确，但风险分层与参考处理级别不一致。',
+        suggestion: '建议按照病变严重程度调整随访和转诊级别。当前病例参考风险分层为“'+getRiskLabel(expectedRisk)+'”。'
+    };
 }
 
 function getDiagnosisFeedback(userDiagnosis, correctDiagnosis, isCorrect) {
@@ -1054,9 +1276,16 @@ function getDiagnosisFeedback(userDiagnosis, correctDiagnosis, isCorrect) {
 function resetScore() {
     document.getElementById('scorePlaceholder').style.display = 'block';
     document.getElementById('scoreResult').style.display = 'none';
-    document.querySelectorAll('.diagnosis-option').forEach(function(opt){
+    document.querySelectorAll('#diagnosisOptions .diagnosis-option, #riskOptions .risk-option').forEach(function(opt){
         opt.style.pointerEvents = 'auto';
         opt.style.opacity = '1';
+    });
+    document.querySelectorAll('input[name="nextAction"]').forEach(function(input){
+        input.disabled = false;
+    });
+    document.querySelectorAll('.action-chip').forEach(function(chip){
+        chip.style.pointerEvents = 'auto';
+        chip.style.opacity = '1';
     });
     document.getElementById('diagNotes').disabled = false;
     document.querySelector('.btn-submit-diag').style.display = 'flex';
@@ -1065,8 +1294,11 @@ function resetScore() {
 function retryDiagnosis() {
     diagnosisSubmitted = false;
     selectedDiagnosis = null;
+    selectedRiskLevel = null;
+    selectedNextActions = [];
     resetDiagnosis();
     resetScore();
+    resetImageInterpretation();
 }
 
 function getDiagLabel(value) {
@@ -1094,7 +1326,8 @@ document.addEventListener('DOMContentLoaded', function(){
         var user = JSON.parse(localStorage.getItem('life_med_user'));
         if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
     } catch(e) {}
-    loadCase(0);
+    var savedCaseIndex = parseInt(localStorage.getItem('virtual_clinical_case_index') || '0', 10);
+    loadCase(savedCaseIndex);
 });
 </script>
 </body>
