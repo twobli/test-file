@@ -40,6 +40,27 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .breadcrumb { font-size: 12px; color: var(--gray-500); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
 .breadcrumb a { color: var(--primary); text-decoration: none; }
 .page-title { font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 14px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.page-head .page-title { margin-bottom: 0; }
+.notification-widget { position: relative; flex-shrink: 0; }
+.notification-trigger { display: inline-flex; align-items: center; gap: 6px; min-width: 122px; height: 34px; padding: 0 12px; border: 1px solid var(--gray-300); border-radius: 3px; background: #fff; color: var(--gray-700); font-size: 12px; cursor: pointer; }
+.notification-trigger:hover { border-color: var(--primary); color: var(--primary); }
+.notification-badge { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--danger); color: #fff; font-size: 11px; line-height: 18px; text-align: center; }
+.notification-panel { position: absolute; right: 0; top: 40px; width: 320px; background: #fff; border: 1px solid var(--gray-200); border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 20; display: none; }
+.notification-panel.show { display: block; }
+.notification-panel .notice-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid var(--gray-100); font-weight: 600; color: var(--gray-800); }
+.notification-panel .notice-list { max-height: 240px; overflow-y: auto; }
+.notification-panel .notice-item { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); font-size: 12px; color: var(--gray-700); line-height: 1.55; }
+.notification-panel .notice-item:last-child { border-bottom: none; }
+.notification-panel .notice-item.unread { background: #fff8f8; }
+.notification-panel .notice-meta { margin-top: 4px; color: var(--gray-400); font-size: 11px; }
+.section-tabs { display: flex; gap: 8px; padding: 4px 0 12px; }
+.section-tab { min-width: 96px; height: 32px; border: 1px solid var(--gray-300); background: #fff; border-radius: 3px; cursor: pointer; color: var(--gray-700); font-size: 12px; font-weight: 500; }
+.section-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+.article-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 600; margin-right: 6px; }
+.article-content .article-lead { padding: 10px 12px; background: #fbfcfe; border: 1px solid var(--gray-200); border-radius: 3px; color: var(--gray-700); margin-bottom: 10px; }
 .card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--gray-100); }
 .card-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
@@ -67,7 +88,6 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .discuss-item .discuss-stats span { display: flex; align-items: center; gap: 2px; }
 .discuss-item .action-btn { background: none; border: none; cursor: pointer; font-size: 12px; padding: 3px 6px; border-radius: 3px; color: var(--gray-500); display: flex; align-items: center; gap: 2px; }
 .discuss-item .action-btn:hover { background: var(--gray-100); }
-.discuss-item .action-btn.liked { color: var(--danger); }
 .comment-section { margin-top: 14px; }
 .comment-box { display: flex; gap: 10px; padding: 12px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 12px; }
 .comment-box textarea { flex: 1; padding: 8px; border: 1px solid var(--gray-300); border-radius: 3px; font-size: 12px; font-family: inherit; resize: vertical; min-height: 56px; outline: none; }
@@ -75,8 +95,21 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .comment-item { padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
 .comment-item .comment-author { font-weight: 600; color: var(--gray-800); margin-bottom: 3px; font-size: 12px; }
 .comment-item .comment-author .role-tag { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: #efe8f6; color: #7a4ea8; margin-left: 4px; }
+.reply-item .role-tag { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: #efe8f6; color: #7a4ea8; margin-left: 4px; }
 .comment-item .comment-text { font-size: 12px; color: var(--gray-700); line-height: 1.6; }
-.comment-item .comment-meta { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+.comment-item .comment-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+.reply-link { border: none; background: none; color: var(--primary); cursor: pointer; font-size: 11px; padding: 0; }
+.reply-box { display: none; gap: 8px; align-items: flex-start; margin-top: 8px; padding: 10px; background: var(--gray-50); border-radius: 3px; }
+.reply-box.show { display: flex; }
+.reply-box textarea { flex: 1; min-height: 48px; padding: 7px 9px; border: 1px solid var(--gray-300); border-radius: 3px; resize: vertical; font-size: 12px; font-family: inherit; outline: none; }
+.reply-box textarea:focus { border-color: var(--primary); }
+.reply-list { margin-top: 10px; margin-left: 20px; border-left: 2px solid var(--gray-200); padding-left: 12px; }
+.reply-item { padding: 9px 0; border-bottom: 1px solid var(--gray-100); }
+.reply-item:last-child { border-bottom: none; }
+.reply-item .reply-author { font-weight: 600; color: var(--gray-800); font-size: 12px; margin-bottom: 3px; }
+.reply-item .reply-target { color: var(--primary); font-weight: 500; }
+.reply-item .reply-text { color: var(--gray-700); font-size: 12px; line-height: 1.6; }
+.reply-item .reply-meta { display: flex; gap: 10px; align-items: center; margin-top: 3px; color: var(--gray-500); font-size: 11px; }
 .article-content { line-height: 1.7; }
 .article-content h3 { font-size: 13px; color: var(--gray-800); margin: 14px 0 6px; }
 .article-content p { color: var(--gray-700); margin-bottom: 8px; }
@@ -110,7 +143,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .upload-area .upload-hint { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
 .toast { position: fixed; top: 68px; left: 50%; transform: translateX(-50%); background: #3b3b3b; color: #eee; padding: 8px 20px; border-radius: 4px; font-size: 12px; z-index: 3000; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
 .toast.show { opacity: 1; }
-@media (max-width: 1024px) { .sidebar { width: 56px; } .sidebar .menu-item span { display: none; } .sidebar .menu-group-title { display: none; } .main-content { margin-left: 56px; } .submenu .menu-item { padding-left: 10px; } }
+@media (max-width: 1024px) { .sidebar { width: 56px; } .sidebar .menu-item span { display: none; } .sidebar .menu-group-title { display: none; } .main-content { margin-left: 56px; } .submenu .menu-item { padding-left: 10px; } .notification-panel { right: -8px; width: 280px; } .section-tabs { flex-wrap: wrap; } }
 </style>
 </head>
 <body>
@@ -158,22 +191,57 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 
 <!-- ====== 列表页视图 ====== -->
 <div id="listView">
-    <h1 class="page-title">疑难病例分析与学术研讨</h1>
-    <div class="card">
-        <div class="filter-bar">
-            <input type="text" id="searchInput" placeholder="请输入关键词搜索病例..." style="flex:1;" oninput="filterCases()">
-            <select id="diseaseFilter" onchange="filterCases()">
-                <option value="">全部疾病</option>
-                <option value="糖尿病视网膜病变">糖尿病视网膜病变</option>
-                <option value="青光眼">青光眼</option>
-                <option value="AMD">AMD</option>
-                <option value="高血压视网膜病变">高血压视网膜病变</option>
-                <option value="RVO">RVO</option>
-                <option value="其他">其他</option>
-            </select>
-            <button class="btn btn-danger" onclick="openModal('shareModal')">+ 分享病例</button>
+    <div class="page-head">
+        <h1 class="page-title">疑难病例分析与学术研讨</h1>
+        <div class="notification-widget">
+            <button class="notification-trigger" onclick="toggleNotifications(event)">
+                <span>消息通知</span>
+                <span class="notification-badge" id="noticeCount">0</span>
+            </button>
+            <div class="notification-panel" id="notificationPanel">
+                <div class="notice-head">
+                    <span>回复通知</span>
+                    <button class="reply-link" onclick="markNotificationsRead(event)">全部已读</button>
+                </div>
+                <div class="notice-list" id="noticeList"></div>
+            </div>
         </div>
-        <div class="discuss-list" id="caseList"></div>
+    </div>
+    <div class="card">
+        <div class="section-tabs">
+            <button class="section-tab active" id="caseTabBtn" onclick="switchSection('case')">病例研讨</button>
+            <button class="section-tab" id="articleTabBtn" onclick="switchSection('article')">知识传播</button>
+        </div>
+        <div class="section-panel active" id="casePanel">
+            <div class="filter-bar">
+                <input type="text" id="searchInput" placeholder="请输入关键词搜索病例..." style="flex:1;" oninput="filterCases()">
+                <select id="diseaseFilter" onchange="filterCases()">
+                    <option value="">全部疾病</option>
+                    <option value="糖尿病视网膜病变">糖尿病视网膜病变</option>
+                    <option value="青光眼">青光眼</option>
+                    <option value="AMD">AMD</option>
+                    <option value="高血压视网膜病变">高血压视网膜病变</option>
+                    <option value="RVO">RVO</option>
+                    <option value="其他">其他</option>
+                </select>
+                <button class="btn btn-danger" onclick="openModal('shareModal')">+ 分享病例</button>
+            </div>
+            <div class="discuss-list" id="caseList"></div>
+        </div>
+        <div class="section-panel" id="articlePanel">
+            <div class="filter-bar">
+                <input type="text" id="articleSearchInput" placeholder="请输入关键词搜索文章..." style="flex:1;" oninput="filterArticles()">
+                <select id="articleCategoryFilter" onchange="filterArticles()">
+                    <option value="">全部分类</option>
+                    <option value="诊疗经验">诊疗经验</option>
+                    <option value="指南共识">指南共识</option>
+                    <option value="文献解读">文献解读</option>
+                    <option value="教学笔记">教学笔记</option>
+                </select>
+                <button class="btn btn-danger" onclick="openModal('articleModal')">+ 上传文章</button>
+            </div>
+            <div class="discuss-list" id="articleList"></div>
+        </div>
     </div>
 </div>
 
@@ -181,7 +249,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 <div id="detailView" style="display:none;">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
         <button class="btn btn-outline" onclick="showList()" style="font-size:12px;">← 返回列表</button>
-        <button class="btn btn-danger" onclick="openModal('shareModal')">分享病例</button>
+        <button class="btn btn-danger" id="detailActionBtn" onclick="openCurrentPublishModal()">分享病例</button>
     </div>
     <div class="card">
         <div class="detail-header">
@@ -193,22 +261,20 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
         <div class="article-content" id="detailContent"></div>
     </div>
 
-    <!-- 操作栏：点赞 + 评论展开 -->
+    <!-- 研讨入口 -->
     <div class="card">
-        <div style="display:flex;gap:20px;align-items:center;padding:8px 0;">
-            <button class="action-btn" id="detailLikeBtn" onclick="toggleDetailLike()" style="background:none;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:4px;color:var(--gray-500);">
-                <span id="detailLikeIcon">🤍</span> <span id="detailLikeCount">0</span>
-            </button>
-            <button class="action-btn" onclick="toggleCommentSection()" style="background:none;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:4px;color:var(--gray-500);">
-                <span>💬</span> <span id="detailCommentCount">0</span> 评论
-            </button>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0;">
+            <div style="font-size:13px;color:var(--gray-700);">
+                <span id="detailDiscussionLabel">病例研讨</span>：<span id="detailCommentCount" style="font-weight:600;color:var(--primary);">0</span> 条讨论
+            </div>
+            <button class="btn btn-primary" onclick="toggleCommentSection()">展开/收起讨论</button>
         </div>
     </div>
 
     <!-- 评论区（可折叠） -->
     <div class="card" id="commentSection" style="display:none;">
         <div class="card-header">
-            <span class="card-title">评论 (<span id="commentTotal">0</span>)</span>
+            <span class="card-title"><span id="commentTitleLabel">病例讨论</span> (<span id="commentTotal">0</span>)</span>
         </div>
         <div class="comment-box">
             <textarea id="newCommentInput" placeholder="发表你的观点和见解..."></textarea>
@@ -266,11 +332,50 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     </div>
 </div>
 
+<!-- 上传文章弹窗 -->
+<div class="modal-overlay" id="articleModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>上传文章</h3>
+            <button class="modal-close" onclick="closeModal('articleModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>文章标题 <span style="color:var(--danger);">*</span></label>
+                <input type="text" id="articleTitle" placeholder="请输入文章标题">
+            </div>
+            <div class="form-group">
+                <label>文章分类 <span style="color:var(--danger);">*</span></label>
+                <select id="articleCategory">
+                    <option value="">请选择</option>
+                    <option value="诊疗经验">诊疗经验</option>
+                    <option value="指南共识">指南共识</option>
+                    <option value="文献解读">文献解读</option>
+                    <option value="教学笔记">教学笔记</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>文章摘要 <span style="color:var(--danger);">*</span></label>
+                <textarea id="articleSummary" placeholder="请概括文章核心观点、适用场景或学习价值"></textarea>
+            </div>
+            <div class="form-group">
+                <label>文章正文 <span style="color:var(--danger);">*</span></label>
+                <textarea id="articleContent" style="min-height:140px;" placeholder="请输入文章正文，可包括背景、观点、诊疗路径、教学提示等内容"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('articleModal')">取消</button>
+            <button class="btn btn-danger" onclick="publishArticle()">📢 发布文章</button>
+        </div>
+    </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // ========== 数据定义 ==========
 var caseIdCounter = 100;
+var articleIdCounter = 2000;
 
 // 疾病分类映射（用于标签颜色）
 var diseaseTagMap = {
@@ -282,7 +387,7 @@ var diseaseTagMap = {
     '其他': 'tag-blue'
 };
 
-// 初始病例数据（含点赞数、评论数、Mock评论）
+// 初始病例数据（含讨论与回复）
 var cases = [
     {
         id: 1,
@@ -294,12 +399,12 @@ var cases = [
         department: '眼科',
         date: '2024-05-20',
         views: 153,
-        likes: 41,
-        liked: false,
         comments: [
-            { author: '李医生', role: '楼主', text: '补充信息：OCTA检查结果显示旁中心凹区域确实存在局部血流密度下降，支持黄斑缺血的诊断。建议对该类患者常规进行OCTA评估。', time: '2024-05-20 14:30', likes: 28 },
-            { author: '赵教授', role: '专家', text: '非常有意思的病例。我同意OCTA在评估黄斑缺血方面比FFA更敏感。但需要注意：OCTA的伪影可能导致假阳性，建议结合结构OCT的en-face图像综合判断。关于治疗，如果OCTA确认存在显著缺血且视力持续下降，可以考虑抗VEGF治疗以减轻VEGF介导的血管渗漏。', time: '2024-05-20 16:15', likes: 42 },
-            { author: '王主任', role: '专家', text: '补充一个观点：糖尿病视网膜病变中的黄斑缺血不应孤立看待，应结合全身血糖控制水平、肾病等全身并发症综合评估。建议完善HbA1c、尿微量白蛋白等检查，必要时内分泌科会诊。', time: '2024-05-21 09:00', likes: 35 }
+            { author: '李医生', role: '楼主', text: '补充信息：OCTA检查结果显示旁中心凹区域确实存在局部血流密度下降，支持黄斑缺血的诊断。建议对该类患者常规进行OCTA评估。', time: '2024-05-20 14:30', replies: [
+                { author: '张教授', role: '教师', replyTo: '李医生', text: '这个补充很关键，建议同时记录血糖控制和肾功能指标，方便学生理解眼底表现与全身状态的关联。', time: '2024-05-20 15:05' }
+            ] },
+            { author: '赵教授', role: '专家', text: '非常有意思的病例。我同意OCTA在评估黄斑缺血方面比FFA更敏感。但需要注意：OCTA的伪影可能导致假阳性，建议结合结构OCT的en-face图像综合判断。关于治疗，如果OCTA确认存在显著缺血且视力持续下降，可以考虑抗VEGF治疗以减轻VEGF介导的血管渗漏。', time: '2024-05-20 16:15', replies: [] },
+            { author: '王主任', role: '专家', text: '补充一个观点：糖尿病视网膜病变中的黄斑缺血不应孤立看待，应结合全身血糖控制水平、肾病等全身并发症综合评估。建议完善HbA1c、尿微量白蛋白等检查，必要时内分泌科会诊。', time: '2024-05-21 09:00', replies: [] }
         ],
         content: `<h3>病例简介</h3><p>患者女性，56岁，因"双眼视力逐渐下降半年"就诊。糖尿病病史10年，口服降糖药控制欠佳（HbA1c 8.5%）。眼科检查：视力右眼0.4，左眼0.5；眼压正常；眼前节（-）。散瞳后眼底检查：双眼后极部散在微血管瘤、点片状出血及硬性渗出。OCT示黄斑中心凹形态尚可，但旁中心凹区域视网膜内层变薄、反射率增高，提示缺血性改变。然而FFA检查未见明确毛细血管无灌注区，诊断存在争议。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">右眼眼底彩照</div><div class="img-placeholder">左眼眼底彩照</div><div class="img-placeholder">右眼 OCT B-scan</div><div class="img-placeholder">FFA 早期像</div></div>`
     },
@@ -313,11 +418,11 @@ var cases = [
         department: '眼科',
         date: '2024-05-18',
         views: 287,
-        likes: 89,
-        liked: false,
         comments: [
-            { author: '张医生', role: '楼主', text: '该病例为27岁男性，双眼视力进行性下降2年。OCT显示视盘小凹伴黄斑区视网膜层间劈裂，讨论是否需要玻璃体切割术。', time: '2024-05-18 10:00', likes: 15 },
-            { author: '刘教授', role: '专家', text: '先天性视盘小凹合并黄斑劈裂较为罕见。根据文献，当BCVA低于0.3或劈裂范围扩大时，建议手术干预。本例视力0.4，可密切随访。', time: '2024-05-18 14:20', likes: 22 }
+            { author: '张医生', role: '楼主', text: '该病例为27岁男性，双眼视力进行性下降2年。OCT显示视盘小凹伴黄斑区视网膜层间劈裂，讨论是否需要玻璃体切割术。', time: '2024-05-18 10:00', replies: [] },
+            { author: '刘教授', role: '专家', text: '先天性视盘小凹合并黄斑劈裂较为罕见。根据文献，当BCVA低于0.3或劈裂范围扩大时，建议手术干预。本例视力0.4，可密切随访。', time: '2024-05-18 14:20', replies: [
+                { author: '研究生王同学', role: '学生', replyTo: '刘教授', text: '如果先随访，是否建议固定使用OCT指标作为进展判断标准？', time: '2024-05-18 15:10' }
+            ] }
         ],
         content: `<h3>病例简介</h3><p>患者男性，27岁，因"双眼视力进行性下降2年"就诊。最佳矫正视力右眼0.4，左眼0.3。眼底检查：双眼视盘颞侧可见小凹，黄斑区视网膜隆起。OCT：视盘小凹伴黄斑区视网膜层间劈裂，外层视网膜结构尚完整。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">双眼眼底彩照</div><div class="img-placeholder">OCT水平扫描</div><div class="img-placeholder">OCT垂直扫描</div><div class="img-placeholder">视野检查</div></div>`
     },
@@ -331,11 +436,9 @@ var cases = [
         department: '眼底病科',
         date: '2024-05-15',
         views: 198,
-        likes: 56,
-        liked: false,
         comments: [
-            { author: '陈医生', role: '楼主', text: '患者78岁，湿性AMD，连续12次雷珠单抗注射后OCT仍显示视网膜下液持续存在，FA显示活动性渗漏。讨论换药策略。', time: '2024-05-15 09:30', likes: 18 },
-            { author: '孙教授', role: '专家', text: '抗VEGF治疗抵抗的定义尚不统一。建议换用阿柏西普（更强亲和力），或考虑联合光动力疗法（PDT）。也可检测房水中VEGF水平指导个体化治疗。', time: '2024-05-15 11:45', likes: 31 }
+            { author: '陈医生', role: '楼主', text: '患者78岁，湿性AMD，连续12次雷珠单抗注射后OCT仍显示视网膜下液持续存在，FA显示活动性渗漏。讨论换药策略。', time: '2024-05-15 09:30', replies: [] },
+            { author: '孙教授', role: '专家', text: '抗VEGF治疗抵抗的定义尚不统一。建议换用阿柏西普（更强亲和力），或考虑联合光动力疗法（PDT）。也可检测房水中VEGF水平指导个体化治疗。', time: '2024-05-15 11:45', replies: [] }
         ],
         content: `<h3>病例简介</h3><p>患者女性，78岁，确诊湿性年龄相关性黄斑变性（AMD）18个月。初始视力0.5，经连续12次雷珠单抗玻璃体腔注射后，最佳矫正视力降至0.2，OCT显示视网膜下液持续存在，FA显示活动性渗漏。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">初诊FAF</div><div class="img-placeholder">近期OCT</div><div class="img-placeholder">FA晚期像</div><div class="img-placeholder">ICGA影像</div></div>`
     },
@@ -349,11 +452,9 @@ var cases = [
         department: '青光眼专科',
         date: '2024-05-12',
         views: 172,
-        likes: 63,
-        liked: false,
         comments: [
-            { author: '王医生', role: '楼主', text: '患者62岁，原发性闭角型青光眼，小梁切除术后第3天出现浅前房、高眼压（32mmHg），讨论恶性青光眼的诊断与处理。', time: '2024-05-12 08:00', likes: 12 },
-            { author: '周主任', role: '专家', text: '恶性青光眼的核心病理是睫状环阻滞。处理原则：立即停用缩瞳剂，全身使用高渗剂+碳酸酐酶抑制剂，局部睫状肌麻痹剂。如药物治疗72小时无效，需手术干预（玻璃体切割+前房成形）。', time: '2024-05-12 10:30', likes: 25 }
+            { author: '王医生', role: '楼主', text: '患者62岁，原发性闭角型青光眼，小梁切除术后第3天出现浅前房、高眼压（32mmHg），讨论恶性青光眼的诊断与处理。', time: '2024-05-12 08:00', replies: [] },
+            { author: '周主任', role: '专家', text: '恶性青光眼的核心病理是睫状环阻滞。处理原则：立即停用缩瞳剂，全身使用高渗剂+碳酸酐酶抑制剂，局部睫状肌麻痹剂。如药物治疗72小时无效，需手术干预（玻璃体切割+前房成形）。', time: '2024-05-12 10:30', replies: [] }
         ],
         content: `<h3>病例简介</h3><p>患者女性，62岁，原发性闭角型青光眼（右眼），行小梁切除术。术后第3天出现浅前房（中央前房深度＜1.5mm），眼压升高至32mmHg。B超显示睫状环阻滞征象，诊断为恶性青光眼。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">术前房角镜</div><div class="img-placeholder">术后AS-OCT</div><div class="img-placeholder">UBM检查</div><div class="img-placeholder">B超影像</div></div>`
     },
@@ -367,14 +468,69 @@ var cases = [
         department: '眼肿瘤科',
         date: '2024-05-10',
         views: 315,
-        likes: 104,
-        liked: false,
         comments: [
-            { author: '赵医生', role: '楼主', text: '患者65岁，反复发作"葡萄膜炎"2年，多次激素冲击治疗无效。玻璃体活检最终确诊原发性眼内淋巴瘤（PIOL）。分享早期识别要点。', time: '2024-05-10 16:00', likes: 45 },
-            { author: '吴教授', role: '专家', text: '伪装综合征是临床陷阱。关键鉴别点：激素治疗反应差、单侧起病、玻璃体细胞形态异常。建议对疑似病例尽早行玻璃体切割活检+流式细胞术。', time: '2024-05-10 18:20', likes: 38 }
+            { author: '赵医生', role: '楼主', text: '患者65岁，反复发作"葡萄膜炎"2年，多次激素冲击治疗无效。玻璃体活检最终确诊原发性眼内淋巴瘤（PIOL）。分享早期识别要点。', time: '2024-05-10 16:00', replies: [] },
+            { author: '吴教授', role: '专家', text: '伪装综合征是临床陷阱。关键鉴别点：激素治疗反应差、单侧起病、玻璃体细胞形态异常。建议对疑似病例尽早行玻璃体切割活检+流式细胞术。', time: '2024-05-10 18:20', replies: [] }
         ],
         content: `<h3>病例简介</h3><p>患者男性，65岁，因"右眼反复红痛、视力下降2年"就诊。外院诊断为"慢性葡萄膜炎"，多次激素冲击治疗无效。入院后查：玻璃体混浊明显，视网膜未见明显病灶。玻璃体切割活检：见到大型B细胞淋巴瘤细胞，CD20（+），确诊为原发性眼内淋巴瘤（PIOL）。</p><h3>影像资料</h3><div class="image-grid"><div class="img-placeholder">眼底彩照</div><div class="img-placeholder">FAF影像</div><div class="img-placeholder">玻璃体混浊照相</div><div class="img-placeholder">病理活检（示意）</div></div>`
     }
+];
+
+var knowledgeArticles = [
+    {
+        id: 1001,
+        title: 'OCTA在糖尿病黄斑缺血评估中的应用要点',
+        category: '诊疗经验',
+        summary: '结合结构OCT、OCTA血流密度和全身代谢指标，梳理糖尿病黄斑缺血的评估路径。',
+        author: '赵教授',
+        role: '临床专家',
+        date: '2024-05-22',
+        views: 246,
+        comments: [
+            { author: '李医生', role: '教师', text: '这篇文章适合放在糖网课程后作为延伸阅读，尤其是OCTA伪影识别部分对学生很有帮助。', time: '2024-05-22 10:30', replies: [
+                { author: '研究生陈同学', role: '学生', replyTo: '李医生', text: '如果OCTA与FFA结论不一致，课堂讨论时是否优先从检查原理差异讲起？', time: '2024-05-22 11:05', replies: [] }
+            ] },
+            { author: '王主任', role: '专家', text: '建议补充内分泌科协作管理部分，黄斑缺血不能只从眼底影像本身解释。', time: '2024-05-22 14:10', replies: [] }
+        ],
+        content: `<div class="article-lead">本文围绕OCTA在糖尿病黄斑缺血评估中的临床应用展开，重点关注影像证据、检查局限和多学科管理。</div><h3>一、评估思路</h3><p>OCTA能够显示浅层及深层毛细血管丛的血流密度变化，对旁中心凹无灌注和微循环异常较为敏感。临床判读时建议同时结合结构OCT、眼底彩照、FFA及视力变化。</p><h3>二、教学提示</h3><p>教师可引导学生比较OCTA与FFA的检查原理差异，讨论伪影、分层错误和黄斑区血流密度下降的临床意义。</p>`
+    },
+    {
+        id: 1002,
+        title: '抗VEGF治疗抵抗病例的复盘框架',
+        category: '教学笔记',
+        summary: '从诊断确认、治疗依从性、药物选择、联合治疗四个维度复盘抗VEGF治疗抵抗病例。',
+        author: '孙教授',
+        role: '教师',
+        date: '2024-05-19',
+        views: 198,
+        comments: [
+            { author: '陈医生', role: '临床医生', text: '这个框架对门诊复盘很实用，尤其是把误诊和依从性问题放在换药之前。', time: '2024-05-19 16:20', replies: [] }
+        ],
+        content: `<div class="article-lead">抗VEGF治疗抵抗不应直接等同于药物无效，临床复盘需要先确认诊断与治疗过程。</div><h3>复盘路径</h3><p>第一步确认是否为真实湿性AMD或合并PCV；第二步核对注射间隔和患者依从性；第三步评估OCT液体类型与病灶活性；第四步讨论换药、缩短间隔或联合PDT等策略。</p><h3>课堂讨论建议</h3><p>可让学生分别从影像证据、治疗方案和患者因素三个角度提出下一步处理建议。</p>`
+    },
+    {
+        id: 1003,
+        title: '伪装综合征早期识别：从葡萄膜炎误诊谈起',
+        category: '文献解读',
+        summary: '结合眼内淋巴瘤相关文献，总结伪装综合征的危险信号和检查路径。',
+        author: '吴教授',
+        role: '临床专家',
+        date: '2024-05-16',
+        views: 321,
+        comments: [
+            { author: '赵医生', role: '楼主', text: '建议把“激素反应差”和“单眼反复发作”作为学生必须掌握的识别点。', time: '2024-05-16 18:40', replies: [] }
+        ],
+        content: `<div class="article-lead">伪装综合征的核心教学价值在于提醒学生：常见诊断背后可能隐藏少见但高风险疾病。</div><h3>危险信号</h3><p>对于反复发作、激素治疗反应差、单眼为主、玻璃体细胞形态异常或老年起病的“葡萄膜炎”，应警惕眼内淋巴瘤等伪装疾病。</p><h3>知识传播重点</h3><p>文章下方讨论可围绕活检时机、影像证据、眼肿瘤科会诊和患者沟通展开。</p>`
+    }
+];
+
+var currentDetailId = null;
+var currentDetailType = 'case';
+var activeSection = 'case';
+var notifications = [
+    { title: '赵教授回复了你的讨论', caseTitle: '非增殖期糖尿病视网膜病变伴黄斑缺血', text: '建议结合结构OCT的en-face图像综合判断OCTA伪影。', time: '2024-05-20 16:20', unread: true },
+    { title: '研究生王同学追问了你的观点', caseTitle: '双眼先天性视盘小凹合并黄斑劈裂', text: '询问随访时是否固定使用OCT指标作为进展判断标准。', time: '2024-05-18 15:12', unread: true },
+    { title: '吴教授补充专家点评', caseTitle: '伪装综合征：眼内淋巴瘤误诊为葡萄膜炎', text: '补充了玻璃体切割活检和流式细胞术的判断路径。', time: '2024-05-10 18:25', unread: false }
 ];
 
 // ========== 初始化 ==========
@@ -386,7 +542,76 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     } catch(e) {}
     renderCaseList(cases);
+    renderArticleList(knowledgeArticles);
+    renderNotifications();
 });
+
+function getDiscussionItem(type, id) {
+    var list = type === 'article' ? knowledgeArticles : cases;
+    return list.find(function(item) { return item.id === id; }) || null;
+}
+
+function getDiscussionCount(comments) {
+    return (comments || []).reduce(function(sum, item) {
+        return sum + 1 + getDiscussionCount(item.replies || []);
+    }, 0);
+}
+
+function getNowTime() {
+    var now = new Date();
+    return now.getFullYear() + '-' +
+        String(now.getMonth()+1).padStart(2,'0') + '-' +
+        String(now.getDate()).padStart(2,'0') + ' ' +
+        String(now.getHours()).padStart(2,'0') + ':' +
+        String(now.getMinutes()).padStart(2,'0');
+}
+
+function getCurrentUserName() {
+    return document.getElementById('headerUserName').textContent || '匿名用户';
+}
+
+function renderNotifications() {
+    var count = notifications.filter(function(n) { return n.unread; }).length;
+    document.getElementById('noticeCount').textContent = count;
+    var list = document.getElementById('noticeList');
+    if (!list) return;
+    if (notifications.length === 0) {
+        list.innerHTML = '<div class="notice-item">暂无消息通知</div>';
+        return;
+    }
+    list.innerHTML = notifications.map(function(n) {
+        return '<div class="notice-item'+(n.unread ? ' unread' : '')+'">' +
+            '<div>'+escapeHtml(n.title)+'</div>' +
+            '<div style="margin-top:3px;">'+escapeHtml(n.text)+'</div>' +
+            '<div class="notice-meta">'+escapeHtml(n.caseTitle)+' · '+escapeHtml(n.time)+'</div>' +
+        '</div>';
+    }).join('');
+}
+
+function toggleNotifications(event) {
+    if (event) event.stopPropagation();
+    var panel = document.getElementById('notificationPanel');
+    panel.classList.toggle('show');
+}
+
+function markNotificationsRead(event) {
+    if (event) event.stopPropagation();
+    notifications.forEach(function(n) { n.unread = false; });
+    renderNotifications();
+}
+
+function addNotification(title, caseTitle, text, time) {
+    notifications.unshift({ title: title, caseTitle: caseTitle, text: text, time: time, unread: true });
+    renderNotifications();
+}
+
+function switchSection(type) {
+    activeSection = type;
+    document.getElementById('caseTabBtn').classList.toggle('active', type === 'case');
+    document.getElementById('articleTabBtn').classList.toggle('active', type === 'article');
+    document.getElementById('casePanel').classList.toggle('active', type === 'case');
+    document.getElementById('articlePanel').classList.toggle('active', type === 'article');
+}
 
 // ========== 渲染病例列表 ==========
 function renderCaseList(caseArray) {
@@ -397,7 +622,7 @@ function renderCaseList(caseArray) {
     }
     var html = '';
     caseArray.forEach(function(c) {
-        html += '<div class="discuss-item" style="flex-direction:column;align-items:stretch;cursor:pointer;" onclick="showDetail(' + c.id + ')">' +
+        html += '<div class="discuss-item" style="flex-direction:column;align-items:stretch;cursor:pointer;" onclick="showDetail(\'case\',' + c.id + ')">' +
             '<div style="display:flex;align-items:center;">' +
                 '<div class="discuss-info" style="flex:1;">' +
                     '<div class="discuss-title" style="color:var(--gray-800);">' +
@@ -410,8 +635,38 @@ function renderCaseList(caseArray) {
                 '</div>' +
             '</div>' +
             '<div style="display:flex;align-items:center;gap:16px;margin-top:6px;padding-left:2px;">' +
-                '<span style="font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:3px;">💬 ' + c.comments.length + ' 评论</span>' +
+                '<span style="font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:3px;">💬 ' + getDiscussionCount(c.comments) + ' 讨论</span>' +
                 '<span style="font-size:12px;color:var(--gray-400);margin-left:auto;">' + c.disease + ' · ' + c.author + ' · ' + c.date + '</span>' +
+            '</div>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+}
+
+// ========== 渲染知识传播文章列表 ==========
+function renderArticleList(articleArray) {
+    var container = document.getElementById('articleList');
+    if (!articleArray || articleArray.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div>暂无匹配文章</div>';
+        return;
+    }
+    var html = '';
+    articleArray.forEach(function(a) {
+        html += '<div class="discuss-item" style="flex-direction:column;align-items:stretch;cursor:pointer;" onclick="showDetail(\'article\',' + a.id + ')">' +
+            '<div style="display:flex;align-items:center;">' +
+                '<div class="discuss-info" style="flex:1;">' +
+                    '<div class="discuss-title" style="color:var(--gray-800);">' +
+                        '<span class="article-tag">' + escapeHtml(a.category) + '</span>' + escapeHtml(a.title) +
+                    '</div>' +
+                    '<div class="discuss-desc">' + escapeHtml(a.summary) + '</div>' +
+                '</div>' +
+                '<div class="discuss-stats" style="flex-shrink:0;margin-left:16px;">' +
+                    '<span>👁 ' + a.views + '</span>' +
+                '</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:16px;margin-top:6px;padding-left:2px;">' +
+                '<span style="font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:3px;">💬 ' + getDiscussionCount(a.comments) + ' 讨论</span>' +
+                '<span style="font-size:12px;color:var(--gray-400);margin-left:auto;">' + escapeHtml(a.role) + ' · ' + escapeHtml(a.author) + ' · ' + escapeHtml(a.date) + '</span>' +
             '</div>' +
         '</div>';
     });
@@ -433,74 +688,62 @@ function filterCases() {
     renderCaseList(filtered);
 }
 
-// ========== 点赞/取消点赞（列表页） ==========
-function toggleLike(id, btnEl) {
-    var c = cases.find(function(x) { return x.id === id; });
-    if (!c) return;
-    c.liked = !c.liked;
-    if (c.liked) {
-        c.likes++;
-    } else {
-        c.likes--;
-    }
-    // 更新按钮样式
-    var icon = btnEl.querySelector('.like-icon');
-    var count = btnEl.querySelector('.like-count');
-    icon.textContent = c.liked ? '❤️' : '🤍';
-    count.textContent = c.likes;
-    btnEl.classList.toggle('liked', c.liked);
-    btnEl.style.color = c.liked ? 'var(--danger)' : 'var(--gray-500)';
+function filterArticles() {
+    var keyword = document.getElementById('articleSearchInput').value.trim().toLowerCase();
+    var category = document.getElementById('articleCategoryFilter').value;
+    var filtered = knowledgeArticles.filter(function(a) {
+        var matchKeyword = !keyword ||
+            a.title.toLowerCase().indexOf(keyword) !== -1 ||
+            a.summary.toLowerCase().indexOf(keyword) !== -1 ||
+            a.category.toLowerCase().indexOf(keyword) !== -1 ||
+            a.author.toLowerCase().indexOf(keyword) !== -1;
+        var matchCategory = !category || a.category === category;
+        return matchKeyword && matchCategory;
+    });
+    renderArticleList(filtered);
 }
 
 // ========== 详情页 ==========
-var currentDetailId = null;
-
-function showDetail(id) {
-    var c = cases.find(function(x) { return x.id === id; });
+function showDetail(type, id) {
+    var c = getDiscussionItem(type, id);
     if (!c) return;
     currentDetailId = id;
+    currentDetailType = type;
+    activeSection = type;
     document.getElementById('listView').style.display = 'none';
     document.getElementById('detailView').style.display = 'block';
 
     document.getElementById('detailTitle').textContent = c.title;
-    document.getElementById('detailMeta').textContent = '发布者：' + c.author + ' | 发布时间：' + c.date + ' | 疾病分类：' + c.disease;
+    if (type === 'article') {
+        document.getElementById('detailMeta').textContent = '作者：' + c.author + ' | 角色：' + c.role + ' | 发布时间：' + c.date + ' | 文章分类：' + c.category;
+        document.getElementById('detailActionBtn').textContent = '上传文章';
+        document.getElementById('detailDiscussionLabel').textContent = '文章讨论';
+        document.getElementById('commentTitleLabel').textContent = '文章讨论';
+        document.getElementById('newCommentInput').placeholder = '围绕这篇文章发表你的观点、补充案例或提出问题...';
+    } else {
+        document.getElementById('detailMeta').textContent = '发布者：' + c.author + ' | 发布时间：' + c.date + ' | 疾病分类：' + c.disease;
+        document.getElementById('detailActionBtn').textContent = '分享病例';
+        document.getElementById('detailDiscussionLabel').textContent = '病例研讨';
+        document.getElementById('commentTitleLabel').textContent = '病例讨论';
+        document.getElementById('newCommentInput').placeholder = '发表你的观点和见解...';
+    }
     document.getElementById('detailContent').innerHTML = c.content;
 
-    // 更新点赞按钮
-    document.getElementById('detailLikeIcon').textContent = c.liked ? '❤️' : '🤍';
-    document.getElementById('detailLikeCount').textContent = c.likes;
-    var likeBtn = document.getElementById('detailLikeBtn');
-    likeBtn.style.color = c.liked ? 'var(--danger)' : 'var(--gray-500)';
-
     // 评论数
-    document.getElementById('detailCommentCount').textContent = c.comments.length;
+    document.getElementById('detailCommentCount').textContent = getDiscussionCount(c.comments);
     renderComments(c);
 }
 
 function showList() {
     document.getElementById('detailView').style.display = 'none';
     document.getElementById('listView').style.display = 'block';
-    // 刷新列表以反映最新点赞/评论数
-    filterCases();
+    switchSection(activeSection);
+    if (activeSection === 'article') filterArticles();
+    else filterCases();
 }
 
-// ========== 详情页点赞 ==========
-function toggleDetailLike() {
-    if (currentDetailId === null) return;
-    var c = cases.find(function(x) { return x.id === currentDetailId; });
-    if (!c) return;
-    c.liked = !c.liked;
-    c.likes += c.liked ? 1 : -1;
-    document.getElementById('detailLikeIcon').textContent = c.liked ? '❤️' : '🤍';
-    document.getElementById('detailLikeCount').textContent = c.likes;
-    document.getElementById('detailLikeBtn').style.color = c.liked ? 'var(--danger)' : 'var(--gray-500)';
-    // 同步更新列表中的显示
-    var btn = document.querySelector('.discuss-item .action-btn.liked') ||
-              document.querySelector('[onclick="toggleLike(' + currentDetailId + ')"]');
-    // 通过重新渲染列表来同步（如果列表可见）
-    if (document.getElementById('listView').style.display !== 'none') {
-        filterCases();
-    }
+function openCurrentPublishModal() {
+    openModal(currentDetailType === 'article' ? 'articleModal' : 'shareModal');
 }
 
 // ========== 评论区展开/收起 ==========
@@ -516,21 +759,100 @@ function toggleCommentSection() {
 // ========== 渲染评论列表 ==========
 function renderComments(c) {
     var container = document.getElementById('commentList');
-    document.getElementById('commentTotal').textContent = c.comments.length;
-    document.getElementById('detailCommentCount').textContent = c.comments.length;
-    if (c.comments.length === 0) {
-        container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;">暂无评论，快来发表你的见解吧</div>';
+    var total = getDiscussionCount(c.comments);
+    document.getElementById('commentTotal').textContent = total;
+    document.getElementById('detailCommentCount').textContent = total;
+    if (total === 0) {
+        container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-400);font-size:13px;">暂无讨论，快来发表你的见解吧</div>';
         return;
     }
-    var html = '';
-    c.comments.forEach(function(cm) {
-        html += '<div class="comment-item">' +
-            '<div class="comment-author">' + escapeHtml(cm.author) + '<span class="role-tag">' + escapeHtml(cm.role) + '</span></div>' +
-            '<div class="comment-text">' + escapeHtml(cm.text) + '</div>' +
-            '<div class="comment-meta">' + escapeHtml(cm.time) + ' | 👍 ' + cm.likes + '</div>' +
-        '</div>';
+    container.innerHTML = c.comments.map(function(cm, idx) {
+        return renderDiscussionNode(cm, c.id, [idx], 0);
+    }).join('');
+}
+
+function renderDiscussionNode(item, caseId, path, depth) {
+    var pathKey = path.join('_');
+    var isReply = depth > 0;
+    var itemClass = isReply ? 'reply-item' : 'comment-item';
+    var authorClass = isReply ? 'reply-author' : 'comment-author';
+    var textClass = isReply ? 'reply-text' : 'comment-text';
+    var metaClass = isReply ? 'reply-meta' : 'comment-meta';
+    var replies = item.replies || [];
+    var html = '<div class="'+itemClass+'">';
+    html += '<div class="'+authorClass+'">' + escapeHtml(item.author);
+    if (item.role) html += '<span class="role-tag">' + escapeHtml(item.role) + '</span>';
+    if (isReply && item.replyTo) html += '<span class="reply-target"> 回复 @' + escapeHtml(item.replyTo) + '</span>';
+    html += '</div>';
+    html += '<div class="'+textClass+'">' + escapeHtml(item.text) + '</div>';
+    html += '<div class="'+metaClass+'"><span>' + escapeHtml(item.time) + '</span><button class="reply-link" onclick="toggleReplyBox(event,' + caseId + ',\'' + pathKey + '\')">回复</button></div>';
+    html += '<div class="reply-box" id="replyBox_' + caseId + '_' + pathKey + '">' +
+        '<textarea id="replyText_' + caseId + '_' + pathKey + '" placeholder="回复 @' + escapeHtml(item.author) + '..."></textarea>' +
+        '<button class="btn btn-primary" style="flex-shrink:0;" onclick="submitReply(' + caseId + ',\'' + pathKey + '\')">发送</button>' +
+        '<button class="btn btn-outline" style="flex-shrink:0;" onclick="toggleReplyBox(event,' + caseId + ',\'' + pathKey + '\')">取消</button>' +
+    '</div>';
+    if (replies.length) {
+        html += '<div class="reply-list">';
+        replies.forEach(function(reply, idx) {
+            html += renderDiscussionNode(reply, caseId, path.concat(idx), depth + 1);
+        });
+        html += '</div>';
+    }
+    html += '</div>';
+    return html;
+}
+
+function getCommentByPath(comments, pathText) {
+    var parts = pathText.split('_').map(function(n) { return parseInt(n, 10); });
+    var current = null;
+    var list = comments;
+    for (var i = 0; i < parts.length; i++) {
+        current = list[parts[i]];
+        if (!current) return null;
+        list = current.replies || [];
+    }
+    return current;
+}
+
+function toggleReplyBox(event, caseId, pathText) {
+    if (event) event.stopPropagation();
+    var boxId = 'replyBox_' + caseId + '_' + pathText;
+    document.querySelectorAll('.reply-box.show').forEach(function(box) {
+        if (box.id !== boxId) box.classList.remove('show');
     });
-    container.innerHTML = html;
+    var box = document.getElementById(boxId);
+    if (!box) return;
+    box.classList.toggle('show');
+    if (box.classList.contains('show')) {
+        var input = document.getElementById('replyText_' + caseId + '_' + pathText);
+        if (input) input.focus();
+    }
+}
+
+function submitReply(caseId, pathText) {
+    var c = getDiscussionItem(currentDetailType, caseId);
+    if (!c) return;
+    var target = getCommentByPath(c.comments, pathText);
+    var input = document.getElementById('replyText_' + caseId + '_' + pathText);
+    var text = input ? input.value.trim() : '';
+    if (!target || !text) {
+        showToast('请输入回复内容');
+        return;
+    }
+    var timeStr = getNowTime();
+    var userName = getCurrentUserName();
+    target.replies = target.replies || [];
+    target.replies.push({
+        author: userName,
+        role: '参与者',
+        replyTo: target.author,
+        text: text,
+        time: timeStr,
+        replies: []
+    });
+    renderComments(c);
+    addNotification('新的讨论回复', c.title, userName + ' 回复了 ' + target.author + ' 的观点', timeStr);
+    showToast('回复已发送，对方将收到消息通知');
 }
 
 // ========== 提交评论 ==========
@@ -542,26 +864,22 @@ function submitComment() {
         return;
     }
     if (currentDetailId === null) return;
-    var c = cases.find(function(x) { return x.id === currentDetailId; });
+    var c = getDiscussionItem(currentDetailType, currentDetailId);
     if (!c) return;
 
-    var now = new Date();
-    var timeStr = now.getFullYear() + '-' +
-        String(now.getMonth()+1).padStart(2,'0') + '-' +
-        String(now.getDate()).padStart(2,'0') + ' ' +
-        String(now.getHours()).padStart(2,'0') + ':' +
-        String(now.getMinutes()).padStart(2,'0');
-    var userName = document.getElementById('headerUserName').textContent || '匿名用户';
+    var timeStr = getNowTime();
+    var userName = getCurrentUserName();
     c.comments.unshift({
         author: userName,
         role: '参与者',
         text: text,
         time: timeStr,
-        likes: 0
+        replies: []
     });
     input.value = '';
     renderComments(c);
-    showToast('评论发表成功');
+    addNotification('新的讨论', c.title, userName + ' 发布了一条新的讨论内容', timeStr);
+    showToast('讨论发表成功');
 }
 
 // ========== 分享病例（修改1） ==========
@@ -595,8 +913,6 @@ function shareCase() {
         department: '眼科',
         date: dateStr,
         views: 0,
-        likes: 0,
-        liked: false,
         comments: [],
         content: `<h3>病例简介</h3><p>${escapeHtml(desc)}</p>`
     };
@@ -614,6 +930,42 @@ function shareCase() {
     // 刷新列表显示新病例
     filterCases();
     showToast('病例分享成功！已添加到列表顶部');
+}
+
+function publishArticle() {
+    var title = document.getElementById('articleTitle').value.trim();
+    var category = document.getElementById('articleCategory').value;
+    var summary = document.getElementById('articleSummary').value.trim();
+    var content = document.getElementById('articleContent').value.trim();
+    if (!title || !category || !summary || !content) {
+        showToast('请填写完整信息（文章标题、文章分类、文章摘要、文章正文为必填项）');
+        return;
+    }
+    var now = new Date();
+    var dateStr = now.getFullYear() + '-' +
+        String(now.getMonth()+1).padStart(2,'0') + '-' +
+        String(now.getDate()).padStart(2,'0');
+    var userName = getCurrentUserName();
+    var newArticle = {
+        id: articleIdCounter++,
+        title: title,
+        category: category,
+        summary: summary,
+        author: userName,
+        role: '教师',
+        date: dateStr,
+        views: 0,
+        comments: [],
+        content: '<div class="article-lead">'+escapeHtml(summary)+'</div><p>'+escapeHtml(content).replace(/\n/g,'</p><p>')+'</p>'
+    };
+    knowledgeArticles.unshift(newArticle);
+    document.getElementById('articleTitle').value = '';
+    document.getElementById('articleCategory').value = '';
+    document.getElementById('articleSummary').value = '';
+    document.getElementById('articleContent').value = '';
+    closeModal('articleModal');
+    filterArticles();
+    showToast('文章发布成功！已添加到知识传播列表顶部');
 }
 
 // ========== 文件上传预览 ==========
@@ -686,6 +1038,10 @@ document.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal-overlay')) {
         e.target.style.display = 'none';
         e.target.classList.remove('show');
+    }
+    var panel = document.getElementById('notificationPanel');
+    if (panel && !e.target.closest('.notification-widget')) {
+        panel.classList.remove('show');
     }
 });
 </script>

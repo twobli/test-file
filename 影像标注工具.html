@@ -15,6 +15,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .toolbar { display:flex; align-items:center; justify-content:space-between; padding:6px 16px; background:#2d2d44; border-bottom:1px solid #3d3d5a; flex-shrink:0; flex-wrap:wrap; gap:4px; }
 .toolbar .tb-left, .toolbar .tb-right { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
 .tool-btn { padding:5px 10px; border:1px solid #4a4a6a; background:#363652; color:#ccd; border-radius:4px; cursor:pointer; font-size:11px; font-family:inherit; transition:var(--transition); display:flex; align-items:center; gap:3px; white-space:nowrap; }
+.toolbar .tool-btn.icon-only { min-width:32px; padding:5px 8px; justify-content:center; gap:0; }
 .tool-btn:hover { background:#4a4a7a; border-color:#5a5a8a; }
 .tool-btn:disabled { cursor:not-allowed; opacity:0.55; }
 .tool-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
@@ -46,6 +47,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .filter-row { display:flex; gap:4px; margin-bottom:6px; flex-wrap:wrap; }
 .filter-row input, .filter-row select { flex:1; min-width:0; padding:4px 6px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:3px; font-size:11px; font-family:inherit; }
 .filter-row select { min-width:70px; }
+.filter-actions { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; }
+.filter-actions .tool-btn { width:100%; min-width:0; justify-content:center; padding:5px 4px; }
 .image-list-item { padding:6px 8px; border-radius:4px; cursor:pointer; font-size:11px; color:#aab; margin-bottom:3px; transition:var(--transition); display:flex; align-items:center; gap:6px; }
 .image-list-item:hover { background:#363652; }
 .image-list-item.active { background:var(--primary); color:#fff; }
@@ -67,7 +70,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .label-custom-row { display:flex; gap:3px; margin-top:4px; }
 .label-custom-row input { flex:1; min-width:0; padding:3px 6px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:3px; font-size:11px; font-family:inherit; }
 .label-custom-row button { padding:3px 8px; background:var(--primary); color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; }
-.ann-view-area { flex:1; display:flex; flex-direction:column; background:#0d0d1a; overflow:hidden; position:relative; }
+.ann-view-area { flex:1; display:flex; flex-direction:column; background:#0d0d1a; overflow:hidden; position:relative; min-width:0; order:2; }
 .image-tabs { display:flex; background:#1a1a2e; border-bottom:1px solid #3d3d5a; flex-shrink:0; overflow-x:auto; }
 .image-tab { padding:6px 12px; font-size:11px; color:#889; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:var(--transition); display:flex; align-items:center; gap:4px; }
 .image-tab:hover { color:#ccd; }
@@ -83,15 +86,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 #annotationCanvas { position:absolute; cursor:crosshair; }
 .layer-panel { display:flex; align-items:center; gap:6px; min-width:190px; }
 .layer-panel select { min-width:110px; padding:3px 6px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:3px; font-size:10px; }
-.ann-panel-right { width:280px; background:#252540; border-left:1px solid #3d3d5a; padding:10px; overflow-y:auto; flex-shrink:0; }
+.ann-panel-right { display:none; width:280px; background:#252540; border-left:1px solid #3d3d5a; padding:10px; overflow-y:auto; flex-shrink:0; order:1; }
 .ann-panel-right h4 { font-size:11px; color:#889; text-transform:uppercase; margin-bottom:8px; }
-.progress-ring { text-align:center; margin-bottom:12px; }
-.progress-ring .pr-num { font-size:32px; font-weight:700; color:var(--success); }
-.progress-ring .pr-label { font-size:11px; color:#889; }
-.progress-stats { display:flex; gap:6px; margin-bottom:10px; }
-.progress-stats .ps-item { flex:1; text-align:center; padding:6px; background:#2d2d44; border-radius:6px; }
-.progress-stats .ps-item .ps-val { font-size:15px; font-weight:700; color:#ccd; }
-.progress-stats .ps-item .ps-lbl { font-size:10px; color:#778; }
 .ann-section { margin-bottom:12px; }
 .ann-section .ann-section-title { font-size:11px; color:#889; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; }
 .ann-section .ann-section-title a { font-size:10px; color:var(--primary); text-decoration:none; cursor:pointer; }
@@ -153,8 +149,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .manual-diagnosis-results { margin-bottom:8px; }
 .manual-diagnosis-results .scope-label { display:block; font-size:10px; color:#889; margin:0 0 4px 2px; }
 .manual-diagnosis-card .manual-tag { font-size:9px; color:#d8c5ff; margin-left:4px; }
-.diagnosis-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; margin:2px; cursor:pointer; }
-.diagnosis-tag.selected { outline:2px solid #fff; }
+.diagnosis-tag { display:inline-block; padding:2px 8px; border:1px solid #4a4a6a; border-radius:10px; font-size:10px; margin:2px; cursor:pointer; color:#e5e7f0; }
+.diagnosis-tag.selected { outline:2px solid #fff; border-color:#fff; color:#fff; font-weight:600; }
 @media (max-width:1024px) { .ann-panel-left,.ann-panel-right { width:160px; } }
 /* 测量工具样式 */
 .measure-result { padding:4px 8px; background:#1a1a2e; border-radius:4px; margin-bottom:3px; font-size:10px; color:#889; display:flex; justify-content:space-between; }
@@ -185,6 +181,11 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .category-manager input, .category-manager select { width:100%; min-width:0; padding:5px 7px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:4px; font-size:11px; font-family:inherit; margin-bottom:5px; }
 #aiModelPanel select { width:100%; min-width:0; padding:5px 7px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:4px; font-size:11px; font-family:inherit; }
 #aiModelPanel select option { background:#2d2d44; color:#ccd; }
+.category-manager #diseaseCategorySelect { display:none; }
+.category-manager .disease-search-results { display:flex; flex-direction:column; gap:3px; margin:1px 0 5px; max-height:150px; overflow-y:auto; }
+.category-manager .disease-search-result { width:100%; padding:5px 7px; border:1px solid #4a4a6a; background:#363652; color:#ccd; border-radius:4px; font-size:11px; text-align:left; cursor:pointer; }
+.category-manager .disease-search-result:hover { background:#4a4a7a; border-color:var(--primary); }
+.category-manager .disease-search-empty { color:#889; font-size:10px; line-height:1.4; margin:1px 0 5px; }
 .category-manager .selected-disease-list { display:flex; flex-wrap:wrap; gap:4px; margin-top:3px; }
 .category-manager .selected-disease-tag { display:inline-flex; align-items:center; gap:4px; max-width:100%; padding:2px 6px; background:#363652; border:1px solid #4a4a6a; border-radius:10px; color:#ccd; font-size:10px; }
 .category-manager .selected-disease-tag span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -192,10 +193,12 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 </style></head><body>
 <div class="header">
   <a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
-<div class="header-nav">
-<a href="影像标注工具.html" class="active">标注工具</a>
-<a href="影像标注任务管理.html">任务管理台</a>
-</div>
+  <div class="header-nav">
+    <a href="眼病/慢病数据采集工具.html">眼病/慢病数据采集工具</a>
+    <a href="表单模板设置.html">眼病/慢病数据录入工具</a>
+    <a href="眼病/慢病影像脱敏工具.html">眼病/慢病影像脱敏工具</a>
+    <a href="影像标注任务管理.html" class="active">眼病/慢病影像标注工具</a>
+  </div>
   <div class="header-right">
     <span id="headerUserName">管理员</span>
     <button class="btn-logout" onclick="logout()">退出</button>
@@ -205,53 +208,54 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 <!-- 工具栏 -->
 <div class="toolbar">
   <div class="tb-left">
-    <button class="tool-btn" onclick="goBackToTaskList()" title="返回标注员任务列表">← 返回任务列表</button>
+    <button class="tool-btn icon-only" onclick="goBackToTaskList()" title="返回任务列表" aria-label="返回任务列表">↩</button>
     <span class="tool-sep"></span>
-    <button class="tool-btn" onclick="undoAction()" title="撤销">↩ 撤销</button>
-    <button class="tool-btn" onclick="redoAction()" title="复原">↪ 复原</button>
+    <button class="tool-btn icon-only" onclick="undoAction()" title="撤销" aria-label="撤销">↶</button>
+    <button class="tool-btn icon-only" onclick="redoAction()" title="重做" aria-label="重做">↷</button>
     <span class="tool-sep"></span>
     <!-- 基础浏览工具 -->
-    <button class="tool-btn" onclick="zoomIn()" title="放大">🔍+ 放大</button>
-    <button class="tool-btn" onclick="zoomOut()" title="缩小">🔍- 缩小</button>
-    <button class="tool-btn" onclick="fitToView()" title="适窗显示">▣ 适窗</button>
-    <button class="tool-btn" onclick="resetViewer()" title="重置阅片视图">↺ 重置</button>
-    <button class="tool-btn" onclick="togglePan()" title="平移模式" id="btnPan">✋ 平移</button>
-    <button class="tool-btn" onclick="rotateImage()" title="旋转">🔄 旋转</button>
-    <button class="tool-btn" onclick="flipImage('h')" title="水平翻转" id="btnFlipH">⇄ 翻转</button>
-    <button class="tool-btn" onclick="flipImage('v')" title="垂直翻转" id="btnFlipV">⇅ 垂翻</button>
-    <button class="tool-btn" onclick="toggleWindowLevel()" title="窗宽窗位" id="btnWL">🌗 窗宽窗位</button>
+    <button class="tool-btn icon-only" onclick="zoomIn()" title="放大" aria-label="放大">🔍+</button>
+    <button class="tool-btn icon-only" onclick="zoomOut()" title="缩小" aria-label="缩小">🔍-</button>
+    <button class="tool-btn icon-only" onclick="fitToView()" title="适窗显示" aria-label="适窗显示">▣</button>
+    <button class="tool-btn icon-only" onclick="resetViewer()" title="重置阅片视图" aria-label="重置阅片视图">↺</button>
+    <button class="tool-btn icon-only" onclick="togglePan()" title="平移模式" aria-label="平移模式" id="btnPan">✋</button>
+    <button class="tool-btn icon-only" onclick="rotateImage()" title="旋转" aria-label="旋转">🔄</button>
+    <button class="tool-btn icon-only" onclick="flipImage('h')" title="水平翻转" aria-label="水平翻转" id="btnFlipH">⇄</button>
+    <button class="tool-btn icon-only" onclick="flipImage('v')" title="垂直翻转" aria-label="垂直翻转" id="btnFlipV">⇅</button>
+    <button class="tool-btn icon-only" onclick="toggleWindowLevel()" title="窗宽窗位" aria-label="窗宽窗位" id="btnWL">🌗</button>
     <span class="tool-sep"></span>
     <!-- 绘制工具 -->
-    <button class="tool-btn" data-tool="select" onclick="setTool('select',this)" title="选择标注">☝ 选择</button>
-    <button class="tool-btn" data-tool="rect" onclick="setTool('rect',this)" title="矩形勾画">▭ 矩形</button>
-    <button class="tool-btn" data-tool="polygon" onclick="setTool('polygon',this)" title="多边形勾画">⬠ 多边形</button>
-    <button class="tool-btn" data-tool="brush" onclick="setTool('brush',this)" title="画笔勾画">✎ 画笔</button>
-    <button class="tool-btn" data-tool="fill" onclick="setTool('fill',this)" title="区域填充">▰ 区域填充</button>
-    <button class="tool-btn" data-tool="ellipse" onclick="setTool('ellipse',this)" title="椭圆勾画">⬭ 椭圆</button>
-    <button class="tool-btn" data-tool="line" onclick="setTool('line',this)" title="线段勾画">╱ 线段</button>
+    <button class="tool-btn icon-only" data-tool="select" onclick="setTool('select',this)" title="选择标注" aria-label="选择标注">☝</button>
+    <button class="tool-btn icon-only" data-tool="rect" onclick="setTool('rect',this)" title="矩形勾画" aria-label="矩形勾画">▭</button>
+    <button class="tool-btn icon-only" data-tool="polygon" onclick="setTool('polygon',this)" title="多边形勾画" aria-label="多边形勾画">⬠</button>
+    <button class="tool-btn icon-only" data-tool="brush" onclick="setTool('brush',this)" title="画笔勾画" aria-label="画笔勾画">✎</button>
+    <button class="tool-btn icon-only" data-tool="fill" onclick="setTool('fill',this)" title="区域填充" aria-label="区域填充">▰</button>
+    <button class="tool-btn icon-only" data-tool="ellipse" onclick="setTool('ellipse',this)" title="椭圆勾画" aria-label="椭圆勾画">⬭</button>
+    <button class="tool-btn icon-only" data-tool="line" onclick="setTool('line',this)" title="线段勾画" aria-label="线段勾画">╱</button>
     <span class="tool-sep"></span>
     <!-- 测量工具 -->
-    <button class="tool-btn" data-tool="measure-length" onclick="setTool('measure-length',this)" title="长度测量" id="btnMeasureLength">📏 长度</button>
-    <button class="tool-btn" data-tool="measure-angle" onclick="setTool('measure-angle',this)" title="角度测量" id="btnMeasureAngle">📐 角度</button>
-    <button class="tool-btn" data-tool="measure-area" onclick="setTool('measure-area',this)" title="面积测量" id="btnMeasureArea">⬡ 面积</button>
-    <button class="tool-btn" data-tool="measure-ellipse" onclick="setTool('measure-ellipse',this)" title="椭圆测量" id="btnMeasureEllipse">⬭ 椭圆测量</button>
-    <button class="tool-btn" data-tool="measure-rect" onclick="setTool('measure-rect',this)" title="矩形测量" id="btnMeasureRect">▭ 矩形测量</button>
+    <button class="tool-btn icon-only" data-tool="measure-length" onclick="setTool('measure-length',this)" title="长度测量" aria-label="长度测量" id="btnMeasureLength">📏</button>
+    <button class="tool-btn icon-only" data-tool="measure-angle" onclick="setTool('measure-angle',this)" title="角度测量" aria-label="角度测量" id="btnMeasureAngle">📐</button>
+    <button class="tool-btn icon-only" data-tool="measure-area" onclick="setTool('measure-area',this)" title="面积测量" aria-label="面积测量" id="btnMeasureArea">⬡</button>
+    <button class="tool-btn icon-only" data-tool="measure-ellipse" onclick="setTool('measure-ellipse',this)" title="椭圆测量" aria-label="椭圆测量" id="btnMeasureEllipse">⬭</button>
+    <button class="tool-btn icon-only" data-tool="measure-rect" onclick="setTool('measure-rect',this)" title="矩形测量" aria-label="矩形测量" id="btnMeasureRect">▭</button>
     <!-- 辅助工具 -->
-    <button class="tool-btn" onclick="toggleAnnotation()" title="注释" id="btnAnnotation">📝 注释</button>
-    <button class="tool-btn" onclick="toggleMagnifier()" title="放大镜" id="btnMagnifier">🔎 放大镜</button>
-    <button class="tool-btn" onclick="toggleProbe()" title="探针" id="btnProbe">📍 探针</button>
-    <button class="tool-btn" onclick="toggleEraser()" title="橡皮擦" id="btnEraser">🧹 橡皮擦</button>
-    <button class="tool-btn danger" onclick="clearAllViewerMarks()" title="清除标注与测量">🗑 清除</button>
+    <button class="tool-btn icon-only" onclick="toggleAnnotation()" title="注释" aria-label="注释" id="btnAnnotation">📝</button>
+    <button class="tool-btn icon-only" onclick="toggleMagnifier()" title="放大镜" aria-label="放大镜" id="btnMagnifier">🔎</button>
+    <button class="tool-btn icon-only" onclick="toggleProbe()" title="探针" aria-label="探针" id="btnProbe">📍</button>
+    <button class="tool-btn icon-only" onclick="toggleEraser()" title="橡皮擦" aria-label="橡皮擦" id="btnEraser">🧹</button>
+    <button class="tool-btn icon-only danger" onclick="clearAllViewerMarks()" title="清除标注与测量" aria-label="清除标注与测量">🗑</button>
     <span class="viewer-range">灰度 <input type="range" id="graySlider" min="0" max="100" value="0" oninput="setGrayScale(this.value)"></span>
     <span class="viewer-range">对比 <input type="range" id="contrastSlider" min="50" max="180" value="100" oninput="setContrast(this.value)"></span>
     <span class="viewer-range">亮度 <input type="range" id="brightnessSlider" min="50" max="160" value="100" oninput="setBrightness(this.value)"></span>
     <!-- 自动标注 -->
-    <button class="tool-btn green" onclick="runAutoAnnotation()" title="自动标注" id="btnAutoAnnotate">🤖 自动标注</button>
-    <span style="color:#667;font-size:11px;">缩放 <span id="zoomLabel">100</span>%</span>
-    <input type="range" min="20" max="300" value="100" style="width:60px;accent-color:var(--primary);" oninput="setZoom(this.value)" title="缩放影像">
-    <span class="viewer-range">线条粗细 <span id="lineWidthVal">2</span>px <input type="range" min="1" max="10" value="2" style="width:60px;accent-color:var(--primary);" oninput="setLineWidth(this.value)" title="调整线条粗细"></span>
-  </div>
-</div>
+    <button class="tool-btn icon-only green" onclick="runAutoAnnotation()" title="自动标注" aria-label="自动标注" id="btnAutoAnnotate">🤖</button>
+     <span style="color:#667;font-size:11px;">缩放 <span id="zoomLabel">100</span>%</span>
+     <input type="range" min="20" max="300" value="100" style="width:60px;accent-color:var(--primary);" oninput="setZoom(this.value)" title="缩放影像">
+     <span class="viewer-range">线条粗细 <span id="lineWidthVal">2</span>px <input type="range" min="1" max="10" value="2" style="width:60px;accent-color:var(--primary);" oninput="setLineWidth(this.value)" title="调整线条粗细"></span>
+     <span class="viewer-range">橡皮擦 <span id="eraserRadiusVal">12</span>px <input type="range" min="4" max="32" value="12" style="width:60px;accent-color:var(--primary);" oninput="setEraserRadius(this.value)" title="调整橡皮擦大小"></span>
+   </div>
+ </div>
 <!-- 工作区 -->
 <div class="workspace">
   <!-- 左面板：影像列表 + 标签管理 -->
@@ -259,15 +263,6 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     <h4>影像筛选</h4>
     <div class="filter-row">
       <input type="date" id="filterDate" onchange="filterImages()" title="检查日期">
-      <select id="filterType" onchange="filterImages()" title="检查类型">
-        <option value="">全部类型</option>
-        <option value="眼底彩照">眼底彩照</option>
-        <option value="OCT">OCT</option>
-        <option value="OCTA">OCTA</option>
-        <option value="DICOM">DICOM</option>
-        <option value="荧光造影">荧光造影</option>
-        <option value="ICGA">ICGA</option>
-      </select>
     </div>
     <div class="filter-row">
       <select id="filterProject" onchange="filterImages()" title="检查项目">
@@ -281,10 +276,6 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
       </select>
       <select id="filterResult" onchange="filterImages()" title="检查结果">
         <option value="">全部检查结果</option>
-        <option value="待分类">待分类</option>
-        <option value="正常">正常</option>
-        <option value="异常">异常</option>
-        <option value="需重新采集">需重新采集</option>
       </select>
     </div>
     <div class="filter-row">
@@ -298,25 +289,14 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
         <option value="pass">质控通过</option>
         <option value="not-pass">质控未通过</option>
       </select>
-      <input type="text" id="filterPatientId" placeholder="患者ID..." oninput="filterImages()">
-      <button class="tool-btn sm" onclick="clearFilters()">清除</button>
     </div>
-    <div class="filter-row">
+    <div class="filter-row filter-actions">
       <button class="tool-btn sm" id="btnAllDates" onclick="toggleAllDates()">全部日期</button>
       <button class="tool-btn sm active" id="btnSortDesc" onclick="toggleSortOrder()">时间倒序</button>
       <button class="tool-btn sm" onclick="expandAllDateGroups()">全部展开</button>
     </div>
     <h4>影像列表 (<span id="imageCount">0</span>)</h4>
     <div id="imageList" style="max-height:360px;overflow-y:auto;"></div>
-    <h4>图像分类</h4>
-    <div class="category-manager" id="imageClassificationManager"></div>
-    <h4>疾病分类</h4>
-    <div class="category-manager" id="categoryManager"></div>
-    <h4>标注标签</h4>
-    <div class="label-preset" id="labelPresets"></div>
-    <div class="label-custom-row">
-      <input type="text" id="customLabelInput" placeholder="搜索标签" oninput="filterLabelOptions()">
-    </div>
   </div>
   <!-- 中间画布区 -->
   <div class="ann-view-area">
@@ -348,21 +328,19 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
       <span class="oct-label" id="octLayerHint">切换到 OCT / DICOM 多层影像后可用</span>
     </div>
   </div>
-  <!-- 右面板：AI结果 + 诊断 + 病灶检测 -->
+  <!-- 右面板：AI结果 + 诊断 -->
   <div class="ann-panel-right">
-    <div class="progress-ring"><div class="pr-num" id="progressPercent">0%</div><div class="pr-label">标注进度</div></div>
-    <div class="progress-stats">
-      <div class="ps-item"><div class="ps-val" id="statTotal">0</div><div class="ps-lbl">总计</div></div>
-      <div class="ps-item"><div class="ps-val" id="statManual">0</div><div class="ps-lbl">人工</div></div>
-      <div class="ps-item"><div class="ps-val" id="statAI">0</div><div class="ps-lbl">AI</div></div>
+    <div class="ann-section">
+      <div class="ann-section-title"><span>图像质量评估</span><button class="tool-btn sm" onclick="runQualityAssessment(true)">重新质控</button></div>
+      <div id="qualityGatePanel"></div>
+    </div>
+    <div class="ann-section">
+      <div class="ann-section-title"><span>图像分类</span></div>
+      <div class="category-manager" id="imageClassificationManager"></div>
     </div>
     <div class="ann-section">
       <div class="ann-section-title"><span>AI 模型</span></div>
       <div id="aiModelPanel"></div>
-    </div>
-    <div class="ann-section">
-      <div class="ann-section-title"><span>图像质量评估</span><button class="tool-btn sm" onclick="runQualityAssessment(true)">重新质控</button></div>
-      <div id="qualityGatePanel"></div>
     </div>
     <!-- 功能2：自动标注结果 -->
     <div class="ann-section">
@@ -379,11 +357,9 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
       <div class="measurement-info" id="selectedAnnoInfo">未选中</div>
       <div id="manualAnnoList" style="max-height:120px;overflow-y:auto;"></div>
     </div>
-    <!-- 功能4：病灶智能检测 -->
     <div class="ann-section">
-      <div class="ann-section-title"><span>🔍 病灶智能检测</span><button class="tool-btn sm" id="btnLesionDetection" onclick="runLesionDetection()">检测</button></div>
-      <div id="lesionDetectionResults"></div>
-      <button class="tool-btn success sm btn-block" id="lesionDetectionApplyBtn" style="display:none;margin-top:4px;" onclick="applyDetectionToAnnotation()">一键应用检测结果</button>
+      <div class="ann-section-title"><span>疾病分类</span></div>
+      <div class="category-manager" id="categoryManager"></div>
     </div>
     <!-- 功能5：AI诊断分类 -->
     <div class="ann-section">
@@ -468,6 +444,7 @@ var isPanDragging = false;
 var panStartX, panStartY;
 var imageOffsetX = 0, imageOffsetY = 0;
 var currentLineWidth = 2;
+var isDiseaseSearchComposing = false;
 var PENDING_LABEL = '待标注';
 var PENDING_COLOR = '#AAB2C8';
 var currentLabel = PENDING_LABEL;
@@ -485,11 +462,8 @@ var octPlayInterval = null;
 var currentOCTIndex = 0;
 var aiDiagnosisResult = null;
 var manualDiagnosisResult = [];
-var lesionDetectionResult = null;
-var activeLocatedLesion = null;
-var activeEditingLesionIndex = null;
-var activeEditingLesionBackup = null;
-var selectedLesionDetectionIndex = null;
+var activeAIAnnotationEditIndex = null;
+var activeAIAnnotationEditBackup = null;
 var showAllDates = false;
 var sortDesc = true;
 var collapsedDateGroups = {};
@@ -618,7 +592,6 @@ function seedDemoImageList() {
     }
   });
   updateImageList();
-  if (currentImageIndex < 0 && uploadedImages.length > 0) switchImage(0);
   document.getElementById('statusHint').textContent = '已加载示例影像，可在左侧列表直接切换普通图像与多层序列';
 }
 
@@ -734,28 +707,35 @@ function updateImageList() {
   }
   container.innerHTML = html || '<div style="font-size:11px;color:#667;padding:8px;">暂无符合条件的影像</div>';
   updateImageCount();
+  ensureFirstVisibleImageSelected(filtered);
+}
+
+function ensureFirstVisibleImageSelected(filtered) {
+  if (!filtered || !filtered.length) return;
+  for (var i = 0; i < filtered.length; i++) {
+    if (uploadedImages.indexOf(filtered[i]) === currentImageIndex) return;
+  }
+  var firstIndex = uploadedImages.indexOf(filtered[0]);
+  if (firstIndex >= 0 && firstIndex !== currentImageIndex) switchImage(firstIndex);
 }
 
 function getFilteredImages() {
+  updateDiseaseFilterOptions();
   var dateVal = document.getElementById('filterDate').value;
-  var typeVal = document.getElementById('filterType').value;
   var projectVal = document.getElementById('filterProject').value;
   var resultVal = document.getElementById('filterResult').value;
   var annotationStatusVal = document.getElementById('filterAnnotationStatus').value;
   var qualityStatusVal = document.getElementById('filterQualityStatus').value;
-  var pidVal = document.getElementById('filterPatientId').value.trim().toLowerCase();
   var result = uploadedImages.filter(function(img) {
     if (!showAllDates && dateVal && img.date !== dateVal) return false;
-    if (typeVal && img.type !== typeVal) return false;
     if (projectVal && img.checkProject !== projectVal) return false;
-    if (resultVal && getImageClassificationDisplay(img) !== resultVal) return false;
+    if (resultVal && !hasImageDiseaseLabel(img, resultVal)) return false;
     if (annotationStatusVal && (img.annotationStatus || '未阅片') !== annotationStatusVal) return false;
     if (qualityStatusVal) {
       var qualityReport = ensureQualityAssessment(img);
       if (qualityStatusVal === 'pass' && qualityReport.status !== 'pass') return false;
       if (qualityStatusVal === 'not-pass' && qualityReport.status === 'pass') return false;
     }
-    if (pidVal && img.patientId.toLowerCase().indexOf(pidVal) < 0) return false;
     return true;
   });
   result.sort(function(a,b) {
@@ -766,19 +746,24 @@ function getFilteredImages() {
   return result;
 }
 
-function filterImages() { updateImageList(); }
-function clearFilters() {
-  document.getElementById('filterDate').value = '';
-  document.getElementById('filterType').value = '';
-  document.getElementById('filterProject').value = '';
-  document.getElementById('filterResult').value = '';
-  document.getElementById('filterAnnotationStatus').value = '';
-  document.getElementById('filterQualityStatus').value = '';
-  document.getElementById('filterPatientId').value = '';
-  showAllDates = false;
-  document.getElementById('btnAllDates').classList.remove('active');
-  updateImageList();
+function updateDiseaseFilterOptions() {
+  var select = document.getElementById('filterResult');
+  if (!select) return;
+  var current = select.value;
+  var categories = getAvailableDiseaseCategories();
+  var html = '<option value="">全部检查结果</option>';
+  var hasCurrent = current === '';
+  for (var i = 0; i < categories.length; i++) {
+    var name = categories[i] && categories[i].name ? categories[i].name : '';
+    if (!name) continue;
+    if (name === current) hasCurrent = true;
+    html += '<option value="' + escapeLabelText(name) + '"' + (name === current ? ' selected' : '') + '>' + escapeLabelText(name) + '</option>';
+  }
+  select.innerHTML = html;
+  if (!hasCurrent) select.value = '';
 }
+
+function filterImages() { updateImageList(); }
 function updateImageCount() { document.getElementById('imageCount').textContent = uploadedImages.length; }
 
 function toggleDateGroup(date) {
@@ -807,11 +792,18 @@ function toggleSortOrder() {
 }
 
 /* ============ IMAGE SWITCHING ============ */
+function updateFunctionPanelVisibility() {
+  var panel = document.querySelector('.ann-panel-right');
+  if (!panel) return;
+  panel.style.display = currentImageIndex >= 0 && uploadedImages[currentImageIndex] ? 'block' : 'none';
+}
+
 function switchImage(index) {
   if (index === currentImageIndex) return;
   saveAnnotations();
   saveAnalysisResults();
   currentImageIndex = index;
+  updateFunctionPanelVisibility();
   var img = uploadedImages[index];
   currentOCTIndex = img.currentLayer || 0;
   loadLayerData(img, currentOCTIndex);
@@ -848,9 +840,10 @@ function renderTabs() {
 
 function closeImage(index) {
   if (uploadedImages.length <= 1) {
-    uploadedImages = []; currentImageIndex = -1;
+   uploadedImages = []; currentImageIndex = -1;
+    updateFunctionPanelVisibility();
     manualAnnotations = []; aiAnnotations = []; measurementResults = [];
-    aiDiagnosisResult = null; manualDiagnosisResult = []; lesionDetectionResult = null;
+    aiDiagnosisResult = null; manualDiagnosisResult = [];
     imageLayer.style.display = 'none'; imageLayer.src = '';
     noImageHint.style.display = 'block';
     annotationCanvas.width = 0; annotationCanvas.height = 0;
@@ -922,9 +915,7 @@ function saveAnalysisResults() {
   if (currentImageIndex < 0 || !uploadedImages[currentImageIndex]) return;
   var img = uploadedImages[currentImageIndex];
   img.aiDiagnosisResult = aiDiagnosisResult ? JSON.parse(JSON.stringify(aiDiagnosisResult)) : null;
-  img.manualDiagnosisResult = manualDiagnosisResult ? JSON.parse(JSON.stringify(manualDiagnosisResult)) : [];
-  img.lesionDetectionResult = lesionDetectionResult ? JSON.parse(JSON.stringify(lesionDetectionResult)) : null;
-}
+  img.manualDiagnosisResult = manualDiagnosisResult ? JSON.parse(JSON.stringify(manualDiagnosisResult)) : [];}
 
 function saveCurrentWork() {
   if (currentImageIndex < 0 || !uploadedImages[currentImageIndex]) {
@@ -939,28 +930,15 @@ function saveCurrentWork() {
 
 function loadAnalysisResults(img) {
   aiDiagnosisResult = img && img.aiDiagnosisResult ? JSON.parse(JSON.stringify(img.aiDiagnosisResult)) : null;
-  manualDiagnosisResult = img && img.manualDiagnosisResult ? JSON.parse(JSON.stringify(img.manualDiagnosisResult)) : [];
-  lesionDetectionResult = img && img.lesionDetectionResult ? JSON.parse(JSON.stringify(img.lesionDetectionResult)) : null;
-  refreshLabelSetBySelectedDisease();
-  activeLocatedLesion = null;
-  activeEditingLesionIndex = null;
-  activeEditingLesionBackup = null;
-  selectedLesionDetectionIndex = null;
-}
+  manualDiagnosisResult = img && img.manualDiagnosisResult ? JSON.parse(JSON.stringify(img.manualDiagnosisResult)) : [];  refreshLabelSetBySelectedDisease();}
 
 function updateAnalysisActionLabels() {
-  var diagnosisBtn = document.getElementById('btnAIDiagnosis');
-  var lesionBtn = document.getElementById('btnLesionDetection');
-  if (diagnosisBtn) diagnosisBtn.textContent = aiDiagnosisResult && aiDiagnosisResult.length ? '重新诊断' : '诊断';
-  if (lesionBtn) lesionBtn.textContent = lesionDetectionResult && lesionDetectionResult.length ? '重新检测' : '检测';
-}
+  var diagnosisBtn = document.getElementById('btnAIDiagnosis');  if (diagnosisBtn) diagnosisBtn.textContent = aiDiagnosisResult && aiDiagnosisResult.length ? '重新诊断' : '诊断';}
 
 function refreshRightResultPanels() {
   updateUI();
   updateAutoAnnoDisplay();
-  updateDiagnosisDisplay(aiDiagnosisResult || []);
-  updateLesionDisplay(lesionDetectionResult || []);
-  renderManualDiagnosisDisplay();
+  updateDiagnosisDisplay(aiDiagnosisResult || []);  renderManualDiagnosisDisplay();
   updateAnalysisActionLabels();
 }
 
@@ -1085,16 +1063,14 @@ function renderAIModelPanel() {
   var container = document.getElementById('aiModelPanel');
   if (!container) return;
   var current = getCurrentAIModel();
-  var html = '<div style="font-size:10px;color:#889;margin-bottom:4px;">当前模型：<strong style="color:' + current.color + ';">' + escapeLabelText(current.name) + '</strong></div>' +
-    '<div style="font-size:10px;color:#889;margin-bottom:6px;line-height:1.4;">' + escapeLabelText(current.description) + '。评分偏移基线：<strong>' + (current.baseBias > 0 ? '+' : '') + current.baseBias + '</strong>。</div>' +
-    '<select onchange="setAIModel(this.value)">';
+  var html = '<select onchange="setAIModel(this.value)">';
   for (var i = 0; i < AI_MODELS.length; i++) {
     var m = AI_MODELS[i];
     var sel = m.id === currentAIModelId ? ' selected' : '';
     html += '<option value="' + escapeLabelText(m.id) + '"' + sel + '>' + escapeLabelText(m.name) + '</option>';
   }
   html += '</select>';
-  html += '<div style="font-size:10px;color:#556;line-height:1.4;margin-top:6px;">切换模型后会自动对当前影像重新执行质量评估。</div>';
+  html += '<div style="font-size:10px;color:#889;line-height:1.4;margin-top:6px;">' + escapeLabelText(current.description) + '</div>';
   container.innerHTML = html;
 }
 
@@ -1158,14 +1134,13 @@ function renderQualityGate() {
         '<div class="qc-item"><span>曝光</span><b>' + report.metrics.exposure + '</b></div>' +
         '<div class="qc-item"><span>伪影</span><b>' + report.metrics.artifact + '</b></div>' +
       '</div>' +
-      '<div class="qc-reasons">' + reasons + '</div>' +
     '</div>';
 }
 
 function updateStatusPixelInfo(img) {
   if (!img) return;
   var report = ensureQualityAssessment(img);
-  document.getElementById('statusPixelInfo').textContent = '类型: ' + img.type + ' | 项目: ' + (img.checkProject || '-') + ' | 结果: ' + getImageClassificationDisplay(img) + ' | 质控: ' + report.statusText + ' ' + report.score + ' | 标注: ' + (img.annotationStatus || '未阅片');
+  document.getElementById('statusPixelInfo').textContent = '类型: ' + img.type + ' | 项目: ' + (img.checkProject || '-') + ' | 结果: ' + getImageClassificationLabel(img) + ' | 质控: ' + report.statusText + ' ' + report.score + ' | 标注: ' + (img.annotationStatus || '未阅片');
 }
 
 function canUseAIForCurrentImage(actionName, options) {
@@ -1548,6 +1523,12 @@ function setLineWidth(v) {
   document.getElementById('lineWidthVal').textContent = v;
 }
 
+function setEraserRadius(v) {
+  currentEraserRadius = Math.max(4, Math.min(32, parseInt(v, 10) || 12));
+  var label = document.getElementById('eraserRadiusVal');
+  if (label) label.textContent = currentEraserRadius;
+}
+
 /* ============ LABEL & CATEGORY ============ */
 function loadTaskLabelSetPresets() {
   var taskId = getQueryParam('taskId');
@@ -1788,6 +1769,11 @@ function getQueryParam(name) {
 
 function initLabelPresets() {
   var container = document.getElementById('labelPresets');
+  if (!container) {
+    initImageClassificationManager();
+    initCategoryManager();
+    return;
+  }
   var selectedLabel = currentLabel === PENDING_LABEL ? '' : currentLabel;
   if (selectedAnnotationId) {
     var selectedAnno = findAnno(selectedAnnotationId);
@@ -1870,12 +1856,55 @@ function getClassificationFromExamResult(value) {
   return '';
 }
 
+function isLegacyClassificationLabel(value) {
+  return value === '正常' || value === '异常' || value === '需重新采集' || value === '待分类';
+}
+
+function appendDiseaseLabelValue(value, labels, seen) {
+  if (!value || isLegacyClassificationLabel(value)) return;
+  var parts = String(value).split(/[、,，;；]/);
+  for (var i = 0; i < parts.length; i++) {
+    var name = parts[i].trim();
+    if (!name || isLegacyClassificationLabel(name) || seen[name]) continue;
+    labels.push(name);
+    seen[name] = true;
+  }
+}
+
+function appendDiagnosisDiseaseLabels(list, labels, seen) {
+  if (!list || !list.length) return;
+  for (var i = 0; i < list.length; i++) {
+    if (list[i] && list[i].disease) appendDiseaseLabelValue(list[i].disease, labels, seen);
+  }
+}
+
+function getImageDiseaseLabels(img) {
+  var labels = [];
+  var seen = {};
+  if (!img) return labels;
+  if (currentImageIndex >= 0 && uploadedImages[currentImageIndex] === img) {
+    appendDiagnosisDiseaseLabels(manualDiagnosisResult, labels, seen);
+    appendDiagnosisDiseaseLabels(aiDiagnosisResult, labels, seen);
+  } else {
+    appendDiagnosisDiseaseLabels(img.manualDiagnosisResult, labels, seen);
+    appendDiagnosisDiseaseLabels(img.aiDiagnosisResult, labels, seen);
+  }
+  return labels;
+}
+
+function hasImageDiseaseLabel(img, label) {
+  var labels = getImageDiseaseLabels(img);
+  return labels.indexOf(label) >= 0;
+}
+
 function getImageClassificationLabel(img) {
   if (!img) return '';
   return getClassificationFromExamResult(img.classificationLabel) || getClassificationFromExamResult(img.examResult);
 }
 
 function getImageClassificationDisplay(img) {
+  var diseaseLabels = getImageDiseaseLabels(img);
+  if (diseaseLabels.length) return diseaseLabels.join('、');
   return getImageClassificationLabel(img) || '待分类';
 }
 
@@ -1889,20 +1918,18 @@ function initImageClassificationManager() {
   if (!container) return;
   var selected = getCurrentImageClassification();
   var normalActive = selected === '正常';
-  var abnormalActive = selected === '异常';
   var recaptureActive = selected === '需重新采集';
   container.innerHTML =
     '<div style="font-size:10px;color:#889;margin-bottom:6px;">图像级标注（必填）</div>' +
     '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
       '<button type="button" class="tool-btn sm ' + (normalActive ? 'active' : '') + '" onclick="setImageClassification(\'正常\')">正常</button>' +
-      '<button type="button" class="tool-btn sm ' + (abnormalActive ? 'active' : '') + '" onclick="setImageClassification(\'异常\')">异常</button>' +
       '<button type="button" class="tool-btn sm ' + (recaptureActive ? 'active' : '') + '" onclick="setImageClassification(\'需重新采集\')">需重新采集</button>' +
     '</div>' +
-    '<div style="font-size:10px;color:#889;margin-top:6px;line-height:1.4;">判断整张影像是否存在病变，不需要在图上勾画；如图像质量不满足诊断需求，请选择“需重新采集”。</div>';
+    '<div style="font-size:10px;color:#889;margin-top:6px;line-height:1.4;">“正常”为未见异常，“需重新采集”为图像质量不满足判读；具体疾病请在下方“疾病分类”中标注。</div>';
 }
 
 function setImageClassification(label) {
-  if (label !== '正常' && label !== '异常' && label !== '需重新采集') return;
+  if (label !== '正常' && label !== '需重新采集') return;
   if (currentImageIndex < 0 || !uploadedImages[currentImageIndex]) {
     alert('请先选择影像');
     return;
@@ -1912,7 +1939,6 @@ function setImageClassification(label) {
   img.examResult = label;
   saveAnalysisResults();
   initImageClassificationManager();
-  initCategoryManager();
   updateImageList();
   renderTabs();
   updateStatusPixelInfo(img);
@@ -1935,17 +1961,25 @@ function initCategoryManager() {
       if (manualDiagnosisResult[s] && manualDiagnosisResult[s].disease) selectedNames[manualDiagnosisResult[s].disease] = true;
     }
   }
-  var html = '<div style="font-size:10px;color:#889;margin-bottom:4px;">疾病分类（可多选）:</div>' +
-    '<input type="text" id="diseaseCategorySearchInput" placeholder="搜索疾病分类" value="' + escapeLabelText(keyword) + '" oninput="filterDiseaseCategoryOptions()">' +
+  var html = '<input type="text" id="diseaseCategorySearchInput" placeholder="搜索疾病分类" value="' + escapeLabelText(keyword) + '" oninput="filterDiseaseCategoryOptions()">' +
     '<select id="diseaseCategorySelect" onchange="addDiagnosisCategoryFromDropdown(this.value)">' +
     '<option value="">选择疾病分类</option>';
+  var resultHtml = '<div class="disease-search-results">';
+  var resultCount = 0;
   for (var i = 0; i < categories.length; i++) {
     var cat = categories[i];
     if (selectedNames[cat.name]) continue;
-    if (keyword && cat.name.indexOf(keyword) < 0) continue;
+    if (!keyword || cat.name.indexOf(keyword) < 0) continue;
     html += '<option value="' + i + '">' + escapeLabelText(cat.name) + '</option>';
+    resultHtml += '<button type="button" class="disease-search-result" onclick="addDiagnosisCategoryFromDropdown(' + i + ')">' + escapeLabelText(cat.name) + '</button>';
+    resultCount++;
   }
   html += '</select>';
+  if (keyword && categories.length && resultCount) {
+    html += resultHtml + '</div>';
+  } else if (keyword && categories.length) {
+    html += '<div class="disease-search-empty">未找到匹配的疾病分类，或分类已全部选择</div>';
+  }
   if (!categories.length) html += '<div style="font-size:10px;color:#889;line-height:1.4;margin-top:6px;">暂无可选疾病，请先在标签/疾病管理中维护疾病。</div>';
   if (manualDiagnosisResult && manualDiagnosisResult.length) {
     html += '<div class="selected-disease-list">';
@@ -1957,6 +1991,16 @@ function initCategoryManager() {
     html += '</div>';
   }
   container.innerHTML = html;
+  var diseaseSearch = document.getElementById('diseaseCategorySearchInput');
+  if (diseaseSearch) {
+    diseaseSearch.addEventListener('compositionstart', function() {
+      isDiseaseSearchComposing = true;
+    });
+    diseaseSearch.addEventListener('compositionend', function() {
+      isDiseaseSearchComposing = false;
+      filterDiseaseCategoryOptions();
+    });
+  }
   renderManualDiagnosisDisplay();
 }
 
@@ -1964,6 +2008,11 @@ function updateDiagnosisCategories() {
   saveAnalysisResults();
   refreshLabelSetBySelectedDisease();
   updateAnalysisActionLabels();
+  initImageClassificationManager();
+  initCategoryManager();
+  updateImageList();
+  renderTabs();
+  if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) updateStatusPixelInfo(uploadedImages[currentImageIndex]);
   document.getElementById('statusHint').textContent = '已更新人工疾病分类，可在右侧选择病情程度';
 }
 
@@ -1993,6 +2042,7 @@ function getCheckedDiagnosisCategories() {
 }
 
 function filterDiseaseCategoryOptions() {
+  if (isDiseaseSearchComposing) return;
   initCategoryManager();
   var input = document.getElementById('diseaseCategorySearchInput');
   if (input) {
@@ -2022,6 +2072,33 @@ function addDiagnosisCategoryFromDropdown(value) {
     manuallyCorrected: true
   });
   updateDiagnosisCategories();
+}
+
+function toggleManualDiagnosisDisease(diseaseName) {
+  if (!diseaseName) return;
+  var categories = getAvailableDiseaseCategories();
+  var matched = null;
+  for (var c = 0; c < categories.length; c++) {
+    if (categories[c] && categories[c].name === diseaseName) {
+      matched = categories[c];
+      break;
+    }
+  }
+  if (!matched) return;
+  if (!manualDiagnosisResult) manualDiagnosisResult = [];
+  for (var i = 0; i < manualDiagnosisResult.length; i++) {
+    if (manualDiagnosisResult[i] && manualDiagnosisResult[i].disease === diseaseName) {
+      manualDiagnosisResult.splice(i, 1);
+      return;
+    }
+  }
+  manualDiagnosisResult.push({
+    disease: matched.name,
+    level: '',
+    allLevels: matched.levels.slice(),
+    source: 'manual',
+    manuallyCorrected: true
+  });
 }
 
 function removeManualDiagnosisCategory(index) {
@@ -2063,6 +2140,9 @@ function selectManualDiagnosisLevel(diseaseIdx, levelIdx) {
   result.manuallyCorrected = true;
   saveAnalysisResults();
   renderManualDiagnosisDisplay();
+  updateImageList();
+  renderTabs();
+  if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) updateStatusPixelInfo(uploadedImages[currentImageIndex]);
   document.getElementById('statusHint').textContent = '已更新人工诊断分类: ' + result.disease + ' - ' + result.level;
 }
 
@@ -2079,6 +2159,10 @@ var labelDragAnnotationId = null;
 var labelDragOffsetX = 0, labelDragOffsetY = 0;
 var labelDragChanged = false;
 var labelDragSnapshot = null;
+var isErasing = false;
+var eraserChanged = false;
+var eraserBeforeSnapshot = null;
+var currentEraserRadius = 12;
 
 function addPendingManualAnnotation(annotation) {
   annotation.id = annotationIdCounter++;
@@ -2106,7 +2190,7 @@ annotationCanvas.addEventListener('mousedown', function(e) {
     placeProbe(pos, e);
     return;
   }
-  if (eraserEnabled) { eraseAt(pos.x, pos.y); return; }
+  if (eraserEnabled) { startEraserStroke(pos.x, pos.y); return; }
   if (annotationMode) {
     if (currentImageIndex < 0) return;
     if (!canUseAIForCurrentImage('人工注释')) return;
@@ -2183,6 +2267,12 @@ annotationCanvas.addEventListener('mousemove', function(e) {
   if (isPanDragging) return;
   if (isLabelDragging) {
     moveLabelDrag(getCanvasPos(e));
+    return;
+  }
+  if (isErasing) {
+    var eraserPos = getCanvasPos(e);
+    applyEraserAt(eraserPos.x, eraserPos.y);
+    redraw();
     return;
   }
   if (magnifierEnabled) { updateMagnifier(e); }
@@ -2265,6 +2355,7 @@ annotationCanvas.addEventListener('mouseup', function(e) {
   if (isPanDragging) { endPanDrag(); return; }
   if (windowDragActive) { windowDragActive = false; return; }
   if (isLabelDragging) { endLabelDrag(); return; }
+  if (isErasing) { endEraserStroke(); return; }
   if (!isDrawing) return;
   if (activeTool === 'polygon') return;
   if (activeTool === 'measure-angle') return;
@@ -2328,6 +2419,7 @@ document.addEventListener('mousemove', function(e) {
 document.addEventListener('mouseup', function() {
   endPanDrag();
   endLabelDrag();
+  endEraserStroke();
 });
 
 /* ============ MEASUREMENT ============ */
@@ -2429,9 +2521,7 @@ function renderAnnotationMeasurementDetails(annotation) {
 }
 
 function getAIStructureSources() {
-  var sources = [];
-  if (lesionDetectionResult && lesionDetectionResult.length) sources = sources.concat(lesionDetectionResult);
-  sources = sources.concat(aiAnnotations || []).concat(manualAnnotations || []);
+  var sources = [];  sources = sources.concat(aiAnnotations || []).concat(manualAnnotations || []);
   return sources.filter(function(item) {
     return item && isMeasurableAnnotationItem(item);
   });
@@ -2592,7 +2682,7 @@ function createAIStructureMeasurements(img) {
 function runAIStructureMeasurement() {
   if (currentImageIndex < 0 || !uploadedImages[currentImageIndex]) { alert('请先选择影像'); return; }
   if (!hasAIStructureMeasurementSource()) {
-    alert('请先完成自动标注、病灶检测或人工标注后，再进行AI结构测量');
+    alert('请先完成自动标注或人工标注后，再进行AI结构测量');
     document.getElementById('statusHint').textContent = 'AI结构测量需要前置标注结果';
     return;
   }
@@ -2735,11 +2825,17 @@ function hitTestAnno(x, y) {
     } else if (a.type === 'ellipse' && a.bbox) {
       var cx = a.bbox[0]+a.bbox[2]/2, cy = a.bbox[1]+a.bbox[3]/2;
       if (a.bbox[2]>0 && a.bbox[3]>0 && ((x-cx)*(x-cx)/(a.bbox[2]/2*a.bbox[2]/2)+(y-cy)*(y-cy)/(a.bbox[3]/2*a.bbox[3]/2))<=1) return a.id;
-    } else if (a.type === 'line' && a.points && a.points.length >= 2) {
-      if (distanceToSegment(x, y, a.points[0], a.points[1]) <= 6) return a.id;
-    } else if (a.type === 'brush' && a.points && a.points.length > 1) {
-      for (var p = 1; p < a.points.length; p++) {
-        if (distanceToSegment(x, y, a.points[p-1], a.points[p]) <= Math.max(6, (a.lineWidth || 2) + 3)) return a.id;
+    } else if (a.type === 'line' && getAnnotationPathSegments(a).length) {
+      var lineSegments = getAnnotationPathSegments(a);
+      for (var ls = 0; ls < lineSegments.length; ls++) {
+        if (lineSegments[ls].length >= 2 && distanceToSegment(x, y, lineSegments[ls][0], lineSegments[ls][lineSegments[ls].length - 1]) <= 6) return a.id;
+      }
+    } else if (a.type === 'brush' && getAnnotationPathSegments(a).length) {
+      var brushSegments = getAnnotationPathSegments(a);
+      for (var bs = 0; bs < brushSegments.length; bs++) {
+        for (var p = 1; p < brushSegments[bs].length; p++) {
+          if (distanceToSegment(x, y, brushSegments[bs][p-1], brushSegments[bs][p]) <= Math.max(6, (a.lineWidth || 2) + 3)) return a.id;
+        }
       }
     } else if ((a.type === 'note' || a.type === 'probe') && a.point) {
       var dx = x - a.point[0], dy = y - a.point[1];
@@ -2873,9 +2969,7 @@ function redraw() {
   }
   if (selectedAIAnnotationIndex !== null && aiAnnotations[selectedAIAnnotationIndex]) {
     drawSelectionHighlight(aiAnnotations[selectedAIAnnotationIndex], '#FFB020');
-  }
-  if (activeLocatedLesion) drawLocatedLesionHighlight(activeLocatedLesion);
-  // Draw current shape being drawn
+  }  // Draw current shape being drawn
   if (isDrawing) drawCurrentShape();
   if (activeTool === 'polygon' && polygonPoints.length > 0) drawPolygonPreview();
   // Draw measurements
@@ -2892,32 +2986,6 @@ function drawPendingNotePoint() {
   ctx.restore();
 }
 
-function drawLocatedLesionHighlight(lesion) {
-  if (!lesion) return;
-  var x = lesion.x - lesion.w / 2;
-  var y = lesion.y - lesion.h / 2;
-  var w = lesion.w;
-  var h = lesion.h;
-  var scaleX = annotationCanvas._scaleX || 1;
-  var scaleY = annotationCanvas._scaleY || 1;
-  var lineWidth = Math.max(2, 2 / Math.max(scaleX, scaleY));
-  ctx.save();
-  ctx.strokeStyle = '#FFB020';
-  ctx.fillStyle = 'rgba(255,176,32,0.16)';
-  ctx.lineWidth = lineWidth;
-  ctx.setLineDash([lineWidth * 4, lineWidth * 2]);
-  ctx.fillRect(x, y, w, h);
-  ctx.strokeRect(x, y, w, h);
-  ctx.setLineDash([]);
-  ctx.beginPath();
-  ctx.moveTo(lesion.x - w * 0.62, lesion.y);
-  ctx.lineTo(lesion.x + w * 0.62, lesion.y);
-  ctx.moveTo(lesion.x, lesion.y - h * 0.62);
-  ctx.lineTo(lesion.x, lesion.y + h * 0.62);
-  ctx.stroke();
-  drawAnnotationLabel(lesion, '定位: ' + lesion.type, x, Math.max(12, y - 8), '#FFB020', 1, lesion.confidence);
-  ctx.restore();
-}
 
 function drawAnnotation(a, isAI) {
   ctx.save();
@@ -2942,19 +3010,33 @@ function drawAnnotation(a, isAI) {
     ctx.ellipse(a.bbox[0]+a.bbox[2]/2, a.bbox[1]+a.bbox[3]/2, a.bbox[2]/2, a.bbox[3]/2, 0, 0, Math.PI*2);
     ctx.fill(); ctx.stroke();
     drawAnnotationLabel(a, a.label, a.bbox[0], a.bbox[1]-6, col, alpha);
-  } else if (a.type === 'brush' && a.points && a.points.length > 0) {
-    ctx.beginPath(); ctx.moveTo(a.points[0][0], a.points[0][1]);
-    for (var j = 1; j < a.points.length; j++) ctx.lineTo(a.points[j][0], a.points[j][1]);
-    ctx.stroke();
-    var minX = a.points[0][0], minY = a.points[0][1];
-    for (var bp = 1; bp < a.points.length; bp++) {
-      minX = Math.min(minX, a.points[bp][0]);
-      minY = Math.min(minY, a.points[bp][1]);
+  } else if (a.type === 'brush' && getAnnotationPathSegments(a).length) {
+    var brushSegments = getAnnotationPathSegments(a);
+    var brushLabelPoint = brushSegments[0][0];
+    var brushMinX = brushLabelPoint[0], brushMinY = brushLabelPoint[1];
+    for (var bs = 0; bs < brushSegments.length; bs++) {
+      var brushSegment = brushSegments[bs];
+      if (!brushSegment.length) continue;
+      ctx.beginPath(); ctx.moveTo(brushSegment[0][0], brushSegment[0][1]);
+      for (var j = 1; j < brushSegment.length; j++) ctx.lineTo(brushSegment[j][0], brushSegment[j][1]);
+      ctx.stroke();
+      for (var bp = 0; bp < brushSegment.length; bp++) {
+        brushMinX = Math.min(brushMinX, brushSegment[bp][0]);
+        brushMinY = Math.min(brushMinY, brushSegment[bp][1]);
+      }
     }
-    drawAnnotationLabel(a, a.label, minX, minY - 6, col, alpha);
-  } else if (a.type === 'line' && a.points && a.points.length >= 2) {
-    ctx.beginPath(); ctx.moveTo(a.points[0][0], a.points[0][1]); ctx.lineTo(a.points[1][0], a.points[1][1]); ctx.stroke();
-    drawAnnotationLabel(a, a.label, a.points[0][0], a.points[0][1]-6, col, alpha);
+    drawAnnotationLabel(a, a.label, brushMinX, brushMinY - 6, col, alpha);
+  } else if (a.type === 'line' && getAnnotationPathSegments(a).length) {
+    var lineSegments = getAnnotationPathSegments(a);
+    for (var ls = 0; ls < lineSegments.length; ls++) {
+      var lineSegment = lineSegments[ls];
+      if (lineSegment.length < 2) continue;
+      ctx.beginPath();
+      ctx.moveTo(lineSegment[0][0], lineSegment[0][1]);
+      ctx.lineTo(lineSegment[lineSegment.length - 1][0], lineSegment[lineSegment.length - 1][1]);
+      ctx.stroke();
+    }
+    drawAnnotationLabel(a, a.label, lineSegments[0][0][0], lineSegments[0][0][1] - 6, col, alpha);
   } else if (a.type === 'note' && a.point) {
     var nx = a.point[0], ny = a.point[1];
     ctx.fillStyle = col;
@@ -3009,13 +3091,29 @@ function drawSelectionHighlight(a, color) {
     ctx.beginPath();
     ctx.ellipse(a.bbox[0]+a.bbox[2]/2, a.bbox[1]+a.bbox[3]/2, a.bbox[2]/2+3, a.bbox[3]/2+3, 0, 0, Math.PI*2);
     ctx.stroke();
-  } else if (a.type === 'line' && a.points && a.points.length >= 2) {
-    ctx.beginPath(); ctx.moveTo(a.points[0][0], a.points[0][1]); ctx.lineTo(a.points[1][0], a.points[1][1]); ctx.stroke();
-  } else if ((a.type === 'polygon' || a.type === 'fill' || a.type === 'brush') && a.points && a.points.length > 0) {
+  } else if (a.type === 'line' && getAnnotationPathSegments(a).length) {
+    var lineSegments = getAnnotationPathSegments(a);
+    for (var ls = 0; ls < lineSegments.length; ls++) {
+      if (lineSegments[ls].length < 2) continue;
+      ctx.beginPath();
+      ctx.moveTo(lineSegments[ls][0][0], lineSegments[ls][0][1]);
+      ctx.lineTo(lineSegments[ls][lineSegments[ls].length - 1][0], lineSegments[ls][lineSegments[ls].length - 1][1]);
+      ctx.stroke();
+    }
+  } else if (a.type === 'brush' && getAnnotationPathSegments(a).length) {
+    var brushSegments = getAnnotationPathSegments(a);
+    for (var bs = 0; bs < brushSegments.length; bs++) {
+      if (!brushSegments[bs].length) continue;
+      ctx.beginPath();
+      ctx.moveTo(brushSegments[bs][0][0], brushSegments[bs][0][1]);
+      for (var bi = 1; bi < brushSegments[bs].length; bi++) ctx.lineTo(brushSegments[bs][bi][0], brushSegments[bs][bi][1]);
+      ctx.stroke();
+    }
+  } else if ((a.type === 'polygon' || a.type === 'fill') && a.points && a.points.length > 0) {
     ctx.beginPath();
     ctx.moveTo(a.points[0][0], a.points[0][1]);
     for (var i = 1; i < a.points.length; i++) ctx.lineTo(a.points[i][0], a.points[i][1]);
-    if (a.type === 'polygon' || a.type === 'fill') ctx.closePath();
+    ctx.closePath();
     ctx.stroke();
   } else if ((a.type === 'note' || a.type === 'probe') && a.point) {
     ctx.beginPath(); ctx.arc(a.point[0], a.point[1], 8, 0, Math.PI*2); ctx.stroke();
@@ -3167,15 +3265,52 @@ function redoAction() {
 }
 
 /* ============ AI ANNOTATION (SIMULATED) ============ */
+function buildDetectedLesionsForImage(img) {
+  var risk = getImageRiskSeed(img);
+  var lesions = [
+    createDetectedFinding(img, '视盘', 0.72, 0.46, 0.12, 0.16, 0.93, 'lesion_disc'),
+    createDetectedFinding(img, '黄斑', 0.48, 0.52, 0.14, 0.12, 0.91, 'lesion_macula'),
+    createDetectedFinding(img, '水肿', 0.48, 0.54, 0.16 + (risk % 3) * 0.02, 0.10 + (risk % 2) * 0.02, 0.82, 'lesion_edema'),
+    createDetectedFinding(img, '出血', 0.34 + (risk % 9) / 100, 0.38 + (risk % 11) / 100, 0.07, 0.06, 0.86, 'lesion_heme'),
+    createDetectedFinding(img, '渗出', 0.56 + (risk % 7) / 100, 0.58 - (risk % 8) / 100, 0.08, 0.05, 0.84, 'lesion_exudate')
+  ];
+  if (risk % 2 === 0) lesions.push(createDetectedFinding(img, '微血管瘤', 0.41, 0.42, 0.04, 0.04, 0.79, 'lesion_ma'));
+  if (risk % 3 === 0) lesions.push(createDetectedFinding(img, '新生血管', 0.70, 0.36, 0.10, 0.08, 0.81, 'lesion_nv'));
+  return lesions;
+}
+
+function mapDetectedLesionsToAutoAnnotations(lesions) {
+  var mapped = [];
+  for (var i = 0; i < lesions.length; i++) {
+    var l = lesions[i];
+    mapped.push({
+      id: l.id || ('ai_lesion_' + i),
+      type: 'rect',
+      label: l.type,
+      bbox: [l.x - l.w / 2, l.y - l.h / 2, l.w, l.h],
+      color: getLabelColor(l.type, '#FF8844'),
+      source: 'ai-lesion',
+      sourceLabel: '病灶识别',
+      confidence: l.confidence,
+      lineWidth: currentLineWidth,
+      region: l.region,
+      areaPx: l.areaPx,
+      severity: l.severity
+    });
+  }
+  return mapped;
+}
+
 function buildAutoAnnotationForImage(img) {
   var iw = img.width, ih = img.height;
-  return [
+  var annotations = [
     {id:'ai1', type:'rect', label:'微血管瘤', bbox:[iw*0.35,ih*0.28,iw*0.06,ih*0.06], color:'#4488FF', source:'ai', confidence:0.94},
     {id:'ai2', type:'rect', label:'出血斑', bbox:[iw*0.50,ih*0.42,iw*0.07,iw*0.06], color:'#4488FF', source:'ai', confidence:0.89},
     {id:'ai3', type:'rect', label:'硬性渗出', bbox:[iw*0.23,ih*0.53,iw*0.06,ih*0.05], color:'#4488FF', source:'ai', confidence:0.91},
     {id:'ai4', type:'rect', label:'微血管瘤', bbox:[iw*0.63,ih*0.33,iw*0.05,iw*0.05], color:'#4488FF', source:'ai', confidence:0.87},
     {id:'ai5', type:'polygon', label:'病灶区域', points:[[iw*0.3,ih*0.2],[iw*0.5,ih*0.15],[iw*0.6,ih*0.3],[iw*0.45,ih*0.4],[iw*0.25,ih*0.35]], color:'#44FFAA', source:'ai', confidence:0.82}
   ];
+  return annotations.concat(mapDetectedLesionsToAutoAnnotations(buildDetectedLesionsForImage(img)));
 }
 
 function performAutoAnnotationForIndex(idx, batchMode) {
@@ -3190,12 +3325,14 @@ function performAutoAnnotationForIndex(idx, batchMode) {
   if (!batchMode) {
     aiAnnotations = img.aiAnnotations;
     selectedAIAnnotationIndex = null;
+    activeAIAnnotationEditIndex = null;
+    activeAIAnnotationEditBackup = null;
     document.getElementById('statusHint').textContent = '🤖 AI自动标注中...';
     setTimeout(function() {
       saveAnnotations();
       redraw(); updateUI();
       updateAutoAnnoDisplay();
-      document.getElementById('statusHint').textContent = '✅ AI自动标注完成，请确认或编辑结果';
+      document.getElementById('statusHint').textContent = '✅ AI自动标注完成，已包含病灶识别结果';
     }, 800);
   }
   return 'pass';
@@ -3230,10 +3367,12 @@ function runAutoAnnotationForAll() {
   var currentImg = uploadedImages[currentImageIndex];
   aiAnnotations = currentImg.aiAnnotations ? JSON.parse(JSON.stringify(currentImg.aiAnnotations)) : [];
   selectedAIAnnotationIndex = null;
+  activeAIAnnotationEditIndex = null;
+  activeAIAnnotationEditBackup = null;
   redraw();
   updateUI();
   updateAutoAnnoDisplay();
-  var hint = '✅ 批量 AI 自动标注：已完成 ' + validCount + ' 张' + (skippedCount > 0 ? '（跳过 ' + skippedCount + ' 张质控未通过）' : '');
+  var hint = '✅ 批量 AI 自动标注：已完成 ' + validCount + ' 张，已包含病灶识别结果' + (skippedCount > 0 ? '（跳过 ' + skippedCount + ' 张质控未通过）' : '');
   document.getElementById('statusHint').textContent = hint;
 }
 
@@ -3284,26 +3423,125 @@ function updateAutoAnnotationActionsVisibility() {
   if (actions) actions.style.display = aiAnnotations && aiAnnotations.length ? 'flex' : 'none';
 }
 
+
+
+
+function isLesionAutoAnnotation(annotation) {
+  return annotation && annotation.source === 'ai-lesion';
+}
+
+function getAutoAnnotationBox(annotation) {
+  if (!annotation) return { x: 0, y: 0, w: 1, h: 1 };
+  if (annotation.bbox && annotation.bbox.length >= 4) {
+    return {
+      x: Math.round(annotation.bbox[0] + annotation.bbox[2] / 2),
+      y: Math.round(annotation.bbox[1] + annotation.bbox[3] / 2),
+      w: Math.round(annotation.bbox[2]),
+      h: Math.round(annotation.bbox[3])
+    };
+  }
+  return {
+    x: Math.round(annotation.x || 0),
+    y: Math.round(annotation.y || 0),
+    w: Math.round(annotation.w || 1),
+    h: Math.round(annotation.h || 1)
+  };
+}
+
+function buildAutoAnnotationTypeOptions(selectedType) {
+  var html = '';
+  var hasSelected = false;
+  var labelOptions = getCurrentLabelOptions();
+  for (var i = 0; i < labelOptions.length; i++) {
+    var preset = labelOptions[i];
+    var selected = preset.label === selectedType;
+    if (selected) hasSelected = true;
+    html += '<option value="' + escapeLabelText(preset.label) + '"' + (selected ? ' selected' : '') + '>' + escapeLabelText(preset.label) + '</option>';
+  }
+  if (selectedType && !hasSelected) {
+    html += '<option value="' + escapeLabelText(selectedType) + '" selected>' + escapeLabelText(selectedType) + '</option>';
+  }
+  return html;
+}
+
+function buildAutoAnnotationSeverityOptions(selectedSeverity) {
+  var levels = ['结构定位', '轻度', '中度', '重度'];
+  var html = '';
+  var hasSelected = false;
+  for (var i = 0; i < levels.length; i++) {
+    var selected = levels[i] === selectedSeverity;
+    if (selected) hasSelected = true;
+    html += '<option value="' + levels[i] + '"' + (selected ? ' selected' : '') + '>' + levels[i] + '</option>';
+  }
+  if (selectedSeverity && !hasSelected) {
+    html += '<option value="' + escapeLabelText(selectedSeverity) + '" selected>' + escapeLabelText(selectedSeverity) + '</option>';
+  }
+  return html;
+}
+
+function getAIAnnotationEditNumber(id, fallback, min, max) {
+  var el = document.getElementById(id);
+  var val = el ? Number(el.value) : fallback;
+  if (!isFinite(val)) val = fallback;
+  val = Math.round(val);
+  if (typeof min === 'number') val = Math.max(min, val);
+  if (typeof max === 'number') val = Math.min(max, val);
+  return val;
+}
+
+function renderLesionAutoAnnotationEditForm(index, annotation) {
+  var box = getAutoAnnotationBox(annotation);
+  return '<div class="lesion-edit-grid" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">' +
+    '<div class="lesion-edit-field"><label>病灶类型</label><select id="aiLesionType_' + index + '" onchange="syncAIAnnotationEditPreview(' + index + ')">' + buildAutoAnnotationTypeOptions(annotation.label || annotation.type) + '</select></div>' +
+    '<div class="lesion-edit-field"><label>严重程度</label><select id="aiLesionSeverity_' + index + '" onchange="syncAIAnnotationEditPreview(' + index + ')">' + buildAutoAnnotationSeverityOptions(annotation.severity) + '</select></div>' +
+    '<div class="lesion-edit-field"><label>X 坐标</label><input id="aiLesionX_' + index + '" type="number" min="0" value="' + box.x + '" oninput="syncAIAnnotationEditPreview(' + index + ')"></div>' +
+    '<div class="lesion-edit-field"><label>Y 坐标</label><input id="aiLesionY_' + index + '" type="number" min="0" value="' + box.y + '" oninput="syncAIAnnotationEditPreview(' + index + ')"></div>' +
+    '<div class="lesion-edit-field"><label>宽度 px</label><input id="aiLesionW_' + index + '" type="number" min="1" value="' + box.w + '" oninput="syncAIAnnotationEditPreview(' + index + ')"></div>' +
+    '<div class="lesion-edit-field"><label>高度 px</label><input id="aiLesionH_' + index + '" type="number" min="1" value="' + box.h + '" oninput="syncAIAnnotationEditPreview(' + index + ')"></div>' +
+    '</div>' +
+    '<div class="lesion-edit-actions" onclick="event.stopPropagation();">' +
+      '<button class="tool-btn success sm" onclick="saveAIAnnotationEdit(' + index + ')">保存修正</button>' +
+      '<button class="tool-btn sm" onclick="cancelAIAnnotationEdit()">取消</button>' +
+    '</div>';
+}
+
+function renderAutoAnnotationCard(index, annotation) {
+  var selectedClass = selectedAIAnnotationIndex === index ? ' selected' : '';
+  var sourceLabel = annotation.sourceLabel || (isLesionAutoAnnotation(annotation) ? '病灶识别' : annotation.type);
+  var html = '<div class="result-card-mini' + selectedClass + '" style="border-left-color:' + annotation.color + ';" onclick="selectAIAnnotation(' + index + ')">';
+  if (isLesionAutoAnnotation(annotation)) {
+    var box = getAutoAnnotationBox(annotation);
+    html += '<div class="rc-title">' + escapeLabelText(annotation.label || annotation.type || '未命名病灶') + ' #' + (index + 1) + (annotation.manuallyCorrected ? ' <span style="font-size:9px;color:#FFB020;">已修正</span>' : '') + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(sourceLabel) + ')</span></div>' +
+      '<div class="rc-val">位置: ' + escapeLabelText(annotation.region || '-') + ' (' + box.x + ',' + box.y + ')</div>' +
+      '<div class="rc-confidence">面积: ~' + (annotation.areaPx || Math.round(box.w * box.h)) + 'px² | 严重程度: ' + escapeLabelText(annotation.severity || '-') + ' | 置信度: ' + Math.round((annotation.confidence || 0) * 100) + '%</div>';
+  } else {
+    html += '<div class="rc-title">' + escapeLabelText(annotation.label) + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(sourceLabel) + ')</span></div>' +
+      '<div class="rc-confidence">置信度: ' + Math.round((annotation.confidence || 0) * 100) + '%</div>';
+  }
+  html += '<a class="rc-link" onclick="event.stopPropagation();editAIAnnotation(' + index + ')">' + (activeAIAnnotationEditIndex === index ? '收起' : '编辑') + '</a>' +
+    '<a class="rc-link" style="color:var(--danger);" onclick="event.stopPropagation();removeAIAnnotation(' + index + ')">删除</a>';
+  if (selectedAIAnnotationIndex === index) {
+    if (isLesionAutoAnnotation(annotation)) {
+      if (activeAIAnnotationEditIndex === index) html += renderLesionAutoAnnotationEditForm(index, annotation);
+      html += renderAnnotationMeasurementDetails(annotation);
+    } else {
+      html += '<div class="ai-edit-row" onclick="event.stopPropagation()"><span>标签</span>' +
+        '<select class="ai-label-select" onchange="changeAIAnnotationLabel(' + index + ', this.value)">' +
+        buildSelectedLabelOptions(annotation.label) + '</select></div>';
+      html += renderAnnotationMeasurementDetails(annotation);
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
 function updateAutoAnnoDisplay() {
   updateAutoAnnotationActionLabel();
   updateAutoAnnotationActionsVisibility();
   var container = document.getElementById('autoAnnoResults');
   var html = '';
   for (var i = 0; i < aiAnnotations.length; i++) {
-    var a = aiAnnotations[i];
-    var selectedClass = selectedAIAnnotationIndex === i ? ' selected' : '';
-    html += '<div class="result-card-mini' + selectedClass + '" style="border-left-color:' + a.color + ';" onclick="selectAIAnnotation(' + i + ')">' +
-      '<div class="rc-title">' + escapeLabelText(a.label) + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(a.type) + ')</span></div>' +
-      '<div class="rc-confidence">置信度: ' + Math.round((a.confidence||0)*100) + '%</div>' +
-      '<a class="rc-link" onclick="event.stopPropagation();editAIAnnotation(' + i + ')">' + (selectedAIAnnotationIndex === i ? '收起' : '编辑') + '</a>' +
-      '<a class="rc-link" style="color:var(--danger);" onclick="event.stopPropagation();removeAIAnnotation(' + i + ')">删除</a>';
-    if (selectedAIAnnotationIndex === i) {
-      html += '<div class="ai-edit-row" onclick="event.stopPropagation()"><span>标签</span>' +
-        '<select class="ai-label-select" onchange="changeAIAnnotationLabel(' + i + ', this.value)">' +
-        buildSelectedLabelOptions(a.label) + '</select></div>';
-      html += renderAnnotationMeasurementDetails(a);
-    }
-    html += '</div>';
+    html += renderAutoAnnotationCard(i, aiAnnotations[i]);
   }
   container.innerHTML = html;
 }
@@ -3312,27 +3550,86 @@ function selectAIAnnotation(index) {
   if (!aiAnnotations[index]) return;
   if (selectedAIAnnotationIndex === index) {
     selectedAIAnnotationIndex = null;
+    if (activeAIAnnotationEditIndex === index) {
+      activeAIAnnotationEditIndex = null;
+      activeAIAnnotationEditBackup = null;
+    }
     document.getElementById('statusHint').textContent = '已取消自动标注结果高亮';
   } else {
     selectedAIAnnotationIndex = index;
+    if (activeAIAnnotationEditIndex !== index) {
+      activeAIAnnotationEditIndex = null;
+      activeAIAnnotationEditBackup = null;
+    }
     document.getElementById('statusHint').textContent = '已高亮自动标注结果 #' + (index + 1);
   }
   selectedAnnotationId = null;
-  selectedLesionDetectionIndex = null;
-  activeLocatedLesion = null;
   redraw();
   updateAutoAnnoDisplay();
-  updateLesionDisplay(lesionDetectionResult || []);
 }
 
 function editAIAnnotation(index) {
   if (!aiAnnotations[index]) return;
-  selectedAIAnnotationIndex = selectedAIAnnotationIndex === index ? null : index;
-  selectedLesionDetectionIndex = null;
-  activeLocatedLesion = null;
+  selectedAIAnnotationIndex = index;
+  if (activeAIAnnotationEditIndex === index) {
+    activeAIAnnotationEditIndex = null;
+    activeAIAnnotationEditBackup = null;
+  } else {
+    activeAIAnnotationEditIndex = index;
+    activeAIAnnotationEditBackup = JSON.parse(JSON.stringify(aiAnnotations[index]));
+  }
   redraw();
   updateAutoAnnoDisplay();
-  updateLesionDisplay(lesionDetectionResult || []);
+}
+
+function cancelAIAnnotationEdit() {
+  if (activeAIAnnotationEditIndex !== null && activeAIAnnotationEditBackup && aiAnnotations[activeAIAnnotationEditIndex]) {
+    aiAnnotations[activeAIAnnotationEditIndex] = JSON.parse(JSON.stringify(activeAIAnnotationEditBackup));
+  }
+  activeAIAnnotationEditIndex = null;
+  activeAIAnnotationEditBackup = null;
+  redraw();
+  updateAutoAnnoDisplay();
+}
+
+function syncAIAnnotationEditPreview(index) {
+  if (!aiAnnotations[index]) return;
+  var annotation = aiAnnotations[index];
+  var labelEl = document.getElementById('aiLesionType_' + index);
+  var severityEl = document.getElementById('aiLesionSeverity_' + index);
+  var img = currentImageIndex >= 0 ? uploadedImages[currentImageIndex] : null;
+  var currentBox = getAutoAnnotationBox(annotation);
+  var maxW = img && img.width ? img.width : undefined;
+  var maxH = img && img.height ? img.height : undefined;
+  var x = getAIAnnotationEditNumber('aiLesionX_' + index, currentBox.x, 0, maxW);
+  var y = getAIAnnotationEditNumber('aiLesionY_' + index, currentBox.y, 0, maxH);
+  var w = getAIAnnotationEditNumber('aiLesionW_' + index, currentBox.w, 1, maxW);
+  var h = getAIAnnotationEditNumber('aiLesionH_' + index, currentBox.h, 1, maxH);
+  var label = labelEl ? labelEl.value : annotation.label;
+  if (label) {
+    annotation.label = label;
+    annotation.type = 'rect';
+    annotation.color = getLabelColor(label, annotation.color || '#FF8844');
+  }
+  annotation.bbox = [x - w / 2, y - h / 2, w, h];
+  annotation.areaPx = Math.round(w * h);
+  annotation.region = img ? getRetinaRegion(x, y, img) : (annotation.region || '-');
+  annotation.severity = severityEl ? severityEl.value : annotation.severity;
+  annotation.manuallyCorrected = true;
+  redraw();
+}
+
+function saveAIAnnotationEdit(index) {
+  if (!aiAnnotations[index]) return;
+  syncAIAnnotationEditPreview(index);
+  aiAnnotations[index].manuallyCorrected = true;
+  aiAnnotations[index].correctedAt = new Date().toISOString();
+  activeAIAnnotationEditIndex = null;
+  activeAIAnnotationEditBackup = null;
+  saveAnnotations();
+  redraw();
+  updateAutoAnnoDisplay();
+  document.getElementById('statusHint').textContent = '已保存自动标注结果 #' + (index + 1) + ' 的修正';
 }
 
 function changeAIAnnotationLabel(index, label) {
@@ -3354,27 +3651,25 @@ function removeAIAnnotation(index) {
 }
 
 function confirmAIAnnotations() {
-  var confirmedIdMap = {};
   for (var i = 0; i < aiAnnotations.length; i++) {
-    var confirmed = JSON.parse(JSON.stringify(aiAnnotations[i]));
-    var oldId = getStructureAnnotationId(confirmed);
-    confirmed.id = annotationIdCounter++;
-    confirmed.source = 'confirmed-ai';
-    manualAnnotations.push(confirmed);
-    if (oldId !== null) confirmedIdMap[oldId] = String(confirmed.id);
+    aiAnnotations[i].aiConfirmed = true;
   }
-  remapMeasurementSourceAnnotationIds(confirmedIdMap);
-  aiAnnotations = [];
+  activeAIAnnotationEditIndex = null;
+  activeAIAnnotationEditBackup = null;
   selectedAIAnnotationIndex = null;
   saveAnnotations();
+  saveAnalysisResults();
   redraw(); updateUI(); updateAutoAnnoDisplay();
   alert('已确认全部AI标注结果');
 }
 
 function rejectAIAnnotations() {
   aiAnnotations = [];
+  activeAIAnnotationEditIndex = null;
+  activeAIAnnotationEditBackup = null;
   selectedAIAnnotationIndex = null;
   saveAnnotations();
+  saveAnalysisResults();
   redraw(); updateUI(); updateAutoAnnoDisplay();
 }
 
@@ -3408,8 +3703,7 @@ function collectDiagnosisEvidence(img) {
   var severityMap = { '结构定位': 0, '轻度': 1, '中度': 2, '重度': 3 };
   var sources = []
     .concat(manualAnnotations || [])
-    .concat(aiAnnotations || [])
-    .concat(lesionDetectionResult || []);
+    .concat(aiAnnotations || []);
   for (var i = 0; i < sources.length; i++) {
     var item = sources[i] || {};
     var label = item.label || item.type || '';
@@ -3580,6 +3874,10 @@ function runAIDiagnosis() {
     saveAnalysisResults();
     updateDiagnosisDisplay(results);
     refreshLabelSetBySelectedDisease();
+    initImageClassificationManager();
+    updateImageList();
+    renderTabs();
+    if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) updateStatusPixelInfo(uploadedImages[currentImageIndex]);
     updateAnalysisActionLabels();
     document.getElementById('statusHint').textContent = '✅ AI诊断分类完成';
   }, 600);
@@ -3618,6 +3916,10 @@ function selectDiagnosisLevel(diseaseIdx, levelIdx) {
     saveAnalysisResults();
     updateDiagnosisDisplay(aiDiagnosisResult);
     refreshLabelSetBySelectedDisease();
+    initImageClassificationManager();
+    updateImageList();
+    renderTabs();
+    if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) updateStatusPixelInfo(uploadedImages[currentImageIndex]);
     updateAnalysisActionLabels();
     return;
   }
@@ -3628,9 +3930,13 @@ function selectDiagnosisLevel(diseaseIdx, levelIdx) {
   saveAnalysisResults();
   updateDiagnosisDisplay(aiDiagnosisResult);
   refreshLabelSetBySelectedDisease();
+  initImageClassificationManager();
+  updateImageList();
+  renderTabs();
+  if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) updateStatusPixelInfo(uploadedImages[currentImageIndex]);
 }
 
-/* ============ LESION DETECTION (SIMULATED) ============ */
+/* ============ AUTO ANNOTATION LESION HELPERS ============ */
 function getRetinaRegion(x, y, img) {
   var horizontal = x < img.width * 0.38 ? '鼻侧' : x > img.width * 0.62 ? '颞侧' : '中央';
   var vertical = y < img.height * 0.38 ? '上方' : y > img.height * 0.62 ? '下方' : '中部';
@@ -3666,246 +3972,18 @@ function createDetectedFinding(img, type, cxRate, cyRate, wRate, hRate, confiden
   };
 }
 
-function runLesionDetection() {
-  if (currentImageIndex < 0) return;
-  if (!canUseAIForCurrentImage('病灶智能检测')) return;
-  activeLocatedLesion = null;
-  activeEditingLesionIndex = null;
-  selectedLesionDetectionIndex = null;
-  redraw();
-  document.getElementById('statusHint').textContent = '🔍 病灶智能检测中...';
-  setTimeout(function() {
-    var img = uploadedImages[currentImageIndex];
-    var risk = getImageRiskSeed(img);
-    var lesions = [
-      createDetectedFinding(img, '视盘', 0.72, 0.46, 0.12, 0.16, 0.93, 'lesion_disc'),
-      createDetectedFinding(img, '黄斑', 0.48, 0.52, 0.14, 0.12, 0.91, 'lesion_macula'),
-      createDetectedFinding(img, '水肿', 0.48, 0.54, 0.16 + (risk % 3) * 0.02, 0.10 + (risk % 2) * 0.02, 0.82, 'lesion_edema'),
-      createDetectedFinding(img, '出血', 0.34 + (risk % 9) / 100, 0.38 + (risk % 11) / 100, 0.07, 0.06, 0.86, 'lesion_heme'),
-      createDetectedFinding(img, '渗出', 0.56 + (risk % 7) / 100, 0.58 - (risk % 8) / 100, 0.08, 0.05, 0.84, 'lesion_exudate')
-    ];
-    if (risk % 2 === 0) lesions.push(createDetectedFinding(img, '微血管瘤', 0.41, 0.42, 0.04, 0.04, 0.79, 'lesion_ma'));
-    if (risk % 3 === 0) lesions.push(createDetectedFinding(img, '新生血管', 0.70, 0.36, 0.10, 0.08, 0.81, 'lesion_nv'));
-    lesionDetectionResult = lesions;
-    saveAnalysisResults();
-    updateLesionDisplay(lesions);
-    updateAnalysisActionLabels();
-    document.getElementById('statusHint').textContent = '✅ 病灶检测完成，发现 ' + lesions.length + ' 处病灶';
-  }, 700);
-}
 
-function updateLesionDisplay(lesions) {
-  updateLesionActionsVisibility(lesions);
-  var container = document.getElementById('lesionDetectionResults');
-  if (!container) return;
-  var html = '';
-  if (!lesions || !lesions.length) {
-    activeEditingLesionIndex = null;
-    selectedLesionDetectionIndex = null;
-    container.innerHTML = '<div class="measurement-info">暂无检测结果</div>';
-    return;
-  }
-  for (var i = 0; i < lesions.length; i++) {
-    var l = lesions[i];
-    var isEditing = activeEditingLesionIndex === i;
-    var isSelected = selectedLesionDetectionIndex === i;
-    html += '<div class="result-card-mini' + (isSelected || isEditing ? ' selected' : '') + '" style="border-left-color:#FF8844;" onclick="selectLesionDetection(' + i + ')">' +
-      '<div class="rc-title">' + escapeLabelText(l.type || '未命名病灶') + ' #' + (i+1) + (l.manuallyCorrected ? ' <span style="font-size:9px;color:#FFB020;">已修正</span>' : '') + '</div>' +
-      '<div class="rc-val">位置: ' + escapeLabelText(l.region || '-') + ' (' + Math.round(l.x || 0) + ',' + Math.round(l.y || 0) + ')</div>' +
-      '<div class="rc-confidence">面积: ~' + (l.areaPx || Math.round((l.w || 0)*(l.h || 0))) + 'px² | 严重程度: ' + escapeLabelText(l.severity || '-') + ' | 置信度: ' + Math.round((l.confidence || 0)*100) + '%</div>' +
-      '<a class="rc-link" onclick="event.stopPropagation();editLesion(' + i + ')">' + (isEditing ? '收起' : '编辑') + '</a>' +
-      '<a class="rc-link" style="color:var(--danger);" onclick="event.stopPropagation();deleteLesion(' + i + ')">删除</a>';
-    if (isEditing) html += buildLesionEditForm(i, l);
-    html += '</div>';
-  }
-  container.innerHTML = html;
-}
 
-function buildLesionEditForm(index, lesion) {
-  return '<div class="lesion-edit-grid" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">' +
-    '<div class="lesion-edit-field"><label>病灶类型</label><select id="lesionType_' + index + '" onchange="syncLesionEditPreview(' + index + ')">' + buildLesionTypeOptions(lesion.type) + '</select></div>' +
-    '<div class="lesion-edit-field"><label>严重程度</label><select id="lesionSeverity_' + index + '" onchange="syncLesionEditPreview(' + index + ')">' + buildLesionSeverityOptions(lesion.severity) + '</select></div>' +
-    '<div class="lesion-edit-field"><label>X 坐标</label><input id="lesionX_' + index + '" type="number" min="0" value="' + Math.round(lesion.x || 0) + '" oninput="syncLesionEditPreview(' + index + ')"></div>' +
-    '<div class="lesion-edit-field"><label>Y 坐标</label><input id="lesionY_' + index + '" type="number" min="0" value="' + Math.round(lesion.y || 0) + '" oninput="syncLesionEditPreview(' + index + ')"></div>' +
-    '<div class="lesion-edit-field"><label>宽度 px</label><input id="lesionW_' + index + '" type="number" min="1" value="' + Math.round(lesion.w || 1) + '" oninput="syncLesionEditPreview(' + index + ')"></div>' +
-    '<div class="lesion-edit-field"><label>高度 px</label><input id="lesionH_' + index + '" type="number" min="1" value="' + Math.round(lesion.h || 1) + '" oninput="syncLesionEditPreview(' + index + ')"></div>' +
-    '</div>' +
-    '<div class="lesion-edit-actions">' +
-      '<button class="tool-btn success sm" onclick="saveLesionEdit(' + index + ')">保存修正</button>' +
-      '<button class="tool-btn sm" onclick="cancelLesionEdit()">取消</button>' +
-    '</div>';
-}
 
-function buildLesionTypeOptions(selectedType) {
-  var html = '';
-  var hasSelected = false;
-  var labelOptions = getCurrentLabelOptions();
-  for (var i = 0; i < labelOptions.length; i++) {
-    var preset = labelOptions[i];
-    var selected = preset.label === selectedType;
-    if (selected) hasSelected = true;
-    html += '<option value="' + escapeLabelText(preset.label) + '"' + (selected ? ' selected' : '') + '>' + escapeLabelText(preset.label) + '</option>';
-  }
-  if (selectedType && !hasSelected) {
-    html += '<option value="' + escapeLabelText(selectedType) + '" selected>' + escapeLabelText(selectedType) + '</option>';
-  }
-  return html;
-}
 
-function buildLesionSeverityOptions(selectedSeverity) {
-  var levels = ['结构定位', '轻度', '中度', '重度'];
-  var html = '';
-  var hasSelected = false;
-  for (var i = 0; i < levels.length; i++) {
-    var selected = levels[i] === selectedSeverity;
-    if (selected) hasSelected = true;
-    html += '<option value="' + levels[i] + '"' + (selected ? ' selected' : '') + '>' + levels[i] + '</option>';
-  }
-  if (selectedSeverity && !hasSelected) {
-    html += '<option value="' + escapeLabelText(selectedSeverity) + '" selected>' + escapeLabelText(selectedSeverity) + '</option>';
-  }
-  return html;
-}
 
-function editLesion(index) {
-  if (!lesionDetectionResult || !lesionDetectionResult[index]) return;
-  if (activeEditingLesionIndex === index) {
-    activeEditingLesionIndex = null;
-    activeEditingLesionBackup = null;
-    activeLocatedLesion = selectedLesionDetectionIndex !== null && lesionDetectionResult[selectedLesionDetectionIndex] ? JSON.parse(JSON.stringify(lesionDetectionResult[selectedLesionDetectionIndex])) : null;
-    updateLesionDisplay(lesionDetectionResult);
-    redraw();
-    return;
-  }
-  activeEditingLesionIndex = index;
-  activeEditingLesionBackup = JSON.parse(JSON.stringify(lesionDetectionResult[index]));
-  activeLocatedLesion = JSON.parse(JSON.stringify(lesionDetectionResult[index]));
-  updateLesionDisplay(lesionDetectionResult);
-  redraw();
-}
 
-function cancelLesionEdit() {
-  if (activeEditingLesionIndex !== null && activeEditingLesionBackup && lesionDetectionResult && lesionDetectionResult[activeEditingLesionIndex]) {
-    lesionDetectionResult[activeEditingLesionIndex] = JSON.parse(JSON.stringify(activeEditingLesionBackup));
-    saveAnalysisResults();
-  }
-  activeEditingLesionIndex = null;
-  activeEditingLesionBackup = null;
-  activeLocatedLesion = selectedLesionDetectionIndex !== null && lesionDetectionResult && lesionDetectionResult[selectedLesionDetectionIndex] ? JSON.parse(JSON.stringify(lesionDetectionResult[selectedLesionDetectionIndex])) : null;
-  updateLesionDisplay(lesionDetectionResult || []);
-  redraw();
-}
 
-function getLesionEditNumber(id, fallback, min, max) {
-  var el = document.getElementById(id);
-  var val = el ? Number(el.value) : fallback;
-  if (!isFinite(val)) val = fallback;
-  val = Math.round(val);
-  if (typeof min === 'number') val = Math.max(min, val);
-  if (typeof max === 'number') val = Math.min(max, val);
-  return val;
-}
 
-function syncLesionEditPreview(index) {
-  if (!lesionDetectionResult || !lesionDetectionResult[index] || currentImageIndex < 0 || !uploadedImages[currentImageIndex]) return;
-  var img = uploadedImages[currentImageIndex];
-  var lesion = lesionDetectionResult[index];
-  var typeEl = document.getElementById('lesionType_' + index);
-  var severityEl = document.getElementById('lesionSeverity_' + index);
-  var type = typeEl ? typeEl.value : lesion.type;
-  if (!type) return;
-  var x = getLesionEditNumber('lesionX_' + index, lesion.x || 0, 0, img.width || undefined);
-  var y = getLesionEditNumber('lesionY_' + index, lesion.y || 0, 0, img.height || undefined);
-  var w = getLesionEditNumber('lesionW_' + index, lesion.w || 1, 1, img.width || undefined);
-  var h = getLesionEditNumber('lesionH_' + index, lesion.h || 1, 1, img.height || undefined);
-  lesion.type = type;
-  lesion.x = x;
-  lesion.y = y;
-  lesion.w = w;
-  lesion.h = h;
-  lesion.areaPx = Math.round(w * h);
-  lesion.region = getRetinaRegion(x, y, img);
-  lesion.severity = severityEl ? severityEl.value : getLesionSeverity(type, lesion.areaPx, lesion.confidence || 0);
-  lesion.manuallyCorrected = true;
-  activeLocatedLesion = JSON.parse(JSON.stringify(lesion));
-  redraw();
-}
 
-function saveLesionEdit(index) {
-  if (!lesionDetectionResult || !lesionDetectionResult[index]) return;
-  if (currentImageIndex < 0 || !uploadedImages[currentImageIndex]) return;
-  syncLesionEditPreview(index);
-  var lesion = lesionDetectionResult[index];
-  lesion.manuallyCorrected = true;
-  lesion.correctedAt = new Date().toISOString();
-  activeEditingLesionIndex = null;
-  activeEditingLesionBackup = null;
-  selectedLesionDetectionIndex = index;
-  activeLocatedLesion = JSON.parse(JSON.stringify(lesion));
-  saveAnalysisResults();
-  updateLesionDisplay(lesionDetectionResult);
-  redraw();
-  document.getElementById('statusHint').textContent = '宸蹭繚瀛樼梾鐏?#' + (index+1) + ' 鐨勪汉宸ヤ慨姝?';
-}
-function deleteLesion(index) {
-  if (!lesionDetectionResult || !lesionDetectionResult[index]) return;
-  if (!confirm('确认删除该病灶检测结果？')) return;
-  lesionDetectionResult.splice(index, 1);
-  activeEditingLesionIndex = null;
-  activeEditingLesionBackup = null;
-  selectedLesionDetectionIndex = null;
-  activeLocatedLesion = null;
-  saveAnalysisResults();
-  updateLesionDisplay(lesionDetectionResult);
-  updateAnalysisActionLabels();
-  redraw();
-  document.getElementById('statusHint').textContent = '已删除病灶检测结果';
-}
 
-function updateLesionActionsVisibility(lesions) {
-  var applyBtn = document.getElementById('lesionDetectionApplyBtn');
-  if (applyBtn) applyBtn.style.display = lesions && lesions.length ? 'flex' : 'none';
-}
 
-function selectLesionDetection(index) {
-  if (!lesionDetectionResult || !lesionDetectionResult[index]) return;
-  if (selectedLesionDetectionIndex === index) {
-    selectedLesionDetectionIndex = null;
-    activeLocatedLesion = null;
-    document.getElementById('statusHint').textContent = '已取消病灶检测结果高亮';
-  } else {
-    var l = lesionDetectionResult[index];
-    selectedLesionDetectionIndex = index;
-    activeLocatedLesion = JSON.parse(JSON.stringify(l));
-    selectedAIAnnotationIndex = null;
-    selectedAnnotationId = null;
-    document.getElementById('statusHint').textContent = '已高亮病灶检测结果 #' + (index+1) + '：' + l.type + ' / ' + (l.region || '-');
-  }
-  redraw();
-  updateAutoAnnoDisplay();
-  updateLesionDisplay(lesionDetectionResult);
-}
 
-function applyDetectionToAnnotation() {
-  if (!lesionDetectionResult) { alert('请先运行病灶检测'); return; }
-  if (!canUseAIForCurrentImage('应用病灶检测结果')) return;
-  for (var i = 0; i < lesionDetectionResult.length; i++) {
-    var l = lesionDetectionResult[i];
-    var col = '#FF4444';
-    for (var j = 0; j < LABEL_PRESETS.length; j++) {
-      if (LABEL_PRESETS[j].label === l.type) { col = LABEL_PRESETS[j].color; break; }
-    }
-    pushUndo();
-    manualAnnotations.push({
-      id: annotationIdCounter++, type: 'rect', label: l.type,
-      color: col, source: 'detection', bbox: [l.x - l.w/2, l.y - l.h/2, l.w, l.h],
-      confidence: l.confidence, lineWidth: currentLineWidth,
-      region: l.region, areaPx: l.areaPx, severity: l.severity
-    });
-  }
-  redraw(); updateUI();
-  alert('已将 ' + lesionDetectionResult.length + ' 个检测病灶应用到标注');
-}
 
 /* ============ AUXILIARY TOOLS ============ */
 function toggleAnnotation() {
@@ -4011,35 +4089,181 @@ function placeProbe(pos, e) {
   document.getElementById('statusHint').textContent = '已放置探针：X ' + reading.x + ' / Y ' + reading.y + ' / 灰度 ' + reading.grayValue;
 }
 
-function eraseAt(x, y) {
-  var hit = hitTestAnno(x, y);
-  if (hit) {
-    pushUndo();
-    manualAnnotations = manualAnnotations.filter(function(a){return a.id!==hit;});
-    if (selectedAnnotationId === hit) selectedAnnotationId = null;
-    saveAnnotations();
-    redraw();
-    updateUI();
+function getAnnotationPathSegments(annotation) {
+  if (!annotation) return [];
+  if (annotation.segments && annotation.segments.length) return annotation.segments;
+  return annotation.points && annotation.points.length ? [annotation.points] : [];
+}
+
+function distanceToPoint(x, y, point) {
+  var dx = x - point[0], dy = y - point[1];
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function polylineIntersectsEraser(points, x, y, radius) {
+  if (!points || !points.length) return false;
+  if (points.length === 1) return distanceToPoint(x, y, points[0]) <= radius;
+  for (var i = 1; i < points.length; i++) {
+    if (distanceToSegment(x, y, points[i - 1], points[i]) <= radius) return true;
+  }
+  return false;
+}
+
+function splitPolylineByEraser(points, x, y, radius) {
+  if (!points || points.length < 2) return [];
+  var chunks = [];
+  var current = [];
+  var sampleStep = Math.max(2, radius * 0.45);
+
+  function pushPoint(point) {
+    if (!current.length || distanceToPoint(point[0], point[1], current[current.length - 1]) > 0.5) {
+      current.push(point);
+    }
+  }
+
+  function flushChunk() {
+    if (current.length >= 2) chunks.push(current);
+    current = [];
+  }
+
+  for (var i = 0; i < points.length - 1; i++) {
+    var p1 = points[i], p2 = points[i + 1];
+    var dx = p2[0] - p1[0], dy = p2[1] - p1[1];
+    var length = Math.sqrt(dx * dx + dy * dy);
+    var steps = Math.max(1, Math.ceil(length / sampleStep));
+    for (var s = 0; s <= steps; s++) {
+      if (i > 0 && s === 0) continue;
+      var t = s / steps;
+      var point = [p1[0] + dx * t, p1[1] + dy * t];
+      if (distanceToPoint(point[0], point[1], [x, y]) <= radius) {
+        flushChunk();
+      } else {
+        pushPoint(point);
+      }
+    }
+  }
+  flushChunk();
+  return chunks;
+}
+
+function isAnnotationWithinEraser(annotation, x, y, radius) {
+  if (!annotation) return false;
+  var effectiveRadius = radius + (annotation.lineWidth || 2) / 2;
+  if (annotation.type === 'brush' || annotation.type === 'line') {
+    var segments = getAnnotationPathSegments(annotation);
+    for (var i = 0; i < segments.length; i++) {
+      if (polylineIntersectsEraser(segments[i], x, y, effectiveRadius)) return true;
+    }
+    return false;
+  }
+  if (annotation.type === 'rect' && annotation.bbox) {
+    return x >= annotation.bbox[0] - radius &&
+      x <= annotation.bbox[0] + annotation.bbox[2] + radius &&
+      y >= annotation.bbox[1] - radius &&
+      y <= annotation.bbox[1] + annotation.bbox[3] + radius;
+  }
+  if (annotation.type === 'ellipse' && annotation.bbox) {
+    var cx = annotation.bbox[0] + annotation.bbox[2] / 2;
+    var cy = annotation.bbox[1] + annotation.bbox[3] / 2;
+    var rx = Math.max(annotation.bbox[2] / 2 + radius, 1);
+    var ry = Math.max(annotation.bbox[3] / 2 + radius, 1);
+    return ((x - cx) * (x - cx)) / (rx * rx) + ((y - cy) * (y - cy)) / (ry * ry) <= 1;
+  }
+  if ((annotation.type === 'polygon' || annotation.type === 'fill') && annotation.points && annotation.points.length >= 3) {
+    if (pointInPolygon(x, y, annotation.points)) return true;
+    for (var p = 1; p < annotation.points.length; p++) {
+      if (distanceToSegment(x, y, annotation.points[p - 1], annotation.points[p]) <= radius) return true;
+    }
+    return distanceToSegment(x, y, annotation.points[annotation.points.length - 1], annotation.points[0]) <= radius;
+  }
+  if ((annotation.type === 'note' || annotation.type === 'probe') && annotation.point) {
+    return distanceToPoint(x, y, annotation.point) <= radius + 14;
+  }
+  return false;
+}
+
+function findEraserTarget(x, y, radius) {
+  for (var i = manualAnnotations.length - 1; i >= 0; i--) {
+    if (isAnnotationWithinEraser(manualAnnotations[i], x, y, radius)) return manualAnnotations[i];
+  }
+  return null;
+}
+
+function startEraserStroke(x, y) {
+  if (currentImageIndex < 0) return;
+  isErasing = true;
+  eraserChanged = false;
+  eraserBeforeSnapshot = makeEditSnapshot();
+  applyEraserAt(x, y);
+  redraw();
+}
+
+function applyEraserAt(x, y) {
+  var target = findEraserTarget(x, y, currentEraserRadius);
+  if (target) {
+    if (target.type === 'brush' || target.type === 'line') {
+      var sourceSegments = getAnnotationPathSegments(target);
+      var nextSegments = [];
+      var changed = false;
+      var effectiveRadius = currentEraserRadius + (target.lineWidth || 2) / 2;
+      for (var i = 0; i < sourceSegments.length; i++) {
+        var segment = sourceSegments[i];
+        if (!polylineIntersectsEraser(segment, x, y, effectiveRadius)) {
+          nextSegments.push(segment.map(function (point) { return point.slice(); }));
+          continue;
+        }
+        var keptChunks = splitPolylineByEraser(segment, x, y, effectiveRadius);
+        for (var c = 0; c < keptChunks.length; c++) nextSegments.push(keptChunks[c]);
+        changed = true;
+      }
+      if (changed) {
+        if (target.type === 'line') {
+          nextSegments = nextSegments.map(function (segment) {
+            return [segment[0], segment[segment.length - 1]];
+          }).filter(function (segment) {
+            return segment.length >= 2 && distanceToPoint(segment[0][0], segment[0][1], segment[1]) > 1;
+          });
+        }
+        if (!nextSegments.length) {
+          manualAnnotations = manualAnnotations.filter(function (annotation) { return annotation.id !== target.id; });
+          if (selectedAnnotationId === target.id) selectedAnnotationId = null;
+        } else {
+          target.segments = nextSegments;
+          target.points = nextSegments[0];
+        }
+        eraserChanged = true;
+      }
+      return;
+    }
+    manualAnnotations = manualAnnotations.filter(function (annotation) { return annotation.id !== target.id; });
+    if (selectedAnnotationId === target.id) selectedAnnotationId = null;
+    eraserChanged = true;
     return;
   }
   var measurementHit = hitTestMeasurement(x, y);
   if (measurementHit) {
-    pushUndo();
-    measurementResults = measurementResults.filter(function(m){ return m.id !== measurementHit; });
+    measurementResults = measurementResults.filter(function (measurement) { return measurement.id !== measurementHit; });
+    eraserChanged = true;
+  }
+}
+
+function endEraserStroke() {
+  if (!isErasing) return;
+  if (eraserChanged && eraserBeforeSnapshot) {
+    undoStack.push(eraserBeforeSnapshot);
+    redoStack = [];
     saveAnnotations();
-    redraw();
     updateUI();
   }
+  isErasing = false;
+  eraserChanged = false;
+  eraserBeforeSnapshot = null;
 }
 
 /* ============ UI UPDATE ============ */
 function updateUI() {
   var annoCountEl = document.getElementById('annoCount');
   if (annoCountEl) annoCountEl.textContent = manualAnnotations.length;
-  document.getElementById('statManual').textContent = manualAnnotations.length;
-  document.getElementById('statAI').textContent = aiAnnotations.length;
-  document.getElementById('statTotal').textContent = manualAnnotations.length + aiAnnotations.length;
-  document.getElementById('progressPercent').textContent = uploadedImages.length > 0 ? Math.min(100, Math.round(manualAnnotations.length / uploadedImages.length * 100)) + '%' : '0%';
   // Annotation list
   var html = '';
   for (var i = 0; i < manualAnnotations.length; i++) {
@@ -4090,18 +4314,14 @@ function selectAnno(id) {
   if (selectedAnnotationId !== null && String(selectedAnnotationId) === String(id)) {
     selectedAnnotationId = null;
     selectedAIAnnotationIndex = null;
-    selectedLesionDetectionIndex = null;
-    activeLocatedLesion = null;
-    updateUI();
+        updateUI();
     redraw();
     document.getElementById('statusHint').textContent = '已取消人工标注高亮';
     return;
   }
   selectedAnnotationId = id;
   selectedAIAnnotationIndex = null;
-  selectedLesionDetectionIndex = null;
-  activeLocatedLesion = null;
-  var a = findAnno(id);
+    var a = findAnno(id);
   if (a) { currentColor = a.color; currentLabel = a.label; }
   updateUI(); redraw();
   document.getElementById('statusHint').textContent = a ? '已选中标注 #' + a.id + '，可在列表内编辑标签' : '未选中标注';
@@ -4180,14 +4400,18 @@ function getDiagnosisSubmitSummary() {
 
 function getSubmitBlockingIssues() {
   var issues = [];
-  if (!getCurrentImageClassification()) issues.push('请先完成图像分类标注：选择“正常”/“异常”/“需重新采集”');
+  if (!getCurrentImageClassification()) issues.push('请先完成图像级标注：选择“正常”或“需重新采集”');
   var pendingCount = 0;
   for (var i = 0; i < manualAnnotations.length; i++) {
     var label = manualAnnotations[i].label || '';
     if (!label || label === PENDING_LABEL) pendingCount++;
   }
   if (pendingCount > 0) issues.push(pendingCount + ' 个标注仍为“待标注”，请先选择标签');
-  if (aiAnnotations.length > 0) issues.push(aiAnnotations.length + ' 个自动标注结果未确认，请先确认、编辑或拒绝');
+  var unconfirmedAICount = 0;
+  for (var j = 0; j < aiAnnotations.length; j++) {
+    if (!aiAnnotations[j] || !aiAnnotations[j].aiConfirmed) unconfirmedAICount++;
+  }
+  if (unconfirmedAICount > 0) issues.push(unconfirmedAICount + ' 个自动标注结果未确认，请先确认、编辑或拒绝');
   if (isDrawing || polygonPoints.length > 0 || brushPath.length > 0 || measurePoints.length > 0 || pendingNotePoint) {
     issues.push('当前仍有绘制、测量或注释未完成，请先完成或取消当前操作');
   }
@@ -4233,7 +4457,7 @@ function renderSubmitDialogDetails() {
   var diagnosisSummary = getDiagnosisSubmitSummary() || '未选择';
   details.innerHTML =
     submitDetailItem('当前影像', img.name || '-') +
-    submitDetailItem('图像分类', classificationSummary) +
+    submitDetailItem('图像级疾病', classificationSummary) +
     submitDetailItem('疾病分类', diagnosisSummary) +
     submitDetailItem('图像质量', report.statusText + ' ' + report.score) +
     submitDetailItem('人工标注', manualAnnotations.length + ' 个') +
@@ -4317,17 +4541,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initAIModelPanel();
   resetLayerControls('切换到 OCT / DICOM 多层影像后可用');
   seedDemoImageList();
-  // 初始化顶部工具栏data-tool属性
-  var tbButtons = document.querySelectorAll('.toolbar .tool-btn');
-  for (var i = 0; i < tbButtons.length; i++) {
-    var btn = tbButtons[i];
-    var txt = btn.textContent || btn.innerText || '';
-    if (txt.indexOf('长度') >= 0) btn.setAttribute('data-tool','measure-length');
-    else if (txt.indexOf('角度') >= 0) btn.setAttribute('data-tool','measure-angle');
-    else if (txt.indexOf('面积') >= 0) btn.setAttribute('data-tool','measure-area');
-    else if (txt.indexOf('椭圆') >= 0 && txt.indexOf('测量') >= 0) btn.setAttribute('data-tool','measure-ellipse');
-    else if (txt.indexOf('矩形') >= 0 && txt.indexOf('测量') >= 0) btn.setAttribute('data-tool','measure-rect');
-  }
   try {
     var user = JSON.parse(localStorage.getItem('life_med_user'));
     if (user && user.name) document.getElementById('headerUserName').textContent = user.name;

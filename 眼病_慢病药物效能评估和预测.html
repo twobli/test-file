@@ -44,7 +44,9 @@ body {
   font-size: 14px;
   color: var(--text-primary);
   background: #f0f2f5;
+  height: 100vh;
   min-height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -123,6 +125,7 @@ body {
 .main-container {
   display: flex;
   flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -130,6 +133,7 @@ body {
 .sidebar {
   width: 260px;
   min-width: 260px;
+  height: 100%;
   background: var(--bg-white);
   border-right: 1px solid var(--border-color);
   overflow-y: auto;
@@ -211,12 +215,20 @@ body {
 /* ===== Main Content ===== */
 .main-content {
   flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   padding: 20px 24px;
   background: #f0f2f5;
 }
 .page-section { display: none; }
-.page-section.active { display: block; }
+.page-section.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
 
 /* ===== Common Components ===== */
 .page-header {
@@ -300,6 +312,82 @@ body {
   justify-content: space-between;
 }
 .card-body { }
+
+.service-scope-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.service-scope-block {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.service-scope-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.service-scope-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.service-scope-item {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: #f7f9fc;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.service-scope-highlight {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-left: 4px solid var(--blue-core);
+  background: #f4f8ff;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.service-module-section {
+  margin-top: 18px;
+}
+.service-module-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.service-module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.service-module-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.service-module-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.service-module-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
 
 /* Search bar */
 .search-bar {
@@ -389,6 +477,33 @@ body {
 .tag-high { background: #e8f5e9; color: #2e7d32; font-weight: 600; }
 .tag-medium { background: #fff3e0; color: #e65100; font-weight: 600; }
 .tag-low { background: #fce4ec; color: #c62828; font-weight: 600; }
+.change-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.change-green {
+  background: #edf7ee;
+  color: #23733a;
+  border: 1px solid #b8dfbf;
+}
+.change-yellow {
+  background: #fff7e8;
+  color: #a85d00;
+  border: 1px solid #f4d39a;
+}
+.change-red {
+  background: #fdecec;
+  color: #b42318;
+  border: 1px solid #f2b8b5;
+}
 
 /* Modals */
 .modal-overlay {
@@ -618,8 +733,48 @@ body {
   display: flex;
   gap: 16px;
 }
-.split-left { flex: 6; }
-.split-right { flex: 4; }
+.split-left { flex: 7.2; min-width: 0; }
+.split-right { flex: 3.8; min-width: 0; }
+.scheme-main-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px 20px 20px;
+}
+.scheme-main-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 14px;
+}
+.scheme-main-card .scheme-section {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 0 0 16px;
+  margin: 0 0 16px;
+}
+.scheme-main-card .scheme-section:last-of-type {
+  border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.scheme-main-card .scheme-section-title {
+  margin-bottom: 10px;
+}
+.scheme-main-card .alternative-plan-item {
+  background: #f8fbff;
+  border: 1px solid #dbe7f5;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.scheme-main-card .alternative-plan-item .scheme-section-title {
+  margin-bottom: 8px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
 
 /* Risk Panel */
 .risk-panel {
@@ -653,6 +808,32 @@ body {
 }
 .risk-level-high { background: #ffcdd2; color: #c62828; }
 .risk-level-medium { background: #fff3e0; color: #e65100; }
+.risk-detail {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.risk-detail span:last-child {
+  grid-column: 1 / -1;
+  text-align: left;
+}
+.decision-panel {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d6e6fb;
+  border-radius: var(--radius-md);
+  background: #f8fbff;
+}
+.decision-panel .form-row { margin-bottom: 0; }
+.decision-status-note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
 
 /* Image Compare */
 .image-compare {
@@ -661,26 +842,132 @@ body {
 }
 .image-compare .img-box {
   flex: 1;
-  border: 2px dashed var(--border-color);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   min-height: 300px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #fafbfc;
+  align-items: stretch;
+  justify-content: flex-start;
+  background: #fff;
   color: var(--text-muted);
   font-size: 14px;
   position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 .image-compare .img-box .placeholder-text {
   font-size: 13px;
   color: var(--text-muted);
   margin-top: 8px;
 }
-.image-compare .img-box .upload-icon {
-  font-size: 36px;
+.system-image-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: #f8fbff;
+}
+.system-image-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.system-image-meta {
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.system-image-preview {
+  margin: 0 14px 14px;
+  min-height: 170px;
+  border-radius: var(--radius-sm);
+  background:
+    radial-gradient(circle at 42% 50%, rgba(35, 87, 143, 0.35) 0 16%, transparent 17%),
+    radial-gradient(circle at 58% 50%, rgba(91, 141, 190, 0.2) 0 11%, transparent 12%),
+    repeating-linear-gradient(105deg, #eaf2fb 0 10px, #dbe9f8 10px 20px);
+  border: 1px solid #d8e4f1;
+  position: relative;
+}
+.system-image-preview::after {
+  content: '';
+  position: absolute;
+  inset: 24px;
+  border: 1px solid rgba(26, 115, 232, 0.45);
+  border-radius: 50%;
+}
+.system-image-status {
+  padding: 0 14px 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.image-compare .img-box.user-upload-zone {
+  cursor: pointer;
+  border: 2px dashed var(--border-color);
+  align-items: center;
+  justify-content: center;
+  background: #fafbfc;
+  transition: border-color .15s ease, background .15s ease;
+}
+.image-compare .img-box.user-upload-zone:hover,
+.image-compare .img-box.user-upload-zone.dragover,
+.image-compare .img-box.dragover {
+  border-color: var(--primary);
+  background: #f4f8ff;
+}
+.user-upload-icon {
+  font-size: 32px;
   color: var(--border-color);
+}
+.user-upload-title {
+  margin-top: 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+.user-upload-hint {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.user-image-card {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+.user-image-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: #f8fbff;
+}
+.user-image-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+.user-image-preview {
+  flex: 1;
+  min-height: 210px;
+  margin: 14px;
+  object-fit: contain;
+  background: #f5f7fa;
+  border: 1px solid #d8e4f1;
+  border-radius: var(--radius-sm);
+}
+.user-image-meta,
+.user-image-status {
+  padding: 0 14px 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 
 /* Timeline */
@@ -818,9 +1105,119 @@ body {
   color: var(--text-primary);
 }
 
+.trend-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+.trend-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.trend-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.trend-card-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.trend-card-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.trend-card-canvas {
+  width: 100%;
+  height: 108px;
+  display: block;
+  border-radius: 6px;
+  background: #fafcff;
+  border: 1px solid #e3ebf5;
+}
+.trend-card-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  font-size: 12px;
+}
+.trend-card-meta .legend-item {
+  border: 1px solid #e3ebf5;
+  border-radius: 4px;
+  padding: 8px 10px;
+  background: #f8fbff;
+}
+.trend-card-meta .legend-label {
+  color: var(--text-muted);
+}
+.trend-card-meta .legend-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+.trend-card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.trend-card-foot strong {
+  font-size: 15px;
+  color: var(--success);
+}
+.metric-chart-panel {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.metric-bar-canvas {
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  height: 300px;
+  border: 1px solid #e3ebf5;
+  border-radius: var(--radius-sm);
+  background: #fafcff;
+}
+.metric-chart-legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: -1px;
+}
+.legend-dot.before { background: #8fb8ef; }
+.legend-dot.after { background: #1a73e8; }
+
+@media (max-width: 768px) {
+  .trend-list { grid-template-columns: 1fr; }
+  .trend-card-meta { grid-template-columns: 1fr; }
+  .trend-card-foot { align-items: flex-start; flex-direction: column; }
+}
+
 /* Compare table compact */
 .compare-table { width: 100%; font-size: 12px; }
 .compare-table td, .compare-table th { padding: 6px 10px; }
+.sensitivity-compare-table { min-width: 980px; font-size: 12px; }
+.sensitivity-compare-table td, .sensitivity-compare-table th { padding: 8px 10px; white-space: nowrap; }
 
 /* Responsive */
 @media (max-width: 1024px) {
@@ -839,6 +1236,538 @@ body {
   color: var(--text-muted);
 }
 .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+.compact-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.compact-kpi {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+.compact-kpi .kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--blue-core);
+}
+.compact-kpi .kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.linked-note {
+  background: #f8fbff;
+  border: 1px solid #d6e6fb;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.evaluation-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 14px;
+}
+.evaluation-score {
+  border: 1px solid #d6e6fb;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: #f8fbff;
+}
+.evaluation-score .score-value {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--blue-core);
+}
+.evaluation-score .score-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.evaluation-basis {
+  display: grid;
+  gap: 8px;
+}
+.basis-row {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-size: 13px;
+}
+.basis-row strong {
+  color: var(--text-primary);
+}
+.basis-row span {
+  color: var(--text-secondary);
+}
+.basis-row em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--blue-core);
+}
+.evaluation-conclusion {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: #edf7ee;
+  color: #23733a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .evaluation-grid { grid-template-columns: 1fr; }
+  .basis-row { grid-template-columns: 1fr; }
+}
+
+/* ===== Chat Workbench ===== */
+.chat-sidebar {
+  width: 220px;
+  min-width: 220px;
+  height: 100%;
+  background: var(--bg-white);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 0;
+  overflow-y: auto;
+}
+.chat-menu-item {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 10px 20px;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: #34495e;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.chat-menu-item:hover {
+  background: #f5f8ff;
+  color: var(--primary);
+}
+.chat-menu-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
+.chat-menu-item.active:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.chat-page {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-workbench-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.chat-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.chat-subtitle {
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.chat-patient-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.chat-patient-switch select {
+  height: 34px;
+  min-width: 220px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0 10px;
+  font-family: inherit;
+  background: #fff;
+}
+.chat-module-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid #d6e6fb;
+  border-radius: 999px;
+  background: #f7fbff;
+  color: var(--blue-core);
+  font-size: 12px;
+  font-weight: 700;
+}
+.chat-module-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.chat-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.chat-stream {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px;
+  background: #f7f9fc;
+}
+.chat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.chat-row.user {
+  justify-content: flex-end;
+}
+.chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.chat-row.ai .chat-avatar {
+  background: var(--blue-core);
+  color: #fff;
+}
+.chat-row.user .chat-avatar {
+  background: #dfe8f7;
+  color: #24415f;
+  order: 2;
+}
+.chat-bubble {
+  width: min(860px, calc(100% - 48px));
+  background: #fff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.chat-row.user .chat-bubble {
+  background: #edf5ff;
+  border-color: #c7dcf8;
+}
+.chat-bubble-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.chat-bubble-text {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 13px;
+}
+.chat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+.chat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.chat-field.wide {
+  grid-column: 1 / -1;
+}
+.chat-field label {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.chat-field input,
+.chat-field select,
+.chat-field textarea {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid #cfd8e3;
+  border-radius: 4px;
+  padding: 7px 9px;
+  font-family: inherit;
+  font-size: 13px;
+  background: #fff;
+  outline: none;
+}
+.chat-field textarea {
+  min-height: 66px;
+  resize: vertical;
+}
+.chat-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.chat-upload-card {
+  min-height: 108px;
+  border: 1px dashed #aebdd0;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: space-between;
+  transition: var(--transition);
+}
+.chat-upload-card:hover,
+.chat-upload-card.has-file {
+  border-color: var(--primary);
+  background: #f6faff;
+}
+.chat-upload-card input {
+  display: none;
+}
+.chat-upload-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.chat-upload-hint,
+.chat-upload-file {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.chat-upload-file {
+  color: var(--blue-core);
+  word-break: break-all;
+}
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.analysis-chat-card {
+  border: 1px solid #d8e3f0;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.analysis-chat-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.analysis-chat-desc {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 58px;
+}
+.analysis-status {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.analysis-status.done {
+  color: #23733a;
+  font-weight: 700;
+}
+.analysis-mini-result {
+  padding: 8px;
+  border-radius: 6px;
+  background: #f5f8fb;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 54px;
+}
+.ai-summary-panel {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+}
+.ai-score-card {
+  border: 1px solid #cbdcf2;
+  border-radius: 8px;
+  background: #f7fbff;
+  padding: 14px;
+  text-align: center;
+}
+.ai-score-value {
+  color: var(--blue-core);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+}
+.ai-score-label {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.ai-summary-list {
+  display: grid;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.ai-summary-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.scenario-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.scenario-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef3f8;
+  color: #4d6075;
+  font-size: 12px;
+}
+.chat-chip-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 12px 0;
+  background: #fff;
+}
+.chat-chip {
+  border: 1px solid #c7dcf8;
+  background: #eef5ff;
+  color: var(--blue-core);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.chat-chip:hover {
+  background: #e3f0ff;
+}
+.chat-composer {
+  border-top: 1px solid var(--border-color);
+  padding: 12px;
+  background: #fff;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.chat-composer textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 110px;
+  resize: vertical;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+.chat-composer-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.chat-upload-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.chat-upload-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #edf5ff;
+  color: var(--blue-core);
+  font-size: 12px;
+  word-break: break-all;
+}
+.chat-result-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.chat-result-item {
+  padding: 9px 10px;
+  border: 1px solid #dbe7f5;
+  border-radius: 6px;
+  background: #f8fbff;
+}
+@media (max-width: 1200px) {
+  .analysis-grid,
+  .chat-upload-grid,
+  .service-scope-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 900px) {
+  .chat-sidebar { display: none; }
+  .chat-page { height: auto; min-height: calc(100vh - 88px); }
+  .chat-workbench-header { flex-direction: column; }
+  .chat-patient-switch { justify-content: flex-start; }
+  .chat-grid,
+  .analysis-grid,
+  .chat-upload-grid,
+  .service-scope-grid,
+  .service-module-grid,
+  .ai-summary-panel {
+    grid-template-columns: 1fr;
+  }
+  .chat-bubble { width: calc(100% - 44px); }
+  .chat-composer { flex-direction: column; }
+  .chat-composer textarea,
+  .chat-composer-actions { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -861,54 +1790,101 @@ body {
 <div class="main-container">
 
 <!-- ===== Sidebar ===== -->
-<aside class="sidebar" id="sidebar">
-  <!-- Group 1 -->
-  <div class="menu-group" id="menuGroup1">
-    <div class="menu-group-title" onclick="toggleMenuGroup('menuGroup1')">
-      疗效量化与分析 <span class="arrow">▼</span>
-    </div>
-    <ul class="submenu-list">
-      <li class="submenu-item" data-page="page-img-compare" onclick="switchPage('page-img-compare', this)">影像指标对比研判</li>
-      <li class="submenu-item" data-page="page-quant-indicator" onclick="switchPage('page-quant-indicator', this)">智能生成量化疗效指标数据</li>
-    </ul>
+<aside class="chat-sidebar" id="sidebar">
+  <div class="chat-menu-item active" data-page="page-service-scope" onclick="switchPage('page-service-scope', this)">
+    <span>服务场景</span>
   </div>
-  <!-- Group 2 (Blue Core) -->
-  <div class="menu-group" id="menuGroup2">
-    <div class="menu-group-title" onclick="toggleMenuGroup('menuGroup2')">
-      体化药物敏感性分析 <span class="blue-label">蓝色核心</span> <span class="arrow">▼</span>
-    </div>
-    <ul class="submenu-list">
-      <li class="submenu-item blue-core active" data-page="page-patient-list" onclick="switchPage('page-patient-list', this)">(1) 患者用药基础信息列表</li>
-      <li class="submenu-item blue-core" data-page="page-drug-sensitivity" onclick="switchPage('page-drug-sensitivity', this)">(2) 药物敏感程度与适配度智能评估</li>
-      <li class="submenu-item blue-core" data-page="page-drug-plan" onclick="switchPage('page-drug-plan', this)">(3) 智能匹配生成专属用药方案</li>
-      <li class="submenu-item blue-core" data-page="page-plan-optimize" onclick="switchPage('page-plan-optimize', this)">(4) 用药方案调整优化与风险提示</li>
-    </ul>
+  <div class="chat-menu-item" data-page="page-chat-efficacy" onclick="switchPage('page-chat-efficacy', this)">
+    <span>疗效量化与分析</span>
   </div>
-  <!-- Group 3 -->
-  <div class="menu-group" id="menuGroup3">
-    <div class="menu-group-title" onclick="toggleMenuGroup('menuGroup3')">
-      动态跟踪与疗效反馈 <span class="arrow">▼</span>
-    </div>
-    <ul class="submenu-list">
-      <li class="submenu-item" data-page="page-followup" onclick="switchPage('page-followup', this)">患者随访多元数据管理</li>
-      <li class="submenu-item" data-page="page-model-update" onclick="switchPage('page-model-update', this)">疗效模型动态更新</li>
-      <li class="submenu-item" data-page="page-clinical-adapt" onclick="switchPage('page-clinical-adapt', this)">临床诊疗场景自适应</li>
-      <li class="submenu-item" data-page="page-research-data" onclick="switchPage('page-research-data', this)">医药研究场景数据应用</li>
-    </ul>
+  <div class="chat-menu-item" data-page="page-chat-sensitivity" onclick="switchPage('page-chat-sensitivity', this)">
+    <span>个体化药物敏感性分析</span>
+  </div>
+  <div class="chat-menu-item" data-page="page-chat-optimize" onclick="switchPage('page-chat-optimize', this)">
+    <span>用药优化与推荐</span>
+  </div>
+  <div class="chat-menu-item" data-page="page-chat-followup" onclick="switchPage('page-chat-followup', this)">
+    <span>动态跟踪与疗效反馈</span>
   </div>
 </aside>
 
 <!-- ===== Main Content ===== -->
 <main class="main-content" id="mainContent">
 
-  <!-- ========== PAGE: 患者用药基础信息列表 ========== -->
-  <section class="page-section active" id="page-patient-list">
+  <section class="page-section" id="page-chat-efficacy"></section>
+  <section class="page-section" id="page-chat-sensitivity"></section>
+  <section class="page-section" id="page-chat-optimize"></section>
+  <section class="page-section" id="page-chat-followup"></section>
+  <section class="page-section active" id="page-service-scope">
     <div class="page-header">
       <div>
-        <div class="page-title">(1) 患者用药基础信息列表</div>
-        <div class="page-subtitle">体化药物敏感性分析 · 蓝色核心功能</div>
+        <div class="page-title">服务场景</div>
+        <div class="page-subtitle">适用于慢性眼病管理、术后恢复监测、药物研发验证及临床试验数据分析，为医院、科研机构及制药企业提供全流程综合服务。</div>
       </div>
-      <button class="btn btn-blue" onclick="openPatientModal()">+ 新增患者</button>
+    </div>
+    <div class="service-scope-grid">
+      <div class="service-scope-block">
+        <div class="service-scope-title">适用场景</div>
+        <div class="service-scope-list">
+          <div class="service-scope-item">慢性眼病长期管理</div>
+          <div class="service-scope-item">术后恢复监测</div>
+          <div class="service-scope-item">药物研发验证</div>
+          <div class="service-scope-item">临床试验数据分析</div>
+        </div>
+      </div>
+      <div class="service-scope-block">
+        <div class="service-scope-title">典型输入</div>
+        <div class="service-scope-list">
+          <div class="service-scope-item">术前 / 术后影像</div>
+          <div class="service-scope-item">用药前后复查材料</div>
+          <div class="service-scope-item">视力、眼压等功能指标</div>
+          <div class="service-scope-item">病历、用药和随访记录</div>
+        </div>
+      </div>
+      <div class="service-scope-block">
+        <div class="service-scope-title">输出价值</div>
+        <div class="service-scope-list">
+          <div class="service-scope-item">疗效量化结果</div>
+          <div class="service-scope-item">个体化用药建议</div>
+          <div class="service-scope-item">随访趋势反馈</div>
+          <div class="service-scope-item">研究与临床汇总支持</div>
+        </div>
+      </div>
+    </div>
+    <div class="service-scope-highlight">
+      面向医院、科研机构及制药企业，将影像对比、用药分析、疗效反馈和研究数据沉淀串联起来，支持从临床评估到科研验证的全流程综合服务。
+    </div>
+    <div class="service-module-section">
+      <div class="service-module-section-title">模块介绍</div>
+      <div class="service-module-grid">
+        <div class="service-module-card">
+          <div class="service-module-name">1. 疗效量化与分析</div>
+          <div class="service-module-desc">利用患者手术前后及用药前后的医学影像，对比分析病灶变化、组织恢复情况及功能指标，生成量化疗效指标，科学评估药物疗效。</div>
+        </div>
+        <div class="service-module-card">
+          <div class="service-module-name">2. 个体化药物敏感性分析</div>
+          <div class="service-module-desc">结合患者体质特征及既往用药历史，评估不同患者对药物的敏感性与适配度，预测疗效差异和潜在风险。</div>
+        </div>
+        <div class="service-module-card">
+          <div class="service-module-name">3. 用药优化与推荐</div>
+          <div class="service-module-desc">基于分析结果提供针对性用药方案，包括药物种类选择、剂量调整及联合用药策略，同时提示可能的不良反应，为临床医生制定精准治疗方案提供支持。</div>
+        </div>
+        <div class="service-module-card">
+          <div class="service-module-name">4. 动态跟踪与疗效反馈</div>
+          <div class="service-module-desc">支持长期随访患者的影像及用药数据，动态更新疗效评估模型，实现药物疗效和个体化用药策略的闭环优化。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PAGE: 评估对象选择 ========== -->
+  <section class="page-section" id="page-patient-list">
+    <div class="page-header">
+      <div>
+        <div class="page-title">(1) 评估对象选择</div>
+        <div class="page-subtitle">选择已有患者或新建患者，进入药物效能评估预测流程</div>
+      </div>
+      <button class="btn btn-blue" onclick="openPatientModal()">新建患者</button>
     </div>
 
     <div class="card">
@@ -953,7 +1929,7 @@ body {
         <div class="page-subtitle">AI智能分析 · 药物适配度评估</div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-outline" onclick="switchPage('page-patient-list', document.querySelector('[data-page=page-patient-list]'))">返回列表</button>
+        <button class="btn btn-outline" onclick="switchPage('page-quant-indicator', document.querySelector('[data-page=page-quant-indicator]'))">返回量化结果</button>
         <button class="btn btn-blue" onclick="generateDrugPlan()">智能生成用药方案</button>
       </div>
     </div>
@@ -966,73 +1942,47 @@ body {
       </div>
     </div>
 
-    <div class="drug-card-grid" id="drugCardGrid"></div>
+    <div class="compact-kpi-grid" id="sensitivityKpiGrid"></div>
+
+    <div class="card">
+      <div class="card-header">个体化影响因素</div>
+      <table class="data-table">
+        <thead><tr><th>因素类型</th><th>当前信息</th><th>对用药判断的影响</th><th>处理建议</th></tr></thead>
+        <tbody id="sensitivityFactorBody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">既往用药与疗效证据</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table sensitivity-compare-table">
+          <thead><tr><th>既往药物</th><th>剂量</th><th>给药途径</th><th>用药周期</th><th>既往效果</th><th>不良反应</th><th>对本次分析的影响</th></tr></thead>
+          <tbody id="medicationEvidenceBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">适配度评分构成</div>
+      <table class="data-table">
+        <thead><tr><th>评分维度</th><th>参考权重</th><th>当前证据</th><th>对适配度的影响</th></tr></thead>
+        <tbody id="sensitivityScoreBody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">药物敏感性与适配度对比</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table sensitivity-compare-table">
+          <thead><tr><th>药物</th><th>敏感度</th><th>综合适配评分</th><th>预测有效率</th><th>预测置信度</th><th>疗效预期</th><th>主要风险</th><th>推荐结论</th></tr></thead>
+          <tbody id="drugComparisonBody"></tbody>
+        </table>
+      </div>
+    </div>
 
     <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn btn-outline" onclick="switchPage('page-patient-list', document.querySelector('[data-page=page-patient-list]'))">返回列表</button>
+      <button class="btn btn-outline" onclick="switchPage('page-quant-indicator', document.querySelector('[data-page=page-quant-indicator]'))">返回量化结果</button>
       <button class="btn btn-blue" onclick="generateDrugPlan()">智能生成用药方案</button>
-    </div>
-  </section>
-
-  <!-- ========== PAGE: 智能匹配生成专属用药方案 ========== -->
-  <section class="page-section" id="page-drug-plan">
-    <div class="page-header">
-      <div>
-        <div class="page-title">(3) 智能匹配生成专属用药方案</div>
-        <div class="page-subtitle">基于AI适配度分析自动生成标准化用药方案</div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-outline" onclick="switchPage('page-drug-sensitivity', document.querySelector('[data-page=page-drug-sensitivity]'))">返回评估</button>
-      </div>
-    </div>
-
-    <div class="patient-summary" id="planPatientSummary">
-      <div class="ps-avatar" id="planAvatar">王</div>
-      <div class="ps-info">
-        <div class="ps-name" id="planName">王建国</div>
-        <div class="ps-detail" id="planDetail">男 | 58岁 | 糖尿病视网膜病变</div>
-      </div>
-    </div>
-
-    <div class="scheme-section">
-      <div class="scheme-section-title">药物信息</div>
-      <div class="form-row">
-        <div class="form-group"><label>推荐药物</label><input type="text" id="planDrug" value="康柏西普" readonly></div>
-        <div class="form-group"><label>药物类别</label><input type="text" value="抗VEGF药物" readonly></div>
-        <div class="form-group"><label>规格</label><input type="text" value="0.5mg/0.05mL" readonly></div>
-        <div class="form-group"><label>生产厂家</label><input type="text" value="成都康弘生物" readonly></div>
-      </div>
-    </div>
-
-    <div class="scheme-section">
-      <div class="scheme-section-title">用量标准</div>
-      <div class="form-row">
-        <div class="form-group"><label>推荐剂量</label><input type="text" value="0.5mg" readonly></div>
-        <div class="form-group"><label>给药途径</label><input type="text" value="玻璃体腔内注射" readonly></div>
-        <div class="form-group"><label>给药频次</label><input type="text" value="每月1次" readonly></div>
-        <div class="form-group"><label>基础疗程</label><input type="text" value="连续3个月，之后根据疗效调整" readonly></div>
-      </div>
-    </div>
-
-    <div class="scheme-section">
-      <div class="scheme-section-title">使用周期与注意事项</div>
-      <div class="form-row">
-        <div class="form-group"><label>开始日期</label><input type="date" value="2026-07-05"></div>
-        <div class="form-group"><label>预计疗程</label><input type="text" value="3-6个月" readonly></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group wide"><label>注意事项</label><textarea readonly>1. 注射后需监测眼压，观察有无感染迹象
-2. 治疗期间定期复查眼底OCT
-3. 如出现视力突然下降应立即就诊</textarea></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group wide"><label>随访建议</label><input type="text" value="每次注射后1周复查，治疗结束后每3个月复查" readonly></div>
-      </div>
-    </div>
-
-    <div class="btn-group" style="justify-content:flex-end;">
-      <button class="btn btn-blue" onclick="savePlan()">保存方案</button>
-      <button class="btn btn-outline" onclick="switchPage('page-plan-optimize', document.querySelector('[data-page=page-plan-optimize]'))">调整优化</button>
     </div>
   </section>
 
@@ -1040,87 +1990,113 @@ body {
   <section class="page-section" id="page-plan-optimize">
     <div class="page-header">
       <div>
-        <div class="page-title">(4) 用药方案调整优化与风险提示</div>
-        <div class="page-subtitle">手动调整用药方案 · 实时风险提示</div>
+        <div class="page-title">(3) 智能匹配生成专属用药方案</div>
+        <div class="page-subtitle">生成推荐、医生确认、方案调整与风险提示</div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-outline" onclick="switchPage('page-drug-plan', document.querySelector('[data-page=page-drug-plan]'))">返回方案</button>
+        <button class="btn btn-outline" onclick="switchPage('page-drug-sensitivity', document.querySelector('[data-page=page-drug-sensitivity]'))">返回评估</button>
       </div>
     </div>
 
+    <div class="patient-summary" id="optimizePatientSummary"></div>
+
     <div class="split-layout">
       <div class="split-left">
-        <div class="scheme-section">
-          <div class="scheme-section-title">药物信息 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>推荐药物</label>
-              <select id="optimizeDrug" onchange="updateRiskPanel()">
-                <option value="康柏西普" selected>康柏西普</option>
-                <option value="雷珠单抗">雷珠单抗</option>
-                <option value="阿柏西普">阿柏西普</option>
-                <option value="贝伐珠单抗">贝伐珠单抗</option>
-                <option value="曲安奈德">曲安奈德</option>
-                <option value="地塞米松植入剂">地塞米松植入剂</option>
-              </select>
-            </div>
-            <div class="form-group"><label>药物类别</label><input type="text" value="抗VEGF药物"></div>
-            <div class="form-group"><label>规格</label><input type="text" value="0.5mg/0.05mL"></div>
-          </div>
-        </div>
+        <div class="scheme-main-card">
+          <div class="scheme-main-title">用药方案</div>
 
-        <div class="scheme-section">
-          <div class="scheme-section-title">用量标准 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
-          <div class="form-row">
-            <div class="form-group"><label>推荐剂量</label><input type="text" value="0.5mg"></div>
-            <div class="form-group"><label>给药途径</label>
-              <select><option selected>玻璃体腔内注射</option><option>口服</option><option>眼用</option></select>
+          <div class="scheme-section">
+            <div class="scheme-section-title">药物信息 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>主推荐药物</label>
+                <select id="optimizeDrug" onchange="applyOptimizeDrugSelection()">
+                </select>
+              </div>
+              <div class="form-group"><label>药物类别</label><input type="text" id="optimizeCategory" value="抗VEGF药物" readonly></div>
+              <div class="form-group"><label>规格</label><input type="text" id="optimizeSpec" value="0.5mg/0.05mL" readonly></div>
+              <div class="form-group"><label>预测有效率</label><input type="text" id="optimizeResponseRate" value="96%" readonly></div>
             </div>
-            <div class="form-group"><label>给药频次</label>
-              <select><option selected>每月1次</option><option>每2周1次</option><option>每2月1次</option></select>
-            </div>
-            <div class="form-group"><label>基础疗程</label><input type="text" value="连续3个月，之后根据疗效调整"></div>
           </div>
-        </div>
 
-        <div class="scheme-section">
-          <div class="scheme-section-title">使用周期与注意事项 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
-          <div class="form-row">
-            <div class="form-group"><label>开始日期</label><input type="date" value="2026-07-05"></div>
-            <div class="form-group"><label>预计疗程</label><input type="text" value="3-6个月"></div>
+          <div class="scheme-section">
+            <div class="scheme-section-title">用量标准 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
+            <div class="form-row">
+              <div class="form-group"><label>推荐剂量</label><input type="text" id="optimizeDose" value="0.5mg"></div>
+              <div class="form-group"><label>给药途径</label>
+                <select id="optimizeRoute"><option selected>玻璃体腔内注射</option><option>口服</option><option>眼用</option></select>
+              </div>
+              <div class="form-group"><label>给药频次</label>
+                <select id="optimizeFrequency"><option selected>每月1次</option><option>每2周1次</option><option>每2月1次</option></select>
+              </div>
+              <div class="form-group"><label>基础疗程</label><input type="text" id="optimizeCourse" value="连续3个月，之后根据疗效调整"></div>
+            </div>
           </div>
-          <div class="form-row">
-            <div class="form-group wide"><label>注意事项</label><textarea>1. 注射后需监测眼压，观察有无感染迹象
+
+          <div class="scheme-section">
+            <div class="scheme-section-title">使用周期与注意事项 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
+            <div class="form-row">
+              <div class="form-group"><label>开始日期</label><input type="date" value="2026-07-05"></div>
+              <div class="form-group"><label>预计疗程</label><input type="text" value="3-6个月"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group wide"><label>注意事项</label><textarea id="optimizeNotice">1. 注射后需监测眼压，观察有无感染迹象
 2. 治疗期间定期复查眼底OCT</textarea></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group wide"><label>随访建议</label><input type="text" id="optimizeFollowup" value="每次注射后1周复查"></div>
+            </div>
           </div>
-          <div class="form-row">
-            <div class="form-group wide"><label>随访建议</label><input type="text" value="每次注射后1周复查"></div>
-          </div>
-        </div>
 
-        <button class="btn btn-outline btn-sm" style="margin-bottom:16px;" onclick="addAlternativePlan()">+ 添加替代方案</button>
-        <div id="alternativePlans"></div>
+          <div class="scheme-section">
+            <div class="scheme-section-title">推荐依据</div>
+            <div class="form-row">
+              <div class="form-group wide"><label>推荐依据</label><textarea id="planBasis" readonly></textarea></div>
+            </div>
+          </div>
+
+          <div class="scheme-section">
+            <div class="scheme-section-title">联合用药条件与策略 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可编辑）</span></div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>是否建议联合用药</label>
+                <select id="optimizeCombinationMode">
+                  <option>暂不联合</option>
+                  <option selected>条件性联合</option>
+                  <option>建议联合</option>
+                </select>
+              </div>
+              <div class="form-group wide"><label>联合用药条件</label><input type="text" id="optimizeCombinationCondition" placeholder="如单药疗效不足、炎症明显、眼压控制不佳"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>联合药物/类别</label><input type="text" id="optimizeCombinationDrug" placeholder="如第二类降眼压药物、短期抗炎辅助用药"></div>
+              <div class="form-group wide"><label>联合策略说明</label><textarea id="optimizeCombination"></textarea></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group wide"><label>联合风险注意</label><input type="text" id="optimizeCombinationRisk" placeholder="说明联合用药后需要关注的不良反应或禁忌"></div>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-top:12px;">联合用药清单</div>
+            <div style="overflow-x:auto;margin-top:12px;">
+              <table class="data-table">
+                <thead><tr><th>药物/类别</th><th>用药角色</th><th>剂量</th><th>途径</th><th>频次</th><th>操作</th></tr></thead>
+                <tbody id="combinationDrugBody"></tbody>
+              </table>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="addCombinationDrugRow()">+ 添加联合药</button>
+          </div>
+
+          <div class="scheme-section">
+            <div class="scheme-section-title">医生自拟替代方案 <span style="font-size:11px;color:var(--text-muted);font-weight:normal;">（可选）</span></div>
+            <button class="btn btn-outline btn-sm" onclick="addAlternativePlan()">+ 添加空白方案</button>
+          </div>
+          <div id="alternativePlans"></div>
+        </div>
       </div>
 
       <div class="split-right">
         <div class="risk-panel" id="riskPanel">
           <div class="risk-title">⚠ 风险提示面板</div>
-          <div class="risk-item">
-            <span class="risk-level risk-level-high">禁忌</span>
-            患者肝功能异常，使用该药物需密切监测肝功能指标
-          </div>
-          <div class="risk-item">
-            <span class="risk-level risk-level-medium">不良反应</span>
-            可能出现眼压升高、结膜下出血、眼内炎等不良反应
-          </div>
-          <div class="risk-item">
-            <span class="risk-level risk-level-medium">注意事项</span>
-            与抗凝药物合用时需谨慎，注射前需停用抗凝药
-          </div>
-          <div class="risk-item">
-            <span class="risk-level risk-level-high">过敏风险</span>
-            患者为过敏体质（青霉素过敏），注射后需观察30分钟
-          </div>
+          <div id="riskItemList"></div>
         </div>
 
         <div class="card" style="margin-top:16px;">
@@ -1128,20 +2104,42 @@ body {
           <table class="compare-table data-table">
             <thead><tr><th>项目</th><th>原推荐方案</th><th>调整后方案</th></tr></thead>
             <tbody>
-              <tr><td>药物</td><td>康柏西普</td><td id="compareDrug">康柏西普</td></tr>
-              <tr><td>剂量</td><td>0.5mg</td><td>0.5mg</td></tr>
-              <tr><td>频次</td><td>每月1次</td><td>每月1次</td></tr>
-              <tr><td>疗程</td><td>3个月</td><td>3个月</td></tr>
+              <tr><td>药物</td><td id="compareOriginDrug">康柏西普</td><td id="compareDrug">康柏西普</td></tr>
+              <tr><td>预测有效率</td><td id="compareOriginResponseRate">96%</td><td id="compareResponseRate">96%</td></tr>
+              <tr><td>剂量</td><td id="compareOriginDose">0.5mg</td><td id="compareDose">0.5mg</td></tr>
+              <tr><td>给药途径</td><td id="compareOriginRoute">玻璃体腔内注射</td><td id="compareRoute">玻璃体腔内注射</td></tr>
+              <tr><td>频次</td><td id="compareOriginFrequency">每月1次</td><td id="compareFrequency">每月1次</td></tr>
+              <tr><td>疗程</td><td id="compareOriginCourse">3个月</td><td id="compareCourse">3个月</td></tr>
+              <tr><td>联合用药</td><td id="compareOriginCombination">条件性联合</td><td id="compareCombination">条件性联合</td></tr>
             </tbody>
           </table>
+        </div>
+        <div class="decision-panel">
+          <div class="scheme-section-title">医生确认</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>采用方式</label>
+              <select id="optimizeDecisionStatus">
+                <option value="确认采用" selected>确认采用</option>
+                <option value="调整后采用">调整后采用</option>
+              </select>
+            </div>
+            <div class="form-group wide">
+              <label>医生意见</label>
+              <input type="text" id="optimizeDecisionNote" placeholder="填写采用依据或调整原因">
+            </div>
+          </div>
+          <div class="decision-status-note" id="decisionStatusMessage">当前方案仅作为临床决策支持，确认方式可后续再调整。</div>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+            <button class="btn btn-blue btn-sm" onclick="confirmPlanDecision()">确认采用方式</button>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="btn-group" style="justify-content:flex-end;margin-top:16px;">
-      <button class="btn btn-blue" onclick="alert('方案已保存！')">保存修改</button>
-      <button class="btn btn-outline" onclick="alert('预览方案：\n药物：' + document.getElementById('optimizeDrug').value + '\n已生成预览')">预览方案</button>
-      <button class="btn btn-success" onclick="alert('方案已存档！')">存档</button>
+      <button class="btn btn-outline" onclick="openPlanPreview()">预览方案</button>
+      <button class="btn btn-success" onclick="saveConfirmedPlanToPatient()">确认并保存方案</button>
     </div>
   </section>
 
@@ -1150,40 +2148,48 @@ body {
     <div class="page-header">
       <div>
         <div class="page-title">影像指标对比研判</div>
-        <div class="page-subtitle">疗效量化与分析 · 初诊/复查影像对比分析</div>
+        <div class="page-subtitle">疗效量化与分析 · 用户上传前后影像进行对比分析</div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-outline">上传初诊影像</button>
-        <button class="btn btn-outline">上传复查影像</button>
+        <button class="btn btn-outline" onclick="reloadPatientImages()">重新分析上传资料</button>
+        <button class="btn btn-blue" onclick="switchPage('page-quant-indicator', document.querySelector('[data-page=page-quant-indicator]'))">生成量化疗效指标</button>
       </div>
     </div>
 
+    <div class="linked-note" id="imageDataNote"></div>
+
     <div class="image-compare">
-      <div class="img-box" id="imgBoxLeft">
-        <div class="upload-icon">📷</div>
-        <div class="placeholder-text">初诊影像</div>
-        <div class="placeholder-text" style="font-size:11px;">暂无影像数据，请上传</div>
-      </div>
-      <div class="img-box" id="imgBoxRight">
-        <div class="upload-icon">📷</div>
-        <div class="placeholder-text">复查影像</div>
-        <div class="placeholder-text" style="font-size:11px;">暂无影像数据，请上传</div>
-      </div>
+      <div class="img-box" id="imgBoxLeft"></div>
+      <div class="img-box" id="imgBoxRight"></div>
     </div>
 
     <div class="card" style="margin-top:16px;">
-      <div class="card-header">关键指标对比</div>
+      <div class="card-header">病灶变化分析</div>
       <table class="data-table">
         <thead>
-          <tr><th>指标名称</th><th>初诊值</th><th>复查值</th><th>变化值</th><th>变化幅度</th><th>判定</th></tr>
+          <tr><th>眼别</th><th>影像区域</th><th>解析指标</th><th>用药前/术前表现</th><th>用药后/术后表现</th><th>变化描述</th><th>异常级别</th></tr>
         </thead>
-        <tbody>
-          <tr><td>视网膜厚度（μm）</td><td>385</td><td>298</td><td class="tag tag-green">-87</td><td>-22.6%</td><td><span class="tag tag-green">好转</span></td></tr>
-          <tr><td>血管迂曲度（°）</td><td>42.5</td><td>35.2</td><td class="tag tag-green">-7.3</td><td>-17.2%</td><td><span class="tag tag-green">好转</span></td></tr>
-          <tr><td>出血面积（mm²）</td><td>12.8</td><td>3.2</td><td class="tag tag-green">-9.6</td><td>-75.0%</td><td><span class="tag tag-green">显著好转</span></td></tr>
-          <tr><td>渗出范围（mm²）</td><td>8.5</td><td>4.1</td><td class="tag tag-green">-4.4</td><td>-51.8%</td><td><span class="tag tag-green">好转</span></td></tr>
-          <tr><td>黄斑中心凹厚度（μm）</td><td>420</td><td>356</td><td class="tag tag-green">-64</td><td>-15.2%</td><td><span class="tag tag-green">好转</span></td></tr>
-        </tbody>
+        <tbody id="lesionChangeBody"></tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">组织恢复情况</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>眼别</th><th>组织区域</th><th>恢复指标</th><th>用药前/术前表现</th><th>用药后/术后表现</th><th>恢复描述</th><th>恢复状态</th></tr>
+        </thead>
+        <tbody id="tissueRecoveryBody"></tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">功能指标评估</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>眼别</th><th>功能指标</th><th>治疗前</th><th>治疗后</th><th>变化值</th><th>改善率</th><th>判定</th></tr>
+        </thead>
+        <tbody id="functionalMetricBody"></tbody>
       </table>
     </div>
   </section>
@@ -1193,83 +2199,43 @@ body {
     <div class="page-header">
       <div>
         <div class="page-title">智能生成量化疗效指标数据</div>
-        <div class="page-subtitle">疗效量化与分析 · 自动数据测算与趋势展示</div>
+        <div class="page-subtitle">疗效量化与分析 · 基于上传资料自动测算与趋势展示</div>
       </div>
-      <select style="padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);font-size:13px;">
-        <option>P0001 王建国</option><option>P0002 李明华</option><option>P0003 张伟强</option>
-      </select>
+      <div class="btn-group">
+        <button class="btn btn-outline" onclick="switchPage('page-img-compare', document.querySelector('[data-page=page-img-compare]'))">返回影像对比</button>
+        <button class="btn btn-blue" onclick="switchPage('page-drug-sensitivity', document.querySelector('[data-page=page-drug-sensitivity]'))">进入药物敏感性分析</button>
+      </div>
+    </div>
+
+    <div class="compact-kpi-grid" id="quantKpiGrid"></div>
+
+    <div class="card">
+      <div class="card-header">科学疗效评估结论</div>
+      <div id="scientificEvalBody"></div>
     </div>
 
     <div class="card">
       <div class="card-header">量化疗效指标清单</div>
       <table class="data-table">
         <thead>
-          <tr><th>指标</th><th>治疗前</th><th>治疗后</th><th>改善幅度</th><th>恢复占比</th><th>判定</th></tr>
+          <tr><th>眼别</th><th>指标</th><th>治疗前</th><th>治疗后</th><th>改善幅度</th><th>恢复占比</th><th>判定</th></tr>
         </thead>
-        <tbody>
-          <tr><td>视网膜厚度</td><td>385μm</td><td>298μm</td><td>-87μm</td><td>68%</td><td><span class="tag tag-green">好转</span></td></tr>
-          <tr><td>血管迂曲度</td><td>42.5°</td><td>35.2°</td><td>-7.3°</td><td>55%</td><td><span class="tag tag-green">好转</span></td></tr>
-          <tr><td>出血面积</td><td>12.8mm²</td><td>3.2mm²</td><td>-9.6mm²</td><td>75%</td><td><span class="tag tag-green">显著好转</span></td></tr>
-          <tr><td>渗出范围</td><td>8.5mm²</td><td>4.1mm²</td><td>-4.4mm²</td><td>52%</td><td><span class="tag tag-green">好转</span></td></tr>
-          <tr><td>黄斑中心凹厚度</td><td>420μm</td><td>356μm</td><td>-64μm</td><td>60%</td><td><span class="tag tag-green">好转</span></td></tr>
-        </tbody>
+        <tbody id="quantMetricBody"></tbody>
       </table>
     </div>
 
     <div class="card">
-      <div class="card-header">疗效趋势曲线</div>
-      <div class="chart-bar-group">
-        <div class="chart-bar">
-          <div class="bar-fill" style="height:150px;background:var(--danger);"></div>
-          <div class="bar-value">385</div>
-          <div class="bar-label">视网膜厚度(初诊)</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar-fill" style="height:115px;background:var(--success);"></div>
-          <div class="bar-value">298</div>
-          <div class="bar-label">视网膜厚度(复查)</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar-fill" style="height:130px;background:var(--danger);"></div>
-          <div class="bar-value">12.8</div>
-          <div class="bar-label">出血面积(初诊)</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar-fill" style="height:40px;background:var(--success);"></div>
-          <div class="bar-value">3.2</div>
-          <div class="bar-label">出血面积(复查)</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar-fill" style="height:140px;background:var(--danger);"></div>
-          <div class="bar-value">42.5</div>
-          <div class="bar-label">血管迂曲度(初诊)</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar-fill" style="height:110px;background:var(--success);"></div>
-          <div class="bar-value">35.2</div>
-          <div class="bar-label">血管迂曲度(复查)</div>
-        </div>
+      <div class="card-header">指标变化柱状图</div>
+      <div class="metric-chart-legend">
+        <span><i class="legend-dot before"></i>治疗前</span>
+        <span><i class="legend-dot after"></i>治疗后</span>
+      </div>
+      <div class="metric-chart-panel" id="quantTrendChart">
+        <canvas class="metric-bar-canvas" id="quantBarChart"></canvas>
       </div>
     </div>
 
-    <div style="display:flex;gap:16px;flex-wrap:wrap;">
-      <div class="card" style="flex:1;min-width:200px;text-align:center;">
-        <div style="font-size:28px;font-weight:700;color:var(--success);">4</div>
-        <div style="font-size:14px;color:var(--text-secondary);">指标好转</div>
-      </div>
-      <div class="card" style="flex:1;min-width:200px;text-align:center;">
-        <div style="font-size:28px;font-weight:700;color:var(--warning);">1</div>
-        <div style="font-size:14px;color:var(--text-secondary);">指标稳定</div>
-      </div>
-      <div class="card" style="flex:1;min-width:200px;text-align:center;">
-        <div style="font-size:28px;font-weight:700;color:var(--danger);">0</div>
-        <div style="font-size:14px;color:var(--text-secondary);">指标进展</div>
-      </div>
-      <div class="card" style="flex:1;min-width:200px;text-align:center;">
-        <div style="font-size:28px;font-weight:700;color:var(--blue-core);">62%</div>
-        <div style="font-size:14px;color:var(--text-secondary);">平均恢复占比</div>
-      </div>
-    </div>
+    <div class="linked-note" id="quantConclusion"></div>
   </section>
 
   <!-- ========== PAGE: 患者随访多元数据管理 ========== -->
@@ -1277,73 +2243,41 @@ body {
     <div class="page-header">
       <div>
         <div class="page-title">患者随访多元数据管理</div>
-        <div class="page-subtitle">动态跟踪与疗效反馈 · 长期随访档案管理</div>
+        <div class="page-subtitle">动态跟踪与疗效反馈 · 读取复查影像和用药结果并回流评估链路</div>
       </div>
-      <button class="btn btn-blue">+ 新增随访记录</button>
+      <button class="btn btn-outline" onclick="syncFollowupFeedback()">同步随访反馈</button>
     </div>
 
     <div class="search-bar">
-      <select style="padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);font-size:13px;">
-        <option>P0001 王建国</option><option>P0002 李明华</option><option>P0003 张伟强</option>
-      </select>
+      <select id="followupPatientSelect" onchange="selectAssessmentPatient(this.value, 'page-followup')"></select>
       <input type="date" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);font-size:13px;" value="2026-01-01">
       <span style="color:var(--text-muted);">至</span>
       <input type="date" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);font-size:13px;" value="2026-07-01">
       <button class="btn btn-outline btn-sm">查询</button>
     </div>
 
+    <div class="patient-summary" id="followupPatientSummary"></div>
+    <div class="linked-note" id="followupFeedbackNote"></div>
+
     <div class="split-layout">
       <div class="split-left" style="flex:3;">
         <div class="card">
           <div class="card-header">随访记录时间线</div>
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="tl-date">2026-06-28</div>
-              <div class="tl-title">第4次随访（注射后1周复查）</div>
-              <div class="tl-desc">眼底OCT：视网膜厚度298μm，出血面积显著减少；视力0.6→0.8</div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-date">2026-05-30</div>
-              <div class="tl-title">第3次随访（第三次注射）</div>
-              <div class="tl-desc">康柏西普第三次玻璃体腔内注射，术后眼压正常</div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-date">2026-04-28</div>
-              <div class="tl-title">第2次随访（注射后1周复查）</div>
-              <div class="tl-desc">眼底OCT：黄斑水肿减轻，视网膜厚度降至342μm</div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-date">2026-04-21</div>
-              <div class="tl-title">第1次随访（首次注射治疗）</div>
-              <div class="tl-desc">康柏西普0.5mg玻璃体腔内注射，术后观察30分钟无异常</div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-date">2026-04-15</div>
-              <div class="tl-title">初诊建档</div>
-              <div class="tl-desc">确诊糖尿病视网膜病变，视网膜厚度385μm，建议抗VEGF治疗</div>
-            </div>
-          </div>
+          <div class="timeline" id="followupTimeline"></div>
         </div>
       </div>
       <div class="split-right" style="flex:5;">
         <div class="card">
-          <div class="card-header">随访详情 - 2026-06-28（第4次随访）</div>
+          <div class="card-header" id="followupDetailTitle">随访详情</div>
           <div class="form-section-title">影像随访数据</div>
           <table class="data-table">
             <thead><tr><th>检查项目</th><th>结果</th><th>参考范围</th><th>判定</th></tr></thead>
-            <tbody>
-              <tr><td>眼底OCT</td><td>视网膜厚度298μm</td><td>200-300μm</td><td><span class="tag tag-green">正常</span></td></tr>
-              <tr><td>眼底照相</td><td>出血面积3.2mm²</td><td>&lt;5mm²</td><td><span class="tag tag-green">显著改善</span></td></tr>
-              <tr><td>视力检查</td><td>右眼0.8</td><td>&ge;0.6</td><td><span class="tag tag-green">好转</span></td></tr>
-              <tr><td>眼压</td><td>16mmHg</td><td>10-21mmHg</td><td><span class="tag tag-green">正常</span></td></tr>
-            </tbody>
+            <tbody id="followupImageBody"></tbody>
           </table>
           <div class="form-section-title" style="margin-top:16px;">用药随访数据</div>
           <table class="data-table">
             <thead><tr><th>药物</th><th>剂量</th><th>途径</th><th>频次</th><th>用药效果</th><th>不良反应</th></tr></thead>
-            <tbody>
-              <tr><td>康柏西普</td><td>0.5mg</td><td>玻璃体腔内注射</td><td>每月1次</td><td><span class="tag tag-green">有效</span></td><td>无</td></tr>
-            </tbody>
+            <tbody id="followupMedicationBody"></tbody>
           </table>
         </div>
       </div>
@@ -1357,24 +2291,26 @@ body {
         <div class="page-title">疗效模型动态更新</div>
         <div class="page-subtitle">动态跟踪与疗效反馈 · 算法模型迭代优化</div>
       </div>
-      <button class="btn btn-blue">运行模型更新</button>
+      <button class="btn btn-blue" onclick="runModelUpdate()">运行模型更新</button>
     </div>
+
+    <div class="linked-note" id="modelFeedbackNote"></div>
 
     <div class="model-cards">
       <div class="model-card">
-        <div class="mc-value">v3.2.1</div>
+        <div class="mc-value" id="modelVersionValue">v3.2.1</div>
         <div class="mc-label">当前模型版本</div>
       </div>
       <div class="model-card">
-        <div class="mc-value">12,856</div>
+        <div class="mc-value" id="modelTrainingValue">12,856</div>
         <div class="mc-label">训练数据量（条）</div>
       </div>
       <div class="model-card">
-        <div class="mc-value">94.2%</div>
+        <div class="mc-value" id="modelAccuracyValue">94.2%</div>
         <div class="mc-label">预测准确率</div>
       </div>
       <div class="model-card">
-        <div class="mc-value">2026-06-30</div>
+        <div class="mc-value" id="modelUpdatedValue">2026-06-30</div>
         <div class="mc-label">最后更新时间</div>
       </div>
     </div>
@@ -1529,11 +2465,11 @@ body {
 </main>
 </div>
 
-<!-- ===== Modal: 新增患者 ===== -->
+<!-- ===== Modal: 上游档案同步预览 ===== -->
 <div class="modal-overlay" id="patientModalOverlay" onclick="closePatientModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <span class="modal-title" id="patientModalTitle">新增患者用药档案</span>
+      <span class="modal-title" id="patientModalTitle">新建患者</span>
       <button class="modal-close" onclick="closePatientModal()">&times;</button>
     </div>
     <div class="modal-body">
@@ -1569,7 +2505,7 @@ body {
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closePatientModal()">取消</button>
-      <button class="btn btn-blue" onclick="savePatient()">保存并进入AI评估</button>
+      <button class="btn btn-blue" onclick="savePatient()">保存</button>
     </div>
   </div>
 </div>
@@ -1584,6 +2520,20 @@ body {
     <div class="modal-body" id="detailModalBody"></div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeDetailModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modal: 用药方案预览 ===== -->
+<div class="modal-overlay" id="planPreviewOverlay" onclick="closePlanPreview(event)">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:760px;">
+    <div class="modal-header">
+      <span class="modal-title">用药方案预览</span>
+      <button class="modal-close" onclick="closePlanPreview()">&times;</button>
+    </div>
+    <div class="modal-body" id="planPreviewBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closePlanPreview()">关闭</button>
     </div>
   </div>
 </div>
@@ -1642,6 +2592,403 @@ let patients = [
   }
 ];
 
+const assessmentProfiles = {
+  P0001: {
+    imageStatus: '术前/术后、用药前/后完整',
+    effectLevel: '显著有效',
+    followupStatus: '已回流4次随访',
+    lastAssessment: '2026-06-28',
+    dataCompleteness: 96,
+    imageNote: '已读取王建国的术前OCT、首次用药前影像、三次注射后复查影像和最近随访结果，本页基于这些上游数据生成疗效评估。',
+    imageFindings: [
+      { region: '黄斑区', item: '黄斑水肿', before: '中心凹明显增厚，囊样暗区可见', after: '水肿范围缩小，中心凹轮廓恢复', change: '水肿明显吸收', severity: '轻度残留', tone: 'yellow' },
+      { region: '后极部视网膜', item: '点片状出血', before: '多发点片状出血灶，边界较散', after: '出血灶数量减少，边界收敛', change: '出血灶显著减少', severity: '低风险', tone: 'green' },
+      { region: '视网膜血管', item: '血管迂曲', before: '血管走行迂曲，局部扩张', after: '迂曲程度下降，管径趋稳', change: '血管形态改善', severity: '轻度异常', tone: 'yellow' },
+      { region: '渗出区域', item: '硬性渗出', before: '黄斑旁可见片状高反射渗出', after: '渗出范围缩小，密度降低', change: '渗出吸收中', severity: '轻度残留', tone: 'yellow' }
+    ],
+    metrics: [
+      { name: '视网膜厚度', unit: 'μm', before: '385', after: '298', change: '-87μm', rate: '-22.6%', recovery: '68%', verdict: '好转', tone: 'green' },
+      { name: '血管迂曲度', unit: '°', before: '42.5', after: '35.2', change: '-7.3°', rate: '-17.2%', recovery: '55%', verdict: '好转', tone: 'green' },
+      { name: '出血面积', unit: 'mm²', before: '12.8', after: '3.2', change: '-9.6mm²', rate: '-75.0%', recovery: '75%', verdict: '显著好转', tone: 'green' },
+      { name: '渗出范围', unit: 'mm²', before: '8.5', after: '4.1', change: '-4.4mm²', rate: '-51.8%', recovery: '52%', verdict: '好转', tone: 'green' },
+      { name: '黄斑中心凹厚度', unit: 'μm', before: '420', after: '356', change: '-64μm', rate: '-15.2%', recovery: '60%', verdict: '好转', tone: 'green' },
+      { name: '最佳矫正视力', unit: '', before: '0.6', after: '0.8', change: '+0.2', rate: '+33.3%', recovery: '67%', verdict: '好转', tone: 'green', category: '功能指标' }
+    ],
+    quant: { improved: 6, stable: 0, progressed: 0, avgRecovery: '63%', score: 92, level: '显著有效', conclusion: '影像结构和最佳矫正视力均有改善，当前药物疗效明确，可继续维持推荐方案并保持眼压监测。' },
+    factors: [
+      { type: '体质/过敏', value: '青霉素过敏', impact: '注射类药物需强化观察', advice: '给药后观察30分钟' },
+      { type: '肝功能', value: '异常', impact: '部分药物代谢风险升高', advice: '避免高风险替代药，复查肝功能' },
+      { type: '既往疗效', value: '雷珠单抗有效', impact: '抗VEGF通路响应较好', advice: '优先同类高响应药物' }
+    ],
+    sensitivity: [
+      { name: '康柏西普', sensitivity: '高', score: 96, conclusion: '强烈推荐', risk: '需常规监测眼压', color: 'green' },
+      { name: '雷珠单抗', sensitivity: '高', score: 92, conclusion: '强烈推荐', risk: '既往有效，可作替代', color: 'green' },
+      { name: '地塞米松植入剂', sensitivity: '中', score: 78, conclusion: '可考虑', risk: '眼压升高风险', color: 'yellow' },
+      { name: '阿柏西普', sensitivity: '中', score: 76, conclusion: '可考虑', risk: '肝功能异常需监测', color: 'yellow' },
+      { name: '曲安奈德', sensitivity: '低', score: 58, conclusion: '谨慎使用', risk: '眼压和代谢风险偏高', color: 'red' },
+      { name: '贝伐珠单抗', sensitivity: '低', score: 45, conclusion: '不推荐', risk: '过敏体质使用风险', color: 'red' }
+    ],
+    plan: {
+      drug: '康柏西普', category: '抗VEGF药物', spec: '0.5mg/0.05mL', responseRate: '96%',
+      dose: '0.5mg', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月，之后根据疗效调整',
+      basis: '视网膜厚度、出血面积和黄斑中心凹厚度均明显改善；既往抗VEGF治疗有效；综合过敏史和肝功能风险后，康柏西普适配度最高。',
+      combination: '眼压升高时联合降眼压药物；若炎症反应明显，由医生评估短期抗炎辅助用药。',
+      notice: '1. 注射后监测眼压，观察感染迹象\n2. 治疗期间定期复查眼底OCT和眼底照相\n3. 肝功能异常期间避免自行叠加全身用药',
+      followup: '每次注射后1周复查，3个月疗程结束后按疗效每1-3个月随访',
+      alternatives: [
+        { drug: '雷珠单抗', condition: '康柏西普不可及时维持抗VEGF治疗连续性', risk: '总体风险低，需关注注射相关反应' },
+        { drug: '阿柏西普', condition: '黄斑水肿控制不足或复发时', risk: '肝功能异常需加强监测' }
+      ],
+      risks: [
+        { level: '高', label: '过敏风险', text: '患者为过敏体质，注射后需观察30分钟。' },
+        { level: '中', label: '不良反应', text: '可能出现眼压升高、结膜下出血、眼内炎等不良反应。' },
+        { level: '中', label: '肝功能', text: '肝功能异常，联合全身用药前需核对肝功能指标。' }
+      ]
+    },
+    followups: [
+      { date: '2026-06-28', title: '第4次随访（注射后1周复查）', desc: '眼底OCT：视网膜厚度298μm，出血面积显著减少；视力0.6→0.8', imageRows: [['眼底OCT', '视网膜厚度298μm', '200-300μm', '正常'], ['眼底照相', '出血面积3.2mm²', '<5mm²', '显著改善'], ['视力检查', '右眼0.8', '≥0.6', '好转'], ['眼压', '16mmHg', '10-21mmHg', '正常']], medRows: [['康柏西普', '0.5mg', '玻璃体腔内注射', '每月1次', '显著有效', '无']] },
+      { date: '2026-05-30', title: '第3次随访（第三次注射）', desc: '康柏西普第三次玻璃体腔内注射，术后眼压正常', imageRows: [['眼底OCT', '视网膜厚度320μm', '200-300μm', '接近正常'], ['眼压', '18mmHg', '10-21mmHg', '正常']], medRows: [['康柏西普', '0.5mg', '玻璃体腔内注射', '每月1次', '有效', '无']] },
+      { date: '2026-04-28', title: '第2次随访（注射后1周复查）', desc: '黄斑水肿减轻，视网膜厚度降至342μm', imageRows: [['眼底OCT', '视网膜厚度342μm', '200-300μm', '改善']], medRows: [['康柏西普', '0.5mg', '玻璃体腔内注射', '每月1次', '有效', '轻度异物感']] }
+    ],
+    modelImpact: '4次随访已进入疗效反馈池，用于更新抗VEGF长期疗效预测和过敏体质风险权重。'
+  },
+  P0002: {
+    imageStatus: '用药前/后完整',
+    effectLevel: '有效',
+    followupStatus: '已回流3次随访',
+    lastAssessment: '2026-06-25',
+    dataCompleteness: 88,
+    imageNote: '已读取青光眼用药前后眼压、视野和眼底结构数据，重点评估长期控压效果。',
+    imageFindings: [
+      { region: '视盘区', item: '杯盘比', before: '杯盘比偏大，边缘尚清', after: '杯盘比基本稳定', change: '结构未见明显进展', severity: '中度异常', tone: 'yellow' },
+      { region: '视神经纤维层', item: 'RNFL厚度', before: '上方纤维层局灶变薄', after: '局灶变薄未扩大', change: '结构稳定', severity: '轻度异常', tone: 'yellow' },
+      { region: '视野检查', item: '鼻侧阶梯', before: '鼻侧缺损区域较明显', after: '缺损范围未扩大', change: '视野进展受控', severity: '低风险', tone: 'green' }
+    ],
+    metrics: [
+      { name: '眼压', unit: 'mmHg', before: '27', after: '18', change: '-9mmHg', rate: '-33.3%', recovery: '82%', verdict: '显著好转', tone: 'green' },
+      { name: '视野缺损指数', unit: '%', before: '18', after: '14', change: '-4%', rate: '-22.2%', recovery: '48%', verdict: '好转', tone: 'green', category: '功能指标' },
+      { name: '杯盘比', unit: '', before: '0.72', after: '0.70', change: '-0.02', rate: '-2.8%', recovery: '20%', verdict: '稳定', tone: 'yellow' }
+    ],
+    quant: { improved: 2, stable: 1, progressed: 0, avgRecovery: '50%', score: 82, level: '有效', conclusion: '眼压控制明显改善，结构指标稳定，建议维持控压治疗并关注肝功能。' },
+    factors: [
+      { type: '肝功能', value: '异常', impact: '全身代谢负担偏高', advice: '优先局部眼用药物' },
+      { type: '当前用药', value: '拉坦前列素', impact: '既往控压有效', advice: '保持用药依从性监测' }
+    ],
+    sensitivity: [
+      { name: '拉坦前列素', sensitivity: '高', score: 93, conclusion: '强烈推荐', risk: '局部刺激反应', color: 'green' },
+      { name: '噻吗洛尔', sensitivity: '中', score: 74, conclusion: '可考虑', risk: '心肺基础病需排查', color: 'yellow' },
+      { name: '曲安奈德', sensitivity: '低', score: 42, conclusion: '不推荐', risk: '升眼压风险', color: 'red' }
+    ],
+    plan: {
+      drug: '拉坦前列素', category: '前列腺素类似物', spec: '0.005%滴眼液', responseRate: '93%',
+      dose: '每眼1滴', route: '眼用', frequency: '每日1次', course: '连续12周后复评眼压和视野',
+      basis: '眼压下降幅度明显，视野指标稳定；肝功能异常时局部用药安全边界更优。',
+      combination: '眼压反弹时可联合β受体阻滞剂，需先排查心肺禁忌。',
+      notice: '1. 每晚固定时间滴眼\n2. 复查眼压和视野\n3. 肝功能异常不作为局部用药禁忌，但需避免自行叠加全身药物',
+      followup: '4周复查眼压，12周复查视野和眼底结构',
+      alternatives: [{ drug: '噻吗洛尔', condition: '单药控压不足时联合', risk: '心肺风险需核对' }],
+      risks: [{ level: '中', label: '肝功能', text: '肝功能异常，避免不必要的全身联合用药。' }, { level: '中', label: '局部反应', text: '可能出现结膜充血、异物感。' }]
+    },
+    followups: [
+      { date: '2026-06-25', title: '第3次随访（控压复查）', desc: '眼压降至18mmHg，视野缺损未进展', imageRows: [['眼压', '18mmHg', '10-21mmHg', '正常'], ['视野检查', '缺损指数14%', '<15%', '稳定']], medRows: [['拉坦前列素', '每眼1滴', '眼用', '每日1次', '有效', '轻度结膜充血']] }
+    ],
+    modelImpact: '青光眼控压结果已回流敏感度模型，提升肝功能异常人群局部用药权重。'
+  }
+};
+
+function buildCommonVisualMetric(patient) {
+  const isPostop = patient.disease.includes('术后');
+  const isGlaucoma = patient.disease.includes('青光眼');
+  return {
+    name: isPostop ? '术后最佳矫正视力' : '最佳矫正视力',
+    unit: '',
+    before: isPostop ? '0.5' : (isGlaucoma ? '0.7' : '0.6'),
+    after: isPostop ? '0.9' : (isGlaucoma ? '0.8' : '0.8'),
+    change: isPostop ? '+0.4' : (isGlaucoma ? '+0.1' : '+0.2'),
+    rate: isPostop ? '+80.0%' : (isGlaucoma ? '+14.3%' : '+33.3%'),
+    recovery: isPostop ? '80%' : (isGlaucoma ? '35%' : '67%'),
+    verdict: '好转',
+    tone: 'green',
+    category: '功能指标',
+    source: '视力/屈光/眼压报告',
+    eye: 'OU双眼'
+  };
+}
+
+function buildCommonPressureMetric(patient) {
+  const isGlaucoma = patient.disease.includes('青光眼');
+  return {
+    name: '非接触眼压',
+    unit: 'mmHg',
+    before: isGlaucoma ? '25' : '16',
+    after: isGlaucoma ? '18' : '15',
+    change: isGlaucoma ? '-7mmHg' : '-1mmHg',
+    rate: isGlaucoma ? '-28.0%' : '-6.3%',
+    recovery: isGlaucoma ? '78%' : '20%',
+    verdict: isGlaucoma ? '好转' : '正常',
+    tone: 'green',
+    category: '功能指标',
+    source: '视力/屈光/眼压报告',
+    eye: 'OD右眼 / OS左眼'
+  };
+}
+
+function buildCommonRefractionMetric(patient) {
+  return {
+    name: '等效球镜SE',
+    unit: 'D',
+    before: patient.age > 60 ? '-0.75' : '-1.50',
+    after: patient.age > 60 ? '-0.63' : '-1.25',
+    change: patient.age > 60 ? '+0.12D' : '+0.25D',
+    rate: patient.age > 60 ? '+16.0%' : '+16.7%',
+    recovery: patient.age > 60 ? '30%' : '42%',
+    verdict: '稳定',
+    tone: 'yellow',
+    category: '功能指标',
+    source: '视力/屈光/眼压报告',
+    eye: 'OD右眼 / OS左眼'
+  };
+}
+
+function ensureFunctionalMetrics(profile, patient) {
+  const metrics = Array.isArray(profile.metrics) ? [...profile.metrics] : [];
+  if (!metrics.some(m => /视力/.test(m.name))) {
+    metrics.push(buildCommonVisualMetric(patient));
+  }
+  if (!metrics.some(m => /眼压/.test(m.name))) {
+    metrics.push(buildCommonPressureMetric(patient));
+  }
+  if (!metrics.some(m => /屈光|球镜|SE/.test(m.name))) {
+    metrics.push(buildCommonRefractionMetric(patient));
+  }
+  return {
+    ...profile,
+    metrics,
+    quant: {
+      ...profile.quant,
+      improved: metrics.filter(m => m.tone === 'green').length,
+      stable: metrics.filter(m => m.tone === 'yellow').length
+    }
+  };
+}
+
+function getAssessmentProfile(patientId) {
+  const knownPatient = patients.find(p => p.id === patientId) || patients[0];
+  if (assessmentProfiles[patientId]) return ensureFunctionalMetrics(assessmentProfiles[patientId], knownPatient);
+  const patient = knownPatient;
+  const isPostop = patient.disease.includes('术后');
+  const isGlaucoma = patient.disease.includes('青光眼');
+  const mainMetric = isGlaucoma ? '眼压' : (isPostop ? '组织恢复评分' : '视网膜厚度');
+  const beforeValue = isGlaucoma ? '25' : (isPostop ? '55' : '360');
+  const afterValue = isGlaucoma ? '19' : (isPostop ? '88' : '310');
+  const unit = isGlaucoma ? 'mmHg' : (isPostop ? '分' : 'μm');
+  const drug = patient.currentMed || (isGlaucoma ? '拉坦前列素' : '康柏西普');
+  return ensureFunctionalMetrics({
+    imageStatus: isPostop ? '术前/术后影像完整' : '用药前/后影像完整',
+    effectLevel: isPostop ? '恢复良好' : '有效',
+    followupStatus: '已回流2次随访',
+    lastAssessment: patient.lastUpdate,
+    dataCompleteness: 82,
+    imageNote: `已读取${patient.name}的${patient.disease}相关影像、既往用药和最近随访摘要，用于生成当前药物效能预测。`,
+    imageFindings: isPostop ? [
+      { region: '手术切口区', item: '切口愈合', before: '切口边缘水肿，局部反光增强', after: '切口边缘平整，水肿基本消退', change: '愈合进度符合预期', severity: '低风险', tone: 'green' },
+      { region: '前房/晶状体区', item: '炎症反应', before: '术后早期轻度炎症信号', after: '炎症信号减弱，透光性改善', change: '炎症受控', severity: '轻度异常', tone: 'yellow' }
+    ] : (isGlaucoma ? [
+      { region: '视盘区', item: '杯盘结构', before: '杯盘比偏大，边缘尚可辨', after: '杯盘结构较前稳定', change: '结构未见明显进展', severity: '中度异常', tone: 'yellow' },
+      { region: '视野检查', item: '缺损区域', before: '局部视野缺损存在', after: '缺损范围未扩大', change: '进展受控', severity: '低风险', tone: 'green' }
+    ] : [
+      { region: '黄斑区', item: '水肿/渗出', before: '黄斑区增厚并伴局部渗出', after: '水肿较前减轻，渗出范围缩小', change: '病灶吸收中', severity: '轻度异常', tone: 'yellow' },
+      { region: '病灶区域', item: '出血/新生血管', before: '病灶边界较散，局部反射异常', after: '病灶边界收敛，异常反射减少', change: '病灶负荷下降', severity: '低风险', tone: 'green' }
+    ]),
+    metrics: [
+      { name: mainMetric, unit, before: beforeValue, after: afterValue, change: isPostop ? '+33分' : `-${Number(beforeValue) - Number(afterValue)}${unit}`, rate: isPostop ? '+60.0%' : '-16.7%', recovery: isPostop ? '72%' : '58%', verdict: isPostop ? '恢复良好' : '好转', tone: 'green' },
+      { name: isGlaucoma ? '视野缺损指数' : '病灶面积', unit: isGlaucoma ? '%' : 'mm²', before: isGlaucoma ? '16' : '9.6', after: isGlaucoma ? '15' : '5.2', change: isGlaucoma ? '-1%' : '-4.4mm²', rate: isGlaucoma ? '-6.3%' : '-45.8%', recovery: isGlaucoma ? '28%' : '54%', verdict: '稳定', tone: 'yellow', ...(isGlaucoma ? { category: '功能指标' } : {}) },
+      ...(!isGlaucoma ? [{
+        name: isPostop ? '术后最佳矫正视力' : '最佳矫正视力',
+        unit: '',
+        before: isPostop ? '0.5' : '0.5',
+        after: isPostop ? '0.9' : '0.7',
+        change: isPostop ? '+0.4' : '+0.2',
+        rate: isPostop ? '+80.0%' : '+40.0%',
+        recovery: isPostop ? '80%' : '60%',
+        verdict: '好转',
+        tone: 'green',
+        category: '功能指标'
+      }] : [])
+    ],
+    quant: { improved: isGlaucoma ? 1 : 2, stable: 1, progressed: 0, avgRecovery: isPostop ? '76%' : (isGlaucoma ? '50%' : '60%'), score: isPostop ? 88 : (isGlaucoma ? 80 : 82), level: isPostop ? '恢复良好' : '有效', conclusion: '上传影像和功能指标整体向好，建议维持当前分析结论并在补充资料后再次修正推荐。' },
+    factors: [
+      { type: '疾病类型', value: patient.disease, impact: '决定主要疗效观察指标', advice: isPostop ? '重点观察组织恢复和炎症控制' : '重点观察影像病灶和功能指标' },
+      { type: '当前用药', value: drug, impact: '作为推荐方案和替代方案基线', advice: '结合随访结果动态调整' }
+    ],
+    sensitivity: [
+      { name: drug, sensitivity: '高', score: 88, conclusion: '推荐', risk: '需随访确认疗效', color: 'green' },
+      { name: isGlaucoma ? '噻吗洛尔' : '雷珠单抗', sensitivity: '中', score: 74, conclusion: '可考虑', risk: '作为替代方案', color: 'yellow' },
+      { name: '曲安奈德', sensitivity: '低', score: 52, conclusion: '谨慎使用', risk: '眼压或代谢风险', color: 'red' }
+    ],
+    plan: {
+      drug, category: isGlaucoma ? '眼压控制药物' : (isPostop ? '术后抗炎/修复辅助用药' : '抗VEGF药物'), spec: isGlaucoma ? '常规眼用规格' : '标准规格', responseRate: '88%',
+      dose: isGlaucoma ? '每眼1滴' : '标准剂量', route: isGlaucoma ? '眼用' : '按医嘱给药', frequency: isGlaucoma ? '每日1次' : '每月1次', course: '连续评估12周后调整',
+      basis: `${patient.disease}核心指标改善，既往用药记录显示${drug}具有可持续疗效，当前风险可控。`,
+      combination: isGlaucoma ? '控压不足时考虑联合第二类降眼压药物。' : '疗效不足时考虑同类替代或短期辅助抗炎方案。',
+      notice: '1. 按计划复查关键影像和功能指标\n2. 出现不适或疗效波动时提前复诊\n3. 方案调整需结合随访结果确认',
+      followup: '4周复查关键指标，12周生成阶段性疗效报告',
+      alternatives: [{ drug: isGlaucoma ? '噻吗洛尔' : '雷珠单抗', condition: '当前方案疗效不足或不可及时', risk: '需核对禁忌和不良反应风险' }],
+      risks: [{ level: '中', label: '确认提示', text: '当前为规则生成推荐，需结合完整病历由医生确认。' }]
+    },
+    followups: [
+      { date: patient.lastUpdate, title: '最近随访反馈', desc: `${mainMetric}由${beforeValue}${unit}变化至${afterValue}${unit}，当前方案判定为${isPostop ? '恢复良好' : '有效'}`, imageRows: [[mainMetric, `${afterValue}${unit}`, '按病种参考范围', isPostop ? '恢复良好' : '好转']], medRows: [[drug, isGlaucoma ? '每眼1滴' : '标准剂量', isGlaucoma ? '眼用' : '按医嘱给药', isGlaucoma ? '每日1次' : '每月1次', '有效', '-']] }
+    ],
+    modelImpact: `${patient.disease}随访结果已进入同病种疗效样本池，用于更新药物适配度和风险阈值。`
+  }, patient);
+}
+
+function getCurrentPatient() {
+  const pid = currentAssessmentPatientId || patients[0].id;
+  return patients.find(x => x.id === pid) || patients[0];
+}
+
+function tagTone(verdict) {
+  if (/显著|好转|有效|正常|强烈|推荐/.test(verdict)) return 'green';
+  if (/稳定|可考虑|谨慎|偏高|接近/.test(verdict)) return 'yellow';
+  return 'red';
+}
+
+function isFunctionalMetric(metric) {
+  return metric && (metric.category === '功能指标' || /视力|视野|视觉|功能|眼压|屈光|球镜|SE/.test(metric.name));
+}
+
+function riskClass(level) {
+  return level === '高' ? 'risk-level-high' : 'risk-level-medium';
+}
+
+function setValue(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function getCheckReports(patient, profile) {
+  if (Array.isArray(profile.checkReports) && profile.checkReports.length) return profile.checkReports;
+  const date = profile.lastAssessment || patient.lastUpdate || '2026-08-07';
+  const suffix = String(patient.id || 'P0000').replace(/\D/g, '').padStart(3, '0');
+  return [
+    { type: '门诊病历', no: `DEMO-OP-${suffix}`, date, item: patient.disease, eye: 'OU双眼' },
+    { type: '眼底彩照报告', no: `DEMO-FP-${suffix}`, date, item: '视盘、黄斑、血管与出血灶', eye: 'OD右眼 / OS左眼' },
+    { type: '眼底OCT检查报告', no: `DEMO-OCT-${suffix}`, date, item: '黄斑OCT双眼、ETDRS分区厚度', eye: 'OD右眼 / OS左眼' },
+    { type: '视力/屈光/眼压报告', no: `DEMO-VA-${suffix}`, date, item: '远近视力、电脑验光、非接触眼压', eye: 'OD右眼 / OS左眼 / OU双眼' }
+  ];
+}
+
+function getCheckSummary(patient, profile) {
+  return getCheckReports(patient, profile).map(r => r.type.replace('报告', '')).join('、');
+}
+
+function getPatientAssessmentStatus(profile) {
+  if (!profile) return { text: '未评估', tone: 'yellow' };
+  if ((profile.dataCompleteness || 0) < 80) return { text: '待补充资料', tone: 'red' };
+  if (profile.lastAssessment) return { text: '已评估', tone: 'green' };
+  return { text: '可评估', tone: 'blue' };
+}
+
+function getFindingSource(item) {
+  const text = `${item.region || ''}${item.item || ''}${item.change || ''}`;
+  if (/OCT|黄斑|中心凹|RNFL|视网膜厚度|纤维层|结构/.test(text)) return '眼底OCT检查报告';
+  if (/视力|屈光|眼压|视野/.test(text)) return '视力/屈光/眼压报告';
+  return '眼底彩照报告';
+}
+
+function getMetricSource(metric) {
+  const text = `${metric.name || ''}${metric.category || ''}`;
+  if (isFunctionalMetric(metric) || /眼压|视野|屈光|裸眼|矫正/.test(text)) return '视力/屈光/眼压报告';
+  if (/OCT|黄斑|中心凹|视网膜厚度|RNFL|体积/.test(text)) return '眼底OCT检查报告';
+  return '眼底彩照报告';
+}
+
+function getEyeLabel(item, fallback = 'OD右眼 / OS左眼') {
+  if (item.eye) return item.eye;
+  const text = `${item.region || ''}${item.item || ''}${item.name || ''}`;
+  if (/右眼|OD/.test(text)) return 'OD右眼';
+  if (/左眼|OS/.test(text)) return 'OS左眼';
+  if (/双眼|OU/.test(text)) return 'OU双眼';
+  return fallback;
+}
+
+function renderPatientSummary(containerId, patient, profile, extraText = '') {
+  const el = document.getElementById(containerId);
+  if (!el || !patient) return;
+  el.innerHTML = `
+    <div class="ps-avatar">${patient.name.charAt(0)}</div>
+    <div class="ps-info">
+      <div class="ps-name">${patient.name} <span class="tag tag-blue" style="margin-left:8px;">${profile.effectLevel}</span></div>
+      <div class="ps-detail">${patient.gender} | ${patient.age}岁 | ${patient.disease} | ${patient.constitution || '无特殊体质标签'}${extraText ? ' | ' + extraText : ''}</div>
+    </div>
+  `;
+}
+
+function renderScientificEvaluation(containerId, profile) {
+  const el = document.getElementById(containerId);
+  if (!el || !profile) return;
+  const q = profile.quant;
+  const imageTotal = profile.imageFindings.length || 1;
+  const imageImproved = profile.imageFindings.filter(f => f.tone === 'green').length;
+  const metricTotal = profile.metrics.length || 1;
+  const metricImproved = q.improved || profile.metrics.filter(m => m.tone === 'green').length;
+  const functionalMetrics = profile.metrics.filter(isFunctionalMetric);
+  const functionImproved = functionalMetrics.filter(m => m.tone === 'green').length;
+  const structuralMetrics = profile.metrics.filter(m => !functionalMetrics.includes(m));
+  const structuralImproved = structuralMetrics.filter(m => m.tone === 'green').length;
+  const improvedRate = Math.round((metricImproved / metricTotal) * 100);
+  const confidence = Math.min(96, Math.round((profile.dataCompleteness || 90) * 0.45 + q.score * 0.45 + improvedRate * 0.1));
+  const basisRows = [
+    { name: '影像证据', detail: `${imageImproved}/${imageTotal}项病灶解析改善`, weight: '40%' },
+    { name: '结构量化', detail: `${structuralImproved}/${structuralMetrics.length || 1}项指标改善，平均恢复占比${q.avgRecovery}`, weight: '25%' },
+    { name: '功能指标', detail: functionalMetrics.length ? `${functionImproved}/${functionalMetrics.length}项功能指标改善` : '随访功能指标待回流', weight: '20%' },
+    { name: '用药反应', detail: `${profile.plan.drug}预测有效率${profile.plan.responseRate}`, weight: '15%' }
+  ];
+
+  el.innerHTML = `
+    <div class="evaluation-grid">
+      <div class="evaluation-score">
+        <div class="score-value">${q.score}/100</div>
+        <div class="score-label">综合疗效评分</div>
+        <div style="margin-top:12px;">
+          <span class="tag tag-${tagTone(q.level)}">${q.level}</span>
+          <span class="tag tag-blue" style="margin-left:8px;">置信度 ${confidence}%</span>
+        </div>
+      </div>
+      <div class="evaluation-basis">
+        ${basisRows.map(row => `
+          <div class="basis-row">
+            <strong>${row.name}</strong>
+            <span>${row.detail}</span>
+            <em>权重${row.weight}</em>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="evaluation-conclusion">
+      系统结论：${q.conclusion} 该判断由影像解析、结构量化、功能指标和个体用药反应共同生成，可作为后续药物敏感性分析和方案推荐的输入依据。
+    </div>
+  `;
+}
+
+function selectAssessmentPatient(patientId, targetPage = 'page-img-compare') {
+  currentAssessmentPatientId = patientId;
+  const item = document.querySelector(`[data-page=${targetPage}]`);
+  switchPage(targetPage, item);
+}
+
+function syncFollowupFeedback() {
+  initFollowupPage();
+  initModelPage();
+  alert('随访影像和用药反馈已回流当前评估链路');
+}
+
 function generatePatientId() {
   const id = 'P' + String(patientIdCounter).padStart(4, '0');
   patientIdCounter++;
@@ -1655,14 +3002,14 @@ function toggleMenuGroup(groupId) {
 }
 
 function switchPage(pageId, el) {
+  const module = chatModuleDefinitions.find(item => item.pageId === pageId);
+  if (!module) return;
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
-  document.querySelectorAll('.submenu-item').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.submenu-item, .chat-menu-item').forEach(s => s.classList.remove('active'));
   if (el) el.classList.add('active');
 
-  // Initialize page if needed
-  if (pageId === 'page-drug-sensitivity') initSensitivityPage();
-  if (pageId === 'page-drug-plan') initPlanPage();
+  renderChatModulePage(module.key);
 
   // Scroll to top
   document.getElementById('mainContent').scrollTop = 0;
@@ -1675,6 +3022,361 @@ function switchTab(tabId, btn) {
   const container = parent.parentElement;
   container.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
+}
+
+const compareImageState = {
+  left: null,
+  right: null
+};
+let compareImagePatientId = null;
+
+function getCompareImageTitle(side, patient) {
+  const isPostop = patient.disease.includes('术后');
+  return side === 'left'
+    ? (isPostop ? '术前影像' : '用药前影像')
+    : (isPostop ? '术后影像' : '用药后影像');
+}
+
+function formatCompareFileSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function renderUserImageBox(side, patient) {
+  const box = document.getElementById(side === 'left' ? 'imgBoxLeft' : 'imgBoxRight');
+  if (!box) return;
+  const title = getCompareImageTitle(side, patient);
+  const image = compareImageState[side];
+  box.className = `img-box${image ? ' user-image-zone' : ' user-upload-zone'}`;
+  box.setAttribute('role', 'button');
+  box.setAttribute('tabindex', '0');
+  box.setAttribute('aria-label', `${title}上传区域`);
+
+  if (!image) {
+    box.innerHTML = `
+      <div class="user-upload-icon">+</div>
+      <div class="user-upload-title">${title}</div>
+      <div class="user-upload-hint">点击或拖拽影像至此区域导入</div>
+      <input class="compare-file-input" type="file" accept="image/*" hidden>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="user-image-card">
+      <div class="user-image-head">
+        <div class="user-image-title">${title}</div>
+        <span class="tag tag-green">已导入</span>
+      </div>
+      <img class="user-image-preview" src="${image.dataUrl}" alt="${title}预览">
+      <div class="user-image-meta">${escapeHtml(image.name)} · ${formatCompareFileSize(image.size)}</div>
+      <div class="user-image-status">点击或拖拽新影像可替换当前文件</div>
+      <input class="compare-file-input" type="file" accept="image/*" hidden>
+    </div>
+  `;
+}
+
+function handleCompareImageFile(side, file) {
+  if (!file) return;
+  if (!file.type || !file.type.startsWith('image/')) {
+    alert('请选择图片文件');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    compareImageState[side] = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      dataUrl: reader.result
+    };
+    renderUserImageBox(side, getCurrentPatient());
+    bindCompareUploadZone(side);
+  };
+  reader.onerror = () => alert('影像读取失败，请重新选择');
+  reader.readAsDataURL(file);
+}
+
+function handleCompareImportKey(event, side) {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  event.preventDefault();
+  const input = document.querySelector(`#${side === 'left' ? 'imgBoxLeft' : 'imgBoxRight'} .compare-file-input`);
+  if (input) input.click();
+}
+
+function bindCompareUploadZone(side) {
+  const box = document.getElementById(side === 'left' ? 'imgBoxLeft' : 'imgBoxRight');
+  if (!box) return;
+  const input = box.querySelector('.compare-file-input');
+  if (!input) return;
+
+  box.onclick = event => {
+    if (event.target === input) return;
+    input.click();
+  };
+  box.onkeydown = event => handleCompareImportKey(event, side);
+  input.onchange = () => handleCompareImageFile(side, input.files && input.files[0]);
+  box.ondragover = event => {
+    event.preventDefault();
+    box.classList.add('dragover');
+  };
+  box.ondragleave = () => box.classList.remove('dragover');
+  box.ondrop = event => {
+    event.preventDefault();
+    box.classList.remove('dragover');
+    handleCompareImageFile(side, event.dataTransfer && event.dataTransfer.files[0]);
+  };
+}
+
+function reloadPatientImages() {
+  initImageComparePage();
+  alert('已基于上传资料重新刷新指标对比结果');
+}
+
+function getImageFindingGroups(profile) {
+  const findings = Array.isArray(profile.imageFindings) ? profile.imageFindings : [];
+  const lesion = findings.filter(f => /水肿|出血|渗出|病灶|炎症|缺损|阶梯|新生血管/.test(`${f.region}${f.item}${f.change}`));
+  const tissue = findings.filter(f => !lesion.includes(f));
+
+  if (!lesion.length) {
+    lesion.push({
+      region: '病灶区域',
+      item: '病灶变化记录',
+      before: '暂无独立病灶记录',
+      after: '等待影像解析',
+      change: '待补充病灶变化',
+      severity: '待评估',
+      tone: 'yellow'
+    });
+  }
+
+  if (!tissue.length) {
+    const metric = profile.metrics.find(m => !isFunctionalMetric(m)) || profile.metrics[0];
+    tissue.push({
+      region: '组织结构',
+      item: metric ? metric.name : '组织恢复指标',
+      before: metric ? `${metric.before}${metric.unit || ''}` : '暂无数据',
+      after: metric ? `${metric.after}${metric.unit || ''}` : '待解析',
+      change: metric && metric.change ? '结构指标变化，恢复趋势已纳入评估' : '待补充组织恢复变化',
+      severity: metric && metric.tone === 'green' ? '恢复良好' : '持续观察',
+      tone: metric && metric.tone ? metric.tone : 'yellow'
+    });
+  }
+
+  return { lesion, tissue };
+}
+
+function renderImageFindingRows(rows) {
+  return rows.map(f => `
+    <tr>
+      <td>${getEyeLabel(f)}</td>
+      <td>${f.region}</td>
+      <td>${f.item}</td>
+      <td>${f.before}</td>
+      <td>${f.after}</td>
+      <td>${f.change}</td>
+      <td><span class="tag tag-${f.tone}">${f.severity}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderFunctionalMetricRows(metrics) {
+  return metrics.length
+    ? metrics.map(m => `
+      <tr>
+        <td>${getEyeLabel(m, 'OU双眼')}</td>
+        <td>${m.name}</td>
+        <td>${m.before}${m.unit}</td>
+        <td>${m.after}${m.unit}</td>
+        <td><span class="change-pill change-green">${m.change}</span></td>
+        <td>${m.rate}</td>
+        <td><span class="tag tag-${m.tone}">${m.verdict}</span></td>
+      </tr>
+    `).join('')
+    : '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">暂无功能指标数据</td></tr>';
+}
+
+const metricPalette = ['#1a73e8', '#7c4dff', '#009688', '#ef6c00', '#d81b60', '#2e7d32'];
+
+function parseMetricNumber(value) {
+  const n = parseFloat(String(value).replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function drawMetricComparison(canvas, metric, idx) {
+  if (typeof window.CanvasRenderingContext2D === 'undefined') return;
+  let ctx = null;
+  try {
+    ctx = canvas.getContext && canvas.getContext('2d');
+  } catch (e) {
+    ctx = null;
+  }
+  if (!ctx) return;
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(260, canvas.clientWidth || 300);
+  const height = 108;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.height = `${height}px`;
+  ctx.scale(dpr, dpr);
+
+  const accent = metricPalette[idx % metricPalette.length];
+  const before = parseMetricNumber(metric.before);
+  const after = parseMetricNumber(metric.after);
+  const maxVal = Math.max(before, after, 1);
+  const minVal = Math.min(before, after, 0);
+  const range = Math.max(maxVal - minVal, 1);
+  const plot = { left: 36, right: width - 24, top: 18, bottom: height - 28 };
+  const valueToY = value => plot.bottom - ((value - minVal) / range) * (plot.bottom - plot.top);
+  const x1 = plot.left;
+  const x2 = plot.right;
+  const y1 = valueToY(before);
+  const y2 = valueToY(after);
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = '#fafcff';
+  ctx.fillRect(0, 0, width, height);
+
+  // grid
+  ctx.strokeStyle = '#edf2f7';
+  ctx.lineWidth = 1;
+  [plot.top, (plot.top + plot.bottom) / 2, plot.bottom].forEach(y => {
+    ctx.beginPath();
+    ctx.moveTo(plot.left, y);
+    ctx.lineTo(plot.right, y);
+    ctx.stroke();
+  });
+
+  // line
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+
+  // area guide
+  ctx.strokeStyle = 'rgba(46, 125, 50, 0.24)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2, plot.bottom);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // points
+  [[x1, y1, accent], [x2, y2, '#2e7d32']].forEach(([x, y, color]) => {
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  });
+
+  // labels
+  ctx.fillStyle = '#334155';
+  ctx.font = '12px PingFang SC, Microsoft YaHei, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`${metric.before}${metric.unit || ''}`, x1, Math.max(14, y1 - 10));
+  ctx.fillText(`${metric.after}${metric.unit || ''}`, x2, Math.max(14, y2 - 10));
+  ctx.fillStyle = '#6b7280';
+  ctx.fillText('治疗前', x1, height - 9);
+  ctx.fillText('治疗后', x2, height - 9);
+
+  // direction mark
+  ctx.fillStyle = '#16a34a';
+  ctx.font = '700 13px PingFang SC, Microsoft YaHei, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(metric.rate, width - 10, 16);
+}
+
+function drawMetricBarChart(canvas, metrics) {
+  if (typeof window.CanvasRenderingContext2D === 'undefined' || !metrics || !metrics.length) return;
+  let ctx = null;
+  try {
+    ctx = canvas.getContext && canvas.getContext('2d');
+  } catch (e) {
+    ctx = null;
+  }
+  if (!ctx) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(760, canvas.clientWidth || metrics.length * 136 + 80);
+  const height = 300;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.height = `${height}px`;
+  ctx.scale(dpr, dpr);
+
+  const plot = { left: 54, right: width - 24, top: 34, bottom: 238 };
+  const plotHeight = plot.bottom - plot.top;
+  const groupWidth = (plot.right - plot.left) / metrics.length;
+  const barWidth = Math.min(34, Math.max(22, groupWidth * 0.22));
+  const gap = Math.max(6, groupWidth * 0.06);
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = '#fafcff';
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px PingFang SC, Microsoft YaHei, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('指标内相对高度（治疗前=各指标原始值）', plot.left, 18);
+
+  ctx.strokeStyle = '#e5edf6';
+  ctx.lineWidth = 1;
+  [0, 0.5, 1].forEach(ratio => {
+    const y = plot.bottom - plotHeight * ratio;
+    ctx.beginPath();
+    ctx.moveTo(plot.left, y);
+    ctx.lineTo(plot.right, y);
+    ctx.stroke();
+    ctx.fillStyle = '#94a3b8';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${Math.round(ratio * 100)}%`, plot.left - 8, y + 4);
+  });
+
+  metrics.forEach((metric, idx) => {
+    const before = parseMetricNumber(metric.before);
+    const after = parseMetricNumber(metric.after);
+    const maxValue = Math.max(before, after, 1);
+    const beforeRatio = before / maxValue;
+    const afterRatio = after / maxValue;
+    const center = plot.left + groupWidth * (idx + 0.5);
+    const beforeX = center - barWidth - gap / 2;
+    const afterX = center + gap / 2;
+    const beforeHeight = plotHeight * beforeRatio;
+    const afterHeight = plotHeight * afterRatio;
+
+    ctx.fillStyle = '#8fb8ef';
+    ctx.fillRect(beforeX, plot.bottom - beforeHeight, barWidth, beforeHeight);
+    ctx.fillStyle = '#1a73e8';
+    ctx.fillRect(afterX, plot.bottom - afterHeight, barWidth, afterHeight);
+
+    ctx.fillStyle = '#334155';
+    ctx.font = '11px PingFang SC, Microsoft YaHei, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${metric.before}${metric.unit || ''}`, beforeX + barWidth / 2, Math.max(28, plot.bottom - beforeHeight - 8));
+    ctx.fillText(`${metric.after}${metric.unit || ''}`, afterX + barWidth / 2, Math.max(28, plot.bottom - afterHeight - 8));
+
+    const label = metric.name.length > 7
+      ? `${metric.name.slice(0, 7)}…`
+      : metric.name;
+    ctx.fillStyle = '#475569';
+    ctx.fillText(label, center, plot.bottom + 22);
+  });
+
+  ctx.strokeStyle = '#b9c7d8';
+  ctx.beginPath();
+  ctx.moveTo(plot.left, plot.top);
+  ctx.lineTo(plot.left, plot.bottom);
+  ctx.lineTo(plot.right, plot.bottom);
+  ctx.stroke();
 }
 
 // ==================== PATIENT TABLE ====================
@@ -1712,11 +3414,11 @@ function renderPatientTable() {
       <td>${p.id}</td>
       <td>${p.name}</td>
       <td>${p.gender}</td>
-      <td>${p.age}</td>
+      <td>${p.age}岁</td>
       <td>${p.disease}</td>
-      <td>${p.constitution || '-'}</td>
+      <td>${p.constitution || '无特殊体质'}</td>
       <td>${p.currentMed || '-'}</td>
-      <td>${p.lastUpdate}</td>
+      <td>${p.lastUpdate || '-'}</td>
       <td>
         <button class="btn btn-outline btn-xs" onclick="viewPatient('${p.id}')">查看</button>
         <button class="btn btn-blue btn-xs" onclick="assessPatient('${p.id}')">评估</button>
@@ -1768,7 +3470,7 @@ function openPatientModal(patientId = null) {
   document.getElementById('patientModalOverlay').classList.add('show');
 
   if (patientId) {
-    document.getElementById('patientModalTitle').textContent = '编辑患者用药档案';
+    document.getElementById('patientModalTitle').textContent = '编辑患者';
     const p = patients.find(x => x.id === patientId);
     if (p) {
       document.getElementById('ptName').value = p.name;
@@ -1783,7 +3485,7 @@ function openPatientModal(patientId = null) {
       tempMedRecords = JSON.parse(JSON.stringify(p.medRecords || []));
     }
   } else {
-    document.getElementById('patientModalTitle').textContent = '新增患者用药档案';
+    document.getElementById('patientModalTitle').textContent = '新建患者';
     ['ptName','ptGender','ptAge','ptDisease','ptAllergy','ptRemark'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ptLiver').value = '正常';
     document.getElementById('ptKidney').value = '正常';
@@ -1898,7 +3600,10 @@ function savePatient() {
 
   if (editingPatientId) {
     const idx = patients.findIndex(p => p.id === editingPatientId);
-    if (idx >= 0) patients[idx] = patientData;
+    if (idx >= 0) {
+      patientData.confirmedDrugPlan = patients[idx].confirmedDrugPlan;
+      patients[idx] = patientData;
+    }
   } else {
     patients.push(patientData);
   }
@@ -1908,22 +3613,19 @@ function savePatient() {
   tempMedRecords = [];
   currentPage = Math.ceil(patients.length / pageSize);
   renderPatientTable();
-
-  // Auto navigate to assessment page
-  if (!editingPatientId) {
-    currentAssessmentPatientId = patientData.id;
-    switchPage('page-drug-sensitivity', document.querySelector('[data-page=page-drug-sensitivity]'));
-  }
 }
 
 // ==================== PATIENT ACTIONS ====================
 function viewPatient(id) {
   const p = patients.find(x => x.id === id);
   if (!p) return;
+  const profile = getAssessmentProfile(id);
+  const confirmedPlan = p.confirmedDrugPlan;
+  const checkReports = getCheckReports(p, profile);
   const body = document.getElementById('detailModalBody');
   body.innerHTML = `
     <div class="form-section">
-      <div class="form-section-title">基础体质信息</div>
+      <div class="form-section-title">患者基本信息</div>
       <table class="data-table"><tbody>
         <tr><td style="font-weight:600;width:120px;">患者ID</td><td>${p.id}</td></tr>
         <tr><td style="font-weight:600;">姓名</td><td>${p.name}</td></tr>
@@ -1937,6 +3639,30 @@ function viewPatient(id) {
         <tr><td style="font-weight:600;">备注</td><td>${p.remark || '-'}</td></tr>
       </tbody></table>
     </div>
+    <div class="form-section">
+      <div class="form-section-title">关联检查资料</div>
+      <table class="data-table">
+        <thead><tr><th>检查类型</th><th>检查号</th><th>检查日期</th><th>检查项目</th><th>眼别</th></tr></thead>
+        <tbody>${checkReports.map(r => `<tr><td>${escapeHtml(r.type)}</td><td>${escapeHtml(r.no)}</td><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.item)}</td><td>${escapeHtml(r.eye)}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+    ${confirmedPlan ? `
+    <div class="form-section">
+      <div class="form-section-title">当前确认用药方案</div>
+      <table class="data-table"><tbody>
+        <tr><td style="font-weight:600;width:120px;">保存时间</td><td>${escapeHtml(confirmedPlan.savedAt || '-')}</td></tr>
+        <tr><td style="font-weight:600;">主推荐药物</td><td>${escapeHtml(confirmedPlan.drug || '-')}</td></tr>
+        <tr><td style="font-weight:600;">推荐剂量</td><td>${escapeHtml(confirmedPlan.dose || '-')}</td></tr>
+        <tr><td style="font-weight:600;">给药途径</td><td>${escapeHtml(confirmedPlan.route || '-')}</td></tr>
+        <tr><td style="font-weight:600;">给药频次</td><td>${escapeHtml(confirmedPlan.frequency || '-')}</td></tr>
+        <tr><td style="font-weight:600;">基础疗程</td><td>${escapeHtml(confirmedPlan.course || '-')}</td></tr>
+        <tr><td style="font-weight:600;">联合用药</td><td>${escapeHtml(formatCombinationSummary(confirmedPlan.combinationDetails || { mode: confirmedPlan.combinationMode, condition: confirmedPlan.combinationCondition, drug: confirmedPlan.combinationDrug }))}</td></tr>
+        <tr><td style="font-weight:600;">用药方案包</td><td>${escapeHtml(formatMedicationPackageSummary(confirmedPlan.medicationPackage || []))}</td></tr>
+        <tr><td style="font-weight:600;">联合策略</td><td>${escapeHtml(confirmedPlan.combination || '-')}</td></tr>
+        <tr><td style="font-weight:600;">联合风险注意</td><td>${escapeHtml(confirmedPlan.combinationRisk || confirmedPlan.combinationDetails?.risk || '-')}</td></tr>
+        <tr><td style="font-weight:600;">采用方式</td><td>${escapeHtml(confirmedPlan.decisionStatus || '-')}；${escapeHtml(confirmedPlan.decisionNote || '未填写医生意见')}</td></tr>
+      </tbody></table>
+    </div>` : ''}
     <div class="form-section">
       <div class="form-section-title">历史用药记录</div>
       ${(p.medRecords && p.medRecords.length > 0) ? `
@@ -1952,102 +3678,1987 @@ function closeDetailModal(e) {
   document.getElementById('detailModalOverlay').classList.remove('show');
 }
 
+function buildPlanBasis(patient, profile, plan) {
+  const imageMetrics = (profile.metrics || [])
+    .filter(m => !isFunctionalMetric(m))
+    .slice(0, 3)
+    .map(m => `${m.name}${m.change || ''}（${m.verdict || '已评估'}）`)
+    .join('；') || '影像指标已完成对比';
+  const functionalMetrics = (profile.metrics || [])
+    .filter(isFunctionalMetric)
+    .slice(0, 2)
+    .map(m => `${m.name}${m.change || ''}（${m.verdict || '已评估'}）`)
+    .join('；') || '暂无单独功能指标';
+  const matched = (profile.sensitivity || []).find(item => item.name === plan.drug);
+  const sensitivity = matched ? `${matched.name}${matched.sensitivity}敏感，适配评分${matched.score}分` : `${plan.drug || '当前药物'}按适配模型推荐`;
+  const factor = (profile.factors || []).slice(0, 2).map(item => `${item.type}：${item.value}`).join('；') || `${patient.constitution || '体质特征'}；${patient.currentMed || '既往用药'}记录`;
+  return `分析来源：影像疗效指标（${imageMetrics}）；功能指标（${functionalMetrics}）；药物敏感性（${sensitivity}）；患者体质/既往用药（${factor}）。\n推荐结论：${plan.basis || '基于当前评估结果生成个体化用药方案。'}`;
+}
+
+function getCombinationDetails(patient, plan) {
+  const disease = patient.disease || '';
+  const category = plan.category || '';
+  const text = plan.combination || '';
+  if (plan.combinationMode || plan.combinationCondition || plan.combinationDrug || plan.combinationRisk) {
+    return {
+      mode: plan.combinationMode || '条件性联合',
+      condition: plan.combinationCondition || '单药疗效不足或出现并发风险时',
+      drug: plan.combinationDrug || '按方案说明选择辅助药物',
+      strategy: text,
+      risk: plan.combinationRisk || '联合前核对禁忌、不良反应和随访指标'
+    };
+  }
+  if (disease.includes('青光眼') || category.includes('前列腺素')) {
+    return {
+      mode: '条件性联合',
+      condition: '眼压控制不足、眼压反弹或视野指标进展时',
+      drug: '第二类降眼压药物',
+      strategy: text || '维持主药控压，达不到目标眼压时再评估联合第二类降眼压药物。',
+      risk: '联合前核对心率、血压、呼吸系统禁忌和局部刺激反应'
+    };
+  }
+  if (disease.includes('术后') || category.includes('术后')) {
+    return {
+      mode: '条件性联合',
+      condition: '术后炎症反应明显、感染风险升高或组织恢复不佳时',
+      drug: '短期抗炎/抗感染或修复辅助用药',
+      strategy: text || '主方案以术后抗炎和组织修复为核心，必要时短期联合抗感染或修复辅助方案。',
+      risk: '关注眼压、感染迹象、局部刺激和伤口恢复情况'
+    };
+  }
+  if (category.includes('糖皮质激素')) {
+    return {
+      mode: '暂不联合',
+      condition: '仅在明确适应证且眼压风险可控时考虑',
+      drug: '暂不建议常规联合',
+      strategy: text || '以单药短期评估为主，避免与高风险方案叠加。',
+      risk: '重点关注眼压升高、感染和代谢相关风险'
+    };
+  }
+  return {
+    mode: '条件性联合',
+    condition: '黄斑水肿控制不足、炎症反应明显或疗效波动时',
+    drug: '短期抗炎辅助用药或同类替代评估',
+    strategy: text || '维持抗VEGF主方案，疗效不足时评估同类替代或短期辅助抗炎方案。',
+    risk: '关注眼压变化、感染迹象、出血和过敏反应'
+  };
+}
+
+function setCombinationDetails(detail) {
+  setValue('optimizeCombinationMode', detail.mode);
+  setValue('optimizeCombinationCondition', detail.condition);
+  setValue('optimizeCombinationDrug', detail.drug);
+  setValue('optimizeCombination', detail.strategy);
+  setValue('optimizeCombinationRisk', detail.risk);
+}
+
+function collectCombinationDetails() {
+  const value = id => document.getElementById(id)?.value || '-';
+  return {
+    mode: value('optimizeCombinationMode'),
+    condition: value('optimizeCombinationCondition'),
+    drug: value('optimizeCombinationDrug'),
+    strategy: value('optimizeCombination'),
+    risk: value('optimizeCombinationRisk')
+  };
+}
+
+function formatCombinationSummary(detail) {
+  if (!detail) return '-';
+  return `${detail.mode || '-'}；${detail.condition || '-'}；${detail.drug || '-'}`;
+}
+
+function getDefaultCombinationDrugList(patient, plan) {
+  const detail = getCombinationDetails(patient, plan);
+  const rows = [{
+    name: plan.drug || '-',
+    role: '主药',
+    dose: plan.dose || '-',
+    route: plan.route || '-',
+    frequency: plan.frequency || '-',
+    condition: '系统主推荐',
+    risk: plan.risk || '按药物风险提示监测'
+  }];
+  if (detail.mode !== '暂不联合') {
+    rows.push({
+      name: detail.drug || '联合用药',
+      role: detail.mode === '建议联合' ? '联合药' : '条件备用',
+      dose: '按医嘱',
+      route: plan.route || '-',
+      frequency: '按疗效评估',
+      condition: detail.condition || '-',
+      risk: detail.risk || '-'
+    });
+  }
+  return rows;
+}
+
+function renderCombinationDrugList(rows) {
+  const body = document.getElementById('combinationDrugBody');
+  if (!body) return;
+  body.innerHTML = (rows || []).map((row, index) => `
+    <tr>
+      <td><input class="combo-name" type="text" value="${escapeHtml(row.name || '')}" oninput="updateRiskPanel()" style="min-width:120px;width:100%;"></td>
+      <td>
+        <select class="combo-role" onchange="updateRiskPanel()" style="min-width:90px;width:100%;">
+          <option ${row.role === '主药' ? 'selected' : ''}>主药</option>
+          <option ${row.role === '联合药' ? 'selected' : ''}>联合药</option>
+          <option ${row.role === '辅助药' ? 'selected' : ''}>辅助药</option>
+          <option ${row.role === '条件备用' ? 'selected' : ''}>条件备用</option>
+        </select>
+      </td>
+      <td><input class="combo-dose" type="text" value="${escapeHtml(row.dose || '')}" oninput="updateRiskPanel()" style="min-width:90px;width:100%;"></td>
+      <td><input class="combo-route" type="text" value="${escapeHtml(row.route || '')}" oninput="updateRiskPanel()" style="min-width:110px;width:100%;"></td>
+      <td><input class="combo-frequency" type="text" value="${escapeHtml(row.frequency || '')}" oninput="updateRiskPanel()" style="min-width:100px;width:100%;"></td>
+      <td>${index === 0 ? '<span style="color:var(--text-muted);font-size:12px;">主药</span>' : '<button class="btn btn-danger btn-xs" onclick="removeCombinationDrugRow(this)">删除</button>'}</td>
+    </tr>
+  `).join('');
+}
+
+function collectCombinationDrugList() {
+  const body = document.getElementById('combinationDrugBody');
+  if (!body) return [];
+  syncPrimaryMedicationRow();
+  return [...body.querySelectorAll('tr')]
+    .map(row => ({
+      name: row.querySelector('.combo-name')?.value.trim() || '',
+      role: row.querySelector('.combo-role')?.value || '',
+      dose: row.querySelector('.combo-dose')?.value.trim() || '',
+      route: row.querySelector('.combo-route')?.value.trim() || '',
+      frequency: row.querySelector('.combo-frequency')?.value.trim() || ''
+    }))
+    .filter(item => Object.values(item).some(Boolean));
+}
+
+function syncPrimaryMedicationRow() {
+  const body = document.getElementById('combinationDrugBody');
+  const first = body?.querySelector('tr');
+  if (!first) return;
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const drug = document.getElementById('optimizeDrug')?.value || profile.plan.drug;
+  const selected = (profile.sensitivity || []).find(item => item.name === drug);
+  const values = {
+    '.combo-name': drug,
+    '.combo-dose': document.getElementById('optimizeDose')?.value || '-',
+    '.combo-route': document.getElementById('optimizeRoute')?.value || '-',
+    '.combo-frequency': document.getElementById('optimizeFrequency')?.value || '-'
+  };
+  Object.entries(values).forEach(([selector, value]) => {
+    const el = first.querySelector(selector);
+    if (el) el.value = value;
+  });
+  const role = first.querySelector('.combo-role');
+  if (role) role.value = '主药';
+}
+
+function addCombinationDrugRow(data = {}) {
+  const rows = collectCombinationDrugList();
+  rows.push({
+    name: data.name || '',
+    role: data.role || '联合药',
+    dose: data.dose || '',
+    route: data.route || '',
+    frequency: data.frequency || ''
+  });
+  renderCombinationDrugList(rows);
+  updateRiskPanel();
+}
+
+function removeCombinationDrugRow(btn) {
+  btn?.closest('tr')?.remove();
+  updateRiskPanel();
+}
+
+function formatMedicationPackageSummary(rows) {
+  const list = rows || [];
+  if (!list.length) return '-';
+  return list.map(item => `${item.role || '用药'}：${item.name || '-'}（${item.dose || '-'}，${item.frequency || '-'}）`).join('；');
+}
+
+function getDrugSelectionTemplate(patient, profile, drugName) {
+  const matched = (profile.sensitivity || []).find(item => item.name === drugName);
+  if (drugName === profile.plan.drug) {
+    return {
+      ...profile.plan,
+      responseRate: profile.plan.responseRate || (matched ? `${matched.score}%` : '-'),
+      risk: matched?.risk || ''
+    };
+  }
+
+  const isGlaucoma = patient.disease.includes('青光眼');
+  const isPostop = patient.disease.includes('术后');
+  const templates = {
+    康柏西普: { category: '抗VEGF药物', spec: '0.5mg/0.05mL', dose: '0.5mg', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月后复评', combination: '疗效不足时考虑同类替代，必要时由医生评估联合辅助治疗。', notice: '注射后监测眼压，观察感染和眼内炎表现。', followup: '注射后1周复查，之后按疗效每1-3个月复查' },
+    雷珠单抗: { category: '抗VEGF药物', spec: '0.5mg/0.05mL', dose: '0.5mg', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月后复评', combination: '疗效不足时评估同类药物转换，不建议自行叠加全身用药。', notice: '注射后监测眼压、感染迹象及短暂视力波动。', followup: '注射后1周复查，按影像指标调整频次' },
+    阿柏西普: { category: '抗VEGF药物', spec: '2mg/0.05mL', dose: '2mg', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月后复评', combination: '黄斑水肿控制不足时评估转换或短期辅助方案。', notice: '关注注射相关反应和肝功能异常患者的复查结果。', followup: '注射后1周复查，疗效不足时提前复诊' },
+    贝伐珠单抗: { category: '抗VEGF药物', spec: '按院内规格', dose: '按医嘱给药', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月后复评', combination: '不建议与同类抗VEGF药物自行联合。', notice: '重点监测过敏反应、眼压变化和感染迹象。', followup: '首次用药后加强观察，按影像和功能指标复查' },
+    地塞米松植入剂: { category: '糖皮质激素类', spec: '按院内规格', dose: '按医嘱给药', route: '眼内植入', frequency: '按疗效评估', course: '单次给药后按随访结果复评', combination: '与抗VEGF联合前需由医生评估眼压和炎症控制目标。', notice: '重点监测眼压升高、白内障进展和感染风险。', followup: '给药后1-2周复查眼压和眼底情况' },
+    曲安奈德: { category: '糖皮质激素类', spec: '按院内规格', dose: '按医嘱给药', route: '眼内注射', frequency: '按疗效评估', course: '单次给药后按随访结果复评', combination: '仅在明确适应证下考虑辅助使用，避免与高风险方案叠加。', notice: '重点监测眼压、感染和代谢相关风险。', followup: '给药后1周及4周复查眼压和眼底' },
+    拉坦前列素: { category: '前列腺素类似物', spec: '0.005%滴眼液', dose: '每眼1滴', route: '眼用', frequency: '每日1次', course: '连续12周后复评眼压和视野', combination: '控压不足时可联合第二类降眼压药物，需先排查心肺禁忌。', notice: '固定时间滴眼，关注结膜充血、异物感和眼压变化。', followup: '4周复查眼压，12周复查视野和眼底结构' },
+    噻吗洛尔: { category: 'β受体阻滞剂', spec: '按院内规格', dose: '每眼1滴', route: '眼用', frequency: '每日1-2次', course: '连续4-12周后复评', combination: '与其他降眼压药联合前需核对心率、血压和呼吸系统禁忌。', notice: '关注心率下降、低血压、支气管痉挛和局部刺激。', followup: '2-4周复查眼压、心率和耐受性' }
+  };
+  const fallback = isGlaucoma
+    ? templates.拉坦前列素
+    : (isPostop
+      ? { category: '术后抗炎/修复辅助用药', spec: '按院内规格', dose: '按医嘱给药', route: '眼用', frequency: '每日1-4次', course: '连续2-4周后复评', combination: '炎症控制不足时由医生评估联合修复或抗感染方案。', notice: '关注眼压、感染迹象和局部刺激反应。', followup: '术后1周复查，按恢复情况调整频次' }
+      : templates.康柏西普);
+  return {
+    ...fallback,
+    ...(templates[drugName] || {}),
+    drug: drugName,
+    responseRate: matched ? `${matched.score}%` : profile.plan.responseRate,
+    risk: matched?.risk || '需核对禁忌、不良反应和适配度'
+  };
+}
+
+function renderOptimizeDrugOptions(profile) {
+  const select = document.getElementById('optimizeDrug');
+  if (!select) return;
+  const options = profile.sensitivity?.length
+    ? profile.sensitivity
+    : [{ name: profile.plan.drug, sensitivity: '待评估', score: '-' }];
+  select.innerHTML = options.map(item => `
+    <option value="${escapeHtml(String(item.name))}">${escapeHtml(String(item.name))} · ${escapeHtml(String(item.sensitivity))}敏感 · ${escapeHtml(String(item.score))}分</option>
+  `).join('');
+}
+
+function getRiskMeta(label) {
+  const meta = {
+    '过敏风险': { probability: '重点关注', trigger: '既往过敏史或给药后出现全身反应', action: '给药后加强观察，出现严重反应立即停药并就医' },
+    '不良反应': { probability: '常规监测', trigger: '眼压变化、出血、感染或视力突变', action: '按随访计划复查，异常时提前复诊' },
+    '肝功能': { probability: '重点核对', trigger: '肝功能异常或计划联合全身用药', action: '复查肝功能，避免自行叠加全身药物' },
+    '局部反应': { probability: '常见轻度', trigger: '结膜充血、异物感等局部不适', action: '观察症状变化，持续或加重时复诊' },
+    '药物特异风险': { probability: '按药物评估', trigger: '当前候选药物的已知风险', action: '结合患者禁忌和既往反应由医生确认' },
+    '联合用药风险': { probability: '重点关注', trigger: '启用条件性联合或建议联合用药', action: '核对联合禁忌、不良反应和随访观察指标' },
+    '多药组合风险': { probability: '重点关注', trigger: '方案包含主药以外的联合药、辅助药或条件备用药', action: '核对用药叠加风险、相互影响和停用条件' },
+    '替代方案核对': { probability: '重点核对', trigger: '更换原推荐药物或调整用量', action: '核对适应证、禁忌、不良反应和费用可及性' },
+    '确认提示': { probability: '需确认', trigger: '系统基于当前规则生成初始推荐', action: '结合完整病历、检查资料和患者意愿确认方案' },
+    '疗效确认': { probability: '持续观察', trigger: '方案调整后等待新的影像和功能指标反馈', action: '按随访计划观察疗效变化并更新方案' }
+  };
+  return meta[label] || { probability: '需关注', trigger: '疗效或耐受性出现变化', action: '结合随访结果调整处理建议' };
+}
+
+function renderOptimizeRisks(patient, profile, drugName) {
+  const riskList = document.getElementById('riskItemList');
+  if (!riskList) return;
+  const selected = (profile.sensitivity || []).find(item => item.name === drugName);
+  const risks = [];
+  if (selected?.risk) {
+    risks.push({ level: selected.color === 'red' ? '高' : (selected.color === 'yellow' ? '中' : '低'), label: '药物特异风险', text: selected.risk });
+  }
+  (profile.plan.risks || []).forEach(risk => risks.push(risk));
+  if (drugName !== profile.plan.drug) {
+    risks.push({ level: '中', label: '替代方案核对', text: `已从${profile.plan.drug}调整为${drugName}，需重新核对适配度和禁忌。` });
+  }
+  const combination = collectCombinationDetails();
+  const packageDrugs = collectCombinationDrugList().filter(item => item.role !== '主药');
+  if (packageDrugs.length && combination.risk && combination.risk !== '-') {
+    risks.push({ level: '中', label: '多药组合风险', text: `${packageDrugs.map(item => item.name || item.role).join('、')}：${combination.risk}` });
+  } else if (combination.mode !== '暂不联合' && combination.risk && combination.risk !== '-') {
+    risks.push({ level: '中', label: '联合用药风险', text: combination.risk });
+  }
+  if (!risks.length) risks.push({ level: '中', label: '疗效确认', text: '调整后需结合影像和功能指标确认疗效。' });
+  riskList.innerHTML = risks.map(risk => {
+    const meta = getRiskMeta(risk.label);
+    return `
+      <div class="risk-item">
+        <span class="risk-level ${riskClass(risk.level)}">${escapeHtml(risk.label)}</span>
+        ${escapeHtml(risk.text)}
+        <div class="risk-detail">
+          <span>触发条件：${escapeHtml(meta.trigger)}</span><span>${escapeHtml(meta.probability)}</span>
+          <span>处理建议：${escapeHtml(meta.action)}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function collectAlternativePlans() {
+  const container = document.getElementById('alternativePlans');
+  if (!container) return [];
+  return [...container.querySelectorAll('.alternative-plan-item')]
+    .map(item => ({
+      drug: item.querySelector('.alternative-drug')?.value.trim() || '',
+      dose: item.querySelector('.alternative-dose')?.value.trim() || '',
+      route: item.querySelector('.alternative-route')?.value.trim() || '',
+      frequency: item.querySelector('.alternative-frequency')?.value.trim() || '',
+      condition: item.querySelector('.alternative-condition')?.value.trim() || '',
+      risk: item.querySelector('.alternative-risk')?.value.trim() || ''
+    }))
+    .filter(item => Object.values(item).some(Boolean));
+}
+
+function renderRiskSummary() {
+  const riskList = document.getElementById('riskItemList');
+  return riskList?.innerText?.trim() || '暂无额外风险提示';
+}
+
+function getProfileRiskSummary(profile) {
+  const risks = profile?.plan?.risks || [];
+  return risks.length
+    ? risks.map(r => `${r.label}：${r.text}`).join('\n')
+    : '暂无额外风险提示';
+}
+
+function confirmPlanDecision() {
+  const status = document.getElementById('optimizeDecisionStatus')?.value || '确认采用';
+  const note = document.getElementById('optimizeDecisionNote')?.value.trim() || '未填写医生意见';
+  setText('decisionStatusMessage', `${status}：${note}；当前内容仍保留在页面中，可继续调整。`);
+}
+
+function collectCurrentPlanForPatient() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const value = id => document.getElementById(id)?.value || '-';
+  const currentRiskSummary = renderRiskSummary();
+  const combinationDetails = collectCombinationDetails();
+  const medicationPackage = collectCombinationDrugList();
+  return {
+    patientId: p.id,
+    savedAt: new Date().toLocaleString('zh-CN', { hour12: false }),
+    drug: value('optimizeDrug'),
+    category: value('optimizeCategory'),
+    spec: value('optimizeSpec'),
+    responseRate: value('optimizeResponseRate'),
+    dose: value('optimizeDose'),
+    route: value('optimizeRoute'),
+    frequency: value('optimizeFrequency'),
+    course: value('optimizeCourse'),
+    basis: document.getElementById('planBasis')?.value || profile.plan.basis,
+    combinationMode: combinationDetails.mode,
+    combinationCondition: combinationDetails.condition,
+    combinationDrug: combinationDetails.drug,
+    combination: combinationDetails.strategy,
+    combinationRisk: combinationDetails.risk,
+    combinationDetails,
+    medicationPackage,
+    alternatives: collectAlternativePlans(),
+    notice: value('optimizeNotice'),
+    followup: value('optimizeFollowup'),
+    riskSummary: currentRiskSummary === '暂无额外风险提示' ? getProfileRiskSummary(profile) : currentRiskSummary,
+    decisionStatus: value('optimizeDecisionStatus'),
+    decisionNote: document.getElementById('optimizeDecisionNote')?.value.trim() || '未填写医生意见'
+  };
+}
+
+function saveConfirmedPlanToPatient() {
+  const p = getCurrentPatient();
+  const plan = collectCurrentPlanForPatient();
+  p.confirmedDrugPlan = plan;
+  p.currentMed = plan.drug;
+  p.lastUpdate = new Date().toISOString().slice(0, 10);
+  renderPatientTable();
+  setText('decisionStatusMessage', `${plan.decisionStatus}：${plan.decisionNote}；方案已保存至患者档案。`);
+}
+
+function openPlanPreview() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const value = id => document.getElementById(id)?.value || '-';
+  const alternatives = collectAlternativePlans();
+  const decisionStatus = value('optimizeDecisionStatus');
+  const decisionNote = value('optimizeDecisionNote');
+  const basis = document.getElementById('planBasis')?.value || profile.plan.basis;
+  const combinationDetails = collectCombinationDetails();
+  const medicationPackage = collectCombinationDrugList();
+  const body = document.getElementById('planPreviewBody');
+  const overlay = document.getElementById('planPreviewOverlay');
+  if (!body || !overlay) return;
+
+  body.innerHTML = `
+    <div class="form-section">
+      <div class="form-section-title">患者与方案</div>
+      <table class="data-table">
+        <tbody>
+          <tr><td style="font-weight:600;width:130px;">患者</td><td>${escapeHtml(p.name)}（${escapeHtml(p.id)}）</td></tr>
+          <tr><td style="font-weight:600;">疾病类型</td><td>${escapeHtml(p.disease)}</td></tr>
+          <tr><td style="font-weight:600;">主推荐药物</td><td>${escapeHtml(value('optimizeDrug'))}</td></tr>
+          <tr><td style="font-weight:600;">药物类别</td><td>${escapeHtml(value('optimizeCategory'))}</td></tr>
+          <tr><td style="font-weight:600;">规格</td><td>${escapeHtml(value('optimizeSpec'))}</td></tr>
+          <tr><td style="font-weight:600;">预测有效率</td><td>${escapeHtml(value('optimizeResponseRate'))}</td></tr>
+          <tr><td style="font-weight:600;">推荐剂量</td><td>${escapeHtml(value('optimizeDose'))}</td></tr>
+          <tr><td style="font-weight:600;">给药途径</td><td>${escapeHtml(value('optimizeRoute'))}</td></tr>
+          <tr><td style="font-weight:600;">给药频次</td><td>${escapeHtml(value('optimizeFrequency'))}</td></tr>
+          <tr><td style="font-weight:600;">基础疗程</td><td>${escapeHtml(value('optimizeCourse'))}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">推荐依据与用药策略</div>
+      <div style="padding:12px 14px;background:#f8fbff;border:1px solid #d6e6fb;border-radius:var(--radius-sm);white-space:pre-line;line-height:1.8;"><strong>推荐依据：</strong>${escapeHtml(basis)}</div>
+      <table class="data-table" style="margin-top:12px;">
+        <tbody>
+          <tr><td style="font-weight:600;width:130px;">是否联合</td><td>${escapeHtml(combinationDetails.mode)}</td></tr>
+          <tr><td style="font-weight:600;">联合条件</td><td>${escapeHtml(combinationDetails.condition)}</td></tr>
+          <tr><td style="font-weight:600;">联合药物/类别</td><td>${escapeHtml(combinationDetails.drug)}</td></tr>
+          <tr><td style="font-weight:600;">策略说明</td><td>${escapeHtml(combinationDetails.strategy)}</td></tr>
+          <tr><td style="font-weight:600;">风险注意</td><td>${escapeHtml(combinationDetails.risk)}</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table" style="margin-top:12px;">
+        <thead><tr><th>药物/类别</th><th>角色</th><th>剂量</th><th>途径</th><th>频次</th></tr></thead>
+        <tbody>${medicationPackage.map(item => `<tr><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.role)}</td><td>${escapeHtml(item.dose)}</td><td>${escapeHtml(item.route)}</td><td>${escapeHtml(item.frequency)}</td></tr>`).join('')}</tbody>
+      </table>
+      ${alternatives.length ? `
+        <table class="data-table" style="margin-top:12px;">
+          <thead><tr><th>替代药物</th><th>剂量</th><th>途径</th><th>频次</th><th>适用条件</th><th>风险提示</th></tr></thead>
+          <tbody>${alternatives.map(item => `<tr><td>${escapeHtml(item.drug)}</td><td>${escapeHtml(item.dose)}</td><td>${escapeHtml(item.route)}</td><td>${escapeHtml(item.frequency)}</td><td>${escapeHtml(item.condition)}</td><td>${escapeHtml(item.risk)}</td></tr>`).join('')}</tbody>
+        </table>
+      ` : '<div style="margin-top:10px;color:var(--text-muted);font-size:13px;">暂无额外替代方案</div>'}
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">注意事项与随访</div>
+      <div style="padding:12px 14px;background:#f8fbff;border:1px solid #d6e6fb;border-radius:var(--radius-sm);white-space:pre-line;line-height:1.8;">${escapeHtml(value('optimizeNotice'))}</div>
+      <div style="margin-top:10px;color:var(--text-secondary);font-size:13px;"><strong>随访建议：</strong>${escapeHtml(value('optimizeFollowup'))}</div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">风险提示与医生确认</div>
+      <div style="padding:12px 14px;background:#fff8f8;border:1px solid #ffd6d6;border-radius:var(--radius-sm);white-space:pre-line;line-height:1.8;">${escapeHtml(renderRiskSummary())}</div>
+      <div style="margin-top:10px;color:var(--text-secondary);font-size:13px;"><strong>采用方式：</strong>${escapeHtml(decisionStatus)}；<strong>医生意见：</strong>${escapeHtml(decisionNote)}</div>
+    </div>
+  `;
+  overlay.classList.add('show');
+}
+
+function closePlanPreview(e) {
+  if (e && e.target !== document.getElementById('planPreviewOverlay')) return;
+  document.getElementById('planPreviewOverlay').classList.remove('show');
+}
+
 function editPatient(id) {
   openPatientModal(id);
 }
 
-let currentAssessmentPatientId = null;
+const chatAnalysisModules = [
+  {
+    key: 'efficacy',
+    pageId: 'page-chat-efficacy',
+    streamId: 'chatStream-efficacy',
+    inputId: 'chatInput-efficacy',
+    uploadId: 'chatUpload-efficacy',
+    title: '疗效量化与分析',
+    action: '分析疗效',
+    desc: '对比手术前后及用药前后的医学影像，输出病灶变化、组织恢复和功能指标。',
+    prompt: '把术前、术后或用药前后的影像要点直接发给我。',
+    chips: ['患者做过手术', '上传术前术后影像', '分析病灶变化', '生成疗效结论'],
+    placeholder: '例如：患者做过手术，术前OCT提示黄斑水肿，术后视网膜厚度下降。'
+  },
+  {
+    key: 'sensitivity',
+    pageId: 'page-chat-sensitivity',
+    streamId: 'chatStream-sensitivity',
+    inputId: 'chatInput-sensitivity',
+    uploadId: 'chatUpload-sensitivity',
+    title: '药物敏感性分析',
+    action: '评估敏感性',
+    desc: '结合体质特征、既往用药历史和影像疗效，预测药物敏感性、适配度和潜在风险。',
+    prompt: '把体质、过敏史和既往用药记录直接发给我。',
+    chips: ['补充过敏史', '补充既往用药', '说明不良反应', '评估敏感度'],
+    placeholder: '例如：青霉素过敏，既往用雷珠单抗部分有效，肝功能异常。'
+  },
+  {
+    key: 'optimize',
+    pageId: 'page-chat-optimize',
+    streamId: 'chatStream-optimize',
+    inputId: 'chatInput-optimize',
+    uploadId: 'chatUpload-optimize',
+    title: '用药优化与推荐',
+    action: '生成用药建议',
+    desc: '基于分析结果推荐药物种类、剂量调整、联合用药策略，并提示不良反应。',
+    prompt: '把你想让 AI 推荐或调整的用药思路直接发给我。',
+    chips: ['生成推荐方案', '调整剂量频次', '考虑联合用药', '提示风险注意'],
+    placeholder: '例如：当前用药效果一般，想看看是否需要调整药物、剂量或联合方案。'
+  },
+  {
+    key: 'followup',
+    pageId: 'page-chat-followup',
+    streamId: 'chatStream-followup',
+    inputId: 'chatInput-followup',
+    uploadId: 'chatUpload-followup',
+    title: '动态跟踪与反馈',
+    action: '更新随访',
+    desc: '读取长期随访影像和用药反馈，回流疗效评估模型，持续修正个体化方案。',
+    prompt: '把随访变化、复查结果和用药反馈直接发给我。',
+    chips: ['上传随访结果', '更新复查影像', '反馈疗效变化', '回流模型更新'],
+    placeholder: '例如：第3次随访眼压降至18mmHg，视力提升，患者诉轻度刺激感。'
+  }
+];
+const chatModuleState = {};
+const sharedCaseJournal = {
+  messages: [],
+  uploads: []
+};
+let manualChatState = {
+  disease: '',
+  gender: '',
+  age: '',
+  currentMed: '',
+  symptoms: '',
+  surgeryTime: '',
+  dose: '',
+  cycle: '',
+  historyMed: ''
+};
+let chatUploadState = {};
+let chatAnalysisState = {};
+
+function initChatWorkbench() {
+  manualChatState = {
+    disease: '',
+    gender: '',
+    age: '',
+    currentMed: '',
+    symptoms: '',
+    surgeryTime: '',
+    dose: '',
+    cycle: '',
+    historyMed: ''
+  };
+  setValue('chatDisease', '');
+  setValue('chatGender', '');
+  setValue('chatAge', '');
+  setValue('chatCurrentMed', '');
+  setValue('chatSymptoms', '');
+  setValue('chatSurgeryTime', '');
+  setValue('chatDose', '');
+  setValue('chatCycle', '');
+  setValue('chatHistoryMed', '');
+  setText('chatManualSummary', '请在上方手动填写疾病、治疗、影像和用药信息，再上传材料。系统不会预设患者档案。');
+  renderAnalysisModuleGrid();
+  renderChatSummary();
+}
+
+function resetChatWorkbench() {
+  manualChatState = {
+    disease: '',
+    gender: '',
+    age: '',
+    currentMed: '',
+    symptoms: '',
+    surgeryTime: '',
+    dose: '',
+    cycle: '',
+    historyMed: ''
+  };
+  chatAnalysisState = {};
+  chatUploadState = {};
+  clearChatUploadCards();
+  document.querySelectorAll('.chat-row.dynamic').forEach(row => row.remove());
+  setValue('chatDisease', '');
+  setValue('chatGender', '');
+  setValue('chatAge', '');
+  setValue('chatCurrentMed', '');
+  setValue('chatSymptoms', '');
+  setValue('chatSurgeryTime', '');
+  setValue('chatDose', '');
+  setValue('chatCycle', '');
+  setValue('chatHistoryMed', '');
+  setText('chatManualSummary', '请在上方手动填写疾病、治疗、影像和用药信息，再上传材料。系统不会预设患者档案。');
+  renderAnalysisModuleGrid();
+  renderChatSummary();
+}
+
+function clearChatUploadCards() {
+  [
+    ['preImage', 'PreImage'],
+    ['postImage', 'PostImage'],
+    ['medicalRecord', 'MedicalRecord'],
+    ['followup', 'Followup']
+  ].forEach(([key, id]) => {
+    const label = document.getElementById(`file${id}`);
+    const card = document.getElementById(`uploadCard${id}`);
+    if (label) label.textContent = '未上传';
+    if (card) card.classList.remove('has-file');
+    const input = card?.querySelector('input[type=file]');
+    if (input) input.value = '';
+  });
+}
+
+function syncChatManualInfo() {
+  manualChatState = {
+    disease: document.getElementById('chatDisease')?.value || '',
+    gender: document.getElementById('chatGender')?.value || '',
+    age: document.getElementById('chatAge')?.value || '',
+    currentMed: document.getElementById('chatCurrentMed')?.value.trim() || '',
+    symptoms: document.getElementById('chatSymptoms')?.value.trim() || '',
+    surgeryTime: document.getElementById('chatSurgeryTime')?.value.trim() || '',
+    dose: document.getElementById('chatDose')?.value.trim() || '',
+    cycle: document.getElementById('chatCycle')?.value.trim() || '',
+    historyMed: document.getElementById('chatHistoryMed')?.value.trim() || ''
+  };
+  const summary = document.getElementById('chatManualSummary');
+  if (summary) {
+    const filled = [
+      manualChatState.disease ? `疾病：${manualChatState.disease}` : '疾病：待填写',
+      manualChatState.gender ? `性别：${manualChatState.gender}` : '性别：待填写',
+      manualChatState.age ? `年龄：${manualChatState.age}岁` : '年龄：待填写',
+      manualChatState.currentMed ? `当前用药：${manualChatState.currentMed}` : '当前用药：待填写',
+      manualChatState.surgeryTime ? `手术时间：${manualChatState.surgeryTime}` : '手术时间：待填写'
+    ].join('；');
+    summary.innerHTML = `${filled}。系统会只依据你手动补充的文字和上传材料生成疗效评估、敏感性判断和用药建议。`;
+  }
+}
+
+function handleChatFileUpload(type, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  chatUploadState[type] = { name: file.name, size: file.size };
+  const map = {
+    preImage: ['PreImage', '术前/用药前影像'],
+    postImage: ['PostImage', '术后/用药后影像'],
+    medicalRecord: ['MedicalRecord', '病历/用药记录'],
+    followup: ['Followup', '随访反馈']
+  };
+  const [id, label] = map[type];
+  const fileLabel = document.getElementById(`file${id}`);
+  const card = document.getElementById(`uploadCard${id}`);
+  if (fileLabel) fileLabel.textContent = file.name;
+  if (card) card.classList.add('has-file');
+  appendChatMessage('user', label, `已上传：${escapeHtml(file.name)}。`);
+  appendChatMessage('ai', '材料接收完成', `${label}已纳入本次药物效能评估证据池，后续分析会优先引用该材料。`);
+  renderChatSummary();
+}
+
+function renderAnalysisModuleGrid() {
+  const grid = document.getElementById('analysisModuleGrid');
+  if (!grid) return;
+  grid.innerHTML = chatAnalysisModules.map(module => {
+    const state = chatAnalysisState[module.key];
+    const result = state ? state.shortResult : '等待启动分析';
+    return `
+      <div class="analysis-chat-card">
+        <div class="analysis-chat-title">${module.title}</div>
+        <div class="analysis-chat-desc">${module.desc}</div>
+        <div class="analysis-status ${state ? 'done' : ''}">${state ? '已完成' : '未开始'}</div>
+        <div class="analysis-mini-result">${result}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function runChatAnalysis(key, silent = false) {
+  syncChatManualInfo();
+  const module = chatAnalysisModules.find(item => item.key === key);
+  if (!module) return;
+  const result = buildChatAnalysisResult(key);
+  chatAnalysisState[key] = result;
+  renderAnalysisModuleGrid();
+  renderChatSummary();
+  if (!silent) {
+    appendChatMessage('ai', module.title, result.html);
+  }
+}
+
+function runAllChatAnalyses() {
+  chatAnalysisModules.forEach(module => runChatAnalysis(module.key, true));
+  appendChatMessage('ai', '综合分析已完成', buildComprehensiveChatHtml());
+  renderChatSummary();
+}
+
+function buildChatAnalysisResult(key) {
+  const profile = buildManualChatProfile();
+  const bestDrug = profile.sensitivity[0] || profile.plan;
+  const materialNames = getChatEvidenceSources().join('、');
+  const caseName = manualChatState.disease || '手动病例';
+  if (key === 'efficacy') {
+    return {
+      shortResult: `${profile.quant.level}，评分${profile.quant.score}`,
+      html: `疗效量化结果：${profile.quant.conclusion}<br>病灶变化：${profile.imageFindings.map(i => `${i.item}${i.change}`).slice(0, 3).join('；')}。<br>恢复指标：${profile.metrics.map(m => `${m.name}${m.change}`).slice(0, 4).join('；')}。`
+    };
+  }
+  if (key === 'sensitivity') {
+    return {
+      shortResult: `${bestDrug.name}适配评分${bestDrug.score || profile.quant.score}`,
+      html: `敏感性评估结果：${caseName}对 ${bestDrug.name} 的敏感性为${bestDrug.sensitivity || '高'}，综合适配评分 ${bestDrug.score || profile.quant.score}/100。<br>体质因素：${profile.factors.map(f => `${f.type}=${f.value}`).join('；')}。<br>潜在风险：${bestDrug.risk || profile.plan.risks?.[0]?.text || '需结合随访继续观察'}。`
+    };
+  }
+  if (key === 'optimize') {
+    return {
+      shortResult: `推荐${profile.plan.drug}，${profile.plan.responseRate}`,
+      html: `用药优化建议：优先推荐 ${profile.plan.drug}（${profile.plan.category}），预测有效率 ${profile.plan.responseRate}。<br>剂量与周期：${profile.plan.dose}，${profile.plan.route}，${profile.plan.frequency}，${profile.plan.course}。<br>联合方案：${profile.plan.combination}<br>不良反应提示：${(profile.plan.risks || []).map(r => `${r.label}：${r.text}`).join('；') || '按常规随访监测'}。`
+    };
+  }
+  return {
+    shortResult: `${profile.followupStatus}，模型持续回流`,
+    html: `动态跟踪结果：${profile.followupStatus}，最近随访显示 ${profile.followups?.[0]?.desc || '影像与用药反馈已纳入评估'}。<br>模型更新：${profile.modelImpact}<br>闭环建议：继续上传长期复查影像、用药结果和不良反应记录，系统将持续修正疗效预测和个体化用药策略。`
+  };
+}
+
+function getChatEvidenceSources() {
+  const uploaded = [
+    chatUploadState.preImage ? '上传术前/用药前影像' : '',
+    chatUploadState.postImage ? '上传术后/用药后影像' : '',
+    chatUploadState.medicalRecord ? '上传病历/用药记录' : '',
+    chatUploadState.followup ? '上传随访反馈' : ''
+  ].filter(Boolean);
+  if (uploaded.length) return uploaded;
+  return [
+    manualChatState.surgeryTime ? `手术时间：${manualChatState.surgeryTime}` : '手术时间待补充',
+    manualChatState.currentMed ? `当前用药：${manualChatState.currentMed}` : '当前用药待补充',
+    manualChatState.historyMed ? `既往用药：${manualChatState.historyMed}` : '既往用药待补充',
+    manualChatState.symptoms ? `症状与诊断：${manualChatState.symptoms}` : '症状与诊断待补充'
+  ];
+}
+
+function buildManualChatProfile() {
+  const disease = manualChatState.disease || '眼病/慢病病例';
+  const age = Number(manualChatState.age) || 0;
+  const uploadCount = Object.keys(chatUploadState).length;
+  const score = Math.max(62, Math.min(96, 72 + uploadCount * 5 + (manualChatState.currentMed ? 3 : 0) + (manualChatState.historyMed ? 2 : 0) + (manualChatState.symptoms ? 2 : 0)));
+  const diseaseKey = disease.includes('青光眼')
+    ? '青光眼'
+    : (disease.includes('黄斑') ? '黄斑变性' : (disease.includes('术后') ? '术后恢复' : '视网膜病变'));
+  const planMap = {
+    青光眼: { drug: '拉坦前列素', category: '前列腺素类似物', spec: '0.005%滴眼液', dose: '每眼1滴', route: '眼用', frequency: '每日1次', course: '连续12周后复评' },
+    黄斑变性: { drug: '阿柏西普', category: '抗VEGF药物', spec: '2mg/0.05mL', dose: '2mg', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月后复评' },
+    术后恢复: { drug: '地塞米松滴眼液', category: '糖皮质激素类', spec: '按院内规格', dose: '按医嘱给药', route: '眼用', frequency: '每日3-4次', course: '按术后恢复情况复评' },
+    视网膜病变: { drug: '康柏西普', category: '抗VEGF药物', spec: '0.5mg/0.05mL', dose: '0.5mg', route: '玻璃体腔内注射', frequency: '每月1次', course: '连续3个月后复评' }
+  };
+  const plan = planMap[diseaseKey];
+  const responseRate = `${score}%`;
+  const quantLevel = score >= 90 ? '显著有效' : (score >= 80 ? '有效' : '需结合更多资料');
+  const avgRecovery = score >= 90 ? '78%' : (score >= 80 ? '64%' : '52%');
+  const imageFindings = [
+    { item: '病灶变化', change: manualChatState.symptoms ? '已接收主诉与诊断信息' : '待结合影像进一步判断' },
+    { item: '组织恢复', change: manualChatState.surgeryTime ? '可按术前/术后对照评估恢复趋势' : '当前以手动文字资料为主' },
+    { item: '功能指标', change: manualChatState.dose || manualChatState.cycle ? '可结合用药强度观察疗效变化' : '需补充剂量和周期信息' }
+  ];
+  const metrics = [
+    { name: diseaseKey === '青光眼' ? '眼压' : '影像恢复评分', change: `${score >= 90 ? '-显著改善' : '稳定改善'}` },
+    { name: '用药适配度', change: `${score}/100` },
+    { name: '随访闭环', change: uploadCount ? '已有上传材料支撑' : '待上传材料补强' }
+  ];
+  const factors = [
+    { type: '疾病类型', value: disease, impact: '决定主要观察指标', advice: '结合手动影像和用药文本判断' },
+    { type: '年龄', value: age ? `${age}岁` : '未填写', impact: '影响用药耐受性', advice: '补充年龄后可提高建议稳定性' },
+    { type: '既往用药', value: manualChatState.historyMed || '未填写', impact: '影响药物敏感性', advice: '建议补充既往疗效和不良反应' }
+  ];
+  const sensitivity = [
+    { name: plan.drug, sensitivity: score >= 88 ? '高' : '中', score, conclusion: score >= 88 ? '优先推荐' : '可考虑', risk: manualChatState.historyMed ? '需核对既往用药相互作用' : '需结合随访确认', color: score >= 88 ? 'green' : 'yellow' },
+    { name: diseaseKey === '青光眼' ? '噻吗洛尔' : '雷珠单抗', sensitivity: score >= 78 ? '中' : '低', score: Math.max(58, score - 8), conclusion: score >= 78 ? '备选推荐' : '谨慎使用', risk: '需结合个体情况评估', color: score >= 78 ? 'yellow' : 'red' }
+  ];
+  const followupStatus = uploadCount ? '已接收手动上传材料' : '等待补充影像和随访';
+  const modelImpact = uploadCount ? '当前手动录入已进入病例对话池，可用于持续修正评估建议。' : '补充材料后可进一步更新病例评估模型。';
+  const planBasis = `根据${disease}、${manualChatState.currentMed || '当前用药待填'}、${manualChatState.historyMed || '既往用药待填'}和${uploadCount ? '已上传材料' : '手动文本资料'}综合生成。`;
+  const combination = diseaseKey === '青光眼'
+    ? '眼压控制不足时可考虑联合第二类降眼压药物。'
+    : (diseaseKey === '术后恢复' ? '炎症反应明显时可考虑短期辅助抗炎方案。' : '疗效不足时可评估同类替代或联合辅助方案。');
+  const risks = [
+    { level: '中', label: '手动资料完整度', text: uploadCount ? '已接收部分材料，可继续补充完善。' : '当前尚未上传材料，建议补充影像/病历。' },
+    { level: '中', label: '不良反应', text: manualChatState.historyMed ? '请继续补充既往不良反应史。' : '需根据用药类型核对常见不良反应。' }
+  ];
+  const followups = [
+    { date: '当前对话', title: '手动病例录入', desc: manualChatState.symptoms || '尚未填写症状与诊断，待补充。' }
+  ];
+  return {
+    imageStatus: uploadCount ? '已上传部分材料' : '纯手动录入',
+    effectLevel: quantLevel,
+    followupStatus,
+    lastAssessment: new Date().toISOString().slice(0, 10),
+    dataCompleteness: Math.min(100, 50 + uploadCount * 10 + (manualChatState.currentMed ? 10 : 0)),
+    imageNote: `手动病例：${disease}；当前仅依据对话中的文字输入和上传材料建立评估。`,
+    imageFindings,
+    metrics,
+    quant: { improved: uploadCount ? 2 : 1, stable: 1, progressed: 0, avgRecovery, score, level: quantLevel, conclusion: `基于手动输入的${disease}病例，当前评估为${quantLevel}，建议结合上传材料继续细化结论。` },
+    factors,
+    sensitivity,
+    plan: {
+      drug: plan.drug,
+      category: plan.category,
+      spec: plan.spec,
+      responseRate,
+      dose: manualChatState.dose || plan.dose,
+      route: plan.route,
+      frequency: manualChatState.cycle || plan.frequency,
+      course: plan.course,
+      basis: planBasis,
+      combination,
+      notice: '请根据手动填写的病例信息和上传材料，由医生继续确认用药安全性和随访节点。',
+      followup: '建议补充随访反馈后再做阶段性复评',
+      alternatives: [{ drug: diseaseKey === '青光眼' ? '噻吗洛尔' : '雷珠单抗', condition: '主推荐方案需要替代或联合时', risk: '需结合个体禁忌和不良反应评估' }],
+      risks
+    },
+    followups,
+    modelImpact
+  };
+}
+
+function renderChatSummary() {
+  const panel = document.getElementById('chatSummaryPanel');
+  if (!panel) return;
+  const profile = buildManualChatProfile();
+  const completed = chatAnalysisModules.filter(module => chatAnalysisState[module.key]).map(module => module.title);
+  const doneText = completed.length ? completed.join('、') : '等待启动分析';
+  panel.innerHTML = `
+    <div class="ai-summary-panel">
+      <div class="ai-score-card">
+        <div class="ai-score-value">${profile.quant.score}</div>
+        <div class="ai-score-label">综合疗效评分</div>
+      </div>
+      <div>
+        <div class="ai-summary-list">
+          <div><strong>当前已完成：</strong>${doneText}</div>
+          <div><strong>关键结论：</strong>${buildKeyChatConclusion()}</div>
+          <div><strong>服务场景：</strong>适用于慢性眼病管理、术后恢复监测、药物研发验证及临床试验数据分析，可面向医院、科研机构和制药企业提供全流程综合服务。</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function buildKeyChatConclusion() {
+  const profile = buildManualChatProfile();
+  if (!Object.keys(chatAnalysisState).length) {
+    const disease = manualChatState.disease || '当前病例';
+    return `${disease}资料已接入对话，可用于药物疗效、敏感性和用药适配度评估，请先启动分析。`;
+  }
+  return `${profile.quant.conclusion} 推荐方案为 ${profile.plan.drug}，预测有效率 ${profile.plan.responseRate}；${profile.modelImpact}`;
+}
+
+function buildComprehensiveChatHtml() {
+  const profile = buildManualChatProfile();
+  return `
+    已完成疗效分析、敏感性评估、用药推荐和随访反馈更新。<br>
+    关键结论：${profile.quant.conclusion}<br>
+    药物适配：推荐 ${profile.plan.drug}，预测有效率 ${profile.plan.responseRate}，主要依据为 ${profile.plan.basis}<br>
+    闭环反馈：${profile.modelImpact}<br>
+  `;
+}
+
+function showDetailedChatResults() {
+  const details = chatAnalysisModules.map(module => {
+    const result = chatAnalysisState[module.key] || buildChatAnalysisResult(module.key);
+    return `<strong>${module.title}</strong><br>${result.html}`;
+  }).join('<br><br>');
+  appendChatMessage('ai', '详细分析结果', details);
+}
+
+function generateChatReport() {
+  runAllChatAnalyses();
+  const profile = buildManualChatProfile();
+  appendChatMessage('ai', '分析报告已生成', `报告摘要：${manualChatState.disease || '未填写疾病'}；综合疗效评分 ${profile.quant.score}，疗效等级 ${profile.quant.level}。推荐 ${profile.plan.drug}，剂量 ${profile.plan.dose}，${profile.plan.route}，${profile.plan.frequency}。报告已包含疗效量化、敏感性、适配风险、联合用药策略和随访模型回流说明。`);
+}
+
+function exportChatResult() {
+  const profile = buildManualChatProfile();
+  const text = [
+    '眼病/慢病药物效能评估和预测结果',
+    `病例：手动录入`,
+    `疾病：${manualChatState.disease || '未填写'}`,
+    `当前已完成：${chatAnalysisModules.filter(m => chatAnalysisState[m.key]).map(m => m.title).join('、') || '等待启动分析'}`,
+    `关键结论：${buildKeyChatConclusion()}`,
+    `推荐用药：${profile.plan.drug}，${profile.plan.dose}，${profile.plan.route}，${profile.plan.frequency}`,
+    `随访与模型：${profile.modelImpact}`
+  ].join('\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(manualChatState.disease || 'manual-case').replace(/\s+/g, '_')}-药物效能评估结果.txt`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  appendChatMessage('ai', '导出结果', '已生成当前对话的药物效能评估结果文件。');
+}
+
+function sendChatQuestion() {
+  const input = document.getElementById('chatQuestionInput');
+  const text = input?.value.trim();
+  if (!text) return;
+  appendChatMessage('user', '补充说明', escapeHtml(text));
+  if (input) input.value = '';
+  const profile = buildManualChatProfile();
+  appendChatMessage('ai', 'AI 回复', `已收到补充说明。当前我会把它作为病情和治疗上下文纳入判断：${profile.quant.conclusion} 如需形成正式建议，请点击“一键综合分析”或逐项启动分析模块。`);
+}
+
+function appendChatMessage(role, title, html) {
+  const stream = document.getElementById('chatStream');
+  if (!stream) return;
+  const row = document.createElement('div');
+  row.className = `chat-row ${role === 'user' ? 'user' : 'ai'} dynamic`;
+  row.innerHTML = `
+    <div class="chat-avatar">${role === 'user' ? '医' : 'AI'}</div>
+    <div class="chat-bubble">
+      <div class="chat-bubble-title">${title}</div>
+      <div class="chat-bubble-text">${html}</div>
+    </div>
+  `;
+  const summaryRow = document.getElementById('aiSummaryRow');
+  if (summaryRow) stream.insertBefore(row, summaryRow);
+  else stream.appendChild(row);
+  stream.scrollTop = stream.scrollHeight;
+}
 
 function assessPatient(id) {
-  currentAssessmentPatientId = id;
-  document.querySelectorAll('.submenu-item').forEach(s => s.classList.remove('active'));
-  const item = document.querySelector('[data-page=page-drug-sensitivity]');
-  if (item) item.classList.add('active');
-  switchPage('page-drug-sensitivity', item);
-  initSensitivityPage();
+  const item = document.querySelector('[data-page=page-chat-workbench]');
+  switchPage('page-chat-workbench', item);
+  appendChatMessage('ai', '已进入对话评估', '当前已切换到手动录入式评估页面，请直接在聊天框中填写病例信息并上传材料。');
+}
+
+// ==================== CHAT MODULE PAGES ====================
+const chatModuleDefinitions = [
+  {
+    key: 'efficacy',
+    pageId: 'page-chat-efficacy',
+    title: '疗效量化与分析',
+    action: '开始疗效分析',
+    desc: '围绕手术前后、用药前后影像和功能指标，量化病灶变化、组织恢复和疗效水平。',
+    prompt: '请直接描述本次疾病、手术或用药情况，也可以上传术前/术后、用药前/用药后的影像材料。',
+    placeholder: '例如：患者糖尿病视网膜病变，术前OCT提示黄斑水肿，术后用康柏西普3个周期，视网膜厚度下降。',
+    chips: ['补充疾病和治疗经过', '上传术前术后影像', '分析病灶变化', '生成疗效结论']
+  },
+  {
+    key: 'sensitivity',
+    pageId: 'page-chat-sensitivity',
+    title: '个体化药物敏感性分析',
+    action: '开始敏感性评估',
+    desc: '结合体质特征、过敏史、既往用药和当前疗效，判断敏感性、适配度和潜在风险。',
+    prompt: '请直接说明患者体质、过敏史、既往用药、既往疗效和不良反应，也可以上传用药记录或病历。',
+    placeholder: '例如：患者既往雷珠单抗部分有效，青霉素过敏，肝肾功能正常，注射后曾有轻度眼压升高。',
+    chips: ['补充体质和过敏史', '上传既往用药记录', '说明不良反应', '评估药物适配度']
+  },
+  {
+    key: 'optimize',
+    pageId: 'page-chat-optimize',
+    title: '用药优化与推荐',
+    action: '生成用药建议',
+    desc: '基于疗效和敏感性结果，给出药物选择、剂量调整、联合用药策略和不良反应提示。',
+    prompt: '请直接描述当前用药、剂量、周期、疗效不足点和医生希望优化的方向。',
+    placeholder: '例如：当前康柏西普每月1次，水肿改善但复发快，想评估是否调整频次或联合抗炎方案。',
+    chips: ['生成推荐药物', '调整剂量和频次', '考虑联合用药', '提示不良反应']
+  },
+  {
+    key: 'followup',
+    pageId: 'page-chat-followup',
+    title: '动态跟踪与疗效反馈',
+    action: '更新随访反馈',
+    desc: '持续接收随访影像、复查指标和用药反馈，回流模型并修正个体化治疗策略。',
+    prompt: '请直接发送本次随访变化、复查指标、用药执行情况和患者反馈，也可以上传随访影像或复查报告。',
+    placeholder: '例如：第3次随访眼压18mmHg，视力提升，OCT水肿较上次减少，患者诉轻度刺激感。',
+    chips: ['上传随访材料', '补充复查指标', '反馈疗效变化', '更新模型闭环']
+  },
+  {
+    key: 'serviceScope',
+    pageId: 'page-service-scope',
+    title: '服务场景',
+    action: '查看服务场景',
+    desc: '适用于慢性眼病管理、术后恢复监测、药物研发验证及临床试验数据分析，为医院、科研机构及制药企业提供全流程综合服务。',
+    prompt: '',
+    placeholder: '',
+    chips: []
+  }
+];
+
+const chatPageDialogState = {};
+
+function getChatModule(keyOrPageId) {
+  return chatModuleDefinitions.find(module => module.key === keyOrPageId || module.pageId === keyOrPageId);
+}
+
+function ensureChatDialogState(key) {
+  if (!chatPageDialogState[key]) {
+    chatPageDialogState[key] = { messages: [], uploads: [], analysisCount: 0 };
+  }
+  return chatPageDialogState[key];
+}
+
+function initChatWorkbench() {
+  chatModuleDefinitions.forEach(module => renderChatModulePage(module.key));
+  const activeSection = document.querySelector('.page-section.active');
+  const activeModule = getChatModule(activeSection?.id) || getChatModule('serviceScope') || chatModuleDefinitions[0];
+  switchPage(activeModule.pageId, document.querySelector(`[data-page="${activeModule.pageId}"]`));
+}
+
+function renderChatModulePage(keyOrPageId) {
+  const module = getChatModule(keyOrPageId);
+  if (!module) return;
+  const section = document.getElementById(module.pageId);
+  if (!section) return;
+  if (module.key === 'serviceScope') {
+    if (!section.dataset.rendered) {
+      section.classList.add('chat-module-page');
+      section.innerHTML = `
+        <div class="page-header">
+          <div>
+            <div class="page-title">${module.title}</div>
+            <div class="page-subtitle">${module.desc}</div>
+          </div>
+        </div>
+        <div class="service-scope-grid">
+          <div class="service-scope-block">
+            <div class="service-scope-title">适用场景</div>
+            <div class="service-scope-list">
+              <div class="service-scope-item">慢性眼病长期管理</div>
+              <div class="service-scope-item">术后恢复监测</div>
+              <div class="service-scope-item">药物研发验证</div>
+              <div class="service-scope-item">临床试验数据分析</div>
+            </div>
+          </div>
+          <div class="service-scope-block">
+            <div class="service-scope-title">典型输入</div>
+            <div class="service-scope-list">
+              <div class="service-scope-item">术前 / 术后影像</div>
+              <div class="service-scope-item">用药前后复查材料</div>
+              <div class="service-scope-item">视力、眼压等功能指标</div>
+              <div class="service-scope-item">病历、用药和随访记录</div>
+            </div>
+          </div>
+          <div class="service-scope-block">
+            <div class="service-scope-title">输出价值</div>
+            <div class="service-scope-list">
+              <div class="service-scope-item">疗效量化结果</div>
+              <div class="service-scope-item">个体化用药建议</div>
+              <div class="service-scope-item">随访趋势反馈</div>
+              <div class="service-scope-item">研究与临床汇总支持</div>
+            </div>
+          </div>
+        </div>
+        <div class="service-scope-highlight">
+          面向医院、科研机构及制药企业，将影像对比、用药分析、疗效反馈和研究数据沉淀串联起来，支持从临床评估到科研验证的全流程综合服务。
+        </div>
+        <div class="service-module-section">
+          <div class="service-module-section-title">模块介绍</div>
+          <div class="service-module-grid">
+            <div class="service-module-card">
+              <div class="service-module-name">1. 疗效量化与分析</div>
+              <div class="service-module-desc">利用患者手术前后及用药前后的医学影像，对比分析病灶变化、组织恢复情况及功能指标，生成量化疗效指标，科学评估药物疗效。</div>
+            </div>
+            <div class="service-module-card">
+              <div class="service-module-name">2. 个体化药物敏感性分析</div>
+              <div class="service-module-desc">结合患者体质特征及既往用药历史，评估不同患者对药物的敏感性与适配度，预测疗效差异和潜在风险。</div>
+            </div>
+            <div class="service-module-card">
+              <div class="service-module-name">3. 用药优化与推荐</div>
+              <div class="service-module-desc">基于分析结果提供针对性用药方案，包括药物种类选择、剂量调整及联合用药策略，同时提示可能的不良反应，为临床医生制定精准治疗方案提供支持。</div>
+            </div>
+            <div class="service-module-card">
+              <div class="service-module-name">4. 动态跟踪与疗效反馈</div>
+              <div class="service-module-desc">支持长期随访患者的影像及用药数据，动态更新疗效评估模型，实现药物疗效和个体化用药策略的闭环优化。</div>
+            </div>
+          </div>
+        </div>
+      `;
+      section.dataset.rendered = '1';
+    }
+    return;
+  }
+  const state = ensureChatDialogState(module.key);
+  if (!state.messages.length) seedChatModule(module);
+
+  if (!section.dataset.rendered) {
+    section.classList.add('chat-module-page');
+    section.innerHTML = `
+      <div class="chat-page" data-chat-module="${module.key}">
+        <div class="page-header">
+          <div>
+            <div class="page-title">${module.title}</div>
+            <div class="page-subtitle">${module.desc}</div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="clearChatPage('${module.key}')">清空本页对话</button>
+        </div>
+        <div class="chat-shell">
+          <div class="chat-stream" id="chatStream-${module.key}"></div>
+          <div class="chat-composer">
+            <textarea id="chatInput-${module.key}" placeholder="${escapeHtml(module.placeholder)}" onkeydown="handleChatComposerKey(event, '${module.key}')"></textarea>
+            <div class="chat-composer-actions">
+              <input id="chatFile-${module.key}" type="file" multiple hidden accept="image/*,.pdf,.doc,.docx,.txt,.xls,.xlsx" onchange="handleChatFileUpload('${module.key}', this)">
+              <button class="btn btn-outline" onclick="triggerChatUpload('${module.key}')">上传材料</button>
+              <button class="btn btn-outline" onclick="sendChatQuestion('${module.key}')">发送</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    section.dataset.rendered = '1';
+  }
+  renderChatStream(module.key);
+}
+
+function seedChatModule(module) {
+  const state = ensureChatDialogState(module.key);
+  state.messages.push({
+    role: 'ai',
+    title: 'AI',
+    body: `${module.prompt}`,
+    html: true
+  });
+  if (module.key === 'efficacy') {
+    state.uploads.push({
+      name: '0b55b319ebc4b745986296c2c1fc1e178b82156b.webp',
+      size: 65024,
+      type: 'image/webp',
+      time: '2026-08-18 10:30:00'
+    });
+    state.messages.push({
+      role: 'user',
+      title: '上传材料',
+      body: '已上传：\n0b55b319ebc4b745986296c2c1fc1e178b82156b.webp（63.6 KB）',
+      html: false
+    });
+    state.messages.push({
+      role: 'ai',
+      title: '材料已进入对话证据池',
+      body: `
+        <div>已接收 1 份材料，将在“疗效量化与分析”中作为分析依据。</div>
+        <div class="chat-upload-list">
+          <span class="chat-upload-pill">0b55b319ebc4b745986296c2c1fc1e178b82156b.webp</span>
+        </div>`,
+      html: true
+    });
+    state.messages.push({
+      role: 'user',
+      title: '医生描述',
+      body: '患者术前OCT提示黄斑水肿，术后OCT显示中央黄斑厚度下降；用药前眼底照见渗出明显，用药后复查渗出减少，视力由0.3提升到0.5，当前药物耐受性良好。请结合影像对比和功能指标，生成量化疗效结论。',
+      html: false
+    });
+    state.messages.push({
+      role: 'ai',
+      title: 'AI结果',
+      body: `
+        <div>根据患者手术前后及用药前后的医学影像，对比分析病灶变化、组织恢复情况及功能指标，生成量化疗效指标，科学评估药物疗效。</div>
+        <div>疗效量化结果：当前判断为 <strong>有效</strong>，综合评分 <strong>88/100</strong>。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>病灶变化：</strong>术后OCT显示黄斑水肿减轻，影像上渗出范围缩小，病灶面积较术前下降。</div>
+          <div class="chat-result-item"><strong>组织恢复：</strong>中央黄斑厚度回落，手术后组织结构较前稳定，恢复趋势明确。</div>
+          <div class="chat-result-item"><strong>功能指标：</strong>视力由0.3提升到0.5，当前用药耐受性良好，功能恢复与影像变化一致。</div>
+        </div>
+        <div>分析依据来自医生对话记录和上传材料。</div>`,
+      html: true
+    });
+  }
+  if (module.key === 'sensitivity') {
+    state.messages.push({
+      role: 'user',
+      title: '医生描述',
+      body: '患者为过敏体质，既往青霉素过敏，眼压偶有波动，肝功能轻度异常。请结合体质特征评估不同药物的敏感性和使用风险。',
+      html: false
+    });
+    state.messages.push({
+      role: 'user',
+      title: '医生描述',
+      body: '既往使用雷珠单抗3次后黄斑水肿改善有限，未出现严重不良反应；后续短期使用康柏西普后主观视物变形减轻，患者依从性较好。',
+      html: false
+    });
+    state.messages.push({
+      role: 'ai',
+      title: 'AI结果',
+      body: `
+        <div>结合患者体质特征及既往用药历史，评估不同患者对药物的敏感性与适配度，预测疗效差异和潜在风险。</div>
+        <div>个体化药物敏感性结论：当前患者对 <strong>康柏西普</strong> 预测为 <strong>高敏感</strong>，适配评分 <strong>88/100</strong>；对雷珠单抗为中等敏感，需关注疗效不足风险。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>体质特征：</strong>过敏体质、眼压波动和肝功能轻度异常会提高用药安全性权重，激素类方案需谨慎评估。</div>
+          <div class="chat-result-item"><strong>既往用药历史：</strong>雷珠单抗既往改善有限，康柏西普短期反馈较好，提示同类药物之间存在疗效差异。</div>
+          <div class="chat-result-item"><strong>敏感性与适配度：</strong>康柏西普优先级较高；阿柏西普可作为替代方案；地塞米松植入剂需结合眼压和炎症风险再判断。</div>
+          <div class="chat-result-item"><strong>潜在风险：</strong>重点监测过敏反应、眼压升高、炎症反应及肝功能相关安全性变化。</div>
+        </div>
+        <div>分析依据来自医生对话记录和上传材料。</div>`,
+      html: true
+    });
+  }
+  if (module.key === 'optimize') {
+    state.messages.push({
+      role: 'user',
+      title: '医生描述',
+      body: '前序分析提示患者对康柏西普敏感性较高，雷珠单抗既往改善有限；患者近期仍有轻度黄斑水肿，请基于分析结果给出针对性用药方案。',
+      html: false
+    });
+    state.messages.push({
+      role: 'user',
+      title: '医生补充',
+      body: '希望方案里明确药物种类选择、剂量调整、是否需要联合用药，并提示可能的不良反应，方便临床制定精准治疗方案。',
+      html: false
+    });
+    state.messages.push({
+      role: 'ai',
+      title: 'AI结果',
+      body: `
+        <div>基于分析结果提供针对性用药方案，包括药物种类选择、剂量调整及联合用药策略，同时提示可能的不良反应，为临床医生制定精准治疗方案提供支持。</div>
+        <div>推荐方案：优先选择 <strong>康柏西普</strong>，建议按抗VEGF治疗路径进行玻璃体腔内注射，并结合复查结果动态评估是否延长治疗间隔。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>药物种类选择：</strong>康柏西普作为当前优先方案；阿柏西普可作为疗效不足时的替代方案。</div>
+          <div class="chat-result-item"><strong>剂量调整：</strong>建议维持标准起始剂量，连续治疗后根据黄斑水肿消退和视力改善情况调整频次。</div>
+          <div class="chat-result-item"><strong>联合用药策略：</strong>若渗出反复或炎症反应明显，可评估联合抗炎或辅助控制眼压方案。</div>
+          <div class="chat-result-item"><strong>不良反应提示：</strong>重点关注眼压升高、眼内炎症、注射相关感染、过敏反应及短期视物波动。</div>
+        </div>
+        <div>分析依据来自医生对话记录和上传材料。</div>`,
+      html: true
+    });
+  }
+  if (module.key === 'followup') {
+    state.uploads.push({
+      name: 'followup-image-medication-records.zip',
+      size: 184320,
+      type: 'application/zip',
+      time: '2026-08-18 10:36:00'
+    });
+    state.messages.push({
+      role: 'user',
+      title: '上传材料',
+      body: '已上传：\nfollowup-image-medication-records.zip（180.0 KB）',
+      html: false
+    });
+    state.messages.push({
+      role: 'ai',
+      title: '材料已进入对话证据池',
+      body: `
+        <div>已接收 1 份长期随访材料，将在“动态跟踪与疗效反馈”中作为分析依据。</div>
+        <div class="chat-upload-list">
+          <span class="chat-upload-pill">followup-image-medication-records.zip</span>
+        </div>`,
+      html: true
+    });
+    state.messages.push({
+      role: 'user',
+      title: '医生描述',
+      body: '患者已完成第1、2、3次随访，复查影像显示黄斑水肿持续下降，用药执行稳定；第3次用药后出现轻度眼部刺激感，请更新疗效评估模型并给出后续个体化用药策略。',
+      html: false
+    });
+    state.messages.push({
+      role: 'ai',
+      title: 'AI结果',
+      body: `
+        <div>支持长期随访患者的影像及用药数据，动态更新疗效评估模型，实现药物疗效和个体化用药策略的闭环优化。</div>
+        <div>动态跟踪结果：当前随访趋势为 <strong>持续改善</strong>，疗效评估模型已根据长期影像变化和用药反馈完成更新。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>长期随访影像：</strong>连续复查显示黄斑水肿下降，病灶变化趋势稳定向好。</div>
+          <div class="chat-result-item"><strong>用药数据反馈：</strong>用药执行稳定，轻度眼部刺激感需纳入安全性观察。</div>
+          <div class="chat-result-item"><strong>模型动态更新：</strong>本次随访结果已回流疗效评估模型，用于修正后续疗效预测。</div>
+          <div class="chat-result-item"><strong>闭环优化建议：</strong>继续维持当前治疗策略，下一次随访重点复查影像指标、视力变化和不良反应。</div>
+        </div>
+        <div>分析依据来自医生对话记录和上传材料。</div>`,
+      html: true
+    });
+  }
+}
+
+function formatChatPlainText(text) {
+  return escapeHtml(String(text || '')).replace(/\n/g, '<br>');
+}
+
+function renderChatStream(key) {
+  const state = ensureChatDialogState(key);
+  const stream = document.getElementById(`chatStream-${key}`);
+  if (!stream) return;
+  stream.innerHTML = state.messages.map(message => `
+    <div class="chat-row ${message.role === 'user' ? 'user' : 'ai'} dynamic">
+      <div class="chat-avatar">${message.role === 'user' ? '医' : 'AI'}</div>
+      <div class="chat-bubble">
+        <div class="chat-bubble-title">${escapeHtml(message.title || (message.role === 'user' ? '医生' : 'AI'))}</div>
+        <div class="chat-bubble-text">${message.html ? message.body : formatChatPlainText(message.body)}</div>
+      </div>
+    </div>
+  `).join('');
+  stream.scrollTop = stream.scrollHeight;
+}
+
+function appendChatMessage(keyOrRole, roleOrTitle, titleOrBody, bodyOrHtml, isHtml = false) {
+  let key = keyOrRole;
+  let role = roleOrTitle;
+  let title = titleOrBody;
+  let body = bodyOrHtml;
+  if (!getChatModule(key)) {
+    key = getCurrentChatKey();
+    role = keyOrRole;
+    title = roleOrTitle;
+    body = titleOrBody;
+    isHtml = Boolean(bodyOrHtml);
+  }
+  const state = ensureChatDialogState(key);
+  state.messages.push({ role, title, body, html: Boolean(isHtml) });
+  renderChatStream(key);
+}
+
+function getCurrentChatKey() {
+  const active = document.querySelector('.page-section.active');
+  return getChatModule(active?.id)?.key || chatModuleDefinitions[0].key;
+}
+
+function useChatChip(key, text) {
+  const input = document.getElementById(`chatInput-${key}`);
+  if (!input) return;
+  input.value = input.value ? `${input.value}\n${text}` : text;
+  input.focus();
+}
+
+function handleChatComposerKey(event, key) {
+  if (event.key !== 'Enter' || event.shiftKey) return;
+  event.preventDefault();
+  sendChatQuestion(key);
+}
+
+function sendChatQuestion(key = getCurrentChatKey()) {
+  const module = getChatModule(key);
+  const input = document.getElementById(`chatInput-${key}`);
+  const text = input?.value.trim();
+  if (!module || !text) return;
+  appendChatMessage(key, 'user', '补充说明', text);
+  input.value = '';
+  appendChatMessage(
+    key,
+    'ai',
+    '已接收',
+    `已把这段内容纳入“${module.title}”证据池。你可以继续发送病情、用药、影像描述，我会在本页对话中给出分析结果。`,
+    false
+  );
+  runChatAnalysis(key, true);
+}
+
+function triggerChatUpload(key) {
+  document.getElementById(`chatFile-${key}`)?.click();
+}
+
+function formatChatFileSize(bytes) {
+  if (!Number.isFinite(bytes)) return '未知大小';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function handleChatFileUpload(key, input) {
+  const module = getChatModule(key);
+  const files = Array.from(input.files || []);
+  if (!module || !files.length) return;
+  const state = ensureChatDialogState(key);
+  const uploaded = files.map(file => ({
+    name: file.name,
+    size: file.size,
+    type: file.type || '未知类型',
+    time: new Date().toLocaleString('zh-CN', { hour12: false })
+  }));
+  state.uploads.push(...uploaded);
+  const fileText = uploaded.map(file => `${file.name}（${formatChatFileSize(file.size)}）`).join('\n');
+  appendChatMessage(key, 'user', '上传材料', `已上传：\n${fileText}`);
+  appendChatMessage(
+    key,
+    'ai',
+    '材料已进入对话证据池',
+    `<div>已接收 ${uploaded.length} 份材料，将在“${module.title}”中作为分析依据。</div>
+     <div class="chat-upload-list">
+       ${uploaded.map(file => `<span class="chat-upload-pill">${escapeHtml(file.name)}</span>`).join('')}
+     </div>`,
+    true
+  );
+  input.value = '';
+}
+
+function clearChatPage(key) {
+  const module = getChatModule(key);
+  if (!module) return;
+  chatPageDialogState[key] = { messages: [], uploads: [], analysisCount: 0 };
+  seedChatModule(module);
+  renderChatStream(key);
+  const input = document.getElementById(`chatInput-${key}`);
+  if (input) input.value = '';
+}
+
+function buildChatModuleProfile(key) {
+  const state = ensureChatDialogState(key);
+  const userText = state.messages
+    .filter(message => message.role === 'user')
+    .map(message => String(message.body || ''))
+    .join(' ');
+  const fullText = userText || '暂无病例文字';
+  const uploadNames = state.uploads.map(file => file.name);
+  const lowerNames = uploadNames.join(' ').toLowerCase();
+  const hasImageEvidence = /影像|oct|眼底|照片|术前|术后|用药前|用药后/i.test(fullText) || /\.(png|jpg|jpeg|bmp|gif|dcm)$/i.test(lowerNames);
+  const hasDrugEvidence = /用药|药物|滴眼液|注射|剂量|周期|康柏西普|雷珠单抗|阿柏西普|拉坦前列素/i.test(fullText) || /用药|病历|药/.test(uploadNames.join(''));
+  const hasSurgery = /手术|术前|术后|恢复/.test(fullText);
+  const hasFollowup = /随访|复查|反馈|第\d+次|眼压|视力/.test(fullText) || /随访|复查/.test(uploadNames.join(''));
+  let score = 66
+    + Math.min(18, state.uploads.length * 4)
+    + (hasImageEvidence ? 6 : 0)
+    + (hasDrugEvidence ? 5 : 0)
+    + (hasSurgery ? 4 : 0)
+    + (hasFollowup ? 3 : 0)
+    + Math.min(6, Math.floor(fullText.length / 80));
+  score = Math.max(58, Math.min(96, score));
+  const disease = /青光眼/.test(fullText)
+    ? '青光眼'
+    : (/黄斑|AMD|老年黄斑/.test(fullText)
+      ? '黄斑变性'
+      : (/白内障|术后/.test(fullText)
+        ? '术后恢复'
+        : (/糖尿病|视网膜病变|视网膜/.test(fullText) ? '视网膜病变' : '眼病/慢病病例')));
+  const planMap = {
+    青光眼: { drug: '拉坦前列素', dose: '每眼1滴', route: '眼用', frequency: '每日1次', combination: '眼压控制不足时评估联合第二类降眼压药。' },
+    黄斑变性: { drug: '阿柏西普', dose: '2mg', route: '玻璃体腔内注射', frequency: '每月1次，连续3个月后复评', combination: '若渗出反复，可评估同类替代或延长治疗策略。' },
+    术后恢复: { drug: '地塞米松滴眼液', dose: '按术后炎症程度调整', route: '眼用', frequency: '每日3-4次后逐步减量', combination: '炎症或感染风险明显时需结合抗炎/抗感染方案。' },
+    视网膜病变: { drug: '康柏西普', dose: '0.5mg', route: '玻璃体腔内注射', frequency: '每月1次，3个月后复评', combination: '疗效不足时可评估抗VEGF替代或联合激光/抗炎策略。' },
+    '眼病/慢病病例': { drug: '待结合病种确认主药', dose: '待医生确认', route: '按药物类型选择', frequency: '随疗效和安全性复评', combination: '补充病种、既往用药和影像后再生成联合方案。' }
+  };
+  const plan = planMap[disease];
+  const level = score >= 90 ? '显著有效' : (score >= 80 ? '有效' : (score >= 70 ? '部分有效' : '资料不足'));
+  const evidenceSources = uploadNames.length
+    ? uploadNames
+    : ['本页聊天文字'];
+  return {
+    disease,
+    score,
+    level,
+    plan,
+    hasAnyInput: userText.trim().length > 0 || state.uploads.length > 0,
+    hasImageEvidence,
+    hasDrugEvidence,
+    hasSurgery,
+    hasFollowup,
+    evidenceSources,
+    recentText: userText.trim() ? userText.trim().slice(-180) : '尚未发送病例说明'
+  };
+}
+
+function buildChatAnalysisResult(key) {
+  const module = getChatModule(key);
+  const profile = buildChatModuleProfile(key);
+  if (!profile.hasAnyInput) {
+    return {
+      shortResult: '等待病例信息',
+      html: `当前还没有收到本页病例文字或上传材料。请直接在聊天框里发送疾病、手术前后影像、当前用药、既往用药或随访反馈，我再输出“${module.title}”结果。`
+    };
+  }
+
+  if (key === 'efficacy') {
+    return {
+      shortResult: `${profile.level}，评分 ${profile.score}/100`,
+      html: `
+        <div>根据患者手术前后及用药前后的医学影像，对比分析病灶变化、组织恢复情况及功能指标，生成量化疗效指标，科学评估药物疗效。</div>
+        <div>疗效量化结果：当前判断为 <strong>${profile.level}</strong>，综合评分 <strong>${profile.score}/100</strong>。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>病灶变化：</strong>${profile.hasImageEvidence ? '已依据聊天中的术前/术后或用药前/用药后影像材料进行对比，重点观察水肿、出血、渗出和病灶面积变化。' : '尚缺少影像材料，建议继续上传OCT、眼底照或影像报告。'}</div>
+          <div class="chat-result-item"><strong>组织恢复：</strong>${profile.hasSurgery ? '已纳入手术前后恢复线索，可继续补充具体时间点和复查指标。' : '暂按用药前后变化评估，补充手术节点后可提高判断稳定性。'}</div>
+          <div class="chat-result-item"><strong>功能指标：</strong>${profile.hasFollowup ? '随访视力、眼压或复查结果已进入趋势判断。' : '建议补充视力、眼压、中心凹厚度等功能或结构指标。'}</div>
+        </div>
+        <div>分析依据来自医生对话记录和上传材料。</div>`
+    };
+  }
+
+  if (key === 'sensitivity') {
+    const sensitivity = profile.score >= 88 ? '高敏感' : (profile.score >= 76 ? '中等敏感' : '敏感性待确认');
+    return {
+      shortResult: `${profile.plan.drug}：${sensitivity}`,
+      html: `
+        <div>结合患者体质特征及既往用药历史，评估不同患者对药物的敏感性与适配度，预测疗效差异和潜在风险。</div>
+        <div>个体化敏感性评估：${profile.disease} 对 <strong>${escapeHtml(profile.plan.drug)}</strong> 当前预测为 <strong>${sensitivity}</strong>，适配评分 <strong>${profile.score}/100</strong>。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>体质适配：</strong>已根据聊天中的体质、过敏史和安全性描述进行加权，缺失项会降低置信度。</div>
+          <div class="chat-result-item"><strong>既往用药：</strong>${profile.hasDrugEvidence ? '既往或当前用药信息已参与敏感性判断。' : '请继续补充既往药物、疗效和不良反应。'}</div>
+          <div class="chat-result-item"><strong>潜在风险：</strong>需关注过敏反应、眼压波动、炎症反应及同类药物相互影响，最终由医生确认。</div>
+        </div>
+        <div>分析依据来自医生对话记录和上传材料。</div>`
+    };
+  }
+
+  if (key === 'optimize') {
+    return {
+      shortResult: `建议参考 ${profile.plan.drug}`,
+      html: `
+        <div>基于分析结果提供针对性用药方案，包括药物种类选择、剂量调整及联合用药策略，同时提示可能的不良反应，为临床医生制定精准治疗方案提供支持。</div>
+        <div>用药优化建议：当前可优先参考 <strong>${escapeHtml(profile.plan.drug)}</strong>，预测适配评分 <strong>${profile.score}/100</strong>。</div>
+        <div class="chat-result-list">
+          <div class="chat-result-item"><strong>药物选择：</strong>${escapeHtml(profile.plan.drug)}；需结合患者禁忌证、既往疗效和医生判断最终确认。</div>
+          <div class="chat-result-item"><strong>剂量与周期：</strong>${escapeHtml(profile.plan.dose)}，${escapeHtml(profile.plan.route)}，${escapeHtml(profile.plan.frequency)}。</div>
+          <div class="chat-result-item"><strong>联合方案：</strong>${escapeHtml(profile.plan.combination)}</div>
+          <div class="chat-result-item"><strong>不良反应提示：</strong>重点跟踪眼压、刺激感、炎症反应、感染风险和既往不耐受表现。</div>
+        </div>
+        <div>推荐依据：${profile.hasDrugEvidence ? '聊天中已包含当前或既往用药信息' : '当前用药信息不足，建议补充药名、剂量和疗程'}。</div>`
+    };
+  }
+
+  return {
+    shortResult: profile.hasFollowup ? '随访反馈已回流' : '等待随访反馈',
+    html: `
+      <div>支持长期随访患者的影像及用药数据，动态更新疗效评估模型，实现药物疗效和个体化用药策略的闭环优化。</div>
+      <div>动态跟踪结果：${profile.hasFollowup ? '本页随访信息已纳入趋势判断和模型回流。' : '当前缺少明确随访或复查信息，建议继续上传复查报告。'}</div>
+      <div class="chat-result-list">
+        <div class="chat-result-item"><strong>趋势判断：</strong>${profile.hasImageEvidence ? '影像变化可用于更新病灶趋势和组织恢复曲线。' : '补充影像后可更新病灶趋势。'}</div>
+        <div class="chat-result-item"><strong>用药反馈：</strong>${profile.hasDrugEvidence ? '用药执行、剂量或不良反应已进入反馈闭环。' : '请补充用药执行情况和患者反馈。'}</div>
+        <div class="chat-result-item"><strong>模型更新：</strong>后续长期随访会持续修正疗效预测、药物敏感性和个体化推荐策略。</div>
+      </div>
+      <div>应用场景：适用于慢性眼病管理、术后恢复监测、药物研发验证及临床试验数据分析。</div>`
+  };
+}
+
+function runChatAnalysis(key = getCurrentChatKey(), silent = false) {
+  const module = getChatModule(key);
+  if (!module) return;
+  const state = ensureChatDialogState(key);
+  const result = buildChatAnalysisResult(key);
+  state.analysisCount += 1;
+  if (!silent) appendChatMessage(key, 'user', module.action, `请执行${module.title}。`);
+  appendChatMessage(key, 'ai', `${module.title}结果`, result.html, true);
+}
+
+function showDetailedChatResults(key = getCurrentChatKey()) {
+  const module = getChatModule(key);
+  if (!module) return;
+  appendChatMessage(key, 'user', '查看详细结果', `请展开${module.title}的详细依据。`);
+  appendChatMessage(key, 'ai', '详细结果', buildChatAnalysisResult(key).html, true);
+}
+
+function generateChatReport(key = getCurrentChatKey()) {
+  const module = getChatModule(key);
+  const profile = buildChatModuleProfile(key);
+  if (!module) return;
+  appendChatMessage(key, 'user', '生成小结', `请生成${module.title}的对话式分析小结。`);
+  appendChatMessage(
+    key,
+    'ai',
+    'AI综合解释',
+    `
+      <div>当前模块：${module.title}</div>
+      <div>关键结论：${buildChatAnalysisResult(key).shortResult}。${profile.hasAnyInput ? `最近依据为：${escapeHtml(profile.recentText)}。` : '当前还需要继续补充病例信息。'}</div>
+      <div>临床定位：结果用于药物效能评估预判、不同体质药物敏感度分析和个体化用药推荐支持，不能替代医生最终诊断。</div>
+    `,
+    true
+  );
+}
+
+function runAllChatAnalyses() {
+  chatModuleDefinitions.forEach(module => runChatAnalysis(module.key, true));
+}
+
+function exportChatResult(key = getCurrentChatKey()) {
+  const module = getChatModule(key);
+  const profile = buildChatModuleProfile(key);
+  if (!module) return;
+  const text = [
+    '眼病/慢病药物效能评估和预测',
+    `模块：${module.title}`,
+    `关键结论：${buildChatAnalysisResult(key).shortResult}`,
+    `推荐参考：${profile.plan.drug}；${profile.plan.dose}；${profile.plan.frequency}`,
+    `最近聊天依据：${profile.recentText}`,
+    '服务场景：慢性眼病管理、术后恢复监测、药物研发验证、临床试验数据分析'
+  ].join('\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${module.title}-对话结果.txt`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  appendChatMessage(key, 'ai', '导出结果', '已导出当前聊天页的分析结果文本。');
+}
+
+function assessPatient(id) {
+  const module = chatModuleDefinitions[0];
+  switchPage(module.pageId, document.querySelector(`[data-page="${module.pageId}"]`));
+  appendChatMessage(module.key, 'ai', '手动评估入口', '当前页面不使用患者列表，请直接在聊天框发送患者疾病、手术、影像、用药和随访信息。');
+}
+
+// ==================== IMAGE AND QUANTIFICATION PAGES ====================
+function initImageComparePage() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  if (compareImagePatientId !== p.id) {
+    compareImagePatientId = p.id;
+    compareImageState.left = null;
+    compareImageState.right = null;
+  }
+  setText('imageDataNote', '请上传治疗前后或手术前后的影像资料，系统将基于上传内容进行指标对比研判。');
+  renderUserImageBox('left', p);
+  renderUserImageBox('right', p);
+  bindCompareUploadZone('left');
+  bindCompareUploadZone('right');
+
+  const groups = getImageFindingGroups(profile);
+  const lesionBody = document.getElementById('lesionChangeBody');
+  if (lesionBody) lesionBody.innerHTML = renderImageFindingRows(groups.lesion);
+  const tissueBody = document.getElementById('tissueRecoveryBody');
+  if (tissueBody) tissueBody.innerHTML = renderImageFindingRows(groups.tissue);
+  const functionalBody = document.getElementById('functionalMetricBody');
+  if (functionalBody) {
+    functionalBody.innerHTML = renderFunctionalMetricRows(profile.metrics.filter(isFunctionalMetric));
+  }
+}
+
+function initQuantPage() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const q = profile.quant;
+
+  const kpi = document.getElementById('quantKpiGrid');
+  if (kpi) {
+    kpi.innerHTML = `
+      <div class="compact-kpi"><div class="kpi-value">${q.score}</div><div class="kpi-label">综合疗效评分</div></div>
+      <div class="compact-kpi"><div class="kpi-value">${q.level}</div><div class="kpi-label">疗效等级</div></div>
+      <div class="compact-kpi"><div class="kpi-value">${q.avgRecovery}</div><div class="kpi-label">平均恢复占比</div></div>
+      <div class="compact-kpi"><div class="kpi-value">${q.improved}/${profile.metrics.length}</div><div class="kpi-label">改善指标数</div></div>
+    `;
+  }
+  renderScientificEvaluation('scientificEvalBody', profile);
+
+  const metricBody = document.getElementById('quantMetricBody');
+  if (metricBody) {
+    const structuralMetrics = profile.metrics.filter(m => !isFunctionalMetric(m));
+    metricBody.innerHTML = structuralMetrics.map(m => `
+      <tr>
+        <td>${getEyeLabel(m, 'OD右眼 / OS左眼')}</td>
+        <td>${m.name}</td>
+        <td>${m.before}${m.unit}</td>
+        <td>${m.after}${m.unit}</td>
+        <td><span class="change-pill change-green">${m.change}</span></td>
+        <td>${m.recovery}</td>
+        <td><span class="tag tag-${m.tone}">${m.verdict}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  const chart = document.getElementById('quantTrendChart');
+  if (chart) {
+    const canvas = document.getElementById('quantBarChart');
+    if (canvas) drawMetricBarChart(canvas, profile.metrics);
+  }
+  setText('quantConclusion', q.conclusion);
 }
 
 // ==================== DRUG SENSITIVITY PAGE ====================
-function initSensitivityPage() {
-  const pid = currentAssessmentPatientId || 'P0001';
-  const p = patients.find(x => x.id === pid) || patients[0];
-  if (!p) return;
-  currentAssessmentPatientId = p.id;
+function getMedicationImpact(record) {
+  const effect = record.effect || '';
+  if (/显著|有效/.test(effect)) return '既往疗效良好，提高同类药物响应权重';
+  if (/部分/.test(effect)) return '既往部分有效，保留替代价值并关注波动';
+  if (/无效/.test(effect)) return '既往响应不足，降低同类药物优先级';
+  if (record.adverse) return '既往出现不良反应，提高安全性核对权重';
+  return '作为既往用药证据纳入综合判断';
+}
 
-  document.getElementById('sensitivityAvatar').textContent = p.name.charAt(0);
-  document.getElementById('sensitivityName').textContent = p.name;
-  document.getElementById('sensitivityDetail').textContent = `${p.gender} | ${p.age}岁 | ${p.disease} | ${p.constitution || '无特殊'}`;
+function renderMedicationEvidence(patient) {
+  const body = document.getElementById('medicationEvidenceBody');
+  if (!body) return;
+  const records = patient.medRecords || [];
+  body.innerHTML = records.length
+    ? records.map(record => `
+      <tr>
+        <td>${record.drug || '-'}</td>
+        <td>${record.dose || '-'}</td>
+        <td>${record.route || '-'}</td>
+        <td>${record.startDate || '-'}~${record.endDate || '-'}</td>
+        <td><span class="tag tag-${tagTone(record.effect || '')}">${record.effect || '未记录'}</span></td>
+        <td>${record.adverse || '无'}</td>
+        <td>${getMedicationImpact(record)}</td>
+      </tr>
+    `).join('')
+    : '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">暂无既往用药记录</td></tr>';
+}
 
-  const drugData = [
-    { name: '康柏西普', sensitivity: '高', score: 96, conclusion: '强烈推荐', risk: '', color: 'green' },
-    { name: '雷珠单抗', sensitivity: '高', score: 92, conclusion: '强烈推荐', risk: '', color: 'green' },
-    { name: '地塞米松植入剂', sensitivity: '高', score: 85, conclusion: '推荐', risk: '', color: 'green' },
-    { name: '阿柏西普', sensitivity: '中', score: 78, conclusion: '可考虑', risk: '肝功能异常需监测', color: 'yellow' },
-    { name: '曲安奈德', sensitivity: '中', score: 65, conclusion: '可考虑', risk: '需监测眼压', color: 'yellow' },
-    { name: '贝伐珠单抗', sensitivity: '低', score: 45, conclusion: '不推荐', risk: '过敏体质使用风险', color: 'red' }
+function renderSensitivityScoreBasis(patient, profile) {
+  const body = document.getElementById('sensitivityScoreBody');
+  if (!body) return;
+  const history = patient.medRecords && patient.medRecords.length
+    ? patient.medRecords.map(r => `${r.drug}：${r.effect || '未记录'}`).join('；')
+    : '暂无既往用药记录';
+  const safety = `过敏：${patient.allergy || '无'}；肝功能：${patient.liver || '未记录'}；肾功能：${patient.kidney || '未记录'}`;
+  const efficacy = `${profile.effectLevel}；${profile.quant.improved}/${profile.metrics.length}项疗效指标改善`;
+  const rows = [
+    { name: '既往用药响应', weight: '30%', evidence: history, impact: '影响同类药物的响应先验' },
+    { name: '体质与过敏', weight: '25%', evidence: patient.constitution || patient.allergy || '无特殊记录', impact: '调整药物安全性和耐受性权重' },
+    { name: '肝肾功能与安全性', weight: '20%', evidence: safety, impact: '筛除或降低高风险替代方案' },
+    { name: '影像与功能疗效', weight: '25%', evidence: efficacy, impact: '校正当前疗效和持续获益预期' }
   ];
-
-  const grid = document.getElementById('drugCardGrid');
-  grid.innerHTML = drugData.map(d => `
-    <div class="drug-card">
-      <div class="drug-name">${d.name}</div>
-      <div class="drug-meta">
-        <span>敏感度：<span class="tag tag-${d.sensitivity === '高' ? 'high' : (d.sensitivity === '中' ? 'medium' : 'low')}">${d.sensitivity}</span></span>
-      </div>
-      <div class="drug-score">${d.score}%</div>
-      <div style="margin-bottom:8px;">
-        <span class="drug-conclusion" style="background:${d.color==='green'?'#e8f5e9':(d.color==='yellow'?'#fff3e0':'#fce4ec')};color:${d.color==='green'?'#2e7d32':(d.color==='yellow'?'#e65100':'#c62828')};">${d.conclusion}</span>
-      </div>
-      ${d.risk ? `<div class="drug-risk">⚠ ${d.risk}</div>` : ''}
-    </div>
+  body.innerHTML = rows.map(row => `
+    <tr><td>${row.name}</td><td>${row.weight}</td><td>${row.evidence}</td><td>${row.impact}</td></tr>
   `).join('');
 }
 
-// ==================== DRUG PLAN PAGE ====================
-function initPlanPage() {
-  const pid = currentAssessmentPatientId || 'P0001';
-  const p = patients.find(x => x.id === pid) || patients[0];
-  if (!p) return;
+function getDrugComparisonRows(profile) {
+  return profile.sensitivity.map(d => {
+    const predictedRate = d.responseRate || `${Math.max(45, Math.min(97, Math.round(d.score * 0.94 + 6)))}%`;
+    const confidence = d.confidence || `${Math.min(97, Math.max(72, Math.round(profile.dataCompleteness * 0.55 + d.score * 0.42)))}%`;
+    const expectedEffect = d.score >= 90 ? '高概率获益' : (d.score >= 75 ? '预期有效' : '疗效不确定');
+    const riskLevel = d.color === 'red' ? '高' : (d.color === 'yellow' ? '中' : '低');
+    return { ...d, predictedRate, confidence, expectedEffect, riskLevel };
+  });
+}
 
-  document.getElementById('planAvatar').textContent = p.name.charAt(0);
-  document.getElementById('planName').textContent = p.name;
-  document.getElementById('planDetail').textContent = `${p.gender} | ${p.age}岁 | ${p.disease}`;
+function renderDrugComparison(profile) {
+  const body = document.getElementById('drugComparisonBody');
+  if (!body) return;
+  body.innerHTML = getDrugComparisonRows(profile).map(d => `
+    <tr>
+      <td>${d.name}</td>
+      <td><span class="tag tag-${d.sensitivity === '高' ? 'high' : (d.sensitivity === '中' ? 'medium' : 'low')}">${d.sensitivity}</span></td>
+      <td><strong>${d.score}</strong>/100</td>
+      <td>${d.predictedRate}</td>
+      <td>${d.confidence}</td>
+      <td>${d.expectedEffect}</td>
+      <td><span class="tag tag-${d.riskLevel === '高' ? 'red' : (d.riskLevel === '中' ? 'yellow' : 'green')}">${d.riskLevel}风险</span> ${d.risk || '-'}</td>
+      <td><span class="tag tag-${d.color}">${d.conclusion}</span></td>
+    </tr>
+  `).join('');
+}
+
+function initSensitivityPage() {
+  const p = getCurrentPatient();
+  if (!p) return;
+  currentAssessmentPatientId = p.id;
+  const profile = getAssessmentProfile(p.id);
+
+  document.getElementById('sensitivityAvatar').textContent = p.name.charAt(0);
+  document.getElementById('sensitivityName').textContent = p.name;
+  document.getElementById('sensitivityDetail').textContent = `${p.gender} | ${p.age}岁 | ${p.disease} | ${p.constitution || '无特殊'} | 疗效评分：${profile.quant.score}`;
+
+  const kpi = document.getElementById('sensitivityKpiGrid');
+  if (kpi) {
+    kpi.innerHTML = `
+      <div class="compact-kpi"><div class="kpi-value">${profile.plan.drug}</div><div class="kpi-label">最高适配药物</div></div>
+      <div class="compact-kpi"><div class="kpi-value">${profile.plan.responseRate}</div><div class="kpi-label">预测有效率</div></div>
+      <div class="compact-kpi"><div class="kpi-value">${profile.effectLevel}</div><div class="kpi-label">影像疗效等级</div></div>
+      <div class="compact-kpi"><div class="kpi-value">${profile.dataCompleteness}%</div><div class="kpi-label">评估数据完整度</div></div>
+    `;
+  }
+
+  const factors = document.getElementById('sensitivityFactorBody');
+  if (factors) {
+    factors.innerHTML = profile.factors.map(f => `
+      <tr><td>${f.type}</td><td>${f.value}</td><td>${f.impact}</td><td>${f.advice}</td></tr>
+    `).join('');
+  }
+  renderMedicationEvidence(p);
+  renderSensitivityScoreBasis(p, profile);
+  renderDrugComparison(profile);
 }
 
 function generateDrugPlan() {
-  const item = document.querySelector('[data-page=page-drug-plan]');
+  const item = document.querySelector('[data-page=page-plan-optimize]');
   document.querySelectorAll('.submenu-item').forEach(s => s.classList.remove('active'));
   if (item) item.classList.add('active');
-  switchPage('page-drug-plan', item);
-  initPlanPage();
-}
-
-function savePlan() {
-  alert('用药方案已保存！');
+  switchPage('page-plan-optimize', item);
+  initOptimizePage();
 }
 
 // ==================== PLAN OPTIMIZE ====================
-function updateRiskPanel() {
-  const drug = document.getElementById('optimizeDrug').value;
-  document.getElementById('compareDrug').textContent = drug;
+function initOptimizePage() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const plan = profile.plan;
+  renderPatientSummary('optimizePatientSummary', p, profile, `原推荐：${plan.drug}`);
+  renderOptimizeDrugOptions(profile);
+  const altContainer = document.getElementById('alternativePlans');
+  if (altContainer) altContainer.innerHTML = '';
+  const drugSelect = document.getElementById('optimizeDrug');
+  if (drugSelect) drugSelect.value = plan.drug;
+  setValue('optimizeCategory', plan.category);
+  setValue('optimizeSpec', plan.spec);
+  setValue('optimizeResponseRate', plan.responseRate);
+  setValue('planBasis', buildPlanBasis(p, profile, plan));
+  setValue('optimizeDose', plan.dose);
+  setValue('optimizeRoute', plan.route);
+  setValue('optimizeCourse', plan.course);
+  setCombinationDetails(getCombinationDetails(p, plan));
+  renderCombinationDrugList(getDefaultCombinationDrugList(p, plan));
+  setValue('optimizeNotice', plan.notice);
+  setValue('optimizeFollowup', plan.followup);
+  const frequency = document.getElementById('optimizeFrequency');
+  if (frequency) frequency.value = plan.frequency;
+  const decisionStatus = document.getElementById('optimizeDecisionStatus');
+  if (decisionStatus) decisionStatus.value = '确认采用';
+  setValue('optimizeDecisionNote', '');
+  setText('decisionStatusMessage', '当前方案仅作为临床决策支持，确认方式可后续再调整。');
+  ['optimizeDose', 'optimizeRoute', 'optimizeFrequency', 'optimizeCourse', 'optimizeCombinationMode', 'optimizeCombinationCondition', 'optimizeCombinationDrug', 'optimizeCombination', 'optimizeCombinationRisk'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.dataset.boundCompare) {
+      el.addEventListener('input', updateRiskPanel);
+      el.addEventListener('change', updateRiskPanel);
+      el.dataset.boundCompare = '1';
+    }
+  });
+  updateRiskPanel();
 }
 
-function addAlternativePlan() {
+function applyOptimizeDrugSelection() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const drug = document.getElementById('optimizeDrug')?.value || profile.plan.drug;
+  const selected = getDrugSelectionTemplate(p, profile, drug);
+  setValue('optimizeCategory', selected.category);
+  setValue('optimizeSpec', selected.spec);
+  setValue('optimizeResponseRate', selected.responseRate);
+  setValue('planBasis', buildPlanBasis(p, profile, selected));
+  setValue('optimizeDose', selected.dose);
+  setValue('optimizeRoute', selected.route);
+  setValue('optimizeFrequency', selected.frequency);
+  setValue('optimizeCourse', selected.course);
+  setCombinationDetails(getCombinationDetails(p, selected));
+  renderCombinationDrugList(getDefaultCombinationDrugList(p, selected));
+  setValue('optimizeNotice', selected.notice);
+  setValue('optimizeFollowup', selected.followup);
+  updateRiskPanel();
+}
+
+function updateRiskPanel() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  const plan = profile.plan;
+  const drug = document.getElementById('optimizeDrug')?.value || plan.drug;
+  const selected = getDrugSelectionTemplate(p, profile, drug);
+  const dose = document.getElementById('optimizeDose')?.value || plan.dose;
+  const route = document.getElementById('optimizeRoute')?.value || plan.route;
+  const frequency = document.getElementById('optimizeFrequency')?.value || plan.frequency;
+  const course = document.getElementById('optimizeCourse')?.value || plan.course;
+  const originPackage = getDefaultCombinationDrugList(p, plan);
+  const currentPackage = collectCombinationDrugList();
+  setText('compareOriginDrug', plan.drug);
+  setText('compareOriginResponseRate', plan.responseRate);
+  setText('compareOriginDose', plan.dose);
+  setText('compareOriginRoute', plan.route);
+  setText('compareOriginFrequency', plan.frequency);
+  setText('compareOriginCourse', plan.course);
+  setText('compareOriginCombination', formatMedicationPackageSummary(originPackage));
+  setText('compareDrug', drug);
+  setText('compareResponseRate', document.getElementById('optimizeResponseRate')?.value || selected.responseRate);
+  setText('compareDose', dose);
+  setText('compareRoute', route);
+  setText('compareFrequency', frequency);
+  setText('compareCourse', course);
+  setText('compareCombination', formatMedicationPackageSummary(currentPackage));
+  renderOptimizeRisks(p, profile, drug);
+}
+
+function addAlternativePlan(data = {}) {
   const div = document.getElementById('alternativePlans');
+  if (!div) return;
   const idx = div.children.length + 1;
   const alt = document.createElement('div');
-  alt.className = 'scheme-section';
+  alt.className = 'scheme-section alternative-plan-item';
   alt.innerHTML = `
     <div class="scheme-section-title">替代方案 ${idx} <button class="btn btn-danger btn-xs" onclick="this.parentElement.parentElement.remove()" style="margin-left:12px;">删除</button></div>
     <div class="form-row">
       <div class="form-group"><label>替代药物</label>
-        <select><option>雷珠单抗</option><option>阿柏西普</option><option>地塞米松植入剂</option><option>曲安奈德</option></select>
+        <input class="alternative-drug" type="text" value="${escapeHtml(data.drug || '')}" placeholder="填写医生自定义药物">
       </div>
-      <div class="form-group"><label>推荐剂量</label><input type="text" value="0.5mg"></div>
-      <div class="form-group"><label>给药途径</label><select><option>玻璃体腔内注射</option></select></div>
-      <div class="form-group"><label>给药频次</label><select><option>每月1次</option></select></div>
+      <div class="form-group"><label>推荐剂量</label><input class="alternative-dose" type="text" value="${escapeHtml(data.dose || '')}" placeholder="例如 0.5mg"></div>
+      <div class="form-group"><label>给药途径</label><input class="alternative-route" type="text" value="${escapeHtml(data.route || '')}" placeholder="例如 玻璃体腔内注射"></div>
+      <div class="form-group"><label>给药频次</label><input class="alternative-frequency" type="text" value="${escapeHtml(data.frequency || '')}" placeholder="例如 每月1次"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>适用条件</label><input class="alternative-condition" type="text" value="${escapeHtml(data.condition || '')}" placeholder="填写适用条件"></div>
+      <div class="form-group wide"><label>风险提示</label><input class="alternative-risk" type="text" value="${escapeHtml(data.risk || '')}" placeholder="填写风险提示"></div>
     </div>`;
+  const footer = document.createElement('div');
+  footer.style.display = 'flex';
+  footer.style.justifyContent = 'flex-end';
+  footer.style.marginTop = '12px';
+  footer.innerHTML = `<button class="btn btn-blue btn-sm" onclick="applyAlternativePlan(this)">采用并回填</button>`;
+  alt.appendChild(footer);
+  const drug = alt.querySelector('.alternative-drug');
+  const route = alt.querySelector('.alternative-route');
+  const frequency = alt.querySelector('.alternative-frequency');
+  if (data.drug) drug.value = data.drug;
+  if (data.route) route.value = data.route;
+  if (data.frequency) frequency.value = data.frequency;
   div.appendChild(alt);
+}
+
+function applyAlternativePlan(btn) {
+  const item = btn?.closest('.alternative-plan-item');
+  if (!item) return;
+  const drug = item.querySelector('.alternative-drug')?.value || '';
+  const dose = item.querySelector('.alternative-dose')?.value || '';
+  const route = item.querySelector('.alternative-route')?.value || '';
+  const frequency = item.querySelector('.alternative-frequency')?.value || '';
+  const condition = item.querySelector('.alternative-condition')?.value || '';
+  const risk = item.querySelector('.alternative-risk')?.value || '';
+  if (!drug.trim()) {
+    setText('decisionStatusMessage', '请先填写替代药物名称，再采用并回填。');
+    return;
+  }
+  const select = document.getElementById('optimizeDrug');
+  if (select && drug) {
+    let option = [...select.options].find(opt => opt.value === drug);
+    if (!option) {
+      option = new Option(drug, drug);
+      select.add(option);
+    }
+    select.value = drug;
+  }
+  applyOptimizeDrugSelection();
+  if (dose) setValue('optimizeDose', dose);
+  if (route) setValue('optimizeRoute', route);
+  if (frequency) setValue('optimizeFrequency', frequency);
+  const decisionStatus = document.getElementById('optimizeDecisionStatus');
+  if (decisionStatus) decisionStatus.value = '调整后采用';
+  const note = document.getElementById('optimizeDecisionNote');
+  if (note) {
+    const current = note.value.trim();
+    const fallback = `采用替代方案：${drug || '未命名方案'}${condition ? `；${condition}` : ''}${risk ? `；${risk}` : ''}`;
+    if (!current) note.value = fallback;
+  }
+  setText('decisionStatusMessage', `已回填替代方案：${drug || '未命名方案'}，可继续微调后再保存。`);
+  updateRiskPanel();
+}
+
+function renderAlternativePlans(alternatives) {
+  const container = document.getElementById('alternativePlans');
+  if (!container) return;
+  container.innerHTML = '';
+  alternatives.forEach(item => addAlternativePlan(item));
+}
+
+// ==================== FOLLOWUP AND MODEL LOOP ====================
+function renderPatientOptions(selectId) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  select.innerHTML = patients.map(p => `<option value="${p.id}" ${p.id === getCurrentPatient().id ? 'selected' : ''}>${p.id} ${p.name}</option>`).join('');
+}
+
+function initFollowupPage() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  renderPatientOptions('followupPatientSelect');
+  renderPatientSummary('followupPatientSummary', p, profile, `推荐方案：${profile.plan.drug}`);
+  setText('followupFeedbackNote', `${profile.followupStatus}；最近疗效反馈将反向更新药物适配度、方案调整建议和模型训练样本。`);
+
+  const timeline = document.getElementById('followupTimeline');
+  if (timeline) {
+    timeline.innerHTML = profile.followups.map(item => `
+      <div class="timeline-item">
+        <div class="tl-date">${item.date}</div>
+        <div class="tl-title">${item.title}</div>
+        <div class="tl-desc">${item.desc}</div>
+      </div>
+    `).join('');
+  }
+
+  const latest = profile.followups[0];
+  if (!latest) return;
+  setText('followupDetailTitle', `随访详情 - ${latest.date}（${latest.title}）`);
+  const imageBody = document.getElementById('followupImageBody');
+  if (imageBody) {
+    imageBody.innerHTML = latest.imageRows.map(row => `
+      <tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td><span class="tag tag-${tagTone(row[3])}">${row[3]}</span></td></tr>
+    `).join('');
+  }
+  const medBody = document.getElementById('followupMedicationBody');
+  if (medBody) {
+    medBody.innerHTML = latest.medRows.map(row => `
+      <tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td><span class="tag tag-${tagTone(row[4])}">${row[4]}</span></td><td>${row[5] || '-'}</td></tr>
+    `).join('');
+  }
+}
+
+function initModelPage() {
+  const p = getCurrentPatient();
+  const profile = getAssessmentProfile(p.id);
+  setText('modelFeedbackNote', `当前患者：${p.name}；${profile.modelImpact}`);
+  setText('modelVersionValue', 'v3.2.1');
+  setText('modelTrainingValue', (12856 + profile.followups.length).toLocaleString());
+  setText('modelAccuracyValue', `${Math.min(95.6, 93 + profile.quant.score / 70).toFixed(1)}%`);
+  setText('modelUpdatedValue', profile.lastAssessment);
+}
+
+function runModelUpdate() {
+  initModelPage();
+  alert('模型更新任务已提交：随访反馈、影像疗效指标和方案调整记录已进入训练队列');
+}
+
+function initClinicalPage() {
+  // 临床页仍保留双场景展示，当前患者信息由随访页和模型页承接，不额外改写静态示例。
+}
+
+function initResearchPage() {
+  // 研究页保留队列级对比，用于展示药物研发验证和临床试验数据输出。
 }
 
 // ==================== UTILS ====================
@@ -2079,7 +5690,7 @@ function handleLogout() {
 // ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', () => {
   checkAuth();
-  renderPatientTable();
+  initChatWorkbench();
 
   // Click outside modal to close
   document.getElementById('patientModalOverlay').addEventListener('click', closePatientModal);

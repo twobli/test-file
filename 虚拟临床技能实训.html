@@ -399,7 +399,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 
                     <div class="clinical-subsection-title"><span>2</span>诊断决策</div>
                     <div class="diagnosis-section">
-                        <div class="ds-label">综合临床诊断（单选）</div>
+                        <div class="ds-label">综合临床诊断（单选） <span style="color:var(--danger);">*</span></div>
                         <div class="diagnosis-options" id="diagnosisOptions">
                             <label class="diagnosis-option" onclick="selectDiagnosis(this)">
                                 <input type="radio" name="diagnosis" value="none"> 无明确糖尿病视网膜病变
@@ -419,7 +419,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                         </div>
                     </div>
                     <div class="diagnosis-section">
-                        <div class="ds-label">临床风险分层（单选）</div>
+                        <div class="ds-label">临床风险分层（单选） <span style="color:var(--danger);">*</span></div>
                         <div class="diagnosis-options" id="riskOptions">
                             <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
                                 <input type="radio" name="riskLevel" value="low"> 常规管理
@@ -433,7 +433,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                         </div>
                     </div>
                     <div class="diagnosis-section">
-                        <div class="ds-label">下一步处理建议（可多选）</div>
+                        <div class="ds-label">下一步处理建议（可多选） <span style="color:var(--danger);">*</span></div>
                         <div class="action-grid">
                             <label class="action-chip"><input type="checkbox" name="nextAction" value="routine"> 常规复查</label>
                             <label class="action-chip"><input type="checkbox" name="nextAction" value="oct"> 完善OCT/相关检查</label>
@@ -443,7 +443,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                     </div>
                     <div class="diagnosis-section">
                         <div class="ds-label">综合诊断说明 <span style="color:var(--danger);">*</span></div>
-                        <textarea class="textarea-diagnosis" id="diagNotes" placeholder="请结合问诊信息、影像判读和风险分层，说明您的综合判断与处理思路..."></textarea>
+                        <textarea class="textarea-diagnosis" id="diagNotes" required placeholder="请结合问诊信息、影像判读和风险分层，说明您的综合判断与处理思路..."></textarea>
                     </div>
                     <button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交临床诊断</button>
                 </div>
@@ -683,7 +683,7 @@ var cases = [
             "没有长期吃药，偶尔吃点维生素。"
         ],
         imagingTabs: [
-            { name:"眼底彩照（右眼）", desc:"右眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。视网膜血管走行正常，无微血管瘤、出血、渗出或棉绒斑。", annotations:[] },
+            { name:"眼底彩照（右眼）", desc:"", annotations:[] },
             { name:"眼底彩照（左眼）", desc:"左眼眼底彩色照相：视盘边界清晰，黄斑区反光正常。视网膜平伏，未见微血管瘤、出血、渗出或棉绒斑。", annotations:[] }
         ],
         correctDiagnosis: "none",
@@ -959,7 +959,9 @@ function renderImaging() {
     html += '</div>';
 
     // Description
-    html += '<div style="margin-top:8px;font-size:12px;color:var(--gray-600);line-height:1.5;">'+currentTab.desc+'</div>';
+    if (currentTab.desc) {
+        html += '<div style="margin-top:8px;font-size:12px;color:var(--gray-600);line-height:1.5;">'+currentTab.desc+'</div>';
+    }
 
     // Navigation dots
     if (tabs.length > 1) {
@@ -995,7 +997,7 @@ function openLightbox(index) {
         '<div style="text-align:center;color:rgba(255,255,255,0.6);">'+
         '<div style="font-size:64px;">🔬</div>'+
         '<div style="font-size:16px;margin:10px 0;">'+tab.name+'</div>'+
-        '<div style="font-size:12px;max-width:450px;margin:0 auto;line-height:1.6;">'+tab.desc+'</div>'+
+        (tab.desc ? '<div style="font-size:12px;max-width:450px;margin:0 auto;line-height:1.6;">'+tab.desc+'</div>' : '')+
         '</div></div>';
     document.getElementById('lightbox').classList.add('show');
 }
@@ -1021,7 +1023,7 @@ function renderImageInterpretation() {
 
     html += '<div class="interpret-section">';
     html += '<div class="is-label">判读依据 <span style="color:var(--danger);">*</span></div>';
-    html += '<textarea class="textarea-interpret" id="imageInterpretNotes" placeholder="请填写判读依据，例如病变位置、眼别、分期判断依据..."'+disabled+'>'+escapeHtml(imagingInterpretation.notes)+'</textarea>';
+    html += '<textarea class="textarea-interpret" id="imageInterpretNotes" required placeholder="请填写判读依据，例如病变位置、眼别、分期判断依据..."'+disabled+'>'+escapeHtml(imagingInterpretation.notes)+'</textarea>';
     html += '</div>';
 
     if (diagnosisSubmitted) {
@@ -1097,6 +1099,13 @@ function submitDiagnosis() {
         alert('请先选择临床风险分层');
         return;
     }
+    var checkedNextActions = Array.prototype.slice.call(document.querySelectorAll('input[name="nextAction"]:checked')).map(function(input){
+        return input.value;
+    });
+    if (!checkedNextActions.length) {
+        alert('请至少选择一项下一步处理建议');
+        return;
+    }
     var diagNotes = document.getElementById('diagNotes').value.trim();
     if (!diagNotes) {
         alert('请填写综合诊断说明');
@@ -1107,9 +1116,7 @@ function submitDiagnosis() {
         return;
     }
     imagingInterpretation = { notes:imageNotes };
-    selectedNextActions = Array.prototype.slice.call(document.querySelectorAll('input[name="nextAction"]:checked')).map(function(input){
-        return input.value;
-    });
+    selectedNextActions = checkedNextActions;
     document.getElementById('confirmModal').classList.add('show');
 }
 

@@ -99,7 +99,7 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 .case-item .ci-brief { font-size:12px; color:var(--gray-600); margin-bottom:8px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .case-item .ci-meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:11px; color:var(--gray-500); }
 .case-item .ci-meta .imaging-type { display:inline-flex; align-items:center; gap:3px; background:var(--gray-100); padding:2px 8px; border-radius:4px; font-size:11px; }
-.case-item .ci-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.case-item .ci-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:8px; }
 .case-item .ci-status { flex-shrink:0; }
 
 .tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:500; white-space:nowrap; }
@@ -140,6 +140,43 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 .imaging-type-tab:hover { border-color:var(--primary); color:var(--primary); }
 .imaging-type-tab.active { background:var(--primary); color:#fff; border-color:var(--primary); }
 
+.case-overview-card .card-body { padding:18px 20px 20px; }
+.case-overview-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.case-overview-item { padding:12px 14px; background:var(--gray-50); border:1px solid var(--gray-100); border-radius:8px; min-height:72px; }
+.case-overview-item.full { grid-column:1 / -1; }
+.case-overview-item.emphasis { background:var(--warning-light); border-color:#fde68a; min-height:84px; }
+.case-overview-item.emphasis .label { color:#b45309; font-weight:600; }
+.case-overview-item.emphasis .value { color:#92400e; }
+.case-overview-item .label { font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:500; }
+.case-overview-item .value { font-size:14px; color:var(--gray-800); font-weight:600; line-height:1.65; word-break:break-word; }
+.case-overview-note { margin-top:12px; padding:12px 14px; background:var(--primary-lighter); border:1px solid #dbe7ff; border-radius:8px; color:#1d4ed8; font-size:13px; line-height:1.7; }
+.case-overview-note strong { color:#1545a4; }
+.case-overview-tags { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.primary-imaging-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.imaging-viewer { margin-top:4px; }
+.imaging-viewer-tabs { display:flex; gap:0; margin-bottom:12px; border-bottom:1px solid var(--gray-200); }
+.imaging-viewer-tab { padding:8px 16px; border:none; background:none; cursor:pointer; font-size:13px; color:var(--gray-700); font-family:inherit; border-bottom:2px solid transparent; margin-bottom:-1px; transition:var(--transition); font-weight:500; }
+.imaging-viewer-tab:hover { color:var(--primary); }
+.imaging-viewer-tab.active { color:var(--primary); border-bottom-color:var(--primary); font-weight:700; }
+.imaging-viewer-stage { min-height:300px; background:radial-gradient(circle at top, rgba(76,117,255,0.16) 0%, rgba(19,22,41,0) 52%), linear-gradient(180deg,#1e2038 0%, #14162a 100%); border-radius:10px; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; overflow:hidden; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.04); }
+.imaging-viewer-stage::after { content:''; position:absolute; inset:0; border-radius:10px; box-shadow:inset 0 0 120px rgba(255,255,255,0.03); pointer-events:none; }
+.imaging-viewer-stage-inner { position:relative; z-index:1; color:#fff; padding:20px; }
+.imaging-viewer-icon { font-size:44px; margin-bottom:14px; opacity:0.85; }
+.imaging-viewer-title { font-size:20px; font-weight:700; line-height:1.35; }
+.imaging-viewer-subtitle { margin-top:8px; font-size:13px; color:rgba(255,255,255,0.72); }
+.imaging-viewer-meta { margin-top:12px; font-size:12px; color:rgba(255,255,255,0.55); }
+.imaging-viewer-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap; }
+.imaging-viewer-footer .view-note { font-size:12px; color:var(--gray-500); }
+.imaging-viewer-footer .zoom-tip { font-size:12px; color:var(--primary); font-weight:600; }
+.report-intro { background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%); border:1px solid #dbe7ff; border-radius:8px; padding:12px 14px; margin-bottom:14px; }
+.report-intro-title { font-size:14px; font-weight:700; color:var(--gray-800); margin-bottom:6px; }
+.report-intro-text { font-size:13px; color:var(--gray-700); line-height:1.7; }
+.report-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.report-field { margin-bottom:0; }
+.report-field.full { grid-column:1 / -1; }
+.report-field textarea { min-height:96px; }
+.report-field .field-hint { margin-top:6px; font-size:12px; color:var(--gray-500); line-height:1.6; }
+
 .lightbox-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.88); z-index:3000; display:none; align-items:center; justify-content:center; }
 .lightbox-overlay.show { display:flex; }
 .lightbox-content { position:relative; max-width:90vw; max-height:90vh; }
@@ -173,19 +210,26 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 .btn-success { background:var(--success); color:#fff; }
 .btn-outline { background:#fff; border:1px solid var(--gray-300); color:var(--gray-700); }
 .btn-outline:hover { background:var(--gray-50); border-color:var(--gray-400); }
+.btn:disabled { opacity:0.55; cursor:not-allowed; box-shadow:none; transform:none; }
+.btn-primary:disabled { background:var(--gray-300); color:var(--gray-600); }
 .btn-lg { padding:10px 24px; font-size:14px; }
 
 .scoring-placeholder { text-align:center; padding:40px 20px; color:var(--gray-500); }
 .scoring-placeholder .ph-icon { font-size:40px; margin-bottom:10px; opacity:0.4; }
 .scoring-placeholder p { font-size:14px; }
-.scoring-overall { display:flex; align-items:center; gap:20px; padding:20px; background:var(--gray-50); border-radius:var(--radius); margin-bottom:16px; }
+.scoring-overall { display:flex; align-items:stretch; gap:16px; padding:20px; background:var(--gray-50); border-radius:var(--radius); margin-bottom:16px; }
+.scoring-overall .score-block { display:flex; flex-direction:column; justify-content:center; min-width:110px; padding-right:4px; }
 .scoring-overall .big-score { font-size:48px; font-weight:700; color:var(--primary); line-height:1; }
 .scoring-overall .big-score-label { font-size:13px; color:var(--gray-600); }
-.scoring-overall .rank-info { flex:1; }
-.scoring-overall .rank-text { font-size:15px; font-weight:500; color:var(--gray-800); margin-bottom:4px; }
-.scoring-overall .rank-bar { height:8px; background:var(--gray-200); border-radius:4px; overflow:hidden; margin-bottom:4px; }
-.scoring-overall .rank-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--success)); border-radius:4px; }
-.scoring-overall .rank-sub { font-size:12px; color:var(--gray-500); }
+.scoring-overall .grade-info { flex:1; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.scoring-overall .grade-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.scoring-overall .grade-badge { display:inline-flex; align-items:center; height:28px; padding:0 12px; border-radius:14px; font-size:13px; font-weight:700; }
+.scoring-overall .grade-desc { font-size:13px; color:var(--gray-700); line-height:1.7; }
+.scoring-overall .grade-scale { font-size:12px; color:var(--gray-500); line-height:1.6; }
+.grade-excellent { background:#dcfce7; color:#166534; }
+.grade-good { background:#dbeafe; color:#1d4ed8; }
+.grade-pass { background:#fef3c7; color:#92400e; }
+.grade-improve { background:#fee2e2; color:#b91c1c; }
 
 .score-item { margin-bottom:12px; }
 .score-item .si-header { display:flex; justify-content:space-between; margin-bottom:4px; font-size:13px; }
@@ -222,8 +266,8 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 .toast-info { background:var(--primary); }
 .toast-warning { background:var(--orange); }
 
-@media (max-width:1280px) { .content-split { flex-direction:column; } .case-list-panel { width:100%; max-height:400px; } }
-@media (max-width:1024px) { .sidebar { width:60px; } .sidebar .menu-item span { display:none; } .sidebar .menu-group-title { display:none; } .main-content { margin-left:60px; } .submenu .menu-item { padding-left:10px; } .lightbox-nav.prev { left:10px; } .lightbox-nav.next { right:10px; } }
+@media (max-width:1280px) { .content-split { flex-direction:column; } .case-list-panel { width:100%; max-height:400px; } .case-overview-grid, .report-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:1024px) { .sidebar { width:60px; } .sidebar .menu-item span { display:none; } .sidebar .menu-group-title { display:none; } .main-content { margin-left:60px; } .submenu .menu-item { padding-left:10px; } .lightbox-nav.prev { left:10px; } .lightbox-nav.next { right:10px; } .case-overview-grid, .report-grid { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -409,6 +453,7 @@ let currentCaseId = 1;
 let filteredCases = [...mockCases];
 let lightboxImages = [], lightboxIndex = 0, lightboxScale = 1;
 let draftData = {}, reportStatus = {}, scoringResult = null;
+let selectedPrimaryImagingByCase = {};
 
 document.addEventListener('DOMContentLoaded', function() {
     try { var u = JSON.parse(localStorage.getItem('life_med_user')); if (u&&u.name) document.getElementById('headerUserName').textContent = u.name; } catch(e) {}
@@ -428,13 +473,9 @@ function getCaseStatus(c) {
     var key = getCaseKey(c.id);
     var status = reportStatus[key] || {};
     if (status.state === 'completed') {
-        return { cls:'status-completed', text:'已完成'+(status.score ? ' '+status.score+'分' : '') };
+        return { cls:'status-completed', text:'已诊断' };
     }
-    var draft = draftData[key] || {};
-    if ((draft.conclusion || draft.basis || draft.diff || draft.treatment || '').trim()) {
-        return { cls:'status-draft', text:'草稿' };
-    }
-    return { cls:'status-pending', text:'未完成' };
+    return { cls:'status-pending', text:'未诊断' };
 }
 
 function getStoredScoring(caseId) {
@@ -469,12 +510,10 @@ function renderCaseList() {
     filteredCases.forEach(function(c) {
         var sel = c.id===currentCaseId?' selected':'';
         var dc='tag-blue'; if(c.disease==='糖尿病视网膜病变')dc='tag-green'; else if(c.disease==='AMD')dc='tag-orange'; else if(c.disease==='RVO')dc='tag-purple'; else if(c.disease==='视神经病变')dc='tag-red';
-        var its = c.imaging.slice(0,3).map(function(im){return '<span class="imaging-type">'+im.type+'</span>';}).join('');
         var status = getCaseStatus(c);
         h+='<div class="case-item'+sel+'" onclick="selectCase('+c.id+')">';
         h+='<div class="ci-header"><span class="ci-name">'+c.name+'</span><div class="ci-tags"><span class="tag '+dc+'">'+c.disease+'</span></div></div>';
-        h+='<div class="ci-brief">'+c.patient.chief+'</div>';
-        h+='<div class="ci-footer"><div class="ci-meta">'+getDifficultyBadge(c)+its+'</div><div class="ci-status"><span class="status-badge '+status.cls+'">'+status.text+'</span></div></div></div>';
+        h+='<div class="ci-footer"><div class="ci-meta">'+getDifficultyBadge(c)+'</div><div class="ci-status"><span class="status-badge '+status.cls+'">'+status.text+'</span></div></div></div>';
     });
     if (filteredCases.length===0) h='<div style="padding:40px;text-align:center;color:var(--gray-500);">没有匹配的病例</div>';
     document.getElementById('caseListBody').innerHTML = h;
@@ -489,48 +528,183 @@ function showEmptyDetail() {
     document.getElementById('caseDetailPanel').innerHTML='<div class="case-detail-empty"><div class="empty-icon">📋</div><p>请从左侧列表中选择一个病例查看详情</p></div>';
 }
 
-function renderCaseDetail(c) {
-    var p=c.patient; var difficultyBadge=getDifficultyBadge(c);
-    var tabs='<button class="imaging-type-tab active" onclick="filterImaging(\'all\',this)">全部</button>';
-    var seen={}; c.imaging.forEach(function(im){ if(!seen[im.type]){seen[im.type]=true;tabs+='<button class="imaging-type-tab" onclick="filterImaging(\''+im.type+'\',this)">'+im.type+'</button>';} });
-    var grid=''; c.imaging.forEach(function(im,idx){
-        grid+='<div class="imaging-thumb" data-imtype="'+im.type+'" onclick="openLightbox('+c.id+','+idx+')">';
-        grid+='<div class="thumb-placeholder" style="background:linear-gradient(135deg,'+im.color+' 0%,'+im.color+'cc 100%);">'+im.type+'</div>';
-        grid+='<div class="thumb-label">'+im.label+'</div></div>';
-    });
-    var dk='case_'+c.id, dr=draftData[dk]||{};
-    var fh=''; fh+='<div class="patient-info-bar">';
-    fh+='<div class="pi-item"><span class="pi-label">姓名：</span><span class="pi-value">'+p.name+'</span></div><span class="pi-sep"></span>';
-    fh+='<div class="pi-item"><span class="pi-label">性别：</span><span class="pi-value">'+p.gender+'</span></div><span class="pi-sep"></span>';
-    fh+='<div class="pi-item"><span class="pi-label">年龄：</span><span class="pi-value">'+p.age+'岁</span></div><span class="pi-sep"></span>';
-    fh+='<div class="pi-item"><span class="pi-label">病例号：</span><span class="pi-value">'+p.caseNo+'</span></div><span class="pi-sep"></span>';
-    fh+='<div class="pi-item"><span class="pi-label">主诉：</span><span class="pi-value">'+p.chief+'</span></div></div>';
-    fh+='<div class="form-group"><label>诊断结论 <span style="color:var(--danger)">*</span></label><textarea id="diagConclusion" placeholder="请输入您的诊断结论（包含疾病名称、分期分级等）">'+(dr.conclusion||'')+'</textarea></div>';
-    fh+='<div class="form-group"><label>诊断依据 <span style="color:var(--danger)">*</span></label><textarea id="diagBasis" placeholder="请列出您的诊断依据（病史、检查结果等）">'+(dr.basis||'')+'</textarea></div>';
-    fh+='<div class="form-group"><label>鉴别诊断</label><textarea id="diagDiff" placeholder="请列出需要鉴别的疾病及排除理由">'+(dr.diff||'')+'</textarea></div>';
-    fh+='<div class="form-group"><label>治疗建议 <span style="color:var(--danger)">*</span></label><textarea id="diagTreatment" placeholder="请制定治疗方案（用药、手术、风险控制等）">'+(dr.treatment||'')+'</textarea></div>';
-    fh+='<div class="form-actions"><button class="btn btn-outline" onclick="saveDraft('+c.id+')">💾 保存草稿</button><button class="btn btn-outline" onclick="resetForm('+c.id+')">🔄 重置</button><button class="btn btn-primary btn-lg" onclick="submitReport('+c.id+')">📤 提交报告</button></div>';
+const primaryImagingTypeMap = {
+    1:'眼底彩照',
+    2:'OCT',
+    3:'OCTA',
+    4:'眼底彩照',
+    5:'眼底彩照',
+    6:'OCT',
+    7:'眼底彩照',
+    8:'OCT',
+    9:'OCT',
+    10:'眼底彩照',
+    11:'OCT',
+    12:'眼底彩照',
+    13:'OCT',
+    14:'OCT',
+    15:'眼底彩照'
+};
 
+function getPrimaryImagingType(c) {
+    return primaryImagingTypeMap[c.id] || '眼底彩照';
+}
+
+function getImagingEyeLabel(im, idx) {
+    var text = ((im.label || '') + ' ' + (im.desc || '')).toLowerCase();
+    if (text.indexOf('双眼') !== -1) return '双眼';
+    if (text.indexOf('右眼') !== -1 || text.indexOf('od') !== -1) return '右眼';
+    if (text.indexOf('左眼') !== -1 || text.indexOf('os') !== -1) return '左眼';
+    return '影像' + (idx + 1);
+}
+
+function getImagingEyeRank(label) {
+    if (label === '右眼') return 0;
+    if (label === '左眼') return 1;
+    if (label === '双眼') return 2;
+    return 3;
+}
+
+function matchPrimaryImagingItem(im, primaryType) {
+    var text = ((im.label || '') + ' ' + (im.desc || '')).toUpperCase();
+    if (primaryType === 'OCTA') return text.indexOf('OCTA') !== -1;
+    if (primaryType === 'OCT') return /(OCT|RNFL|GCC|CMT|扫描|层厚|厚度|B-SCAN|BSCAN)/.test(text);
+    return /彩照|眼底/.test(text);
+}
+
+function getPrimaryImagingEntries(c, primaryType) {
+    var entries = [];
+    (c.imaging || []).forEach(function(im, idx) {
+        if (matchPrimaryImagingItem(im, primaryType)) entries.push({ item: im, idx: idx });
+    });
+    if (!entries.length && (c.imaging || []).length) {
+        entries = [{ item: c.imaging[0], idx: 0 }];
+    }
+    entries.sort(function(a, b) {
+        var al = getImagingEyeLabel(a.item, a.idx);
+        var bl = getImagingEyeLabel(b.item, b.idx);
+        var diff = getImagingEyeRank(al) - getImagingEyeRank(bl);
+        if (diff !== 0) return diff;
+        return a.idx - b.idx;
+    });
+    return entries;
+}
+
+function getDiseaseTagClass(disease) {
+    if (disease === '糖尿病视网膜病变') return 'tag-green';
+    if (disease === 'AMD') return 'tag-orange';
+    if (disease === 'RVO') return 'tag-purple';
+    if (disease === '视神经病变') return 'tag-red';
+    return 'tag-blue';
+}
+
+function buildCaseOverviewHtml(c, primaryType) {
+    var p = c.patient;
+    var diseaseTag = getDiseaseTagClass(c.disease);
+    return '' +
+        '<div class="card case-overview-card" id="caseOverviewCard">' +
+            '<div class="card-header"><span class="card-title">📋 病例信息与病史</span><div class="case-overview-tags"><span class="tag '+diseaseTag+'">'+escapeHtml(c.disease)+'</span>'+getDifficultyBadge(c)+'</div></div>' +
+            '<div class="card-body">' +
+                '<div class="case-overview-grid">' +
+                    '<div class="case-overview-item"><div class="label">病例号</div><div class="value">'+escapeHtml(p.caseNo)+'</div></div>' +
+                    '<div class="case-overview-item"><div class="label">患者姓名</div><div class="value">'+escapeHtml(p.name)+'</div></div>' +
+                    '<div class="case-overview-item"><div class="label">性别 / 年龄</div><div class="value">'+escapeHtml(p.gender+' / '+p.age+'岁')+'</div></div>' +
+                    '<div class="case-overview-item"><div class="label">疾病分类</div><div class="value"><span class="tag '+diseaseTag+'">'+escapeHtml(c.disease)+'</span></div></div>' +
+                    '<div class="case-overview-item full emphasis"><div class="label">主诉 / 病史</div><div class="value">'+escapeHtml(p.chief)+'</div></div>' +
+                '</div>' +
+                '<div class="case-overview-note"><strong>阅读顺序：</strong>先核对病例信息与病史，再查看主影像，最后进入诊断报告撰写。</div>' +
+            '</div>' +
+        '</div>';
+}
+
+function buildImagingCardHtml(c, primaryType, imagingEntries) {
+    var html = '';
+    var activeIndex = selectedPrimaryImagingByCase[c.id];
+    if (typeof activeIndex !== 'number' || activeIndex < 0 || activeIndex >= imagingEntries.length) activeIndex = 0;
+    selectedPrimaryImagingByCase[c.id] = activeIndex;
+    var activeEntry = imagingEntries[activeIndex] || imagingEntries[0];
+    var activeIm = activeEntry ? activeEntry.item : (c.imaging && c.imaging[0]);
+    var activeEye = activeIm ? getImagingEyeLabel(activeIm, activeEntry ? activeEntry.idx : 0) : '当前影像';
+    html += '<div class="card" id="imagingCard">';
+    html += '<div class="card-header"><span class="card-title">📷 主影像浏览</span><div class="primary-imaging-actions"><span class="tag '+getDiseaseTagClass(c.disease)+'">主影像：'+escapeHtml(primaryType)+'</span></div></div>';
+    html += '<div class="card-body">';
+    html += '<div class="imaging-viewer">';
+    html += '<div class="imaging-viewer-tabs">';
+    imagingEntries.forEach(function(entry, idx) {
+        var side = getImagingEyeLabel(entry.item, entry.idx);
+        html += '<button class="imaging-viewer-tab'+(idx===activeIndex?' active':'')+'" onclick="switchPrimaryImaging('+c.id+','+idx+')">'+escapeHtml(side)+'</button>';
+    });
+    html += '</div>';
+    html += '<div class="imaging-viewer-stage" onclick="openLightbox('+c.id+','+activeEntry.idx+')">';
+    html += '<div class="imaging-viewer-stage-inner">';
+    html += '<div class="imaging-viewer-icon">🔬</div>';
+    html += '<div class="imaging-viewer-title">'+escapeHtml(primaryType+'（'+activeEye+'）')+'</div>';
+    html += '<div class="imaging-viewer-subtitle">'+escapeHtml(activeIm && activeIm.label ? activeIm.label : '主影像资料')+'</div>';
+    html += '<div class="imaging-viewer-meta">点击放大查看</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="imaging-viewer-footer"><div class="view-note">当前选中：'+escapeHtml(activeEye)+' · '+escapeHtml(primaryType)+'</div><div class="zoom-tip">点击影像区可放大</div></div>';
+    html += '</div>';
+    html += '<div style="margin-top:14px;display:flex;justify-content:flex-end;"><button class="btn btn-primary" onclick="document.getElementById(\'diagnosisReportCard\').scrollIntoView({behavior:\'smooth\',block:\'start\'});">进入诊断报告撰写</button></div>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+}
+
+function buildReportFormHtml(c, primaryType, dr, isCompleted) {
+    var p = c.patient;
+    var html = '';
+    html += '<div class="card" id="diagnosisReportCard">';
+    html += '<div class="card-header"><span class="card-title">📝 诊断报告撰写</span><span class="tag tag-blue">结构化模板</span></div>';
+    html += '<div class="card-body">';
+    html += '<div class="report-intro">';
+    html += '<div class="report-intro-title">撰写要求</div>';
+    html += '<div class="report-intro-text">当前病例：'+escapeHtml(c.name)+'；病例号：'+escapeHtml(p.caseNo)+'；主影像类型：'+escapeHtml(primaryType)+'。请按“诊断结论 - 影像学依据 - 鉴别诊断 - 处置建议”的顺序撰写，尽量写清疾病名称、侧别、分期/分级，以及主影像的关键征象和处理路径。</div>';
+    html += '</div>';
+    html += '<div class="report-grid">';
+    html += '<div class="form-group report-field"><label>诊断结论 <span style="color:var(--danger)">*</span></label><textarea id="diagConclusion" placeholder="请写明疾病名称、侧别及分期/分级，例如：右眼增殖性糖尿病视网膜病变（PDR）">'+escapeHtml(dr.conclusion || '')+'</textarea><div class="field-hint">建议写成“疾病名称 + 侧别 + 分期/分级/伴随并发症”。</div></div>';
+    html += '<div class="form-group report-field"><label>影像学依据 <span style="color:var(--danger)">*</span></label><textarea id="diagBasis" placeholder="请写明病灶部位、主要征象及与病史的对应关系，例如：黄斑区出血、渗出、CNV渗漏...">'+escapeHtml(dr.basis || '')+'</textarea><div class="field-hint">建议按“病变部位 + 关键影像征象 + 证据链”来写。</div></div>';
+    html += '<div class="form-group report-field full"><label>鉴别诊断 <span style="color:var(--danger)">*</span></label><textarea id="diagDiff" placeholder="请列出1-2个需要鉴别的疾病，并写明排除理由">'+escapeHtml(dr.diff || '')+'</textarea><div class="field-hint">建议至少写出一个鉴别对象和排除逻辑，避免只写病名不写理由。</div></div>';
+    html += '<div class="form-group report-field full"><label>处置建议 <span style="color:var(--danger)">*</span></label><textarea id="diagTreatment" placeholder="请写明首选治疗、补充检查、风险控制及复查安排">'+escapeHtml(dr.treatment || '')+'</textarea><div class="field-hint">建议包含治疗方式、必要检查、风险控制和随访节奏。</div></div>';
+    html += '</div>';
+    html += '<div class="form-actions"><button class="btn btn-outline" onclick="resetForm('+c.id+')">🔄 重置</button><button class="btn btn-primary btn-lg" onclick="submitReport('+c.id+')"'+(isCompleted?' disabled title="该病例已完成AI诊断分析，请先重置后再提交"':'')+'>📤 提交AI诊断分析</button></div>';
+    html += '</div></div>';
+    return html;
+}
+
+function switchPrimaryImaging(caseId, idx) {
+    selectedPrimaryImagingByCase[caseId] = idx;
+    var c = mockCases.find(function(item){ return item.id === caseId; });
+    if (c) renderCaseDetail(c, false);
+}
+
+function renderCaseDetail(c, scrollToTop) {
+    var p = c.patient;
+    var primaryType = getPrimaryImagingType(c);
+    var imagingEntries = getPrimaryImagingEntries(c, primaryType);
+    var dk='case_'+c.id, dr=draftData[dk]||{};
     var sh='';
     var activeScoring = (scoringResult && scoringResult.caseId===c.id) ? scoringResult : getStoredScoring(c.id);
     if (activeScoring) {
         var sr=activeScoring;
-        sh+='<div class="scoring-result"><div class="scoring-overall"><div><div class="big-score">'+sr.total+'</div><div class="big-score-label">综合得分</div></div><div class="rank-info"><div class="rank-text">🏆 '+sr.rankText+'</div><div class="rank-bar"><div class="rank-fill" style="width:'+sr.percentile+'%"></div></div><div class="rank-sub">排名前 '+(100-sr.percentile)+'%</div></div></div>';
+        var level = (sr.level && sr.level.label) ? sr.level : getScoreLevel(sr.total);
+        sh+='<div class="scoring-result"><div class="scoring-overall"><div class="score-block"><div class="big-score">'+sr.total+'</div><div class="big-score-label">综合得分</div></div><div class="grade-info"><div class="grade-row"><span class="grade-badge '+level.cls+'">'+level.label+'</span><span style="font-size:13px;color:var(--gray-700);font-weight:600;">当前综合表现</span></div><div class="grade-desc">'+level.desc+'</div><div class="grade-scale">评分参考：90-100 优秀 · 75-89 良好 · 60-74 合格 · 60分以下 待提升</div></div></div>';
         [{label:'诊断准确性',val:sr.scores.accuracy,max:40},{label:'报告完整性',val:sr.scores.completeness,max:25},{label:'治疗规范性',val:sr.scores.treatment,max:20},{label:'逻辑清晰度',val:sr.scores.logic,max:15}].forEach(function(it){
             var pct=Math.round(it.val/it.max*100), cls=pct>=80?'si-fill-good':(pct>=60?'si-fill-ok':'si-fill-bad');
             sh+='<div class="score-item"><div class="si-header"><span class="si-label">'+it.label+'</span><span class="si-val">'+it.val+'/'+it.max+'分</span></div><div class="si-bar"><div class="si-fill '+cls+'" style="width:'+pct+'%"></div></div></div>';
         });
         sh+=buildAiAnalysis(c, sr, dr)+'</div>';
     } else {
-        sh='<div class="scoring-placeholder"><div class="ph-icon">📊</div><p>提交报告后可查看评分</p></div>';
+        sh='<div class="scoring-placeholder"><div class="ph-icon">📊</div><p>提交AI诊断分析后可查看评分</p></div>';
     }
 
     var html='';
-    html+='<div class="card"><div class="card-header"><span class="card-title">📷 影像浏览 - '+c.name+'</span>'+difficultyBadge+'</div><div class="card-body"><div class="imaging-type-tabs" id="imagingTabs">'+tabs+'</div><div class="imaging-grid" id="imagingGrid">'+grid+'</div></div></div>';
-    html+='<div class="card"><div class="card-header"><span class="card-title">📝 诊断报告撰写</span></div><div class="card-body">'+fh+'</div></div>';
+    html+=buildCaseOverviewHtml(c, primaryType);
+    html+=buildImagingCardHtml(c, primaryType, imagingEntries);
+    html+=buildReportFormHtml(c, primaryType, dr, !!activeScoring);
     html+='<div class="card" id="scoringCard"><div class="card-header"><span class="card-title">📊 诊断报告评分</span></div><div class="card-body">'+sh+'</div></div>';
     document.getElementById('caseDetailPanel').innerHTML=html;
-    document.getElementById('caseDetailPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    if (scrollToTop !== false) document.getElementById('caseDetailPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function escapeHtml(str) {
@@ -550,6 +724,13 @@ function buildList(lines) {
     return '<ul class="ai-list">'+lines.map(function(line){ return '<li>'+escapeHtml(line)+'</li>'; }).join('')+'</ul>';
 }
 
+function getScoreLevel(total) {
+    if (total >= 90) return { label:'优秀', cls:'grade-excellent', desc:'报告结构完整，诊断表达准确，影像依据和处置建议都比较充分。' };
+    if (total >= 75) return { label:'良好', cls:'grade-good', desc:'主体内容较完整，核心结论基本正确，继续补强鉴别诊断和关键依据会更好。' };
+    if (total >= 60) return { label:'合格', cls:'grade-pass', desc:'报告已覆盖主要内容，但部分关键细节还需补充，建议重点完善诊断依据与治疗建议。' };
+    return { label:'待提升', cls:'grade-improve', desc:'目前报告还比较基础，建议先补齐诊断结论、影像依据和处置路径，再进行整体润色。' };
+}
+
 function buildAiAnalysis(c, sr, dr) {
     var accuracyPct = Math.round(sr.scores.accuracy / 40 * 100);
     var completenessPct = Math.round(sr.scores.completeness / 25 * 100);
@@ -565,7 +746,7 @@ function buildAiAnalysis(c, sr, dr) {
     var html = '';
     html += '<div class="ai-analysis">';
     html += '<div class="ai-title">🤖 AI辅助分析</div>';
-    html += '<div class="ai-summary">AI已将你的诊断报告与标准答案进行结构化比对，重点关注诊断命名、分期分级、影像证据、鉴别诊断和治疗规范性。以下建议用于完善报告表达和训练临床思维。</div>';
+    html += '<div class="ai-summary">AI已将你的诊断报告进行结构化审阅，重点关注诊断命名、分期分级、影像证据、鉴别诊断和治疗规范性。以下建议用于完善报告表达和训练临床思维。</div>';
     html += '<div class="ai-section"><div class="ai-section-title"><span>诊断匹配</span><span class="ai-score-tag">'+sr.scores.accuracy+'/40分</span></div><div class="ai-text">'+diagnosisTone+' 标准诊断参考：'+escapeHtml(c.standardAnswer.diagnosis)+'</div></div>';
     html += '<div class="ai-section"><div class="ai-section-title"><span>证据完整性</span><span class="ai-score-tag">'+sr.scores.completeness+'/25分</span></div><div class="ai-text">'+completenessTone+' 建议报告中至少覆盖以下要点：</div>'+buildList(answerLines(c.standardAnswer.basis, 5))+'</div>';
     html += '<div class="ai-section"><div class="ai-section-title"><span>治疗建议</span><span class="ai-score-tag">'+sr.scores.treatment+'/20分</span></div><div class="ai-text">'+treatmentTone+' 可参考的处置方向如下：</div>'+buildList(answerLines(c.standardAnswer.treatment, 5))+'</div>';
@@ -613,7 +794,7 @@ function saveDraft(caseId, quiet) {
 }
 
 function resetForm(caseId) {
-    showConfirm('确认重置','将清空所有已填写内容，此操作不可撤销。确定要重置吗？',function(){
+    showConfirm('确认重置','重置后将清空当前填写内容，并删除已生成的AI诊断分析结果，病例会恢复为未诊断状态。确定要重置吗？',function(){
         ['diagConclusion','diagBasis','diagDiff','diagTreatment'].forEach(function(id){document.getElementById(id).value='';});
         delete draftData[getCaseKey(caseId)]; try{localStorage.setItem('case_diag_drafts',JSON.stringify(draftData));}catch(e){}
         delete reportStatus[getCaseKey(caseId)]; persistReportStatus(); scoringResult=null;
@@ -623,10 +804,15 @@ function resetForm(caseId) {
 }
 
 function submitReport(caseId) {
+    if (getStoredScoring(caseId)) {
+        showToast('该病例已完成AI诊断分析，请先重置后再提交','warning');
+        return;
+    }
     if(!document.getElementById('diagConclusion').value.trim()){showToast('请填写诊断结论','warning');return;}
     if(!document.getElementById('diagBasis').value.trim()){showToast('请填写诊断依据','warning');return;}
+    if(!document.getElementById('diagDiff').value.trim()){showToast('请填写鉴别诊断','warning');return;}
     if(!document.getElementById('diagTreatment').value.trim()){showToast('请填写治疗建议','warning');return;}
-    showConfirm('提交报告','提交后将进行自动评分，提交后不可修改。确定要提交吗？',function(){
+    showConfirm('提交AI诊断分析','提交后将进行自动评分，提交后不可修改。确定要提交吗？',function(){
         saveDraft(caseId, true); calculateScore(caseId);
         reportStatus[getCaseKey(caseId)]={state:'completed',score:scoringResult.total,result:scoringResult,submittedAt:new Date().toISOString()};
         persistReportStatus();
@@ -652,8 +838,8 @@ function calculateScore(caseId) {
     if((dr.treatment||'').length>50) ls+=2;
     ls=Math.min(15,ls);
     ds=Math.min(40,Math.max(5,ds)); bs=Math.min(25,Math.max(3,bs)); ts=Math.min(20,Math.max(3,ts));
-    var total=ds+bs+ts+ls, pct=Math.min(98,Math.max(30,total+10));
-    scoringResult={caseId:caseId,total:total,percentile:pct,rankText:'击败了 '+pct+'% 的同行用户',scores:{accuracy:ds,completeness:bs,treatment:ts,logic:ls}};
+    var total=ds+bs+ts+ls;
+    scoringResult={caseId:caseId,total:total,level:getScoreLevel(total),scores:{accuracy:ds,completeness:bs,treatment:ts,logic:ls}};
 }
 
 function showConfirm(title,body,onConfirm) {

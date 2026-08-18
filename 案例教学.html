@@ -1336,7 +1336,7 @@ function renderResultActions() {
     const report = currentCaseId ? getLearningReport(currentCaseId) : null;
     if (report) {
         actions.style.display = 'flex';
-        actions.innerHTML = '<button class="btn-report-submit" onclick="openSavedLearningReport(currentCaseId)">查看学习报告</button>';
+        actions.innerHTML = '<button class="btn-report-submit" onclick="switchToCompareAfterSubmit()">进入AI诊断对比学习</button>';
     } else {
         actions.innerHTML = '';
         actions.style.display = 'none';
