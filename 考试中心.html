@@ -243,6 +243,7 @@ table tbody tr:hover { background: var(--gray-50); }
 .btn-outline:hover { background: var(--gray-50); }
 .btn-danger { background: var(--danger); color: #fff; }
 .btn-danger:hover { background: #DC2626; }
+.action-btns { flex-wrap: wrap; }
 
 /* ===== 分页 ===== */
 .pagination-section { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px 20px; }
@@ -391,14 +392,6 @@ table tbody tr:hover { background: var(--gray-50); }
     align-items: center; justify-content: space-between;
     border-top: 1px solid var(--gray-200);
 }
-.exam-bottom-bar .btn-mark {
-    border: 1px solid #A855F7; color: #A855F7; background: #fff;
-    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-family: inherit;
-    cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px;
-}
-.exam-bottom-bar .btn-mark:hover { background: #F5F0FF; }
-.exam-bottom-bar .btn-mark.marked { background: #F5F0FF; border-color: #7C3AED; color: #7C3AED; }
-
 /* 题号导航面板 */
 .exam-nav-panel {
     width: 240px; background: #fff; border-left: 1px solid var(--gray-200);
@@ -411,7 +404,6 @@ table tbody tr:hover { background: var(--gray-50); }
 .legend-dot.answered { background: var(--success); }
 .legend-dot.unanswered { background: var(--gray-200); }
 .legend-dot.current { background: var(--primary); }
-.legend-dot.marked { background: #A855F7; }
 .exam-nav-grid {
     display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
     margin-bottom: 16px;
@@ -426,8 +418,6 @@ table tbody tr:hover { background: var(--gray-50); }
 .exam-nav-num:hover { border-color: var(--primary); }
 .exam-nav-num.answered { background: var(--success-light); color: var(--success); border-color: var(--success); font-weight: 600; }
 .exam-nav-num.current { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 700; }
-.exam-nav-num.marked { border-color: #A855F7; color: #A855F7; }
-.exam-nav-num.marked.answered { background: #F5F0FF; border-color: #7C3AED; color: #7C3AED; }
 .exam-nav-stats { font-size: 12px; color: var(--gray-500); line-height: 2; }
 .exam-nav-stats .stat-item { display: flex; align-items: center; gap: 6px; }
 
@@ -436,14 +426,14 @@ table tbody tr:hover { background: var(--gray-50); }
    ======================================================== */
 #reportModal .modal {
     max-width: 1180px; width: 95%; max-height: 88vh; border-radius: 16px; overflow: hidden;
-    display: flex; flex-direction: column;
+    display: block; overflow-y: auto;
 }
 .report-gradient-header {
     background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #2563eb 100%);
-    color: #fff; padding: 28px 32px 24px; flex-shrink: 0;
+    color: #fff; padding: 18px 24px 16px;
 }
 .report-top-row {
-    display: flex; align-items: flex-start; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 12px;
 }
 .report-top-row .report-back-btn {
@@ -474,14 +464,210 @@ table tbody tr:hover { background: var(--gray-50); }
     font-size: 20px; font-weight: 700; margin-bottom: 4px;
 }
 .report-exam-meta {
-    font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 14px;
+    font-size: 12px; color: rgba(255,255,255,0.75);
 }
 .report-pass-badge {
-    display: inline-block; padding: 4px 16px; border-radius: 20px;
-    font-size: 13px; font-weight: 600; margin-bottom: 16px;
+    display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: 13px; font-weight: 600;
 }
 .report-pass-badge.pass { background: #8B5CF6; color: #fff; }
 .report-pass-badge.fail { background: #F87171; color: #fff; }
+.report-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 14px;
+}
+.report-attempt-switcher,
+.analysis-attempt-switcher {
+    display: flex; gap: 20px; flex-wrap: wrap;
+}
+.attempt-tab-btn {
+    min-width: 126px;
+    border: 1px solid rgba(255,255,255,0.36);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-radius: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: var(--transition);
+}
+.attempt-tab-btn:hover { background: rgba(255,255,255,0.22); }
+.attempt-tab-btn.active {
+    background: #fff;
+    color: var(--primary-dark);
+    border-color: #fff;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.16);
+}
+.attempt-tab-btn strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.25;
+}
+.attempt-tab-btn span {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    opacity: 0.82;
+}
+.analysis-attempt-switcher {
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.analysis-attempt-switcher .attempt-tab-btn {
+    background: #fff;
+    color: var(--gray-700);
+    border-color: var(--gray-200);
+    min-width: 118px;
+    box-shadow: var(--shadow);
+}
+.analysis-attempt-switcher .attempt-tab-btn.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+.report-selected-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
+    gap: 16px;
+    margin-bottom: 18px;
+    align-items: start;
+}
+.report-overview-card,
+.report-band-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+}
+.report-card-head,
+.report-band-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+.report-card-eyebrow {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+.report-card-head h3,
+.report-band-head h3 {
+    margin-top: 4px;
+    font-size: 18px;
+    color: var(--gray-900);
+    line-height: 1.25;
+}
+.report-card-sub {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+.report-band-pill {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.band-current {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #F0F7FF;
+    color: var(--primary-dark);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid #BFDBFE;
+}
+.report-score-block {
+    margin: 18px 0 16px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #F8FBFF 0%, #FFFFFF 100%);
+    border: 1px solid #DCEBFF;
+}
+.report-score-main {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+.report-score-main b {
+    font-size: 40px;
+    line-height: 1;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+}
+.report-score-main span {
+    font-size: 18px;
+    color: var(--gray-500);
+    font-weight: 600;
+}
+.report-score-caption {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+.report-overview-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+.report-meta-item {
+    background: #F8FAFC;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+.report-meta-item span {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+.report-meta-item strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--gray-900);
+}
+.score-band-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+}
+.score-band-line {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #F8FAFC;
+    font-size: 13px;
+    color: var(--gray-600);
+    border: 1px solid transparent;
+}
+.score-band-line strong {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.score-band-line.current {
+    background: linear-gradient(90deg, #EFF6FF 0%, #FFFFFF 100%);
+    border-color: #BFDBFE;
+    box-shadow: 0 0 0 1px rgba(59,130,246,0.12) inset;
+}
+.score-band-line.current strong { color: var(--primary-dark); }
 .report-score-row {
     display: flex; gap: 20px; flex-wrap: wrap;
 }
@@ -494,7 +680,7 @@ table tbody tr:hover { background: var(--gray-50); }
 .report-score-item .score-label {
     font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;
 }
-.report-body-content { padding: 24px 32px; overflow-y: auto; flex: 1; background: #F8FAFC; }
+.report-body-content { padding: 20px 32px; overflow: visible; background: #F8FAFC; }
 .report-dashboard-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
 .report-analysis-grid { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 16px; margin-bottom: 18px; }
 .report-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 18px; box-shadow: var(--shadow); }
@@ -506,9 +692,12 @@ table tbody tr:hover { background: var(--gray-50); }
 .score-band-track { flex: 1; height: 8px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
 .score-band-fill { height: 100%; border-radius: 999px; }
 .score-band-value { width: 42px; text-align: right; color: var(--gray-500); }
+.score-band.active .score-band-label,
+.score-band.active .score-band-value { color: var(--gray-900); font-weight: 700; }
+.score-band.active .score-band-track { box-shadow: 0 0 0 1px rgba(59,130,246,0.16) inset; }
 .report-mini-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
 .report-mini-kpi { background: var(--gray-50); border-radius: 8px; padding: 10px; text-align: center; }
-.report-mini-kpi b { display: block; font-size: 18px; color: var(--gray-900); }
+.report-mini-kpi b { display: block; font-size: 16px; color: var(--gray-900); line-height: 1.35; word-break: break-word; }
 .report-mini-kpi span { color: var(--gray-500); font-size: 12px; }
 .error-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
 .error-chip { border-radius: 8px; padding: 10px; text-align: center; background: var(--gray-50); }
@@ -527,6 +716,175 @@ table tbody tr:hover { background: var(--gray-50); }
 .trend-column.error { background: linear-gradient(180deg, #EF4444, #F59E0B); }
 .trend-note { margin-top: 10px; color: var(--gray-600); font-size: 12px; line-height: 1.6; }
 .analysis-list { display: flex; flex-direction: column; gap: 10px; }
+.score-grade-tag,
+.attempt-compare-tag,
+.analysis-item-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.score-grade-tag.excellent,
+.analysis-item-badge.excellent { background: #ECFDF5; color: #059669; }
+.score-grade-tag.good,
+.analysis-item-badge.good { background: #EFF6FF; color: #2563EB; }
+.score-grade-tag.qualified,
+.analysis-item-badge.qualified { background: #EEF2FF; color: #4F46E5; }
+.score-grade-tag.improve,
+.analysis-item-badge.improve { background: #FFFBEB; color: #D97706; }
+.score-grade-tag.need,
+.analysis-item-badge.need { background: #FEF2F2; color: #DC2626; }
+.analysis-item-badge.ok { background: #ECFDF5; color: #059669; }
+.attempt-compare-tag { background: #F8FAFC; color: var(--gray-700); }
+.analysis-modal-box {
+    max-width: 980px;
+    width: 94%;
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.analysis-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fff;
+    flex-shrink: 0;
+}
+.analysis-title-main { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.analysis-title-sub { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+.analysis-modal-body {
+    padding: 18px 24px 24px;
+    overflow-y: auto;
+    background: #F8FAFC;
+    flex: 1;
+}
+.analysis-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.analysis-summary-card {
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: var(--shadow);
+    padding: 12px 14px;
+}
+.analysis-summary-card strong {
+    display: block;
+    font-size: 20px;
+    color: var(--gray-900);
+    line-height: 1.2;
+}
+.analysis-summary-card span {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+.analysis-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 2px 0 14px;
+}
+.analysis-filter-btn {
+    min-width: 92px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--gray-700);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.analysis-filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+.analysis-filter-btn.active {
+    border-color: var(--primary);
+    color: #fff;
+    background: var(--primary);
+}
+.analysis-list { display: flex; flex-direction: column; gap: 12px; }
+.analysis-item {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+}
+.analysis-item.correct {
+    border-color: #BBF7D0;
+    background: #F7FDF8;
+}
+.analysis-item.wrong {
+    border-color: #FECACA;
+    background: #FFF7F7;
+}
+.analysis-item-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.analysis-item-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+.analysis-question {
+    font-size: 14px;
+    color: var(--gray-800);
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+.analysis-answer-row {
+    background: var(--gray-50);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-bottom: 8px;
+}
+.analysis-answer-row strong { color: var(--gray-900); }
+.analysis-explain {
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+    color: #9A3412;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+.analysis-meta {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--gray-500);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.analysis-empty {
+    padding: 26px 0;
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 13px;
+}
 .analysis-row { display: grid; grid-template-columns: minmax(84px, 1fr) 1.5fr auto; align-items: center; gap: 10px; font-size: 12px; color: var(--gray-600); }
 .analysis-row-name { color: var(--gray-800); font-weight: 600; }
 .analysis-track { height: 8px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
@@ -627,8 +985,10 @@ table tbody tr:hover { background: var(--gray-50); }
 .history-delta.flat { color: var(--gray-500); }
 .report-footer { padding: 16px 32px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; background: #fff; }
 @media (max-width: 1100px) {
+    .report-selected-summary { grid-template-columns: 1fr; }
     .report-dashboard-grid, .report-analysis-grid { grid-template-columns: 1fr; }
     .history-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .analysis-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ========================================================
@@ -765,6 +1125,7 @@ table tbody tr:hover { background: var(--gray-50); }
                         <button class="filter-status-btn active" onclick="filterStatus('all',this)">全部</button>
                         <button class="filter-status-btn" onclick="filterStatus('not-started',this)">未开始</button>
                         <button class="filter-status-btn" onclick="filterStatus('in-progress',this)">进行中</button>
+                        <button class="filter-status-btn" onclick="filterStatus('completed',this)">已完成</button>
                     </div>
                     <div class="search-box">
                         <span class="search-icon">🔍</span>
@@ -778,8 +1139,8 @@ table tbody tr:hover { background: var(--gray-50); }
                             <thead>
                                 <tr>
                                     <th>测评名称</th>
-                                    <th>测评类型</th>
-                                    <th>考核对象</th>
+                                    <th>考试类型</th>
+                                    <th>考核范围</th>
                                     <th>状态</th>
                                     <th>总分</th>
                                     <th>成绩轴</th>
@@ -804,6 +1165,7 @@ table tbody tr:hover { background: var(--gray-50); }
                         <button class="filter-status-btn active" onclick="filterComprehensiveStatus('all',this)">全部</button>
                         <button class="filter-status-btn" onclick="filterComprehensiveStatus('not-started',this)">未开始</button>
                         <button class="filter-status-btn" onclick="filterComprehensiveStatus('in-progress',this)">进行中</button>
+                        <button class="filter-status-btn" onclick="filterComprehensiveStatus('completed',this)">已完成</button>
                     </div>
                     <div class="search-box">
                         <span class="search-icon">🔍</span>
@@ -863,7 +1225,6 @@ table tbody tr:hover { background: var(--gray-50); }
         </div>
         <div class="exam-bottom-bar">
             <button class="btn btn-outline" onclick="prevQuestion()">← 上一题</button>
-            <button class="btn-mark" id="btnMark" onclick="toggleMark()">🏷 标记待查</button>
             <button class="btn btn-primary" onclick="nextQuestion()">下一题 →</button>
         </div>
     </div>
@@ -884,10 +1245,6 @@ table tbody tr:hover { background: var(--gray-50); }
                 <div class="confirm-stat">
                     <span class="stat-dot" style="background:#F59E0B;"></span>未完成题目
                     <span class="stat-val" style="color:#F59E0B;" id="csUnanswered">0</span>
-                </div>
-                <div class="confirm-stat">
-                    <span class="stat-dot" style="background:#A855F7;"></span>标记待查
-                    <span class="stat-val" style="color:#A855F7;" id="csMarked">0</span>
                 </div>
             </div>
             <div class="confirm-warn-box" id="confirmWarnBox">
@@ -917,81 +1274,18 @@ table tbody tr:hover { background: var(--gray-50); }
             <div class="report-exam-title" id="reportExamName">2026年眼科医师资格考试-专业知识</div>
             <div class="report-exam-meta" id="reportExamMeta">考试时间：2026-04-12 14:30-16:30 | 用时：1小时22分钟</div>
             <span class="report-pass-badge pass" id="reportPassBadge">测评已完成</span>
-            <div class="report-score-row">
-                <div class="report-score-item">
-                    <div class="score-num" id="reportTotalScore">86</div>
-                    <div class="score-label">总分</div>
-                </div>
-                <div class="report-score-item">
-                    <div class="score-num" id="reportAccuracy">86%</div>
-                    <div class="score-label">正确率</div>
-                </div>
-                <div class="report-score-item">
-                    <div class="score-num" id="reportRank">24/328</div>
-                    <div class="score-label">排名</div>
-                </div>
-                <div class="report-score-item">
-                    <div class="score-num" id="reportBeat">93%</div>
-                    <div class="score-label">击败考生</div>
-                </div>
-            </div>
+            <div class="report-attempt-switcher" id="reportAttemptSwitcher"></div>
         </div>
         <div class="report-body-content">
-            <div class="report-dashboard-grid">
-                <div class="report-card">
-                    <h4>成绩分布</h4>
-                    <div id="scoreDistribution"></div>
-                </div>
-                <div class="report-card">
-                    <h4>错误率分析</h4>
-                    <div id="errorRateAnalysis"></div>
-                </div>
-                <div class="report-card">
-                    <h4>能力提升曲线</h4>
-                    <div id="abilityCurve"></div>
-                </div>
-            </div>
-
-            <div class="report-analysis-grid">
-                <div class="report-card">
-                    <h4>题型得分分析</h4>
-                    <div class="type-score-list" id="typeScoreList"></div>
-                </div>
-                <div class="report-card">
-                    <h4>知识点掌握情况</h4>
-                    <div id="knowledgeAnalysis"></div>
-                </div>
-                <div class="report-card">
-                    <h4>难度分级表现</h4>
-                    <div id="difficultyAnalysis"></div>
-                </div>
-            </div>
-
-            <div class="report-advice" id="reportAdvice">系统将根据题型、知识点和难度表现生成能力提升建议。</div>
-
-            <!-- 逐题详情 -->
-            <div class="report-detail-section">
-                <h4>逐题详情</h4>
-                <div style="overflow-x:auto;">
-                    <table class="report-detail-table">
-                        <thead>
-                            <tr>
-                                <th>题号</th><th>题型</th><th>正确答案</th><th>你的答案</th><th>结果</th><th>得分</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reportDetailBody"></tbody>
-                    </table>
-                </div>
-            </div>
+            <div class="report-selected-summary" id="reportSelectedSummary"></div>
 
             <!-- 历史成绩对比 -->
             <div class="report-history-section" id="reportHistorySection" style="display:none;">
-                <h4>历次成绩对比</h4>
-                <div class="history-summary-grid" id="reportHistorySummary"></div>
+                <h4>历次报告对比</h4>
                 <div style="overflow-x:auto;">
                     <table class="report-history-table">
                         <thead>
-                            <tr><th>次数</th><th>考试时间</th><th>得分</th><th>变化</th><th>正确率</th><th>错误率</th><th>用时</th><th>排名</th><th>击败考生</th></tr>
+                            <tr><th>次数</th><th>考试时间</th><th>得分</th><th>成绩档次</th><th>同次对照</th><th>用时</th><th>操作</th></tr>
                         </thead>
                         <tbody id="reportHistoryBody"></tbody>
                     </table>
@@ -1001,6 +1295,25 @@ table tbody tr:hover { background: var(--gray-50); }
         <div class="report-footer">
             <button class="btn btn-outline" onclick="closeModal('reportModal');switchToListView();">关闭</button>
             <button class="btn btn-warning" id="reportReExamBtn" onclick="reExam()">再考一次</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 错题解析弹窗 ===== -->
+<div class="modal-overlay" id="analysisModal">
+    <div class="modal analysis-modal-box">
+        <div class="analysis-header">
+            <div>
+                <div class="analysis-title-main" id="analysisModalTitle">题目解析</div>
+                <div class="analysis-title-sub" id="analysisModalSub">查看本次考试的全部题目解析与对照</div>
+            </div>
+            <button class="btn btn-outline" onclick="closeModal('analysisModal')">关闭</button>
+        </div>
+        <div class="analysis-modal-body">
+            <div class="analysis-attempt-switcher" id="analysisAttemptSwitcher"></div>
+            <div class="analysis-filter-bar" id="analysisFilterBar"></div>
+            <div class="analysis-summary" id="analysisSummary"></div>
+            <div class="analysis-list" id="analysisModalList"></div>
         </div>
     </div>
 </div>
@@ -1019,31 +1332,33 @@ var examQuestions = [{"q": "糖尿病视网膜病变的早期微血管改变不�
 var examData = [
     { id: 1, name: '糖尿病视网膜病变基础单课程测评', examType: '单课程测评', target: '糖尿病视网膜病变基础', status: 'in-progress', totalScore: 100, bestScore: null, examCount: '0/3次', history: [] },
     { id: 2, name: '青光眼诊疗基础单课程测评', examType: '单课程测评', target: '青光眼诊疗基础', status: 'not-started', totalScore: 100, bestScore: null, examCount: '0/2次', history: [] },
-    { id: 3, name: '眼科学基础模块考核', examType: '模块考核', target: '眼科学基础模块', status: 'completed', totalScore: 100, bestScore: 92, examCount: '2/2次', history: [{time:'2026-05-20',score:86,rate:'86%',duration:'48分钟',result:'完成'},{time:'2026-06-10',score:92,rate:'92%',duration:'42分钟',result:'完成'}] },
-    { id: 4, name: '角膜病模块考核', examType: '模块考核', target: '角膜病模块', status: 'completed', totalScore: 100, bestScore: 72, examCount: '1/3次', history: [{time:'2026-06-18',score:72,rate:'72%',duration:'55分钟',result:'完成'}] },
+    { id: 3, name: '眼科学基础模块考核', examType: '模块考核', target: '解剖学', status: 'completed', totalScore: 100, bestScore: 92, examCount: '2/2次', history: [{time:'2026-05-20',score:86,rate:'86%',duration:'48分钟',result:'完成'},{time:'2026-06-10',score:92,rate:'92%',duration:'42分钟',result:'完成'}] },
+    { id: 4, name: '角膜病模块考核', examType: '模块考核', target: '生理学', status: 'completed', totalScore: 100, bestScore: 72, examCount: '1/3次', history: [{time:'2026-06-18',score:72,rate:'72%',duration:'55分钟',result:'完成'}] },
     { id: 5, name: 'AMD诊疗规范单课程测评', examType: '单课程测评', target: 'AMD诊疗规范', status: 'not-started', totalScore: 100, bestScore: null, examCount: '0/2次', history: [] },
     { id: 6, name: '高血压视网膜病变单课程测评', examType: '单课程测评', target: '高血压视网膜病变', status: 'not-started', totalScore: 100, bestScore: null, examCount: '0/3次', history: [] },
-    { id: 7, name: '青光眼模块考核', examType: '模块考核', target: '青光眼模块', status: 'completed', totalScore: 100, bestScore: 95, examCount: '2/2次', history: [{time:'2026-04-15',score:88,rate:'88%',duration:'50分钟',result:'完成'},{time:'2026-05-28',score:95,rate:'95%',duration:'40分钟',result:'完成'}] },
+    { id: 7, name: '青光眼模块考核', examType: '模块考核', target: '生物信息学', status: 'completed', totalScore: 100, bestScore: 95, examCount: '2/2次', history: [{time:'2026-04-15',score:88,rate:'88%',duration:'50分钟',result:'完成'},{time:'2026-05-28',score:95,rate:'95%',duration:'40分钟',result:'完成'}] },
     { id: 8, name: '眼底激光治疗单课程测评', examType: '单课程测评', target: '眼底激光治疗原理', status: 'in-progress', totalScore: 100, bestScore: null, examCount: '0/3次', history: [] },
     { id: 9, name: 'RVO诊疗指南单课程测评', examType: '单课程测评', target: 'RVO诊疗指南', status: 'not-started', totalScore: 100, bestScore: null, examCount: '0/2次', history: [] },
-    { id: 10, name: '糖尿病视网膜病变模块考核', examType: '模块考核', target: '糖尿病视网膜病变模块', status: 'completed', totalScore: 100, bestScore: 58, examCount: '2/3次', history: [{time:'2026-05-10',score:52,rate:'52%',duration:'65分钟',result:'完成'},{time:'2026-06-20',score:58,rate:'58%',duration:'58分钟',result:'完成'}] },
+    { id: 10, name: '糖尿病视网膜病变模块考核', examType: '模块考核', target: '医学AI基础', status: 'completed', totalScore: 100, bestScore: 58, examCount: '2/3次', history: [{time:'2026-05-10',score:52,rate:'52%',duration:'65分钟',result:'完成'},{time:'2026-06-20',score:58,rate:'58%',duration:'58分钟',result:'完成'}] },
     { id: 11, name: 'OCT读片实战训练单课程测评', examType: '单课程测评', target: 'OCT读片实战训练', status: 'completed', totalScore: 100, bestScore: 88, examCount: '1/2次', history: [{time:'2026-06-12',score:88,rate:'88%',duration:'45分钟',result:'完成'}] },
     { id: 12, name: '眼底血管造影判读单课程测评', examType: '单课程测评', target: '眼底血管造影判读', status: 'in-progress', totalScore: 100, bestScore: null, examCount: '0/3次', history: [] }
 ];
 
 // 综合考核数据
 var comprehensiveData = [
-    { id: 101, name: '眼科基础全周期综合考试', examType: '全周期综合考试', target: '眼科基础全课程', status: 'not-started', totalScore: 150, bestScore: null, examCount: '0/2次', history: [] },
-    { id: 102, name: 'AI诊疗全周期综合考试', examType: '全周期综合考试', target: 'AI诊疗全课程', status: 'completed', totalScore: 120, bestScore: 108, examCount: '1/2次', history: [{time:'2026-06-08',score:108,rate:'90%',duration:'75分钟',result:'完成'}] },
-    { id: 103, name: '影像判读全周期综合考试', examType: '全周期综合考试', target: '影像判读全课程', status: 'completed', totalScore: 150, bestScore: 82, examCount: '1/3次', history: [{time:'2026-06-15',score:82,rate:'55%',duration:'90分钟',result:'完成'}] }
+    { id: 101, name: '眼科基础全周期综合考试', examType: '全周期综合考试', target: '解剖学 + 生理学', status: 'not-started', totalScore: 150, bestScore: null, examCount: '0/2次', history: [] },
+    { id: 102, name: 'AI诊疗全周期综合考试', examType: '全周期综合考试', target: '生物信息学 + 医学AI基础', status: 'completed', totalScore: 120, bestScore: 108, examCount: '1/2次', history: [{time:'2026-06-08',score:108,rate:'90%',duration:'75分钟',result:'完成'}] },
+    { id: 103, name: '影像判读全周期综合考试', examType: '全周期综合考试', target: '解剖学 + 生理学 + 生物信息学', status: 'completed', totalScore: 150, bestScore: 82, examCount: '1/3次', history: [{time:'2026-06-15',score:82,rate:'55%',duration:'90分钟',result:'完成'}] }
 ];
 
 var currentStatusFilter = 'all';
 var currentComprehensiveStatusFilter = 'all';
 var currentExamId = null;
+var currentReportAttemptIndex = 0;
+var currentReportSnapshot = null;
+var currentAnalysisQuestionFilter = 'all';
 var currentQuestion = 0;
 var userAnswers = {};
-var markedQuestions = {};
 var examTimerInterval = null;
 var EXAM_TOTAL_SECONDS = 5400;
 var examSeconds = EXAM_TOTAL_SECONDS;
@@ -1056,6 +1371,254 @@ var currentStagePage = 1;
 var currentCompPage = 1;
 var filteredStageData = [];
 var filteredCompData = [];
+
+function clampNumber(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+function hashString(text) {
+    text = (text || '').toString();
+    var hash = 0;
+    for (var i = 0; i < text.length; i++) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(i);
+        hash |= 0;
+    }
+    return Math.abs(hash);
+}
+
+function createSeededRandom(seed) {
+    var state = (seed || 1) % 2147483647;
+    if (state <= 0) state += 2147483646;
+    return function() {
+        state = state * 16807 % 2147483647;
+        return (state - 1) / 2147483646;
+    };
+}
+
+function getScoreBandInfo(scorePct) {
+    if (scorePct >= 90) return { label: '优秀', key: 'excellent', color: '#10B981', range: '90-100' };
+    if (scorePct >= 80) return { label: '良好', key: 'good', color: '#2563EB', range: '80-90' };
+    if (scorePct >= 60) return { label: '合格', key: 'qualified', color: '#4F46E5', range: '60-80' };
+    if (scorePct >= 30) return { label: '待提升', key: 'improve', color: '#D97706', range: '30-60' };
+    return { label: '需加强', key: 'need', color: '#DC2626', range: '0-30' };
+}
+
+function getSameAttemptBaseline(item, attemptIndex) {
+    var base = 76 + attemptIndex * 2;
+    if (item && item.examType === '全周期综合考试') base += 2;
+    if (item && item.name && item.name.indexOf('基础') !== -1) base += 1;
+    if (item && item.name && item.name.indexOf('模块') !== -1) base += 2;
+    base += (hashString((item ? item.id : 'x') + '-' + attemptIndex) % 5) - 2;
+    return clampNumber(base, 58, 95);
+}
+
+function getSameAttemptCompareText(item, attemptIndex, scorePct) {
+    var baseline = getSameAttemptBaseline(item, attemptIndex);
+    var diff = Math.round(scorePct - baseline);
+    if (Math.abs(diff) <= 1) return '接近同次平均';
+    return diff > 0 ? ('高于同次平均 ' + Math.abs(diff) + ' 分') : ('低于同次平均 ' + Math.abs(diff) + ' 分');
+}
+
+function getSyntheticWrongIndexes(item, attemptIndex, totalQuestions, wrongCount) {
+    var seed = hashString((item ? item.id : 'exam') + '-' + attemptIndex + '-' + totalQuestions + '-' + wrongCount);
+    var rand = createSeededRandom(seed || 1);
+    var picked = [];
+    var guard = 0;
+    while (picked.length < wrongCount && guard < totalQuestions * 12) {
+        var index = Math.floor(rand() * totalQuestions);
+        if (picked.indexOf(index) === -1) picked.push(index);
+        guard++;
+    }
+    picked.sort(function(a, b) { return a - b; });
+    return picked;
+}
+
+function getWrongOptionIndex(correctIndex, optionCount, offset) {
+    if (!optionCount) return 0;
+    if (optionCount === 1) return 0;
+    var index = (correctIndex + offset) % optionCount;
+    if (index === correctIndex) index = (index + 1) % optionCount;
+    return index;
+}
+
+function buildQuestionExplanation(q, isCorrect, correctText, userText) {
+    if (isCorrect) {
+        return '本题作答正确，可继续保持对“' + (q.knowledge || '相关知识点') + '”的稳定掌握。';
+    }
+    return '本题考查“' + (q.knowledge || '相关知识点') + '”的核心判断。你的答案是“' + userText + '”，建议回到题干中的关键线索重新梳理解题路径。正确答案为“' + correctText + '”。';
+}
+
+function buildAttemptStatsFromRows(detailRows) {
+    var typeStats = {};
+    var knowledgeStats = {};
+    var difficultyStats = {};
+    for (var i = 0; i < detailRows.length; i++) {
+        var row = detailRows[i];
+        var q = row.question || {};
+        var result = { score: row.score || 0, correct: !!row.isCorrect };
+        addReportStat(typeStats, q.type || row.type, q, result);
+        addReportStat(knowledgeStats, q.knowledge || row.knowledge || '眼科综合知识', q, result);
+        addReportStat(difficultyStats, q.difficulty || row.difficulty || '基础', q, result);
+    }
+    return { typeStats: typeStats, knowledgeStats: knowledgeStats, difficultyStats: difficultyStats };
+}
+
+function buildSyntheticDetailRows(item, attemptIndex, accuracy) {
+    var total = examQuestions.length;
+    var wrongCount = accuracy >= 100 ? 0 : Math.max(1, Math.round(total * (100 - accuracy) / 100));
+    wrongCount = clampNumber(wrongCount, 0, total);
+    var wrongIndexes = getSyntheticWrongIndexes(item, attemptIndex, total, wrongCount);
+    var wrongMap = {};
+    for (var i = 0; i < wrongIndexes.length; i++) wrongMap[wrongIndexes[i]] = true;
+    var rows = [];
+    for (var j = 0; j < total; j++) {
+        var q = examQuestions[j];
+        var correctText = getCorrectAnswerText(q);
+        var isCorrect = !wrongMap[j];
+        var userText;
+        if (isCorrect) {
+            userText = correctText;
+        } else if (q.type === '单选题') {
+            var wrongOpt = getWrongOptionIndex(q.answer, (q.options || []).length, attemptIndex + j + 1);
+            userText = getOptionLabel(wrongOpt);
+        } else if (q.type === '多选题') {
+            if (Array.isArray(q.answer) && q.answer.length > 0) {
+                var picked = q.answer.slice(0, Math.max(1, q.answer.length - 1));
+                if (picked.length === 0) picked = [getWrongOptionIndex(q.answer[0] || 0, (q.options || []).length, j + attemptIndex)];
+                userText = getOptionLabel(picked);
+            } else {
+                userText = '未完整作答';
+            }
+        } else {
+            userText = '答题要点不完整';
+        }
+        rows.push({
+            num: j + 1,
+            type: q.type,
+            knowledge: q.knowledge || '眼科综合知识',
+            difficulty: q.difficulty || '基础',
+            correctAns: correctText,
+            userAns: userText,
+            isCorrect: isCorrect,
+            score: isCorrect ? q.score : 0,
+            explanation: buildQuestionExplanation(q, isCorrect, correctText, userText),
+            question: q
+        });
+    }
+    return rows;
+}
+
+function buildAttemptSnapshot(item, attemptIndex, options) {
+    options = options || {};
+    var totalScore = options.totalScore !== undefined ? options.totalScore : (item ? item.totalScore : 0);
+    var earnedScore = options.earnedScore !== undefined ? options.earnedScore : 0;
+    var total = options.total !== undefined ? options.total : examQuestions.length;
+    var correct = options.correct !== undefined ? options.correct : 0;
+    var wrong = options.wrong !== undefined ? options.wrong : Math.max(0, total - correct);
+    var accuracy = options.accuracy !== undefined ? options.accuracy : (total ? Math.round(correct / total * 100) : 0);
+    var duration = options.duration || '-';
+    var time = options.time || '-';
+    var detailRows = options.detailRows || buildSyntheticDetailRows(item, attemptIndex, accuracy);
+    var stats = options.stats || buildAttemptStatsFromRows(detailRows);
+    var band = getScoreBandInfo(accuracy);
+    var compareText = options.compareText || getSameAttemptCompareText(item, attemptIndex, accuracy);
+    var wrongQuestions = [];
+    for (var i = 0; i < detailRows.length; i++) {
+        if (!detailRows[i].isCorrect) wrongQuestions.push(detailRows[i]);
+    }
+    return {
+        attemptIndex: attemptIndex,
+        time: time,
+        score: earnedScore,
+        totalScore: totalScore,
+        accuracy: accuracy,
+        duration: duration,
+        total: total,
+        correct: correct,
+        wrong: wrong,
+        bandLabel: band.label,
+        bandKey: band.key,
+        compareText: compareText,
+        detailRows: detailRows,
+        wrongQuestions: wrongQuestions,
+        typeStats: stats.typeStats,
+        knowledgeStats: stats.knowledgeStats,
+        difficultyStats: stats.difficultyStats,
+        advice: options.advice || '',
+        metaText: options.metaText || ''
+    };
+}
+
+function ensureAttemptSnapshots(item) {
+    if (!item || !item.history || item.history.length === 0) return;
+    item.history.forEach(function(h, idx) {
+        var accuracy = parseInt(h.rate, 10);
+        if (isNaN(accuracy)) {
+            accuracy = item.totalScore > 0 ? Math.round((h.score || 0) / item.totalScore * 100) : 0;
+        }
+        h.attemptIndex = idx + 1;
+        h.bandLabel = getScoreBandInfo(accuracy).label;
+        h.compareText = getSameAttemptCompareText(item, idx + 1, accuracy);
+        h.accuracy = accuracy;
+        if (!h.report) {
+            var report = buildAttemptSnapshot(item, idx + 1, {
+                time: h.time || '-',
+                score: h.score || 0,
+                totalScore: item.totalScore || 0,
+                accuracy: accuracy,
+                duration: h.duration || '-',
+                total: examQuestions.length,
+                correct: Math.max(0, examQuestions.length - Math.max(0, Math.round(examQuestions.length * (100 - accuracy) / 100))),
+                wrong: Math.max(0, Math.round(examQuestions.length * (100 - accuracy) / 100)),
+                compareText: h.compareText
+            });
+            h.report = report;
+        } else {
+            h.report.bandLabel = h.bandLabel;
+            h.report.compareText = h.compareText;
+            h.report.accuracy = accuracy;
+        }
+    });
+}
+
+function getAttemptSnapshot(item, attemptIndex) {
+    ensureAttemptSnapshots(item);
+    if (!item || !item.history || item.history.length === 0) return null;
+    var index = clampNumber(attemptIndex, 0, item.history.length - 1);
+    var entry = item.history[index];
+    if (!entry) return null;
+    if (!entry.report) {
+        entry.report = buildAttemptSnapshot(item, index + 1, {
+            time: entry.time || '-',
+            score: entry.score || 0,
+            totalScore: item.totalScore || 0,
+            accuracy: parseInt(entry.rate, 10) || 0,
+            duration: entry.duration || '-',
+            total: examQuestions.length
+        });
+    }
+    entry.report.attemptIndex = index + 1;
+    entry.bandLabel = entry.bandLabel || entry.report.bandLabel;
+    entry.compareText = entry.compareText || entry.report.compareText;
+    return entry.report;
+}
+
+function prepareAllAttemptSnapshots() {
+    [examData, comprehensiveData].forEach(function(list) {
+        list.forEach(function(item) {
+            ensureAttemptSnapshots(item);
+        });
+    });
+}
+
+function countAttemptReports(item) {
+    if (!item || !item.history || item.history.length === 0) return 0;
+    var count = 0;
+    for (var i = 0; i < item.history.length; i++) {
+        if (item.history[i] && item.history[i].report) count++;
+    }
+    return count;
+}
 
 function setupMixedExamQuestions() {
     if (examQuestions._mixedReady) return;
@@ -1291,15 +1854,28 @@ function getExamCountInfo(item) {
     return { current: current, max: max, usedUp: current >= max };
 }
 
+function hasExamProgress(item) {
+    return !!(item && (item.savedAnswers || item.savedQuestion !== undefined || item.remainingSeconds !== undefined));
+}
+
 function getActionHtml(item) {
-    if (item.status === 'not-started') {
+    var hasHistory = !!(item && item.history && item.history.length > 0);
+    if (item.status === 'in-progress' || hasExamProgress(item)) {
+        var html = '<div class="action-btns">';
+        if (hasHistory) {
+            html += '<button class="btn btn-outline" onclick="viewReport(' + item.id + ')">查看报告</button>';
+            html += '<button class="btn btn-outline" onclick="viewAttemptAnalysis(' + item.id + ')">查看题目解析</button>';
+        }
+        html += '<button class="btn btn-primary" onclick="startExam(' + item.id + ')">继续考试</button>';
+        html += '</div>';
+        return html;
+    } else if (item.status === 'not-started') {
         return '<button class="btn btn-primary" onclick="startExam(' + item.id + ')">开始考试</button>';
-    } else if (item.status === 'in-progress') {
-        return '<button class="btn btn-primary" onclick="startExam(' + item.id + ')">继续考试</button>';
     } else {
         var countInfo = getExamCountInfo(item);
+        var analysisBtn = '<button class="btn btn-outline" onclick="viewAttemptAnalysis(' + item.id + ')">查看题目解析</button>';
         var reExamBtn = countInfo.usedUp ? '' : '<button class="btn btn-warning" onclick="startExam(' + item.id + ')">再考一次</button>';
-        return '<div class="action-btns"><button class="btn btn-outline" onclick="viewReport(' + item.id + ')">查看报告</button>' + reExamBtn + '</div>';
+        return '<div class="action-btns"><button class="btn btn-outline" onclick="viewReport(' + item.id + ')">查看报告</button>' + analysisBtn + reExamBtn + '</div>';
     }
 }
 
@@ -1454,7 +2030,6 @@ function saveCurrentExamProgress() {
     if (!item || item.status === 'completed') return;
     item.status = 'in-progress';
     item.savedAnswers = cloneExamState(userAnswers);
-    item.savedMarks = cloneExamState(markedQuestions);
     item.savedQuestion = currentQuestion;
     item.remainingSeconds = Math.max(0, examSeconds);
 }
@@ -1462,7 +2037,6 @@ function saveCurrentExamProgress() {
 function clearExamProgress(item) {
     if (!item) return;
     delete item.savedAnswers;
-    delete item.savedMarks;
     delete item.savedQuestion;
     delete item.remainingSeconds;
 }
@@ -1497,13 +2071,11 @@ function startExam(id, resetProgress) {
 
     currentQuestion = item && item.savedQuestion !== undefined ? item.savedQuestion : 0;
     userAnswers = item && item.savedAnswers ? cloneExamState(item.savedAnswers) : {};
-    markedQuestions = item && item.savedMarks ? cloneExamState(item.savedMarks) : {};
     examSeconds = item && item.remainingSeconds !== undefined ? item.remainingSeconds : EXAM_TOTAL_SECONDS;
     if (item && item.status === 'completed' && !resetProgress) {
         clearExamProgress(item);
         currentQuestion = 0;
         userAnswers = {};
-        markedQuestions = {};
         examSeconds = EXAM_TOTAL_SECONDS;
     }
     if (item) item.status = 'in-progress';
@@ -1587,27 +2159,23 @@ function renderNavPanel() {
     var panel = document.getElementById('examNavPanel');
     var total = examQuestions.length;
     var answered = Object.keys(userAnswers).length;
-    var marked = Object.keys(markedQuestions).length;
     var html = '<div class="nav-title">题号导航</div>';
     html += '<div class="exam-nav-legend">';
     html += '<div class="legend-item"><span class="legend-dot answered"></span>已完成</div>';
     html += '<div class="legend-item"><span class="legend-dot unanswered"></span>未完成</div>';
     html += '<div class="legend-item"><span class="legend-dot current"></span>当前题</div>';
-    html += '<div class="legend-item"><span class="legend-dot marked"></span>标记</div>';
     html += '</div>';
     html += '<div class="exam-nav-grid">';
     for (var i = 0; i < total; i++) {
         var cls = '';
         if (i === currentQuestion) cls += ' current';
         if (userAnswers[i] !== undefined) cls += ' answered';
-        if (markedQuestions[i]) cls += ' marked';
         html += '<button class="exam-nav-num' + cls + '" onclick="jumpToQuestion(' + i + ')">' + (i + 1) + '</button>';
     }
     html += '</div>';
     html += '<div class="exam-nav-stats">';
     html += '<div class="stat-item"><span class="legend-dot answered" style="display:inline-block;"></span> 已完成题目 <strong>' + answered + '</strong> / ' + total + '</div>';
     html += '<div class="stat-item"><span class="legend-dot unanswered" style="display:inline-block;"></span> 未完成题目 <strong>' + (total - answered) + '</strong> / ' + total + '</div>';
-    html += '<div class="stat-item"><span class="legend-dot marked" style="display:inline-block;"></span> 标记题目 <strong>' + marked + '</strong> / ' + total + '</div>';
     html += '</div>';
     panel.innerHTML = html;
 }
@@ -1618,37 +2186,14 @@ function jumpToQuestion(index) {
     renderQuestion();
     renderNavPanel();
     updateProgress();
-    updateMarkBtn();
 }
 
 function prevQuestion() {
-    if (currentQuestion > 0) { currentQuestion--; saveCurrentExamProgress(); renderQuestion(); renderNavPanel(); updateProgress(); updateMarkBtn(); }
+    if (currentQuestion > 0) { currentQuestion--; saveCurrentExamProgress(); renderQuestion(); renderNavPanel(); updateProgress(); }
 }
 
 function nextQuestion() {
-    if (currentQuestion < examQuestions.length - 1) { currentQuestion++; saveCurrentExamProgress(); renderQuestion(); renderNavPanel(); updateProgress(); updateMarkBtn(); }
-}
-
-function toggleMark() {
-    if (markedQuestions[currentQuestion]) {
-        delete markedQuestions[currentQuestion];
-    } else {
-        markedQuestions[currentQuestion] = true;
-    }
-    saveCurrentExamProgress();
-    renderNavPanel();
-    updateMarkBtn();
-}
-
-function updateMarkBtn() {
-    var btn = document.getElementById('btnMark');
-    if (markedQuestions[currentQuestion]) {
-        btn.classList.add('marked');
-        btn.innerHTML = '🏷 已标记';
-    } else {
-        btn.classList.remove('marked');
-        btn.innerHTML = '🏷 标记待查';
-    }
+    if (currentQuestion < examQuestions.length - 1) { currentQuestion++; saveCurrentExamProgress(); renderQuestion(); renderNavPanel(); updateProgress(); }
 }
 
 function updateProgress() {
@@ -1691,15 +2236,12 @@ function updateTimerDisplay() {
 function confirmSubmit() {
     var answered = Object.keys(userAnswers).length;
     var total = examQuestions.length;
-    var marked = Object.keys(markedQuestions).length;
     var unanswered = total - answered;
 
     document.getElementById('csAnswered').textContent = answered + '题';
     document.getElementById('csUnanswered').textContent = unanswered + '题';
-    document.getElementById('csMarked').textContent = marked + '题';
 
     var warnText = '你还有 ' + unanswered + ' 道题目未作答';
-    if (marked > 0) warnText += '，' + marked + ' 道标记的题目未检查';
     warnText += '，交卷后将无法修改答案，是否确认提交？';
     document.getElementById('confirmWarnText').textContent = warnText;
 
@@ -1778,6 +2320,152 @@ function escapeAttr(text) {
     return (text || '').toString().replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+function renderAttemptSwitcher(item, selectedAttemptIndex, containerId, mode) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    if (!item || !item.history || item.history.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    ensureAttemptSnapshots(item);
+    selectedAttemptIndex = typeof selectedAttemptIndex === 'number' ? clampNumber(selectedAttemptIndex, 0, item.history.length - 1) : item.history.length - 1;
+    var html = '';
+    item.history.forEach(function(h, idx) {
+        var scoreText = (h.score !== undefined && h.score !== null ? h.score : (h.report ? h.report.score : 0)) + '分';
+        var timeText = h.time || ('第' + (idx + 1) + '次');
+        var active = idx === selectedAttemptIndex ? ' active' : '';
+        var click = mode === 'analysis'
+            ? 'viewAttemptAnalysis(' + item.id + ',' + idx + ')'
+            : 'viewAttemptReport(' + item.id + ',' + idx + ')';
+        html += '<button class="attempt-tab-btn' + active + '" onclick="' + click + '">';
+        html += '<strong>第' + (idx + 1) + '次</strong>';
+        html += '<span>' + escapeAttr(scoreText) + ' · ' + escapeAttr(timeText) + '</span>';
+        html += '</button>';
+    });
+    container.innerHTML = html;
+}
+
+function renderAnalysisFilterBar(snapshot) {
+    var container = document.getElementById('analysisFilterBar');
+    if (!container) return;
+    if (!snapshot || !snapshot.detailRows || snapshot.detailRows.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    var total = snapshot.detailRows.length;
+    var wrongCount = snapshot.wrong || 0;
+    var rightCount = Math.max(0, total - wrongCount);
+    var filters = [
+        { key: 'all', label: '全部题目', count: total },
+        { key: 'wrong', label: '错题', count: wrongCount },
+        { key: 'correct', label: '正确题目', count: rightCount }
+    ];
+    var html = '';
+    filters.forEach(function(item) {
+        var active = currentAnalysisQuestionFilter === item.key ? ' active' : '';
+        html += '<button class="analysis-filter-btn' + active + '" onclick="setAnalysisQuestionFilter(\'' + item.key + '\')">';
+        html += item.label + ' (' + item.count + ')';
+        html += '</button>';
+    });
+    container.innerHTML = html;
+}
+
+function renderAnalysisQuestionList(snapshot) {
+    var list = document.getElementById('analysisModalList');
+    if (!list) return;
+    if (!snapshot || !snapshot.detailRows || snapshot.detailRows.length === 0) {
+        list.innerHTML = '<div class="analysis-empty">暂无题目解析数据。</div>';
+        return;
+    }
+    var rows = snapshot.detailRows.slice();
+    if (currentAnalysisQuestionFilter === 'wrong') {
+        rows = rows.filter(function(row) { return !row.isCorrect; });
+    } else if (currentAnalysisQuestionFilter === 'correct') {
+        rows = rows.filter(function(row) { return !!row.isCorrect; });
+    }
+    if (rows.length === 0) {
+        list.innerHTML = '<div class="analysis-empty">当前筛选条件下暂无题目。</div>';
+        return;
+    }
+    var html = '';
+    rows.forEach(function(row) {
+        var state = row.isCorrect ? 'correct' : 'wrong';
+        var badge = row.isCorrect ? '<span class="analysis-item-badge ok">正确</span>' : '<span class="analysis-item-badge need">错题</span>';
+        html += '<div class="analysis-item ' + state + '">';
+        html += '<div class="analysis-item-head">';
+        html += '<div class="analysis-item-title">第' + row.num + '题 · ' + escapeAttr(row.type || '-') + '</div>';
+        html += badge;
+        html += '</div>';
+        html += '<div class="analysis-question">' + escapeAttr(row.question && row.question.q ? row.question.q : ('题目：' + row.num)) + '</div>';
+        html += '<div class="analysis-answer-row"><strong>你的答案：</strong>' + escapeAttr(row.userAns || '未作答') + '</div>';
+        html += '<div class="analysis-answer-row"><strong>正确答案：</strong>' + escapeAttr(row.correctAns || '参考答案见解析') + '</div>';
+        html += '<div class="analysis-explain">解析说明：' + escapeAttr(row.explanation || '请结合题干与知识点重新梳理。') + '</div>';
+        html += '<div class="analysis-meta"><span>知识点：' + escapeAttr(row.knowledge || '-') + '</span><span>难度：' + escapeAttr(row.difficulty || '-') + '</span><span>得分：' + row.score + '分</span></div>';
+        html += '</div>';
+    });
+    list.innerHTML = html;
+}
+
+function setAnalysisQuestionFilter(filter) {
+    currentAnalysisQuestionFilter = filter || 'all';
+    if (!currentReportSnapshot) return;
+    renderAnalysisFilterBar(currentReportSnapshot);
+    renderAnalysisQuestionList(currentReportSnapshot);
+}
+
+function renderReportSelectedSummary(snapshot) {
+    var container = document.getElementById('reportSelectedSummary');
+    if (!container) return;
+    if (!snapshot) {
+        container.innerHTML = '';
+        return;
+    }
+    var bandInfo = getScoreBandInfo(snapshot.accuracy || 0);
+    var bandList = [
+        { range: '0-30', label: '需加强', key: 'need' },
+        { range: '30-60', label: '待提升', key: 'improve' },
+        { range: '60-80', label: '合格', key: 'qualified' },
+        { range: '80-90', label: '良好', key: 'good' },
+        { range: '90-100', label: '优秀', key: 'excellent' }
+    ];
+    var html = '';
+    html += '<div class="report-overview-card">';
+    html += '<div class="report-card-head">';
+    html += '<div>';
+    html += '<div class="report-card-eyebrow">本次概况</div>';
+    html += '<h3>第' + snapshot.attemptIndex + '次测评</h3>';
+    html += '<div class="report-card-sub">考试时间：' + escapeAttr(snapshot.time || '-') + '</div>';
+    html += '</div>';
+    html += '<span class="report-band-pill">' + escapeAttr(bandInfo.label) + ' · ' + escapeAttr(bandInfo.range) + '</span>';
+    html += '</div>';
+    html += '<div class="report-score-block">';
+    html += '<div class="report-score-main"><b>' + snapshot.score + '</b><span>/' + snapshot.totalScore + '</span></div>';
+    html += '<div class="report-score-caption">本次得分</div>';
+    html += '</div>';
+    html += '<div class="report-overview-meta">';
+    html += '<div class="report-meta-item"><span>错题数量</span><strong>' + snapshot.wrong + '题</strong></div>';
+    html += '<div class="report-meta-item"><span>用时</span><strong>' + escapeAttr(snapshot.duration || '-') + '</strong></div>';
+    html += '<div class="report-meta-item"><span>测评次数</span><strong>第' + snapshot.attemptIndex + '次</strong></div>';
+    html += '<div class="report-meta-item"><span>状态</span><strong>已完成</strong></div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="report-band-card">';
+    html += '<div class="report-band-head">';
+    html += '<div>';
+    html += '<div class="report-card-eyebrow">成绩区间</div>';
+    html += '<h3>分数段说明</h3>';
+    html += '</div>';
+    html += '<span class="band-current">当前：' + escapeAttr(bandInfo.label) + '</span>';
+    html += '</div>';
+    html += '<div class="score-band-list">';
+    bandList.forEach(function(b) {
+        html += '<div class="score-band-line' + (b.key === bandInfo.key ? ' current' : '') + '"><strong>' + b.range + '</strong><span>' + b.label + '</span></div>';
+    });
+    html += '</div>';
+    html += '</div>';
+    container.innerHTML = html;
+}
+
 function renderHistoryAndTrend(item) {
     var histSection = document.getElementById('reportHistorySection');
     var histBody = document.getElementById('reportHistoryBody');
@@ -1803,13 +2491,14 @@ function renderHistoryAndTrend(item) {
 
     var histHtml = trendHtml;
     item.history.forEach(function(h, j) {
+        var histAcc = parseInt(h.rate, 10) || (item.totalScore > 0 ? Math.round(h.score / item.totalScore * 100) : 0);
         histHtml += '<tr>';
         histHtml += '<td>第' + (j + 1) + '次<br><span style="color:#9CA3AF;">' + h.time + '</span></td>';
         histHtml += '<td>' + h.score + '分</td>';
         histHtml += '<td>' + h.rate + '</td>';
         histHtml += '<td>' + h.duration + '</td>';
-        histHtml += '<td>' + (h.rank || '-') + '</td>';
-        histHtml += '<td>' + (h.beat || '-') + '</td>';
+        histHtml += '<td>' + (h.bandLabel || getScoreBandInfo(histAcc).label) + '</td>';
+        histHtml += '<td>' + (h.compareText || getSameAttemptCompareText(item, j + 1, histAcc)) + '</td>';
         histHtml += '</tr>';
     });
     histBody.innerHTML = histHtml;
@@ -1830,16 +2519,20 @@ function addReportStat(map, key, q, result) {
 }
 
 function renderScoreDistribution(data) {
+    var target = document.getElementById('scoreDistribution');
+    if (!target) return;
     var scorePct = data.totalScore > 0 ? Math.round(data.earnedScore / data.totalScore * 100) : 0;
+    var bandInfo = getScoreBandInfo(scorePct);
+    var compareText = data.compareText || '接近同次平均';
     var bands = [
-        { label: '90-100', title: '优秀', value: 18, color: '#10B981', active: scorePct >= 90 },
-        { label: '80-89', title: '良好', value: 26, color: '#3B82F6', active: scorePct >= 80 && scorePct < 90 },
-        { label: '60-79', title: '待提升', value: 41, color: '#F59E0B', active: scorePct >= 60 && scorePct < 80 },
-        { label: '<60', title: '需强化', value: 15, color: '#EF4444', active: scorePct < 60 }
+        { label: '90-100', title: '优秀', value: 18, color: '#10B981', active: bandInfo.key === 'excellent' },
+        { label: '80-89', title: '良好', value: 26, color: '#3B82F6', active: bandInfo.key === 'good' },
+        { label: '60-79', title: '待提升', value: 41, color: '#F59E0B', active: bandInfo.key === 'improve' },
+        { label: '<60', title: '需强化', value: 15, color: '#EF4444', active: bandInfo.key === 'need' }
     ];
     var html = '<div class="score-dist-row"><div class="score-dist-main">';
     bands.forEach(function(b) {
-        html += '<div class="score-band">';
+        html += '<div class="score-band' + (b.active ? ' active' : '') + '">';
         html += '<div class="score-band-label">' + b.label + '</div>';
         html += '<div class="score-band-track"><div class="score-band-fill" style="width:' + b.value + '%;background:' + b.color + ';"></div></div>';
         html += '<div class="score-band-value">' + b.value + '%</div>';
@@ -1848,16 +2541,17 @@ function renderScoreDistribution(data) {
     html += '</div></div>';
     html += '<div class="report-mini-kpis">';
     html += '<div class="report-mini-kpi"><b>' + scorePct + '%</b><span>所在区间</span></div>';
-    html += '<div class="report-mini-kpi"><b>' + data.earnedScore + '/' + data.totalScore + '</b><span>本次得分</span></div>';
-    html += '<div class="report-mini-kpi"><b>' + data.beat + '%</b><span>击败考生</span></div>';
+    html += '<div class="report-mini-kpi"><b>' + bandInfo.label + '</b><span>成绩档次</span></div>';
+    html += '<div class="report-mini-kpi"><b>' + compareText + '</b><span>同次对照</span></div>';
     html += '</div>';
-    document.getElementById('scoreDistribution').innerHTML = html;
+    target.innerHTML = html;
 }
 
 function renderErrorRateAnalysis(data, knowledgeStats) {
+    var target = document.getElementById('errorRateAnalysis');
+    if (!target) return;
     var total = data.total || 1;
     var errorRate = Math.round(data.wrong / total * 100);
-    var markedRate = Math.round(data.marked / total * 100);
     var weakItems = Object.keys(knowledgeStats || {}).map(function(k) {
         var s = knowledgeStats[k];
         var rate = s.totalQ ? Math.round(s.wrongQ / s.totalQ * 100) : 0;
@@ -1866,7 +2560,6 @@ function renderErrorRateAnalysis(data, knowledgeStats) {
 
     var html = '<div class="error-summary">';
     html += '<div class="error-chip error"><b>' + errorRate + '%</b><span>总体错误率</span></div>';
-    html += '<div class="error-chip warn"><b>' + markedRate + '%</b><span>标记复查率</span></div>';
     html += '<div class="error-chip ok"><b>' + data.correct + '</b><span>答对题数</span></div>';
     html += '</div><div class="weak-list">';
     if (weakItems.length === 0) {
@@ -1877,10 +2570,12 @@ function renderErrorRateAnalysis(data, knowledgeStats) {
         });
     }
     html += '</div>';
-    document.getElementById('errorRateAnalysis').innerHTML = html;
+    target.innerHTML = html;
 }
 
 function renderAbilityCurve(item, currentScore, totalScore) {
+    var target = document.getElementById('abilityCurve');
+    if (!target) return;
     var history = item && item.history ? item.history.slice() : [];
     if (history.length === 0) {
         history = [{ score: currentScore, rate: (totalScore ? Math.round(currentScore / totalScore * 100) : 0) + '%', time: '本次' }];
@@ -1895,119 +2590,98 @@ function renderAbilityCurve(item, currentScore, totalScore) {
     var last = history[history.length - 1] ? history[history.length - 1].score : currentScore;
     var diff = last - first;
     html += '<div class="trend-note">' + (history.length > 1 ? ('较首次测评' + (diff >= 0 ? '提升 ' : '下降 ') + Math.abs(diff) + ' 分，建议结合下方薄弱知识点继续强化。') : '当前仅有一次成绩记录，后续测评后将自动形成能力提升曲线。') + '</div>';
-    document.getElementById('abilityCurve').innerHTML = html;
+    target.innerHTML = html;
 }
 
-function renderAttemptHistory(item, totalScore) {
+function renderAttemptHistory(item, selectedAttemptIndex) {
     var histSection = document.getElementById('reportHistorySection');
     var histBody = document.getElementById('reportHistoryBody');
-    var histSummary = document.getElementById('reportHistorySummary');
     if (!item || !item.history || item.history.length === 0) {
         histSection.style.display = 'none';
         histBody.innerHTML = '';
-        if (histSummary) histSummary.innerHTML = '';
         return;
     }
     histSection.style.display = 'block';
-    var firstAttempt = item.history[0];
-    var latestAttempt = item.history[item.history.length - 1];
+    ensureAttemptSnapshots(item);
+    selectedAttemptIndex = typeof selectedAttemptIndex === 'number' ? clampNumber(selectedAttemptIndex, 0, item.history.length - 1) : item.history.length - 1;
     var bestAttempt = item.history.reduce(function(best, h) {
         return h.score > best.score ? h : best;
-    }, firstAttempt);
-    var totalAcc = 0;
-    for (var a = 0; a < item.history.length; a++) {
-        var hAcc = parseInt(item.history[a].rate, 10);
-        if (isNaN(hAcc)) hAcc = totalScore ? Math.round(item.history[a].score / totalScore * 100) : 0;
-        totalAcc += hAcc;
-    }
-    var avgAcc = Math.round(totalAcc / item.history.length);
-    var overallDelta = latestAttempt.score - firstAttempt.score;
-    var overallDeltaText = item.history.length === 1 ? '首次记录' : ((overallDelta > 0 ? '+' : '') + overallDelta + '分');
-    var countInfo = getExamCountInfo(item);
-    if (histSummary) {
-        histSummary.innerHTML =
-            '<div class="history-summary-card"><strong>' + latestAttempt.score + '/' + totalScore + '</strong><span>最近一次成绩</span></div>' +
-            '<div class="history-summary-card"><strong>' + bestAttempt.score + '/' + totalScore + '</strong><span>历史最高成绩</span></div>' +
-            '<div class="history-summary-card"><strong>' + overallDeltaText + '</strong><span>较首次变化</span></div>' +
-            '<div class="history-summary-card"><strong>' + item.history.length + '/' + countInfo.max + '次</strong><span>已完成次数，平均正确率' + avgAcc + '%</span></div>';
-    }
+    }, item.history[0]);
     var html = '';
     for (var i = 0; i < item.history.length; i++) {
         var h = item.history[i];
-        var prev = i > 0 ? item.history[i - 1] : null;
-        var delta = prev ? h.score - prev.score : 0;
-        var deltaText = i === 0 ? '-' : ((delta > 0 ? '+' : '') + delta + '分');
-        var deltaCls = i === 0 ? 'flat' : (delta > 0 ? 'up' : (delta < 0 ? 'down' : 'flat'));
-        var acc = parseInt(h.rate, 10) || (totalScore ? Math.round(h.score / totalScore * 100) : 0);
-        var errorRate = Math.max(0, 100 - acc);
-        var displayRank = h.rank || (Math.max(1, 328 - Math.round(acc * 2.6)) + '/328');
-        var displayBeat = h.beat || Math.min(99, Math.max(1, Math.round(acc * 0.92 + 6))) + '%';
-        var rowCls = i === item.history.length - 1 ? ' class="history-current"' : '';
+        var scorePct = item.totalScore ? Math.round(h.score / item.totalScore * 100) : 0;
+        var bandInfo = getScoreBandInfo(scorePct);
+        var band = h.bandLabel || bandInfo.label;
+        var bandKey = h.report ? h.report.bandKey : bandInfo.key;
+        var compareText = h.compareText || getSameAttemptCompareText(item, i + 1, scorePct);
+        var rowCls = i === selectedAttemptIndex ? ' class="history-current"' : '';
+        var currentMark = i === selectedAttemptIndex ? '<br><span style="color:#2563EB;">当前查看</span>' : '';
         var bestMark = h === bestAttempt ? '<br><span style="color:#10B981;">最高</span>' : '';
         html += '<tr' + rowCls + '>';
-        html += '<td>第' + (i + 1) + '次' + (i === item.history.length - 1 ? '<br><span style="color:#2563EB;">当前</span>' : bestMark) + '</td>';
+        html += '<td>第' + (i + 1) + '次' + currentMark + bestMark + '</td>';
         html += '<td>' + (h.time || '-') + '</td>';
         html += '<td><strong>' + h.score + '</strong>分</td>';
-        html += '<td><span class="history-delta ' + deltaCls + '">' + deltaText + '</span></td>';
-        html += '<td>' + (h.rate || acc + '%') + '</td>';
-        html += '<td>' + errorRate + '%</td>';
+        html += '<td><span class="score-grade-tag ' + bandKey + '">' + band + '</span></td>';
+        html += '<td><span class="attempt-compare-tag">' + compareText + '</span></td>';
         html += '<td>' + (h.duration || '-') + '</td>';
-        html += '<td>' + displayRank + '</td>';
-        html += '<td>' + displayBeat + '</td>';
+        html += '<td><div class="action-btns"><button class="btn btn-outline" onclick="viewAttemptAnalysis(' + item.id + ',' + i + ')">查看题目解析</button></div></td>';
         html += '</tr>';
     }
     histBody.innerHTML = html;
 }
 
-function renderStatRows(containerId, stats, valueLabel) {
-    var keys = Object.keys(stats || {});
-    if (keys.length === 0) {
-        document.getElementById(containerId).innerHTML = '<div style="font-size:13px;color:var(--gray-500);">暂无分析数据。</div>';
+function renderAttemptAnalysisModal(snapshot) {
+    var summary = document.getElementById('analysisSummary');
+    if (!snapshot) {
+        summary.innerHTML = '';
+        document.getElementById('analysisAttemptSwitcher').innerHTML = '';
+        document.getElementById('analysisFilterBar').innerHTML = '';
+        document.getElementById('analysisModalList').innerHTML = '<div class="analysis-empty">暂无解析数据。</div>';
         return;
     }
-    keys.sort(function(a, b) {
-        var sa = stats[a], sb = stats[b];
-        var ra = sa.totalScore ? sa.earnedScore / sa.totalScore : 0;
-        var rb = sb.totalScore ? sb.earnedScore / sb.totalScore : 0;
-        return ra - rb;
-    });
-    var html = '<div class="analysis-list">';
-    keys.forEach(function(k) {
-        var s = stats[k];
-        var pct = s.totalScore ? Math.round(s.earnedScore / s.totalScore * 100) : 0;
-        html += '<div class="analysis-row">';
-        html += '<div class="analysis-row-name">' + k + '</div>';
-        html += '<div class="analysis-track"><div class="analysis-fill" style="width:' + pct + '%"></div></div>';
-        html += '<div class="analysis-value">' + pct + '% · ' + (valueLabel || (s.earnedScore + '/' + s.totalScore + '分')) + '</div>';
-        html += '</div>';
-    });
-    html += '</div>';
-    document.getElementById(containerId).innerHTML = html;
+    document.getElementById('analysisModalTitle').textContent = '题目解析';
+    document.getElementById('analysisModalSub').textContent = '当前查看：第' + snapshot.attemptIndex + '次测评 | 考试时间：' + (snapshot.time || '-') + ' | 用时：' + (snapshot.duration || '-');
+    renderAttemptSwitcher(snapshot.item, snapshot.attemptIndex - 1, 'analysisAttemptSwitcher', 'analysis');
+    renderAnalysisFilterBar(snapshot);
+    summary.innerHTML =
+        '<div class="analysis-summary-card"><strong>' + snapshot.wrong + '题</strong><span>错题数量</span></div>' +
+        '<div class="analysis-summary-card"><strong>' + snapshot.score + '/' + snapshot.totalScore + '</strong><span>本次得分</span></div>' +
+        '<div class="analysis-summary-card"><strong>' + snapshot.bandLabel + '</strong><span>成绩档次</span></div>' +
+        '<div class="analysis-summary-card"><strong>' + (snapshot.duration || '-') + '</strong><span>用时</span></div>';
+    renderAnalysisQuestionList(snapshot);
 }
 
-function renderReportAdvice(knowledgeStats, difficultyStats, accuracy) {
-    var weakest = Object.keys(knowledgeStats || {}).sort(function(a, b) {
-        var sa = knowledgeStats[a], sb = knowledgeStats[b];
-        var ra = sa.totalScore ? sa.earnedScore / sa.totalScore : 0;
-        var rb = sb.totalScore ? sb.earnedScore / sb.totalScore : 0;
-        return ra - rb;
-    })[0] || '相关知识点';
-    var hard = difficultyStats && difficultyStats['高阶'];
-    var hardPct = hard && hard.totalScore ? Math.round(hard.earnedScore / hard.totalScore * 100) : null;
-    var advice = '建议优先强化“' + weakest + '”。';
-    if (hardPct !== null && hardPct < accuracy) advice += ' 高阶题表现低于总体正确率，建议增加病例分析和综合判断训练。';
-    else advice += ' 当前基础掌握尚可，可通过多选题、病例分析题进一步提升综合应用能力。';
-    document.getElementById('reportAdvice').textContent = advice;
+function renderAttemptReport(item, attemptIndex, openAnalysisAfterRender) {
+    if (!item) return;
+    ensureAttemptSnapshots(item);
+    if (!item.history || item.history.length === 0) return;
+    attemptIndex = typeof attemptIndex === 'number' ? clampNumber(attemptIndex, 0, item.history.length - 1) : item.history.length - 1;
+    var snapshot = getAttemptSnapshot(item, attemptIndex);
+    if (!snapshot) return;
+    snapshot.item = item;
+    currentExamId = item.id;
+    currentReportAttemptIndex = attemptIndex;
+    currentReportSnapshot = snapshot;
+
+    document.getElementById('reportExamName').textContent = item.name + ' - 成绩报告';
+    document.getElementById('reportExamMeta').textContent = '当前查看：第' + snapshot.attemptIndex + '次测评 | 考试时间：' + (snapshot.time || '-') + ' | 用时：' + (snapshot.duration || '-');
+    var badge = document.getElementById('reportPassBadge');
+    badge.className = 'report-pass-badge pass';
+    badge.textContent = '测评已完成';
+    renderAttemptSwitcher(item, attemptIndex, 'reportAttemptSwitcher', 'report');
+    renderReportSelectedSummary(snapshot);
+    renderAttemptHistory(item, attemptIndex);
+    document.getElementById('reportReExamBtn').style.display = getExamCountInfo(item).usedUp ? 'none' : 'inline-flex';
+    document.getElementById('reportModal').classList.add('show');
+    if (openAnalysisAfterRender) {
+        renderAttemptAnalysisModal(snapshot);
+        document.getElementById('analysisModal').classList.add('show');
+    }
 }
 
 function renderReportDashboard(data) {
-    renderScoreDistribution(data);
-    renderErrorRateAnalysis(data, data.knowledgeStats || {});
-    renderAbilityCurve(data.item, data.earnedScore, data.totalScore);
-    renderAttemptHistory(data.item, data.totalScore);
-    renderStatRows('knowledgeAnalysis', data.knowledgeStats || {});
-    renderStatRows('difficultyAnalysis', data.difficultyStats || {});
-    renderReportAdvice(data.knowledgeStats || {}, data.difficultyStats || {}, data.accuracy || 0);
+    renderReportSelectedSummary(data);
 }
 
 function gradeExamAndShowReport(autoSubmit) {
@@ -2049,17 +2723,39 @@ function gradeExamAndShowReport(autoSubmit) {
             correctAns: getCorrectAnswerText(q),
             userAns: getUserAnswerText(q, userAnswers[i]),
             isCorrect: isCorrect,
-            score: result.score
+            score: result.score,
+            explanation: buildQuestionExplanation(q, isCorrect, getCorrectAnswerText(q), getUserAnswerText(q, userAnswers[i])),
+            question: q
         });
     }
 
     var accuracy = Math.round(correct / total * 100);
     var duration = Math.max(1, Math.floor((EXAM_TOTAL_SECONDS - examSeconds) / 60));
-    var rank = Math.floor(Math.random() * 300) + 20;
-    var beat = Math.round(Math.random() * 10 + 85);
 
     // 更新考试数据
     var item = findExamById(currentExamId);
+    var attemptIndex = item && item.history ? item.history.length + 1 : 1;
+    var bandInfo = getScoreBandInfo(accuracy);
+    var compareText = getSameAttemptCompareText(item, attemptIndex, accuracy);
+    var timeStr = new Date().toLocaleString('zh-CN');
+    var snapshot = buildAttemptSnapshot(item, attemptIndex, {
+        time: timeStr,
+        score: earnedScore,
+        totalScore: totalScore,
+        accuracy: accuracy,
+        duration: duration + '分钟',
+        total: total,
+        correct: correct,
+        wrong: wrong,
+        detailRows: detailRows,
+        stats: {
+            typeStats: typeStats,
+            knowledgeStats: knowledgeStats,
+            difficultyStats: difficultyStats
+        },
+        compareText: compareText,
+        metaText: autoSubmit ? '倒计时结束自动交卷' : '手动交卷'
+    });
     if (item) {
         var countParts = item.examCount.split('/');
         var currentCount = parseInt(countParts[0]) + 1;
@@ -2070,96 +2766,30 @@ function gradeExamAndShowReport(autoSubmit) {
         }
         item.status = 'completed';
         clearExamProgress(item);
-        // 添加历史记录
-        var now = new Date();
-        var timeStr = now.getFullYear() + '-' + (now.getMonth()+1).toString().padStart(2,'0') + '-' + now.getDate().toString().padStart(2,'0');
         item.history = item.history || [];
+        snapshot.item = item;
         item.history.push({
-            time: timeStr,
+            time: snapshot.time,
             score: earnedScore,
             rate: accuracy + '%',
             duration: duration + '分钟',
             result: '完成',
-            rank: rank + '/328',
-            beat: beat + '%'
+            attemptIndex: attemptIndex,
+            bandLabel: bandInfo.label,
+            compareText: compareText,
+            accuracy: accuracy,
+            report: snapshot
         });
     }
 
-    // 渲染报告弹窗
-    document.getElementById('reportExamName').textContent = (item ? item.name : '阶段测评') + ' - 成绩报告';
-
-    var examDate = new Date().toLocaleString('zh-CN');
-    document.getElementById('reportExamMeta').textContent = (autoSubmit ? '倒计时结束自动交卷：' : '交卷时间：') + examDate + ' | 用时：' + duration + '分钟';
-
-    var badge = document.getElementById('reportPassBadge');
-    badge.className = 'report-pass-badge pass';
-    badge.textContent = '测评已完成';
-
-    // 分数按108分制显示
-    var displayScore = earnedScore;
-    document.getElementById('reportTotalScore').textContent = displayScore + '/' + totalScore;
-    document.getElementById('reportAccuracy').textContent = accuracy + '%';
-    document.getElementById('reportRank').textContent = rank + '/328';
-    document.getElementById('reportBeat').textContent = beat + '%';
-    renderReportDashboard({
-        item: item,
-        total: total,
-        correct: correct,
-        wrong: wrong,
-        marked: Object.keys(markedQuestions).length,
-        totalScore: totalScore,
-        earnedScore: earnedScore,
-        accuracy: accuracy,
-        rank: rank,
-        beat: beat,
-        knowledgeStats: knowledgeStats,
-        difficultyStats: difficultyStats
-    });
-
-    // 题型得分分析
-    var typeColors = { '单选题': '#3B82F6', '多选题': '#8B5CF6', '简答题': '#10B981', '病例分析题': '#F59E0B', '代码题': '#111827' };
-    var typeList = document.getElementById('typeScoreList');
-    var typeHtml = '';
-    for (var t in typeStats) {
-        var ts = typeStats[t];
-        var color = typeColors[t] || '#6B7280';
-        var barPct = ts.totalScore > 0 ? Math.round(ts.earnedScore / ts.totalScore * 100) : 0;
-        typeHtml += '<div class="type-score-item">';
-        typeHtml += '<span class="type-color-dot" style="background:' + color + ';"></span>';
-        typeHtml += '<div class="type-info"><div class="type-name">' + t + '</div><div class="type-count">' + ts.totalQ + '题，' + ts.totalScore + '分</div></div>';
-        typeHtml += '<div class="type-bar-wrap"><div class="type-bar-inner" style="width:' + barPct + '%;background:' + color + ';"></div></div>';
-        typeHtml += '<div class="type-score-val">' + ts.earnedScore + '/' + ts.totalScore + '分</div>';
-        typeHtml += '</div>';
+    if (item) {
+        renderAttemptReport(item, item.history.length - 1);
+    } else {
+        var fallbackItem = { id: currentExamId, name: '阶段测评', totalScore: totalScore, history: [{ report: snapshot }] };
+        snapshot.item = fallbackItem;
+        renderAttemptReport(fallbackItem, 0);
     }
-    typeList.innerHTML = typeHtml;
 
-    // 逐题详情
-    var detailBody = document.getElementById('reportDetailBody');
-    var detailHtml = '';
-    for (var i = 0; i < detailRows.length; i++) {
-        var row = detailRows[i];
-        var rowClass = row.isCorrect ? 'correct-row' : 'wrong-row';
-        var resultText = row.isCorrect ? '✅ 正确' : '❌ 错误';
-        if (row.userAns === '未作答') resultText = '⚠ 未作答';
-        detailHtml += '<tr class="' + rowClass + '">';
-        detailHtml += '<td>' + row.num + '</td>';
-        detailHtml += '<td>' + row.type + '<br><span style="color:#6B7280;font-size:11px;">' + row.knowledge + ' / ' + row.difficulty + '</span></td>';
-        detailHtml += '<td title="' + escapeAttr(row.correctAns) + '">' + compactReportText(row.correctAns) + '</td>';
-        detailHtml += '<td title="' + escapeAttr(row.userAns) + '">' + compactReportText(row.userAns) + '</td>';
-        detailHtml += '<td>' + resultText + '</td>';
-        detailHtml += '<td>' + row.score + '分</td>';
-        detailHtml += '</tr>';
-    }
-    detailBody.innerHTML = detailHtml;
-
-    renderAttemptHistory(item, totalScore);
-
-    // 重新考试按钮
-    document.getElementById('reportReExamBtn').style.display = item && getExamCountInfo(item).usedUp ? 'none' : 'inline-flex';
-
-    document.getElementById('reportModal').classList.add('show');
-
-    // 刷新列表
     refreshAllTables();
 }
 
@@ -2167,79 +2797,47 @@ function viewReport(id) {
     currentExamId = id;
     var item = findExamById(id);
     if (!item) return;
-    if (item.status !== 'completed') {
-        alert('考试完成后才会生成成绩报告。');
+    if (!item.history || item.history.length === 0) {
+        alert('暂无可查看的报告。');
         return;
     }
+    viewAttemptReport(id, item.history && item.history.length > 0 ? item.history.length - 1 : 0);
+}
 
-    var latestHistory = item.history && item.history.length > 0 ? item.history[item.history.length - 1] : null;
-    var attemptIndex = latestHistory ? item.history.length : 0;
+function viewAttemptReport(id, attemptIndex) {
+    currentExamId = id;
+    var item = findExamById(id);
+    if (!item) return;
+    ensureAttemptSnapshots(item);
+    if (!item.history || item.history.length === 0) {
+        alert('暂无可查看的报告。');
+        return;
+    }
+    attemptIndex = typeof attemptIndex === 'number' ? clampNumber(attemptIndex, 0, item.history.length - 1) : item.history.length - 1;
+    renderAttemptReport(item, attemptIndex);
+}
 
-    // 模拟报告数据
-    document.getElementById('reportExamName').textContent = item.name + ' - 成绩报告';
-    document.getElementById('reportExamMeta').textContent = latestHistory
-        ? '当前报告：第' + attemptIndex + '次测评 | 考试时间：' + latestHistory.time + ' | 历史最高：' + (item.bestScore || latestHistory.score) + '/' + item.totalScore
-        : '最近考试时间：未考试';
-    document.getElementById('reportPassBadge').className = 'report-pass-badge pass';
-    document.getElementById('reportPassBadge').textContent = '测评已完成';
-
-    var score = latestHistory ? latestHistory.score : (item.bestScore || 0);
-    var totalScore = item.totalScore;
-    var accuracy = latestHistory && latestHistory.rate ? parseInt(latestHistory.rate, 10) : (totalScore > 0 ? Math.round(score / totalScore * 100) : 0);
-    if (isNaN(accuracy)) accuracy = totalScore > 0 ? Math.round(score / totalScore * 100) : 0;
-    var latestRank = latestHistory && latestHistory.rank ? latestHistory.rank : (Math.max(1, 328 - Math.round(accuracy * 2.6)) + '/328');
-    var latestBeat = latestHistory && latestHistory.beat ? latestHistory.beat : Math.min(99, Math.max(1, Math.round(accuracy * 0.92 + 6))) + '%';
-    document.getElementById('reportTotalScore').textContent = score + '/' + totalScore;
-    document.getElementById('reportAccuracy').textContent = accuracy + '%';
-    document.getElementById('reportRank').textContent = latestRank;
-    document.getElementById('reportBeat').textContent = latestBeat;
-
-    var mockCorrect = Math.round(accuracy / 100 * 50);
-    var mockWrong = Math.max(0, 50 - mockCorrect);
-    var mockKnowledgeStats = {
-        '眼科基础': { totalQ: 16, correctQ: Math.round(mockCorrect * 0.34), totalScore: 32, earnedScore: Math.round(score * 0.32), wrongQ: Math.max(0, 16 - Math.round(mockCorrect * 0.34)) },
-        'AI诊疗应用': { totalQ: 18, correctQ: Math.round(mockCorrect * 0.36), totalScore: 36, earnedScore: Math.round(score * 0.36), wrongQ: Math.max(0, 18 - Math.round(mockCorrect * 0.36)) },
-        '影像判读': { totalQ: 16, correctQ: Math.round(mockCorrect * 0.30), totalScore: 32, earnedScore: Math.round(score * 0.32), wrongQ: Math.max(0, 16 - Math.round(mockCorrect * 0.30)) }
-    };
-    var mockDifficultyStats = {
-        '基础': { totalQ: 18, correctQ: Math.round(mockCorrect * 0.42), totalScore: 36, earnedScore: Math.round(score * 0.42), wrongQ: Math.max(0, 18 - Math.round(mockCorrect * 0.42)) },
-        '进阶': { totalQ: 20, correctQ: Math.round(mockCorrect * 0.38), totalScore: 40, earnedScore: Math.round(score * 0.36), wrongQ: Math.max(0, 20 - Math.round(mockCorrect * 0.38)) },
-        '高阶': { totalQ: 12, correctQ: Math.round(mockCorrect * 0.20), totalScore: 24, earnedScore: Math.round(score * 0.22), wrongQ: Math.max(0, 12 - Math.round(mockCorrect * 0.20)) }
-    };
-    renderReportDashboard({
-        item: item,
-        total: 50,
-        correct: mockCorrect,
-        wrong: mockWrong,
-        marked: 0,
-        totalScore: totalScore,
-        earnedScore: score,
-        accuracy: accuracy,
-        rank: 0,
-        beat: parseInt(latestBeat, 10) || Math.round(Math.random() * 15 + 80),
-        knowledgeStats: mockKnowledgeStats,
-        difficultyStats: mockDifficultyStats
-    });
-
-    // 题型分析概览
-    var typeList = document.getElementById('typeScoreList');
-    typeList.innerHTML = [
-        { name: '单选题', score: Math.round(score * 0.38), total: Math.round(totalScore * 0.38), color: '#3B82F6' },
-        { name: '多选题', score: Math.round(score * 0.18), total: Math.round(totalScore * 0.18), color: '#8B5CF6' },
-        { name: '简答题', score: Math.round(score * 0.16), total: Math.round(totalScore * 0.16), color: '#10B981' },
-        { name: '病例分析题', score: Math.round(score * 0.20), total: Math.round(totalScore * 0.20), color: '#F59E0B' },
-        { name: '代码题', score: Math.round(score * 0.08), total: Math.round(totalScore * 0.08), color: '#111827' }
-    ].map(function(t) {
-        var pct = t.total ? Math.round(t.score / t.total * 100) : 0;
-        return '<div class="type-score-item"><span class="type-color-dot" style="background:' + t.color + ';"></span><div class="type-info"><div class="type-name">' + t.name + '</div><div class="type-count">混合题型</div></div><div class="type-bar-wrap"><div class="type-bar-inner" style="width:' + pct + '%;background:' + t.color + ';"></div></div><div class="type-score-val">' + t.score + '/' + t.total + '分</div></div>';
-    }).join('');
-
-    document.getElementById('reportDetailBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#9CA3AF;">详细答题记录请参加考试后查看</td></tr>';
-
-    renderAttemptHistory(item, totalScore);
-
-    document.getElementById('reportReExamBtn').style.display = getExamCountInfo(item).usedUp ? 'none' : 'inline-flex';
-    document.getElementById('reportModal').classList.add('show');
+function viewAttemptAnalysis(id, attemptIndex) {
+    currentExamId = id;
+    var item = findExamById(id);
+    if (!item) return;
+    ensureAttemptSnapshots(item);
+    if (!item.history || item.history.length === 0) {
+        alert('暂无可查看的题目解析。');
+        return;
+    }
+    if (typeof attemptIndex !== 'number') attemptIndex = item.history.length - 1;
+    attemptIndex = clampNumber(attemptIndex, 0, item.history.length - 1);
+    var snapshot = getAttemptSnapshot(item, attemptIndex);
+    if (!snapshot) return;
+    snapshot.item = item;
+    if (!document.getElementById('analysisModal').classList.contains('show')) {
+        currentAnalysisQuestionFilter = 'all';
+    }
+    currentReportAttemptIndex = attemptIndex;
+    currentReportSnapshot = snapshot;
+    renderAttemptAnalysisModal(snapshot);
+    document.getElementById('analysisModal').classList.add('show');
 }
 
 function reExam() {
@@ -2279,6 +2877,7 @@ function logout() {
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', function() {
+    prepareAllAttemptSnapshots();
     renderTable(examData, 1);
     applyComprehensiveFilters();
 
