@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>证书与学分管理 - 个人中心与能力评估</title>
+<link rel="stylesheet" href="个人中心与能力评估_子页面.css">
+</head>
+<body>
+<div class="header">
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
+    <div class="header-nav">
+        <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+        <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+        <a href="基础课程.html" class="active">生命医学AI教育平台</a>
+        <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+    </div>
+    <div class="header-right"><span class="user-info" id="headerUserName">张教授</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+<div class="sidebar">
+    <div class="menu-group">
+        <div class="menu-group-title">AI教育平台</div>
+        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📚</span><span>基础课程</span></a>
+        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span><span>案例教学</span></a>
+        <div class="menu-item has-submenu" onclick="toggleSubmenu(this)"><span><span class="menu-icon">🔧</span><span>技能实践</span></span><span class="arrow">▶</span></div>
+        <div class="submenu">
+            <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
+            <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
+            <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
+            <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
+        </div>
+        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
+        <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)"><span><span class="menu-icon">👤</span><span>个人中心与能力评估</span></span><span class="arrow">▶</span></div>
+        <div class="submenu open">
+            <a class="menu-item" href="个人中心与能力评估.html">个人中心概览</a>
+            <a class="menu-item" href="个人学习档案管理.html">个人学习档案管理</a>
+            <a class="menu-item" href="学习轨迹分析.html">学习轨迹分析</a>
+            <a class="menu-item" href="AI能力雷达图.html">AI能力雷达图</a>
+            <a class="menu-item" href="智能反馈与学习建议.html">智能反馈与学习建议</a>
+            <a class="menu-item active" href="证书与学分管理.html">证书与学分管理</a>
+            <a class="menu-item" href="模块学习完成度.html">模块学习完成度</a>
+        </div>
+    </div>
+</div>
+<main class="main-content">
+    <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>证书与学分管理</span></div>
+    <div class="page-head">
+        <div><h1 class="page-title">证书与学分管理</h1><p class="page-desc">支持课程结业证书、实验认证和AI技能徽章的生成、查询与下载。</p></div>
+        <div class="head-actions"><a class="btn btn-outline" href="个人中心与能力评估.html">返回个人中心首页</a><button class="btn btn-primary" onclick="alert('证书生成任务已提交')">生成证书</button></div>
+    </div>
+    <section class="card">
+        <div class="card-header"><div><div class="card-title">证书与学分管理</div><div class="card-subtitle">记录已获得的学分、证书和AI技能徽章。</div></div><span class="tag green">独立子页面</span></div>
+        <div class="credit-strip">
+            <div class="credit-box"><strong>28</strong><span>已获学分</span></div>
+            <div class="credit-box"><strong>3</strong><span>课程结业证书</span></div>
+            <div class="credit-box"><strong>4</strong><span>AI技能徽章</span></div>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="cert-table">
+                <thead><tr><th>证书/徽章</th><th>来源</th><th>发放条件</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody>
+                    <tr><td>眼底影像诊断结业证书</td><td>基础课程</td><td>课程完成 + 测验正确率≥80%</td><td><span class="status done">已生成</span></td><td><div class="cert-actions"><button class="btn-xs primary" onclick="alert('打开证书预览')">查看</button><button class="btn-xs" onclick="alert('证书下载任务已提交')">下载</button></div></td></tr>
+                    <tr><td>OCT标注实训认证</td><td>技能实践</td><td>标注质控通过 + 报告提交</td><td><span class="status done">已生成</span></td><td><div class="cert-actions"><button class="btn-xs primary" onclick="alert('打开证书预览')">查看</button><button class="btn-xs" onclick="alert('证书下载任务已提交')">下载</button></div></td></tr>
+                    <tr><td>AI模型构建能力徽章</td><td>数据标注与AI实训</td><td>模型作品评分≥75</td><td><span class="status ing">待生成</span></td><td><button class="btn-xs" onclick="alert('当前尚未满足生成条件')">查看条件</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script>
+function toggleSubmenu(el) { el.classList.toggle('expanded'); var submenu = el.nextElementSibling; if (submenu) submenu.classList.toggle('open'); }
+function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
+document.addEventListener('DOMContentLoaded', function() { try { var user = JSON.parse(localStorage.getItem('life_med_user')); if (user && user.name) document.getElementById('headerUserName').textContent = user.name; } catch (e) {} });
+</script>
+</body>
+</html>
+

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>学习轨迹分析 - 个人中心与能力评估</title>
+<link rel="stylesheet" href="个人中心与能力评估_子页面.css">
+<style>
+.learning-track-page .track-layout { grid-template-columns: minmax(0, 1fr) 340px; align-items: stretch; }
+.learning-track-page .track-layout.module-mode { grid-template-columns: 1fr; }
+.learning-track-page .track-layout.module-mode .time-panel { display: none; }
+.learning-track-page .time-panel,
+.learning-track-page .daily-distribution,
+.learning-track-page .analysis-panel { min-width: 0; }
+.learning-track-page .section-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.learning-track-page .section-label b { color: var(--gray-900); font-size: 14px; }
+.learning-track-page .section-label span { color: var(--gray-500); font-size: 12px; }
+.learning-track-page .bar-chart { height: 250px; border: 0; border-radius: 0; background: transparent; padding: 20px 8px 30px; }
+.learning-track-page .bar-chart:before { left: 8px; right: 8px; top: 20px; bottom: 30px; }
+.learning-track-page .bar-item { appearance: none; border: 0; background: transparent; flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: end; gap: 6px; position: relative; z-index: 1; cursor: pointer; font-family: inherit; min-width: 0; }
+.learning-track-page .bar-item .bar { width: 34px; transition: var(--transition); }
+.learning-track-page .bar-item:hover .bar,
+.learning-track-page .bar-item.active .bar { background: linear-gradient(180deg, #1557b0, #42a5f5); box-shadow: 0 8px 16px rgba(26,115,232,0.22); }
+.learning-track-page .bar-item.active .bar-label { color: var(--primary); font-weight: 800; }
+.learning-track-page .chart-hint { margin-top: 8px; color: var(--gray-500); font-size: 12px; }
+.learning-track-page .daily-distribution { border-left: 1px solid var(--gray-200); padding-left: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+.learning-track-page .track-layout.module-mode .daily-distribution { border-left: 0; padding-left: 0; min-height: 360px; }
+.learning-track-page .track-tabs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.learning-track-page .track-tab { border: 1px solid var(--gray-200); background: #fff; color: var(--gray-600); border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); font-family: inherit; }
+.learning-track-page .track-tab:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.learning-track-page .track-tab.active { border-color: var(--primary); color: #fff; background: var(--primary); box-shadow: 0 4px 10px rgba(26,115,232,0.18); }
+.learning-track-page .donut-wrap { display: flex; justify-content: center; padding: 4px 0 2px; }
+.learning-track-page .donut-chart { width: 166px; height: 166px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(15,23,42,0.06); }
+.learning-track-page .donut-center { width: 96px; height: 96px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(15,23,42,0.08); }
+.learning-track-page .donut-center b { color: var(--gray-900); font-size: 22px; line-height: 1.1; }
+.learning-track-page .donut-center span { color: var(--gray-500); font-size: 12px; margin-top: 3px; }
+.learning-track-page .legend-list { display: flex; flex-direction: column; gap: 8px; }
+.learning-track-page .legend-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--gray-700); font-size: 12px; }
+.learning-track-page .legend-row span { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+.learning-track-page .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.learning-track-page .line-chart-wrap { padding-top: 8px; }
+.learning-track-page .line-chart { width: 100%; height: 190px; overflow: visible; }
+.learning-track-page .track-layout.module-mode .line-chart { height: 310px; }
+.learning-track-page .line-axis { stroke: var(--gray-200); stroke-width: 1; }
+.learning-track-page .line-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.learning-track-page .line-area { opacity: 0.12; }
+.learning-track-page .line-point { stroke: #fff; stroke-width: 2; }
+.learning-track-page .line-label { fill: var(--gray-500); font-size: 11px; }
+.learning-track-page .line-value { fill: var(--gray-800); font-size: 11px; font-weight: 800; }
+.learning-track-page .activity-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.learning-track-page .activity-section { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 14px; min-width: 0; }
+.learning-track-page .activity-section-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.learning-track-page .activity-section-title b { color: var(--gray-900); font-size: 14px; }
+.learning-track-page .activity-section-title div > span { display: block; color: var(--gray-500); font-size: 12px; margin-top: 2px; }
+.learning-track-page .activity-row { display: grid; grid-template-columns: 118px 72px minmax(0, 1fr) 72px; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--gray-200); }
+.learning-track-page .activity-section-title + .activity-row { border-top: 0; padding-top: 0; }
+.learning-track-page .activity-name { display: inline-flex; align-items: center; gap: 7px; color: var(--gray-800); font-weight: 700; font-size: 13px; min-width: 0; }
+.learning-track-page .activity-value { color: var(--gray-900); font-weight: 800; font-size: 14px; text-align: right; }
+.learning-track-page .activity-level { color: var(--primary); font-weight: 800; font-size: 12px; text-align: right; white-space: nowrap; }
+.learning-track-page .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.learning-track-page .activity-meter { height: 7px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+.learning-track-page .activity-meter i { display: block; height: 100%; border-radius: 999px; }
+.learning-track-page .coverage-summary { margin-bottom: 14px; border: 1px solid var(--gray-200); border-radius: 8px; background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%); padding: 16px; }
+.learning-track-page .coverage-summary-main { display: grid; grid-template-columns: 180px 1fr 160px; align-items: center; gap: 18px; }
+.learning-track-page .coverage-summary-title { color: var(--gray-600); font-size: 13px; }
+.learning-track-page .coverage-summary-value { display: block; color: var(--primary); font-size: 34px; line-height: 1.15; font-weight: 800; margin-top: 4px; }
+.learning-track-page .coverage-summary-desc { color: var(--gray-500); font-size: 12px; line-height: 1.7; }
+.learning-track-page .coverage-summary-count { color: var(--gray-900); font-size: 18px; font-weight: 800; text-align: right; }
+.learning-track-page .coverage-summary-count span { display: block; color: var(--gray-500); font-size: 12px; font-weight: 400; margin-top: 2px; }
+.learning-track-page .coverage-detail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.learning-track-page .coverage-meta { display: block; color: var(--gray-500); font-size: 12px; margin-top: 2px; }
+@media (max-width: 1280px) {
+    .learning-track-page .track-layout,
+    .learning-track-page .activity-split,
+    .learning-track-page .coverage-detail { grid-template-columns: 1fr; }
+    .learning-track-page .coverage-summary-main { grid-template-columns: 1fr; gap: 10px; }
+    .learning-track-page .coverage-summary-count { text-align: left; }
+}
+@media (max-width: 768px) {
+    .learning-track-page .activity-row { grid-template-columns: 1fr; gap: 6px; }
+    .learning-track-page .activity-value, .learning-track-page .activity-level { text-align: left; }
+    .learning-track-page .track-tabs { justify-content: flex-start; }
+    .learning-track-page .bar-item .bar { width: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
+    <div class="header-nav">
+        <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+        <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+        <a href="基础课程.html" class="active">生命医学AI教育平台</a>
+        <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+    </div>
+    <div class="header-right"><span class="user-info" id="headerUserName">张教授</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+<div class="sidebar">
+    <div class="menu-group">
+        <div class="menu-group-title">AI教育平台</div>
+        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📚</span><span>基础课程</span></a>
+        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span><span>案例教学</span></a>
+        <div class="menu-item has-submenu" onclick="toggleSubmenu(this)"><span><span class="menu-icon">🔧</span><span>技能实践</span></span><span class="arrow">▶</span></div>
+        <div class="submenu">
+            <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
+            <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
+            <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
+            <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
+        </div>
+        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
+        <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)"><span><span class="menu-icon">👤</span><span>个人中心与能力评估</span></span><span class="arrow">▶</span></div>
+        <div class="submenu open">
+            <a class="menu-item" href="个人中心与能力评估.html">个人中心概览</a>
+            <a class="menu-item" href="个人学习档案管理.html">个人学习档案管理</a>
+            <a class="menu-item active" href="学习轨迹分析.html">学习轨迹分析</a>
+            <a class="menu-item" href="AI能力雷达图.html">AI能力雷达图</a>
+            <a class="menu-item" href="智能反馈与学习建议.html">智能反馈与学习建议</a>
+            <a class="menu-item" href="证书与学分管理.html">证书与学分管理</a>
+            <a class="menu-item" href="模块学习完成度.html">模块学习完成度</a>
+        </div>
+    </div>
+</div>
+<main class="main-content learning-track-page">
+    <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>学习轨迹分析</span></div>
+    <div class="page-head">
+        <div><h1 class="page-title">学习轨迹分析</h1><p class="page-desc">系统分析学习时间、活跃度和内容覆盖率等指标，方便后续独立调整统计口径。</p></div>
+        <div class="head-actions"><a class="btn btn-outline" href="个人中心与能力评估.html">返回个人中心首页</a><span class="tag green">自动统计</span></div>
+    </div>
+    <section class="card">
+        <div class="card-header">
+            <div><div class="card-title">近7天学习时长</div><div class="card-subtitle">可查看全部学习构成，也可按基础课程、案例教学、技能实践、考试中心查看近7天趋势。</div></div>
+            <div class="track-tabs" id="trackTabs"></div>
+        </div>
+        <div class="track-layout" id="trackLayout">
+            <div class="time-panel">
+                <div class="section-label"><b>每日总学习时长</b></div>
+                <div class="bar-chart" id="timeChart"></div>
+                <div class="chart-hint">选择“全部”时可点击日期查看当天构成；选择单个分类时右侧展示近7天趋势。</div>
+            </div>
+            <div class="daily-distribution" id="dailyDistribution"></div>
+        </div>
+    </section>
+    <section class="card">
+        <div class="card-header">
+            <div><div class="card-title">活跃度分析</div><div class="card-subtitle">将学习时长和学习频次拆开判断，分别对比基础课程、案例教学、技能实践、考试中心的活跃情况。</div></div>
+            <span class="tag blue">活跃度</span>
+        </div>
+        <div class="analysis-panel" id="activityPanel"></div>
+    </section>
+    <section class="card">
+        <div class="card-header">
+            <div><div class="card-title">内容覆盖率</div><div class="card-subtitle">按基础课程、案例教学、技能实践、考试中心分别统计已完成内容和应完成内容。</div></div>
+            <span class="tag green">覆盖率</span>
+        </div>
+        <div class="coverage-summary">
+            <div class="coverage-summary-main">
+                <div>
+                    <span class="coverage-summary-title">总体内容覆盖率</span>
+                    <strong class="coverage-summary-value">71%</strong>
+                </div>
+                <div>
+                    <div class="coverage-track"><i style="width:71%;background:var(--primary);"></i></div>
+                    <p class="coverage-summary-desc">综合基础课程、案例教学、技能实践、考试中心四类应完成内容，统计当前用户已完成学习范围。</p>
+                </div>
+                <div class="coverage-summary-count">36 / 51<span>已完成 / 应完成</span></div>
+            </div>
+        </div>
+        <div class="coverage-detail">
+            <div class="coverage-item"><div class="coverage-head"><span>基础课程<span class="coverage-meta">14 / 18 门单课程</span></span><b>78%</b></div><div class="coverage-track"><i style="width:78%;background:var(--primary);"></i></div></div>
+            <div class="coverage-item"><div class="coverage-head"><span>案例教学<span class="coverage-meta">9 / 14 个病例</span></span><b>64%</b></div><div class="coverage-track"><i style="width:64%;background:var(--warning);"></i></div></div>
+            <div class="coverage-item"><div class="coverage-head"><span>技能实践<span class="coverage-meta">7 / 12 个实训任务</span></span><b>58%</b></div><div class="coverage-track"><i style="width:58%;background:var(--purple);"></i></div></div>
+            <div class="coverage-item"><div class="coverage-head"><span>考试中心<span class="coverage-meta">6 / 7 场测评</span></span><b>86%</b></div><div class="coverage-track"><i style="width:86%;background:var(--success);"></i></div></div>
+        </div>
+    </section>
+</main>
+<script>
+var moduleMeta = [
+    { key: 'course', name: '基础课程', color: '#1a73e8' },
+    { key: 'case', name: '案例教学', color: '#f59e0b' },
+    { key: 'practice', name: '技能实践', color: '#7c3aed' },
+    { key: 'exam', name: '考试中心', color: '#10b981' }
+];
+var studyTime = [
+    { day: '07-10', hour: 2.8, modules: { course: 1.1, case: 0.7, practice: 1.0, exam: 0 } },
+    { day: '07-11', hour: 3.6, modules: { course: 1.5, case: 0.6, practice: 0.8, exam: 0.7 } },
+    { day: '07-12', hour: 1.5, modules: { course: 0.8, case: 0, practice: 0.5, exam: 0.2 } },
+    { day: '07-13', hour: 4.2, modules: { course: 1.4, case: 1.1, practice: 1.2, exam: 0.5 } },
+    { day: '07-14', hour: 5.1, modules: { course: 1.7, case: 1.2, practice: 1.4, exam: 0.8 } },
+    { day: '07-15', hour: 3.9, modules: { course: 1.4, case: 1.1, practice: 0.7, exam: 0.7 } },
+    { day: '07-16', hour: 4.8, modules: { course: 1.8, case: 1.0, practice: 1.1, exam: 0.9 } }
+];
+var selectedDayIndex = 4;
+var currentTrackMode = 'all';
+function formatHour(value){var rounded=Math.round(value*10)/10;return (rounded%1===0?rounded.toFixed(0):rounded.toFixed(1))+'h';}
+function getModuleTotal(item){return moduleMeta.reduce(function(sum,meta){return sum+(item.modules[meta.key]||0);},0);}
+function getTrackOptions(){return [{ key: 'all', name: '全部' }].concat(moduleMeta);}
+function getModuleMeta(key){return moduleMeta.filter(function(meta){return meta.key===key;})[0];}
+function renderTrackLayoutState(){
+    var layout=document.getElementById('trackLayout');
+    if(layout){layout.className=currentTrackMode==='all'?'track-layout':'track-layout module-mode';}
+}
+function renderTrackTabs(){
+    var tabs=document.getElementById('trackTabs');
+    tabs.innerHTML=getTrackOptions().map(function(item){
+        var active=item.key===currentTrackMode?' active':'';
+        return "<button type=\"button\" class=\"track-tab"+active+"\" onclick=\"switchTrackMode('"+item.key+"')\">"+item.name+"</button>";
+    }).join('');
+}
+function renderTimeChart(){
+    var chart=document.getElementById('timeChart');
+    var max=Math.max.apply(null,studyTime.map(function(item){return item.hour;}));
+    chart.innerHTML=studyTime.map(function(item,index){
+        var height=Math.round(item.hour/max*88);
+        var active=index===selectedDayIndex?' active':'';
+        return '<button type="button" class="bar-item'+active+'" onclick="selectDay('+index+')" aria-label="查看'+item.day+'学习时长分类"><div class="bar" style="height:'+height+'%"><b>'+formatHour(item.hour)+'</b></div><span class="bar-label">'+item.day+'</span></button>';
+    }).join('');
+}
+function renderLineDistribution(key){
+    var meta=getModuleMeta(key);
+    var panel=document.getElementById('dailyDistribution');
+    var values=studyTime.map(function(item){return item.modules[key]||0;});
+    var total=values.reduce(function(sum,value){return sum+value;},0);
+    var max=Math.max.apply(null,values.concat([1]));
+    var width=900,height=300,padX=56,padTop=42,padBottom=48;
+    var chartHeight=height-padTop-padBottom;
+    var points=values.map(function(value,index){
+        var x=padX+(width-padX*2)*(index/(values.length-1));
+        var y=padTop+chartHeight-(value/max*chartHeight);
+        return { x:x, y:y, value:value, day:studyTime[index].day };
+    });
+    var line=points.map(function(point,index){return (index===0?'M':'L')+point.x.toFixed(1)+' '+point.y.toFixed(1);}).join(' ');
+    var area=line+' L '+points[points.length-1].x.toFixed(1)+' '+(height-padBottom)+' L '+points[0].x.toFixed(1)+' '+(height-padBottom)+' Z';
+    var rows=points.map(function(point){
+        return '<circle class="line-point" cx="'+point.x.toFixed(1)+'" cy="'+point.y.toFixed(1)+'" r="4" fill="'+meta.color+'"></circle>'+
+            '<text class="line-value" x="'+point.x.toFixed(1)+'" y="'+(point.y-9).toFixed(1)+'" text-anchor="middle">'+formatHour(point.value)+'</text>'+
+            '<text class="line-label" x="'+point.x.toFixed(1)+'" y="'+(height-8)+'" text-anchor="middle">'+point.day+'</text>';
+    }).join('');
+    panel.innerHTML='<div class="section-label"><b>'+meta.name+'近7天学习时长</b><span>累计 '+formatHour(total)+'</span></div>'+
+        '<div class="line-chart-wrap"><svg class="line-chart" viewBox="0 0 '+width+' '+height+'" role="img" aria-label="'+meta.name+'近7天学习时长折线图">'+
+        '<line class="line-axis" x1="'+padX+'" y1="'+(height-padBottom)+'" x2="'+(width-padX)+'" y2="'+(height-padBottom)+'"></line>'+
+        '<line class="line-axis" x1="'+padX+'" y1="'+padTop+'" x2="'+padX+'" y2="'+(height-padBottom)+'"></line>'+
+        '<path class="line-area" d="'+area+'" fill="'+meta.color+'"></path>'+
+        '<path class="line-path" d="'+line+'" stroke="'+meta.color+'"></path>'+rows+
+        '</svg></div><div class="chart-hint">当前仅展示'+meta.name+'在近7天内的学习时长变化。</div>';
+}
+function renderDailyDistribution(){
+    renderTrackLayoutState();
+    if(currentTrackMode!=='all'){renderLineDistribution(currentTrackMode);return;}
+    var item=studyTime[selectedDayIndex];
+    var panel=document.getElementById('dailyDistribution');
+    var total=getModuleTotal(item);
+    var start=0;
+    var segments=moduleMeta.map(function(meta){
+        var value=item.modules[meta.key]||0;
+        var end=start+(total?value/total*100:0);
+        var segment=meta.color+' '+start.toFixed(2)+'% '+end.toFixed(2)+'%';
+        start=end;
+        return segment;
+    }).join(',');
+    var legend=moduleMeta.map(function(meta){
+        var value=item.modules[meta.key]||0;
+        var percent=total?Math.round(value/total*100):0;
+        return '<div class="legend-row"><span><i class="legend-dot" style="background:'+meta.color+'"></i>'+meta.name+'</span><b>'+formatHour(value)+' · '+percent+'%</b></div>';
+    }).join('');
+    panel.innerHTML='<div class="section-label"><b>'+item.day+' 学习构成</b><span>总计 '+formatHour(total)+'</span></div><div class="donut-wrap"><div class="donut-chart" style="background:conic-gradient('+segments+')"><div class="donut-center"><b>'+formatHour(total)+'</b><span>当天总时长</span></div></div></div><div class="legend-list">'+legend+'</div>';
+}
+function getLongestStreak(){
+    var current=0,longest=0;
+    studyTime.forEach(function(item){if(item.hour>0){current+=1;if(current>longest)longest=current;}else{current=0;}});
+    return longest;
+}
+function getActivityLevel(percent){
+    if(percent>=90) return '高度活跃';
+    if(percent>=75) return '较活跃';
+    if(percent>=60) return '一般活跃';
+    return '待提升';
+}
+function renderActivityPanel(){
+    var panel=document.getElementById('activityPanel');
+    var stats=moduleMeta.map(function(meta){
+        var total=studyTime.reduce(function(sum,item){return sum+(item.modules[meta.key]||0);},0);
+        var activeDays=studyTime.filter(function(item){return (item.modules[meta.key]||0)>0;}).length;
+        return { meta: meta, total: total, activeDays: activeDays };
+    });
+    var maxTotal=Math.max.apply(null,stats.map(function(item){return item.total;}));
+    var durationRows=stats.map(function(item){
+        var durationPercent=maxTotal?Math.round(item.total/maxTotal*100):0;
+        return '<div class="activity-row">'+
+            '<span class="activity-name"><i class="activity-dot" style="background:'+item.meta.color+'"></i>'+item.meta.name+'</span>'+
+            '<span class="activity-value">'+formatHour(item.total)+'</span>'+
+            '<div class="activity-meter"><i style="width:'+durationPercent+'%;background:'+item.meta.color+';"></i></div>'+
+            '<span class="activity-level">'+getActivityLevel(durationPercent)+'</span>'+
+            '</div>';
+    }).join('');
+    var frequencyRows=stats.map(function(item){
+        var frequencyPercent=Math.round(item.activeDays/studyTime.length*100);
+        return '<div class="activity-row">'+
+            '<span class="activity-name"><i class="activity-dot" style="background:'+item.meta.color+'"></i>'+item.meta.name+'</span>'+
+            '<span class="activity-value">'+item.activeDays+' / 7天</span>'+
+            '<div class="activity-meter"><i style="width:'+frequencyPercent+'%;background:'+item.meta.color+';"></i></div>'+
+            '<span class="activity-level">'+getActivityLevel(frequencyPercent)+'</span>'+
+            '</div>';
+    }).join('');
+    panel.innerHTML='<div class="activity-split">'+
+        '<div class="activity-section"><div class="activity-section-title"><div><b>学习时长活跃度</b><span>以近7天累计学习时长进行对比，最高分类作为100%基准。</span></div><span class="tag blue">时长维度</span></div>'+durationRows+'</div>'+
+        '<div class="activity-section"><div class="activity-section-title"><div><b>学习频次活跃度</b><span>以近7天产生学习记录的天数进行对比，7天为满频次。</span></div><span class="tag green">频次维度</span></div>'+frequencyRows+'</div>'+
+        '</div>';
+}
+function switchTrackMode(key){currentTrackMode=key;renderTrackTabs();renderDailyDistribution();}
+function selectDay(index){selectedDayIndex=index;renderTimeChart();renderDailyDistribution();}
+function toggleSubmenu(el){el.classList.toggle('expanded');var submenu=el.nextElementSibling;if(submenu) submenu.classList.toggle('open');}
+function logout(){if(confirm('确定要退出登录吗？')){localStorage.removeItem('life_med_user');window.location.href='login.html';}}
+document.addEventListener('DOMContentLoaded',function(){renderTrackTabs();renderTimeChart();renderDailyDistribution();renderActivityPanel();try{var user=JSON.parse(localStorage.getItem('life_med_user'));if(user&&user.name)document.getElementById('headerUserName').textContent=user.name;}catch(e){}});
+</script>
+</body>
+</html>

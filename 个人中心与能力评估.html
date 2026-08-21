@@ -218,6 +218,53 @@ body {
 .credit-box { background: var(--gray-50); border-radius: 8px; padding: 12px; border: 1px solid var(--gray-200); }
 .credit-box strong { display: block; font-size: 22px; color: var(--gray-900); }
 .credit-box span { color: var(--gray-500); font-size: 12px; }
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+.module-card {
+    display: block;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+    padding: 16px;
+    text-decoration: none;
+    color: var(--gray-800);
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+.module-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+}
+.module-card .module-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.module-card h4 {
+    font-size: 16px;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+}
+.module-card p {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+.module-link {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+}
 
 .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.48); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 24px; }
 .modal-overlay.show { display: flex; }
@@ -280,7 +327,19 @@ body {
             <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
         </div>
         <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
-        <a class="menu-item active" href="个人中心与能力评估.html"><span class="menu-icon">👤</span><span>个人中心与能力评估</span></a>
+        <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)">
+            <span><span class="menu-icon">👤</span><span>个人中心与能力评估</span></span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="submenu open">
+            <a class="menu-item active" href="个人中心与能力评估.html">个人中心概览</a>
+            <a class="menu-item" href="个人学习档案管理.html">个人学习档案管理</a>
+            <a class="menu-item" href="学习轨迹分析.html">学习轨迹分析</a>
+            <a class="menu-item" href="AI能力雷达图.html">AI能力雷达图</a>
+            <a class="menu-item" href="智能反馈与学习建议.html">智能反馈与学习建议</a>
+            <a class="menu-item" href="证书与学分管理.html">证书与学分管理</a>
+            <a class="menu-item" href="模块学习完成度.html">模块学习完成度</a>
+        </div>
     </div>
 </div>
 
@@ -335,7 +394,55 @@ body {
         </div>
     </section>
 
-    <div class="layout">
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">个人中心与能力评估子页面</div>
+                <div class="card-subtitle">已按照需规拆分为独立子页面，后续可逐个页面单独调整，最终再统一整合。</div>
+            </div>
+            <span class="tag blue">6 个子页面</span>
+        </div>
+        <div class="module-grid">
+            <a class="module-card" href="个人学习档案管理.html">
+                <span class="module-tag">档案管理</span>
+                <h4>个人学习档案管理</h4>
+                <p>记录学习课程、实验报告、考试成绩与模型作品，形成用户个人学习沉淀。</p>
+                <div class="module-link">进入子页面 →</div>
+            </a>
+            <a class="module-card" href="学习轨迹分析.html">
+                <span class="module-tag">轨迹分析</span>
+                <h4>学习轨迹分析</h4>
+                <p>拆分学习时间、活跃度、内容覆盖率等指标，便于后续独立优化统计逻辑。</p>
+                <div class="module-link">进入子页面 →</div>
+            </a>
+            <a class="module-card" href="AI能力雷达图.html">
+                <span class="module-tag">能力画像</span>
+                <h4>AI能力雷达图</h4>
+                <p>可视化展示知识掌握、诊断能力、模型构建、科研创新等能力维度。</p>
+                <div class="module-link">进入子页面 →</div>
+            </a>
+            <a class="module-card" href="智能反馈与学习建议.html">
+                <span class="module-tag">智能反馈</span>
+                <h4>智能反馈与学习建议</h4>
+                <p>根据评估结果自动推荐学习方向和实践内容，作为个性化教学反馈入口。</p>
+                <div class="module-link">进入子页面 →</div>
+            </a>
+            <a class="module-card" href="证书与学分管理.html">
+                <span class="module-tag">证书学分</span>
+                <h4>证书与学分管理</h4>
+                <p>支持课程结业证书、实验认证、AI技能徽章的生成、查询与后续下载。</p>
+                <div class="module-link">进入子页面 →</div>
+            </a>
+            <a class="module-card" href="模块学习完成度.html">
+                <span class="module-tag">完成度</span>
+                <h4>模块学习完成度</h4>
+                <p>单独展示基础课程、案例教学、技能实践、考试中心等模块完成情况。</p>
+                <div class="module-link">进入子页面 →</div>
+            </a>
+        </div>
+    </section>
+
+    <div class="layout" style="display:none;">
         <div class="column">
             <section class="card">
                 <div class="card-header">

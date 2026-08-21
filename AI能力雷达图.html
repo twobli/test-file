@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI能力雷达图 - 个人中心与能力评估</title>
+<link rel="stylesheet" href="个人中心与能力评估_子页面.css">
+<style>
+.learning-track-page .knowledge-panel { margin-top: 16px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 16px; }
+.learning-track-page .knowledge-overview { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: stretch; margin-bottom: 14px; }
+.learning-track-page .knowledge-score { border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%); display: flex; flex-direction: column; justify-content: center; }
+.learning-track-page .knowledge-score { align-items: center; gap: 8px; }
+.learning-track-page .knowledge-donut { width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; }
+.learning-track-page .knowledge-donut-center { width: 92px; height: 92px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(15,23,42,0.08); }
+.learning-track-page .knowledge-donut-center strong { color: var(--primary); font-size: 30px; line-height: 1.1; }
+.learning-track-page .knowledge-donut-center span { color: var(--gray-500); font-size: 12px; }
+.learning-track-page .knowledge-score span { color: var(--gray-500); font-size: 12px; }
+.learning-track-page .knowledge-score strong { display: block; color: var(--primary); font-size: 34px; line-height: 1.1; margin: 4px 0; font-weight: 800; }
+.learning-track-page .knowledge-score em { font-style: normal; color: var(--gray-600); font-size: 12px; }
+.learning-track-page .knowledge-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.learning-track-page .knowledge-metric { border: 1px solid var(--gray-200); border-radius: 8px; background: var(--gray-50); padding: 14px; min-height: 78px; display: flex; flex-direction: column; justify-content: center; }
+.learning-track-page .knowledge-metric span { color: var(--gray-500); font-size: 12px; display: block; margin-bottom: 6px; }
+.learning-track-page .knowledge-metric b { color: var(--gray-900); font-size: 22px; line-height: 1.1; }
+.learning-track-page .knowledge-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.learning-track-page .knowledge-card { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 12px 14px; display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px; gap: 12px; align-items: center; }
+.learning-track-page .knowledge-ring { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; color: var(--gray-900); font-size: 13px; font-weight: 800; box-shadow: inset 0 0 0 1px rgba(15,23,42,0.06); }
+.learning-track-page .knowledge-card-title { min-width: 0; }
+.learning-track-page .knowledge-card-title b { display: block; color: var(--gray-900); font-size: 14px; margin-bottom: 4px; }
+.learning-track-page .knowledge-mini-bar { height: 7px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+.learning-track-page .knowledge-mini-bar i { display: block; height: 100%; border-radius: 999px; }
+.learning-track-page .knowledge-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 6px; color: var(--gray-500); font-size: 12px; }
+.learning-track-page .knowledge-card-state { justify-self: end; font-size: 12px; font-weight: 800; }
+.learning-track-page .knowledge-card-state.good { color: var(--success); }
+.learning-track-page .knowledge-card-state.warn { color: var(--warning); }
+@media (max-width: 1280px) {
+    .learning-track-page .knowledge-overview { grid-template-columns: 1fr; }
+    .learning-track-page .knowledge-metrics { grid-template-columns: 1fr; }
+    .learning-track-page .knowledge-grid { grid-template-columns: 1fr; }
+    .learning-track-page .knowledge-card { grid-template-columns: 1fr; gap: 8px; }
+    .learning-track-page .knowledge-card-state { justify-self: start; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
+    <div class="header-nav">
+        <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+        <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+        <a href="基础课程.html" class="active">生命医学AI教育平台</a>
+        <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+    </div>
+    <div class="header-right"><span class="user-info" id="headerUserName">张教授</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+<div class="sidebar">
+    <div class="menu-group">
+        <div class="menu-group-title">AI教育平台</div>
+        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📚</span><span>基础课程</span></a>
+        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span><span>案例教学</span></a>
+        <div class="menu-item has-submenu" onclick="toggleSubmenu(this)"><span><span class="menu-icon">🔧</span><span>技能实践</span></span><span class="arrow">▶</span></div>
+        <div class="submenu">
+            <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
+            <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
+            <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
+            <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
+        </div>
+        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
+        <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)"><span><span class="menu-icon">👤</span><span>个人中心与能力评估</span></span><span class="arrow">▶</span></div>
+        <div class="submenu open">
+            <a class="menu-item" href="个人中心与能力评估.html">个人中心概览</a>
+            <a class="menu-item" href="个人学习档案管理.html">个人学习档案管理</a>
+            <a class="menu-item" href="学习轨迹分析.html">学习轨迹分析</a>
+            <a class="menu-item active" href="AI能力雷达图.html">AI能力雷达图</a>
+            <a class="menu-item" href="智能反馈与学习建议.html">智能反馈与学习建议</a>
+            <a class="menu-item" href="证书与学分管理.html">证书与学分管理</a>
+            <a class="menu-item" href="模块学习完成度.html">模块学习完成度</a>
+        </div>
+    </div>
+</div>
+<main class="main-content">
+    <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>AI能力雷达图</span></div>
+    <div class="page-head">
+        <div><h1 class="page-title">AI能力雷达图</h1><p class="page-desc">可视化展示用户在知识掌握、诊断能力、模型构建、科研创新、病例分析和知识应用等维度的能力水平。</p></div>
+        <div class="head-actions"><a class="btn btn-outline" href="个人中心与能力评估.html">返回个人中心首页</a><button class="btn btn-primary" onclick="refreshRadar()">重新生成能力画像</button></div>
+    </div>
+    <section class="card">
+        <div class="card-header">
+            <div><div class="card-title">AI能力雷达图</div></div>
+            <span class="tag blue">更新时间：2026-07-16</span>
+        </div>
+        <div class="radar-section">
+            <div class="radar-wrap">
+                <svg class="radar-svg" viewBox="0 0 300 300" aria-label="AI能力雷达图">
+                    <polygon class="radar-grid" points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"></polygon>
+                    <polygon class="radar-grid" points="150,80 210.6,115 210.6,185 150,220 89.4,185 89.4,115"></polygon>
+                    <polygon class="radar-grid" points="150,110 184.6,130 184.6,170 150,190 115.4,170 115.4,130"></polygon>
+                    <line class="radar-axis" x1="150" y1="150" x2="150" y2="50"></line>
+                    <line class="radar-axis" x1="150" y1="150" x2="236.6" y2="100"></line>
+                    <line class="radar-axis" x1="150" y1="150" x2="236.6" y2="200"></line>
+                    <line class="radar-axis" x1="150" y1="150" x2="150" y2="250"></line>
+                    <line class="radar-axis" x1="150" y1="150" x2="63.4" y2="200"></line>
+                    <line class="radar-axis" x1="150" y1="150" x2="63.4" y2="100"></line>
+                    <polygon class="radar-area" id="radarArea"></polygon>
+                    <g id="radarPoints"></g>
+                    <text class="radar-label" x="150" y="35" text-anchor="middle">知识掌握</text>
+                    <text class="radar-label" x="252" y="96" text-anchor="start">诊断能力</text>
+                    <text class="radar-label" x="252" y="207" text-anchor="start">模型构建</text>
+                    <text class="radar-label" x="150" y="272" text-anchor="middle">科研创新</text>
+                    <text class="radar-label" x="48" y="207" text-anchor="end">病例分析</text>
+                    <text class="radar-label" x="48" y="96" text-anchor="end">知识应用</text>
+                </svg>
+            </div>
+            <div>
+                <div class="ability-list" id="abilityList"></div>
+            </div>
+        </div>
+    </section>
+    <section class="card">
+        <div class="card-header">
+            <div><div class="card-title">基础课程知识点图谱</div><div class="card-subtitle">展示基础课程中各知识点的掌握情况，按已作答题目和最新重测结果自动汇总。</div></div>
+            <span class="tag blue">基础课程</span>
+        </div>
+        <div class="knowledge-panel">
+            <div class="knowledge-overview">
+                <div class="knowledge-score">
+                    <div class="knowledge-donut" style="background:conic-gradient(var(--primary) 0 70%, var(--gray-100) 70% 100%);">
+                        <div class="knowledge-donut-center">
+                            <strong>70%</strong>
+                            <span>总体</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="knowledge-metrics">
+                    <div class="knowledge-metric">
+                        <span>已掌握</span>
+                        <b>2</b>
+                    </div>
+                    <div class="knowledge-metric">
+                        <span>需强化</span>
+                        <b>2</b>
+                    </div>
+                    <div class="knowledge-metric">
+                        <span>已作答</span>
+                        <b>20题</b>
+                    </div>
+                    <div class="knowledge-metric">
+                        <span>重测</span>
+                        <b>覆盖</b>
+                    </div>
+                </div>
+            </div>
+            <div class="knowledge-grid">
+                <div class="knowledge-card">
+                    <div class="knowledge-ring" style="background:conic-gradient(var(--primary) 0 83%, var(--gray-100) 83% 100%);">83%</div>
+                    <div class="knowledge-card-title">
+                        <b>高血压视网膜病变分级</b>
+                        <div class="knowledge-mini-bar"><i style="width:83%; background:var(--primary);"></i></div>
+                        <div class="knowledge-card-meta"><span>5 / 6</span><span>6题</span></div>
+                    </div>
+                    <div class="knowledge-card-state good">已掌握</div>
+                </div>
+                <div class="knowledge-card">
+                    <div class="knowledge-ring" style="background:conic-gradient(var(--success) 0 83%, var(--gray-100) 83% 100%);">83%</div>
+                    <div class="knowledge-card-title">
+                        <b>RNFL厚度评估</b>
+                        <div class="knowledge-mini-bar"><i style="width:83%; background:var(--success);"></i></div>
+                        <div class="knowledge-card-meta"><span>5 / 6</span><span>6题</span></div>
+                    </div>
+                    <div class="knowledge-card-state good">已掌握</div>
+                </div>
+                <div class="knowledge-card">
+                    <div class="knowledge-ring" style="background:conic-gradient(var(--warning) 0 50%, var(--gray-100) 50% 100%);">50%</div>
+                    <div class="knowledge-card-title">
+                        <b>动静脉交叉压迫</b>
+                        <div class="knowledge-mini-bar"><i style="width:50%; background:var(--warning);"></i></div>
+                        <div class="knowledge-card-meta"><span>2 / 4</span><span>4题</span></div>
+                    </div>
+                    <div class="knowledge-card-state warn">需强化</div>
+                </div>
+                <div class="knowledge-card">
+                    <div class="knowledge-ring" style="background:conic-gradient(var(--danger) 0 50%, var(--gray-100) 50% 100%);">50%</div>
+                    <div class="knowledge-card-title">
+                        <b>视盘水肿识别</b>
+                        <div class="knowledge-mini-bar"><i style="width:50%; background:var(--danger);"></i></div>
+                        <div class="knowledge-card-meta"><span>2 / 4</span><span>4题</span></div>
+                    </div>
+                    <div class="knowledge-card-state warn">需强化</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+var abilityData = [
+    { name: '知识掌握', score: 70, color: '#1a73e8' },
+    { name: '诊断能力', score: 82, color: '#10b981' },
+    { name: '模型构建', score: 74, color: '#7c3aed' },
+    { name: '科研创新', score: 78, color: '#0891b2' },
+    { name: '病例分析', score: 81, color: '#f59e0b' },
+    { name: '知识应用', score: 68, color: '#ef4444' }
+];
+function radarPoint(index, score) {
+    var angle = -Math.PI / 2 + index * Math.PI * 2 / abilityData.length;
+    return { x: 150 + Math.cos(angle) * score, y: 150 + Math.sin(angle) * score };
+}
+function renderRadar() {
+    var points = abilityData.map(function(item, index) {
+        var point = radarPoint(index, item.score);
+        return point.x.toFixed(1) + ',' + point.y.toFixed(1);
+    }).join(' ');
+    document.getElementById('radarArea').setAttribute('points', points);
+    document.getElementById('radarPoints').innerHTML = abilityData.map(function(item, index) {
+        var point = radarPoint(index, item.score);
+        return '<circle class="radar-point" cx="' + point.x.toFixed(1) + '" cy="' + point.y.toFixed(1) + '" r="4"></circle>';
+    }).join('');
+    document.getElementById('abilityList').innerHTML = abilityData.map(function(item) {
+        return '<div class="ability-row"><span>' + item.name + '</span><div class="ability-track"><i style="width:' + item.score + '%;background:' + item.color + ';"></i></div><b>' + item.score + '</b></div>';
+    }).join('');
+}
+function refreshRadar() { alert('已根据最新学习记录重新生成能力画像。'); }
+function toggleSubmenu(el) { el.classList.toggle('expanded'); var submenu = el.nextElementSibling; if (submenu) submenu.classList.toggle('open'); }
+function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
+document.addEventListener('DOMContentLoaded', function() {
+    renderRadar();
+    try { var user = JSON.parse(localStorage.getItem('life_med_user')); if (user && user.name) document.getElementById('headerUserName').textContent = user.name; } catch (e) {}
+});
+</script>
+</body>
+</html>

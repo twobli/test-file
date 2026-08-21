@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>模块学习完成度 - 个人中心与能力评估</title>
+<link rel="stylesheet" href="个人中心与能力评估_子页面.css">
+</head>
+<body>
+<div class="header">
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
+    <div class="header-nav">
+        <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+        <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+        <a href="基础课程.html" class="active">生命医学AI教育平台</a>
+        <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+    </div>
+    <div class="header-right"><span class="user-info" id="headerUserName">张教授</span><button class="btn-logout" onclick="logout()">退出</button></div>
+</div>
+<div class="sidebar">
+    <div class="menu-group">
+        <div class="menu-group-title">AI教育平台</div>
+        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📚</span><span>基础课程</span></a>
+        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span><span>案例教学</span></a>
+        <div class="menu-item has-submenu" onclick="toggleSubmenu(this)"><span><span class="menu-icon">🔧</span><span>技能实践</span></span><span class="arrow">▶</span></div>
+        <div class="submenu">
+            <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
+            <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
+            <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
+            <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
+        </div>
+        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
+        <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)"><span><span class="menu-icon">👤</span><span>个人中心与能力评估</span></span><span class="arrow">▶</span></div>
+        <div class="submenu open">
+            <a class="menu-item" href="个人中心与能力评估.html">个人中心概览</a>
+            <a class="menu-item" href="个人学习档案管理.html">个人学习档案管理</a>
+            <a class="menu-item" href="学习轨迹分析.html">学习轨迹分析</a>
+            <a class="menu-item" href="AI能力雷达图.html">AI能力雷达图</a>
+            <a class="menu-item" href="智能反馈与学习建议.html">智能反馈与学习建议</a>
+            <a class="menu-item" href="证书与学分管理.html">证书与学分管理</a>
+            <a class="menu-item active" href="模块学习完成度.html">模块学习完成度</a>
+        </div>
+    </div>
+</div>
+<main class="main-content">
+    <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>模块学习完成度</span></div>
+    <div class="page-head">
+        <div><h1 class="page-title">模块学习完成度</h1><p class="page-desc">独立展示基础课程、案例教学、技能实践和考试中心等模块的完成情况。</p></div>
+        <div class="head-actions"><a class="btn btn-outline" href="个人中心与能力评估.html">返回个人中心首页</a><button class="btn btn-primary" onclick="alert('完成度数据已刷新')">刷新完成度</button></div>
+    </div>
+    <section class="card">
+        <div class="card-header"><div><div class="card-title">模块学习完成度</div><div class="card-subtitle">各模块完成进度与当前阶段说明。</div></div><span class="tag blue">自动汇总</span></div>
+        <div class="learning-path">
+            <div class="path-step active"><span class="step-num">1</span><strong>基础课程</strong><p>已完成 12/18 章节，章节测验平均正确率 88%。</p><div class="mini-progress"><i style="width:68%;"></i></div></div>
+            <div class="path-step active"><span class="step-num">2</span><strong>案例教学</strong><p>已完成 9 个病例，2 份病例分析报告待完善。</p><div class="mini-progress"><i style="width:64%;background:var(--warning);"></i></div></div>
+            <div class="path-step active"><span class="step-num">3</span><strong>技能实践</strong><p>影像标注已完成质控，AI模型作品仍需复核。</p><div class="mini-progress"><i style="width:58%;background:var(--purple);"></i></div></div>
+            <div class="path-step active"><span class="step-num">4</span><strong>考试中心</strong><p>模块考核已完成，全周期综合考试待补齐。</p><div class="mini-progress"><i style="width:86%;background:var(--success);"></i></div></div>
+        </div>
+    </section>
+    <section class="card" style="margin-top:18px;">
+        <div class="card-header"><div><div class="card-title">下一阶段建议</div><div class="card-subtitle">根据模块完成情况形成的学习顺序。</div></div></div>
+        <div class="timeline">
+            <div class="timeline-item"><div class="timeline-date">阶段 1</div><div class="timeline-body"><b>补齐基础课程章节</b><span>优先完成糖尿病视网膜病变、青光眼和OCT读片相关章节。</span></div></div>
+            <div class="timeline-item"><div class="timeline-date">阶段 2</div><div class="timeline-body"><b>完善病例分析报告</b><span>将案例教学中的进行中病例完成提交，形成可追踪学习成果。</span></div></div>
+            <div class="timeline-item"><div class="timeline-date">阶段 3</div><div class="timeline-body"><b>参加全周期综合考试</b><span>用综合考试检验跨知识体系的应用能力。</span></div></div>
+        </div>
+    </section>
+</main>
+<script>
+function toggleSubmenu(el) { el.classList.toggle('expanded'); var submenu = el.nextElementSibling; if (submenu) submenu.classList.toggle('open'); }
+function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
+document.addEventListener('DOMContentLoaded', function() { try { var user = JSON.parse(localStorage.getItem('life_med_user')); if (user && user.name) document.getElementById('headerUserName').textContent = user.name; } catch (e) {} });
+</script>
+</body>
+</html>

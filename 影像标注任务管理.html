@@ -667,6 +667,7 @@
       padding: 1px 7px;
       white-space: nowrap
     }
+
     .empty-hint {
       padding: 14px 4px;
       color: var(--gray-500);
@@ -1409,8 +1410,10 @@
       </div>
 
       <div class="tabbar" style="margin-bottom:16px">
-        <button type="button" class="tab-btn active" id="imageDataViewTab" onclick="switchDataView('image')">图像数据列表</button>
-        <button type="button" class="tab-btn" id="linkedDatasetViewTab" onclick="switchDataView('settings')">数据集设置</button>
+        <button type="button" class="tab-btn active" id="imageDataViewTab"
+          onclick="switchDataView('image')">图像数据列表</button>
+        <button type="button" class="tab-btn" id="linkedDatasetViewTab"
+          onclick="switchDataView('settings')">数据集设置</button>
       </div>
 
       <section class="card" id="imageDataListView">
@@ -1422,8 +1425,7 @@
               placeholder="输入数据名称、项目或关联数据集" oninput="renderDatasetPanel()"></div>
           <div class="filter-field"><label>识别格式</label><input id="datasetFormatKeyword" type="text"
               placeholder="输入 jpg、png、dicom 等" oninput="renderDatasetPanel()"></div>
-          <div class="filter-field"><label>数据状态</label><select id="datasetStatusFilter"
-              onchange="renderDatasetPanel()">
+          <div class="filter-field"><label>数据状态</label><select id="datasetStatusFilter" onchange="renderDatasetPanel()">
               <option value="">全部状态</option>
               <option>可建任务</option>
               <option>已分配完</option>
@@ -1466,8 +1468,9 @@
               <option>目标检测</option>
               <option>图像分割</option>
             </select></div>
-          <div class="filter-actions"><button class="btn btn-primary" onclick="renderLinkedDatasetSettings()">查询</button><button
-              class="btn btn-outline" onclick="resetLinkedDatasetFilters()">重置</button></div>
+          <div class="filter-actions"><button class="btn btn-primary"
+              onclick="renderLinkedDatasetSettings()">查询</button><button class="btn btn-outline"
+              onclick="resetLinkedDatasetFilters()">重置</button></div>
         </div>
         <div class="table-wrap">
           <table>
@@ -1507,8 +1510,8 @@
         <div class="filter-bar">
           <div class="filter-field"><label>任务名称</label><input id="reviewFilterName" type="text" placeholder="输入任务名称"
               oninput="renderReviewQueue()"></div>
-          <div class="filter-field"><label>关联数据集</label><input id="reviewFilterDataset" type="text" placeholder="输入关联数据集"
-              oninput="renderReviewQueue()"></div>
+          <div class="filter-field"><label>关联数据集</label><input id="reviewFilterDataset" type="text"
+              placeholder="输入关联数据集" oninput="renderReviewQueue()"></div>
           <div class="filter-field"><label>所属项目</label><input id="reviewFilterProject" type="text" placeholder="输入项目名称"
               oninput="renderReviewQueue()"></div>
           <div class="filter-field"><label>标注类型</label><select id="reviewFilterType" onchange="renderReviewQueue()">
@@ -1519,7 +1522,8 @@
             </select></div>
           <div class="filter-field admin-only"><label>标注员/审核员</label><input id="reviewFilterMember" type="text"
               placeholder="输入人员姓名" oninput="renderReviewQueue()"></div>
-          <div class="filter-field"><label>创建时间</label><input id="reviewFilterDate" type="date" onchange="renderReviewQueue()">
+          <div class="filter-field"><label>创建时间</label><input id="reviewFilterDate" type="date"
+              onchange="renderReviewQueue()">
           </div>
           <div class="filter-actions"><button class="btn btn-primary" onclick="renderReviewQueue()">查询</button><button
               class="btn btn-outline" onclick="resetReviewQueueFilters()">重置</button></div>
@@ -1605,82 +1609,86 @@
           <p class="page-desc">维护图像分类、目标检测与图像分割任务使用的标签集和疾病关联关系。标签集、标签明细和疾病信息都可直接维护和删除。</p>
         </div>
         <div class="toolbar-actions">
-          <button type="button" class="btn btn-outline" id="createLabelSetButton" onclick="createLabelSet()">新建标签集</button>
+          <button type="button" class="btn btn-outline" id="createLabelSetButton"
+            onclick="createLabelSet()">新建标签集</button>
           <button type="button" class="btn btn-outline" id="createDiseaseButton" onclick="createDisease()">新增疾病</button>
         </div>
       </div>
 
       <div class="tabbar" style="margin-bottom:16px">
-        <button type="button" class="tab-btn active" id="labelSetManagementTab" onclick="switchLabelSystemView('sets')">标签集管理</button>
-        <button type="button" class="tab-btn" id="diseaseManagementTab" onclick="switchLabelSystemView('diseases')">疾病管理</button>
+        <button type="button" class="tab-btn active" id="labelSetManagementTab"
+          onclick="switchLabelSystemView('sets')">标签集管理</button>
+        <button type="button" class="tab-btn" id="diseaseManagementTab"
+          onclick="switchLabelSystemView('diseases')">疾病管理</button>
       </div>
 
       <div id="labelSetManagementView">
         <section class="label-layout">
-        <div class="card" id="labelSetListView">
-          <div class="card-header">
-            <span class="card-title">标签集列表</span>
-          </div>
-          <div class="filter-bar" style="grid-template-columns:1fr 120px;margin-bottom:14px">
-            <div class="filter-field"><label>搜索标签集</label><input id="labelSetKeyword" type="text"
-                placeholder="名称/用途/数据集" oninput="renderLabelSetList()"></div>
-            <div class="filter-field"><label>任务类型</label><select id="labelTypeFilter" onchange="renderLabelSetList()">
-                <option value="">全部类型</option>
-                <option>图像分类</option>
-                <option>目标检测</option>
-                <option>图像分割</option>
-              </select></div>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>标签集名称</th>
-                  <th>适用数据集</th>
-                  <th>适用疾病</th>
-                  <th>任务类型</th>
-                  <th>标签数量</th>
-                  <th>更新时间</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody id="labelSetTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="labelSetDetailView" style="display:none;grid-column:1 / -1">
-          <section class="card">
+          <div class="card" id="labelSetListView">
             <div class="card-header">
-              <span class="card-title" id="labelDetailTitle">标签明细</span>
-              <div class="toolbar-actions">
-                <button type="button" class="btn btn-outline btn-sm" onclick="showLabelSetList()">返回标签集列表</button>
-                <button type="button" class="btn btn-outline btn-sm" onclick="addLabelToSet(activeLabelSetId)">新增标签</button>
-              </div>
+              <span class="card-title">标签集列表</span>
             </div>
-            <div class="label-rules">
-              <div class="label-rule"><strong>分类标签</strong><span>面向整张影像，可单选或多选，用于疾病分类与筛查分层。</span></div>
-              <div class="label-rule"><strong>检测标签</strong><span>面向矩形框目标，描述病灶或关键结构的位置与类别。</span></div>
-              <div class="label-rule"><strong>分割标签</strong><span>面向轮廓、区域填充和结构描边，支撑面积、长度等量化结果。</span></div>
+            <div class="filter-bar" style="grid-template-columns:1fr 120px;margin-bottom:14px">
+              <div class="filter-field"><label>搜索标签集</label><input id="labelSetKeyword" type="text"
+                  placeholder="名称/用途/数据集" oninput="renderLabelSetList()"></div>
+              <div class="filter-field"><label>任务类型</label><select id="labelTypeFilter" onchange="renderLabelSetList()">
+                  <option value="">全部类型</option>
+                  <option>图像分类</option>
+                  <option>目标检测</option>
+                  <option>图像分割</option>
+                </select></div>
             </div>
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>标签</th>
-                    <th>标签类型</th>
-                    <th>标注形态</th>
-                    <th>临床/科研含义</th>
-                    <th>必填</th>
+                    <th>标签集名称</th>
+                    <th>适用数据集</th>
+                    <th>适用疾病</th>
+                    <th>任务类型</th>
+                    <th>标签数量</th>
                     <th>更新时间</th>
                     <th>操作</th>
                   </tr>
                 </thead>
-                <tbody id="labelTableBody"></tbody>
+                <tbody id="labelSetTableBody"></tbody>
               </table>
             </div>
-          </section>
-        </div>
+          </div>
+
+          <div id="labelSetDetailView" style="display:none;grid-column:1 / -1">
+            <section class="card">
+              <div class="card-header">
+                <span class="card-title" id="labelDetailTitle">标签明细</span>
+                <div class="toolbar-actions">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="showLabelSetList()">返回标签集列表</button>
+                  <button type="button" class="btn btn-outline btn-sm"
+                    onclick="addLabelToSet(activeLabelSetId)">新增标签</button>
+                </div>
+              </div>
+              <div class="label-rules">
+                <div class="label-rule"><strong>分类标签</strong><span>面向整张影像，可单选或多选，用于疾病分类与筛查分层。</span></div>
+                <div class="label-rule"><strong>检测标签</strong><span>面向矩形框目标，描述病灶或关键结构的位置与类别。</span></div>
+                <div class="label-rule"><strong>分割标签</strong><span>面向轮廓、区域填充和结构描边，支撑面积、长度等量化结果。</span></div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>标签</th>
+                      <th>标签类型</th>
+                      <th>标注形态</th>
+                      <th>临床/科研含义</th>
+                      <th>必填</th>
+                      <th>更新时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="labelTableBody"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
         </section>
       </div>
 
@@ -1690,10 +1698,10 @@
             <span class="card-title">疾病列表</span>
           </div>
           <div class="filter-bar" style="grid-template-columns:1fr auto;margin-bottom:14px">
-            <div class="filter-field"><label>搜索疾病</label><input id="diseaseKeyword" type="text"
-                placeholder="名称/编码/别名" oninput="renderDiseaseList()"></div>
+            <div class="filter-field"><label>搜索疾病</label><input id="diseaseKeyword" type="text" placeholder="名称/编码/别名"
+                oninput="renderDiseaseList()"></div>
             <div class="filter-actions"><button class="btn btn-primary" onclick="renderDiseaseList()">查询</button><button
-              class="btn btn-outline" onclick="resetDiseaseFilters()">重置</button></div>
+                class="btn btn-outline" onclick="resetDiseaseFilters()">重置</button></div>
           </div>
           <div class="table-wrap">
             <table>
@@ -1817,7 +1825,6 @@
         <div class="form-group"><label id="reviewResultLabel">复核结论</label><select id="reviewResult">
             <option>通过</option>
             <option>退回修改</option>
-            <option>多人复核</option>
           </select></div>
         <div class="form-group"><label id="reviewNoteLabel">复核意见</label><textarea id="reviewNote"
             placeholder="请直接填写本次审核发现的问题、修改要求或通过说明。"></textarea></div>
@@ -2001,9 +2008,10 @@
         <div class="form-group" id="importUploadWrap">
           <label>上传文件</label>
           <label class="file-upload-box" for="importFiles">
-            <span class="file-upload-title">选择影像文件</span>
+            <span class="file-upload-title">选择影像文件（仅支持OCT、OCTA、眼底彩照图像）</span>
             <span class="file-upload-note">支持 DICOM、JPG、JPEG、PNG、BMP，可一次选择多个文件。</span>
-            <input id="importFiles" type="file" multiple accept=".dcm,.dicom,.jpg,.jpeg,.png,.bmp,image/jpeg,image/png,image/bmp" onchange="handleImportFiles()">
+            <input id="importFiles" type="file" multiple
+              accept=".dcm,.dicom,.jpg,.jpeg,.png,.bmp,image/jpeg,image/png,image/bmp" onchange="handleImportFiles()">
           </label>
           <div class="upload-file-list" id="importFileList"></div>
         </div>
@@ -2022,8 +2030,8 @@
       </div>
       <div class="modal-body">
         <div class="form-grid">
-          <div class="form-group"><label>数据集名称</label><input id="linkedDatasetNameInput"
-              placeholder="如：黄斑病变辅助诊断数据集"></div>
+          <div class="form-group"><label>数据集名称</label><input id="linkedDatasetNameInput" placeholder="如：黄斑病变辅助诊断数据集">
+          </div>
         </div>
         <div class="form-group">
           <label>适用任务类型</label>
@@ -2097,7 +2105,8 @@
             </select>
           </div>
         </div>
-        <div class="label-preview" id="exportPreview">将按 JSON 导出该任务的全部图像信息，包含图像信息、标注结果、复核记录、任务元数据、分片统计、标注详情、人员信息、时间、设备信息、软件版本。</div>
+        <div class="label-preview" id="exportPreview">将按 JSON
+          导出该任务的全部图像信息，包含图像信息、标注结果、复核记录、任务元数据、分片统计、标注详情、人员信息、时间、设备信息、软件版本。</div>
       </div>
       <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('exportModal')">取消</button><button
           class="btn btn-primary" onclick="confirmExportTask()">确认导出</button></div>
@@ -2177,17 +2186,13 @@
   <div class="modal-overlay" id="diseaseFormModal">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="diseaseFormTitle">新增疾病</h3><button class="modal-close"
-          onclick="closeDiseaseForm()">×</button>
+        <h3 id="diseaseFormTitle">新增疾病</h3><button class="modal-close" onclick="closeDiseaseForm()">×</button>
       </div>
       <div class="modal-body">
         <div class="form-grid">
-          <div class="form-group"><label>疾病名称</label><input id="diseaseNameInput"
-              placeholder="如：糖尿病视网膜病变"></div>
-          <div class="form-group"><label>疾病编码</label><input id="diseaseCodeInput"
-              placeholder="如：E10-E14.3"></div>
-          <div class="form-group"><label>别名</label><input id="diseaseAliasInput"
-              placeholder="如：DR、糖网"></div>
+          <div class="form-group"><label>疾病名称</label><input id="diseaseNameInput" placeholder="如：糖尿病视网膜病变"></div>
+          <div class="form-group"><label>疾病编码</label><input id="diseaseCodeInput" placeholder="如：E10-E14.3"></div>
+          <div class="form-group"><label>别名</label><input id="diseaseAliasInput" placeholder="如：DR、糖网"></div>
         </div>
         <div class="form-group"><label>疾病说明</label><textarea id="diseaseDescriptionInput"
             placeholder="填写疾病范围、影像特征或使用说明"></textarea></div>
@@ -2197,9 +2202,8 @@
           <div class="field-note" id="diseaseUpdatedAtText"></div>
         </div>
       </div>
-      <div class="modal-footer"><button class="btn btn-outline"
-          onclick="closeDiseaseForm()">取消</button><button class="btn btn-primary"
-          id="diseaseFormSubmitBtn" onclick="saveDiseaseForm()">保存疾病</button></div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeDiseaseForm()">取消</button><button
+          class="btn btn-primary" id="diseaseFormSubmitBtn" onclick="saveDiseaseForm()">保存疾病</button></div>
     </div>
   </div>
 
@@ -2234,9 +2238,8 @@
         <div class="form-group"><label>临床/科研含义</label><textarea id="labelMeaningInput"
             placeholder="说明该标签的临床含义、科研用途或模型训练目标"></textarea></div>
       </div>
-      <div class="modal-footer"><button class="btn btn-outline"
-          onclick="closeLabelForm()">取消</button><button class="btn btn-primary" id="labelFormSubmitBtn"
-          onclick="saveLabelForm()">保存标签</button></div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeLabelForm()">取消</button><button
+          class="btn btn-primary" id="labelFormSubmitBtn" onclick="saveLabelForm()">保存标签</button></div>
     </div>
   </div>
 
@@ -2511,7 +2514,7 @@
       renderTaskTable();
       updateStats();
       renderReviewQueue();
-      showToast(currentRole === 'admin' ? '已切换为管理员视图' : currentRole === 'reviewer' ? '已切换为审核员视图：' + currentReviewer : '已切换为标注员视图：' + currentAnnotator);
+      showToast(currentRole === 'admin' ? '已切换为管理员视图' : currentRole === 'reviewer' ? '已切换为审核模式：' + currentReviewer : '已切换为标注模式：' + currentAnnotator);
     }
 
     function applyRoleView() {
@@ -2533,10 +2536,10 @@
       if (newTaskButton) newTaskButton.style.display = reviewCenterMode ? 'none' : '';
       var desc = document.getElementById('rolePageDesc');
       if (desc) desc.textContent = currentRole === 'admin'
-          ? '用于标注任务分配、标签定义、协作监控与审核复核。标注员从任务进入具体影像工作台，管理员可回收任务、复核结果并导出训练数据。'
-          : currentRole === 'reviewer'
-            ? '审核员视图仅展示分配给当前人员的任务，可查看任务状态与标注结果。'
-            : '标注员视图仅展示分配给当前人员的任务，可查看任务目标并进入影像标注工作台提交标注结果。';
+        ? '用于标注任务分配、标签定义、协作监控与审核复核。标注员从任务进入具体影像工作台，管理员可回收任务、复核结果并导出训练数据。'
+        : currentRole === 'reviewer'
+          ? '审核员视图仅展示分配给当前人员的任务，可查看任务状态与标注结果。'
+          : '标注员视图仅展示分配给当前人员的任务，可查看任务目标并进入影像标注工作台提交标注结果。';
       var doneMeta = document.getElementById('statDoneMeta');
       if (doneMeta) doneMeta.textContent = currentRole === 'admin' ? '可导出训练数据' : '';
       var user = document.getElementById('headerUserName');
@@ -2563,7 +2566,7 @@
       var type = document.getElementById('filterType').value;
       var member = document.getElementById('filterMember').value.trim();
       var date = document.getElementById('filterDate').value;
-      return tasks.filter(function (t) {
+      var filteredTasks = tasks.filter(function (t) {
         if (currentRole === 'annotator' && t.annotators.indexOf(currentAnnotator) < 0) return false;
         if (currentRole === 'reviewer' && t.reviewers.indexOf(currentReviewer) < 0) return false;
         if (taskListReviewOnly && !isMyReviewTask(t)) return false;
@@ -2578,6 +2581,13 @@
         if (date && t.createdAt.slice(0, 10) !== date) return false;
         return true;
       });
+      if (currentRole !== 'annotator') return filteredTasks;
+      var returnedTasks = [];
+      var otherTasks = [];
+      filteredTasks.forEach(function (task) {
+        (task.reviewStatus === '审核退回' ? returnedTasks : otherTasks).push(task);
+      });
+      return returnedTasks.concat(otherTasks);
     }
 
     function renderTaskTypeFilterOptions() {
@@ -3136,10 +3146,10 @@
       var status = typeof t === 'string' ? t : getDisplayStatus(t);
       var cls = status === '审核通过' ? 'tag-green'
         : status === '待标注' ? 'tag-blue'
-        : status === '待审核' || status === '审核中' ? 'tag-orange'
-        : status === '多人复核中' ? 'tag-blue'
-        : status === '审核退回' ? 'tag-red'
-        : 'tag-gray';
+          : status === '待审核' || status === '审核中' ? 'tag-orange'
+            : status === '多人复核中' ? 'tag-blue'
+              : status === '审核退回' ? 'tag-red'
+                : 'tag-gray';
       return '<span class="tag ' + cls + '">' + status + '</span>';
     }
 
@@ -4391,11 +4401,11 @@
       var reviewStatusVal = getReviewStatus(t);
       var detailReviewRows = reviewStatusVal === '多人复核中'
         ? '<tr><th>复核发起人</th><td>' + (t.multiReviewRequestedBy || '管理员') + '</td></tr>' +
-          '<tr><th>复核发起时间</th><td>' + (t.multiReviewRequestedAt || '待发起') + '</td></tr>' +
-          '<tr><th>复核说明</th><td>' + (t.multiReviewNote || '已发起多人复核，等待其他审核员处理') + '</td></tr>'
+        '<tr><th>复核发起时间</th><td>' + (t.multiReviewRequestedAt || '待发起') + '</td></tr>' +
+        '<tr><th>复核说明</th><td>' + (t.multiReviewNote || '已发起多人复核，等待其他审核员处理') + '</td></tr>'
         : '<tr><th>审核人</th><td>' + (t.reviewedBy || '待审核') + '</td></tr>' +
-          '<tr><th>审核时间</th><td>' + (t.reviewedAt || '待审核') + '</td></tr>' +
-          '<tr><th>审核意见</th><td>' + (t.reviewNote || '暂无审核意见') + '</td></tr>';
+        '<tr><th>审核时间</th><td>' + (t.reviewedAt || '待审核') + '</td></tr>' +
+        '<tr><th>审核意见</th><td>' + (t.reviewNote || '暂无审核意见') + '</td></tr>';
       document.getElementById('annotationDetailBody').innerHTML =
         '<tr><th>任务ID</th><td>' + t.id + '</td></tr>' +
         '<tr><th>图像数据</th><td>' + getTaskImageDataName(t) + '</td></tr>' +
