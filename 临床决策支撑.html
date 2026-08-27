@@ -1,573 +1,3528 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>临床决策支撑</title>
-<style>
-:root {
-  --primary:#1a73e8; --primary-dark:#1557b0; --primary-light:#e8f0fe;
-  --success:#34a853; --success-light:#e6f4ea; --warning:#fbbc04; --warning-light:#fef7e0;
-  --danger:#ea4335; --danger-light:#fce8e6; --purple:#7c3aed; --purple-light:#f1ebff;
-  --teal:#0891b2; --teal-light:#e0f7fb; --gray-50:#f8f9fa; --gray-100:#f5f7fa;
-  --gray-200:#e8ecf0; --gray-300:#dadce0; --gray-400:#bdc1c6; --gray-500:#9aa0a6;
-  --gray-600:#80868b; --gray-700:#5f6368; --gray-800:#3c4043; --gray-900:#202124;
-  --sidebar-width:220px; --header-height:56px; --radius:8px;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
-  --transition:all .2s ease;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter','PingFang SC','Microsoft YaHei',Arial,sans-serif;font-size:14px;color:#333;background:var(--gray-50);min-height:100vh;line-height:1.6}
-.header{height:var(--header-height);background:linear-gradient(135deg,#1a56db 0%,#2563eb 52%,#1d4ed8 100%);color:#fff;display:flex;align-items:center;padding:0 24px;position:fixed;inset:0 0 auto 0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.logo{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;text-decoration:none;white-space:nowrap}
-.header-nav{display:flex;gap:4px;margin-left:40px}
-.header-nav a{color:rgba(255,255,255,.85);text-decoration:none;padding:6px 14px;border-radius:6px;font-size:13px;transition:var(--transition);white-space:nowrap}
-.header-nav a:hover,.header-nav a.active{background:rgba(255,255,255,.15);color:#fff}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px}
-.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px;transition:var(--transition)}
-.btn-logout:hover{background:rgba(255,255,255,.35)}
-.sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100vh - var(--header-height));background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;z-index:999;padding:8px 0}
-.menu-group-title{padding:12px 20px 6px;font-size:11px;color:var(--gray-500);text-transform:uppercase;letter-spacing:1px;font-weight:600}
-.menu-item,.sub-menu-item{display:flex;align-items:center;color:var(--gray-700);text-decoration:none;transition:var(--transition);border-left:3px solid transparent;cursor:pointer}
-.menu-item{padding:10px 20px;font-size:13px}
-.sub-menu-item{padding:8px 20px 8px 36px;font-size:12px}
-.menu-item:hover,.sub-menu-item:hover{background:var(--gray-50);color:var(--primary)}
-.menu-item.active,.sub-menu-item.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
-.main-content{margin-left:var(--sidebar-width);margin-top:var(--header-height);padding:24px;min-height:calc(100vh - var(--header-height))}
-.breadcrumb{font-size:13px;color:var(--gray-600);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.breadcrumb a{color:var(--primary);text-decoration:none}.breadcrumb .sep{color:var(--gray-400)}
-.page-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
-.page-title{font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
-.page-subtitle{color:var(--gray-600);font-size:13px}.title-actions{display:none}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-family:inherit;font-weight:500;cursor:pointer;transition:var(--transition);text-decoration:none;gap:6px;white-space:nowrap}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
-.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#2d9249}
-.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--gray-700)}.btn-outline:hover{background:var(--gray-50);border-color:var(--gray-400)}
-.btn-sm{padding:5px 10px;font-size:12px}.btn-block{width:100%}.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:500;line-height:1.5}
-.tag-blue{background:var(--primary-light);color:var(--primary)}.tag-green{background:var(--success-light);color:#137333}
-.tag-orange{background:var(--warning-light);color:#b06000}.tag-red{background:var(--danger-light);color:#c5221f}
-.tag-purple{background:var(--purple-light);color:var(--purple)}.tag-teal{background:var(--teal-light);color:var(--teal)}.tag-gray{background:#f1f3f4;color:var(--gray-700)}
-.module-nav{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:10px;margin-bottom:16px}
-.module-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:12px;text-align:left;text-decoration:none;color:inherit;min-height:88px;cursor:default;transition:var(--transition);position:relative}
-.module-card.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.08)}
-.module-card.future{background:#fff;color:var(--gray-600)}
-.module-card.done{border-color:rgba(52,168,83,.35);background:#fbfffc}
-.module-index{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--gray-100);color:var(--gray-600);font-size:12px;font-weight:700;margin-bottom:8px}
-.module-card.active .module-index{background:var(--primary);color:#fff}.module-card.done .module-index{background:var(--success);color:#fff}
-.module-card strong{display:block;font-size:14px;color:var(--gray-900)}.module-card span{font-size:11px;color:var(--gray-500);display:block;margin-top:2px}
-.workspace{display:block}
-.panel{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow)}
-.panel-header{padding:14px 16px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;gap:12px}
-.panel-title{font-size:15px;font-weight:700;color:var(--gray-900)}.panel-desc{font-size:12px;color:var(--gray-500);margin-top:2px}.panel-body{padding:16px}
-.left-stack{display:none}.center-stack{display:flex;flex-direction:column;gap:16px}.source-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.source-stat{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff;min-height:66px}.source-stat strong{font-size:20px;color:var(--gray-900);display:block;line-height:1.1}.source-stat span{font-size:12px;color:var(--gray-600);display:block;margin-top:4px}
-.source-filter-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.source-filter{border:1px solid var(--gray-300);background:#fff;border-radius:16px;padding:4px 10px;font-size:12px;color:var(--gray-700);cursor:pointer}.source-filter.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);font-weight:600}
-.case-list{display:flex;flex-direction:column;gap:8px}.case-item{border:1px solid var(--gray-200);border-radius:8px;padding:10px;cursor:pointer;background:#fff;transition:var(--transition)}
-.case-item:hover{border-color:var(--primary)}.case-item.active{border-color:var(--primary);background:var(--primary-light)}
-.case-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}.case-title{font-size:13px;font-weight:700;color:var(--gray-900)}
-.case-meta{font-size:11px;color:var(--gray-600);display:flex;flex-wrap:wrap;gap:6px}.case-summary{font-size:12px;color:var(--gray-700);margin-top:6px;line-height:1.45}
-.timeline-row{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:start;font-size:12px;margin-bottom:10px}.timeline-row strong{color:var(--gray-800)}.timeline-row span{color:var(--gray-600)}
-.stage-panel{display:none}.stage-panel.active{display:block}.stage-header{padding:16px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-.stage-title{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:4px}.stage-desc{font-size:13px;color:var(--gray-600)}.stage-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.case-brief{background:linear-gradient(180deg,#fff 0%,#f8fbff 100%);padding:16px}.chain-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.chain-title strong{font-size:15px;color:var(--gray-900)}
-.patient-entry-grid{display:grid;grid-template-columns:minmax(150px,1fr) minmax(90px,.45fr) minmax(100px,.45fr) minmax(230px,1.25fr) minmax(230px,1.25fr);gap:10px}.patient-field{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff;min-width:0}.patient-field label{font-size:11px;color:var(--gray-500);display:block;margin-bottom:6px}.patient-field.required label::after{content:" *";color:var(--danger);font-weight:800}.patient-field input,.patient-field select,.patient-field textarea{font-weight:700}.patient-field textarea{min-height:42px;resize:vertical}
-.qa-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(340px,.7fr);gap:16px;padding:16px}.intake-main,.assist-column{display:flex;flex-direction:column;gap:16px}.chat-panel{border:1px solid var(--gray-200);border-radius:var(--radius);background:#fff;display:flex;flex-direction:column;min-height:560px}
-.chat-head{padding:14px 16px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center}.chat-title{font-weight:700;color:var(--gray-900)}
-.chat-thread{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px;max-height:420px}
-.message-row{display:flex;gap:10px;max-width:92%}.message-row.user{align-self:flex-end;flex-direction:row-reverse}.msg-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;background:var(--primary);flex-shrink:0}.message-row.user .msg-avatar{background:var(--gray-500)}
-.msg-bubble{border-radius:10px;padding:10px 12px;line-height:1.65;font-size:13px;background:var(--gray-100);color:var(--gray-900)}.message-row.user .msg-bubble{background:var(--primary);color:#fff}
-.answer-bar{padding:12px 16px;border-top:1px solid var(--gray-100);background:#fff}.reference-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.ref-chip{border:1px solid var(--gray-300);background:#fff;color:var(--gray-700);border-radius:18px;padding:6px 12px;font-size:12px;cursor:pointer;transition:var(--transition)}.ref-chip:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
-.chat-input-row{display:flex;gap:8px;align-items:flex-end}.chat-input-row textarea{min-height:40px;max-height:100px;resize:vertical}
-input,select,textarea{width:100%;border:1px solid var(--gray-300);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;background:#fff;color:var(--gray-900);transition:var(--transition)}textarea{line-height:1.55}input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
-.source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}.source-card{border:1px solid var(--gray-200);border-radius:8px;background:#fff;padding:12px;min-height:136px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}.source-card strong{font-size:13px;color:var(--gray-900);display:block}.source-card span{font-size:12px;color:var(--gray-600);display:block;margin-top:3px;line-height:1.45}.source-card .source-foot{display:flex;justify-content:space-between;align-items:center;gap:8px}.upload-files{font-size:11px;color:var(--gray-500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hidden-file-input{display:none}
-.missing-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.missing-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--gray-200);background:var(--gray-50);border-radius:16px;padding:5px 10px;font-size:12px;color:var(--gray-700)}.missing-pill.done{background:var(--success-light);border-color:rgba(52,168,83,.28);color:#137333}.missing-pill.warn{background:var(--warning-light);border-color:rgba(251,188,4,.42);color:#b06000}
-.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field-card{border:1px solid var(--gray-200);border-radius:8px;background:#fff;padding:12px;min-width:0}.field-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.field-head strong{font-size:13px;color:var(--gray-900)}.field-card textarea{min-height:92px;resize:vertical}.field-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}.field-origin{font-size:11px;color:var(--gray-500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.assist-card .chat-thread{max-height:170px;min-height:128px;background:#fff}.assist-card .answer-bar{padding:0;border-top:0}.assist-card .reference-chips{margin:10px 0}.assist-hint{font-size:12px;color:var(--gray-600);line-height:1.6;margin-top:8px}
-.summary-grid{display:grid;grid-template-columns:1fr;gap:10px}.summary-item{border:1px solid var(--gray-200);border-radius:8px;padding:10px;background:#fff}.summary-item span{font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px}.summary-item strong{font-size:13px;color:var(--gray-900);line-height:1.45;font-weight:600}.summary-item.empty{background:var(--gray-50)}.summary-actions{margin-top:14px}
-.result-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:16px;padding:16px}.section-card{border:1px solid var(--gray-200);border-radius:var(--radius);background:#fff;padding:14px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.section-title h3{font-size:15px;color:var(--gray-900)}.section-subtitle{font-size:11px;color:var(--gray-500)}
-.diagnosis-item,.similar-item{border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:8px;background:#fff}.diagnosis-head,.similar-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.diagnosis-name,.similar-title{font-weight:700;color:var(--gray-900);font-size:13px}.probability,.match-score{font-weight:700;color:var(--primary);font-size:13px}.match-score{color:var(--success)}
-.bar{height:7px;background:var(--gray-200);border-radius:4px;overflow:hidden;margin:8px 0}.bar-fill{height:100%;border-radius:4px;background:var(--primary)}
-.diagnosis-reason,.similar-meta{font-size:12px;color:var(--gray-600);line-height:1.5;margin-top:4px}.evidence-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.next-card{border:1px solid var(--gray-200);border-radius:8px;padding:12px;background:var(--gray-50);font-size:12px;color:var(--gray-700);line-height:1.6}.toast{position:fixed;right:24px;bottom:24px;background:var(--gray-900);color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:13px;display:none;z-index:2000;max-width:380px}
-@media(max-width:1500px){.workspace{grid-template-columns:300px minmax(520px,1fr)}.patient-entry-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.qa-layout,.result-grid{grid-template-columns:1fr}.source-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:1100px){.sidebar{width:64px}.menu-group-title,.menu-item span,.sub-menu-item{display:none}.main-content{margin-left:64px}.workspace,.module-nav,.patient-entry-grid,.source-grid,.field-grid{grid-template-columns:1fr}.module-card::after{display:none}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>临床决策支撑 AI Copilot 工作台</title>
+  <style>
+    :root {
+      --bg: #eef2f6;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --line: #d8e0ea;
+      --line-strong: #b8c4d3;
+      --text: #172033;
+      --muted: #657287;
+      --blue: #2563eb;
+      --blue-weak: #eaf1ff;
+      --green: #12805c;
+      --green-weak: #e9f8f1;
+      --amber: #b45309;
+      --amber-weak: #fff5db;
+      --red: #c2413a;
+      --red-weak: #fff0ef;
+      --violet: #6d5bd0;
+      --cyan: #087990;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+      --top: 46px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      height: 100%;
+      display: grid;
+      grid-template-rows: var(--top) minmax(0, 1fr);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      min-height: var(--top);
+      background: linear-gradient(90deg, #2457d6 0%, #2563eb 100%);
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+
+    .brand {
+      min-width: 190px;
+      font-weight: 800;
+      letter-spacing: 0;
+      font-size: 18px;
+      white-space: nowrap;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .top-nav {
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .top-nav-item,
+    .top-actions .btn {
+      border: 0;
+      border-radius: 10px;
+      min-height: 38px;
+      padding: 0 16px;
+      color: rgba(255, 255, 255, 0.92);
+      background: transparent;
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: none;
+      text-decoration: none;
+    }
+
+    .top-nav-item {
+      flex: 0 0 auto;
+    }
+
+    .top-nav-item:hover,
+    .top-actions .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .top-nav-item.active {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .top-nav-item:focus-visible,
+    .top-actions .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.28);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      flex: 0 0 auto;
+      margin-left: auto;
+      align-items: center;
+    }
+
+    .top-actions .btn {
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .top-actions .btn.ghost {
+      color: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.12);
+      border: 0;
+    }
+
+    .top-actions .btn.ghost:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag.blue { color: #1d4ed8; background: #dbeafe; border-color: #bfdbfe; }
+    .tag.green { color: #047857; background: #d1fae5; border-color: #a7f3d0; }
+    .tag.amber { color: #92400e; background: #fef3c7; border-color: #fde68a; }
+    .tag.red { color: #b91c1c; background: #fee2e2; border-color: #fecaca; }
+    .tag.gray { color: #475569; background: #f1f5f9; border-color: #e2e8f0; }
+
+    .shell {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .module-nav {
+      min-height: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+      padding: 10px 0 12px;
+      overflow: hidden;
+    }
+
+    .module-nav-head {
+      padding: 16px 18px 8px;
+      color: #9ca3af;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .module-nav-item {
+      display: block;
+      width: 100%;
+      margin: 0;
+      min-height: 44px;
+      padding: 11px 16px 11px 18px;
+      border: 0;
+      border-left: 4px solid transparent;
+      background: #dbeafe;
+      color: #1d4ed8;
+      text-align: left;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .module-nav-item.active {
+      border-left-color: var(--blue);
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .module-nav-item:hover {
+      background: #d5e7ff;
+    }
+
+    .module-nav-item:focus-visible {
+      outline: none;
+      background: #dbeafe;
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.18);
+    }
+
+    .panel {
+      min-height: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-weight: 800;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 4px var(--green-weak);
+      flex: 0 0 auto;
+    }
+
+    .panel-body {
+      min-height: 0;
+      overflow: auto;
+      padding: 12px;
+    }
+    .intake-panel {
+      padding: 10px;
+      border: 1px solid #cfe0ff;
+      border-radius: 7px;
+      background: #f7fbff;
+    }
+
+    .intake-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .intake-head strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .intake-head span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .dropzone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 9px;
+      border: 1px dashed #8db4f4;
+      border-radius: 6px;
+      background: #fff;
+      color: #1d4ed8;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .16s ease, border-color .16s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      background: #eef5ff;
+      border-color: var(--blue);
+    }
+
+    .intake-actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .intake-actions .btn {
+      min-height: 30px;
+      padding: 0 9px;
+      font-size: 12px;
+    }
+
+    .upload-summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .file-item {
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .file-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .file-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .file-kind {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .status-pill {
+      flex: 0 0 auto;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--blue-weak);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-pill.waiting {
+      background: var(--amber-weak);
+      color: var(--amber);
+    }
+
+    .status-pill.done {
+      background: var(--green-weak);
+      color: var(--green);
+    }
+
+    .file-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .file-actions .btn {
+      min-height: 27px;
+      padding: 0 8px;
+      font-size: 11px;
+    }
+
+    .upload-workbench .file-list {
+      gap: 6px;
+    }
+
+    .upload-workbench .file-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+      border: 0;
+      border-bottom: 1px solid #e5e7eb;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .upload-workbench .file-item-head {
+      min-width: 0;
+      align-items: center;
+    }
+
+    .upload-workbench .file-actions {
+      margin-top: 0;
+    }
+
+    .upload-workbench .file-item:last-child {
+      border-bottom: 0;
+    }
+
+    .context-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .field {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .field label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .field-source {
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .field textarea,
+    .field input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      resize: vertical;
+      min-height: 38px;
+      padding: 7px 10px 10px;
+      color: var(--text);
+      background: transparent;
+      overflow-wrap: anywhere;
+    }
+
+    .field textarea:focus,
+    .field input:focus {
+      box-shadow: inset 0 -2px 0 var(--blue);
+    }
+
+    .imaging-box {
+      margin: 8px 10px 10px;
+      padding: 9px;
+      border-radius: 6px;
+      background: var(--surface-soft);
+      border: 1px dashed var(--line-strong);
+      color: #334155;
+      font-size: 12px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .signal-box {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fbfdff;
+      padding: 9px 10px 10px;
+    }
+
+    .signal-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .signal {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #fff7e8;
+      border: 1px solid #f5d39d;
+      color: #8a4a05;
+      font-size: 12px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .signal.pass {
+      background: var(--green-weak);
+      border-color: #a7f3d0;
+      color: #047857;
+    }
+
+    .metric {
+      padding: 8px;
+      border-radius: 6px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      min-width: 0;
+    }
+
+    .metric b {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .metric span {
+      font-weight: 800;
+    }
+
+    .btn {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      padding: 0 12px;
+      color: var(--text);
+      background: #fff;
+      font-weight: 800;
+      transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .btn.primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    .btn.ghost {
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn.ghost:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+
+    .chat-panel {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .command-bar {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(110px, 1fr));
+      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      background: #f7f9fc;
+    }
+
+    .command-btn {
+      min-height: 58px;
+      justify-content: flex-start;
+      text-align: left;
+      align-items: center;
+      padding: 8px 10px;
+      color: #1f2937;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      font-weight: 900;
+      line-height: 1.25;
+      white-space: normal;
+    }
+
+    .command-btn small {
+      display: block;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 2px;
+      font-size: 11px;
+    }
+
+    .command-btn:hover,
+    .command-btn.active {
+      background: var(--blue-weak);
+      border-color: #9bbcff;
+      color: #123c86;
+    }
+
+    .command-btn[data-type="similar"]:hover,
+    .command-btn[data-type="similar"].active { background: #eefdf8; border-color: #92dfc6; color: #0f654a; }
+    .command-btn[data-type="treatment"]:hover,
+    .command-btn[data-type="treatment"].active { background: #fff7e8; border-color: #f7c56c; color: #7c3f05; }
+    .command-btn[data-type="report"]:hover,
+    .command-btn[data-type="report"].active { background: #f0f9ff; border-color: #8bd3ee; color: #075985; }
+    .command-btn[data-type="quality"]:hover,
+    .command-btn[data-type="quality"].active { background: #fff1f2; border-color: #f5a2a9; color: #991b1b; }
+
+    .chat-stream {
+      min-height: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: auto;
+      padding: 14px;
+      background: linear-gradient(180deg, #fbfdff 0%, #f7f9fd 100%);
+    }
+
+    .upload-nudge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .upload-nudge-text {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .upload-nudge-text strong {
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .upload-nudge-text span {
+      color: #475569;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .msg {
+      max-width: 92%;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-self: flex-start;
+    }
+
+    .msg.user {
+      grid-template-columns: minmax(0, 1fr) 34px;
+      align-self: flex-end;
+    }
+
+    .msg .bubble {
+      min-width: 0;
+      padding: 11px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+      overflow-wrap: anywhere;
+    }
+
+    .msg.user .bubble {
+      grid-column: 1;
+      grid-row: 1;
+      background: #edf5ff;
+      border-color: #b9d6ff;
+    }
+
+    .msg .who {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .msg.user .who {
+      grid-column: 2;
+      background: #475569;
+    }
+
+    .thinking {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--blue);
+      animation: pulse 1s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: .3; transform: scale(.85); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      padding: 10px;
+      margin-top: 9px;
+    }
+
+    .text-plan-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .text-plan {
+      line-height: 1.65;
+    }
+
+    .text-plan strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .report-draft-text {
+      margin-top: 12px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+
+    .similar-card {
+      cursor: pointer;
+      transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease, transform .16s ease;
+    }
+
+    .similar-card:hover {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .similar-card.selected {
+      border-color: var(--blue);
+      background: #f8fbff;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.14);
+    }
+
+    .similar-card .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .similar-card .select-badge {
+      margin-left: auto;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e0ecff;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .plan-group {
+      margin-top: 12px;
+    }
+
+    .plan-group-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .plan-group-title small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .plan-card {
+      cursor: pointer;
+      transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease, transform .16s ease;
+    }
+
+    .plan-card:hover {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .plan-card.selected {
+      border-color: var(--blue);
+      background: #f8fbff;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.14);
+    }
+
+    .plan-card .plan-detail {
+      color: #334155;
+      font-size: 12px;
+    }
+
+    .plan-card .plan-reason {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .plan-card .plan-reason strong {
+      color: #475569;
+    }
+
+    .plan-card .select-badge {
+      margin-left: auto;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e0ecff;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .treatment-confirm-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 10px;
+      border: 1px solid #cfe0ff;
+      border-radius: 7px;
+      background: #f7fbff;
+    }
+
+    .treatment-confirm-bar span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .treatment-confirm-bar .btn {
+      flex: 0 0 auto;
+    }
+
+    .result-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 900;
+      margin-bottom: 7px;
+    }
+
+    .score {
+      flex: 0 0 auto;
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-bottom: 7px;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+    }
+
+    .kv {
+      margin: 6px 0 0;
+      padding-left: 18px;
+      color: #334155;
+    }
+
+    .kv li {
+      margin: 4px 0;
+      line-height: 1.55;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .mini-btn {
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+
+    .chat-input {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: none;
+      overflow: visible;
+      padding: 10px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .composer-shell {
+      position: relative;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      overflow: visible;
+      z-index: 5;
+    }
+
+    .composer-textarea {
+      width: 100%;
+      min-height: 86px;
+      resize: vertical;
+      border: 0;
+      outline: none;
+      padding: 18px 18px 8px;
+      color: var(--text);
+      background: transparent;
+      font-size: 15px;
+    }
+
+    .composer-textarea::placeholder {
+      color: #c4c8cf;
+    }
+
+    .composer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px 12px 14px;
+      border-top: 1px solid #eef2f7;
+      background: #fff;
+    }
+
+    .composer-left,
+    .composer-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .add-btn {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+    }
+
+    .add-btn.active {
+      background: #dbeafe;
+      color: #1d4ed8;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.14);
+    }
+
+    .add-btn.quality-needed {
+      border-color: #f6c56f;
+      background: #fff8eb;
+      color: #9a3412;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.14);
+    }
+
+    .add-btn.quality-needed .add-btn-icon {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .add-btn-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .add-btn-text {
+      white-space: nowrap;
+    }
+
+    .send-btn {
+      min-width: 64px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid #2563eb;
+      background: #2563eb;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .send-btn:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    .upload-workbench {
+      display: none;
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: calc(100% + 10px);
+      z-index: 30;
+      max-height: 420px;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid #cfe0ff;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.12);
+    }
+
+    .upload-workbench.open {
+      display: block;
+    }
+
+    .upload-workbench-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .upload-workbench-head strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .upload-workbench-head span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .upload-workbench-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
+
+    .upload-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .upload-step {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .upload-step-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #334155;
+      min-height: 22px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .upload-step-title strong {
+      color: #0f172a;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .upload-step-title small {
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .upload-step-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-left: 26px;
+      margin-top: 0;
+    }
+
+    .upload-meta-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .upload-menu-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .upload-menu-row {
+      width: 100%;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fff;
+      color: #1f2937;
+      text-align: left;
+      font-weight: 800;
+    }
+
+    .upload-menu-row:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .upload-menu-row.active {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+    }
+
+    .upload-menu-title {
+      color: #1f2937;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .upload-menu-desc {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .menu-section-title {
+      color: #475569;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .upload-type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .upload-type-pill {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      justify-content: flex-start;
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: left;
+      white-space: normal;
+      transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .upload-type-label {
+      min-width: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .upload-type-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      flex: 0 0 auto;
+      margin-top: 5px;
+    }
+
+    .upload-type-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .upload-type-main strong {
+      font-size: 12px;
+    }
+
+    .upload-type-main small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .upload-type-pill small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .upload-type-pill.active {
+      color: var(--blue);
+      background: #eff6ff;
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+    }
+
+    .upload-type-pill.active .upload-type-dot {
+      background: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .upload-type-check {
+      display: inline-grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      margin-left: auto;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .upload-type-pill.has-waiting {
+      border-color: #f7c56c;
+      background: #fffbeb;
+    }
+
+    .upload-type-pill.has-written {
+      border-color: #92dfc6;
+      background: #f0fdf4;
+    }
+
+    .upload-empty-hint {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 92px;
+      padding: 14px 16px;
+      border: 1px dashed #8eb5ff;
+      border-radius: 10px;
+      background: #f8fbff;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .upload-empty-hint:hover,
+    .upload-empty-hint.dragover {
+      border-color: #2563eb;
+      background: #eff6ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+    }
+
+    .upload-drop-icon {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 9px;
+      background: #dbeafe;
+      color: #2563eb;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .upload-drop-copy {
+      min-width: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .upload-empty-hint strong {
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .upload-empty-hint .upload-state-text {
+      margin-left: auto;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #dbeafe;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .upload-import-report-btn {
+      flex: 0 0 auto;
+      min-height: 32px;
+      padding: 0 12px;
+      border: 1px solid #bfdbfe;
+      border-radius: 7px;
+      background: #f8fbff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+      box-shadow: none;
+    }
+
+    .upload-import-report-btn:hover {
+      background: #eef5ff;
+      border-color: #93c5fd;
+    }
+
+    .upload-import-report-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .upload-workbench-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .chat-input textarea {
+      width: 100%;
+      min-height: 42px;
+      max-height: 120px;
+      resize: vertical;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      padding: 10px;
+      outline: none;
+      color: var(--text);
+    }
+
+    .chat-input textarea:focus {
+      border-color: #7aa7ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 8px 8px 0;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+    }
+
+    .tab {
+      min-height: 34px;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      padding: 0 10px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .tab.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+
+    .tab-page {
+      display: none;
+      min-height: 0;
+      overflow: auto;
+      padding: 12px;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    .report-paper {
+      min-height: 100%;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.03);
+    }
+
+    .report-paper h2 {
+      margin: 0 0 12px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #172033;
+      text-align: center;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .report-section {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--line-strong);
+    }
+
+    .report-section:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .report-section h3 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      color: #111827;
+    }
+
+    .report-section p {
+      margin: 4px 0;
+      color: #334155;
+    }
+
+    .qc-list,
+    .knowledge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .qc-item,
+    .knowledge-item {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .qc-item.pass { border-left: 4px solid var(--green); }
+    .qc-item.warn { border-left: 4px solid var(--amber); }
+    .qc-item.block { border-left: 4px solid var(--red); }
+
+    .qc-item h4,
+    .knowledge-item h4 {
+      margin: 0 0 5px;
+      font-size: 13px;
+    }
+
+    .modal-body .knowledge-item + .knowledge-item {
+      margin-top: 10px;
+    }
+
+    .modal-body .knowledge-item h4 {
+      font-size: 15px;
+    }
+
+    .modal-body .knowledge-item p,
+    .modal-body .knowledge-item li {
+      font-size: 13px;
+    }
+
+    .qc-item p,
+    .knowledge-item p {
+      margin: 4px 0;
+      color: #475569;
+      font-size: 12px;
+    }
+
+    .qc-text-output {
+      margin: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: #172033;
+      font: 13px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.48);
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-panel {
+      width: min(760px, 96vw);
+      max-height: min(720px, 88vh);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+      font-weight: 900;
+    }
+
+    .modal-body {
+      overflow: auto;
+      padding: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 60;
+      display: none;
+      max-width: 360px;
+      padding: 10px 12px;
+      border-radius: 7px;
+      background: #111827;
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-weight: 800;
+    }
+
+    @media (max-width: 1180px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        min-height: 100%;
+        height: auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 10px 14px;
+      }
+
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        min-height: 420px;
+      }
+
+      .command-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        overflow-x: hidden;
+      }
+
+      .app {
+        display: block;
+      }
+
+      .topbar {
+        height: auto;
+        min-height: var(--top);
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 10px 12px;
+        gap: 8px;
+      }
+
+      .top-nav,
+      .top-actions {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        min-width: 0;
+      }
+
+      .shell {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        gap: 8px;
+        overflow-x: hidden;
+      }
+
+      .chat-panel { order: 1; }
+      .shell > aside:first-child { order: 2; }
+      .shell > aside:last-child { order: 3; }
+
+      .panel {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+      }
+
+      .chat-panel {
+        min-height: 620px;
+      }
+
+      .command-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .msg {
+        width: 100%;
+        max-width: 100%;
+        grid-template-columns: 34px minmax(0, 1fr);
+      }
+
+      .msg.user {
+        grid-template-columns: minmax(0, 1fr) 34px;
+      }
+
+      .upload-type-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .upload-empty-hint {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .upload-empty-hint .upload-state-text {
+        margin-left: 46px;
+      }
+
+      .upload-import-report-btn {
+        margin-left: 0;
+        width: auto;
+      }
+
+      .upload-workbench-head {
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+
+      .upload-workbench-head-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+      }
+
+    }
+
+  </style>
 </head>
 <body>
-<div class="header">
-  <a href="app-center.html" class="logo">生命医学主题库应用</a>
-  <div class="header-nav">
-    <a href="眼底图像输入.html">AI眼底疾病筛查</a>
-    <a href="临床数据开放共享.html">生命医学开放数据平台</a>
-    <a href="基础课程.html">生命医学AI教育平台</a>
-    <a href="临床决策支撑.html" class="active">眼病/慢病专家系统</a>
-  </div>
-  <div class="header-right"><span id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div>
-</div>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="app-center.html">生命医学主题库应用</a>
+      <div class="top-nav" aria-label="系统切换">
+        <a class="top-nav-item" href="眼底图像输入.html">AI眼底疾病筛查</a>
+        <a class="top-nav-item" href="临床数据开放共享.html">生命医学开放数据平台</a>
+        <a class="top-nav-item" href="基础课程.html">生命医学AI教育平台</a>
+        <a class="top-nav-item active" href="临床决策支撑.html" aria-current="page">眼病/慢病专家系统</a>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" type="button">管理员</button>
+        <button class="btn ghost" type="button">退出</button>
+      </div>
+    </header>
 
-<aside class="sidebar">
-  <div class="menu-group">
-    <div class="menu-group-title">专家系统</div>
-    <a class="menu-item active" href="临床决策支撑.html"><span>临床决策支撑</span></a>
-    <a class="sub-menu-item active" data-stage-link="qa" onclick="switchStage('qa')">病例采集确认</a>
-    <a class="sub-menu-item" href="临床决策支撑_辅助临床诊断.html" onclick="return saveCurrentCaseBeforeNavigate()">辅助临床诊断</a>
-    <a class="sub-menu-item" href="临床决策支撑_相似病历推荐.html" onclick="return saveCurrentCaseBeforeNavigate()">相似病历推荐</a>
-    <a class="sub-menu-item" href="临床决策支撑_治疗方案推荐.html" onclick="return saveCurrentCaseBeforeNavigate()">治疗方案推荐</a>
-    <a class="sub-menu-item" href="临床决策支撑_报告与质控.html" onclick="return saveCurrentCaseBeforeNavigate()">医学报告</a>
-    <a class="sub-menu-item" href="临床决策支撑_医嘱质控.html" onclick="return saveCurrentCaseBeforeNavigate()">医嘱质控</a>
-    <a class="sub-menu-item" href="临床决策支撑_归档记录.html" onclick="return saveCurrentCaseBeforeNavigate()">归档记录</a>
-    <a class="menu-item" href="患者咨询_导诊机器人.html"><span>导诊机器人</span></a>
-  </div>
-</aside>
+    <main class="shell">
+      <aside class="module-nav">
+        <div class="module-nav-head">专家系统</div>
+        <button class="module-nav-item active" type="button">临床决策支撑</button>
+      </aside>
 
-<main class="main-content">
-  <div class="breadcrumb"><a href="app-center.html">应用中心</a><span class="sep">></span><a href="临床决策支撑.html">眼病/慢病专家系统</a><span class="sep">></span><span>临床决策支撑</span></div>
-  <div class="page-title-row">
-    <div>
-      <h1 class="page-title">临床决策支撑</h1>
-    </div>
-  </div>
+      <section class="panel chat-panel">
 
-  <div class="module-nav" id="moduleNav"></div>
-
-  <div class="workspace">
-    <div class="left-stack">
-      <section class="panel">
-        <div class="panel-header"><div><div class="panel-title">病例来源</div><div class="panel-desc">门诊、住院、筛查和随访进入同一采集确认流程</div></div></div>
-        <div class="panel-body">
-          <div class="source-stats">
-            <div class="source-stat"><strong id="countAll">0</strong><span>全部病例</span></div>
-            <div class="source-stat"><strong id="countScreening">0</strong><span>筛查转入</span></div>
-            <div class="source-stat"><strong id="countAnalyzed">0</strong><span>已完成诊断</span></div>
-            <div class="source-stat"><strong id="countReport">0</strong><span>已生成报告</span></div>
-          </div>
-          <div class="source-filter-row">
-            <button class="source-filter active" data-filter="all" onclick="setSourceFilter('all')">全部</button>
-            <button class="source-filter" data-filter="病历截图上传" onclick="setSourceFilter('病历截图上传')">病历截图上传</button>
-            <button class="source-filter" data-filter="AI筛查转入" onclick="setSourceFilter('AI筛查转入')">AI筛查转入</button>
-            <button class="source-filter" data-filter="随访复诊" onclick="setSourceFilter('随访复诊')">随访复诊</button>
-          </div>
+        <div class="command-bar" aria-label="临床 AI 核心功能">
+          <button class="command-btn" data-type="diagnosis">
+            辅助临床诊断
+            <small>疾病可能性与证据</small>
+          </button>
+          <button class="command-btn" data-type="similar">
+            相似病历推荐
+            <small>历史病历与转归</small>
+          </button>
+          <button class="command-btn" data-type="treatment">
+            治疗方案推荐
+            <small>检查、用药、处置</small>
+          </button>
+          <button class="command-btn" data-type="report">
+            报告自动生成
+            <small>结构化报告草稿</small>
+          </button>
+          <button class="command-btn" data-type="quality">
+            医嘱合理性质控
+            <small>禁忌、重复、适应症</small>
+          </button>
         </div>
-      </section>
 
-      <section class="panel">
-        <div class="panel-header"><div><div class="panel-title">待处理病例</div><div class="panel-desc">选中后采集、诊断和后续页面共用同一病例</div></div><button class="btn btn-outline btn-sm" onclick="newCase()">新建</button></div>
-        <div class="panel-body"><div class="case-list" id="caseList"></div></div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-header"><div class="panel-title">页面拆分逻辑</div></div>
-        <div class="panel-body">
-          <div class="timeline-row"><strong>采集页</strong><span>上传资料图片、OCR+AI抽取字段、医生补录确认。</span></div>
-          <div class="timeline-row"><strong>诊断页</strong><span>基于主诉、病史、影像、体检和检验结果输出疾病可能性排序。</span></div>
-          <div class="timeline-row"><strong>病历页</strong><span>基于病历文书和结构化表单检索相似病例与既往转归。</span></div>
-          <div class="timeline-row"><strong>方案页</strong><span>检查检验、用药、手术/处置、随访方案单独确认。</span></div>
-          <div class="timeline-row"><strong>报告页</strong><span>自动生成报告，并对医嘱进行合理性质控。</span></div>
-        </div>
-      </section>
-    </div>
-
-    <div class="center-stack">
-      <section class="panel">
-        <div class="case-brief">
-          <div class="chain-title"><strong>病例疾病信息录入</strong><span class="tag tag-teal" id="caseInfoStatus">资料采集中</span></div>
-          <div class="patient-entry-grid">
-            <div class="patient-field required"><label for="patientNameInput">姓名</label><input id="patientNameInput" type="text" required onchange="updateCaseInfo('patientName',this.value)" placeholder="请输入姓名"></div>
-            <div class="patient-field required"><label for="patientAgeInput">年龄</label><input id="patientAgeInput" type="number" min="0" max="120" required onchange="updateCaseInfo('age',this.value)" placeholder="年龄"></div>
-            <div class="patient-field required"><label for="patientGenderInput">性别</label><select id="patientGenderInput" required onchange="updateCaseInfo('gender',this.value)"><option value="男">男</option><option value="女">女</option></select></div>
-            <div class="patient-field required"><label for="patientHistoryInput">既往病史</label><textarea id="patientHistoryInput" rows="1" required onchange="updateCaseInfo('pastHistory',this.value)" placeholder="请输入既往病史"></textarea></div>
-            <div class="patient-field required"><label for="patientMedicationInput">过往用药史</label><textarea id="patientMedicationInput" rows="1" required onchange="updateCaseInfo('medicationHistory',this.value)" placeholder="请输入过往用药史"></textarea></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel stage-panel active" id="stage-qa">
-        <div class="stage-header">
-          <div><div class="stage-title">病例信息采集与确认</div><div class="stage-desc">医生上传病历、检查检验、影像报告等截图，系统通过OCR和AI抽取字段；医生可直接修改并确认。</div></div>
-        </div>
-        <input class="hidden-file-input" id="bulkUploadInput" type="file" accept="image/*" multiple onchange="handleBulkUpload(this.files)">
-        <div class="qa-layout">
-          <div class="intake-main">
-            <div class="section-card">
-              <div class="section-title"><h3>资料上传识别</h3><span class="section-subtitle">上传截图或图片后，系统识别文字并抽取到结构化字段</span></div>
-              <div class="source-grid" id="autoSourceGrid"></div>
+        <div class="chat-stream" id="chatStream">
+          <article class="msg">
+            <div class="who">AI</div>
+            <div class="bubble">
+              您好，我是临床决策支撑 AI Copilot。当前已载入一份糖尿病眼底病变相关病例，我可以根据主诉、慢病史、眼病史、影像、体格检查和检验结果，协助完成辅助诊断、相似病历推荐、治疗方案推荐、报告自动生成和医嘱合理性质控。您可以直接输入问题，也可以在需要补充证据时点击“添加资料”上传病历、检验报告或影像文件。
             </div>
-            <div class="section-card">
-              <div class="section-title"><h3>结构化病例字段</h3><span class="section-subtitle">自动识别结果可直接改，字段输入作为兜底</span></div>
-              <div class="field-grid" id="fieldEditor"></div>
-            </div>
-          </div>
-          <div class="assist-column">
-            <div class="section-card assist-card">
-              <div class="section-title"><h3>AI补缺助手</h3><span class="tag tag-blue" id="qaStepLabel">待检查</span></div>
-              <div class="chat-thread" id="qaThread"></div>
-              <div class="reference-chips" id="referenceChips"></div>
-              <div class="chat-input-row">
-                <textarea id="qaInput" rows="1" placeholder="仅在缺失项需要补充时输入..." onkeydown="handleQaKeyDown(event)"></textarea>
-                <button class="btn btn-primary" onclick="submitQaAnswer()">补充</button>
+          </article>
+        </div>
+
+        <div class="chat-input">
+          <div class="composer-shell">
+            <textarea id="chatInput" class="composer-textarea" placeholder="输入病情描述、问题或方案要求"></textarea>
+            <div class="composer-footer">
+              <div class="composer-left">
+                <button class="add-btn" id="uploadToggleBtn" type="button" title="添加资料" aria-label="添加资料" aria-expanded="false">
+                  <span class="add-btn-icon">+</span>
+                  <span class="add-btn-text">添加资料</span>
+                </button>
+                <span class="tag gray" id="uploadSummary">0 份资料</span>
               </div>
-              <div class="assist-hint">优先上传资料图片和编辑字段；AI只负责整理识别结果、提示缺失项或提供参考说法。</div>
+              <div class="composer-right">
+                <button class="send-btn" id="sendBtn" type="button" aria-label="发送">发送</button>
+              </div>
             </div>
-            <div class="section-card">
-              <div class="section-title"><h3>病例摘要</h3><span class="section-subtitle">确认后进入诊断模型</span></div>
-              <div class="summary-grid" id="structuredSummary"></div>
-              <div class="summary-actions"><button class="btn btn-primary btn-block" onclick="confirmCaseAndGoDiagnosis()">确认病例资料并进入辅助临床诊断</button></div>
+            <div class="upload-workbench" id="uploadWorkbench">
+              <div class="upload-workbench-head">
+                <div>
+                  <strong>添加资料</strong>
+                  <span>直接上传资料，AI 自动识别并归类</span>
+                </div>
+                <div class="upload-workbench-head-actions">
+                  <button class="btn upload-import-report-btn" id="importScreeningReportBtn" type="button">导入输出筛查报告</button>
+                </div>
+              </div>
+              <input id="fileInput" type="file" accept="image/*,.pdf,.doc,.docx,.txt" multiple hidden />
+              <div class="upload-flow">
+                <div class="upload-step">
+                  <div class="upload-step-title">
+                    <strong>上传资料</strong>
+                    <small>AI 自动识别并归类</small>
+                  </div>
+                  <div class="upload-empty-hint" id="dropzone" role="button" tabindex="0">
+                    <span class="upload-drop-icon" aria-hidden="true">+</span>
+                    <span class="upload-drop-copy">
+                      <strong id="uploadActionTitle">点击上传资料</strong>
+                      <span id="uploadActionHint">支持图片、PDF、Word、文本，也可拖拽到此处。</span>
+                    </span>
+                    <span class="upload-state-text" id="uploadStateText">等待上传资料</span>
+                  </div>
+                </div>
+
+                <div class="upload-summary">
+                  <span>AI 识别后由医生确认，病例上下文仍可继续调整。</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+    </main>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel" tabindex="-1">
+      <div class="modal-head">
+        <span id="modalTitle">详情</span>
+        <button class="btn mini-btn" id="modalClose">关闭</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
-</main>
 
-<div class="toast" id="toast"></div>
+  <div class="toast" id="toast"></div>
 
-<script>
-var currentFilter = 'all';
-var currentCaseIndex = 0;
-var currentStage = 'qa';
-var requiredCaseInfoDefs = [
-  {key:'patientName',label:'姓名',inputId:'patientNameInput'},
-  {key:'age',label:'年龄',inputId:'patientAgeInput'},
-  {key:'gender',label:'性别',inputId:'patientGenderInput'},
-  {key:'pastHistory',label:'既往病史',inputId:'patientHistoryInput'},
-  {key:'medicationHistory',label:'过往用药史',inputId:'patientMedicationInput'}
-];
+  <script>
+    const state = {
+      activeCommand: null,
+      selectedSimilarCase: null,
+      selectedTreatment: {
+        checks: [],
+        medications: [],
+        procedures: []
+      },
+      treatmentConfirmed: false,
+      pendingTextPlan: null,
+      pendingReportDraft: null,
+      completedGuideSteps: [],
+      uploads: [],
+      qualityQc: {
+        active: false,
+        textEntries: [],
+        orderText: '',
+        completed: false
+      },
+      caseContext: {
+        chief: '双眼视物模糊 2 月，眼前黑影飘动 1 周。',
+        chronic: '2 型糖尿病 15 年，高血压 8 年，口服二甲双胍与降压药，血糖控制欠佳。',
+        eyeHistory: '1 年前体检提示轻度非增殖期糖尿病视网膜病变，未规律随访。',
+        imaging: '眼底彩照：散在微血管瘤、点片状出血、硬性渗出；OCT：黄斑中心凹厚度 312 μm，层间囊样水肿。',
+        exam: '视力：右 0.5、左 0.6；眼压：右 16、左 17 mmHg',
+        lab: 'HbA1c 8.9% ↑；空腹血糖 9.6 mmol/L ↑；eGFR 76 mL/min/1.73m²',
+        qualityNotes: ''
+      },
+      report: {
+        dx: '糖尿病视网膜病变（增殖期疑诊，87%）；糖尿病性黄斑水肿（65%）。',
+        similar: '未选择相似病历。',
+        tx: '建议完善 FFA 与黄斑区 OCT 定量复查；可评估微循环改善治疗、抗 VEGF 治疗及慢病协同管理。',
+        qc: '待进入医嘱合理性质控：需核验患者病史、诊断、检查结果、历史用药和当前拟开医嘱后再生成结论。'
+      }
+    };
 
-var questionDefs = [
-  { key:'mainComplaint', label:'主诉', question:'请先描述患者的主要症状和持续时间。', refs:['双眼视物模糊2月，眼前黑影飘动1周。','反复头痛1周，晨起明显，伴血压升高。','体检发现眼压偏高半年，偶有眼胀。'] },
-  { key:'chronicHistory', label:'慢病史', question:'患者是否有糖尿病、高血压、高血脂等慢病史？控制情况如何？', refs:['2型糖尿病15年，高血压8年，近半年血糖控制欠佳。','高血压10年，糖尿病5年，服药不规律。','无糖尿病、高血压病史。'] },
-  { key:'eyeHistory', label:'眼病史', question:'请补充既往眼病史、眼底治疗史、近视/青光眼家族史等。', refs:['去年体检提示轻度非增殖期糖尿病视网膜病变。','否认青光眼和眼底激光治疗史，近期无视力下降。','高度近视20年，父亲有青光眼病史。'] },
-  { key:'imagingFindings', label:'医学影像', question:'是否已有眼底照相、OCT、OCTA、CT等影像结果？', refs:['AI眼底筛查DR阳性，OCT提示黄斑区水肿，中央凹厚度约312um。','暂未上传头颅影像，眼底提示高血压视网膜动脉硬化改变。','OCT RNFL提示右眼上方神经纤维层变薄，视野轻度缺损。'] },
-  { key:'physicalExam', label:'体格检查', question:'请补充视力、眼压、血压、眼底或全身查体结果。', refs:['视力右眼0.5左眼0.6，眼压16/17mmHg，眼底散在出血点。','血压172/98mmHg，神经系统查体未见明显定位体征。','眼压右眼24mmHg左眼22mmHg，杯盘比右0.6左0.5。'] },
-  { key:'labResults', label:'检验结果', question:'请补充血糖、HbA1c、肾功能、血脂或其他关键检验结果。', refs:['HbA1c 8.9%，空腹血糖9.6mmol/L，eGFR 76，LDL-C 3.2。','空腹血糖8.1mmol/L，肌酐96umol/L，eGFR 58，钾4.2。','血常规、生化未见明显异常。'] }
-];
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => Array.from(document.querySelectorAll(selector));
+    const defaultChatPlaceholder = '输入病情描述、问题或方案要求';
+    const qualityChatPlaceholder = '请输入病史、诊断、检查结果、历史用药情况或当前拟开医嘱';
 
-var sourceDefs = [
-  {key:'casePhoto',title:'病历截图',desc:'门诊病历、入院记录、病程记录图片',fields:['mainComplaint','chronicHistory','eyeHistory','physicalExam'],origin:'病历截图OCR+AI抽取'},
-  {key:'labReport',title:'检验报告图片',desc:'血糖、HbA1c、肾功能、血脂等报告',fields:['labResults'],origin:'检验报告OCR+AI抽取'},
-  {key:'imagingReport',title:'影像报告图片',desc:'眼底照相、OCT、CT等影像报告',fields:['imagingFindings'],origin:'影像报告OCR+AI抽取'},
-  {key:'historyPhoto',title:'既往病历图片',desc:'既往眼病史、慢病史、过往用药和治疗记录',fields:['eyeHistory','chronicHistory','medicationHistory'],origin:'既往病历OCR+AI抽取'},
-  {key:'otherPhoto',title:'其他补充图片',desc:'会诊记录、随访截图、患者自带资料',fields:['mainComplaint','physicalExam'],origin:'补充图片OCR+AI抽取'}
-];
+    const similarCases = [
+      {
+        id: 'DR-2026-099',
+        score: 96,
+        scoreColor: 'var(--green)',
+        patient: '62 岁女性，糖尿病 16 年，视物模糊合并黄斑水肿。',
+        plan: 'OCT/FFA 定量评估后，微循环改善治疗联合抗 VEGF。',
+        prognosis: '3 个月后水肿明显吸收，视力由 0.3 改善至 0.8。',
+        detail: '与当前患者在年龄、糖尿病病程、视物模糊、OCT 黄斑水肿和眼底渗出方面高度相似。',
+        meta: {
+          reportNo: 'RPT-DR-2026-0099',
+          visitDate: '2026-04-12',
+          department: '眼底病专科门诊',
+          source: '相似病历库 / 已归档门诊病历'
+        },
+        similarityBasis: [
+          '年龄、性别和糖尿病病程接近：62 岁女性，糖尿病 16 年。',
+          '主诉均包含双眼视物模糊，近期出现眼前黑影或视物变形。',
+          'OCT 均提示黄斑区水肿，眼底彩照均见出血点和硬性渗出。',
+          'HbA1c 偏高，均需要慢病协同管理。'
+        ],
+        chiefComplaint: '双眼视物模糊 3 月，左眼眼前黑影 10 天。',
+        history: '2 型糖尿病 16 年，高血压 7 年，血糖控制欠佳，既往未规律眼底随访；否认荧光素钠过敏史。',
+        exam: '视力：右 0.4、左 0.3；眼压：右 15、左 16 mmHg；双眼后极部可见点片状出血及硬性渗出。',
+        labs: 'HbA1c 9.1%；空腹血糖 10.2 mmol/L；eGFR 79 mL/min/1.73m²；LDL-C 3.4 mmol/L。',
+        imaging: 'OCT：黄斑中心凹厚度 335 μm，囊样水肿；FFA：后极部毛细血管渗漏，未见大面积无灌注区。',
+        diagnosis: [
+          '糖尿病视网膜病变，重度非增殖期，双眼。',
+          '糖尿病性黄斑水肿，左眼为主。',
+          '2 型糖尿病控制欠佳；高血压病。'
+        ],
+        treatment: [
+          '完善 OCT / FFA 作为治疗前基线。',
+          '左眼玻璃体腔抗 VEGF 注射 3 次，每 4 周复评。',
+          '羟苯磺酸钙 0.5g tid 口服，联合内分泌科强化控糖。',
+          '随访 OCT 监测黄斑水肿变化，必要时评估局灶光凝。'
+        ],
+        qc: [
+          '抗 VEGF 前已排除眼内感染及近期手术风险。',
+          'FFA 前已确认无荧光素钠过敏史，肾功能未见明显禁忌。',
+          '未发现近期重复 OCT / FFA 检查。',
+          '用药剂量与肾功能状态匹配。'
+        ],
+        outcome: [
+          '1 月复查：黄斑中心凹厚度降至 298 μm，视力左眼 0.4。',
+          '3 月复查：黄斑水肿明显吸收，视力左眼 0.8。',
+          '转入慢病协同管理，继续监测 HbA1c 与眼底变化。'
+        ],
+        lessons: [
+          '当前患者可借鉴“先 FFA/OCT 定量，再确认抗 VEGF 或激光”的路径。',
+          '若 FFA 未见大面积无灌注区，抗 VEGF 对黄斑水肿可作为优先评估项。',
+          '血糖控制欠佳会影响眼底转归，应同步纳入治疗建议和报告。'
+        ]
+      },
+      {
+        id: 'DME-2025-117',
+        score: 86,
+        scoreColor: 'var(--blue)',
+        patient: '65 岁女性，血糖控制欠佳，视物变形。',
+        plan: '内分泌协同强化降糖，结合局部眼底光凝。',
+        prognosis: '随访后黄斑区渗出减轻，视物变形改善。',
+        detail: '与当前患者在血糖控制欠佳、DME 风险和需慢病协同管理方面相似。',
+        meta: {
+          reportNo: 'RPT-DME-2025-0117',
+          visitDate: '2025-11-26',
+          department: '眼底病随访门诊',
+          source: '相似病历库 / 随访归档记录'
+        },
+        similarityBasis: [
+          '均存在长期糖尿病和 HbA1c 偏高。',
+          '均有视物模糊或视物变形，提示黄斑区受累。',
+          '均需要结合 OCT 结果判断黄斑水肿程度。',
+          '均需慢病协同管理降低进展风险。'
+        ],
+        chiefComplaint: '右眼视物变形 1 月，双眼视物模糊半年。',
+        history: '2 型糖尿病 18 年，间断服药，近半年血糖波动明显；既往右眼局灶光凝 1 次。',
+        exam: '视力：右 0.45、左 0.7；眼压正常；右眼黄斑区硬性渗出较集中。',
+        labs: 'HbA1c 8.6%；空腹血糖 8.8 mmol/L；eGFR 83 mL/min/1.73m²；尿微量白蛋白阳性。',
+        imaging: 'OCT：右眼黄斑旁中心水肿，中心凹厚度 286 μm；FFA：局灶渗漏点，未见高危增殖改变。',
+        diagnosis: [
+          '糖尿病性黄斑水肿，右眼，非中心受累为主。',
+          '中重度非增殖期糖尿病视网膜病变。',
+          '糖尿病肾病早期风险。'
+        ],
+        treatment: [
+          '内分泌科协同调整降糖方案。',
+          '黄斑区 OCT 随访，每 4-6 周复查。',
+          '结合 FFA 渗漏点完成局灶光凝评估。',
+          '暂缓抗 VEGF，若水肿进展或中心受累再升级治疗。'
+        ],
+        qc: [
+          '局灶光凝前已确认 FFA 渗漏范围。',
+          '未直接生成抗 VEGF 医嘱，符合非中心受累 DME 分层策略。',
+          '已提示尿微量白蛋白阳性，建议慢病协同管理。',
+          '避免短期重复 FFA，随访以 OCT 变化为主。'
+        ],
+        outcome: [
+          '6 周复查：视物变形减轻，OCT 水肿范围缩小。',
+          '3 月复查：硬性渗出减少，视力右眼稳定在 0.6。',
+          '继续慢病管理，建议 3 月后复查眼底照相与 OCT。'
+        ],
+        lessons: [
+          '若当前患者 FFA 显示局灶渗漏且非中心受累，可参考局灶光凝评估路径。',
+          '治疗强度应根据 OCT 中心受累程度和 FFA 缺血范围分层。',
+          '慢病协同管理与眼底随访应同时写入治疗建议。'
+        ]
+      }
+    ];
 
-var cases = [
-  {
-    id:'CASE-20260717-001', source:'AI筛查转入', status:'资料待确认', analyzed:false, reportGenerated:false,
-    patientName:'张某某', gender:'女', age:62, patientId:'P20260717008', dept:'眼科', visitType:'门诊复诊', visitDate:'2026-07-17',
-    mainComplaint:'双眼视物模糊2月，眼前黑影飘动1周。',
-    pastHistory:'2型糖尿病15年，高血压8年。',
-    chronicHistory:'2型糖尿病15年，高血压8年，近半年空腹血糖多次高于8 mmol/L。',
-    medicationHistory:'长期口服降糖药和降压药，近期血糖控制欠佳；未规律接受眼底专科治疗。',
-    eyeHistory:'去年体检提示轻度非增殖期糖尿病视网膜病变。',
-    imagingFindings:'AI眼底筛查提示DR阳性。眼底彩照可见微血管瘤、点片状出血和硬性渗出；OCT提示黄斑区水肿，中央凹厚度约312um。',
-    physicalExam:'视力：右眼0.5，左眼0.6；眼压：右眼16mmHg，左眼17mmHg；眼底可见散在出血点及硬性渗出。',
-    labResults:'HbA1c 8.9%；空腹血糖9.6mmol/L；尿微量白蛋白阳性；eGFR 76；LDL-C 3.2mmol/L。',
-    orderDraft:'眼底照相；OCT黄斑扫描；眼底荧光血管造影；内分泌科会诊；羟苯磺酸钙胶囊 0.5g tid。',
-    recommendedOrders:'眼底彩照复核；OCT黄斑扫描；眼底荧光血管造影；玻璃体腔抗VEGF治疗适应症评估；内分泌科会诊优化血糖血压管理；3个月眼底随访。',
-    qaIndex:6, qaLog:[],
-    evidence:['糖尿病病程15年','HbA1c 8.9%','视物模糊','眼底出血点','OCT黄斑水肿','AI筛查DR阳性'],
-    diagnoses:[
-      {name:'糖尿病视网膜病变，重度NPDR并黄斑水肿可能',probability:91,reason:'慢性糖尿病、血糖控制欠佳、眼底出血渗出及OCT黄斑水肿共同支持。'},
-      {name:'增殖期糖尿病视网膜病变待排',probability:72,reason:'眼前黑影提示玻璃体出血或新生血管风险，需FFA进一步分级。'},
-      {name:'高血压性视网膜病变',probability:45,reason:'合并高血压病史，但当前影像特征更符合糖尿病视网膜改变。'}
-    ],
-    similar:[
-      {title:'糖尿病15年伴黄斑水肿病例',match:94,dept:'眼科',outcome:'抗VEGF治疗后黄斑水肿减轻，3个月视力稳定。',factors:'病程、HbA1c、OCT黄斑厚度、眼底出血分布相近。'},
-      {title:'重度NPDR合并高血压病例',match:88,dept:'眼底病专科',outcome:'完成FFA分级后联合内分泌管理，半年无明显进展。',factors:'慢病组合、眼底渗出和血压控制情况接近。'}
-    ],
-    treatment:{checks:['完善FFA明确是否存在新生血管及无灌注区。','复查OCT量化黄斑中心凹厚度，作为后续疗效评估基线。','同步评估血压、血脂、尿微量白蛋白和肾功能。'],medication:['优先强化血糖、血压和血脂综合管理。','可考虑羟苯磺酸钙等改善微循环药物，需结合眼底分级。'],procedures:['如黄斑水肿影响中心视力，建议评估玻璃体腔抗VEGF治疗。','若FFA提示广泛无灌注区或新生血管，评估全视网膜光凝。'],followup:['眼底病专科3个月随访；若出现黑影增多、视力急降，应提前复诊。']},
-    qualityRules:[{level:'pass',title:'检查适应症匹配',desc:'OCT和FFA与黄斑水肿、DR分级判断直接相关。'},{level:'warn',title:'慢病联动管理',desc:'报告中需同步提示内分泌科优化血糖血压，避免只处理眼底表现。'}],
-    knowledge:['眼底荧光血管造影适用于DR分期、无灌注区和新生血管评估。','抗VEGF治疗需结合黄斑水肿范围、视力影响和眼内炎风险告知。']
-  },
-  {
-    id:'CASE-20260717-002', source:'病历截图上传', status:'资料待确认', analyzed:false, reportGenerated:false,
-    patientName:'王某某', gender:'男', age:58, patientId:'P20260717012', dept:'全科门诊', visitType:'门诊初诊', visitDate:'2026-07-17',
-    mainComplaint:'反复头痛1周，晨起明显，伴血压升高。', pastHistory:'高血压10年，糖尿病5年，青霉素过敏。', chronicHistory:'高血压10年，糖尿病5年，青霉素过敏。长期服药不规律。', medicationHistory:'间断服用苯磺酸氨氯地平和降糖药，服药不规律；青霉素过敏，避免青霉素类抗菌药。', eyeHistory:'否认青光眼和眼底激光治疗史，近期无视力下降。',
-    imagingFindings:'暂未上传头颅影像。眼底检查提示高血压视网膜动脉硬化改变。', physicalExam:'血压172/98mmHg，心率86次/分；神经系统查体未见明显定位体征。', labResults:'空腹血糖8.1mmol/L；肌酐96umol/L；eGFR 58；钾4.2mmol/L。',
-    orderDraft:'头颅CT平扫；24小时动态血压监测；苯磺酸氨氯地平片 5mg qd；缬沙坦胶囊 80mg qd；阿莫西林胶囊 0.5g tid。',
-    recommendedOrders:'头颅CT平扫；24小时动态血压监测；肝肾功、电解质、尿微量白蛋白；苯磺酸氨氯地平片 5mg qd；缬沙坦胶囊 80mg qd；低盐饮食和家庭血压记录。',
-    qaIndex:0, qaLog:[], evidence:['血压172/98mmHg','晨起头痛','高血压10年','服药不规律','眼底动脉硬化','eGFR 58'],
-    diagnoses:[{name:'高血压控制不良伴头痛',probability:87,reason:'长期高血压、晨起头痛和家庭血压升高高度一致。'},{name:'高血压急症或靶器官损害待排',probability:61,reason:'当前无神经定位体征，但血压水平和头痛需排除颅内风险及肾损害。'},{name:'颅内血管事件待排',probability:34,reason:'头痛急性加重，需结合头颅CT及神经系统复查。'}],
-    similar:[{title:'高血压晨峰伴头痛病例',match:92,dept:'全科门诊',outcome:'调整联合降压方案后2周血压达标。',factors:'晨起头痛、家庭血压峰值和服药不规律相似。'},{title:'高血压合并糖尿病肾功能下降病例',match:84,dept:'心内科',outcome:'ARB类药物联合生活方式干预后尿微量白蛋白下降。',factors:'慢病组合、eGFR和降压药选择依据相近。'}],
-    treatment:{checks:['头颅CT用于排除急性颅内出血或占位。','24小时动态血压评估晨峰和夜间血压控制。','复查肾功能、电解质、尿微量白蛋白和眼底。'],medication:['CCB联合ARB作为初始强化降压方案，兼顾糖尿病肾保护。','避免使用与过敏史冲突的抗菌药物。'],procedures:['若出现意识障碍、神经定位体征或血压持续升高，应转急诊评估。'],followup:['3天复测血压，2周内门诊复诊，带家庭血压记录调整剂量。']},
-    qualityRules:[{level:'error',title:'过敏禁忌冲突',desc:'患者存在青霉素过敏史，当前医嘱含阿莫西林，建议删除或替换。'},{level:'warn',title:'肾功能监测',desc:'ARB类药物启用后建议复查肌酐和血钾。'}],
-    knowledge:['青霉素过敏患者应避免阿莫西林及其他青霉素类药物。','ARB类降压药需关注血钾和肾功能变化。']
-  }
-];
+    const treatmentCatalog = {
+      checks: [
+        {
+          id: 'ffa',
+          title: '眼底荧光素血管造影（FFA）',
+          status: '优先',
+          detail: '明确无灌注区、新生血管、黄斑渗漏和后续激光治疗范围。',
+          logic: '眼底存在出血点与硬性渗出，且当前需要完成糖尿病视网膜病变分期。',
+          source: '检查适应症知识库'
+        },
+        {
+          id: 'oct',
+          title: '黄斑区 OCT 定量复查',
+          status: '优先',
+          detail: '量化中心凹厚度、囊样水肿和视网膜层间液体，建立治疗前基线。',
+          logic: '当前 OCT 已提示中心凹厚度 312 μm 和层间囊样水肿，需要定量评估疗效变化。',
+          source: '影像分析规则'
+        },
+        {
+          id: 'labs',
+          title: 'HbA1c / 肾功能 / 血脂复核',
+          status: '建议',
+          detail: '支撑慢病协同管理、造影风险评估和全身用药安全性判断。',
+          logic: 'HbA1c 8.9% 提示血糖控制欠佳，后续造影与用药均需结合肾功能复核。',
+          source: '检验适应症知识库'
+        }
+      ],
+      medications: [
+        {
+          id: 'calcium-dobesilate',
+          title: '羟苯磺酸钙胶囊 0.5g tid',
+          status: '可评估',
+          detail: '用于糖尿病微血管病变相关微循环改善，需结合院内药品规格和说明书复核。',
+          logic: '眼底硬性渗出和微血管病变表现明显，当前 eGFR 76 未触发严重肾功能限制。',
+          source: '药品说明书与用药知识库'
+        },
+        {
+          id: 'metabolic-management',
+          title: '内分泌科协同强化血糖管理',
+          status: '建议',
+          detail: '复核降糖方案、近期血糖趋势和低血糖风险，避免仅处理眼底表现。',
+          logic: 'HbA1c 8.9% 表明基础病控制欠佳，血糖管理是降低眼底病变进展风险的必要环节。',
+          source: '慢病协同规则'
+        }
+      ],
+      procedures: [
+        {
+          id: 'anti-vegf',
+          title: '玻璃体腔抗 VEGF 注射评估',
+          status: '需确认',
+          detail: '可作为影响视力的糖尿病性黄斑水肿治疗选项，当前不直接生成正式医嘱。',
+          logic: 'OCT 提示黄斑水肿并伴视力下降，但仍需 FFA、感染风险和既往注射史确认。',
+          source: '专科处置路径'
+        },
+        {
+          id: 'laser',
+          title: '眼底激光治疗评估',
+          status: '需确认',
+          detail: '根据 FFA 的无灌注区、新生血管或局灶渗漏范围评估 PRP/局灶光凝。',
+          logic: '当前眼底存在出血和硬性渗出，但缺少 FFA 范围证据，不建议直接生成激光医嘱。',
+          source: '专科处置路径'
+        }
+      ]
+    };
 
-document.addEventListener('DOMContentLoaded',function(){
-  try{var user=JSON.parse(localStorage.getItem('life_med_user'));if(user&&user.name)document.getElementById('headerUserName').textContent=user.name;}catch(e){}
-  loadPersistedCase();
-  cases.forEach(function(c){ensureFieldMeta(c);initQaLog(c);});
-  renderAll();
-  setupTextarea();
-});
+    const guideSteps = [
+      {
+        id: 'allergy',
+        target: 'chronic',
+        targetLabel: '慢病史',
+        title: '补充药物 / 造影过敏史',
+        question: '请补充患者是否存在药物过敏、荧光素钠或造影过敏史。若无，可直接输入“无”。',
+        placeholder: '例如：无已知药物过敏史；无荧光素钠过敏史。',
+        shouldAsk: p => !/过敏|禁忌/.test(`${p.chronic} ${p.lab} ${p.eyeHistory}`),
+        normalize: text => /^(无|没有|否)$/i.test(text.trim())
+          ? '过敏史：无已知药物及造影过敏史。'
+          : `过敏史 / 禁忌：${text}`
+      },
+      {
+        id: 'ffa',
+        target: 'imaging',
+        targetLabel: '医学影像',
+        title: '补充 FFA 或造影计划',
+        question: '请说明是否已完成 FFA。若未完成，请写明计划、原因或是否存在造影禁忌。',
+        placeholder: '例如：未完成 FFA，建议本次完善以评估无灌注区和新生血管范围。',
+        shouldAsk: p => !/FFA|荧光素血管造影|造影计划|无灌注区/.test(p.imaging),
+        normalize: text => `FFA / 造影信息：${text}`
+      },
+      {
+        id: 'prior-treatment',
+        target: 'eyeHistory',
+        targetLabel: '眼病史',
+        title: '核验既往眼科治疗史',
+        question: '请补充既往是否接受过抗 VEGF 注射、眼底激光、眼科手术或规律随访。',
+        placeholder: '例如：既往未行抗 VEGF 注射或眼底激光，未规律随访。',
+        shouldAsk: p => !/抗 VEGF|抗VEGF|注射史|激光|手术/.test(`${p.eyeHistory} ${p.imaging}`),
+        normalize: text => `既往眼科治疗史：${text}`
+      },
+      {
+        id: 'renal',
+        target: 'lab',
+        targetLabel: '检验结果',
+        title: '补充肾功能与用药安全依据',
+        question: '请补充肌酐、eGFR、尿蛋白或近期肾功能结论，用于造影和用药安全判断。',
+        placeholder: '例如：eGFR 76 mL/min/1.73m²，尿微量白蛋白阳性。',
+        shouldAsk: p => !/肌酐|eGFR|肾|尿蛋白/.test(`${p.lab} ${p.chronic}`),
+        normalize: text => `肾功能 / 用药安全依据：${text}`
+      }
+    ];
 
-function renderAll(){renderCounts();renderModuleNav();renderCaseList();renderBrief();renderStage();renderQa();renderSummary();}
-function renderCounts(){document.getElementById('countAll').textContent=cases.length;document.getElementById('countScreening').textContent=cases.filter(c=>c.source==='AI筛查转入').length;document.getElementById('countAnalyzed').textContent=cases.filter(c=>c.analyzed).length;document.getElementById('countReport').textContent=cases.filter(c=>c.reportGenerated).length;}
-function renderModuleNav(){
-  var modules=[
-    {key:'qa',title:'病例采集确认',desc:'本页完成病例资料采集',state:'active'},
-    {key:'diagnosis',title:'辅助临床诊断',desc:'采集完成后的下一步',state:'future'},
-    {key:'similar',title:'相似病历推荐',desc:'诊断完成后检索参考',state:'future'},
-    {key:'plan',title:'治疗方案推荐',desc:'结合诊断与病历推荐',state:'future'},
-    {key:'report',title:'医学报告',desc:'自动生成结构化报告',state:'future'},
-    {key:'quality',title:'医嘱质控',desc:'检查医嘱规则与归档',state:'future'},
-    {key:'archive',title:'归档记录',desc:'固化完整诊疗记录',state:'future'}
-  ];
-  document.getElementById('moduleNav').innerHTML=modules.map(function(m,i){
-    var cls='module-card '+(m.state==='active'?'active':'future');
-    return '<div class="'+cls+'"><div class="module-index">'+(i+1)+'</div><strong>'+m.title+'</strong><span>'+m.desc+'</span></div>';
-  }).join('');
-}
-function renderCaseList(){
-  var rows=cases.map((item,index)=>({item,index})).filter(row=>currentFilter==='all'||row.item.source===currentFilter);
-  document.getElementById('caseList').innerHTML=rows.map(function(row){
-    var c=row.item, active=row.index===currentCaseIndex?' active':'';
-    var diagnosisSummary=c.analyzed&&c.diagnoses&&c.diagnoses.length?escapeHtml(c.diagnoses[0].name)+' · '+c.diagnoses[0].probability+'%':'资料采集 '+qaProgress(c)+'/'+questionDefs.length+' · 待运行辅助诊断';
-    return '<div class="case-item'+active+'" onclick="selectCase('+row.index+')"><div class="case-top"><div class="case-title">'+escapeHtml(c.patientName)+' · '+escapeHtml(c.mainComplaint||'待采集主诉')+'</div>'+renderStatus(c)+'</div><div class="case-meta"><span>'+escapeHtml(c.id)+'</span><span>'+escapeHtml(c.dept)+'</span><span>'+escapeHtml(c.source)+'</span></div><div class="case-summary">'+diagnosisSummary+'</div></div>';
-  }).join('')||'<div class="case-summary">当前筛选下暂无病例</div>';
-}
-function renderBrief(){
-  var c=getCurrentCase();
-  ensureFieldMeta(c);
-  if(c.pastHistory==null)c.pastHistory=c.chronicHistory||'';
-  if(c.medicationHistory==null)c.medicationHistory=c.pastMedicationHistory||'';
-  document.getElementById('caseInfoStatus').textContent=c.status||'资料采集中';
-  setFieldValue('patientNameInput',c.patientName||'');
-  setFieldValue('patientAgeInput',c.age||'');
-  setFieldValue('patientGenderInput',c.gender||'男');
-  setFieldValue('patientHistoryInput',c.pastHistory||'');
-  setFieldValue('patientMedicationInput',c.medicationHistory||'');
-}
-function renderStage(){currentStage='qa';document.querySelectorAll('.stage-panel').forEach(p=>p.classList.toggle('active',p.id==='stage-qa'));document.querySelectorAll('[data-stage-link]').forEach(l=>l.classList.toggle('active',l.dataset.stageLink==='qa'));}
-function renderQa(){
-  var c=getCurrentCase();ensureFieldMeta(c);initQaLog(c);
-  renderSourceGrid(c);
-  renderFieldEditor(c);
-  renderMissingStrip(c);
-  renderMissingAssist(c);
-}
-function renderSourceGrid(c){
-  document.getElementById('autoSourceGrid').innerHTML=sourceDefs.map(function(source){
-    var total=source.fields.length;
-    var count=source.fields.filter(function(key){return Boolean(c[key]);}).length;
-    var tag=count===total?'tag-green':(count>0?'tag-blue':'tag-orange');
-    var files=getUploadNames(c,source.key);
-    return '<div class="source-card"><div><strong>'+source.title+'</strong><span>'+source.desc+'</span></div><div><div class="upload-files">'+escapeHtml(files||'未上传图片')+'</div><div class="source-foot"><span class="tag '+tag+'">'+count+'/'+total+'项</span><button class="btn btn-outline btn-sm" onclick="triggerUpload(\''+source.key+'\')">上传</button><button class="btn btn-primary btn-sm" onclick="recognizeSource(\''+source.key+'\')">识别</button></div></div><input class="hidden-file-input" id="upload-'+source.key+'" type="file" accept="image/*" multiple onchange="handleUpload(\''+source.key+'\',this.files)"></div>';
-  }).join('');
-}
-function renderMissingStrip(){return;}
-function renderFieldEditor(c){
-  document.getElementById('fieldEditor').innerHTML=questionDefs.map(function(q){
-    var value=c[q.key]||'';
-    var confirmed=Boolean(c.fieldConfirmed[q.key]);
-    var hasValue=Boolean(value);
-    var tag=!hasValue?'<span class="tag tag-orange">待补充</span>':(confirmed?'<span class="tag tag-green">已确认</span>':'<span class="tag tag-blue">已识别</span>');
-    var origin=c.fieldOrigins[q.key]||(!hasValue?'等待补录':'系统识别');
-    return '<div class="field-card" id="field-card-'+q.key+'"><div class="field-head"><strong>'+q.label+'</strong>'+tag+'</div><textarea id="field-'+q.key+'" rows="4" onchange="updateField(\''+q.key+'\',this.value)" placeholder="可手动录入或修改'+q.label+'">'+escapeHtml(value)+'</textarea><div class="field-actions"><span class="field-origin">'+escapeHtml(origin)+'</span><div><button class="btn btn-outline btn-sm" onclick="clearField(\''+q.key+'\')">清空</button><button class="btn btn-primary btn-sm" onclick="confirmField(\''+q.key+'\')">确认</button></div></div></div>';
-  }).join('');
-}
-function renderMissingAssist(c){
-  var missing=getNextMissingField(c);
-  var unconfirmed=questionDefs.find(function(q){return c[q.key]&&!c.fieldConfirmed[q.key];});
-  if(missing){
-    document.getElementById('qaStepLabel').textContent='补缺 · '+missing.label;
-    document.getElementById('qaThread').innerHTML=messageHtml('bot','当前只缺“'+missing.label+'”。'+missing.question);
-    document.getElementById('referenceChips').innerHTML=missing.refs.map(function(r){return '<button class="ref-chip" onclick="selectReferenceAnswer(\''+escapeAttr(r)+'\')">'+escapeHtml(r)+'</button>';}).join('');
-    return;
-  }
-  if(unconfirmed){
-    document.getElementById('qaStepLabel').textContent='待确认 · '+unconfirmed.label;
-    document.getElementById('qaThread').innerHTML=messageHtml('bot','病例字段已基本完整，请优先确认“'+unconfirmed.label+'”。如需修改，可直接在左侧字段中编辑。');
-    document.getElementById('referenceChips').innerHTML='<button class="ref-chip" onclick="confirmField(\''+unconfirmed.key+'\')">确认'+unconfirmed.label+'</button><button class="ref-chip" onclick="focusField(\''+unconfirmed.key+'\')">定位字段</button>';
-    return;
-  }
-  document.getElementById('qaStepLabel').textContent='资料完整';
-  document.getElementById('qaThread').innerHTML=messageHtml('bot','病例资料已完整并确认，可作为后续辅助诊断输入。');
-  document.getElementById('referenceChips').innerHTML='<button class="ref-chip" onclick="confirmAllFields()">确认病例资料</button>';
-}
-function renderSummary(){
-  var c=getCurrentCase();
-  document.getElementById('structuredSummary').innerHTML=questionDefs.map(function(q){
-    var value=c[q.key]||'待采集';
-    var empty=!c[q.key];
-    var state=!empty&&c.fieldConfirmed&&c.fieldConfirmed[q.key]?'已确认':(empty?'待补充':'待确认');
-    return '<div class="summary-item'+(empty?' empty':'')+'"><span>'+q.label+' · '+state+'</span><strong>'+escapeHtml(value)+'</strong></div>';
-  }).join('');
-}
-function switchStage(stage){if(stage!=='qa'){toast('当前页面仅做病例采集，后续步骤只作为流程展示。');return;}currentStage='qa';renderAll();}
-function updateCaseInfo(key,value){
-  var c=getCurrentCase();
-  ensureFieldMeta(c);
-  if(key==='age')c.age=value?Number(value):'';
-  else if(key==='pastHistory'){
-    c.pastHistory=value.trim();
-  }else if(key==='medicationHistory'){
-    c.medicationHistory=value.trim();
-  }else c[key]=value.trim();
-  c.status=qaProgress(c)===questionDefs.length?'资料待确认':'资料采集中';
-  renderCaseList();
-  renderSummary();
-  renderFieldEditor(c);
-  renderMissingAssist(c);
-  localStorage.setItem('clinical_decision_case',JSON.stringify(c));
-}
-function setFieldValue(id,value){var el=document.getElementById(id);if(el&&el.value!==String(value==null?'':value))el.value=value==null?'':value;}
-function syncCaseInfoFields(){
-  var c=getCurrentCase();
-  if(!c)return;
-  var nameEl=document.getElementById('patientNameInput');
-  var ageEl=document.getElementById('patientAgeInput');
-  var genderEl=document.getElementById('patientGenderInput');
-  var historyEl=document.getElementById('patientHistoryInput');
-  var medicationEl=document.getElementById('patientMedicationInput');
-  if(nameEl)c.patientName=nameEl.value.trim();
-  if(ageEl)c.age=ageEl.value?Number(ageEl.value):'';
-  if(genderEl)c.gender=genderEl.value;
-  if(historyEl)c.pastHistory=historyEl.value.trim();
-  if(medicationEl)c.medicationHistory=medicationEl.value.trim();
-}
-function getMissingRequiredCaseInfo(c){
-  c=c||getCurrentCase();
-  return requiredCaseInfoDefs.find(function(item){
-    var value=c[item.key];
-    if(item.key==='age')return value===''||value==null;
-    return !String(value==null?'':value).trim();
-  });
-}
-function validateRequiredCaseInfo(){
-  syncCaseInfoFields();
-  var missing=getMissingRequiredCaseInfo(getCurrentCase());
-  if(!missing)return true;
-  toast('病例疾病信息录入为必填，请先补充：'+missing.label);
-  focusCaseInfo(missing.key);
-  return false;
-}
-function focusCaseInfo(key){
-  var item=requiredCaseInfoDefs.find(function(def){return def.key===key;});
-  var el=item&&document.getElementById(item.inputId);
-  if(el){el.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(function(){el.focus();},120);}
-}
-function selectCase(index){saveCurrentCase();currentCaseIndex=index;currentStage='qa';renderAll();toast('已载入病例：'+cases[index].patientName);}
-function setSourceFilter(filter){currentFilter=filter;document.querySelectorAll('.source-filter').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter===filter));renderCaseList();}
-function selectReferenceAnswer(text){document.getElementById('qaInput').value=text;submitQaAnswer();}
-function submitQaAnswer(){
-  var c=getCurrentCase(), input=document.getElementById('qaInput'), text=input.value.trim();
-  ensureFieldMeta(c);
-  var q=getNextMissingField(c);
-  if(!text){return;}
-  if(!q){toast('当前没有缺失字段，可直接在左侧字段中修改或确认。');return;}
-  c[q.key]=text;
-  c.fieldOrigins[q.key]='AI补缺助手';
-  c.fieldConfirmed[q.key]=false;
-  c.qaLog.push({type:'user',text:text});
-  c.qaIndex=getNextMissingIndex(c);
-  if(c.qaIndex<questionDefs.length)c.qaLog.push({type:'bot',text:'已补充“'+q.label+'”，请继续确认或补齐下一项。'});
-  else{c.status='资料待确认';c.qaLog.push({type:'bot',text:'病例资料已补齐，请确认字段后运行多模态图神经网络模型生成辅助诊断和相似病历。'});}
-  input.value='';input.style.height='auto';renderAll();
-}
-function handleQaKeyDown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitQaAnswer();}}
-function restartQa(){var c=getCurrentCase();c.qaIndex=0;c.qaLog=[];c.fieldOrigins={};c.fieldConfirmed={};questionDefs.forEach(q=>c[q.key]='');initQaLog(c);c.status='资料采集中';renderAll();toast('已清空病例字段，可重新同步或手动补录。');}
-function runDecision(){syncOpenFieldValues();ensureFieldMeta(getCurrentCase());if(!validateRequiredCaseInfo())return;saveCurrentCase();window.location.href='临床决策支撑_辅助临床诊断.html';}
-function saveCurrentCase(){syncOpenFieldValues();localStorage.setItem('clinical_decision_case',JSON.stringify(getCurrentCase()));toast('当前病例资料已保存，后续页面将沿用该病例。');return true;}
-function saveCurrentCaseBeforeNavigate(){syncOpenFieldValues();if(!validateRequiredCaseInfo())return false;localStorage.setItem('clinical_decision_case',JSON.stringify(getCurrentCase()));return true;}
-function confirmCaseAndGoDiagnosis(){
-  syncOpenFieldValues();
-  if(!validateRequiredCaseInfo())return;
-  var c=getCurrentCase();
-  ensureFieldMeta(c);
-  var missing=getNextMissingField(c);
-  if(missing){toast('仍缺少：'+missing.label+'，请先补充。');focusField(missing.key);return;}
-  questionDefs.forEach(function(q){c.fieldConfirmed[q.key]=true;if(!c.fieldOrigins[q.key])c.fieldOrigins[q.key]='医生确认';});
-  c.status='资料已确认';
-  localStorage.setItem('clinical_decision_case',JSON.stringify(c));
-  window.location.href='临床决策支撑_辅助临床诊断.html';
-}
-function goTreatment(){saveCurrentCase();window.location.href='临床决策支撑_治疗方案推荐.html';}
-function newCase(){
-  var today=new Date().toISOString().slice(0,10);
-  cases.unshift({id:'CASE-'+today.replace(/-/g,'')+'-'+String(cases.length+1).padStart(3,'0'),source:'医生新建',status:'资料采集中',analyzed:false,reportGenerated:false,patientName:'新患者',gender:'男',age:'',patientId:'P'+today.replace(/-/g,'')+String(cases.length+1).padStart(3,'0'),dept:'待选择',visitType:'门诊初诊',visitDate:today,pastHistory:'',medicationHistory:'',mainComplaint:'',chronicHistory:'',eyeHistory:'',imagingFindings:'',physicalExam:'',labResults:'',orderDraft:'',recommendedOrders:'完善病例资料后生成推荐医嘱。',qaIndex:0,qaLog:[],fieldOrigins:{},fieldConfirmed:{},uploadedFiles:{},evidence:['待补充病例资料'],diagnoses:[{name:'待运行辅助诊断',probability:0,reason:'病例资料尚未补全。'}],similar:[],treatment:{checks:['补全病例资料后推荐检查检验。'],medication:['补全诊断依据后推荐用药。'],procedures:['补全诊断依据后评估处置方案。'],followup:['补全病例资料后生成随访安排。']},qualityRules:[],knowledge:['医嘱质控将根据病史、诊断、检查、检验和用药说明书规则生成。']});
-  currentCaseIndex=0;currentFilter='all';currentStage='qa';document.querySelectorAll('.source-filter').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter==='all'));renderAll();toast('已新建病例，可先上传资料图片，也可直接手动补录字段。');
-}
-function loadPersistedCase(){try{var saved=JSON.parse(localStorage.getItem('clinical_decision_case'));if(!saved||!saved.id)return;var idx=cases.findIndex(c=>c.id===saved.id);if(idx>=0){cases[idx]=Object.assign({},cases[idx],saved);currentCaseIndex=idx;}else{cases.unshift(saved);currentCaseIndex=0;}}catch(e){}}
-function syncSource(sourceKey){
-  recognizeSource(sourceKey);
-}
-function triggerUpload(sourceKey){var el=document.getElementById('upload-'+sourceKey);if(el)el.click();}
-function triggerBulkUpload(){var el=document.getElementById('bulkUploadInput');if(el)el.click();}
-function handleUpload(sourceKey,files){
-  var c=getCurrentCase();ensureFieldMeta(c);
-  c.uploadedFiles=c.uploadedFiles||{};
-  c.uploadedFiles[sourceKey]=Array.from(files||[]).map(function(file){return file.name;});
-  recognizeSource(sourceKey);
-}
-function handleBulkUpload(files){
-  var list=Array.from(files||[]);
-  if(!list.length)return;
-  var grouped={};
-  list.forEach(function(file){
-    var key=guessUploadType(file.name);
-    grouped[key]=grouped[key]||[];
-    grouped[key].push(file.name);
-  });
-  var c=getCurrentCase();ensureFieldMeta(c);c.uploadedFiles=c.uploadedFiles||{};
-  Object.keys(grouped).forEach(function(key){c.uploadedFiles[key]=(c.uploadedFiles[key]||[]).concat(grouped[key]);recognizeSourceSilent(key);});
-  c.qaIndex=getNextMissingIndex(c);
-  c.status=qaProgress(c)===questionDefs.length?'资料待确认':'资料采集中';
-  renderAll();
-  toast('已上传'+list.length+'张图片，并完成OCR+AI字段抽取。');
-}
-function recognizeSource(sourceKey){
-  var c=getCurrentCase();ensureFieldMeta(c);
-  var source=sourceDefs.find(function(s){return s.key===sourceKey;});
-  if(!source)return;
-  c.uploadedFiles=c.uploadedFiles||{};
-  if(!c.uploadedFiles[sourceKey]||!c.uploadedFiles[sourceKey].length){toast('请先上传'+source.title+'。');triggerUpload(sourceKey);return;}
-  source.fields.forEach(function(key){
-    if(!c[key])c[key]=getAutoSuggestion(key);
-    c.fieldOrigins[key]=source.origin;
-    c.fieldConfirmed[key]=false;
-  });
-  c.qaIndex=getNextMissingIndex(c);
-  c.status=qaProgress(c)===questionDefs.length?'资料待确认':'资料采集中';
-  renderAll();
-  toast('已识别'+source.title+'，并抽取相关字段。');
-}
-function syncAllSources(){triggerBulkUpload();}
-function recognizeSourceSilent(sourceKey){var c=getCurrentCase();ensureFieldMeta(c);var source=sourceDefs.find(function(s){return s.key===sourceKey;});if(!source)return;source.fields.forEach(function(key){if(!c[key])c[key]=getAutoSuggestion(key);if(c[key])c.fieldOrigins[key]=source.origin;if(c[key])c.fieldConfirmed[key]=false;});}
-function updateField(key,value){var c=getCurrentCase();ensureFieldMeta(c);c[key]=value.trim();c.fieldOrigins[key]=c[key]?'医生手动补录':'等待补录';c.fieldConfirmed[key]=false;c.qaIndex=getNextMissingIndex(c);c.status=qaProgress(c)===questionDefs.length?'资料待确认':'资料采集中';renderAll();}
-function confirmField(key){syncOpenFieldValues();var c=getCurrentCase();ensureFieldMeta(c);if(!c[key]){toast('请先补充该字段内容。');focusField(key);return;}c.fieldConfirmed[key]=true;if(!c.fieldOrigins[key])c.fieldOrigins[key]='医生确认';c.status=isAllConfirmed(c)?'资料已确认':(qaProgress(c)===questionDefs.length?'资料待确认':'资料采集中');renderAll();toast('已确认：'+getQuestion(key).label);}
-function confirmAllFields(){syncOpenFieldValues();if(!validateRequiredCaseInfo())return;var c=getCurrentCase();ensureFieldMeta(c);var missing=getNextMissingField(c);if(missing){toast('仍缺少：'+missing.label+'，请先补充。');focusField(missing.key);return;}questionDefs.forEach(function(q){c.fieldConfirmed[q.key]=true;if(!c.fieldOrigins[q.key])c.fieldOrigins[q.key]='医生确认';});c.status='资料已确认';saveCurrentCase();renderAll();toast('病例资料已确认，可作为后续辅助诊断输入。');}
-function clearField(key){var c=getCurrentCase();ensureFieldMeta(c);c[key]='';c.fieldOrigins[key]='等待补录';c.fieldConfirmed[key]=false;c.qaIndex=getNextMissingIndex(c);c.status='资料采集中';renderAll();focusField(key);}
-function focusField(key){var el=document.getElementById('field-'+key)||document.getElementById('field-card-'+key);if(el){el.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(function(){if(el.focus)el.focus();},120);}}
-function syncOpenFieldValues(){syncCaseInfoFields();var c=getCurrentCase();if(!c)return;ensureFieldMeta(c);questionDefs.forEach(function(q){var el=document.getElementById('field-'+q.key);if(el&&el.value!==c[q.key]){c[q.key]=el.value.trim();c.fieldOrigins[q.key]=c[q.key]?'医生手动补录':'等待补录';c.fieldConfirmed[q.key]=false;}});c.qaIndex=getNextMissingIndex(c);}
-function getUploadNames(c,sourceKey){c.uploadedFiles=c.uploadedFiles||{};var names=c.uploadedFiles[sourceKey]||[];return names.length?names.slice(-2).join('、'):'';}
-function guessUploadType(name){
-  var text=String(name||'').toLowerCase();
-  if(/检验|化验|血糖|hba1c|肾功|血脂|lab|lis/.test(text))return 'labReport';
-  if(/影像|眼底|oct|ct|pacs|片|报告/.test(text))return 'imagingReport';
-  if(/既往|历史|复诊|随访|history/.test(text))return 'historyPhoto';
-  if(/病历|门诊|入院|主诉|emr|case/.test(text))return 'casePhoto';
-  return 'otherPhoto';
-}
-function getAutoSuggestion(key){if(key==='medicationHistory')return '长期口服降糖药或降压药，具体药名、剂量和依从性待医生确认。';var q=getQuestion(key);return q&&q.refs&&q.refs.length?q.refs[0]:'';}
-function getQuestion(key){return questionDefs.find(function(q){return q.key===key;})||{label:key,refs:[]};}
-function getNextMissingField(c){return questionDefs.find(function(q){return !c[q.key];});}
-function getNextMissingIndex(c){var index=questionDefs.findIndex(function(q){return !c[q.key];});return index<0?questionDefs.length:index;}
-function isAllConfirmed(c){return questionDefs.every(function(q){return c[q.key]&&c.fieldConfirmed[q.key];});}
-function ensureFieldMeta(c){c.fieldOrigins=c.fieldOrigins||{};c.fieldConfirmed=c.fieldConfirmed||{};c.uploadedFiles=c.uploadedFiles||{};if(c.pastHistory==null)c.pastHistory=c.chronicHistory||'';if(c.medicationHistory==null)c.medicationHistory=c.pastMedicationHistory||'';questionDefs.forEach(function(q){if(c[q.key]&&!c.fieldOrigins[q.key])c.fieldOrigins[q.key]=c.source==='AI筛查转入'?'筛查图片/病历资料识别':'已存在病例资料';if(!c[q.key])c.fieldConfirmed[q.key]=false;});if(qaProgress(c)===questionDefs.length&&(c.status==='问答采集中'||c.status==='待问答'||c.status==='资料采集中'))c.status='资料待确认';c.qaIndex=getNextMissingIndex(c);}
-function initQaLog(c){if(c.qaLog&&c.qaLog.length)return;if(qaProgress(c)>=questionDefs.length){c.qaLog=[{type:'bot',text:'病例资料已识别并抽取到结构化字段，请确认字段或直接修改。'}];return;}var q=getNextMissingField(c)||questionDefs[0];c.qaLog=[{type:'bot',text:'当前缺少“'+q.label+'”。'+q.question}];}
-function qaProgress(c){return questionDefs.filter(q=>Boolean(c[q.key])).length;}
-function renderStatus(c){var cls=c.status==='已生成报告'||c.status==='资料已确认'?'tag-green':(c.status==='已完成诊断'||c.status==='资料已采集'||c.status==='资料待确认'?'tag-blue':'tag-orange');return '<span class="tag '+cls+'">'+escapeHtml(c.status)+'</span>';}
-function messageHtml(type,text){return '<div class="message-row '+type+'"><div class="msg-avatar">'+(type==='bot'?'AI':'医')+'</div><div class="msg-bubble">'+escapeHtml(text)+'</div></div>';}
-function setupTextarea(){var el=document.getElementById('qaInput');if(!el)return;el.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});}
-function getCurrentCase(){return cases[currentCaseIndex];}
-function escapeHtml(text){var div=document.createElement('div');div.appendChild(document.createTextNode(text==null?'':String(text)));return div.innerHTML;}
-function escapeAttr(text){return String(text).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');}
-function toast(message){var el=document.getElementById('toast');el.textContent=message;el.style.display='block';clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(function(){el.style.display='none';},2400);}
-function logout(){if(confirm('确定要退出登录吗？')){localStorage.removeItem('life_med_user');window.location.href='login.html';}}
-</script>
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function profile() {
+      return { ...state.caseContext };
+    }
+
+    function contextInsights(p) {
+      const text = `${p.chief} ${p.chronic} ${p.eyeHistory} ${p.imaging} ${p.exam} ${p.lab}`;
+      const fields = [p.chief, p.chronic, p.eyeHistory, p.imaging, p.exam, p.lab];
+      const filled = fields.filter(Boolean).length;
+      const gaps = [];
+
+      if (!/过敏|禁忌/.test(text)) gaps.push('补充药物/造影过敏史');
+      if (!/FFA|荧光素血管造影|造影计划|无灌注区/.test(p.imaging)) gaps.push('补充 FFA 或造影计划');
+      if (!/随访|复查|注射史|激光/.test(text)) gaps.push('核验既往治疗与随访');
+      if (!/肌酐|eGFR|肾/.test(text)) gaps.push('补充肾功能依据');
+
+      const evidenceScore = Math.min(96, Math.round((filled / fields.length) * 74 + (4 - Math.min(gaps.length, 4)) * 6));
+      const riskScore =
+        (/HbA1c\s*8|HbA1c\s*9|血糖控制欠佳|糖尿病\s*15/.test(text) ? 35 : 15) +
+        (/水肿|出血|硬性渗出|微血管瘤/.test(text) ? 35 : 12) +
+        (/高血压|肾|eGFR/.test(text) ? 16 : 6);
+
+      return {
+        gaps,
+        evidenceScore,
+        riskLabel: riskScore >= 78 ? '高风险' : riskScore >= 58 ? '中高风险' : '中风险'
+      };
+    }
+
+    function updateContextSignals() {
+      const insights = contextInsights(profile());
+      const list = $('#signalList');
+      if (!list) return;
+      list.innerHTML = '';
+      const items = insights.gaps.length ? insights.gaps : ['核心证据已覆盖，等待医生复核'];
+      items.forEach(item => {
+        const span = document.createElement('span');
+        span.className = insights.gaps.length ? 'signal' : 'signal pass';
+        span.textContent = item;
+        list.appendChild(span);
+      });
+    }
+
+    function activeGuideStep() {
+      const p = profile();
+      return guideSteps.find(step => !state.completedGuideSteps.includes(step.id) && step.shouldAsk(p)) || null;
+    }
+
+    function setStatus(text) {
+      const el = $('#contextStatus');
+      if (!el) return;
+      el.textContent = text;
+      window.clearTimeout(el._timer);
+      el._timer = window.setTimeout(() => {
+        el.textContent = '已同步';
+      }, 900);
+    }
+
+    function updateReport() {
+      const p = profile();
+      const setText = (selector, value) => {
+        const el = $(selector);
+        if (el) el.textContent = value;
+      };
+      setText('[data-rpt="chief"]', p.chief);
+      setText('[data-rpt="history"]', `${p.chronic} ${p.eyeHistory}`);
+      setText('[data-rpt="evidence"]', `${p.imaging}；${p.exam}；${p.lab}`);
+      setText('#reportSimilar', state.report.similar);
+      setText('#reportDx', state.report.dx);
+      setText('#reportTx', state.report.tx);
+      setText('#reportQc', state.report.qc);
+      updateContextSignals();
+    }
+
+    function toast(text) {
+      const el = $('#toast');
+      el.textContent = text;
+      el.style.display = 'block';
+      window.clearTimeout(el._timer);
+      el._timer = window.setTimeout(() => {
+        el.style.display = 'none';
+      }, 2600);
+    }
+
+    function appendMessage(role, content) {
+      const stream = $('#chatStream');
+      const article = document.createElement('article');
+      article.className = role === 'user' ? 'msg user' : 'msg';
+      article.innerHTML = role === 'user'
+        ? `<div class="bubble">${escapeHtml(content)}</div><div class="who">医</div>`
+        : `<div class="who">AI</div><div class="bubble">${content}</div>`;
+      stream.appendChild(article);
+      stream.scrollTop = stream.scrollHeight;
+      return article;
+    }
+
+    function showThinking(callback) {
+      const row = appendMessage('ai', '<span class="thinking"><span class="pulse"></span>正在结合病例上下文推理</span>');
+      window.setTimeout(() => {
+        row.remove();
+        callback();
+      }, 360);
+    }
+
+    function activateCommand(type) {
+      state.activeCommand = type;
+      $$('.command-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.type === type));
+    }
+
+    const commandMeta = {
+      diagnosis: '辅助临床诊断',
+      similar: '相似病历推荐',
+      treatment: '治疗方案推荐',
+      report: '报告自动生成',
+      quality: '医嘱合理性质控'
+    };
+
+    const diagnosisTextPlans = [
+      {
+        no: 1,
+        title: '糖尿病视网膜病变（增殖期疑诊）优先',
+        body: '依据长期 2 型糖尿病史、HbA1c 8.9%、眼底散在出血点及硬性渗出，当前应优先考虑糖尿病视网膜病变进展。建议补充 FFA 明确无灌注区、新生血管及渗漏范围。',
+        report: '糖尿病视网膜病变（增殖期疑诊）优先；依据糖尿病 15 年、HbA1c 8.9%、眼底出血点、硬性渗出及 OCT 黄斑水肿表现。建议补充 FFA 明确无灌注区、新生血管及渗漏范围。'
+      },
+      {
+        no: 2,
+        title: '非增殖期糖尿病视网膜病变合并黄斑水肿',
+        body: '若暂未取得新生血管或明显无灌注区证据，可先按非增殖期糖尿病视网膜病变合并糖尿病性黄斑水肿处理。OCT 中心凹厚度 312 μm 和层间囊样水肿可解释视物模糊。',
+        report: '考虑非增殖期糖尿病视网膜病变合并糖尿病性黄斑水肿；依据视物模糊、眼底微血管瘤/出血渗出及 OCT 中心凹增厚、层间囊样水肿。需进一步补充 FFA 后确认分期。'
+      },
+      {
+        no: 3,
+        title: '眼底血管性疾病鉴别诊断路径',
+        body: '视物模糊、眼底出血及黄斑水肿还需与高血压性视网膜病变、视网膜静脉阻塞等眼底血管性疾病鉴别。建议结合血压控制、眼底血管造影和既往眼病史进一步排查。',
+        report: '需鉴别高血压性视网膜病变及视网膜静脉阻塞等眼底血管性疾病；建议结合血压控制情况、FFA/OCT 结果和既往眼病史进一步判断。'
+      }
+    ];
+
+    const treatmentTextPlans = [
+      {
+        no: 1,
+        title: '检查检验优先，先补足治疗前证据',
+        body: '检查检验推荐：优先完善 FFA 和黄斑区 OCT 定量复查，同步复核 HbA1c、eGFR、血脂。用药推荐：暂不直接升级眼内治疗，先结合肾功能与过敏史评估微循环改善治疗可行性。手术/处置方案推荐：待 FFA 明确无灌注区、新生血管及渗漏范围后，再决定抗 VEGF 或激光路径。推断逻辑：当前证据提示糖尿病视网膜病变合并黄斑水肿，但分期与处置范围仍依赖造影和 OCT 定量。推荐依据：影像、检验和检查适应症知识库。',
+        report: '治疗建议采用检查检验优先方案：建议优先完善眼底荧光素血管造影（FFA）和黄斑区 OCT 定量复查，同步复核 HbA1c、eGFR、血脂；在明确无灌注区、新生血管及黄斑渗漏范围后，再评估抗 VEGF、视网膜激光或微循环改善治疗。当前不建议在证据不足时直接升级侵入性处置。',
+        qc: '治疗方案已选择检查检验优先路径；抗 VEGF 或激光处置需以 FFA/OCT 结果、感染风险排查和医生最终确认作为前置条件。',
+        selection: {
+          checks: ['ffa', 'oct', 'labs'],
+          medications: [],
+          procedures: []
+        }
+      },
+      {
+        no: 2,
+        title: '微循环改善与慢病协同管理优先',
+        body: '检查检验推荐：复核 HbA1c、肾功能、血脂，并安排 OCT 随访观察黄斑水肿变化。用药推荐：在无禁忌且肾功能允许前提下，可评估羟苯磺酸钙等微循环改善治疗，同时请内分泌协同优化血糖。手术/处置方案推荐：若视力继续下降或 OCT/FFA 提示中心受累、活动性渗漏，再升级至抗 VEGF 或激光评估。推断逻辑：HbA1c 8.9% 提示全身代谢控制欠佳，慢病协同会影响眼底转归。推荐依据：用药安全知识库、慢病协同管理规则和随访路径。',
+        report: '治疗建议采用微循环改善与慢病协同管理方案：建议复核 HbA1c、eGFR、血脂，结合肾功能、过敏史和用药禁忌评估微循环改善治疗；同步建议内分泌协同优化血糖控制，并以 OCT 随访黄斑水肿变化。若视力下降或影像提示活动性渗漏，再进一步评估抗 VEGF 或激光治疗。',
+        qc: '治疗方案已选择用药与慢病协同路径；用药前需核验肾功能、过敏史、合并用药和近期检验结果，避免在禁忌证不明时生成正式医嘱。',
+        selection: {
+          checks: ['oct', 'labs'],
+          medications: ['calcium-dobesilate', 'metabolic-management'],
+          procedures: []
+        }
+      },
+      {
+        no: 3,
+        title: '抗 VEGF / 激光处置评估路径',
+        body: '检查检验推荐：先完成 FFA、OCT 定量和感染风险排查，必要时补充眼压、眼前节检查及全身用药风险评估。用药推荐：若 OCT 证实中心受累黄斑水肿，可评估抗 VEGF 治疗；同时继续慢病协同管理。手术/处置方案推荐：若 FFA 显示无灌注区或新生血管，可评估视网膜激光；具体处置范围需由医生结合影像确认。推断逻辑：当前存在黄斑水肿和糖网进展风险，处置强度需由影像证据分层。推荐依据：眼底病处置路径、影像分析规则和医嘱质控规则。',
+        report: '治疗建议采用抗 VEGF / 激光处置评估方案：建议在完成 FFA、OCT 定量、感染风险及禁忌证排查后，若证实中心受累糖尿病性黄斑水肿，可评估抗 VEGF 治疗；若 FFA 提示无灌注区或新生血管，可评估视网膜激光。处置前需由医生结合影像范围、全身情况和患者意愿最终确认。',
+        qc: '治疗方案已选择抗 VEGF / 激光处置评估路径；需核验 FFA/OCT 前置证据、感染风险、近期眼部手术史、用药禁忌和医生确认记录。',
+        selection: {
+          checks: ['ffa', 'oct', 'labs'],
+          medications: ['metabolic-management'],
+          procedures: ['anti-vegf', 'laser']
+        }
+      }
+    ];
+
+    function runCommand(type) {
+      activateCommand(type);
+      appendMessage('user', `执行 ${commandMeta[type]}`);
+      showThinking(() => appendMessage('ai', renderCommand(type)));
+    }
+
+    function parsePlanSelection(text) {
+      const normalized = text.replace(/\s/g, '');
+      const direct = normalized.match(/^([123一二三])$/);
+      const match = direct || normalized.match(/(?:方案|第)([123一二三])(?:个|号)?/) || normalized.match(/(?:采用|选择|选用|按|用|导入|写入)(?:方案|第)?([123一二三])(?:个|号)?/);
+      if (!match) return null;
+      const map = { '1': 1, '2': 2, '3': 3, '一': 1, '二': 2, '三': 3 };
+      return map[match[1]] || null;
+    }
+
+    function applyPendingTextPlan(selectionText) {
+      if (!state.pendingTextPlan) return null;
+      const selectedNo = parsePlanSelection(selectionText);
+      if (!selectedNo) return null;
+      const plan = state.pendingTextPlan.plans.find(item => item.no === selectedNo);
+      if (!plan) return null;
+
+      if (state.pendingTextPlan.target === 'dx') {
+        state.report.dx = plan.report;
+      } else if (state.pendingTextPlan.target === 'tx') {
+        state.report.tx = plan.report;
+        state.report.qc = plan.qc;
+        state.treatmentConfirmed = true;
+        if (plan.selection) {
+          state.selectedTreatment = {
+            checks: [...plan.selection.checks],
+            medications: [...plan.selection.medications],
+            procedures: [...plan.selection.procedures]
+          };
+        }
+      }
+      updateReport();
+      showTab('report');
+        const label = state.pendingTextPlan.label;
+        state.pendingTextPlan = null;
+        toast(`方案${selectedNo}已写入报告`);
+        return `
+          <strong>方案已写入报告</strong><br />
+          已采用方案${selectedNo}：${escapeHtml(plan.title)}。当前报告草稿的“${escapeHtml(label)}”相关段落已更新。`;
+    }
+
+    function reportDraft() {
+      const p = profile();
+      const similarText = state.report.similar && state.report.similar !== '未选择相似病历。'
+        ? state.report.similar
+        : '未选择相似病历。';
+      const lines = [
+        '报告草稿已生成，待医生确认。',
+        '',
+        '一、患者摘要',
+        `患者：张某某，女，62 岁。`,
+        `主诉：${p.chief || '待补充'}`,
+        `病史：${p.chronic || '待补充'} ${p.eyeHistory || ''}`.trim(),
+        '',
+        '二、多模态证据',
+        p.imaging || '医学影像：待补充',
+        p.exam || '体格检查：待补充',
+        p.lab || '检验结果：待补充',
+        '',
+        '三、相似病历参考',
+        similarText,
+        '',
+        '四、辅助临床诊断',
+        state.report.dx,
+        '',
+        '五、治疗建议',
+        state.report.tx,
+        '',
+        '六、医嘱合理性质控',
+        state.report.qc,
+        '',
+        ''
+      ];
+      return lines.join('\n');
+    }
+
+    function applyPendingReportDraft(text) {
+      if (!state.pendingReportDraft) return null;
+      const normalized = text.replace(/[\s。！？!,.，、]/g, '');
+      if (!/^(确认写入报告|确认写入|写入报告|导入报告|采用草稿|确认草稿)$/.test(normalized)) {
+        return null;
+      }
+      state.pendingReportDraft = null;
+      updateReport();
+      showTab('report');
+      toast('报告草稿已确认写入');
+      return `
+        <strong>报告草稿已确认写入</strong><br />
+          当前报告草稿已更新。`;
+    }
+
+    function isTreatmentSelected(group, id) {
+      return state.selectedTreatment[group].includes(id);
+    }
+
+    function selectedTreatmentItems(group) {
+      return treatmentCatalog[group].filter(item => isTreatmentSelected(group, item.id));
+    }
+
+    function renderTreatmentCard(group, item) {
+      const selected = isTreatmentSelected(group, item.id);
+      return `
+        <div class="result-card plan-card${selected ? ' selected' : ''}" data-plan-group="${group}" data-plan-id="${item.id}" role="button" tabindex="0" onclick="toggleTreatmentPlan('${group}','${item.id}')" onkeydown="if(event.key === 'Enter' || event.key === ' '){event.preventDefault();toggleTreatmentPlan('${group}','${item.id}')}">
+          <div class="result-title">
+            <span>${item.title}</span>
+            <span class="tag ${item.status === '优先' ? 'blue' : item.status === '可评估' ? 'green' : 'amber'}">${item.status}</span>
+          </div>
+          <div class="plan-detail">${item.detail}</div>
+          <div class="plan-reason"><strong>推断逻辑：</strong>${item.logic}<br /><strong>依据：</strong>${item.source}</div>
+          <div class="card-actions">
+            <button class="btn mini-btn" data-select-plan="${group}:${item.id}" onclick="event.stopPropagation();toggleTreatmentPlan('${group}','${item.id}')">${selected ? '已选择' : '选为方案'}</button>
+            ${selected ? '<span class="select-badge">医生已选</span>' : ''}
+          </div>
+        </div>`;
+    }
+
+    function selectedTreatmentSummary() {
+      const groups = [
+        ['检查检验', 'checks'],
+        ['用药', 'medications'],
+        ['手术/处置', 'procedures']
+      ];
+      const selected = groups
+        .map(([label, group]) => {
+          const items = selectedTreatmentItems(group);
+          return items.length ? `${label}：${items.map(item => item.title).join('、')}` : '';
+        })
+        .filter(Boolean);
+      return selected.length ? selected.join('；') : '尚未选择治疗方案';
+    }
+
+    function treatmentQcSummary() {
+      const checks = selectedTreatmentItems('checks');
+      const medications = selectedTreatmentItems('medications');
+      if (!checks.length && !medications.length) {
+        return '尚未有医生确认的检查/检验或用药医嘱，质控暂不生成正式结论。';
+      }
+      const warnings = [];
+      if (medications.some(item => item.id === 'calcium-dobesilate') && !/eGFR|肾/.test(profile().lab + profile().chronic)) {
+        warnings.push('用药前需补充肾功能依据');
+      }
+      return warnings.length
+        ? `已核验医生选择的检查/检验与用药医嘱；警示：${warnings.join('；')}。`
+        : '已核验医生选择的检查/检验与用药医嘱，当前未发现明确禁忌；仍需医生完成最终确认。';
+    }
+
+    function qualityIntakePromptHtml() {
+      return `
+        医嘱合理性质控需要以下信息：<br />
+        请上传图片或输入文字：<br />
+        患者病史、诊断、检查结果、历史用药情况、当前拟开医嘱。<br /><br />
+        我会综合判断：<br />
+        用药医嘱是否合理；<br />
+        检查医嘱是否合理；<br />
+        检验医嘱是否合理；<br />
+        是否存在禁忌、重复、适应症不足或证据缺口。<br /><br />
+        请先上传资料，或直接在输入框补充文字。`;
+    }
+
+    function updateQualityInputState() {
+      const input = $('#chatInput');
+      const uploadButton = $('#uploadToggleBtn');
+      const collecting = state.qualityQc.active && !state.qualityQc.completed;
+      if (input) input.placeholder = collecting ? qualityChatPlaceholder : defaultChatPlaceholder;
+      if (uploadButton) uploadButton.classList.toggle('quality-needed', collecting);
+      updateUploadActionState();
+    }
+
+    function selectedOrderText() {
+      if (state.qualityQc.orderText) return state.qualityQc.orderText;
+      const selectedSummary = selectedTreatmentSummary();
+      return selectedSummary === '尚未选择治疗方案' ? '待补充当前拟开医嘱' : selectedSummary;
+    }
+
+    function qualityEvidenceGaps(p, currentOrders) {
+      const text = `${p.chief} ${p.chronic} ${p.eyeHistory} ${p.imaging} ${p.exam} ${p.lab} ${p.qualityNotes} ${currentOrders}`;
+      const gaps = [];
+      if (!/过敏|禁忌/.test(text)) gaps.push('过敏史或造影禁忌仍需补充');
+      if (!/当前拟开|医嘱|处方|检查|检验|用药|FFA|OCT|羟苯磺酸钙|抗 VEGF|激光/.test(currentOrders)) gaps.push('当前拟开医嘱仍需明确');
+      if (!/既往|历史|院外|长期|二甲双胍|降压药|抗凝|抗血小板|用药/.test(text)) gaps.push('历史用药和院外用药需进一步核验');
+      if (!/肌酐|eGFR|肾/.test(text)) gaps.push('肾功能依据仍需补充');
+      if (!/FFA|荧光素血管造影|造影计划|无灌注区/.test(text)) gaps.push('FFA 或造影计划需补充，用于判断处置适应症');
+      return gaps;
+    }
+
+    function buildQualityQcText() {
+      const p = profile();
+      const currentOrders = selectedOrderText();
+      const evidenceText = [p.imaging, p.exam, p.lab].filter(Boolean).join('；') || '待补充';
+      const historyText = [p.chronic, p.eyeHistory].filter(Boolean).join(' ') || '待补充';
+      const historyMedication = /二甲双胍|降压药|用药|服药|口服|抗凝|抗血小板/.test(`${p.chronic} ${p.qualityNotes}`)
+        ? `${p.chronic}${p.qualityNotes ? `；${p.qualityNotes}` : ''}`
+        : '待补充历史用药、院外用药和过敏史';
+      const gaps = qualityEvidenceGaps(p, currentOrders);
+      const hasOrders = currentOrders !== '待补充当前拟开医嘱';
+      const drugNeedsReview = !hasOrders || gaps.some(item => /过敏史|历史用药|肾功能/.test(item));
+      const examNeedsReview = /FFA|荧光素血管造影|造影|抗 VEGF|激光/.test(currentOrders) && !/过敏|禁忌|FFA|荧光素血管造影|造影计划/.test(`${p.imaging} ${p.qualityNotes}`);
+      const labPass = /HbA1c|血糖|eGFR|肾|血脂|肌酐/.test(`${p.lab} ${currentOrders} ${p.qualityNotes}`);
+
+      const riskNotes = [];
+      if (/HbA1c|血糖控制欠佳|糖尿病/.test(`${p.chronic} ${p.lab}`)) riskNotes.push('血糖控制欠佳会影响眼底病变转归，治疗建议需同步慢病协同管理。');
+      if (/FFA|荧光素血管造影|造影/.test(currentOrders)) riskNotes.push('若拟开 FFA，应复核荧光素钠过敏史、肾功能和近期同类检查记录。');
+      if (/抗 VEGF|注射|激光/.test(currentOrders)) riskNotes.push('若拟开抗 VEGF 或激光处置，应确认 OCT/FFA 前置证据、感染风险和既往治疗间隔。');
+      if (!riskNotes.length) riskNotes.push('暂未发现明确禁忌，但仍需医生结合原始资料最终确认。');
+
+      return [
+        '医嘱合理性质控结论',
+        '',
+        '一、当前依据',
+        `病史：${historyText}`,
+        `诊断：${state.report.dx || '待补充'}`,
+        `检查结果：${evidenceText}`,
+        `历史用药：${historyMedication}`,
+        `当前拟开医嘱：${currentOrders}`,
+        '',
+        '二、用药医嘱合理性',
+        `结论：${drugNeedsReview ? '需复核' : '通过'}`,
+        `理由：${drugNeedsReview ? '用药前仍需核验过敏史、肾功能、历史用药和重复用药风险；资料补齐前不建议输出确定性通过结论。' : '现有病史、检验与拟开医嘱未提示明确禁忌，仍需医生最终确认。'}`,
+        '',
+        '三、检查医嘱合理性',
+        `结论：${examNeedsReview ? '需复核' : '通过'}`,
+        `理由：${examNeedsReview ? '涉及造影或眼底处置时，需补充造影禁忌、FFA/OCT 前置依据或近期重复检查记录。' : 'OCT、FFA 等检查与糖尿病视网膜病变分期、黄斑水肿评估和治疗前证据补足目标相符。'}`,
+        '',
+        '四、检验医嘱合理性',
+        `结论：${labPass ? '通过' : '需复核'}`,
+        `理由：${labPass ? 'HbA1c、血糖、肾功能等检验可支撑慢病协同、造影安全和用药风险评估。' : '需明确 HbA1c、肾功能、血脂或其他治疗前安全性指标。'}`,
+        '',
+        '五、风险提示',
+        ...riskNotes.map(item => `- ${item}`),
+        '',
+        '六、需补充信息',
+        ...(gaps.length ? gaps.map(item => `- ${item}`) : ['- 暂无明显证据缺口；建议医生复核原始资料后确认医嘱。'])
+      ].join('\n');
+    }
+
+    function updateQcPanel() {
+      const list = $('#qcList');
+      if (!list) return;
+      if (state.qualityQc.completed) {
+        list.innerHTML = `<pre class="qc-text-output">${escapeHtml(buildQualityQcText())}</pre>`;
+        return;
+      }
+      list.innerHTML = `
+        <div class="qc-item warn">
+          <h4>资料收集与核验</h4>
+          <p>请上传或输入用于质控的资料：患者病史、诊断、检查结果、历史用药情况、当前拟开医嘱。AI 将在资料提交后输出质控结论。</p>
+        </div>`;
+    }
+
+    function startQualityCollection() {
+      state.qualityQc.active = true;
+      state.qualityQc.completed = false;
+      state.pendingTextPlan = null;
+      state.pendingReportDraft = null;
+      updateQualityInputState();
+      updateQcPanel();
+      return qualityIntakePromptHtml();
+    }
+
+    function finishQualityQc(sourceText) {
+      if (sourceText) {
+        state.qualityQc.textEntries.push(sourceText);
+        state.qualityQc.orderText = sourceText;
+        state.caseContext.qualityNotes = state.qualityQc.textEntries.join('\n');
+      }
+      state.qualityQc.active = false;
+      state.qualityQc.completed = true;
+      updateQualityInputState();
+      const qcText = buildQualityQcText();
+      state.report.qc = '已完成资料收集后的医嘱合理性质控；详见对话结论和本报告质控摘要。';
+      updateReport();
+      updateQcPanel();
+      return `<pre class="qc-text-output">${escapeHtml(qcText)}</pre>`;
+    }
+
+    function updateTreatmentSelection() {
+      $$('.plan-card').forEach(card => {
+        const group = card.dataset.planGroup;
+        const id = card.dataset.planId;
+        const selected = isTreatmentSelected(group, id);
+        card.classList.toggle('selected', selected);
+        const selectButton = card.querySelector(`[data-select-plan="${group}:${id}"]`);
+        if (selectButton) selectButton.textContent = selected ? '已选择' : '选为方案';
+        const oldBadge = card.querySelector('.select-badge');
+        if (selected && !oldBadge) {
+          const badge = document.createElement('span');
+          badge.className = 'select-badge';
+          badge.textContent = '医生已选';
+          card.querySelector('.card-actions').appendChild(badge);
+        } else if (!selected && oldBadge) {
+          oldBadge.remove();
+        }
+      });
+      const summary = $('#treatmentSelectionSummary');
+      if (summary) summary.textContent = selectedTreatmentSummary();
+      const confirmButton = $('#confirmTreatmentBtn');
+      if (confirmButton) confirmButton.disabled = !(
+        state.selectedTreatment.checks.length ||
+        state.selectedTreatment.medications.length ||
+        state.selectedTreatment.procedures.length
+      );
+    }
+
+    function toggleTreatmentPlan(group, id) {
+      const selected = state.selectedTreatment[group];
+      const index = selected.indexOf(id);
+      if (index >= 0) selected.splice(index, 1);
+      else selected.push(id);
+      state.treatmentConfirmed = false;
+      updateTreatmentSelection();
+      toast(index >= 0 ? '已取消该方案' : '已选择该方案，确认后写入报告');
+    }
+
+    function confirmTreatmentSelection() {
+      const hasSelection =
+        state.selectedTreatment.checks.length ||
+        state.selectedTreatment.medications.length ||
+        state.selectedTreatment.procedures.length;
+      if (!hasSelection) {
+        toast('请先选择至少一项治疗方案');
+        return;
+      }
+      state.treatmentConfirmed = true;
+      state.report.tx = `${selectedTreatmentSummary()}。医生已确认方案，AI 推断逻辑和前置条件保留在当前对话中。`;
+      state.report.qc = treatmentQcSummary();
+      updateReport();
+      toast('已确认治疗方案并同步到报告');
+    }
+
+    function renderCommand(type) {
+      if (type === 'diagnosis') {
+        state.pendingTextPlan = {
+          type: 'diagnosis',
+          label: '辅助临床诊断',
+          target: 'dx',
+          plans: diagnosisTextPlans
+        };
+        return `
+          <strong>辅助临床诊断方案</strong><br />
+          我已根据主诉、慢病史、眼病史、医学影像、体格检查和检验结果生成 3 个文字诊断方案。
+          <div class="text-plan-list">
+            ${diagnosisTextPlans.map(plan => `
+              <div class="text-plan">
+                <strong>方案${plan.no}：${escapeHtml(plan.title)}</strong>
+                ${escapeHtml(plan.body)}
+              </div>
+            `).join('')}
+          </div>`;
+      }
+
+      if (type === 'similar') {
+        return `
+          <strong>相似病历推荐结果</strong>
+          <span style="display:block;color:var(--muted);font-size:12px;margin-top:3px;">点击卡片可选择一条主参考病历，选择结果会同步到当前报告草稿。</span>
+          ${similarCases.map(item => {
+            const selected = state.selectedSimilarCase && state.selectedSimilarCase.id === item.id;
+            return `
+              <div class="result-card similar-card${selected ? ' selected' : ''}" data-similar-id="${item.id}" role="button" tabindex="0" onclick="selectSimilarCase('${item.id}')" onkeydown="if(event.key === 'Enter' || event.key === ' '){event.preventDefault();selectSimilarCase('${item.id}')}">
+                <div class="result-title">
+                  <span>${item.id}</span>
+                  <span class="score" style="color:${item.scoreColor}">${item.score}% 相似</span>
+                </div>
+                <ul class="kv">
+                  <li>画像：${item.patient}</li>
+                  <li>借鉴方案：${item.plan}</li>
+                  <li>转归：${item.prognosis}</li>
+                </ul>
+                <div class="card-actions">
+                  <button class="btn mini-btn" onclick="event.stopPropagation();openCase('${item.id}')">查看完整病历</button>
+                  <button class="btn mini-btn" data-select-similar="${item.id}" onclick="event.stopPropagation();selectSimilarCase('${item.id}')">${selected ? '已选择' : '选为参考'}</button>
+                  ${selected ? '<span class="select-badge">已选参考</span>' : ''}
+                </div>
+              </div>`;
+          }).join('')}`;
+      }
+
+      if (type === 'treatment') {
+        state.pendingTextPlan = {
+          type: 'treatment',
+          label: '治疗方案推荐',
+          target: 'tx',
+          plans: treatmentTextPlans
+        };
+        return `
+          <strong>治疗方案推荐方案</strong><br />
+          我已根据基础信息、主诉、现病史/慢病史、医学影像、体格检查和检验结果生成 3 个文字治疗方案。每个方案均覆盖检查检验推荐、用药推荐、手术/处置方案推荐，以及推断逻辑和推荐依据。
+          <div class="text-plan-list">
+            ${treatmentTextPlans.map(plan => `
+              <div class="text-plan">
+                <strong>方案${plan.no}：${escapeHtml(plan.title)}</strong>
+                ${escapeHtml(plan.body)}
+              </div>
+            `).join('')}
+          </div>`;
+      }
+
+      if (type === 'report') {
+        const draft = reportDraft();
+        state.pendingReportDraft = draft;
+        return `
+          <div class="report-draft-text">${escapeHtml(draft)}</div>`;
+      }
+
+      if (type === 'quality') {
+        return startQualityCollection();
+      }
+
+      state.report.qc = treatmentQcSummary();
+      updateReport();
+      showTab('report');
+      const selectedChecks = selectedTreatmentItems('checks');
+      const selectedMedications = selectedTreatmentItems('medications');
+      const hasTreatmentSelection = selectedChecks.length || selectedMedications.length;
+      const selectedCheckText = selectedChecks.length
+        ? selectedChecks.map(item => escapeHtml(item.title)).join('、')
+        : '尚未选择检查/检验医嘱。请先在“治疗方案推荐”中选择包含检查检验建议的方案。';
+      const selectedMedicationText = selectedMedications.length
+        ? selectedMedications.map(item => escapeHtml(item.title)).join('、')
+        : '尚未选择用药医嘱。请先在“治疗方案推荐”中选择含用药建议的方案，例如方案2。';
+      const qcLeadText = hasTreatmentSelection
+        ? escapeHtml([
+            selectedChecks.length ? `检查/检验：${selectedChecks.map(item => item.title).join('、')}` : '',
+            selectedMedications.length ? `用药：${selectedMedications.map(item => item.title).join('、')}` : ''
+          ].filter(Boolean).join('；'))
+        : '尚未选择治疗方案。请先点击“治疗方案推荐”，AI 会输出 3 个文字方案。';
+      return `
+        <strong>医嘱合理性质控结论</strong>
+        <div class="result-card" style="border-left:4px solid ${hasTreatmentSelection ? 'var(--blue)' : 'var(--amber)'}">
+          <div class="result-title"><span>当前质控对象</span><span class="tag ${hasTreatmentSelection ? 'blue' : 'amber'}">${hasTreatmentSelection ? '已选择' : '待选择'}</span></div>
+          <p>${qcLeadText}</p>
+          <p>${hasTreatmentSelection ? escapeHtml(state.report.qc) : '质控暂不生成正式结论。'}</p>
+        </div>
+        <div class="result-card" style="border-left:4px solid ${selectedChecks.length ? 'var(--green)' : 'var(--amber)'}">
+          <div class="result-title"><span>检查/检验医嘱</span><span class="tag ${selectedChecks.length ? 'green' : 'amber'}">${selectedChecks.length ? '已选择' : '待选择'}</span></div>
+          <ul class="kv">
+            <li>${selectedCheckText}</li>
+            <li>系统将核验适应症、近期重复检查、造影风险和检验指标完整性。</li>
+          </ul>
+        </div>
+        <div class="result-card" style="border-left:4px solid ${selectedMedications.length ? 'var(--green)' : 'var(--amber)'}">
+          <div class="result-title"><span>用药医嘱</span><span class="tag ${selectedMedications.length ? 'green' : 'amber'}">${selectedMedications.length ? '已选择' : '待选择'}</span></div>
+          <ul class="kv">
+            <li>${selectedMedicationText}</li>
+            <li>${selectedMedications.length ? '系统将核验说明书、过敏史、肝肾功能和重复用药。' : '选择后，本处会显示具体药品，并提供对应说明书与用药质控依据。'}</li>
+          </ul>
+          ${selectedMedications.length ? '<div class="card-actions"><button class="btn mini-btn" onclick="openKnowledge(\'drug\')">查看所选药品说明书</button></div>' : ''}
+        </div>`;
+    }
+
+    function answerQuestion(text) {
+      const lower = text.toLowerCase();
+      if (text.includes('重新生成报告') || text.includes('刷新报告')) {
+        return renderCommand('report');
+      }
+      if (text.includes('黄斑水肿') || text.includes('预后')) {
+        return `
+          <strong>关于黄斑水肿与预后</strong><br />
+          OCT 显示中心凹厚度 312 μm 且存在层间囊样水肿，较能解释当前视物模糊。若水肿持续，可影响感光细胞功能恢复；治疗上应先用 FFA/OCT 明确渗漏和缺血范围，再决定抗 VEGF、激光或联合策略。
+          <div class="card-actions">
+            <button class="btn mini-btn" onclick="runCommand('treatment')">展开治疗路径</button>
+          </div>`;
+      }
+      if (text.includes('用药') || text.includes('羟苯磺酸钙') || lower.includes('drug')) {
+        return `
+          <strong>关于当前用药建议</strong><br />
+          羟苯磺酸钙用于糖尿病微血管病变相关微循环障碍。结合当前 eGFR 76，未提示严重肾功能限制；仍需医生复核过敏史、胃肠道耐受性和院外用药。
+          <div class="card-actions">
+            <button class="btn mini-btn" onclick="openKnowledge('drug')">查看说明书</button>
+            <button class="btn mini-btn" onclick="runCommand('quality')">用药质控</button>
+          </div>`;
+      }
+      if (text.includes('肾功能下降') || text.includes('肾功能') || text.includes('eGFR')) {
+        return `
+          <strong>肾功能相关风险</strong><br />
+          当前 eGFR 76 mL/min/1.73m² 未提示严重肾功能限制。若后续复核发现 eGFR 明显下降，应优先确认肌酐、尿蛋白、造影风险和药物蓄积风险；检查上可考虑先完善肾功能评估，再决定是否进行 FFA。
+          <div class="card-actions">
+            <button class="btn mini-btn" onclick="openKnowledge('drug')">看用药注意事项</button>
+            <button class="btn mini-btn" onclick="runCommand('quality')">重新质控</button>
+          </div>`;
+      }
+      if (text.includes('证据缺口') || text.includes('补齐证据')) {
+        const insights = contextInsights(profile());
+        return `
+          <strong>当前证据缺口</strong><br />
+          系统已覆盖 6 类输入维度，证据完整度约 ${insights.evidenceScore}%。仍建议优先补齐：${escapeHtml(insights.gaps.join('、') || '暂无明显缺口')}。
+          <div class="result-card">
+            <div class="result-title"><span>补齐顺序</span><span class="tag blue">建议</span></div>
+            <ul class="kv">
+              <li>先补过敏史和造影禁忌，避免检查/用药风险漏判。</li>
+              <li>再补 FFA 或造影计划，用于确认无灌注区、新生血管和渗漏范围。</li>
+              <li>最后核验既往治疗史和随访依从性，避免重复治疗。</li>
+            </ul>
+          </div>`;
+      }
+      if (text.includes('门诊小结') || text.includes('小结')) {
+        return `
+          <strong>门诊小结草稿</strong><br />
+          患者女，62 岁，因双眼视物模糊 2 月、眼前黑影飘动 1 周就诊。既往 2 型糖尿病 15 年、高血压 8 年，血糖控制欠佳。眼底彩照提示微血管瘤、点片状出血及硬性渗出，OCT 见黄斑中心凹增厚伴囊样水肿。考虑糖尿病视网膜病变合并糖尿病性黄斑水肿可能，建议完善 FFA/OCT 定量评估、慢病协同管理，并在医嘱质控通过后确认治疗方案。
+          <div class="card-actions">
+            <button class="btn mini-btn" onclick="runCommand('report')">写入报告</button>
+            <button class="btn mini-btn" onclick="copyReport()">复制报告</button>
+          </div>`;
+      }
+      if (text.includes('报告') || text.includes('病历')) {
+        return `
+          <strong>报告处理</strong><br />
+          我已按当前病例上下文维护报告草稿。`;
+      }
+      return `
+        <strong>基于当前病例的回答</strong><br />
+        当前核心矛盾是长期糖尿病背景下的眼底微血管损伤、黄斑区水肿和血糖控制欠佳。建议先用辅助诊断确认疾病排序，再用治疗方案推荐生成检查、用药、处置和随访路径，最后进入医嘱质控。`;
+    }
+
+    function sendChat() {
+      const input = $('#chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      appendMessage('user', text);
+      input.value = '';
+      showThinking(() => {
+        const planResult = applyPendingTextPlan(text);
+        const reportResult = applyPendingReportDraft(text);
+        const qualityResult = !planResult && !reportResult && state.qualityQc.active ? finishQualityQc(text) : null;
+        appendMessage('ai', planResult || reportResult || qualityResult || answerQuestion(text));
+      });
+    }
+
+    function showTab(name) {
+      $$('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name));
+      $$('.tab-page').forEach(page => page.classList.toggle('active', page.id === `tab-${name}`));
+    }
+
+    function modal(title, body) {
+      $('#modalTitle').textContent = title;
+      $('#modalBody').innerHTML = body;
+      $('#modal').classList.add('show');
+      $('.modal-panel').focus();
+    }
+
+    function closeModal() {
+      $('#modal').classList.remove('show');
+    }
+
+    function openKnowledge(type) {
+      if (type === 'drug') {
+        modal('药品说明书：羟苯磺酸钙胶囊', `
+          <div class="knowledge-item">
+            <h4>适用场景</h4>
+            <ul class="kv">
+              <li>可作为糖尿病微血管病变相关微循环障碍的用药参考，尤其是眼底微血管瘤、点片状出血、硬性渗出等表现存在时。</li>
+              <li>当前病例中 HbA1c 8.9%、糖尿病病程较长，提示微血管并发症风险较高；若医生判断存在糖尿病视网膜病变进展，可纳入治疗方案评估。</li>
+              <li>该药不能替代血糖、血压、血脂等基础慢病控制，也不能替代抗 VEGF、激光等眼底处置的适应症判断。</li>
+            </ul>
+          </div>
+          <div class="knowledge-item">
+            <h4>用法用量与复核点</h4>
+            <ul class="kv">
+              <li>常见医嘱表达：羟苯磺酸钙胶囊 0.5g，口服，tid；实际剂量需以院内药品规格、说明书版本和医生处方习惯为准。</li>
+              <li>开立前需复核肾功能、过敏史、胃肠道耐受情况、近期院外用药，以及是否存在重复改善微循环类药物。</li>
+              <li>若患者同时使用抗凝、抗血小板药或存在出血倾向，应提示医生进行用药风险评估。</li>
+              <li>若 eGFR 明显下降、肌酐升高或存在严重肾功能异常，应谨慎生成正式用药医嘱，优先提示医生复核。</li>
+            </ul>
+          </div>
+          <div class="knowledge-item">
+            <h4>不良反应与禁忌风险</h4>
+            <ul class="kv">
+              <li>需关注皮疹、瘙痒、过敏反应、恶心、腹痛、腹泻等胃肠道不适。</li>
+              <li>若既往有明确药物过敏史、严重肾功能异常、原因不明出血或多药联合风险，应作为质控警示。</li>
+              <li>长期或重复用药需关注疗程、复诊计划和疗效评价，避免“开药后无随访指标”。</li>
+            </ul>
+          </div>
+          <div class="knowledge-item">
+            <h4>AI 质控规则</h4>
+            <ul class="kv">
+              <li>若缺少肾功能或过敏史信息，系统应提示“用药前需补充肾功能和过敏史核验”。</li>
+              <li>若医生选择微循环改善方案，报告中应同步写明“需结合肾功能、过敏史、合并用药复核”。</li>
+              <li>若同时存在抗 VEGF 或激光处置建议，系统应区分“辅助用药建议”和“眼底处置路径”，避免把药物作为主要处置依据。</li>
+            </ul>
+          </div>`);
+        return;
+      }
+      if (type === 'exam') {
+        modal('检查/检验适应症：FFA 与 OCT', `
+          <div class="knowledge-item">
+            <h4>OCT 适应症与用途</h4>
+            <ul class="kv">
+              <li>用于评估黄斑水肿、中心凹厚度、视网膜层间液体、囊样改变，以及治疗前后的量化变化。</li>
+              <li>当前病例已提示中心凹厚度 312 μm、层间囊样水肿，OCT 可作为黄斑水肿治疗前基线和后续疗效随访指标。</li>
+              <li>若医生考虑抗 VEGF 治疗，OCT 可帮助判断是否存在中心受累黄斑水肿及治疗响应。</li>
+            </ul>
+          </div>
+          <div class="knowledge-item">
+            <h4>FFA 适应症与用途</h4>
+            <ul class="kv">
+              <li>用于判断无灌注区、新生血管、荧光渗漏、微血管异常和视网膜激光治疗靶区。</li>
+              <li>糖尿病视网膜病变分期不清、疑似增殖期病变、眼底出血点/硬性渗出明显时，FFA 可帮助明确病变活动性和处置范围。</li>
+              <li>若计划激光治疗，FFA 是判断治疗范围、避开不必要处置和解释治疗依据的重要证据。</li>
+            </ul>
+          </div>
+          <div class="knowledge-item">
+            <h4>检查前核验</h4>
+            <ul class="kv">
+              <li>FFA 前需关注荧光素钠过敏史、严重肝肾功能异常、妊娠/哺乳状态、哮喘或既往造影不良反应。</li>
+              <li>OCT 检查前应确认影像质量、屈光间质情况和左右眼对应关系，避免报告字段写错眼别。</li>
+              <li>若近期已完成同类检查，应提示医生核对检查日期，避免重复检查。</li>
+            </ul>
+          </div>
+          <div class="knowledge-item">
+            <h4>AI 质控规则</h4>
+            <ul class="kv">
+              <li>缺少 OCT 定量依据时，不宜直接生成“黄斑水肿治疗后改善/加重”的结论。</li>
+              <li>缺少 FFA 或等效影像证据时，不宜直接生成激光治疗范围或抗 VEGF/激光正式处置医嘱。</li>
+              <li>报告写入建议：先描述检查目的，再写明“用于明确糖尿病视网膜病变分期、黄斑渗漏范围及后续治疗路径”。</li>
+            </ul>
+          </div>`);
+        return;
+      }
+      modal('患者历史记录核验', `
+        <div class="knowledge-item">
+          <h4>核验范围</h4>
+          <ul class="kv">
+            <li>既往诊断：糖尿病视网膜病变分期、黄斑水肿、青光眼、白内障、视网膜静脉阻塞、高血压性视网膜病变等。</li>
+            <li>眼科检查：既往 OCT、FFA、眼底照相、眼压、视力、裂隙灯检查和既往影像结论。</li>
+            <li>历史治疗：抗 VEGF 注射次数、末次注射日期、眼底激光治疗部位、既往手术史和治疗反应。</li>
+            <li>用药与风险：降糖药、抗凝/抗血小板药、激素类药物、院外改善微循环药、过敏史和不良反应史。</li>
+          </ul>
+        </div>
+        <div class="knowledge-item">
+          <h4>重点核验问题</h4>
+          <ul class="kv">
+            <li>是否已经在近期完成 OCT 或 FFA，避免重复检查或重复收费风险。</li>
+            <li>是否存在既往抗 VEGF 注射间隔过短、感染风险未排查、眼压异常或近期眼内手术史。</li>
+            <li>是否存在严重肾功能异常、荧光素钠过敏史或造影不良反应，影响 FFA 推荐。</li>
+            <li>是否存在降糖控制不佳但治疗建议未包含慢病协同管理，导致治疗建议不完整。</li>
+          </ul>
+        </div>
+        <div class="knowledge-item">
+          <h4>AI 质控目标</h4>
+          <ul class="kv">
+            <li>避免重复检查、禁忌用药、治疗间隔过密、处置证据不足和慢病风险遗漏。</li>
+            <li>当历史资料缺失时，系统应输出“证据缺口”，而不是直接给出确定性治疗结论。</li>
+            <li>当历史治疗与当前推荐冲突时，系统应提示医生先复核既往处置记录，再写入报告或医嘱。</li>
+          </ul>
+        </div>
+        <div class="knowledge-item">
+          <h4>报告写入建议</h4>
+          <ul class="kv">
+            <li>若资料完整：可写“已核验既往眼底检查、用药史、过敏史及既往处置记录，暂未发现明确冲突”。</li>
+            <li>若资料缺失：可写“既往抗 VEGF/激光治疗史、过敏史或近期影像资料待补充，治疗方案需医生复核后确认”。</li>
+            <li>若发现风险：应明确写入风险来源，例如“近期同类检查已完成，需避免重复检查”或“造影前需复核过敏史及肾功能”。</li>
+          </ul>
+        </div>`);
+    }
+
+    function openCase(id) {
+      const item = similarCases.find(caseItem => caseItem.id === id);
+      if (!item) return;
+      const list = values => `<ul class="kv">${values.map(value => `<li>${escapeHtml(value)}</li>`).join('')}</ul>`;
+      modal(`完整相似病历 ${id}`, `
+        <div class="knowledge-item">
+          <h4>病历索引</h4>
+          <p>报告编号：${escapeHtml(item.meta.reportNo)}｜就诊日期：${escapeHtml(item.meta.visitDate)}｜科室：${escapeHtml(item.meta.department)}</p>
+          <p>来源：${escapeHtml(item.meta.source)}｜相似度：${item.score}%</p>
+        </div>
+        <div class="knowledge-item">
+          <h4>相似依据</h4>
+          ${list(item.similarityBasis)}
+        </div>
+        <div class="knowledge-item">
+          <h4>患者画像</h4>
+          <p>${escapeHtml(item.patient)}</p>
+          <h4>主诉</h4>
+          <p>${escapeHtml(item.chiefComplaint)}</p>
+          <h4>病史</h4>
+          <p>${escapeHtml(item.history)}</p>
+        </div>
+        <div class="knowledge-item">
+          <h4>体格检查</h4>
+          <p>${escapeHtml(item.exam)}</p>
+          <h4>检验结果</h4>
+          <p>${escapeHtml(item.labs)}</p>
+          <h4>医学影像</h4>
+          <p>${escapeHtml(item.imaging)}</p>
+        </div>
+        <div class="knowledge-item">
+          <h4>主要诊断</h4>
+          ${list(item.diagnosis)}
+          <h4>治疗过程</h4>
+          ${list(item.treatment)}
+        </div>
+        <div class="knowledge-item">
+          <h4>医嘱质控摘要</h4>
+          ${list(item.qc)}
+        </div>
+        <div class="knowledge-item">
+          <h4>随访转归</h4>
+          ${list(item.outcome)}
+        </div>
+        <div class="knowledge-item">
+          <h4>对当前患者的可借鉴点</h4>
+          ${list(item.lessons)}
+          <div class="card-actions">
+            <button class="btn primary" onclick="selectSimilarCase('${item.id}');closeModal()">选为参考病历</button>
+          </div>
+        </div>`);
+    }
+
+    function selectSimilarCase(id) {
+      const item = similarCases.find(caseItem => caseItem.id === id);
+      if (!item) return;
+
+      state.selectedSimilarCase = item;
+      state.report.similar = `${item.id}（${item.score}% 相似）：${item.detail} 借鉴方案为${item.plan}；既往转归为${item.prognosis}`;
+      updateReport();
+
+      $$('.similar-card').forEach(card => {
+        const selected = card.dataset.similarId === id;
+        card.classList.toggle('selected', selected);
+        const selectButton = card.querySelector('[data-select-similar]');
+        if (selectButton) {
+          selectButton.textContent = selected ? '已选择' : '选为参考';
+        }
+        const oldBadge = card.querySelector('.select-badge');
+        if (selected && !oldBadge) {
+          const badge = document.createElement('span');
+          badge.className = 'select-badge';
+          badge.textContent = '已选参考';
+          card.querySelector('.card-actions').appendChild(badge);
+        } else if (!selected && oldBadge) {
+          oldBadge.remove();
+        }
+      });
+
+      toast(`已选择 ${item.id} 作为主参考病历`);
+    }
+
+    const uploadFieldLabels = {
+      chief: '主诉',
+      chronic: '慢病史',
+      eyeHistory: '眼病史',
+      imaging: '医学影像',
+      exam: '体格检查',
+      lab: '检验结果'
+    };
+
+    const uploadCatalog = [
+      { id: 'case', label: '病历截图', description: '门诊病历、入院记录、病程记录', kind: '病历资料', target: 'chronic' },
+      { id: 'lab', label: '检验报告图片', description: '血糖、HbA1c、肾功能、血脂等', kind: '检验报告', target: 'lab' },
+      { id: 'imaging', label: '影像报告图片', description: '眼底彩照、OCT、FFA 等影像报告', kind: '影像报告', target: 'imaging' },
+      { id: 'prior', label: '既往病历图片', description: '眼科病史、慢病史、治疗记录', kind: '既往眼病资料', target: 'eyeHistory' },
+      { id: 'other', label: '其他补充图片', description: '会诊记录、随访截图、患者自带资料', kind: '其他补充资料', target: 'chronic' }
+    ];
+
+    function classifyUpload(name) {
+      const lower = name.toLowerCase();
+      if (/检验|化验|血糖|糖化|hba1c|lab|blood/.test(lower)) {
+        return {
+          category: 'lab',
+          kind: '检验报告',
+          target: 'lab',
+          confidence: 98,
+          extracted: 'HbA1c 8.9%；空腹血糖 9.6 mmol/L；eGFR 76 mL/min/1.73m²。'
+        };
+      }
+      if (/影像|oct|ffa|眼底|ct|mri|image/.test(lower)) {
+        return {
+          category: 'imaging',
+          kind: '影像报告',
+          target: 'imaging',
+          confidence: 96,
+          extracted: '眼底彩照：散在微血管瘤、点片状出血、硬性渗出。\\nOCT：黄斑中心凹厚度 312 μm，层间囊样水肿。'
+        };
+      }
+      if (/查体|体格|exam|检查/.test(lower)) {
+        return {
+          category: 'other',
+          kind: '体格检查',
+          target: 'exam',
+          confidence: 94,
+          extracted: '视力：右 0.5、左 0.6；眼压：右 16、左 17 mmHg。'
+        };
+      }
+      if (/眼病|眼科|眼底/.test(lower)) {
+        return {
+          category: 'prior',
+          kind: '既往眼病资料',
+          target: 'eyeHistory',
+          confidence: 91,
+          extracted: '既往提示轻度非增殖期糖尿病视网膜病变，未规律随访。'
+        };
+      }
+      if (/病历|病程|门诊|住院|既往|history|record/.test(lower)) {
+        return {
+          category: 'case',
+          kind: '病历资料',
+          target: 'chronic',
+          confidence: 93,
+          extracted: '2 型糖尿病 15 年，高血压 8 年，近期血糖控制欠佳。'
+        };
+      }
+      return {
+        category: 'other',
+        kind: '其他补充资料',
+        target: 'chronic',
+        confidence: 76,
+        extracted: '待医生确认资料归属和临床有效内容。'
+      };
+    }
+
+    function formatFileSize(size) {
+      if (!size) return '系统导入';
+      if (size < 1024 * 1024) return `${Math.max(1, Math.round(size / 1024))} KB`;
+      return `${(size / 1024 / 1024).toFixed(1)} MB`;
+    }
+
+    function createUploadRecord(file, targetOverride = '') {
+      const classified = classifyUpload(file.name);
+      const selectedCategory = uploadCatalog.find(item => item.id === targetOverride);
+      return {
+        id: `upload-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name: file.name,
+        size: file.size || 0,
+        source: '本地上传',
+        status: '已写入',
+        ...classified,
+        category: selectedCategory ? selectedCategory.id : classified.category,
+        kind: selectedCategory ? selectedCategory.kind : classified.kind,
+        target: selectedCategory ? selectedCategory.target : classified.target
+      };
+    }
+
+    function updateUploadSummary() {
+      const total = state.uploads.length;
+      const written = state.uploads.filter(item => item.status === '已写入').length;
+      $('#uploadSummary').textContent = `${total} 份资料`;
+      $('#uploadStateText').textContent = total
+        ? `${written} 份已写入`
+        : '等待上传资料';
+      updateUploadActionState();
+    }
+
+    function updateUploadActionState() {
+      const title = $('#uploadActionTitle');
+      const hint = $('#uploadActionHint');
+      if (!title || !hint) return;
+      const collectingQuality = state.qualityQc.active && !state.qualityQc.completed;
+      title.textContent = collectingQuality ? '上传用于医嘱质控的资料' : '点击上传资料';
+      hint.textContent = collectingQuality
+        ? '支持病史、诊断、检查结果、历史用药、当前拟开医嘱的图片、PDF、Word 或文本。'
+        : '支持图片、PDF、Word、文本，也可拖拽到此处。AI 会自动识别资料类型。';
+    }
+
+    function renderUploads() {
+      updateUploadSummary();
+    }
+
+    function handleFiles(fileList, targetOverride = '') {
+      const files = Array.from(fileList || []);
+      if (!files.length) return;
+      const records = files.map(file => createUploadRecord(file, targetOverride));
+      state.uploads.push(...records);
+      updateReport();
+      renderUploads();
+      appendMessage('ai', `
+        <strong>资料已导入</strong><br />
+        已自动识别并写入 ${records.length} 份资料，病例上下文已更新，可直接使用左侧服务场景进行分析。`);
+      toast(`已直接导入 ${records.length} 份资料`);
+      toggleUploadWorkbench(false);
+    }
+
+    function importScreeningReport(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const record = {
+        id: `upload-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name: 'AI眼底疾病筛查报告_RP-260626-001.pdf',
+        size: 0,
+        source: '筛查系统导入',
+        status: '已写入',
+        category: 'imaging',
+        kind: 'AI眼底疾病筛查报告',
+        target: 'imaging',
+        confidence: 97,
+        extracted: [
+          '报告编号：RP-260626-001；生成时间：2026-06-26 15:30；综合风险：中度；复查建议：3个月内。',
+          '常见疾病筛查：糖尿病视网膜病变（DR）中度，置信度87%，提示中度非增殖性糖尿病视网膜病变特征，存在多发微动脉瘤与少量出血；青光眼相关病变阴性，置信度94%；年龄相关性黄斑变性（AMD）阴性，置信度91%；高血压性视网膜病变轻度，置信度81%。',
+          '多任务联合筛查：右眼眼底图像中检出微动脉瘤5处、出血灶4处、硬性渗出4处；AI 视盘分割杯盘比约0.38，黄斑中心凹定位正常，血管反光增强，提示轻度动脉硬化改变。',
+          '患者信息：李*，OPD-202606-001；来源机构：市中心门诊；图片来源：右眼_眼底彩照_001.jpg；质控评分：96%。',
+          '医生建议：建议患者3个月内行眼底复查，重点关注糖尿病视网膜病变进展，同时控制血糖、血压，必要时转诊眼底专科进一步检查和治疗。'
+        ].join('\\n')
+      };
+
+      state.uploads.push(record);
+      updateReport();
+      renderUploads();
+      appendMessage('ai', `
+        <strong>眼底筛查报告已导入</strong><br />
+        筛查报告已自动写入病例上下文，可直接使用左侧服务场景进行分析。`);
+      toast('已直接导入眼底筛查报告');
+      toggleUploadWorkbench(false);
+    }
+
+    function removeUpload(id) {
+      state.uploads = state.uploads.filter(item => item.id !== id);
+      renderUploads();
+      toast('资料已移除');
+    }
+
+    function quoteCase() {
+      state.report.tx = '参考相似病历 DR-2026-099：完善 OCT/FFA 定量评估后，采取微循环改善治疗，必要时联合抗 VEGF，并同步内分泌科强化血糖管理。';
+      updateReport();
+      toast('相似病历处置经验已写入报告');
+    }
+
+    function reportText() {
+      const paper = $('#reportPaper');
+      return (paper ? paper.innerText : reportDraft()).replace(/\n{3,}/g, '\n\n').trim();
+    }
+
+    async function copyReport() {
+      const text = reportText();
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('报告已复制');
+      } catch (err) {
+        modal('报告文本', `<pre style="white-space:pre-wrap;margin:0">${escapeHtml(text)}</pre>`);
+      }
+    }
+
+    function knowledgeAnswerText(type) {
+      if (type === 'drug') {
+        return [
+          '药品说明书与用药质控依据：羟苯磺酸钙胶囊',
+          '',
+          '一、适用场景',
+          '可作为糖尿病微血管病变相关微循环障碍的用药参考，尤其在眼底微血管瘤、点片状出血、硬性渗出等表现存在时纳入评估。',
+          '当前病例存在糖尿病病程长、HbA1c 偏高和眼底微血管损伤表现，可作为治疗方案评估依据之一。',
+          '该药不能替代血糖、血压、血脂等慢病控制，也不能替代抗 VEGF、激光等眼底处置的适应症判断。',
+          '',
+          '二、用法用量与复核点',
+          '常见医嘱表达：羟苯磺酸钙胶囊 0.5g，口服，tid；实际剂量需以院内药品规格、说明书版本和医生处方习惯为准。',
+          '开立前需复核肾功能、过敏史、胃肠道耐受情况、近期院外用药，以及是否存在重复改善微循环类药物。',
+          '若患者同时使用抗凝、抗血小板药或存在出血倾向，应进行用药风险评估。',
+          '',
+          '三、风险与禁忌提醒',
+          '需关注皮疹、瘙痒、过敏反应、恶心、腹痛、腹泻等不良反应。',
+          '若 eGFR 明显下降、肌酐升高、严重肾功能异常、明确药物过敏史或多药联合风险存在，应优先提示医生复核。',
+          '',
+          '四、AI 质控规则',
+          '缺少肾功能或过敏史信息时，不输出确定性通过结论。',
+          '若选择微循环改善治疗，报告中同步写明需结合肾功能、过敏史和合并用药复核。'
+        ].join('\n');
+      }
+      if (type === 'exam') {
+        return [
+          '检查/检验适应症依据：FFA 与 OCT',
+          '',
+          '一、OCT 适应症与用途',
+          '用于评估黄斑水肿、中心凹厚度、视网膜层间液体、囊样改变，以及治疗前后的量化变化。',
+          '当前病例已提示中心凹厚度 312 μm、层间囊样水肿，OCT 可作为治疗前基线和后续疗效随访指标。',
+          '',
+          '二、FFA 适应症与用途',
+          '用于判断无灌注区、新生血管、荧光渗漏、微血管异常和视网膜激光治疗靶区。',
+          '糖尿病视网膜病变分期不清、疑似增殖期病变、眼底出血点或硬性渗出明显时，FFA 可帮助明确病变活动性和处置范围。',
+          '',
+          '三、检查前核验',
+          'FFA 前需关注荧光素钠过敏史、严重肝肾功能异常、妊娠/哺乳状态、哮喘或既往造影不良反应。',
+          'OCT 检查前应确认影像质量、屈光间质情况和左右眼对应关系。',
+          '',
+          '四、AI 质控规则',
+          '缺少 OCT 定量依据时，不宜直接生成黄斑水肿治疗变化结论。',
+          '缺少 FFA 或等效影像证据时，不宜直接生成激光治疗范围或正式处置医嘱。'
+        ].join('\n');
+      }
+      return [
+        '患者历史记录核验依据',
+        '',
+        '一、核验范围',
+        '既往诊断：糖尿病视网膜病变分期、黄斑水肿、青光眼、白内障、视网膜静脉阻塞、高血压性视网膜病变等。',
+        '眼科检查：既往 OCT、FFA、眼底照相、眼压、视力、裂隙灯检查和既往影像结论。',
+        '历史治疗：抗 VEGF 注射次数、末次注射日期、眼底激光治疗部位、既往手术史和治疗反应。',
+        '用药与风险：降糖药、抗凝/抗血小板药、激素类药物、院外改善微循环药、过敏史和不良反应史。',
+        '',
+        '二、重点核验问题',
+        '是否近期已完成 OCT 或 FFA，避免重复检查。',
+        '是否存在抗 VEGF 注射间隔过短、感染风险未排查、眼压异常或近期眼内手术史。',
+        '是否存在严重肾功能异常、荧光素钠过敏史或造影不良反应。',
+        '',
+        '三、AI 质控目标',
+        '避免重复检查、禁忌用药、治疗间隔过密、处置证据不足和慢病风险遗漏。',
+        '当历史资料缺失时，输出证据缺口，而不是直接给出确定性结论。'
+      ].join('\n');
+    }
+
+    function openKnowledge(type) {
+      appendMessage('user', type === 'drug' ? '查看药品说明书与用药质控依据' : type === 'exam' ? '查看检查/检验适应症依据' : '查看患者历史记录核验依据');
+      showThinking(() => {
+        appendMessage('ai', `<pre class="qc-text-output">${escapeHtml(knowledgeAnswerText(type))}</pre>`);
+      });
+    }
+
+    function caseDetailText(item) {
+      return [
+        `完整相似病历 ${item.id}`,
+        '',
+        '一、病历索引',
+        `报告编号：${item.meta.reportNo}`,
+        `就诊日期：${item.meta.visitDate}`,
+        `科室：${item.meta.department}`,
+        `来源：${item.meta.source}`,
+        `相似度：${item.score}%`,
+        '',
+        '二、相似依据',
+        ...item.similarityBasis.map(value => `- ${value}`),
+        '',
+        '三、患者画像',
+        item.patient,
+        `主诉：${item.chiefComplaint}`,
+        `病史：${item.history}`,
+        '',
+        '四、检查与证据',
+        `体格检查：${item.exam}`,
+        `检验结果：${item.labs}`,
+        `医学影像：${item.imaging}`,
+        '',
+        '五、主要诊断',
+        ...item.diagnosis.map(value => `- ${value}`),
+        '',
+        '六、治疗过程',
+        ...item.treatment.map(value => `- ${value}`),
+        '',
+        '七、医嘱质控摘要',
+        ...item.qc.map(value => `- ${value}`),
+        '',
+        '八、随访转归',
+        ...item.outcome.map(value => `- ${value}`),
+        '',
+        '九、对当前患者的可借鉴点',
+        ...item.lessons.map(value => `- ${value}`)
+      ].join('\n');
+    }
+
+    function openCase(id) {
+      const item = similarCases.find(caseItem => caseItem.id === id);
+      if (!item) return;
+      appendMessage('user', `查看完整相似病历 ${id}`);
+      showThinking(() => {
+        appendMessage('ai', `
+          <pre class="qc-text-output">${escapeHtml(caseDetailText(item))}</pre>
+          <div class="card-actions">
+            <button class="btn primary" onclick="selectSimilarCase('${item.id}')">选为参考病历</button>
+          </div>`);
+      });
+    }
+
+    $$('.command-btn').forEach(btn => {
+      btn.addEventListener('click', () => runCommand(btn.dataset.type));
+    });
+
+    $$('.tab').forEach(tab => {
+      tab.addEventListener('click', () => showTab(tab.dataset.tab));
+    });
+
+    $$('[data-knowledge]').forEach(btn => {
+      btn.addEventListener('click', () => openKnowledge(btn.dataset.knowledge));
+    });
+
+    function openUploadPicker() {
+      const input = $('#fileInput');
+      input.dataset.target = '';
+      input.click();
+    }
+
+    function runUploadAction() {
+      openUploadPicker();
+    }
+
+    function toggleUploadWorkbench(forceOpen) {
+      const panel = $('#uploadWorkbench');
+      const button = $('#uploadToggleBtn');
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
+      panel.classList.toggle('open', shouldOpen);
+      button.classList.toggle('active', shouldOpen);
+      button.setAttribute('aria-expanded', String(shouldOpen));
+      button.setAttribute('title', shouldOpen ? '收起资料' : '添加资料');
+      button.setAttribute('aria-label', shouldOpen ? '收起资料' : '添加资料');
+    }
+
+    $('#uploadToggleBtn').addEventListener('click', () => toggleUploadWorkbench());
+    $('#importScreeningReportBtn').addEventListener('click', importScreeningReport);
+    $('#fileInput').addEventListener('change', event => {
+      handleFiles(event.target.files, event.target.dataset.target || '');
+      event.target.dataset.target = '';
+      event.target.value = '';
+    });
+
+    const dropzone = $('#dropzone');
+    dropzone.addEventListener('click', runUploadAction);
+    dropzone.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        runUploadAction();
+      }
+    });
+    dropzone.addEventListener('dragover', event => {
+      event.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', event => {
+      event.preventDefault();
+      dropzone.classList.remove('dragover');
+      handleFiles(event.dataTransfer.files);
+    });
+
+    $('#uploadWorkbench').addEventListener('click', event => event.stopPropagation());
+
+    document.addEventListener('click', event => {
+      const panel = $('#uploadWorkbench');
+      const toggle = $('#uploadToggleBtn');
+      if (!panel.classList.contains('open')) return;
+      if (panel.contains(event.target) || toggle.contains(event.target)) return;
+      toggleUploadWorkbench(false);
+    });
+
+    $('#sendBtn').addEventListener('click', sendChat);
+    $('#chatInput').addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChat();
+      }
+    });
+    $('#modalClose').addEventListener('click', closeModal);
+    $('#modal').addEventListener('click', event => {
+      if (event.target.id === 'modal') closeModal();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeModal();
+    });
+
+    updateQualityInputState();
+    updateQcPanel();
+    renderUploads();
+    updateReport();
+  </script>
 </body>
 </html>

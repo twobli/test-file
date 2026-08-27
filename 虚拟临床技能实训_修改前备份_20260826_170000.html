@@ -329,6 +329,8 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     <div class="page-header">
         <h1 class="page-title">虚拟临床技能实训</h1>
         <div class="case-selector">
+            <label>当前病例：</label>
+            <span class="case-current" id="caseCurrentLabel">病例加载中</span>
             <button class="case-refresh-btn" onclick="refreshCase()">刷新病例</button>
         </div>
     </div>
@@ -392,9 +394,58 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                     <span class="card-badge">影像判读 + 诊断决策</span>
                 </div>
                 <div class="card-body">
-                    <div class="clinical-subsection-title"><span>1</span>影像判读与诊断决策</div>
-<textarea class="textarea-diagnosis" id="diagNotes" required placeholder="请填写影像判读与诊断决策，例如病变位置、眼别、分期判断与处理思路..."></textarea>
-<button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交临床诊断</button>
+                    <div class="clinical-subsection-title"><span>1</span>影像判读</div>
+                    <div id="imageInterpretationBody"></div>
+
+                    <div class="clinical-subsection-title"><span>2</span>诊断决策</div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">综合临床诊断（单选） <span style="color:var(--danger);">*</span></div>
+                        <div class="diagnosis-options" id="diagnosisOptions">
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="none"> 无明确糖尿病视网膜病变
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="mild"> 轻度非增殖性DR（轻度NPDR）
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="moderate"> 中度非增殖性DR（中度NPDR）
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="severe"> 重度非增殖性DR（重度NPDR）
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="pdr"> 增殖性DR（PDR）
+                            </label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">临床风险分层（单选） <span style="color:var(--danger);">*</span></div>
+                        <div class="diagnosis-options" id="riskOptions">
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="low"> 常规管理
+                            </label>
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="followup"> 定期复查
+                            </label>
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="urgent"> 尽快专科处理
+                            </label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">下一步处理建议（可多选） <span style="color:var(--danger);">*</span></div>
+                        <div class="action-grid">
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="routine"> 常规复查</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="oct"> 完善OCT/相关检查</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="referral"> 眼科专科复诊</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="control"> 强化血糖血压管理</label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">综合诊断说明 <span style="color:var(--danger);">*</span></div>
+                        <textarea class="textarea-diagnosis" id="diagNotes" required placeholder="请结合问诊信息、影像判读和风险分层，说明您的综合判断与处理思路..."></textarea>
+                    </div>
+                    <button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交临床诊断</button>
                 </div>
             </div>
 
@@ -956,8 +1007,27 @@ function resetImageInterpretation() {
 }
 
 function renderImageInterpretation() {
-    // 影像判读与诊断决策已合并为单一输入框（diagNotes），此处无需单独渲染
-    return;
+    var c = cases[currentCaseIndex];
+    var locked = diagnosisSubmitted;
+    var disabled = locked ? ' disabled' : '';
+    var ref = getReferenceImageInterpretation(c);
+    var html = '';
+
+    if (diagnosisSubmitted) html += '<div class="interpret-summary"><strong>影像判读依据已记录。</strong>系统将结合下方诊断决策进行整体判定。</div>';
+
+    html += '<div class="interpret-section">';
+    html += '<div class="is-label">判读依据 <span style="color:var(--danger);">*</span></div>';
+    html += '<textarea class="textarea-interpret" id="imageInterpretNotes" required placeholder="请填写判读依据，例如病变位置、眼别、分期判断依据..."'+disabled+'>'+escapeHtml(imagingInterpretation.notes)+'</textarea>';
+    html += '</div>';
+
+    if (diagnosisSubmitted) {
+        html += '<div class="interpret-reference">';
+        html += '<strong>参考判读：</strong>'+escapeHtml(ref.conclusion)+'<br>';
+        html += '<strong>判读要点：</strong>'+escapeHtml(ref.points);
+        html += '</div>';
+    }
+
+    document.getElementById('imageInterpretationBody').innerHTML = html;
 }
 
 function getReferenceImageInterpretation(c) {
@@ -1010,16 +1080,37 @@ function resetDiagnosis() {
 }
 
 function submitDiagnosis() {
-    var diagNotesEl = document.getElementById('diagNotes');
-    var diagNotes = diagNotesEl ? diagNotesEl.value.trim() : '';
+    var imageNotes = document.getElementById('imageInterpretNotes').value.trim();
+    if (!imageNotes) {
+        alert('请填写影像判读依据');
+        return;
+    }
+    if (!selectedDiagnosis) {
+        alert('请先选择综合临床诊断');
+        return;
+    }
+    if (!selectedRiskLevel) {
+        alert('请先选择临床风险分层');
+        return;
+    }
+    var checkedNextActions = Array.prototype.slice.call(document.querySelectorAll('input[name="nextAction"]:checked')).map(function(input){
+        return input.value;
+    });
+    if (!checkedNextActions.length) {
+        alert('请至少选择一项下一步处理建议');
+        return;
+    }
+    var diagNotes = document.getElementById('diagNotes').value.trim();
     if (!diagNotes) {
-        alert('请填写影像判读与诊断决策');
+        alert('请填写综合诊断说明');
         return;
     }
     if (diagnosisSubmitted) {
-        alert('您已提交过诊断，如需重新作答请点击"重新诊断"按钮。');
+        alert('您已提交过诊断，如需查看新病例请点击刷新病例，或点击"重新诊断"按钮。');
         return;
     }
+    imagingInterpretation = { notes:imageNotes };
+    selectedNextActions = checkedNextActions;
     document.getElementById('confirmModal').classList.add('show');
 }
 
@@ -1031,36 +1122,72 @@ function doSubmitDiagnosis() {
     closeConfirm();
     diagnosisSubmitted = true;
     var c = cases[currentCaseIndex];
-    renderDiagnosisJudgement(c);
+    var diagnosisCorrect = (selectedDiagnosis === c.correctDiagnosis);
+    var expectedRisk = getExpectedRiskLevel(c.correctDiagnosis);
+    var riskCorrect = (selectedRiskLevel === expectedRisk);
+    var isCorrect = diagnosisCorrect && riskCorrect;
+
+    renderDiagnosisJudgement(isCorrect, c, diagnosisCorrect, riskCorrect, expectedRisk);
 }
 
-function renderDiagnosisJudgement(c) {
+function renderDiagnosisJudgement(isCorrect, c, diagnosisCorrect, riskCorrect, expectedRisk) {
+    renderImageInterpretation();
+    document.getElementById('scorePlaceholder').style.display = 'none';
     var resultDiv = document.getElementById('scoreResult');
     resultDiv.style.display = 'block';
-    resultDiv.className = 'score-result correct';
+    resultDiv.className = 'score-result '+(isCorrect ? 'correct' : 'wrong');
+
+    var badgeText = isCorrect ? '临床诊断整体正确' : '需要复核临床诊断';
+    var badgeClass = isCorrect ? 'correct' : 'wrong';
+    var feedback = getClinicalDiagnosisFeedback(diagnosisCorrect, riskCorrect, selectedDiagnosis, c.correctDiagnosis, expectedRisk);
     var diagnosisNotes = document.getElementById('diagNotes').value.trim();
+    var nextActionText = getActionLabels(selectedNextActions).join('、') || '未选择';
+    var expectedActionText = getActionLabels(getExpectedActions(c.correctDiagnosis)).join('、');
 
     var html = '';
-    html += '<div class="score-header"><div class="judgement-icon correct">✓</div><div class="score-badge correct">已提交</div></div>';
-    html += '<div class="score-detail">';
-    html += '<div class="sd-row"><span class="sd-label">影像判读与诊断决策</span><span class="sd-value">'+escapeHtml(diagnosisNotes)+'</span></div>';
+
+    html += '<div class="score-header">';
+    html += '<div class="judgement-icon '+badgeClass+'">'+(isCorrect?'✓':'!')+'</div>';
+    html += '<div class="score-badge '+badgeClass+'">'+badgeText+'</div>';
     html += '</div>';
-    html += '<div class="score-feedback info"><strong>参考诊断：</strong>'+c.correctLabel+'</div>';
-    html += '<div class="score-feedback info"><strong>参考处理方向：</strong>'+getActionLabels(getExpectedActions(c.correctDiagnosis)).join('、')+'</div>';
+
+    html += '<div class="score-detail">';
+    html += '<div class="sd-row"><span class="sd-label">影像判读</span><span class="sd-value">'+escapeHtml(imagingInterpretation.notes)+'</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">临床诊断</span><span class="sd-value">'+getDiagLabel(selectedDiagnosis)+'（'+(diagnosisCorrect?'正确':'需复核')+'）</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">风险分层</span><span class="sd-value">'+getRiskLabel(selectedRiskLevel)+'（参考：'+getRiskLabel(expectedRisk)+'）</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">处理建议</span><span class="sd-value">'+nextActionText+'</span></div>';
+    html += '<div class="sd-row"><span class="sd-label">诊断说明</span><span class="sd-value">'+escapeHtml(diagnosisNotes)+'</span></div>';
+    html += '</div>';
+
+    html += '<div class="score-feedback '+(isCorrect?'success':'warning')+'"><strong>诊断提示：</strong>'+feedback.tip+'</div>';
+    html += '<div class="score-feedback info"><strong>反馈建议：</strong>'+feedback.suggestion+'</div>';
+    html += '<div class="score-feedback info"><strong>参考处理方向：</strong>'+expectedActionText+'</div>';
+
     html += '<div class="score-feedback info">';
     html += '<strong>参考答案与解析</strong><br><br>';
     html += '<strong>正确诊断：</strong>'+c.correctLabel+'<br><br>';
+    html += '<strong>参考风险分层：</strong>'+getRiskLabel(expectedRisk)+'<br><br>';
     html += '<strong>诊断依据：</strong>'+c.diagnosisBasis+'<br><br>';
     html += '<strong>关键鉴别点：</strong>'+c.keyPoints;
     html += '</div>';
+
     html += '<button class="btn-retry" onclick="retryDiagnosis()">重新诊断</button>';
+
     resultDiv.innerHTML = html;
 
+    document.querySelectorAll('#diagnosisOptions .diagnosis-option, #riskOptions .risk-option').forEach(function(opt){
+        opt.style.pointerEvents = 'none';
+        opt.style.opacity = '0.7';
+    });
+    document.querySelectorAll('input[name="nextAction"]').forEach(function(input){
+        input.disabled = true;
+    });
+    document.querySelectorAll('.action-chip').forEach(function(chip){
+        chip.style.pointerEvents = 'none';
+        chip.style.opacity = '0.7';
+    });
     document.getElementById('diagNotes').disabled = true;
-    var btn = document.querySelector('.btn-submit-diag');
-    if (btn) btn.style.display = 'none';
-    var ph = document.getElementById('scorePlaceholder');
-    if (ph) ph.style.display = 'none';
+    document.querySelector('.btn-submit-diag').style.display = 'none';
 }
 
 function getExpectedRiskLevel(correctDiagnosis) {

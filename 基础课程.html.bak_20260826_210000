@@ -443,7 +443,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 /* ===== AI智能答疑系统 ===== */
 .ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; height: 48px; padding: 0 18px; border-radius: 24px; background: linear-gradient(135deg, #2563eb, #6d5bd0); color: #fff; border: none; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(37,99,235,0.28); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
 .ai-chat-toggle:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.34); }
-.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); box-shadow: var(--shadow); }
+.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
 .ai-qa-sidebar { min-height: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
 .ai-qa-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--gray-900); }
 .ai-qa-brand .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; }

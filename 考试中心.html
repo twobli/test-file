@@ -681,7 +681,7 @@ table tbody tr:hover { background: var(--gray-50); }
     font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;
 }
 .report-body-content { padding: 20px 32px; overflow: visible; background: #F8FAFC; }
-.report-dashboard-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+.report-dashboard-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
 .report-analysis-grid { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 16px; margin-bottom: 18px; }
 .report-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 18px; box-shadow: var(--shadow); }
 .report-card h4 { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 14px; }
@@ -699,22 +699,69 @@ table tbody tr:hover { background: var(--gray-50); }
 .report-mini-kpi { background: var(--gray-50); border-radius: 8px; padding: 10px; text-align: center; }
 .report-mini-kpi b { display: block; font-size: 16px; color: var(--gray-900); line-height: 1.35; word-break: break-word; }
 .report-mini-kpi span { color: var(--gray-500); font-size: 12px; }
-.error-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
-.error-chip { border-radius: 8px; padding: 10px; text-align: center; background: var(--gray-50); }
-.error-chip b { display: block; font-size: 20px; }
-.error-chip span { font-size: 12px; color: var(--gray-500); }
-.error-chip.error b { color: #EF4444; }
-.error-chip.warn b { color: #F59E0B; }
-.error-chip.ok b { color: #10B981; }
-.weak-list { display: flex; flex-direction: column; gap: 8px; }
-.weak-item { display: grid; grid-template-columns: minmax(92px, 1fr) 1.8fr auto; align-items: center; gap: 10px; font-size: 12px; color: var(--gray-600); }
-.weak-track { height: 7px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
-.weak-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #EF4444, #F59E0B); }
+.error-pie-grid { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 16px; align-items: center; margin-bottom: 14px; }
+.error-pie-wrap { display: flex; align-items: center; justify-content: center; }
+.error-pie {
+    width: 160px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    position: relative;
+    background: conic-gradient(#10B981 0 50%, #EF4444 50% 100%);
+}
+.error-pie::after {
+    content: '';
+    position: absolute;
+    inset: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--gray-200);
+}
+.error-pie-center {
+    position: absolute;
+    inset: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+}
+.error-pie-center b { font-size: 28px; line-height: 1; color: var(--gray-900); }
+.error-pie-center span { margin-top: 4px; font-size: 12px; color: var(--gray-500); }
+.error-pie-meta { display: flex; flex-direction: column; gap: 10px; }
+.error-pie-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.error-pie-stat { background: var(--gray-50); border-radius: 8px; padding: 10px 12px; }
+.error-pie-stat b { display: block; font-size: 18px; color: var(--gray-900); line-height: 1.2; }
+.error-pie-stat span { display: block; margin-top: 4px; font-size: 12px; color: var(--gray-500); }
+.error-pie-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--gray-600); }
+.error-pie-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--gray-50); border-radius: 999px; padding: 6px 10px; }
+.error-pie-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.error-pie-dot.gain { background: #10B981; }
+.error-pie-dot.loss { background: #EF4444; }
+.error-knowledge { margin-top: 12px; border-top: 1px solid var(--gray-100); padding-top: 12px; }
+.error-knowledge-head { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
+.weak-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.weak-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    border: 1px solid #FECACA;
+    background: #FFF7F7;
+    color: #991B1B;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.weak-name { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.weak-name span { font-size: 13px; font-weight: 700; color: #991B1B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.weak-name em,
+.weak-name small { display: none; }
 .trend-line-wrap { height: 180px; display: flex; align-items: flex-end; gap: 12px; padding: 8px 6px 0; border-bottom: 1px solid var(--gray-200); }
 .trend-point { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; color: var(--gray-500); font-size: 11px; }
 .trend-column { width: 20px; min-height: 6px; border-radius: 8px 8px 0 0; background: linear-gradient(180deg, #3B82F6, #8B5CF6); }
 .trend-column.error { background: linear-gradient(180deg, #EF4444, #F59E0B); }
-.trend-note { margin-top: 10px; color: var(--gray-600); font-size: 12px; line-height: 1.6; }
 .analysis-list { display: flex; flex-direction: column; gap: 10px; }
 .score-grade-tag,
 .attempt-compare-tag,
@@ -989,6 +1036,8 @@ table tbody tr:hover { background: var(--gray-50); }
     .report-dashboard-grid, .report-analysis-grid { grid-template-columns: 1fr; }
     .history-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .analysis-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .error-pie-grid { grid-template-columns: 1fr; }
+    .error-pie-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ========================================================
@@ -1278,6 +1327,16 @@ table tbody tr:hover { background: var(--gray-50); }
         </div>
         <div class="report-body-content">
             <div class="report-selected-summary" id="reportSelectedSummary"></div>
+            <div class="report-dashboard-grid" style="margin-top:16px;">
+                <div class="report-card">
+                    <h4>错误率分析</h4>
+                    <div id="errorRateAnalysis"></div>
+                </div>
+                <div class="report-card">
+                    <h4>能力提升曲线</h4>
+                    <div id="abilityCurve"></div>
+                </div>
+            </div>
 
             <!-- 历史成绩对比 -->
             <div class="report-history-section" id="reportHistorySection" style="display:none;">
@@ -1363,6 +1422,7 @@ var examTimerInterval = null;
 var EXAM_TOTAL_SECONDS = 5400;
 var examSeconds = EXAM_TOTAL_SECONDS;
 var currentTab = 'stage';
+var EXAM_RESULTS_STORAGE_KEY = 'life_med_exam_results_v1';
 
 // ===== 分页状态 =====
 var stagePageSize = 10;
@@ -1371,6 +1431,40 @@ var currentStagePage = 1;
 var currentCompPage = 1;
 var filteredStageData = [];
 var filteredCompData = [];
+
+function hydrateExamResults() {
+    try {
+        var stored = JSON.parse(localStorage.getItem(EXAM_RESULTS_STORAGE_KEY) || '[]');
+        if (!Array.isArray(stored)) return;
+        [examData, comprehensiveData].forEach(function(list) {
+            list.forEach(function(item) {
+                var saved = stored.find(function(entry) {
+                    return String(entry.id) === String(item.id);
+                });
+                if (!saved) return;
+                if (Array.isArray(saved.history)) item.history = saved.history;
+                if (saved.bestScore !== undefined) item.bestScore = saved.bestScore;
+                if (saved.examCount) item.examCount = saved.examCount;
+                if (saved.status) item.status = saved.status;
+            });
+        });
+    } catch (e) {}
+}
+
+function persistExamResults() {
+    try {
+        var items = examData.concat(comprehensiveData).map(function(item) {
+            return {
+                id: item.id,
+                history: item.history || [],
+                bestScore: item.bestScore,
+                examCount: item.examCount,
+                status: item.status
+            };
+        });
+        localStorage.setItem(EXAM_RESULTS_STORAGE_KEY, JSON.stringify(items));
+    } catch (e) {}
+}
 
 function clampNumber(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -2550,25 +2644,62 @@ function renderScoreDistribution(data) {
 function renderErrorRateAnalysis(data, knowledgeStats) {
     var target = document.getElementById('errorRateAnalysis');
     if (!target) return;
-    var total = data.total || 1;
-    var errorRate = Math.round(data.wrong / total * 100);
-    var weakItems = Object.keys(knowledgeStats || {}).map(function(k) {
-        var s = knowledgeStats[k];
-        var rate = s.totalQ ? Math.round(s.wrongQ / s.totalQ * 100) : 0;
-        return { name: k, rate: rate, wrong: s.wrongQ, total: s.totalQ };
-    }).sort(function(a, b) { return b.rate - a.rate; }).slice(0, 4);
+    var totalScore = Math.max(0, data.totalScore || 0);
+    var earnedScore = Math.max(0, data.earnedScore || 0);
+    var lostScore = Math.max(0, totalScore - earnedScore);
+    var scoreRate = totalScore > 0 ? Math.round(earnedScore / totalScore * 100) : 0;
+    var lossRate = totalScore > 0 ? Math.round(lostScore / totalScore * 100) : 0;
+    var wrongQuestions = data.wrongQuestions || [];
+    var weakMap = {};
+    wrongQuestions.forEach(function(row) {
+        var q = row && row.question ? row.question : row;
+        var name = (row && row.knowledge) || (q && q.knowledge) || '未分类知识点';
+        if (!weakMap[name]) {
+            weakMap[name] = { name: name, count: 0, wrongScore: 0 };
+        }
+        weakMap[name].count++;
+        weakMap[name].wrongScore += Math.max(0, row.score || (q && q.score) || 0);
+    });
+    var weakItems = Object.keys(weakMap).map(function(k) {
+        var s = knowledgeStats && knowledgeStats[k];
+        var total = s && s.totalQ ? s.totalQ : 0;
+        var rate = total > 0 ? Math.round((weakMap[k].count / total) * 100) : 0;
+        return {
+            name: k,
+            rate: rate,
+            wrongScore: weakMap[k].wrongScore,
+            totalScore: s && s.totalScore ? s.totalScore : lostScore,
+            wrongQ: weakMap[k].count,
+            totalQ: total
+        };
+    }).sort(function(a, b) { return b.wrongScore - a.wrongScore; });
 
-    var html = '<div class="error-summary">';
-    html += '<div class="error-chip error"><b>' + errorRate + '%</b><span>总体错误率</span></div>';
-    html += '<div class="error-chip ok"><b>' + data.correct + '</b><span>答对题数</span></div>';
-    html += '</div><div class="weak-list">';
+    var html = '<div class="error-pie-grid">';
+    html += '<div class="error-pie-wrap"><div class="error-pie" style="background:conic-gradient(#10B981 0 ' + scoreRate + '%, #EF4444 ' + scoreRate + '% 100%);"><div class="error-pie-center"><b>' + lossRate + '%</b><span>失分占比</span></div></div></div>';
+    html += '<div class="error-pie-meta">';
+    html += '<div class="error-pie-stats">';
+    html += '<div class="error-pie-stat"><b>' + totalScore + '</b><span>总分</span></div>';
+    html += '<div class="error-pie-stat"><b>' + earnedScore + '</b><span>得分</span></div>';
+    html += '<div class="error-pie-stat"><b>' + lostScore + '</b><span>失分</span></div>';
+    html += '<div class="error-pie-stat"><b>' + scoreRate + '%</b><span>得分占比</span></div>';
+    html += '</div>';
+    html += '<div class="error-pie-legend">';
+    html += '<span class="error-pie-tag"><i class="error-pie-dot gain"></i>得分 ' + earnedScore + ' / ' + totalScore + '</span>';
+    html += '<span class="error-pie-tag"><i class="error-pie-dot loss"></i>失分 ' + lostScore + ' / ' + totalScore + '</span>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="error-knowledge">';
+    html += '<div class="error-knowledge-head">失分知识点</div>';
+    html += '<div class="weak-list">';
     if (weakItems.length === 0) {
-        html += '<div style="font-size:13px;color:var(--gray-500);">暂无薄弱项数据。</div>';
+        html += '<div style="font-size:13px;color:var(--gray-500);">全部答对，无失分知识点。</div>';
     } else {
         weakItems.forEach(function(w) {
-            html += '<div class="weak-item"><span>' + w.name + '</span><div class="weak-track"><div class="weak-fill" style="width:' + w.rate + '%"></div></div><b>' + w.rate + '%</b></div>';
+            html += '<div class="weak-item"><div class="weak-name"><span>知识点：' + w.name + '</span></div></div>';
         });
     }
+    html += '</div>';
     html += '</div>';
     target.innerHTML = html;
 }
@@ -2586,10 +2717,6 @@ function renderAbilityCurve(item, currentScore, totalScore) {
         html += '<div class="trend-point"><div class="trend-column" style="height:' + Math.max(6, scorePct) + '%"></div><b>' + h.score + '</b><span>第' + (idx + 1) + '次</span></div>';
     });
     html += '</div>';
-    var first = history[0] ? history[0].score : currentScore;
-    var last = history[history.length - 1] ? history[history.length - 1].score : currentScore;
-    var diff = last - first;
-    html += '<div class="trend-note">' + (history.length > 1 ? ('较首次测评' + (diff >= 0 ? '提升 ' : '下降 ') + Math.abs(diff) + ' 分，建议结合下方薄弱知识点继续强化。') : '当前仅有一次成绩记录，后续测评后将自动形成能力提升曲线。') + '</div>';
     target.innerHTML = html;
 }
 
@@ -2671,6 +2798,8 @@ function renderAttemptReport(item, attemptIndex, openAnalysisAfterRender) {
     badge.textContent = '测评已完成';
     renderAttemptSwitcher(item, attemptIndex, 'reportAttemptSwitcher', 'report');
     renderReportSelectedSummary(snapshot);
+    renderErrorRateAnalysis(snapshot, snapshot.knowledgeStats || {});
+    renderAbilityCurve(item, snapshot.score, snapshot.totalScore);
     renderAttemptHistory(item, attemptIndex);
     document.getElementById('reportReExamBtn').style.display = getExamCountInfo(item).usedUp ? 'none' : 'inline-flex';
     document.getElementById('reportModal').classList.add('show');
@@ -2780,6 +2909,7 @@ function gradeExamAndShowReport(autoSubmit) {
             accuracy: accuracy,
             report: snapshot
         });
+        persistExamResults();
     }
 
     if (item) {
@@ -2877,6 +3007,7 @@ function logout() {
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', function() {
+    hydrateExamResults();
     prepareAllAttemptSnapshots();
     renderTable(examData, 1);
     applyComprehensiveFilters();

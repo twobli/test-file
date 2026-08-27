@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -443,7 +443,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 /* ===== AI智能答疑系统 ===== */
 .ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; height: 48px; padding: 0 18px; border-radius: 24px; background: linear-gradient(135deg, #2563eb, #6d5bd0); color: #fff; border: none; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(37,99,235,0.28); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
 .ai-chat-toggle:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.34); }
-.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); box-shadow: var(--shadow); }
+.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
 .ai-qa-sidebar { min-height: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
 .ai-qa-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--gray-900); }
 .ai-qa-brand .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; }
@@ -670,7 +670,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                     <span class="section-badge" id="toolbarSectionBadge">1.1 当前节</span>
                 </div>
                 <div class="toolbar-actions">
-                    
+                    <button class="btn btn-primary btn-sm" onclick="openAiQaSystem()">AI答疑</button>
                     <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回列表</button>
                 </div>
             </div>
@@ -837,7 +837,20 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 <!-- ====== 页面五：AI智能答疑系统 ====== -->
 <div class="page-view" id="page-ai-qa">
     <div class="ai-qa-shell">
-        
+        <aside class="ai-qa-sidebar">
+            <div class="ai-qa-brand"><span class="brand-dot">AI</span><span>AI智能答疑</span></div>
+            <div class="ai-scope-card">
+                <h4>当前问答范围</h4>
+                <p id="aiScopeDescription">仅围绕当前课程小节回答；课程难点讲解只围绕当前小节绑定知识点。</p>
+            </div>
+            <div class="ai-context-title" id="aiContextTitle">当前课程与小节</div>
+            <div class="ai-context-group" id="aiContextGroup">
+                <div class="ai-context-item active">
+                    <strong>当前范围</strong>
+                    <span>打开课程小节后自动绑定问答范围</span>
+                </div>
+            </div>
+        </aside>
         <section class="ai-qa-main">
             <div class="ai-qa-topbar">
                 <div class="ai-qa-heading">
@@ -3406,7 +3419,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (tabs) tabs.classList.add('active');
         } else {
             if (title) title.textContent = '医学课程问答';
-            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答。';
+            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答，不涉及课程难点讲解。';
             if (tabs) tabs.classList.remove('active');
             if (input) input.placeholder = '请输入医学课程相关问题...';
         }
@@ -3430,7 +3443,7 @@ document.addEventListener('DOMContentLoaded', function() {
             : ['医学课程问答', '疾病知识问答', '诊断标准梳理'];
         const welcomeText = isSection
             ? '当前问答已固定在本小节内。你可以围绕本节课程内容进行自然语言问答，也可以切换到课程难点讲解查看本节绑定知识点。'
-            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。';
+            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。这里仅提供课程相关问答解析，不展示课程难点讲解。';
         const firstMsg = isSection
             ? '你好，我会基于“' + getAIContextLabel() + '”回答问题。你可以直接问本小节概念、房水排出通路、眼压变化原因或测验易错点。'
             : '你好，我是AI学习助手。当前只回答医学课程相关问题，请勿询问与医学无关的内容。';

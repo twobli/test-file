@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>读片与病例大赛系统</title><style>
+﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>读片与病例大赛系统</title><style>
 :root {
     --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe;
     --success: #34a853; --warning: #fbbc04; --danger: #ea4335;
@@ -211,10 +211,7 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
 .btn-primary-result:hover { background: #C62828; }
 
 @media (max-width: 1024px) { .sidebar { width: 60px; } .sidebar .menu-item span { display: none; } .sidebar .menu-group-title { display: none; } .main-content { margin-left: 60px; } .submenu .menu-item { padding-left: 10px; } .exam-layout { flex-direction: column; } .exam-right { width: 100%; } .result-grid-new { grid-template-columns: 1fr 1fr; } .result-analysis-list { grid-template-columns: 1fr; } .summary-strip { grid-template-columns: 1fr 1fr; } }
-.ai-conclusion { margin-top:18px; padding:16px 18px; background:linear-gradient(135deg,#eef3ff,#f6f1ff); border:1px solid #dbe4ff; border-radius:12px; }
-.ai-conclusion-title { font-size:15px; font-weight:800; color:#175CD3; margin-bottom:8px; }
-.ai-conclusion-body { font-size:13px; line-height:1.8; color:var(--gray-800); }
-.ai-conclusion-body strong { color:#175CD3; }</style></head><body>
+</style></head><body>
 <div class="header"><a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a><div class="header-nav"><a href="眼底图像输入.html">AI眼底疾病筛查</a><a href="临床数据开放共享.html">生命医学开放数据平台</a><a href="基础课程.html">生命医学AI教育平台</a><a href="临床决策支撑.html">眼病/慢病专家系统</a></div><div class="header-right"><span class="user-info" id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
 <div class="sidebar" id="sidebar">
     <div class="menu-group"><div class="menu-group-title">AI教育平台</div>
@@ -414,7 +411,7 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
         </div>
         <div class="analysis-modal-body">
             <div class="analysis-tip">已展示本场比赛全部题目、正确答案与解析；错题、未作答和缺考题会重点标注。</div>
-            <div class="result-analysis-list" id="analysisModalList"></div><div id="analysisAiConclusion" style="display:none;"></div>
+            <div class="result-analysis-list" id="analysisModalList"></div>
         </div>
     </div>
 </div>
@@ -1008,65 +1005,6 @@ function buildQuestionAnalysisHtml(item, result) {
     return html;
 }
 
-function classifyQuestionTopic(qData) {
-    var text = ((qData.desc || '') + ' ' + (qData.analysis || '')).toLowerCase();
-    if (/ffa|荧光|渗漏|造影/.test(text)) return 'FFA荧光造影判读';
-    if (/视野|鼻侧阶梯|弓形暗点|青光眼/.test(text)) return '视野与青光眼判读';
-    if (/糖尿病视网膜病变|dr分级|增殖期|非增殖期|微血管瘤/.test(text)) return '糖尿病视网膜病变分级';
-    if (/oct|黄斑|视网膜下液|椭圆体带|cmt/.test(text)) return 'OCT与黄斑结构判读';
-    if (/眼底彩照|眼底|出血|渗出|棉绒斑/.test(text)) return '眼底彩照识别';
-    return '综合读片知识';
-}
-
-function appendAiDiagnosisConclusion(item, result) {
-    var container = document.getElementById('analysisAiConclusion');
-    if (!container) return;
-    if (result.type === 'absent') {
-        container.innerHTML = '';
-        container.style.display = 'none';
-        return;
-    }
-    var answeredCount = result.answered || 0;
-    var correctTarget = result.type === 'absent' ? 0 : Math.round(answeredCount * (result.accuracy || 0) / 100);
-    var wrong = [];
-    for (var i = 1; i <= item.totalQ; i++) {
-        var qData = mockQuestions[(i - 1) % mockQuestions.length];
-        var answered = i <= answeredCount;
-        var isCorrect = result.type !== 'absent' && answered && i <= correctTarget;
-        if (answered && !isCorrect) wrong.push({ num: i, qData: qData });
-    }
-    var topicTips = {
-        '糖尿病视网膜病变分级': '重新梳理DR分期标准与关键征象（微血管瘤、点片状出血、硬性渗出、棉绒斑、静脉串珠、IRMA、新生血管），结合眼底彩照与病史判断分级。',
-        'FFA荧光造影判读': '强化FFA各期荧光形态与渗漏特征，区分视网膜内层、外层、脉络膜层病变，注意点状/片状/囊样渗漏的鉴别。',
-        'OCT与黄斑结构判读': '加强对黄斑各层结构（神经上皮、RPE、感光细胞/椭圆体带）及视网膜下液、视网膜内液、PED等关键征象的识别。',
-        '视野与青光眼判读': '复习青光眼性视野缺损模式（鼻侧阶梯、弓形暗点、旁中心暗点），并结合视盘C/D、RNFL OCT与眼压综合判断。',
-        '眼底彩照识别': '结合病史与眼底彩照把握病变部位、形态与范围，规范分型分级用语，注意出血/渗出/新生血管的鉴别。',
-        '综合读片知识': '结合病史、主影像与辅助检查建立系统读片路径，重点提升对影像征象与疾病关联的分析能力。'
-    };
-    var html = '<div class="ai-conclusion">';
-    html += '<div class="ai-conclusion-title">🤖 AI诊断结论</div>';
-    if (!wrong.length) {
-        html += '<div class="ai-conclusion-body">本场比赛你的作答整体正确，未发现明显知识短板。建议继续保持，并拓展不同病种与影像类型的读片训练。</div>';
-    } else {
-        var byTopic = {};
-        wrong.forEach(function(w) {
-            var t = classifyQuestionTopic(w.qData);
-            if (!byTopic[t]) byTopic[t] = { nums: [] };
-            byTopic[t].nums.push(w.num);
-        });
-        var topics = Object.keys(byTopic);
-        var topicPart = topics.map(function(t) {
-            return '<strong>' + t + '</strong>（第' + byTopic[t].nums.join('、') + '题）共' + byTopic[t].nums.length + '题';
-        }).join('；');
-        var tips = topics.map(function(t, i) {
-            return (i + 1) + '. ' + (topicTips[t] || topicTips['综合读片知识']);
-        }).join('<br>');
-        html += '<div class="ai-conclusion-body">本次比赛你共做错 <strong>' + wrong.length + ' 题</strong>，主要集中在：' + topicPart + '。<br><strong>补足建议：</strong><br>' + tips + '</div>';
-    }
-    html += '</div>';
-    container.innerHTML = html;
-    container.style.display = 'block';
-}
 function createSubmittedPreviewResult(item) {
     var answered = item.attempt.answered || item.totalQ || 0;
     var answerRatio = item.totalQ ? answered / item.totalQ : 0;
@@ -1168,7 +1106,6 @@ function showCompetitionAnalysis(competitionName, focusWrong) {
     document.getElementById('analysisExamName').textContent = item.name;
     document.getElementById('analysisStatusTag').textContent = wrongCount ? ('错题 ' + wrongCount + ' 题') : '全部题目已标注';
     document.getElementById('analysisModalList').innerHTML = buildQuestionAnalysisHtml(item, result);
-    appendAiDiagnosisConclusion(item, result);
     openModal('analysisModal');
     if (focusWrong) {
         setTimeout(function() {

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>读片与病例大赛系统管理</title>
+  <link rel="stylesheet" href="技能实践管理.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>AI教育后台</strong><span>独立运营管理系统</span></div></a>
+      <div class="nav-group-title">业务工作台</div>
+      <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
+      <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
+      <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
+      <a class="nav-item child" href="虚拟临床技能实训管理.html"><span class="nav-icon">01</span>虚拟临床技能实训</a>
+      <a class="nav-item child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
+      <a class="nav-item active child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
+      <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
+      <a class="nav-item" href="index.html#profiles"><span class="nav-icon">◎</span>学员档案与能力评估</a>
+      <a class="nav-item" href="index.html#certs"><span class="nav-icon">◇</span>证书学分管理</a>
+      <a class="nav-item" href="index.html#aiqa"><span class="nav-icon">AI</span>AI答疑与模型配置</a>
+      <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
+      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
+      <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
+      <a class="nav-item" href="index.html#audit"><span class="nav-icon">↺</span>内容审核与运营日志</a>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Skill Practice / Module 03</p>
+          <h1>读片与病例大赛系统管理</h1>
+          <p class="page-desc">后台只负责创建比赛，维护比赛名称、比赛类型、有效期、固定答题时长和题库；学生端报名、答题及赛后结果由前端业务自动生成。</p>
+        </div>
+        <div class="top-actions"><a class="btn" href="技能实践管理.html">返回技能实践管理</a><button class="btn primary" onclick="openModal('add')">＋ 创建比赛</button></div>
+      </header>
+
+      <div class="breadcrumb"><a href="技能实践管理.html">技能实践管理</a><span class="sep">&gt;</span><span>读片与病例大赛系统</span></div>
+
+      <div class="toolbar">
+        <div class="filters">
+          <input class="input" id="search" placeholder="搜索比赛名称" oninput="render()">
+          <select class="select" id="typeFilter" onchange="render()"><option value="">全部比赛类型</option><option>读片挑战赛</option><option>病例综合赛</option></select>
+        </div>
+        <span class="status info">管理对象：比赛信息、有效期、时长、题目和解析</span>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2 class="panel-title">比赛列表</h2><p class="panel-subtitle">每场比赛单独配置题目；后台只维护比赛配置，不参与学生端报名、答题和赛后流程。</p></div></div>
+        <div class="table-wrap"><table><thead><tr><th>比赛名称</th><th>比赛类型</th><th>有效期</th><th>固定答题时长</th><th>题目数量</th><th>操作</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-mask" id="mask" onclick="closeModal()"></div>
+  <section class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><h2 id="modalTitle">创建比赛</h2><p id="modalDesc">维护比赛信息和题库内容。</p></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">取消</button><button class="btn primary" id="saveBtn" onclick="save()">保存</button></div>
+  </section>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var letters = ['A','B','C','D','E'];
+    var baseQuestions = [
+      {desc:'根据上述眼底图像表现，该患者糖尿病视网膜病变的分级应为？',type:'单选',options:['A. 无明显DR改变','B. 轻度非增殖期DR','C. 中度非增殖期DR','D. 重度非增殖期DR','E. 增殖期DR'],answer:'C',analysis:'散在微血管瘤与点状出血已超过轻度改变范围，但尚未达到重度非增殖期或增殖期标准，因此判断为中度非增殖期DR。',image:''},
+      {desc:'OCT显示黄斑区可见视网膜下液，最可能的诊断是？',type:'单选',options:['A. 黄斑裂孔','B. 中心性浆液性脉络膜视网膜病变','C. 年龄相关性黄斑变性','D. 黄斑前膜','E. 糖尿病黄斑水肿'],answer:'B',analysis:'视网膜下液伴黄斑区局灶性浆液性脱离更符合中心性浆液性脉络膜视网膜病变的影像特征。',image:''},
+      {desc:'FFA早晚期图像显示荧光渗漏，病变位于？',type:'单选',options:['A. 视网膜内层','B. 视网膜外层','C. 脉络膜层','D. 玻璃体腔','E. 视神经'],answer:'B',analysis:'荧光从早期局灶染色到晚期渗漏，提示血管屏障受损，常见于视网膜外层相关病变。',image:''},
+      {desc:'患者视野检查显示鼻侧阶梯，最可能的诊断？',type:'单选',options:['A. 白内障','B. 青光眼','C. 视神经炎','D. 视网膜脱离','E. 黄斑病变'],answer:'B',analysis:'鼻侧阶梯属于青光眼典型视野缺损表现，结合视神经结构改变更支持青光眼。',image:''},
+      {desc:'该OCT图像中，椭圆体带的完整性如何？',type:'单选',options:['A. 完全正常','B. 局部中断','C. 弥漫性消失','D. 增厚','E. 无法判断'],answer:'C',analysis:'椭圆体带连续性缺失且范围较广，提示光感受器结构受损明显，因此选择弥漫性消失。',image:''}
+    ];
+    var rows = [
+      {name:'OCT黄斑病变读片挑战赛',type:'读片挑战赛',desc:'OCT影像黄斑区病变识别与分类。',start:'2026-07-10',end:'2026-08-01',durationMin:60,questions:cloneQuestions(baseQuestions)},
+      {name:'糖尿病视网膜病变综合赛',type:'病例综合赛',desc:'基于眼底彩照开展糖尿病视网膜病变识别与分级。',start:'2026-08-25',end:'2026-09-05',durationMin:120,questions:cloneQuestions(baseQuestions)},
+      {name:'OCTA血流密度判读赛',type:'读片挑战赛',desc:'围绕OCTA血流密度与黄斑结构改变进行判读。',start:'2026-09-10',end:'2026-09-20',durationMin:60,questions:cloneQuestions(baseQuestions.slice(0,3))},
+      {name:'FFA眼底病变病例赛',type:'病例综合赛',desc:'FFA各期图像判读与病理分析。',start:'2026-06-01',end:'2026-06-15',durationMin:90,questions:cloneQuestions(baseQuestions)}
+    ];
+    var editing = null, mode = 'add', workingQuestions = [], editingQuestionIndex = -1;
+
+    function cloneQuestions(list){return JSON.parse(JSON.stringify(list));}
+    function esc(v){return String(v == null ? '' : v).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];});}
+    function render(){
+      var q=(document.getElementById('search').value||'').toLowerCase(), ty=document.getElementById('typeFilter').value;
+      var list=rows.filter(function(r){return(!q||r.name.toLowerCase().indexOf(q)>-1)&&(!ty||r.type===ty);});
+      document.getElementById('tableBody').innerHTML=list.length?list.map(function(r){
+        return '<tr><td><strong>'+esc(r.name)+'</strong><div class="muted">'+esc(r.desc)+'</div></td><td>'+esc(r.type)+'</td><td>'+esc(r.start)+' 至 '+esc(r.end)+'</td><td>'+esc(r.durationMin)+'分钟</td><td>'+r.questions.length+'题</td><td><div class="table-actions"><button class="btn small" onclick="openModal(\'view\',\''+encodeURIComponent(r.name)+'\')">查看</button></div></td></tr>';
+      }).join(''):'<tr><td colspan="6"><div class="empty-note">没有匹配的比赛。</div></td></tr>';
+    }
+    function textValue(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+    function inputField(id,label,value,disabled,full){return '<div class="form-field '+(full?'full':'')+'"><label>'+label+'</label><input class="input" id="'+id+'" value="'+esc(value)+'"'+(disabled?' disabled':'')+'></div>';}
+    function questionEditor(read){
+      if(read) return '';
+      return '<div class="question-editor" id="questionEditor"><div class="option-title"><span>新增 / 编辑题目</span><span class="status info">前端固定为单选题</span></div><div class="form-field"><label>题干</label><textarea id="q_desc" placeholder="请输入题目内容"></textarea></div><div class="form-field"><label>题目影像地址（可选）</label><input class="input" id="q_image" placeholder="填写影像地址；也可以选择本地文件作为原型占位"><input class="input" id="q_image_file" type="file" accept="image/*"></div><div class="form-field"><label>选项</label><div class="option-stack">'+letters.map(function(letter,index){return '<div class="question-option-input"><b>'+letter+'</b><input class="input" id="q_option_'+index+'" placeholder="请输入'+letter+'选项"></div>';}).join('')+'</div></div><div class="split-form"><div class="form-field"><label>正确答案</label><select class="select" id="q_answer"><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div><div class="form-field"><label>题目解析</label><input class="input" id="q_analysis" placeholder="提交后前端展示的题目解析"></div></div><div class="question-editor-actions"><button class="btn primary" onclick="addQuestion()">＋ 添加到题目列表</button><button class="btn" onclick="resetQuestionEditor()">清空题目编辑</button><label class="btn">上传题库文件<input class="input" id="q_import" type="file" accept=".json,.csv,application/json,text/csv" onchange="importQuestions(event)"></label><span class="question-counter" id="questionCounter">0题</span></div></div>';
+    }
+    function renderQuestionList(read){
+      var html=workingQuestions.length?workingQuestions.map(function(q,index){
+        return '<div class="question-item"><div class="question-item-head"><strong>第'+(index+1)+'题：'+esc(q.desc)+'</strong><div class="table-actions">'+(read?'':'<button class="btn small" onclick="editQuestion('+index+')">编辑</button><button class="btn small danger" onclick="deleteQuestion('+index+')">删除</button>')+'</div></div><div class="question-meta"><span class="status info">'+esc(q.type||'单选')+'</span><span>正确答案：'+esc(q.answer||'未设置')+'</span>'+(q.image?'<span>含影像</span>':'')+'</div><div class="question-options">'+(q.options||[]).map(function(opt){return '<div class="question-option '+(String(opt).charAt(0)===String(q.answer)?'correct':'')+'">'+esc(opt)+'</div>';}).join('')+'</div><div class="muted">解析：'+esc(q.analysis||'未填写')+'</div></div>';
+      }).join(''):'<div class="empty-note">暂未添加题目，请手动新增或上传题库文件。</div>';
+      document.getElementById('questionList').innerHTML=html;
+      var counter=document.getElementById('questionCounter');if(counter)counter.textContent=workingQuestions.length+'题';
+    }
+    function fields(r,read){
+      var dis=read?' disabled':'';
+      return '<div class="section-block"><h3>一、比赛基本信息</h3><p class="section-note">这些字段会直接决定学生端比赛列表、报名状态和答题倒计时。</p><div class="split-form">'
+        +inputField('f_name','比赛名称',r.name,read,true)
+        +'<div class="form-field"><label>比赛类型</label><select class="select" id="f_type"'+dis+'><option'+(r.type==='读片挑战赛'?' selected':'')+'>读片挑战赛</option><option'+(r.type==='病例综合赛'?' selected':'')+'>病例综合赛</option></select></div>'
+        +'<div class="form-field"><label>开始日期</label><input class="input" id="f_start" type="date" value="'+esc(r.start)+'"'+dis+'></div><div class="form-field"><label>结束日期</label><input class="input" id="f_end" type="date" value="'+esc(r.end)+'"'+dis+'></div>'
+        +'<div class="form-field"><label>固定答题时长（分钟）</label><input class="input" id="f_duration" type="number" min="1" value="'+esc(r.durationMin)+'"'+dis+'></div>'+inputField('f_desc','比赛说明',r.desc,read,true)+'</div></div>'
+        +'<div class="section-block"><h3>二、比赛题库</h3><p class="section-note">题目会按当前列表顺序进入学生端。每题维护题干、选项、正确答案和解析；比赛固定为单选题。</p>'+questionEditor(read)+'<div class="option-title"><span>已配置题目</span><span class="status info">'+workingQuestions.length+'题</span></div><div class="question-list" id="questionList"></div></div>';
+    }
+    function openModal(m,key){
+      mode=m;var name=decodeURIComponent(key||'');editing=rows.find(function(r){return r.name===name;})||{name:'',type:'读片挑战赛',desc:'',start:'',end:'',durationMin:90,questions:[]};
+      workingQuestions=cloneQuestions(editing.questions||[]);editingQuestionIndex=-1;
+      var read=m==='view';
+      document.getElementById('modalTitle').textContent=m==='add'?'创建比赛':m==='edit'?'编辑比赛':'查看比赛';
+      document.getElementById('modalDesc').textContent=read?'查看比赛基本信息和已配置题库。':'配置比赛有效期、固定答题时长和题库内容。';
+      document.getElementById('modalBody').innerHTML=fields(editing,read);
+      document.getElementById('saveBtn').style.display=read?'none':'inline-flex';
+      document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
+      renderQuestionList(read);
+    }
+    function resetQuestionEditor(){editingQuestionIndex=-1;['q_desc','q_image','q_analysis'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});letters.forEach(function(letter,index){var el=document.getElementById('q_option_'+index);if(el)el.value='';});var answer=document.getElementById('q_answer');if(answer)answer.value='A';}
+    function addQuestion(){
+      var q={desc:textValue('q_desc'),type:'单选',options:letters.map(function(letter,index){return letter+'. '+textValue('q_option_'+index);}),answer:document.getElementById('q_answer').value,analysis:textValue('q_analysis'),image:textValue('q_image')};
+      if(!q.desc||q.options.some(function(opt){return opt.length<3;})||!q.analysis){showToast('请填写题干、5个选项和题目解析');return;}
+      if(editingQuestionIndex>-1)workingQuestions[editingQuestionIndex]=q;else workingQuestions.push(q);
+      resetQuestionEditor();renderQuestionList(false);showToast('题目已添加到比赛题库');
+    }
+    function editQuestion(index){var q=workingQuestions[index];editingQuestionIndex=index;document.getElementById('q_desc').value=q.desc||'';document.getElementById('q_image').value=q.image||'';document.getElementById('q_analysis').value=q.analysis||'';letters.forEach(function(letter,i){document.getElementById('q_option_'+i).value=(q.options[i]||'').replace(/^[A-E]\.\s*/,'');});document.getElementById('q_answer').value=q.answer||'A';document.getElementById('q_desc').focus();}
+    function deleteQuestion(index){if(!confirm('确定删除第'+(index+1)+'题吗？'))return;workingQuestions.splice(index,1);renderQuestionList(false);}
+    function importQuestions(event){
+      var file=event.target.files&&event.target.files[0];if(!file)return;
+      var reader=new FileReader();
+      reader.onload=function(){try{var text=reader.result, data=file.name.toLowerCase().endsWith('.json')?JSON.parse(text):text.split(/\r?\n/).filter(Boolean).slice(1).map(function(line){var p=line.split(',');return {desc:p[0],type:'单选',options:p.slice(1,6).map(function(x,i){return letters[i]+'. '+x;}),answer:p[6]||'A',analysis:p[7]||'',image:p[8]||''};});if(!Array.isArray(data))throw new Error();workingQuestions=workingQuestions.concat(data.map(function(q){return {desc:q.desc||q.question||'',type:'单选',options:(q.options||[]).map(function(x,i){return String(x).match(/^[A-E]\./)?String(x):letters[i]+'. '+x;}),answer:q.answer||'A',analysis:q.analysis||'',image:q.image||''};}));renderQuestionList(false);showToast('题库已导入 '+data.length+' 题');}catch(e){showToast('题库文件格式不正确，请使用JSON或CSV');}};
+      reader.readAsText(file,'UTF-8');
+    }
+    function closeModal(){document.getElementById('mask').classList.remove('open');document.getElementById('modal').classList.remove('open');}
+    function save(){
+      var item={name:textValue('f_name'),type:document.getElementById('f_type').value,start:document.getElementById('f_start').value,end:document.getElementById('f_end').value,durationMin:Number(document.getElementById('f_duration').value),desc:textValue('f_desc'),questions:cloneQuestions(workingQuestions)};
+      if(!item.name||!item.start||!item.end||!item.durationMin){showToast('请填写比赛名称、有效期和答题时长');return;}
+      if(item.start>item.end){showToast('结束日期不能早于开始日期');return;}
+      if(!item.questions.length){showToast('请至少配置1道比赛题目');return;}
+      var idx=rows.findIndex(function(r){return r.name===editing.name;});if(mode==='edit'&&idx>-1)rows[idx]=item;else rows.unshift(item);
+      closeModal();render();showToast('比赛和题库已保存');
+    }
+    function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
+    render();
+  </script>
+</body>
+</html>

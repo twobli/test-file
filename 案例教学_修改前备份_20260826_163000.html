@@ -1894,7 +1894,12 @@ function renderCompareDiff(compareCase){
     compareRows.forEach(row=>{
         diffHtml += '<tr><td><strong>'+escHtml(row.name)+'</strong></td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
-
+    const diagRow = rows[0];
+    if(diagRow.status.cls !== 'match'){
+        diffHtml += '<tr class="highlight"><td><strong>复盘重点</strong></td><td colspan="5" style="color:#b06000;">请重点核对学员诊断意见与 AI 诊断结果不一致的原因，并查看系统给出的差异反馈。</td></tr>';
+    }else{
+        diffHtml += '<tr class="highlight"><td><strong>复盘重点</strong></td><td colspan="5" style="color:#137333;">学员诊断意见与 AI 方向一致，可继续查看 AI 的分析依据，巩固诊断判断过程。</td></tr>';
+    }
     diffHtml += '</tbody></table>';
     document.getElementById('diffPanel').innerHTML = diffHtml;
 }

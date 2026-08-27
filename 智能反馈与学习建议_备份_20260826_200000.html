@@ -50,14 +50,7 @@
 .recommendation-page .route-step span { color: var(--gray-500); font-size: 11px; }
 @media (max-width: 1000px) { .recommendation-page .source-layout, .recommendation-page .recommendation-list { grid-template-columns: 1fr; } }
 @media (max-width: 680px) { .recommendation-page .source-summary, .recommendation-page .resource-grid, .recommendation-page .route-line { grid-template-columns: 1fr; } .recommendation-page .filter-tabs { width: 100%; } .recommendation-page .filter-tab { flex: 1; } }
-
-.direction-desc { margin:6px 0 12px; font-size:13px; color:var(--gray-700); line-height:1.7; }
-.ai-advice-block { padding:18px 20px; background:linear-gradient(135deg,#eef3ff,#f6f1ff); border:1px solid #dbe4ff; border-radius:12px; }
-.ai-advice-body { font-size:14px; line-height:1.8; color:var(--gray-800); margin-bottom:12px; }
-.ai-advice-body strong { color:#175CD3; }
-.ai-advice-list { display:flex; flex-direction:column; gap:10px; }
-.ai-advice-item { font-size:13px; line-height:1.75; color:var(--gray-700); padding:11px 13px; background:#fff; border:1px solid #e5ebff; border-radius:8px; }
-.ai-advice-item strong { color:#175CD3; }</style>
+</style>
 </head>
 <body>
 <div class="header">
@@ -98,24 +91,61 @@
 <main class="main-content recommendation-page">
     <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>智能反馈与学习建议</span></div>
     <div class="page-head">
-        <div><h1 class="page-title">智能反馈与学习建议</h1><p class="page-desc">系统根据 AI 能力雷达图中的六维能力评估，自动给出针对性的学习方向与实践内容。</p></div>
+        <div><h1 class="page-title">智能反馈与学习建议</h1><p class="page-desc">系统根据 AI 能力雷达图中的能力短板，定位需要优先巩固的知识点与病种，并给出对应学习内容。</p></div>
         <div class="head-actions"><button class="btn btn-primary" onclick="refreshAdvice()">重新生成建议</button></div>
     </div>
-    
-<section class="card recommendation-card">
-    <div class="card-header"><div><div class="card-title">🤖 AI学习建议</div><div class="card-subtitle">基于你最近的 AI 能力雷达图评估，为你生成以下学习方向与实践内容。</div></div></div>
-    <div class="recommendation-list">
-        <div class="ai-advice-block">
-            <div class="ai-advice-body">结合你当前的 AI 能力雷达图评估，综合能力 <strong>B+</strong>，建议从以下几个方向加强学习与实践：</div>
-            <div class="ai-advice-list">
-                <div class="ai-advice-item"><strong>1. 强化影像判读与诊断能力</strong>：建议加强多模态影像（眼底彩照、OCT、FFA、OCTA）的判读与诊断决策训练，结合典型病例反复练习，提升对关键征象的识别与判断能力。</div>
-                <div class="ai-advice-item"><strong>2. 提升模型构建与数据分析能力</strong>：建议加强数据标注、图像处理、模型训练与结果评估的实操练习，理解 AI 模型的构建流程与评估指标。</div>
-                <div class="ai-advice-item"><strong>3. 深化科研创新与文献研究</strong>：建议强化文献检索、研究设计、结果分析与学术表达训练，形成规范的科研与论证思路。</div>
-                <div class="ai-advice-item"><strong>4. 巩固临床应用与知识综合运用</strong>：建议加强系统化课程学习、模块化考核与综合测评，夯实基础并提升临床知识的综合运用能力。</div>
+    <section class="card feedback-source-card">
+        <div class="card-header"><div><div class="card-title">AI能力短板反馈</div><div class="card-subtitle">推荐结果来自最近一次 AI 能力雷达图。</div></div><span class="tag blue">自动生成</span></div>
+        <div class="source-layout">
+            <div class="source-primary"><span class="eyebrow">推荐依据</span><strong>AI能力雷达图</strong><span>从低分能力反推知识点与病种，再匹配课程、资料和病例训练。</span></div>
+            <div class="source-summary">
+                <div class="source-stat"><b>2</b><span>薄弱知识点</span></div>
+                <div class="source-stat"><b>2</b><span>重点病种</span></div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <section class="card recommendation-card">
+        <div class="card-header"><div><div class="card-title">针对性学习建议</div><div class="card-subtitle">只展示与当前薄弱知识点、病种直接关联的内容。</div></div></div>
+        <div class="filter-tabs" role="tablist" aria-label="推荐类型筛选">
+            <button type="button" class="filter-tab active" onclick="filterRecommendations('all', this)">全部</button>
+            <button type="button" class="filter-tab" onclick="filterRecommendations('knowledge', this)">薄弱知识点</button>
+            <button type="button" class="filter-tab" onclick="filterRecommendations('disease', this)">薄弱病种</button>
+        </div>
+        <div class="recommendation-list" id="recommendationList">
+            <article class="recommendation-item is-knowledge" data-recommendation-type="knowledge">
+                <div class="recommendation-head"><span class="recommendation-type knowledge">● 薄弱知识点</span></div>
+                <h3 class="recommendation-title">高血压视网膜病变分级</h3>
+                <div class="resource-grid">
+                    <div class="resource-group"><h4>基础课程</h4><a class="resource-link" href="基础课程.html">1.1 Keith-Wagener-Barker分级<span>对应 KWB 分级与眼底表现</span></a><a class="resource-link" href="基础课程.html">1.2 Scheie分级与临床应用<span>补充分期与临床判断</span></a></div>
+                    <div class="resource-group"><h4>外部学习资料</h4><a class="resource-link" href="基础课程.html">高血压性视网膜病变教材章节<span>分级、出血、棉绒斑与视盘水肿</span></a><a class="resource-link" href="基础课程.html">高血压视网膜病变图谱<span>分级图像对照</span></a></div>
+                </div>
+            </article>
+            <article class="recommendation-item is-knowledge" data-recommendation-type="knowledge">
+                <div class="recommendation-head"><span class="recommendation-type knowledge">● 薄弱知识点</span></div>
+                <h3 class="recommendation-title">青光眼视野检查</h3>
+                <div class="resource-grid">
+                    <div class="resource-group"><h4>基础课程</h4><a class="resource-link" href="基础课程.html">2.1 视野检查与解读<span>旁中心暗点、鼻侧阶梯与弓形暗点</span></a><a class="resource-link" href="基础课程.html">2.2 OCT在青光眼结构评估中的应用<span>结合结构与功能判断</span></a></div>
+                    <div class="resource-group"><h4>外部学习资料</h4><a class="resource-link" href="基础课程.html">标准自动视野检查判读<span>常见缺损模式与随访判断</span></a><a class="resource-link" href="基础课程.html">青光眼诊疗指南<span>视野检查在诊断中的应用</span></a></div>
+                </div>
+            </article>
+            <article class="recommendation-item is-disease" data-recommendation-type="disease">
+                <div class="recommendation-head"><span class="recommendation-type disease">● 薄弱病种</span></div>
+                <h3 class="recommendation-title">糖尿病视网膜病变</h3>
+                <div class="resource-grid">
+                    <div class="resource-group"><h4>案例教学</h4><a class="resource-link" href="案例教学.html">DR伴黄斑水肿（抗VEGF治疗决策）<span>进阶病例 · 诊断与治疗决策</span></a><a class="resource-link" href="案例教学.html">轻度非增殖期糖尿病视网膜病变<span>基础病例 · 分级与随访</span></a></div>
+                    <div class="resource-group"><h4>经典病例诊断实训</h4><a class="resource-link" href="经典病例诊断实训.html">增殖性糖尿病视网膜病变合并黄斑水肿<span>疑难病例 · 多模态影像诊断</span></a><a class="resource-link" href="经典病例诊断实训.html">轻度非增殖期糖尿病视网膜病变<span>基础病例 · 诊断依据训练</span></a></div>
+                </div>
+            </article>
+            <article class="recommendation-item is-disease" data-recommendation-type="disease">
+                <div class="recommendation-head"><span class="recommendation-type disease">● 薄弱病种</span></div>
+                <h3 class="recommendation-title">青光眼</h3>
+                <div class="resource-grid">
+                    <div class="resource-group"><h4>案例教学</h4><a class="resource-link" href="案例教学.html">不典型急性闭角型青光眼<span>进阶病例 · 鉴别诊断</span></a><a class="resource-link" href="案例教学.html">早期原发性开角型青光眼<span>基础病例 · 眼压与视野判断</span></a></div>
+                    <div class="resource-group"><h4>经典病例诊断实训</h4><a class="resource-link" href="经典病例诊断实训.html">原发性开角型青光眼<span>进阶病例 · 结构功能联合判读</span></a><a class="resource-link" href="经典病例诊断实训.html">慢性闭角型青光眼<span>进阶病例 · 房角与视野分析</span></a></div>
+                </div>
+            </article>
+        </div>
+    </section>
 </main>
 <script>
 function refreshAdvice() { alert('已基于最新学习数据重新生成反馈与学习建议。'); }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -301,6 +301,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 /* ===== 强化建议 ===== */
 .reinforce-alert { background: #fffaf0; border: 1px solid #f7d27a; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
 .reinforce-alert .ra-title { font-weight: 700; color: #7d5200; font-size: 15px; margin-bottom: 4px; }
+.reinforce-alert .ra-subtitle { color: #8a6a21; font-size: 12px; margin-bottom: 14px; }
 .reinforce-alert .ra-list { display: grid; gap: 12px; }
 .reinforce-alert .ra-item { background: #fff; border: 1px solid #f5e3b1; border-radius: 8px; padding: 14px 16px; }
 .reinforce-alert .ra-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -308,18 +309,20 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .reinforce-alert .ra-name { font-size: 14px; color: var(--gray-900); font-weight: 700; }
 .reinforce-alert .ra-meta { color: var(--gray-500); font-size: 12px; margin-top: 4px; }
 .reinforce-alert .ra-track { margin-top: 8px; color: var(--gray-700); font-size: 13px; line-height: 1.7; }
-.reinforce-alert .ra-recommend-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+.reinforce-alert .ra-config-note { margin-bottom: 12px; padding: 10px 12px; border-radius: 8px; background: #fff; border: 1px dashed #e9bf62; color: #7d5200; font-size: 12px; line-height: 1.6; }
+.reinforce-alert .ra-recommend-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; }
 .reinforce-alert .ra-section { border: 1px solid var(--gray-200); border-radius: 8px; background: #fbfcff; padding: 12px; }
 .reinforce-alert .ra-section-title { color: var(--primary); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
-.reinforce-alert .ra-course-list { display: grid; gap: 8px; }
-.reinforce-alert .ra-course-card { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 10px 12px; }
+.reinforce-alert .ra-course-list, .reinforce-alert .ra-ref-list { display: grid; gap: 8px; }
+.reinforce-alert .ra-course-card, .reinforce-alert .ra-ref-item { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 10px 12px; }
 .reinforce-alert .ra-course-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
 .reinforce-alert .ra-course-name { color: var(--gray-900); font-weight: 700; font-size: 13px; line-height: 1.5; }
-.reinforce-alert .ra-course-meta, .reinforce-alert .ra-course-reason { color: var(--gray-500); font-size: 12px; line-height: 1.6; }
+.reinforce-alert .ra-course-meta, .reinforce-alert .ra-course-reason, .reinforce-alert .ra-ref-source { color: var(--gray-500); font-size: 12px; line-height: 1.6; }
 .reinforce-alert .ra-status { flex-shrink: 0; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
 .reinforce-alert .ra-status.learned { color: #137333; background: #e6f4ea; }
 .reinforce-alert .ra-status.unlearned { color: #b06000; background: #fef7e0; }
 .reinforce-alert .ra-link-btn { margin-top: 8px; height: 28px; padding: 0 10px; border: 1px solid var(--primary); border-radius: 7px; background: #fff; color: var(--primary); font-size: 12px; font-weight: 700; cursor: pointer; }
+.reinforce-alert .ra-ref-name { color: var(--gray-800); font-weight: 700; font-size: 13px; margin-bottom: 2px; }
 .reinforce-alert .ra-empty { background: #fff; border: 1px solid #d7ead9; border-radius: 8px; padding: 14px 16px; color: #1e7e34; font-size: 13px; }
 @media (max-width: 900px) {
     .reinforce-alert .ra-recommend-grid { grid-template-columns: 1fr; }
@@ -443,7 +446,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 /* ===== AI智能答疑系统 ===== */
 .ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; height: 48px; padding: 0 18px; border-radius: 24px; background: linear-gradient(135deg, #2563eb, #6d5bd0); color: #fff; border: none; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(37,99,235,0.28); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
 .ai-chat-toggle:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.34); }
-.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); box-shadow: var(--shadow); }
+.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
 .ai-qa-sidebar { min-height: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
 .ai-qa-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--gray-900); }
 .ai-qa-brand .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; }
@@ -670,7 +673,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                     <span class="section-badge" id="toolbarSectionBadge">1.1 当前节</span>
                 </div>
                 <div class="toolbar-actions">
-                    
+                    <button class="btn btn-primary btn-sm" onclick="openAiQaSystem()">AI答疑</button>
                     <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回列表</button>
                 </div>
             </div>
@@ -758,6 +761,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
             <div class="result-learning-meta">
                 <span class="result-meta-pill" id="resultLearningProgress">本章学习进度：100%</span>
                 <span class="result-meta-pill" id="resultAttempts">测验次数：1次</span>
+                <span class="result-meta-pill" id="resultBestAccuracy">历史最高：80%</span>
             </div>
             <div class="attempt-filter">
                 <label for="quizAttemptSelect">测验记录</label>
@@ -785,6 +789,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
     <!-- 建议强化内容 -->
     <div class="reinforce-alert" id="reinforceAlert">
         <div class="ra-title">知识追踪与学习路径优化</div>
+        <div class="ra-subtitle">根据后台预配置知识点与测验题目绑定关系，定位薄弱知识点并推荐下一步学习内容。</div>
         <div id="reinforceItems"></div>
     </div>
 
@@ -837,7 +842,20 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 <!-- ====== 页面五：AI智能答疑系统 ====== -->
 <div class="page-view" id="page-ai-qa">
     <div class="ai-qa-shell">
-        
+        <aside class="ai-qa-sidebar">
+            <div class="ai-qa-brand"><span class="brand-dot">AI</span><span>AI智能答疑</span></div>
+            <div class="ai-scope-card">
+                <h4>当前问答范围</h4>
+                <p id="aiScopeDescription">仅围绕当前课程小节回答；课程难点讲解只围绕当前小节绑定知识点。</p>
+            </div>
+            <div class="ai-context-title" id="aiContextTitle">当前课程与小节</div>
+            <div class="ai-context-group" id="aiContextGroup">
+                <div class="ai-context-item active">
+                    <strong>当前范围</strong>
+                    <span>打开课程小节后自动绑定问答范围</span>
+                </div>
+            </div>
+        </aside>
         <section class="ai-qa-main">
             <div class="ai-qa-topbar">
                 <div class="ai-qa-heading">
@@ -2381,6 +2399,9 @@ function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, sele
     const attemptLabel = selectedAttemptIndex === history.length - 1
         ? '本次：第' + selectedAttemptNo + '次 / 共' + attempts + '次'
         : '当前查看：第' + selectedAttemptNo + '次 / 共' + attempts + '次';
+    const bestAccuracy = storedRecord
+        ? Math.max(storedRecord.bestAccuracy || 0, ...history.map(item => item.accuracy || 0))
+        : pct;
     currentResultContext = {
         feedbackKey: getFeedbackKey(course, resultChapter, selectedAttemptNo),
         attemptNo: selectedAttemptNo,
@@ -2398,6 +2419,7 @@ function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, sele
     document.getElementById('rTotal').textContent = total;
     document.getElementById('resultLearningProgress').textContent = '本章学习进度：' + learningProgress + '%';
     document.getElementById('resultAttempts').textContent = attemptLabel;
+    document.getElementById('resultBestAccuracy').textContent = '历史最高：' + bestAccuracy + '%';
     renderKnowledgeMastery(result.mastery);
     renderQuizHistory(course, currentQuizChapterIndex, storedRecord, selectedAttempt);
     renderCourseFeedbackContext(course, resultChapter);
@@ -2857,6 +2879,7 @@ function buildLearningPathHtml(wrongItems, accuracy) {
     });
 
     const weakItems = Array.from(weakMap.values()).sort((a, b) => b.count - a.count);
+    const configNote = `<div class="ra-config-note">配置逻辑：后台运营人员需先维护知识点库，再在章节课程和测验题目上传时绑定同一知识点；系统根据本次错题命中的知识点，反查课程内容和外部参考资料。</div>`;
     const cards = weakItems.map((item, index) => {
         const wrongQuestions = uniqueNumbers(item.questions);
         const relatedQuestions = getKnowledgeQuestionNumbers(item.keyword, currentQuizData);
@@ -2871,11 +2894,15 @@ function buildLearningPathHtml(wrongItems, accuracy) {
                     <div class="ra-section-title">推荐下一步学习内容：基础课程内课程内容</div>
                     ${buildInternalCourseRecommendations(item.keyword)}
                 </div>
+                <div class="ra-section">
+                    <div class="ra-section-title">推荐下一步学习内容：外部参考学习</div>
+                    ${buildExternalReferenceRecommendations(item.keyword)}
+                </div>
             </div>
         </div>`;
     }).join('');
 
-    return `<div class="ra-list">${cards}</div>`;
+    return configNote + `<div class="ra-list">${cards}</div>`;
 }
 
 function uniqueNumbers(numbers) {
@@ -2937,6 +2964,16 @@ function buildInternalCourseRecommendations(keyword) {
         </div>`;
     }).join('');
     return `<div class="ra-course-list">${cards || '<div class="ra-course-card">当前知识点暂未绑定基础课程内容，请先在后台知识点库完成课程小节绑定。</div>'}</div>`;
+}
+
+function buildExternalReferenceRecommendations(keyword) {
+    const config = getRecommendationConfig(keyword);
+    const refs = (config.references || []).map(ref => `<div class="ra-ref-item">
+        <div class="ra-ref-name">${ref.title}</div>
+        <div class="ra-ref-source">出处：${ref.source}</div>
+        <div class="ra-ref-source">建议关注：${ref.focus}</div>
+    </div>`).join('');
+    return `<div class="ra-ref-list">${refs || '<div class="ra-ref-item">当前知识点暂未配置外部参考资料。</div>'}</div>`;
 }
 
 function openRecommendedSection(courseId, chapterIndex, sectionIndex) {
@@ -3406,7 +3443,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (tabs) tabs.classList.add('active');
         } else {
             if (title) title.textContent = '医学课程问答';
-            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答。';
+            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答，不涉及课程难点讲解。';
             if (tabs) tabs.classList.remove('active');
             if (input) input.placeholder = '请输入医学课程相关问题...';
         }
@@ -3430,7 +3467,7 @@ document.addEventListener('DOMContentLoaded', function() {
             : ['医学课程问答', '疾病知识问答', '诊断标准梳理'];
         const welcomeText = isSection
             ? '当前问答已固定在本小节内。你可以围绕本节课程内容进行自然语言问答，也可以切换到课程难点讲解查看本节绑定知识点。'
-            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。';
+            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。这里仅提供课程相关问答解析，不展示课程难点讲解。';
         const firstMsg = isSection
             ? '你好，我会基于“' + getAIContextLabel() + '”回答问题。你可以直接问本小节概念、房水排出通路、眼压变化原因或测验易错点。'
             : '你好，我是AI学习助手。当前只回答医学课程相关问题，请勿询问与医学无关的内容。';

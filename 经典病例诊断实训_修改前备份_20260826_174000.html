@@ -268,10 +268,6 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 
 @media (max-width:1280px) { .content-split { flex-direction:column; } .case-list-panel { width:100%; max-height:400px; } .case-overview-grid, .report-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:1024px) { .sidebar { width:60px; } .sidebar .menu-item span { display:none; } .sidebar .menu-group-title { display:none; } .main-content { margin-left:60px; } .submenu .menu-item { padding-left:10px; } .lightbox-nav.prev { left:10px; } .lightbox-nav.next { right:10px; } .case-overview-grid, .report-grid { grid-template-columns:1fr; } }
-
-.report-textarea-lg { min-height:180px; }
-
-.case-list-note { margin:6px 0 12px; padding:8px 10px; font-size:12px; color:#5f3dc4; background:#f3efff; border-radius:8px; line-height:1.6; }
 </style>
 </head>
 <body>
@@ -306,7 +302,19 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 
 <!-- 区域一：病例筛选 -->
 <div class="filter-bar" id="filterBar">
-        <div class="filter-group">
+    <div class="filter-group">
+        <span class="filter-label">疾病分类：</span>
+        <select id="filterDisease" onchange="applyFilters()">
+            <option value="all">全部</option>
+            <option value="糖尿病视网膜病变">糖尿病视网膜病变</option>
+            <option value="青光眼">青光眼</option>
+            <option value="AMD">AMD</option>
+            <option value="高血压视网膜病变">高血压视网膜病变</option>
+            <option value="RVO">RVO</option>
+            <option value="视神经病变">视神经病变</option>
+        </select>
+    </div>
+    <div class="filter-group">
         <span class="filter-label">难度等级：</span>
         <select id="filterDifficulty" onchange="applyFilters()">
             <option value="all">全部</option>
@@ -326,7 +334,6 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 <div class="content-split">
     <div class="case-list-panel" id="caseListPanel">
         <div class="panel-header">病例列表 <span class="count-badge" id="listCount">15个</span></div>
-        <div class="case-list-note">以下病例属于不同病种归类，具体是何种病种，请完成相关诊断</div>
         <div class="case-list-body" id="caseListBody"></div>
     </div>
     <div class="case-detail-panel" id="caseDetailPanel">
@@ -481,7 +488,7 @@ function persistReportStatus() {
 }
 
 function applyFilters() {
-    var dEl = document.getElementById('filterDisease'); var d = dEl ? dEl.value : 'all';
+    var d = document.getElementById('filterDisease').value;
     var lv = document.getElementById('filterDifficulty').value;
     var s = document.getElementById('filterSearch').value.toLowerCase().trim();
     filteredCases = mockCases.filter(function(c) {

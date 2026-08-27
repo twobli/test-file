@@ -1,4 +1,4 @@
-Replacing renderUserComparePanel Replacing buildLearningReportAssessment Replacing buildCompareFieldAssessments Replacing buildCompareRows Replacing getUserDiagnosisInfo <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>案例教学 - 眼科病例实训系统</title><style>
+﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>案例教学 - 眼科病例实训系统</title><style>
 /* ===== 生命医学主题库 - 通用样式 ===== */
 :root {
     --primary: #1a73e8;
@@ -731,26 +731,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .submenu.open { max-height: 280px; }
 .submenu .menu-item { padding-left: 50px; font-size: 12px; }
 .submenu .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-/* 病程时间轴推理样式 */
-.evo-progressbar { position: relative; height: 8px; background: #eef1f6; border-radius: 8px; margin: 16px 0 6px; overflow: hidden; }
-.evo-progress-fill { height: 100%; background: linear-gradient(90deg,#175CD3,#7643E3); border-radius: 8px; transition: width .4s ease; }
-.evo-progress-label { font-size: 12px; color: var(--gray-500); text-align: right; margin-bottom: 2px; }
-.evolution-event.evo-locked { opacity: .55; }
-.evo-locked-hint { font-size: 12px; color: var(--gray-400); padding: 12px 0; }
-.evo-question { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--gray-800); }
-.evo-options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-.evo-option { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid #e0e4ea; border-radius: 8px; font-size: 13px; background: #fff; color: var(--gray-700); line-height: 1.5; }
-.evo-option.evo-clickable { cursor: pointer; transition: .15s; }
-.evo-option.evo-clickable:hover { border-color: #175CD3; background: #f0f6ff; }
-.evo-opt-key { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: #eef2f8; color: var(--gray-700); align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex: 0 0 auto; }
-.evo-option.evo-correct { border-color: #137333; background: #e9f7ef; color: #137333; }
-.evo-option.evo-wrong { border-color: #d93025; background: #fceceb; color: #d93025; }
-.evo-mark { font-size: 12px; font-weight: 700; margin-left: auto; }
-.evo-mark.correct { color: #137333; }
-.evo-mark.wrong { color: #d93025; }
-.evo-next-wrap { margin-top: 12px; text-align: right; }
-.evo-tip { font-size: 12px; color: var(--gray-500); align-self: center; }
-.evo-check { color: #137333; font-weight: 800; }</style></head><body>
+</style></head><body>
 
 <!-- 顶部导航栏 -->
 <div class="header">
@@ -1492,57 +1473,50 @@ function assessLogicField(text, keywords, maxScore, positiveHint){
 }
 
 function buildLearningReportAssessment(rows, evo, userDiag, aiDiag, currentCase, compareCase){
-    const diagRow = rows[0] || { name:'诊断意见', user:'未填写', ai:'未生成', status:{cls:'mismatch', text:'用户未填写'} };
-    const userText = String(userDiag.diagnosisText || userDiag.diagnosis || diagRow.user || '').trim();
+    const diseaseRow = rows.find(r=>r.name==='疾病名称') || rows[0];
+    const stageRow = rows.find(r=>r.name==='分型/分期') || rows[1];
+    const eyeRow = rows.find(r=>r.name==='受累眼别') || rows[2];
+    const basisRow = rows.find(r=>r.name==='诊断依据') || rows[3];
     const evidenceKeywords = getCaseEvidenceKeywords(currentCase, compareCase).slice(0, 8);
-    const basisSource = normalizeScoreText(userText);
+    const basisText = String(userDiag.diagnosisBasis || '');
+    const basisSource = normalizeScoreText(basisText);
     const evidenceHits = evidenceKeywords.filter(k=>basisSource.includes(normalizeScoreText(k))).length;
 
-    const diagStatus = getComparisonStatus(userText, aiDiag.diseaseName);
-    const stageStatus = getComparisonStatus(userText, aiDiag.subtypeStage);
-    const eyeStatus = getComparisonStatus(userText, aiDiag.affectedEye);
-    const directionScore = diagStatus.cls === 'match' ? 45 : (diagStatus.cls === 'partial' ? 28 : 8);
-    const stageScore = stageStatus.cls === 'match' ? 10 : (stageStatus.cls === 'partial' ? 6 : 0);
-    const eyeScore = eyeStatus.cls === 'match' ? 10 : (eyeStatus.cls === 'partial' ? 6 : 0);
+    const diseaseScore = diseaseRow.status.cls === 'match' ? 40 : (diseaseRow.status.cls === 'partial' ? 26 : 0);
+    const stageScore = stageRow.status.cls === 'match' ? 20 : (stageRow.status.cls === 'partial' ? 12 : 0);
+    const eyeScore = eyeRow.status.cls === 'match' ? 15 : (eyeRow.status.cls === 'partial' ? 9 : 0);
     let basisScore = 0;
-    if(userText){
-        basisScore = evidenceKeywords.length ? Math.min(35, Math.round(35 * Math.max(0.3, evidenceHits / Math.max(3, evidenceKeywords.length)))) : 20;
+    if(basisText.trim()){
+        basisScore = evidenceKeywords.length ? Math.min(25, Math.round(25 * Math.max(0.35, evidenceHits / Math.max(3, evidenceKeywords.length)))) : 15;
     }
-    const compareDiagnosisAccuracy = Math.min(100, Math.round(directionScore + stageScore + eyeScore + basisScore));
-    const compareBasisLogic = assessLogicField(userText, evidenceKeywords.concat(['病史','主诉','眼底','眼压','OCT','FFA','OCTA','视野','影像','检查','诊断','考虑','符合','提示','建议']), 70, '诊断意见能够串联病例资料、影像表现与诊断结论，证据链较完整。');
-    const compareLogicCompleteness = Math.min(100, Math.round((userText ? 20 : 0) + compareBasisLogic.score + ((stageStatus.cls === 'match' || eyeStatus.cls === 'match') ? 10 : 0)));
+    const compareDiagnosisAccuracy = Math.min(100, Math.round(diseaseScore + stageScore + eyeScore + basisScore));
+    const compareFieldCompletion = (userDiag.diseaseName.trim() ? 15 : 0) + (userDiag.subtypeStage.trim() && userDiag.subtypeStage !== '未填写' ? 10 : 0) + (userDiag.affectedEye.trim() && userDiag.affectedEye !== '未填写' ? 10 : 0) + (basisText.trim() ? 15 : 0);
+    const compareBasisLogic = assessLogicField(basisText, evidenceKeywords.concat(['病史','主诉','眼底','眼压','OCT','FFA','OCTA','视野','影像','检查','诊断依据']), 50, '诊断依据能够串联病例资料、影像表现和诊断结论，证据链较完整。');
+    const compareLogicCompleteness = Math.min(100, Math.round(compareFieldCompletion + compareBasisLogic.score));
     const compareOverallScore = Math.round((compareDiagnosisAccuracy + compareLogicCompleteness) / 2);
-    const compareFieldAssessments = buildCompareFieldAssessments(rows, userDiag, aiDiag, compareBasisLogic, compareDiagnosisAccuracy, compareLogicCompleteness);
+    const compareFieldAssessments = buildCompareFieldAssessments(rows, userDiag, aiDiag, compareBasisLogic, basisScore);
 
-    // ===== 病程推理实训：时间轴单选题评分 =====
-    const quiz = buildEvolutionQuiz(currentCase, compareCase);
-    let correctCount = 0;
-    const evolutionFields = (evo && evo.qa) ? evo.qa.map(function(q, i){
-        const step = quiz[i] || null;
-        const selected = q ? q.selected : null;
-        const isCorrect = !!(step && selected === step.correct);
-        if(isCorrect) correctCount++;
-        const userText2 = (selected != null && step) ? (step.options[selected] || '未选择') : '未作答';
-        return {
-            name: step ? (step.date + ' · ' + step.title) : ('第' + (i + 1) + '题'),
-            user: userText2,
-            accuracyScore: isCorrect ? 100 : 0,
-            logicScore: isCorrect ? 100 : 0,
-            accuracyComment: isCorrect ? '诊断方向判断正确。' : '诊断方向判断有误，请查看解析。',
-            logicComment: step ? step.explanation : ''
-        };
-    }) : [];
-    const evolutionDiagnosisAccuracy = quiz.length ? Math.round(correctCount / quiz.length * 100) : 0;
-    const evolutionLogicCompleteness = quiz.length ? Math.round(correctCount / quiz.length * 100) : 0;
+    const diseaseKeywords = [currentCase && currentCase.disease, currentCase && currentCase.answer && currentCase.answer.diagnosis, aiDiag.diseaseName, aiDiag.subtypeStage].concat(evidenceKeywords).filter(Boolean);
+    const stageAccuracyAssess = assessLogicField(evo.stage, diseaseKeywords.concat(['阶段','分期','进展','轻度','中度','重度','急性','慢性','水肿','闭角','缺血','CNV']), 25, '病情阶段与病例资料、AI诊断方向较一致。');
+    const turningAccuracyAssess = assessLogicField(evo.turning, evidenceKeywords.concat(['OCT','FFA','OCTA','眼底','眼压','房角','视盘','视野','血糖','出血','渗漏','水肿','时间节点']), 25, '关键转折节点能够对应病例中的核心检查证据。');
+    const trendAccuracyAssess = assessLogicField(evo.trend, diseaseKeywords.concat(['进展','加重','改善','稳定','下降','风险','复查','随访','治疗','观察','可能']), 25, '病情趋势判断与病例演变方向较一致。');
+    const planAccuracyAssess = assessLogicField(evo.plan, evidenceKeywords.concat(['随访','治疗','复查','控制','抗VEGF','激光','手术','眼压','血糖','血压','监测']), 25, '处置与随访重点能对应当前病情风险。');
+    const evolutionDiagnosisAccuracy = Math.min(100, Math.round(stageAccuracyAssess.score + turningAccuracyAssess.score + trendAccuracyAssess.score + planAccuracyAssess.score));
+
+    const stageLogicAssess = assessLogicField(evo.stage, ['阶段','进展','轻度','中度','重度','急性','慢性','增殖','间歇','水肿','脱离','渗漏'], 25, '病情阶段判断较完整，能够结合病变程度与阶段描述。');
+    const turningLogicAssess = assessLogicField(evo.turning, ['OCT','FFA','OCTA','眼底','眼压','房角','视盘','视野','血糖','出血','渗漏','水肿'], 25, '关键转折节点描述较完整，能抓住改变判断的核心证据。');
+    const trendLogicAssess = assessLogicField(evo.trend, ['进展','加重','改善','稳定','下降','风险','复查','随访','治疗','观察','可能'], 25, '病情趋势判断较完整，具备一定的动态分析意识。');
+    const planLogicAssess = assessLogicField(evo.plan, ['随访','治疗','复查','控制','抗VEGF','激光','手术','眼压','血糖','血压','监测'], 25, '处置与随访重点较完整，能够落到临床管理。');
+    const evolutionLogicCompleteness = Math.min(100, Math.round(stageLogicAssess.score + turningLogicAssess.score + trendLogicAssess.score + planLogicAssess.score));
+
     const evolutionOverallScore = Math.round((evolutionDiagnosisAccuracy + evolutionLogicCompleteness) / 2);
-    const evolutionDiagnosisComment = evolutionDiagnosisAccuracy >= 80 ? '时间轴推理整体正确，能抓住各时间点的关键判断。' : evolutionDiagnosisAccuracy >= 50 ? '时间轴推理部分正确，个别关键点需再对照。' : '时间轴推理正确率偏低，需结合各时间点的症状与检查重新梳理。';
-    const evolutionLogicComment = evolutionDiagnosisComment;
-
     const diagnosisAccuracy = Math.round((compareDiagnosisAccuracy + evolutionDiagnosisAccuracy) / 2);
     const logicCompleteness = Math.round((compareLogicCompleteness + evolutionLogicCompleteness) / 2);
     const overallScore = Math.round((compareOverallScore + evolutionOverallScore) / 2);
-    const compareDiagnosisComment = compareDiagnosisAccuracy >= 85 ? '学员诊断意见与 AI 诊断结果方向高度一致。' : compareDiagnosisAccuracy >= 70 ? '学员诊断方向基本一致，部分细节仍需对照。' : '学员诊断意见与 AI 结果差异较明显。';
-    const compareLogicComment = compareLogicCompleteness >= 85 ? '诊断意见表述完整，能够形成较清楚的证据链。' : compareLogicCompleteness >= 70 ? '诊断意见基本完整，可再补充关键证据。' : '诊断意见偏简略，逻辑链条不够清楚。';
+    const compareDiagnosisComment = compareDiagnosisAccuracy >= 85 ? '学员提交的诊断字段与 AI 诊断结果整体一致。' : compareDiagnosisAccuracy >= 70 ? '学员诊断方向基本一致，部分字段仍需对照。' : '学员诊断字段与 AI 结果差异较明显。';
+    const compareLogicComment = compareLogicCompleteness >= 85 ? '诊断意见字段完整，诊断依据能形成较清楚的证据链。' : compareLogicCompleteness >= 70 ? '诊断意见基本完整，但诊断依据仍可补充。' : '诊断意见或诊断依据偏简略，逻辑链条不够清楚。';
+    const evolutionDiagnosisComment = evolutionDiagnosisAccuracy >= 85 ? '病程推理结论与病例演变方向较一致。' : evolutionDiagnosisAccuracy >= 70 ? '病程推理方向基本正确，部分节点需要再对照。' : '病程推理与病例关键演变存在偏差。';
+    const evolutionLogicComment = evolutionLogicCompleteness >= 85 ? '病程逻辑完整，能够形成较清晰的时间线推理。' : evolutionLogicCompleteness >= 70 ? '病程逻辑基本完整，仍有个别环节需要补强。' : '病程推理较简略，需补足关键转折和随访决策。';
 
     return {
         diagnosisAccuracy,
@@ -1569,11 +1543,16 @@ function buildLearningReportAssessment(rows, evo, userDiag, aiDiag, currentCase,
             diagnosisComment: evolutionDiagnosisComment,
             logicComment: evolutionLogicComment
         },
-        fieldAssessments: evolutionFields,
+        fieldAssessments: [
+            { name:'病情阶段', user:evo.stage || '未填写', accuracyScore:stageAccuracyAssess.score, logicScore:stageLogicAssess.score, accuracyComment:stageAccuracyAssess.comment, logicComment:stageLogicAssess.comment },
+            { name:'关键转折节点', user:evo.turning || '未填写', accuracyScore:turningAccuracyAssess.score, logicScore:turningLogicAssess.score, accuracyComment:turningAccuracyAssess.comment, logicComment:turningLogicAssess.comment },
+            { name:'病情趋势判断', user:evo.trend || '未填写', accuracyScore:trendAccuracyAssess.score, logicScore:trendLogicAssess.score, accuracyComment:trendAccuracyAssess.comment, logicComment:trendLogicAssess.comment },
+            { name:'处置与随访重点', user:evo.plan || '未填写', accuracyScore:planAccuracyAssess.score, logicScore:planLogicAssess.score, accuracyComment:planAccuracyAssess.comment, logicComment:planLogicAssess.comment }
+        ],
         evidenceKeywords,
         evidenceHits,
         basisScore,
-        basisSummary: diagRow ? diagRow.status.text : '待对照'
+        basisSummary: basisRow ? basisRow.status.text : '待对照'
     };
 }
 
@@ -1713,16 +1692,15 @@ function getSubmittedReasoning(caseId){
 
 function getUserDiagnosisInfo(ans){
     const fields = normalizeDiagnosisOpinion(ans);
-    const text = String(fields.diagnosisText || fields.diagnosisBasis || '');
+    const diagnosis = getDiagnosisSummaryText(fields);
     return {
-        diagnosis: text || '未填写',
-        diagnosisText: text,
-        diseaseName: '',
-        subtypeStage: '',
-        affectedEye: '',
-        diagnosisBasis: text || '未填写',
+        diagnosis: diagnosis,
+        diseaseName: fields.diseaseName || '未填写',
+        subtypeStage: fields.subtypeStage || '未填写',
+        affectedEye: fields.affectedEye || '未填写',
+        diagnosisBasis: fields.diagnosisBasis || '未填写',
         confidence: '已提交',
-        supplement: text || '系统已自动生成对比反馈'
+        supplement: fields.diagnosisBasis || '系统已自动生成对比反馈'
     };
 }
 
@@ -1840,13 +1818,15 @@ function renderUserComparePanel(){
     if(!panel) return;
     const ans = getSubmittedReasoning(currentCaseId);
     const userDiag = getUserDiagnosisInfo(ans);
-    const text = userDiag.diagnosisText || userDiag.diagnosis || '未填写';
 
     let html = '<div class="panel-header"><span class="header-icon">👤</span>用户诊断意见</div>';
     html += '<div class="panel-body">';
-    html += '<div class="user-diagnosis-name">'+escHtml(text)+'</div>';
-    html += '<div class="user-module"><div class="section-label">诊断意见</div><div class="diagnosis-structured-list">';
-    html += '<div class="diag-field-card full"><div class="diag-field-label">诊断意见</div><div class="diag-field-value">'+escHtml(text)+'</div></div>';
+    html += '<div class="user-diagnosis-name">'+escHtml(userDiag.diseaseName)+'</div>';
+    html += '<div class="user-module"><div class="section-label">诊断意见字段</div><div class="diagnosis-structured-list">';
+    html += '<div class="diag-field-card"><div class="diag-field-label">疾病名称</div><div class="diag-field-value">'+escHtml(userDiag.diseaseName)+'</div></div>';
+    html += '<div class="diag-field-card"><div class="diag-field-label">分型/分期</div><div class="diag-field-value">'+escHtml(userDiag.subtypeStage)+'</div></div>';
+    html += '<div class="diag-field-card"><div class="diag-field-label">受累眼别</div><div class="diag-field-value">'+escHtml(userDiag.affectedEye)+'</div></div>';
+    html += '<div class="diag-field-card full"><div class="diag-field-label">诊断依据</div><div class="diag-field-value">'+escHtml(userDiag.diagnosisBasis)+'</div></div>';
     html += '</div></div>';
     html += '</div>';
     panel.innerHTML = html;
@@ -1856,29 +1836,67 @@ function buildCompareRows(compareCase){
     const ans = getSubmittedReasoning(currentCaseId);
     const userDiag = getUserDiagnosisInfo(ans);
     const aiDiag = getAiDiagnosisInfo(compareCase);
-    const userText = String(userDiag.diagnosisText || userDiag.diagnosis || '');
-    const aiConclusion = String(aiDiag.diagnosis || [aiDiag.diseaseName, aiDiag.subtypeStage, aiDiag.affectedEye].filter(Boolean).join(' / '));
-    const status = getComparisonStatus(userText, aiConclusion);
+
     return [
-        { name:'诊断意见', user: userText || '未填写', ai: aiConclusion || '未生成', status: status }
+        { name:'疾病名称', user:userDiag.diseaseName, ai:aiDiag.diseaseName, status:getComparisonStatus(userDiag.diseaseName, aiDiag.diseaseName) },
+        { name:'分型/分期', user:userDiag.subtypeStage, ai:aiDiag.subtypeStage, status:getComparisonStatus(userDiag.subtypeStage, aiDiag.subtypeStage) },
+        { name:'受累眼别', user:userDiag.affectedEye, ai:aiDiag.affectedEye, status:getComparisonStatus(userDiag.affectedEye, aiDiag.affectedEye) },
+        { name:'诊断依据', user:userDiag.diagnosisBasis, ai:aiDiag.diagnosisBasis, status:{ cls:'partial', text:'重点对照' } }
     ];
 }
 
-function buildCompareFieldAssessments(rows, userDiag, aiDiag, compareBasisLogic, compareDiagnosisAccuracy, compareLogicCompleteness){
-    const row = rows[0] || { name:'诊断意见', user:'未填写', ai:'未生成', status:{cls:'mismatch', text:'用户未填写'} };
-    const userText = String(userDiag.diagnosisText || userDiag.diagnosis || row.user || '');
-    const accComment = row.status.text === '高度一致' ? '诊断意见与 AI 诊断方向高度一致。' : row.status.text === '部分一致' ? '诊断意见与 AI 诊断方向部分一致。' : '诊断意见与 AI 诊断方向存在差异。';
-    const logicComment = compareBasisLogic && compareBasisLogic.comment ? compareBasisLogic.comment : (userText ? '诊断意见表述较完整，可支撑后续对比。' : '诊断意见未填写，影响对比判断。');
+function buildCompareFieldAssessments(rows, userDiag, aiDiag, compareBasisLogic, basisScore){
+    const diseaseRow = rows.find(r=>r.name==='疾病名称') || rows[0];
+    const stageRow = rows.find(r=>r.name==='分型/分期') || rows[1];
+    const eyeRow = rows.find(r=>r.name==='受累眼别') || rows[2];
+    const basisRow = rows.find(r=>r.name==='诊断依据') || rows[3];
+    const diseaseText = String(userDiag.diseaseName || '').trim();
+    const stageText = String(userDiag.subtypeStage || '').trim();
+    const eyeText = String(userDiag.affectedEye || '').trim();
+    const basisText = String(userDiag.diagnosisBasis || '').trim();
+    const basisLogicScore = Math.min(25, Math.max(0, Math.round(((compareBasisLogic && compareBasisLogic.score) || 0) / 2)));
+    const scoreByStatus = function(status, full, partial, low){ return status === 'match' ? full : (status === 'partial' ? partial : low); };
+
     return [
         {
-            name: row.name || '诊断意见',
-            user: row.user,
-            ai: row.ai,
-            status: row.status,
-            accuracyScore: compareDiagnosisAccuracy != null ? compareDiagnosisAccuracy : (row.status.cls === 'match' ? 70 : row.status.cls === 'partial' ? 45 : 20),
-            logicScore: compareLogicCompleteness != null ? compareLogicCompleteness : (userText ? 60 : 0),
-            accuracyComment: accComment,
-            logicComment: logicComment
+            name:'疾病名称',
+            user:userDiag.diseaseName,
+            ai:aiDiag.diseaseName,
+            status:diseaseRow.status,
+            accuracyScore:scoreByStatus(diseaseRow.status.cls, 25, 16, 6),
+            logicScore:diseaseText ? scoreByStatus(diseaseRow.status.cls, 20, 15, 10) : 0,
+            accuracyComment:diseaseRow.status.text === '高度一致' ? '疾病名称与 AI 结果高度一致。' : diseaseRow.status.text === '部分一致' ? '疾病名称与 AI 结果部分一致。' : '疾病名称与 AI 结果存在差异。',
+            logicComment:diseaseText ? '疾病名称填写完整，可支撑后续对比。' : '疾病名称未填写，影响对比判断。'
+        },
+        {
+            name:'分型/分期',
+            user:userDiag.subtypeStage,
+            ai:aiDiag.subtypeStage,
+            status:stageRow.status,
+            accuracyScore:scoreByStatus(stageRow.status.cls, 25, 15, 5),
+            logicScore:stageText && stageText !== '未填写' ? scoreByStatus(stageRow.status.cls, 18, 14, 8) : 0,
+            accuracyComment:stageRow.status.text === '高度一致' ? '分型/分期与 AI 结果一致。' : stageRow.status.text === '部分一致' ? '分型/分期与 AI 结果部分一致。' : '分型/分期与 AI 结果存在差异。',
+            logicComment:stageText && stageText !== '未填写' ? '分型/分期表述完整。' : '分型/分期信息缺失。'
+        },
+        {
+            name:'受累眼别',
+            user:userDiag.affectedEye,
+            ai:aiDiag.affectedEye,
+            status:eyeRow.status,
+            accuracyScore:scoreByStatus(eyeRow.status.cls, 20, 12, 5),
+            logicScore:eyeText && eyeText !== '未填写' ? scoreByStatus(eyeRow.status.cls, 15, 10, 6) : 0,
+            accuracyComment:eyeRow.status.text === '高度一致' ? '受累眼别与 AI 结果一致。' : eyeRow.status.text === '部分一致' ? '受累眼别与 AI 结果部分一致。' : '受累眼别与 AI 结果存在差异。',
+            logicComment:eyeText && eyeText !== '未填写' ? '受累眼别信息完整。' : '受累眼别信息缺失。'
+        },
+        {
+            name:'诊断依据',
+            user:userDiag.diagnosisBasis,
+            ai:aiDiag.diagnosisBasis,
+            status:basisRow.status,
+            accuracyScore:basisScore,
+            logicScore:basisLogicScore,
+            accuracyComment:basisRow.status.text || '重点对照',
+            logicComment:compareBasisLogic && compareBasisLogic.comment ? compareBasisLogic.comment : '诊断依据需进一步补充。'
         }
     ];
 }
@@ -1894,7 +1912,12 @@ function renderCompareDiff(compareCase){
     compareRows.forEach(row=>{
         diffHtml += '<tr><td><strong>'+escHtml(row.name)+'</strong></td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
-
+    const diagRow = rows[0];
+    if(diagRow.status.cls !== 'match'){
+        diffHtml += '<tr class="highlight"><td><strong>复盘重点</strong></td><td colspan="5" style="color:#b06000;">请重点核对学员诊断意见与 AI 诊断结果不一致的原因，并查看系统给出的差异反馈。</td></tr>';
+    }else{
+        diffHtml += '<tr class="highlight"><td><strong>复盘重点</strong></td><td colspan="5" style="color:#137333;">学员诊断意见与 AI 方向一致，可继续查看 AI 的分析依据，巩固诊断判断过程。</td></tr>';
+    }
     diffHtml += '</tbody></table>';
     document.getElementById('diffPanel').innerHTML = diffHtml;
 }
@@ -1986,37 +2009,6 @@ function getCompareSummaryTabs(compareCase){
     return compareCase && compareCase.summary && compareCase.summary.tabs ? compareCase.summary.tabs : {};
 }
 
-const EVO_DISEASE_POOL = ['糖尿病黄斑水肿（DME）','急性闭角型青光眼','湿性年龄相关性黄斑变性（AMD）','非动脉炎性前部缺血性视神经病变（NAION）','糖尿病视网膜病变','视网膜中央静脉阻塞','原发性开角型青光眼','中心性浆液性脉络膜视网膜病变','视网膜脱离'];
-function evoSeed(text){ let s = 0; const t = String(text || ''); for(let i = 0; i < t.length; i++){ s = (s * 31 + t.charCodeAt(i)) & 0x7fffffff; } return s || 1; }
-function evoShuffle(arr, seed){ const a = arr.slice(); let s = seed; for(let i = a.length - 1; i > 0; i--){ s = (s * 9301 + 49297) % 233280; const j = Math.floor((s / 233280) * (i + 1)); const tmp = a[i]; a[i] = a[j]; a[j] = tmp; } return a; }
-function buildEvolutionQuizOptions(disease){
-    const pool = EVO_DISEASE_POOL.filter(function(d){ return d !== disease; });
-    const options = [disease].concat(pool.slice(0, 3));
-    const shuffled = evoShuffle(options, evoSeed(disease));
-    return { options: shuffled, correct: shuffled.indexOf(disease) };
-}
-function buildEvolutionQuiz(caseObj, compareCase){
-    const tabs = getCompareSummaryTabs(compareCase);
-    const eyeHistory = tabs.eyeHistory || {};
-    const systemicHistory = tabs.systemicHistory || {};
-    const eyeExam = tabs.eyeExam || {};
-    const imaging = tabs.imaging || {};
-    const answer = (caseObj && caseObj.answer) || {};
-    const disease = (compareCase && compareCase.ai && compareCase.ai.disease) || answer.diagnosis || (caseObj && caseObj.disease) || '糖尿病黄斑水肿（DME）';
-    const opts = buildEvolutionQuizOptions(disease);
-    const risk = [systemicHistory.diabetes, systemicHistory.hypertension, systemicHistory.other, systemicHistory.familyHistory, eyeHistory.pastHistory].filter(Boolean).join('；') || (caseObj && caseObj.info) || '患者存在相关全身与眼部危险因素';
-    const symptom = eyeHistory.chiefComplaint || eyeHistory.presentIllness || (caseObj && caseObj.info) || '主诉与现病史信息';
-    const signs = [eyeExam.fundus, eyeExam.slitLamp, eyeExam.va, eyeExam.iop].filter(Boolean).join('；') || answer.features || '查体见相关眼部体征';
-    const img = [imaging.oct, imaging.ffa, imaging.octa, imaging.icga, imaging.vf, imaging.ubm].filter(Boolean).join('；') || (answer.checks || []).join('、') || '影像学检查提示关键改变';
-    const summaryAll = [risk, symptom, signs, img].filter(Boolean).join('；');
-    const steps = [
-        { date:'2026-01-01', title:'病史与初发症状', symptoms:'既往史：'+risk+'<br>主诉：'+symptom, question:'根据2026年1月1日初诊时的病史与主诉，最应优先考虑下列哪种疾病方向？', options:opts.options, correct:opts.correct, explanation:'结合患者基础病史（糖尿病、高血压、近视等）与初发主诉，优先考虑与这些危险因素相一致的疾病方向：'+disease+'。' },
-        { date:'2026-02-01', title:'眼部体征与病情进展', symptoms:'体征：'+signs, question:'2026年2月1日复查时的眼部体征，更支持下列哪一项病情判断？', options:opts.options, correct:opts.correct, explanation:'眼底、裂隙灯等体征与病程进展相互印证，进一步支持'+disease+'的判断。' },
-        { date:'2026-03-01', title:'多模态影像与关键证据', symptoms:'影像：'+img, question:'2026年3月1日的影像学检查呈现的关键证据，最符合下列哪项诊断？', options:opts.options, correct:opts.correct, explanation:'OCT、FFA、OCTA等影像特征（如水肿、渗漏、形态与血流改变）与'+disease+'一致。' },
-        { date:'2026-04-01', title:'综合诊断决策', symptoms:'综合资料：'+summaryAll, question:'综合2026年1月至4月的全部病史、症状、体征与影像，最可能的最终诊断是？', options:opts.options, correct:opts.correct, explanation:'综合时间轴各项证据，最终诊断指向'+disease+'。' }
-    ];
-    return steps;
-}
 function buildEvolutionEvents(caseObj, compareCase){
     const tabs = getCompareSummaryTabs(compareCase);
     const eyeHistory = tabs.eyeHistory || {};
@@ -2066,7 +2058,12 @@ function saveEvolutionAnswers(){
     if(getLearningReport(currentCaseId)){
         return evolutionAnswers[currentCaseId] || {};
     }
-    const ans = getEvolutionState();
+    const ans = evolutionAnswers[currentCaseId] || {};
+    ['stage','turning','trend','plan'].forEach(key=>{
+        const el = document.getElementById('evo_'+key);
+        if(el) ans[key] = el.value.trim();
+    });
+    evolutionAnswers[currentCaseId] = ans;
     persistTeachingState();
     return ans;
 }
@@ -2077,36 +2074,9 @@ function saveEvolutionDraft(){
         return;
     }
     saveEvolutionAnswers();
-    alert('病程推理进度已保存。');
+    alert('病程推理内容已保存。');
 }
 
-function getEvolutionQuiz(){ return buildEvolutionQuiz(currentCase, findCompareCaseForCurrentCase()); }
-function getEvolutionState(){
-    const quiz = getEvolutionQuiz();
-    let ans = evolutionAnswers[currentCaseId];
-    if(!ans || !Array.isArray(ans.qa) || ans.qa.length !== quiz.length){
-        ans = { current: 0, qa: quiz.map(function(s){ return { date:s.date, selected:null }; }) };
-        evolutionAnswers[currentCaseId] = ans;
-    }
-    return ans;
-}
-function selectEvoOption(stepIndex, optionIndex){
-    if(getLearningReport(currentCaseId)) return;
-    const ans = evolutionAnswers[currentCaseId];
-    if(!ans || !ans.qa[stepIndex]) return;
-    if(ans.qa[stepIndex].selected != null) return;
-    ans.qa[stepIndex].selected = optionIndex;
-    persistTeachingState();
-    renderEvolutionTraining();
-}
-function nextEvolutionStep(){
-    const ans = evolutionAnswers[currentCaseId];
-    if(!ans) return;
-    const quiz = getEvolutionQuiz();
-    if(ans.current < quiz.length) ans.current = ans.current + 1;
-    persistTeachingState();
-    renderEvolutionTraining();
-}
 function renderEvolutionTraining(){
     const empty = document.getElementById('emptyStateEvolution');
     const content = document.getElementById('evolutionContent');
@@ -2117,86 +2087,52 @@ function renderEvolutionTraining(){
     }
     empty.style.display = 'none';
     content.style.display = 'block';
+
     if(!aiReadyCases[currentCaseId]){
-        content.innerHTML = '<div class="compare-locked"><div class="lock-icon">🔒</div><h3>病程推理实训暂未开放</h3><p>请先在“病例推理实训”中完成诊断推理，并查看AI诊断对比学习。完成前序对比后，再进入病程时间轴推理。</p><button class="btn btn-primary" onclick="switchToReasoningTab()">返回病例推理实训</button></div>';
+        content.innerHTML = '<div class="compare-locked"><div class="lock-icon">🔒</div><h3>病程推理实训暂未开放</h3><p>请先在“病例推理实训”中完成诊断推理，并查看AI诊断对比学习。完成前序对比后，再进入病程时间线推理。</p><button class="btn btn-primary" onclick="switchToReasoningTab()">返回病例推理实训</button></div>';
         return;
     }
-    let report = getLearningReport(currentCaseId);
-    const quiz = getEvolutionQuiz();
-    const ans = getEvolutionState();
-    if(ans.current > quiz.length) ans.current = quiz.length;
-    const total = quiz.length;
-    const answeredCount = ans.qa.filter(function(q){ return q.selected != null; }).length;
-    const allDone = answeredCount === total && total > 0;
-    if(report && !allDone){
-        delete caseLearningReports[currentCaseId];
-        persistTeachingState();
-        report = null;
-    }
 
-    let html = '<div class="evolution-workspace"><div class="evolution-panel">';
-    html += '<div class="evolution-panel-title">病程演变时间轴（推理作答）</div>';
-    html += '<div class="evolution-panel-subtitle">请按时间顺序观察每个日期的症状与进展，并回答与之相关的单选题。选择后将逐段时间轴推进，直至完成全部推理。</div>';
-    html += '<div class="evo-progressbar"><div class="evo-progress-fill" style="width:'+Math.round(answeredCount/total*100)+'%"></div></div>';
-    html += '<div class="evo-progress-label">进度 ' + answeredCount + ' / ' + total + '</div>';
+    const report = getLearningReport(currentCaseId);
+    currentCompareCase = findCompareCaseForCurrentCase();
+    const ans = evolutionAnswers[currentCaseId] || {};
+    const readOnlyAttr = report ? ' readonly' : '';
+    const events = buildEvolutionEvents(currentCase, currentCompareCase);
+
+    let html = '<div class="evolution-workspace">';
+
+    html += '<div class="evolution-panel">';
+    html += '<div class="evolution-panel-title">病程演变时间线</div>';
+    html += '<div class="evolution-panel-subtitle">请按时间顺序观察病史、体征、影像和诊断决策之间的关系，重点判断哪些证据推动了病情判断的变化。</div>';
     html += '<div class="evolution-timeline">';
-    quiz.forEach(function(step, i){
-        const q = ans.qa[i];
-        const answered = q && q.selected != null;
-        const isCurrent = (i === ans.current);
-        let cls = 'evolution-event';
-        if(answered || i < ans.current) cls += ' evo-done';
-        if(isCurrent && !answered) cls += ' evo-active';
-        if(!answered && i > ans.current) cls += ' evo-locked';
-        html += '<div class="'+cls+'">';
-        html += '<div class="evo-time">'+escHtml(step.date)+(answered?' <span class="evo-check">✓</span>':'')+'</div>';
-        html += '<div class="evo-card">';
-        html += '<div class="evo-card-title">'+escHtml(step.title)+'</div>';
-        if(answered || isCurrent){
-            html += '<div class="evo-card-detail">'+step.symptoms+'</div>';
-        }
-        if(answered){
-            const isCorrect = (q.selected === step.correct);
-            html += '<div class="evo-question">'+escHtml(step.question)+'</div>';
-            html += '<div class="evo-options">';
-            step.options.forEach(function(opt, j){
-                let ocls = 'evo-option';
-                if(j === step.correct) ocls += ' evo-correct';
-                else if(j === q.selected) ocls += ' evo-wrong';
-                html += '<div class="'+ocls+'"><span class="evo-opt-key">'+String.fromCharCode(65+j)+'</span>'+escHtml(opt)+(j===step.correct?' <span class="evo-mark correct">✔</span>':(j===q.selected?' <span class="evo-mark wrong">✘</span>':''))+'</div>';
-            });
-            html += '</div>';
-            html += '<div class="evo-focus">'+(isCorrect?'回答正确：':'回答有误：')+escHtml(step.explanation)+'</div>';
-            if(isCurrent && i < total-1 && !report){
-                html += '<div class="evo-next-wrap"><button class="btn btn-outline" onclick="nextEvolutionStep()">下一时间点 →</button></div>';
-            }
-        } else if(isCurrent){
-            html += '<div class="evo-question">'+escHtml(step.question)+'</div>';
-            html += '<div class="evo-options">';
-            step.options.forEach(function(opt, j){
-                html += '<div class="evo-option evo-clickable" onclick="selectEvoOption('+i+','+j+')"><span class="evo-opt-key">'+String.fromCharCode(65+j)+'</span>'+escHtml(opt)+'</div>';
-            });
-            html += '</div>';
-        } else {
-            html += '<div class="evo-locked-hint">🔒 完成前一时间点后再查看该时间点的症状</div>';
-        }
-        html += '</div></div>';
+    events.forEach(ev=>{
+        html += '<div class="evolution-event">';
+        html += '<div class="evo-time">'+escHtml(ev.time)+'</div>';
+        html += '<div class="evo-card"><div class="evo-card-title">'+escHtml(ev.title)+'</div><div class="evo-card-detail">'+escHtml(ev.detail)+'</div><div class="evo-focus">'+escHtml(ev.focus)+'</div></div>';
+        html += '</div>';
     });
+    html += '</div></div>';
+
+    html += '<div class="evolution-panel">';
+    html += '<div class="evolution-panel-title">病程推理作答'+(report ? '（已保存）' : '')+'</div>';
+    html += '<div class="evolution-panel-subtitle">'+(report ? '以下为本病例生成学习报告前保存的病程推理作答，字段仅供查看，系统评分已固定。' : '请围绕时间线写出你的病程判断。完成后在本页生成综合学习报告，报告会同时包含AI诊断对比学习和病程推理实训内容。')+'</div>';
+    html += '<div class="evolution-form-grid">';
+    html += '<div class="evolution-field"><label>1. 当前病情处于什么阶段？</label><textarea id="evo_stage" placeholder="示例：目前符合糖尿病黄斑水肿形成阶段，长期血糖控制不佳后出现黄斑区渗漏和结构性水肿。"'+readOnlyAttr+'>'+escHtml(ans.stage || '')+'</textarea></div>';
+    html += '<div class="evolution-field"><label>2. 哪些节点改变了你的判断？</label><textarea id="evo_turning" placeholder="示例：OCT显示CRT增厚和囊样水肿，FFA提示弥漫性渗漏，是从单纯DR转向DME判断的关键节点。"'+readOnlyAttr+'>'+escHtml(ans.turning || '')+'</textarea></div>';
+    html += '<div class="evolution-field"><label>3. 你判断病情趋势如何？</label><textarea id="evo_trend" placeholder="示例：如果血糖继续控制不佳，黄斑水肿可能进展，视力仍有下降风险；若抗VEGF有效，OCT厚度应逐步下降。"'+readOnlyAttr+'>'+escHtml(ans.trend || '')+'</textarea></div>';
+    html += '<div class="evolution-field"><label>4. 后续处置和随访重点是什么？</label><textarea id="evo_plan" placeholder="示例：重点跟踪视力、OCT黄斑厚度、FFA渗漏范围和全身代谢控制，根据疗效调整抗VEGF或随访间隔。"'+readOnlyAttr+'>'+escHtml(ans.plan || '')+'</textarea></div>';
     html += '</div>';
     html += '<div class="evolution-actions">';
-    if(!report){
-        if(allDone){
-            html += '<button class="btn-gen-report" onclick="generateIntegratedLearningReport()"><span class="report-icon">📊</span> 生成学习报告</button>';
-        } else {
-            html += '<button class="btn btn-outline" onclick="saveEvolutionDraft()">保存进度</button>';
-            html += '<span class="evo-tip">完成全部单选题后即可生成学习报告</span>';
-        }
+    if(!report) {
+        html += '<button class="btn btn-outline" onclick="saveEvolutionDraft()">保存草稿</button>';
+        html += '<button class="btn-gen-report" onclick="generateIntegratedLearningReport()"><span class="report-icon">📊</span> 生成学习报告</button>';
     } else {
         html += '<button class="btn-reset-case" onclick="confirmResetCurrentCase()">重置当前病例</button>';
         html += '<button class="btn-gen-report" onclick="openSavedLearningReport(currentCaseId)"><span class="report-icon">📄</span> 查看学习报告</button>';
     }
     html += '</div>';
     html += '</div></div>';
+
     content.innerHTML = html;
 }
 
@@ -2208,9 +2144,9 @@ function generateIntegratedLearningReport(){
     }
     currentCompareCase = findCompareCaseForCurrentCase();
     const evo = saveEvolutionAnswers();
-    const quizCheck = buildEvolutionQuiz(currentCase, currentCompareCase);
-    if(!evo || !Array.isArray(evo.qa) || evo.qa.length !== quizCheck.length || evo.qa.some(function(q, i){ return q.selected == null; })){
-        alert('请先完成病程时间轴推理的全部单选题，再生成学习报告。');
+    const missing = ['stage','turning','trend','plan'].find(key=>!String(evo[key] || '').trim());
+    if(missing){
+        alert('请先完成病程推理作答，再生成学习报告。');
         return;
     }
 
@@ -2228,8 +2164,8 @@ function generateIntegratedLearningReport(){
 
     let html = '<div class="report-content">';
     html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统自动评分：诊断准确率 / 逻辑完整度</div></div>';
-    html += '<div class="report-meta"><div>学员：管理员</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
-    html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病程推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程时间轴作答和系统评分固定保留。</div>';
+    html += '<div class="report-meta"><div>学员：管理员</div><div>病例：'+escHtml(currentCase.title)+'</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
+    html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病程推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程推理作答和系统评分固定保留。</div>';
     html += '<div class="report-score-section">';
     html += '<div class="report-score-big"><div class="big-score" style="color:'+scoreColor+';">'+assessment.overallScore+'</div><div class="big-label">'+(assessment.overallScore>=90?'优秀':assessment.overallScore>=75?'良好':assessment.overallScore>=60?'一般':'需提高')+'</div></div>';
     html += '<div class="report-score-detail">';
@@ -2243,27 +2179,27 @@ function generateIntegratedLearningReport(){
     html += '<div class="report-module-card">';
     html += '<div class="report-module-head"><div><div class="report-module-title">AI诊断对比学习</div><div class="report-module-desc">按学员提交的诊断字段与 AI 诊断结果逐项对比，系统自动评分诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
-    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+compare.diagnosisAccuracy+'分</div></div>';
-    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+compare.logicCompleteness+'分</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+compare.diagnosisAccuracy+'分</div><div class="score-pill-desc">'+escHtml(compare.diagnosisComment)+'</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+compare.logicCompleteness+'分</div><div class="score-pill-desc">'+escHtml(compare.logicComment)+'</div></div>';
     html += '</div>';
     html += '<table class="diff-table"><thead><tr><th>评分字段</th><th>学员提交内容</th><th>AI诊断结果</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     compareRowsForReport.forEach(row=>{
         html += '<tr><td>'+escHtml(row.name)+'</td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
-    
+    html += '<tr class="highlight"><td><strong>模块评分</strong></td><td colspan="2">系统自动评分汇总</td><td>'+compare.diagnosisAccuracy+'分</td><td>'+compare.logicCompleteness+'分</td><td>'+escHtml(compare.diagnosisComment)+' '+escHtml(compare.logicComment)+'</td></tr>';
     html += '</tbody></table></div>';
 
     html += '<div class="report-module-card">';
-    html += '<div class="report-module-head"><div><div class="report-module-title">病程推理实训</div><div class="report-module-desc">按病程时间轴各时间点的单选题作答，系统自动评判诊断准确率和逻辑完整度。</div></div></div>';
+    html += '<div class="report-module-head"><div><div class="report-module-title">病程推理实训</div><div class="report-module-desc">按病程阶段、关键转折、趋势判断和处置随访四个作答项，系统自动评判诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
-    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+evolution.diagnosisAccuracy+'分</div></div>';
-    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+evolution.logicCompleteness+'分</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+evolution.diagnosisAccuracy+'分</div><div class="score-pill-desc">'+escHtml(evolution.diagnosisComment)+'</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+evolution.logicCompleteness+'分</div><div class="score-pill-desc">'+escHtml(evolution.logicComment)+'</div></div>';
     html += '</div>';
-    html += '<table class="diff-table"><thead><tr><th>时间节点</th><th>学员选择</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
+    html += '<table class="diff-table"><thead><tr><th>作答项</th><th>学员作答</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     assessment.fieldAssessments.forEach(item=>{
         html += '<tr><td><strong>'+escHtml(item.name)+'</strong></td><td>'+escHtml(item.user)+'</td><td>'+escHtml(item.accuracyScore)+'分</td><td>'+escHtml(item.logicScore)+'分</td><td>'+escHtml(item.accuracyComment)+' '+escHtml(item.logicComment)+'</td></tr>';
     });
-    
+    html += '<tr class="highlight"><td><strong>模块评分</strong></td><td>系统自动评分汇总</td><td>'+evolution.diagnosisAccuracy+'分</td><td>'+evolution.logicCompleteness+'分</td><td>'+escHtml(evolution.diagnosisComment)+' '+escHtml(evolution.logicComment)+'</td></tr>';
     html += '</tbody></table></div></div>';
     html += '<div class="report-actions"><button class="btn btn-outline" onclick="printReport()">打印</button><button class="btn btn-primary" onclick="closeReport()">关闭</button></div>';
     html += '</div>';
@@ -2271,7 +2207,7 @@ function generateIntegratedLearningReport(){
     saveLearningReport(currentCaseId, {
         caseId: currentCaseId,
         caseTitle: currentCase.title,
-        reportVersion: 'case-learning-score-v5',
+        reportVersion: 'case-learning-score-v3',
         generatedAt: dateStr,
         metrics: {
             diagnosisAccuracy: assessment.diagnosisAccuracy,
@@ -2307,8 +2243,8 @@ function openSavedLearningReport(caseId){
         return;
     }
     const targetCaseId = caseId || currentCaseId;
-    const canRegenerate = targetCaseId === currentCaseId && currentTab === 'evolution';
-    if(report.reportVersion !== 'case-learning-score-v5' && canRegenerate){
+    const canRegenerate = targetCaseId === currentCaseId && currentTab === 'evolution' && document.getElementById('evo_stage');
+    if(report.reportVersion !== 'case-learning-score-v3' && canRegenerate){
         delete caseLearningReports[targetCaseId];
         persistTeachingState();
         generateIntegratedLearningReport();
@@ -2326,12 +2262,14 @@ function selectCompareCase(id){
 
     // ===== AI诊断面板 =====
     const aiDiag = getAiDiagnosisInfo(currentCompareCase);
-    const aiConclusion = aiDiag.diagnosis || [aiDiag.diseaseName, aiDiag.subtypeStage, aiDiag.affectedEye].filter(Boolean).join(' / ');
     let aiHtml = '<div class="panel-header"><span class="header-icon">🤖</span>AI 诊断结果</div>';
     aiHtml += '<div class="panel-body">';
     aiHtml += '<div class="ai-diagnosis-name">'+escHtml(aiDiag.diseaseName)+'</div>';
-    aiHtml += '<div class="user-module"><div class="section-label">AI诊断结论</div><div class="diagnosis-structured-list ai">';
-    aiHtml += '<div class="diag-field-card full"><div class="diag-field-label">AI 诊断</div><div class="diag-field-value">'+escHtml(aiConclusion)+'</div></div>';
+    aiHtml += '<div class="user-module"><div class="section-label">AI诊断字段</div><div class="diagnosis-structured-list ai">';
+    aiHtml += '<div class="diag-field-card"><div class="diag-field-label">疾病名称</div><div class="diag-field-value">'+escHtml(aiDiag.diseaseName)+'</div></div>';
+    aiHtml += '<div class="diag-field-card"><div class="diag-field-label">分型/分期</div><div class="diag-field-value">'+escHtml(aiDiag.subtypeStage)+'</div></div>';
+    aiHtml += '<div class="diag-field-card"><div class="diag-field-label">受累眼别</div><div class="diag-field-value">'+escHtml(aiDiag.affectedEye)+'</div></div>';
+    aiHtml += '<div class="diag-field-card full"><div class="diag-field-label">诊断依据</div><div class="diag-field-value">'+escHtml(aiDiag.diagnosisBasis)+'</div></div>';
     aiHtml += '</div></div>';
     aiHtml += '</div>';
     document.getElementById('aiPanel').innerHTML = aiHtml;

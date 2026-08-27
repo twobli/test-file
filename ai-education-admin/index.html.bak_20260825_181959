@@ -1147,9 +1147,9 @@
         <div class="tab-pane" id="teacherCourseContent">
           <div class="panel">
             <div class="panel-head">
-              <div><h2 class="panel-title">课程列表与章节测验绑定</h2><p class="panel-subtitle">后台先维护知识点，再上传分章节课程；课程保存后紧接着在同一流程里配置章节测验，小节上传视频并绑定知识点。</p></div>
+              <div><h2 class="panel-title">课程列表与章节测验绑定</h2><p class="panel-subtitle">后台先维护知识点，再上传分章节课程；课程保存后紧接着在同一流程里配置章节测验，小节分别上传视频、讲义和图文并绑定知识点。</p></div>
               <div class="top-actions">
-                <button class="btn primary" onclick="openDrawer('上传课程', '先填写课程名称、知识体系和难度等级，再按章节和小节逐步维护视频和知识点，接着配置章节测验和参与人员。', 'course')">上传课程</button>
+                <button class="btn primary" onclick="openDrawer('上传课程', '先填写课程名称、知识体系和难度等级，再按章节和小节逐步维护视频、讲义、图文、知识点，接着配置章节测验和参与人员。', 'course')">上传课程</button>
               </div>
             </div>
             <div class="panel-body">
@@ -1686,14 +1686,14 @@
     };
 
     var courses = [
-      { name: '糖尿病视网膜病变基础', category: '生物信息学', difficulty: '中级', chapters: '12章 / 28节', resources: '视频28节', knowledgeScope: 'ETDRS分级、4-2-1规则、国际临床DR分级、OCTA与FFA鉴别', completeRule: '视频播放100%；可自由跳章节', quizBinding: '已绑定 10/12 章测验｜2章待配置', quizStatus: '待补齐', progress: 65, front: '继续学习｜章节测验随本章学完后开放', status: '已发布' },
-      { name: '青光眼诊疗基础', category: '生理学', difficulty: '高级', chapters: '15章 / 32节', resources: '视频32节', knowledgeScope: '青光眼视野检查、RNFL厚度评估、OCT结构评估', completeRule: '已学完，可直接重学或进入章节测验', quizBinding: '已绑定 15/15 章测验｜全部随课程发布', quizStatus: '已完成', progress: 100, front: '再次学习｜去进行章节测验', status: '已发布' },
-      { name: '高血压视网膜病变', category: '解剖学', difficulty: '初级', chapters: '8章 / 16节', resources: '视频16节', knowledgeScope: 'Keith-Wagener-Barker分级、Scheie分级、动静脉交叉压迫征', completeRule: '已学完；测验结果可回看和重测', quizBinding: '已绑定 8/8 章测验｜支持再次测验', quizStatus: '已完成', progress: 100, front: '再次学习｜再次测验｜查看学习测验结果', status: '已发布' },
-      { name: '眼底血管造影判读', category: '医学AI基础', difficulty: '中级', chapters: '11章 / 24节', resources: '视频24节', knowledgeScope: 'FFA渗漏判断、OCTA与FFA鉴别、无灌注区识别', completeRule: '视频完成进度追踪；本章未学完锁测验', quizBinding: '已绑定 7/11 章测验｜4章待配置', quizStatus: '待补齐', progress: 45, front: '继续学习｜未学完章节测验锁定', status: '已发布' }
+      { name: '糖尿病视网膜病变基础', category: '生物信息学', difficulty: '中级', chapters: '12章 / 28节', resources: '视频28节｜图文28节｜讲义28份', knowledgeScope: 'ETDRS分级、4-2-1规则、国际临床DR分级、OCTA与FFA鉴别', completeRule: '视频100% + 图文读到底；可自由跳章节', quizBinding: '已绑定 10/12 章测验｜2章待配置', quizStatus: '待补齐', progress: 65, front: '继续学习｜章节测验随本章学完后开放', status: '已发布' },
+      { name: '青光眼诊疗基础', category: '生理学', difficulty: '高级', chapters: '15章 / 32节', resources: '视频32节｜图文32节｜讲义32份', knowledgeScope: '青光眼视野检查、RNFL厚度评估、OCT结构评估', completeRule: '已学完，可直接重学或进入章节测验', quizBinding: '已绑定 15/15 章测验｜全部随课程发布', quizStatus: '已完成', progress: 100, front: '再次学习｜去进行章节测验', status: '已发布' },
+      { name: '高血压视网膜病变', category: '解剖学', difficulty: '初级', chapters: '8章 / 16节', resources: '视频16节｜图文16节｜讲义16份', knowledgeScope: 'Keith-Wagener-Barker分级、Scheie分级、动静脉交叉压迫征', completeRule: '已学完；测验结果可回看和重测', quizBinding: '已绑定 8/8 章测验｜支持再次测验', quizStatus: '已完成', progress: 100, front: '再次学习｜再次测验｜查看学习测验结果', status: '已发布' },
+      { name: '眼底血管造影判读', category: '医学AI基础', difficulty: '中级', chapters: '11章 / 24节', resources: '视频24节｜图文24节｜讲义24份', knowledgeScope: 'FFA渗漏判断、OCTA与FFA鉴别、无灌注区识别', completeRule: '视频/图文分项追踪；本章未学完锁测验', quizBinding: '已绑定 7/11 章测验｜4章待配置', quizStatus: '待补齐', progress: 45, front: '继续学习｜未学完章节测验锁定', status: '已发布' }
     ];
 
     var assignments = [
-      { course: '高血压视网膜病变', chapter: '第2章｜高血压视网膜病变分级', condition: '本章全部小节视频播放100%', courseKnowledge: '小节范围：KWB分级、Scheie分级、动静脉交叉压迫征', knowledge: '本次测验：KWB分级、动静脉交叉压迫征', retake: '不限次数；概览只统计首测', result: '学完本章后显示“再次测验/查看学习测验结果”', status: '已发布' },
+      { course: '高血压视网膜病变', chapter: '第2章｜高血压视网膜病变分级', condition: '本章全部小节视频100% + 图文读到底', courseKnowledge: '小节范围：KWB分级、Scheie分级、动静脉交叉压迫征', knowledge: '本次测验：KWB分级、动静脉交叉压迫征', retake: '不限次数；概览只统计首测', result: '学完本章后显示“再次测验/查看学习测验结果”', status: '已发布' },
       { course: '青光眼诊疗基础', chapter: '第4章｜青光眼诊断技术与标准', condition: '本章全部小节已学完后自动开放', courseKnowledge: '小节范围：青光眼视野检查、RNFL厚度评估、OCT结构评估', knowledge: '本次测验：青光眼视野检查、RNFL厚度评估', retake: '可重测；每次结果单独保留', result: '学完本章后显示“去进行章节测验”', status: '待发布' },
       { course: '糖尿病视网膜病变基础', chapter: '第3章｜DR国际临床分级标准', condition: '本章全部小节完成，教师可补充指定学员开放', courseKnowledge: '小节范围：ETDRS分级、4-2-1规则、国际临床DR分级、OCTA与FFA鉴别', knowledge: '本次测验：ETDRS分级、4-2-1规则、国际临床DR分级', retake: '不限次数；首测进入课程概览', result: '课程卡片保留学习入口，测验入口随章节完成解锁', status: '草稿' }
     ];
@@ -1741,7 +1741,7 @@
         name: '王珂',
         group: '青光眼专题班',
         courses: [
-          { name: '青光眼诊疗基础', progress: 82, quizAttempts: [], state: '视频未播放到100%，章节测验未开放' },
+          { name: '青光眼诊疗基础', progress: 82, quizAttempts: [], state: '视频已完成，图文未读完，章节测验未开放' },
           { name: 'OCT读片实战训练', progress: 36, quizAttempts: [], state: '课程学习中，章节测验未开放' },
           { name: '眼底血管造影判读', progress: 0, quizAttempts: [], state: '尚未开始学习，章节测验未开放' }
         ]
@@ -2626,7 +2626,9 @@
         + '<div class="form-field"><label>小节名称</label><input class="input" placeholder="请输入小节名称"></div>'
         + '<div class="form-field"><label>小节编号</label><input class="input" value="' + code + '"></div>'
         + '<div class="form-field"><label>视频上传</label><input class="input" placeholder="上传视频文件"></div>'
-        + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" multiple size="5" required>' + courseKnowledgeOptionHtml() + '</select></div>'
+        + '<div class="form-field"><label>视频讲义</label><input class="input" placeholder="上传视频讲义"></div>'
+        + '<div class="form-field" style="grid-column:1/-1;"><label>图文内容</label><textarea placeholder="在这里编辑图文内容、配图说明和学习要点。"></textarea></div>'
+        + '<div class="form-field"><label>绑定知识点</label><select class="select knowledge-select" multiple size="5">' + courseKnowledgeOptionHtml() + '</select></div>'
         + '</div>'
         + '</div>';
     }
@@ -2637,16 +2639,18 @@
         + '<div class="question-grid">'
         + '<div class="form-field"><label>题目标题</label><input class="input" placeholder="请输入题目标题"></div>'
         + '<div class="form-field"><label>题型</label><select class="select" disabled><option selected>单选题</option></select></div>'
-        + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" multiple size="5" required>' + courseKnowledgeOptionHtml() + '</select></div>'
+        + '<div class="form-field"><label>分数</label><input class="input" type="number" min="1" value="10"></div>'
+        + '<div class="form-field"><label>关联小节</label><select class="select"><option>1.1 Keith-Wagener-Barker分级</option><option>1.2 Scheie分级与临床应用</option></select></div>'
+        + '<div class="form-field"><label>绑定知识点</label><select class="select knowledge-select" multiple size="5">' + courseKnowledgeOptionHtml() + '</select></div>'
         + '<div class="form-field wide"><label>题干</label><textarea placeholder="请输入单选题题干"></textarea></div>'
         + '<div class="form-field wide"><label>选项</label><textarea placeholder="A. ...&#10;B. ...&#10;C. ...&#10;D. ..."></textarea></div>'
-        + '<div class="form-field wide"><label>正确答案与解析</label><textarea placeholder="填写正确答案和解析"></textarea></div>' + '<div class="form-field wide" style="font-size:12px;color:var(--gray-500);">提示：题目统一为单选题，必须绑定至少一个知识点后才能保存。</div>'
+        + '<div class="form-field wide"><label>正确答案与解析</label><textarea placeholder="填写正确答案和解析"></textarea></div>'
         + '</div>'
         + '</div>';
     }
 
     function addCourseQuizQuestion() {
-      var list = document.getElementById('courseQuizList');
+      var list = document.querySelector('#drawerBody .course-quiz-list');
       if (!list) return;
       var questionIndex = list.querySelectorAll('.exam-question-card').length + 1;
       list.insertAdjacentHTML('beforeend', courseQuizCardHtml(questionIndex));
@@ -2678,7 +2682,7 @@
         + '<div class="chapter-title-row"><span class="chapter-tag">第' + chapterIndex + '章</span><input class="input chapter-name" placeholder="请输入第' + chapterIndex + '章名称"></div>'
         + '<button class="btn small" onclick="addCourseSection(this)">+ 添加小节</button>'
         + '</div>'
-        + '<div class="course-builder-note">先填写章节名称，再点击“添加小节”继续上传视频并绑定知识点。</div>'
+        + '<div class="course-builder-note">先填写章节名称，再点击“添加小节”继续上传视频、讲义、图文并绑定知识点。</div>'
         + '<div class="section-footer"><button class="btn primary" onclick="addCourseSection(this)">+ 添加小节</button></div>'
         + '</div>';
     }
@@ -2691,9 +2695,9 @@
     }
 
     var drawerTemplates = {
-      'rule-check': '<div class="rules"><div class="rule-box"><b>课程</b><p>校验知识体系、难度等级、章节树、视频资源、章节测验是否完整。</p></div><div class="rule-box"><b>考试</b><p>校验题型混合、知识点覆盖、难度比例、次数限制和成绩报告字段。</p></div><div class="rule-box"><b>比赛</b><p>校验有效期、固定时长、进度保存、完成/退赛/缺考结果生成。</p></div><div class="rule-box"><b>个人中心</b><p>校验课程、测验、考试、实训、AI答疑、证书学分是否可进入能力评估。</p></div></div>',
+      'rule-check': '<div class="rules"><div class="rule-box"><b>课程</b><p>校验知识体系、难度等级、章节树、在线讲义、讲义下载、章节测验是否完整。</p></div><div class="rule-box"><b>考试</b><p>校验题型混合、知识点覆盖、难度比例、次数限制和成绩报告字段。</p></div><div class="rule-box"><b>比赛</b><p>校验有效期、固定时长、进度保存、完成/退赛/缺考结果生成。</p></div><div class="rule-box"><b>个人中心</b><p>校验课程、测验、考试、实训、AI答疑、证书学分是否可进入能力评估。</p></div></div>',
       course: `<div class="course-builder">
-        <div class="course-builder-note">先填写课程名称、知识体系、难度等级，再在下方按顺序添加章节。章节只有名称；小节里上传视频并绑定知识点。课程保存后可继续配置章节测验，并在这里选择参与人员。</div>
+        <div class="course-builder-note">先填写课程名称、知识体系、难度等级，再在下方按顺序添加章节。章节只有名称；小节里才上传视频、视频讲义、图文并绑定知识点。课程保存后可继续配置章节测验，并在这里选择参与人员。</div>
         <div class="split-form">
           <div class="form-field"><label>课程名称</label><input class="input" value="高血压视网膜病变"></div>
           <div class="form-field"><label>知识体系</label><select class="select"><option>解剖学</option><option selected>生理学</option><option>生物信息学</option><option>医学AI基础</option></select></div>
@@ -2718,6 +2722,8 @@
                   <div class="form-field"><label>小节名称</label><input class="input" value="Keith-Wagener-Barker分级"></div>
                   <div class="form-field"><label>小节编号</label><input class="input" value="1.1"></div>
                   <div class="form-field"><label>视频上传</label><input class="input" value="1.1_KWB分级.mp4"></div>
+                  <div class="form-field"><label>视频讲义</label><input class="input" value="1.1_KWB分级讲义.pdf"></div>
+                  <div class="form-field" style="grid-column:1/-1;"><label>图文内容</label><textarea>这里直接作为图文编辑器使用，支持粘贴章节图文、要点和配图说明。</textarea></div>
                   <div class="form-field"><label>绑定知识点</label><select class="select knowledge-select" multiple size="5"><option selected>Keith-Wagener-Barker分级</option><option selected>动静脉交叉压迫征</option><option>Scheie分级</option><option>高血压眼底</option><option>RNFL厚度评估</option></select></div>
                 </div>
               </div>
@@ -2730,6 +2736,8 @@
                   <div class="form-field"><label>小节名称</label><input class="input" value="Scheie分级与临床应用"></div>
                   <div class="form-field"><label>小节编号</label><input class="input" value="1.2"></div>
                   <div class="form-field"><label>视频上传</label><input class="input" value="1.2_Scheie分级.mp4"></div>
+                  <div class="form-field"><label>视频讲义</label><input class="input" value="1.2_Scheie分级讲义.pdf"></div>
+                  <div class="form-field" style="grid-column:1/-1;"><label>图文内容</label><textarea>这里直接作为图文编辑器使用，支持粘贴章节图文、要点和配图说明。</textarea></div>
                   <div class="form-field"><label>绑定知识点</label><select class="select knowledge-select" multiple size="5"><option selected>Scheie分级</option><option selected>高血压眼底</option><option>Keith-Wagener-Barker分级</option><option>动静脉交叉压迫征</option><option>RNFL厚度评估</option></select></div>
                 </div>
               </div>
@@ -2747,7 +2755,7 @@
               </div>
               <button class="btn small" onclick="addCourseSection(this)">+ 添加小节</button>
             </div>
-            <div class="course-builder-note">先补第2章名称，再在下方逐个添加小节。每个小节都按“视频 -> 知识点”顺序维护，之后可直接继续配章节单选题。</div>
+            <div class="course-builder-note">先补第2章名称，再在下方逐个添加小节。每个小节都按“视频 -> 讲义 -> 图文 -> 知识点”顺序维护，之后可直接继续配章节单选题。</div>
             <div class="section-footer"><button class="btn primary" onclick="addCourseSection(this)">+ 添加小节</button></div>
           </div>
         </div>
@@ -2783,7 +2791,7 @@
       'course-aiqa': `<div class="split-form">
         <div class="form-field"><label>首页AI答疑范围</label><select class="select"><option>仅医学课程自然语言问答</option><option>暂不开放</option></select></div>
         <div class="form-field"><label>首页入场提示</label><input class="input" value="当前问答基于医学课程内容，请勿询问与医学无关的内容"></div>
-        <div class="form-field"><label>课程详情入口</label><select class="select"><option>当前小节视频完成后开放</option><option>未完成时提示先学完当前小节</option></select></div>
+        <div class="form-field"><label>课程详情入口</label><select class="select"><option>当前小节视频、讲义和图文均完成后开放</option><option>未完成时提示先学完当前小节</option></select></div>
         <div class="form-field"><label>详情页功能</label><select class="select"><option>当前小节问答 + 当前小节知识点难点讲解</option><option>仅当前小节问答</option></select></div>
         <div class="form-field" style="grid-column:1/-1;"><label>知识点难点讲解</label><textarea>AI只读取当前小节绑定的知识点，按白话解释、临床例子、常见误区、教材/指南出处组织内容；未绑定知识点的小节不能发布难点讲解。</textarea></div>
         <div class="form-field" style="grid-column:1/-1;"><label>问题拦截规则</label><textarea>首页AI答疑不提供课程难点讲解；非医学问题、与当前课程无关的问题需提示收敛到医学课程学习范围。</textarea></div>

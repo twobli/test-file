@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -95,7 +95,7 @@
         <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
         <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)"><span><span class="menu-icon">👤</span><span>个人中心与能力评估</span></span><span class="arrow">▶</span></div>
         <div class="submenu open">
-            
+            <a class="menu-item" href="个人中心与能力评估.html">个人中心概览</a>
             <a class="menu-item" href="个人学习档案管理.html">个人学习档案管理</a>
             <a class="menu-item" href="学习轨迹分析.html">学习轨迹分析</a>
             <a class="menu-item active" href="AI能力雷达图.html">AI能力雷达图</a>
@@ -108,7 +108,7 @@
     <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>AI能力雷达图</span></div>
     <div class="page-head">
         <div><h1 class="page-title">AI能力雷达图</h1><p class="page-desc">可视化展示用户在知识掌握、诊断能力、模型构建、科研创新、病例分析和知识应用等维度的能力水平。</p></div>
-        <div class="head-actions"><button class="btn btn-primary" onclick="refreshRadar()">重新生成能力画像</button></div>
+        <div class="head-actions"><a class="btn btn-outline" href="个人中心与能力评估.html">返回个人中心首页</a><button class="btn btn-primary" onclick="refreshRadar()">重新生成能力画像</button></div>
     </div>
     <section class="card">
         <div class="card-header">
@@ -155,7 +155,9 @@
 <script>
 var knowledgeModules = [
     { name: '解剖学', score: 72, color: '#1a73e8' },
-    { name: '生物信息学', score: 71, color: '#f59e0b' }
+    { name: '生物信息学', score: 71, color: '#f59e0b' },
+    { name: '医学AI基础', score: 69, color: '#7c3aed' },
+    { name: '生理学', score: 68, color: '#10b981' }
 ];
 var knowledgeAverage = Math.round(knowledgeModules.reduce(function(sum, item) {
     return sum + item.score;
@@ -230,8 +232,9 @@ var abilityDetails = {
         title: '科研创新',
         tag: '综合评分 78%',
         rows: [
-            { name: '医学AI基础', score: 69, color: '#7c3aed' },
-            { name: '生理学', score: 68, color: '#10b981' }
+            { name: '文献检索', score: 82, color: '#0891b2' },
+            { name: '研究设计', score: 76, color: '#0891b2' },
+            { name: '结果分析', score: 76, color: '#0891b2' }
         ]
     },
     case: {

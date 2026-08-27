@@ -328,9 +328,6 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     </div>
     <div class="page-header">
         <h1 class="page-title">虚拟临床技能实训</h1>
-        <div class="case-selector">
-            <button class="case-refresh-btn" onclick="refreshCase()">刷新病例</button>
-        </div>
     </div>
 
     <div class="content-grid">
@@ -392,9 +389,58 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                     <span class="card-badge">影像判读 + 诊断决策</span>
                 </div>
                 <div class="card-body">
-                    <div class="clinical-subsection-title"><span>1</span>影像判读与诊断决策</div>
-<textarea class="textarea-diagnosis" id="diagNotes" required placeholder="请填写影像判读与诊断决策，例如病变位置、眼别、分期判断与处理思路..."></textarea>
-<button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交临床诊断</button>
+                    <div class="clinical-subsection-title"><span>1</span>影像判读</div>
+                    <div id="imageInterpretationBody"></div>
+
+                    <div class="clinical-subsection-title"><span>2</span>诊断决策</div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">综合临床诊断（单选） <span style="color:var(--danger);">*</span></div>
+                        <div class="diagnosis-options" id="diagnosisOptions">
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="none"> 无明确糖尿病视网膜病变
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="mild"> 轻度非增殖性DR（轻度NPDR）
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="moderate"> 中度非增殖性DR（中度NPDR）
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="severe"> 重度非增殖性DR（重度NPDR）
+                            </label>
+                            <label class="diagnosis-option" onclick="selectDiagnosis(this)">
+                                <input type="radio" name="diagnosis" value="pdr"> 增殖性DR（PDR）
+                            </label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">临床风险分层（单选） <span style="color:var(--danger);">*</span></div>
+                        <div class="diagnosis-options" id="riskOptions">
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="low"> 常规管理
+                            </label>
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="followup"> 定期复查
+                            </label>
+                            <label class="diagnosis-option risk-option" onclick="selectRiskLevel(this)">
+                                <input type="radio" name="riskLevel" value="urgent"> 尽快专科处理
+                            </label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">下一步处理建议（可多选） <span style="color:var(--danger);">*</span></div>
+                        <div class="action-grid">
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="routine"> 常规复查</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="oct"> 完善OCT/相关检查</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="referral"> 眼科专科复诊</label>
+                            <label class="action-chip"><input type="checkbox" name="nextAction" value="control"> 强化血糖血压管理</label>
+                        </div>
+                    </div>
+                    <div class="diagnosis-section">
+                        <div class="ds-label">综合诊断说明 <span style="color:var(--danger);">*</span></div>
+                        <textarea class="textarea-diagnosis" id="diagNotes" required placeholder="请结合问诊信息、影像判读和风险分层，说明您的综合判断与处理思路..."></textarea>
+                    </div>
+                    <button class="btn-submit-diag" onclick="submitDiagnosis()">✅ 提交临床诊断</button>
                 </div>
             </div>
 

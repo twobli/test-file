@@ -220,6 +220,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .learning-panel.active { display: block; }
 .video-section { background: #000; border-radius: var(--radius); overflow: hidden; position: relative; }
 .video-learn-tip { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.video-handout-section { margin-top: 12px; }
 .video-section .video-placeholder { width: 100%; height: 360px; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; cursor: pointer; position: relative; }
 .video-section .video-placeholder .play-btn { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 28px; transition: var(--transition); border: 3px solid rgba(255,255,255,0.6); }
 .video-section .video-placeholder:hover .play-btn { background: rgba(255,255,255,0.35); transform: scale(1.08); }
@@ -231,6 +232,26 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .video-controls .ctrl-progress { flex: 1; height: 4px; background: #555; border-radius: 2px; cursor: pointer; position: relative; }
 .video-controls .ctrl-progress-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 35%; }
 .video-controls .ctrl-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.handout-section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; flex: 1; overflow-y: auto; }
+.article-content-section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 24px; min-height: 420px; max-height: 560px; overflow-y: auto; }
+.article-read-tip { margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--gray-200); border-radius: 8px; background: var(--gray-50); color: var(--gray-600); font-size: 12px; line-height: 1.6; }
+.article-read-progress { height: 6px; margin-top: 8px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.article-read-progress span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: inherit; transition: width .2s ease; }
+.handout-section .handout-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100); }
+.handout-section .handout-heading { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.handout-section .handout-header h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.handout-section .handout-body { font-size: 14px; color: var(--gray-800); line-height: 1.9; }
+.handout-section .handout-body h4 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 16px 0 8px; }
+.handout-section .handout-body p { margin-bottom: 10px; }
+.handout-section .handout-body ul { padding-left: 20px; margin-bottom: 10px; }
+.handout-section .handout-body ul li { margin-bottom: 4px; }
+.article-content-heading { padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid var(--gray-100); }
+.article-content-heading h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.article-content-body { font-size: 14px; color: var(--gray-800); line-height: 1.9; }
+.article-content-body h4 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin: 18px 0 8px; }
+.article-content-body p { margin-bottom: 12px; }
+.article-content-body ul { padding-left: 20px; margin-bottom: 12px; }
+.article-content-body ul li { margin-bottom: 5px; }
 .section-complete-hint { background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: var(--radius); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
 .section-complete-hint .complete-text { font-size: 13px; color: #2e7d32; font-weight: 500; }
 
@@ -301,6 +322,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 /* ===== 强化建议 ===== */
 .reinforce-alert { background: #fffaf0; border: 1px solid #f7d27a; border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
 .reinforce-alert .ra-title { font-weight: 700; color: #7d5200; font-size: 15px; margin-bottom: 4px; }
+.reinforce-alert .ra-subtitle { color: #8a6a21; font-size: 12px; margin-bottom: 14px; }
 .reinforce-alert .ra-list { display: grid; gap: 12px; }
 .reinforce-alert .ra-item { background: #fff; border: 1px solid #f5e3b1; border-radius: 8px; padding: 14px 16px; }
 .reinforce-alert .ra-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -308,18 +330,20 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .reinforce-alert .ra-name { font-size: 14px; color: var(--gray-900); font-weight: 700; }
 .reinforce-alert .ra-meta { color: var(--gray-500); font-size: 12px; margin-top: 4px; }
 .reinforce-alert .ra-track { margin-top: 8px; color: var(--gray-700); font-size: 13px; line-height: 1.7; }
-.reinforce-alert .ra-recommend-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+.reinforce-alert .ra-config-note { margin-bottom: 12px; padding: 10px 12px; border-radius: 8px; background: #fff; border: 1px dashed #e9bf62; color: #7d5200; font-size: 12px; line-height: 1.6; }
+.reinforce-alert .ra-recommend-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; }
 .reinforce-alert .ra-section { border: 1px solid var(--gray-200); border-radius: 8px; background: #fbfcff; padding: 12px; }
 .reinforce-alert .ra-section-title { color: var(--primary); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
-.reinforce-alert .ra-course-list { display: grid; gap: 8px; }
-.reinforce-alert .ra-course-card { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 10px 12px; }
+.reinforce-alert .ra-course-list, .reinforce-alert .ra-ref-list { display: grid; gap: 8px; }
+.reinforce-alert .ra-course-card, .reinforce-alert .ra-ref-item { border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 10px 12px; }
 .reinforce-alert .ra-course-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
 .reinforce-alert .ra-course-name { color: var(--gray-900); font-weight: 700; font-size: 13px; line-height: 1.5; }
-.reinforce-alert .ra-course-meta, .reinforce-alert .ra-course-reason { color: var(--gray-500); font-size: 12px; line-height: 1.6; }
+.reinforce-alert .ra-course-meta, .reinforce-alert .ra-course-reason, .reinforce-alert .ra-ref-source { color: var(--gray-500); font-size: 12px; line-height: 1.6; }
 .reinforce-alert .ra-status { flex-shrink: 0; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
 .reinforce-alert .ra-status.learned { color: #137333; background: #e6f4ea; }
 .reinforce-alert .ra-status.unlearned { color: #b06000; background: #fef7e0; }
 .reinforce-alert .ra-link-btn { margin-top: 8px; height: 28px; padding: 0 10px; border: 1px solid var(--primary); border-radius: 7px; background: #fff; color: var(--primary); font-size: 12px; font-weight: 700; cursor: pointer; }
+.reinforce-alert .ra-ref-name { color: var(--gray-800); font-weight: 700; font-size: 13px; margin-bottom: 2px; }
 .reinforce-alert .ra-empty { background: #fff; border: 1px solid #d7ead9; border-radius: 8px; padding: 14px 16px; color: #1e7e34; font-size: 13px; }
 @media (max-width: 900px) {
     .reinforce-alert .ra-recommend-grid { grid-template-columns: 1fr; }
@@ -443,7 +467,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 /* ===== AI智能答疑系统 ===== */
 .ai-chat-toggle { position: fixed; bottom: 24px; right: 24px; height: 48px; padding: 0 18px; border-radius: 24px; background: linear-gradient(135deg, #2563eb, #6d5bd0); color: #fff; border: none; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 6px 18px rgba(37,99,235,0.28); z-index: 1500; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
 .ai-chat-toggle:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.34); }
-.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); box-shadow: var(--shadow); }
+.ai-qa-shell { height: calc(100vh - var(--header-height) - 48px); min-height: 0; background: #f4f7fb; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 260px minmax(0, 1fr); box-shadow: var(--shadow); }
 .ai-qa-sidebar { min-height: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--gray-200); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; }
 .ai-qa-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--gray-900); }
 .ai-qa-brand .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; }
@@ -670,14 +694,19 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                     <span class="section-badge" id="toolbarSectionBadge">1.1 当前节</span>
                 </div>
                 <div class="toolbar-actions">
-                    
+                    <button class="btn btn-primary btn-sm" onclick="openAiQaSystem()">AI答疑</button>
                     <button class="btn btn-outline btn-sm" onclick="navToCourseList()">返回列表</button>
                 </div>
             </div>
             <div class="learning-mode-bar">
+                <div class="learning-mode-tabs">
+                    <button class="learning-mode-tab active" id="modeVideoTab" type="button" onclick="switchLearningMode('video')">视频学习</button>
+                    <button class="learning-mode-tab" id="modeArticleTab" type="button" onclick="switchLearningMode('article')">图文学习</button>
+                </div>
                 <div class="learning-mode-status">
                     <span class="learning-part-pill" id="videoPartStatus">视频未完成</span>
-                    <span class="learning-rule-tip">首次学习需视频完整播放后才开放章节测验。</span>
+                    <span class="learning-part-pill" id="articlePartStatus">图文未完成</span>
+                    <span class="learning-rule-tip">首次学习需视频完整播放、图文从头读到尾，二者完成后才开放章节测验。</span>
                 </div>
             </div>
             <div class="learning-panel active" id="videoLearningPanel">
@@ -698,10 +727,30 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                     </div>
                 </div>
                 <div class="video-learn-tip" id="videoLearnTip">完成条件：视频播放到 100% 后，本节视频学习才会标记完成。</div>
+                <div class="handout-section video-handout-section">
+                    <div class="handout-header">
+                        <div class="handout-heading">
+                            <h3 id="handoutTitle">在线讲义</h3>
+                            <button class="btn btn-outline btn-sm" onclick="downloadHandout()">📥 讲义下载</button>
+                        </div>
+                        <span style="font-size:12px;color:var(--gray-500);" id="handoutMeta"></span>
+                    </div>
+                    <div class="handout-body" id="handoutBody"></div>
+                </div>
             </div>
             <div class="section-complete-hint" id="sectionCompleteHint" style="display:none;">
                 <span class="complete-text">✅ 你已完成本章节的学习</span>
                 <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
+            </div>
+            <div class="learning-panel" id="articleLearningPanel">
+            <div class="article-content-section" id="articleContentSection" onscroll="handleArticleScroll()">
+                <div class="article-read-tip">
+                    完成条件：从本页图文顶部阅读到页面底部后，本节图文学习才会标记完成。
+                    <div class="article-read-progress"><span id="articleReadProgressFill"></span></div>
+                </div>
+                <div class="article-content-heading"><h3 id="articleContentTitle">图文学习</h3></div>
+                <div class="article-content-body" id="articleContentBody"></div>
+            </div>
             </div>
         </div>
     </div>
@@ -758,6 +807,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
             <div class="result-learning-meta">
                 <span class="result-meta-pill" id="resultLearningProgress">本章学习进度：100%</span>
                 <span class="result-meta-pill" id="resultAttempts">测验次数：1次</span>
+                <span class="result-meta-pill" id="resultBestAccuracy">历史最高：80%</span>
             </div>
             <div class="attempt-filter">
                 <label for="quizAttemptSelect">测验记录</label>
@@ -785,6 +835,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
     <!-- 建议强化内容 -->
     <div class="reinforce-alert" id="reinforceAlert">
         <div class="ra-title">知识追踪与学习路径优化</div>
+        <div class="ra-subtitle">根据后台预配置知识点与测验题目绑定关系，定位薄弱知识点并推荐下一步学习内容。</div>
         <div id="reinforceItems"></div>
     </div>
 
@@ -811,7 +862,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
             </div>
             <div>
                 <label for="courseFeedbackContent">反馈内容</label>
-                <textarea id="courseFeedbackContent" placeholder="请描述需要教师端关注的问题，例如视频内容不清楚、题目解析不足、学习进度展示不明确等。"></textarea>
+                <textarea id="courseFeedbackContent" placeholder="请描述需要教师端关注的问题，例如讲义不清楚、题目解析不足、学习进度展示不明确等。"></textarea>
             </div>
             <div class="cf-submit-field">
                 <label>提交</label>
@@ -837,7 +888,20 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 <!-- ====== 页面五：AI智能答疑系统 ====== -->
 <div class="page-view" id="page-ai-qa">
     <div class="ai-qa-shell">
-        
+        <aside class="ai-qa-sidebar">
+            <div class="ai-qa-brand"><span class="brand-dot">AI</span><span>AI智能答疑</span></div>
+            <div class="ai-scope-card">
+                <h4>当前问答范围</h4>
+                <p id="aiScopeDescription">仅围绕当前课程小节回答；课程难点讲解只围绕当前小节绑定知识点。</p>
+            </div>
+            <div class="ai-context-title" id="aiContextTitle">当前课程与小节</div>
+            <div class="ai-context-group" id="aiContextGroup">
+                <div class="ai-context-item active">
+                    <strong>当前范围</strong>
+                    <span>打开课程小节后自动绑定问答范围</span>
+                </div>
+            </div>
+        </aside>
         <section class="ai-qa-main">
             <div class="ai-qa-topbar">
                 <div class="ai-qa-heading">
@@ -930,17 +994,17 @@ const MOCK_COURSES = [
         icon: '🔬', coverClass: 'c1',
         chapters: [
             { id: 'c1_1', title: '第一章 DR流行病学与危险因素', sections: [
-                { id: 's1_1_1', title: '1.1 DR的全球流行病学特征', duration: '25分钟' },
-                { id: 's1_1_2', title: '1.2 糖尿病病程与DR发生率的关系', duration: '22分钟' },
-                { id: 's1_1_3', title: '1.3 危险因素与预防策略', duration: '20分钟' }
+                { id: 's1_1_1', title: '1.1 DR的全球流行病学特征', duration: '25分钟', handout: '<h4>DR的全球流行病学特征</h4><p>糖尿病视网膜病变（Diabetic Retinopathy, DR）是全球工作年龄人群首要致盲性眼病之一。据国际糖尿病联盟（IDF）统计，全球糖尿病患者已超过5.37亿，其中约三分之一会发展为不同程度的DR。</p><h4>流行趋势</h4><ul><li>全球DR患病率约为34.6%，威胁视力的DR患病率约为10.2%</li><li>亚太地区DR患病率增长最快，中国糖尿病患者DR患病率约为24.7%-37.5%</li><li>随着糖尿病患病率上升和人口老龄化，DR的疾病负担将持续加重</li></ul><h4>危险因素分析</h4><p>DR的发生发展受多种因素影响：<strong>病程</strong>是最重要的危险因素，病程超过20年的患者DR患病率超过80%；<strong>血糖控制水平</strong>（HbA1c每降低1%，微血管并发症风险降低37%）；<strong>高血压</strong>（收缩压每降低10mmHg，DR进展风险降低34%）；<strong>血脂异常</strong>和<strong>妊娠</strong>等因素也会加速DR进展。</p>' },
+                { id: 's1_1_2', title: '1.2 糖尿病病程与DR发生率的关系', duration: '22分钟', handout: '<h4>糖尿病病程与DR发生率的关系</h4><p>糖尿病病程是DR发生发展的最核心驱动因素。研究表明，DR患病率与糖尿病病程呈显著正相关。</p><h4>1型糖尿病</h4><ul><li>病程5年以内：DR患病率约17%</li><li>病程10-14年：DR患病率约50%，其中增殖性DR（PDR）约6%</li><li>病程15年以上：DR患病率高达97%，PDR约67%</li></ul><h4>2型糖尿病</h4><p>2型糖尿病患者在确诊时已有约21%存在DR，病程超过15年者DR患病率约60%。值得注意的是，2型糖尿病起病隐匿，许多患者在确诊前已有多年未诊断的高血糖状态，因此初诊时DR筛查至关重要。</p>' },
+                { id: 's1_1_3', title: '1.3 危险因素与预防策略', duration: '20分钟', handout: '<h4>危险因素与预防策略</h4><p>DR的关键可控危险因素包括高血糖、高血压和血脂异常。综合干预可显著降低DR发生和进展风险。</p><h4>血糖管理</h4><p>DCCT/EDIC研究证实，强化血糖控制可使DR发生风险降低76%，进展风险降低54%。ADA建议多数成人糖尿病患者HbA1c目标<7.0%。</p><h4>血压管理</h4><p>UKPDS研究显示，严格血压控制（目标<150/85mmHg）可使DR进展风险降低34%，视力下降风险降低47%。建议合并高血压的DR患者血压控制在130/80mmHg以下。</p>' }
             ]},
             { id: 'c1_2', title: '第二章 DR国际临床分级标准', sections: [
-                { id: 's1_2_1', title: '2.1 ETDRS分级体系详解', duration: '28分钟' },
-                { id: 's1_2_2', title: '2.2 国际临床DR严重程度量表', duration: '24分钟' }
+                { id: 's1_2_1', title: '2.1 ETDRS分级体系详解', duration: '28分钟', handout: '<h4>ETDRS分级体系详解</h4><p>早期治疗糖尿病视网膜病变研究（ETDRS）建立了一套基于眼底照片的标准化分级体系，至今仍是DR研究的金标准。</p><h4>ETDRS严重程度分级</h4><ul><li><strong>无DR：</strong>ETDRS分级10级，眼底无可识别的DR病变</li><li><strong>轻度NPDR：</strong>ETDRS分级20-35级，仅有微血管瘤</li><li><strong>中度NPDR：</strong>ETDRS分级43-47级，介于轻度和重度之间</li><li><strong>重度NPDR：</strong>ETDRS分级53级，具有4-2-1规则特征</li><li><strong>轻度PDR：</strong>ETDRS分级61级，视盘或视网膜出现新生血管</li></ul>' },
+                { id: 's1_2_2', title: '2.2 国际临床DR严重程度量表', duration: '24分钟', handout: '<h4>国际临床DR严重程度量表</h4><p>2003年国际眼科理事会制定了简化的国际临床DR严重程度量表（ICDRSS），分为5级，是目前临床应用最广泛的分级体系。</p><h4>五级分级标准</h4><ul><li><strong>无明显DR：</strong>眼底无异常</li><li><strong>轻度NPDR：</strong>仅有微动脉瘤</li><li><strong>中度NPDR：</strong>介于轻度和重度之间，有微动脉瘤及其他病变但不满足重度标准</li><li><strong>重度NPDR（4-2-1规则）：</strong>四个象限均有≥20个视网膜内出血点，或两个象限有静脉串珠，或一个象限有IRMA</li><li><strong>PDR：</strong>出现新生血管、玻璃体积血或视网膜前出血</li></ul>' }
             ]},
             { id: 'c1_3', title: '第三章 DR的筛查与诊断方法', sections: [
-                { id: 's1_3_1', title: '3.1 眼底照相技术规范', duration: '20分钟' },
-                { id: 's1_3_2', title: '3.2 OCT/OCTA在DR中的应用', duration: '26分钟' }
+                { id: 's1_3_1', title: '3.1 眼底照相技术规范', duration: '20分钟', handout: '<h4>眼底照相技术规范</h4><p>标准化的眼底照相是DR筛查和分级的基础。规范的眼底照相需要覆盖足够的视网膜区域并保证图像质量。</p><h4>拍摄规范</h4><ul><li><strong>视野要求：</strong>最少应拍摄两张45°眼底照片，分别以黄斑中心和视盘为中心</li><li><strong>瞳孔要求：</strong>推荐使用药物散瞳，确保瞳孔直径≥4mm</li><li><strong>图像质量：</strong>需保证清晰度、对焦良好、无睫毛或眼睑遮挡</li></ul>' },
+                { id: 's1_3_2', title: '3.2 OCT/OCTA在DR中的应用', duration: '26分钟', handout: '<h4>OCT/OCTA在DR中的应用</h4><p>光学相干断层扫描（OCT）和OCT血管成像（OCTA）为DR的精准评估提供了革命性的无创工具。</p><h4>OCT的核心应用</h4><ul><li>定量评估黄斑水肿（DME）：测量中心凹视网膜厚度（CST）</li><li>识别视网膜内层紊乱（DRIL），预测视力预后</li><li>检测视网膜下液和视网膜内囊样改变</li></ul>' }
             ]}
         ],
         quiz: [
@@ -960,12 +1024,12 @@ const MOCK_COURSES = [
         icon: '👁', coverClass: 'c2',
         chapters: [
             { id: 'c2_1', title: '第一章 青光眼房水动力学与病理生理', sections: [
-                { id: 's2_1_1', title: '1.1 房水生成与排出机制', duration: '30分钟' },
-                { id: 's2_1_2', title: '1.2 高眼压性视神经损伤机制', duration: '28分钟' }
+                { id: 's2_1_1', title: '1.1 房水生成与排出机制', duration: '30分钟', handout: '<h4>房水生成与排出机制</h4><p>房水由睫状体的无色素上皮细胞产生，以维持眼内压（IOP）在正常范围内。房水循环是理解青光眼病理生理的基础。</p><h4>房水生成</h4><p>房水生成主要通过三种机制：主动分泌（占80%-90%，Na⁺-K⁺-ATP酶驱动的跨上皮离子转运）、超滤过（占10%-15%，依赖于毛细血管静水压和血浆胶体渗透压差）和单纯扩散。正常房水生成速率约为2.5μL/min。</p><h4>房水排出</h4><p>房水主要通过两条途径排出：<strong>小梁网途径</strong>（压力依赖性，占总排出量的80%-90%）和<strong>葡萄膜巩膜途径</strong>（压力非依赖性，占10%-20%）。原发性开角型青光眼的病变核心即小梁网途径阻力增加。</p>' },
+                { id: 's2_1_2', title: '1.2 高眼压性视神经损伤机制', duration: '28分钟', handout: '<h4>高眼压性视神经损伤机制</h4><p>青光眼性视神经病变的核心是视网膜神经节细胞（RGC）的进行性凋亡及其轴突的丢失。目前公认的主要损伤机制包括机械压迫学说和血管缺血学说。</p><h4>机械压迫学说</h4><p>筛板是视神经穿过巩膜的最薄弱处，高眼压导致筛板向后弯曲变形，直接压迫和阻断轴浆运输，使源自外侧膝状体的神经营养因子（如BDNF）无法逆行转运至RGC胞体，触发了RGC凋亡程序。</p>' }
             ]},
             { id: 'c2_2', title: '第二章 青光眼诊断技术与标准', sections: [
-                { id: 's2_2_1', title: '2.1 视野检查与解读', duration: '25分钟' },
-                { id: 's2_2_2', title: '2.2 OCT在青光眼结构评估中的应用', duration: '26分钟' }
+                { id: 's2_2_1', title: '2.1 视野检查与解读', duration: '25分钟', handout: '<h4>视野检查与解读</h4><p>视野检查是青光眼诊断和随访的核心功能学检查。标准自动视野计（SAP，如Humphrey 24-2/30-2程序）是目前金标准。</p><h4>典型青光眼视野缺损模式</h4><ul><li><strong>旁中心暗点：</strong>最早出现的视野异常，位于固视点10°-20°范围内</li><li><strong>鼻侧阶梯：</strong>沿水平子午线分布的鼻侧视野缺损</li><li><strong>弓形暗点：</strong>从生理盲点延伸至鼻侧水平缝的弧形缺损（Bjerrum暗点）</li></ul>' },
+                { id: 's2_2_2', title: '2.2 OCT在青光眼结构评估中的应用', duration: '26分钟', handout: '<h4>OCT在青光眼结构评估中的应用</h4><p>OCT可定量评估视盘周围视网膜神经纤维层（RNFL）厚度、黄斑区神经节细胞复合体（GCC）厚度和视盘形态参数。</p><p>RNFL厚度是青光眼结构损伤的最敏感指标，颞下和颞上象限最早受累，遵循青光眼半视野损伤模式。</p>' }
             ]}
         ],
         quiz: [
@@ -982,8 +1046,8 @@ const MOCK_COURSES = [
         icon: '🔎', coverClass: 'c3',
         chapters: [
             { id: 'c3_1', title: '第一章 AMD的发病机制', sections: [
-                { id: 's3_1_1', title: '1.1 年龄相关性黄斑变性的流行病学', duration: '22分钟' },
-                { id: 's3_1_2', title: '1.2 干性AMD与湿性AMD的病理差异', duration: '30分钟' }
+                { id: 's3_1_1', title: '1.1 年龄相关性黄斑变性的流行病学', duration: '22分钟', handout: '<h4>年龄相关性黄斑变性的流行病学</h4><p>AMD是发达国家50岁以上人群首要致盲性眼病。随着全球人口老龄化加速，AMD的疾病负担持续攀升。据估计，全球AMD患者约1.96亿，预计2040年将增至2.88亿。</p>' },
+                { id: 's3_1_2', title: '1.2 干性AMD与湿性AMD的病理差异', duration: '30分钟', handout: '<h4>干性AMD与湿性AMD的病理差异</h4><p>干性（萎缩性）AMD以RPE细胞进行性丢失和光感受器萎缩为特征，占AMD的85%-90%；湿性（新生血管性）AMD以脉络膜新生血管（CNV）形成为特征，占10%-15%但导致80%-90%的AMD相关重度视力丧失。</p><p>VEGF-A是CNV形成的关键驱动因子，抗VEGF治疗的引入彻底改变了湿性AMD的预后。</p>' }
             ]}
         ],
         quiz: [
@@ -1000,8 +1064,8 @@ const MOCK_COURSES = [
         icon: '🩺', coverClass: 'c4',
         chapters: [
             { id: 'c4_1', title: '第一章 高血压视网膜病变分级', sections: [
-                { id: 's4_1_1', title: '1.1 Keith-Wagener-Barker分级', duration: '20分钟' },
-                { id: 's4_1_2', title: '1.2 Scheie分级与临床应用', duration: '18分钟' }
+                { id: 's4_1_1', title: '1.1 Keith-Wagener-Barker分级', duration: '20分钟', handout: '<h4>Keith-Wagener-Barker分级</h4><p>KWB分级是最经典的高血压视网膜病变分级体系，分为四级：I级为视网膜动脉轻度狭窄；II级为动静脉交叉压迫征；III级为视网膜出血、棉绒斑和硬性渗出；IV级为III级基础上出现视盘水肿。</p>' },
+                { id: 's4_1_2', title: '1.2 Scheie分级与临床应用', duration: '18分钟', handout: '<h4>Scheie分级与临床应用</h4><p>Scheie分级将高血压视网膜病变分为高血压分期（0-4期）和动脉硬化分期（0-4期），更精细地评估血管改变。</p>' }
             ]}
         ],
         quiz: [
@@ -1018,7 +1082,7 @@ const MOCK_COURSES = [
         icon: '💉', coverClass: 'c5',
         chapters: [
             { id: 'c5_1', title: '第一章 RVO分类与流行病学', sections: [
-                { id: 's5_1_1', title: '1.1 CRVO与BRVO的差异', duration: '25分钟' }
+                { id: 's5_1_1', title: '1.1 CRVO与BRVO的差异', duration: '25分钟', handout: '<h4>CRVO与BRVO的差异</h4><p>视网膜静脉阻塞（RVO）是继DR之后的第二大视网膜血管性疾病。CRVO（视网膜中央静脉阻塞）发生于筛板水平的中央静脉血栓形成；BRVO（视网膜分支静脉阻塞）发生于动静脉交叉处的分支静脉受压。</p><p>BRVO远多于CRVO，约占RVO的80%。CRVO可分为非缺血型（占75%）和缺血型（占25%）。</p>' }
             ]}
         ],
         quiz: [
@@ -1035,8 +1099,8 @@ const MOCK_COURSES = [
         icon: '📷', coverClass: 'c6',
         chapters: [
             { id: 'c6_1', title: '第一章 OCT基本原理与正常解读', sections: [
-                { id: 's6_1_1', title: '1.1 SD-OCT和SS-OCT技术对比', duration: '20分钟' },
-                { id: 's6_1_2', title: '1.2 正常黄斑OCT结构分层', duration: '18分钟' }
+                { id: 's6_1_1', title: '1.1 SD-OCT和SS-OCT技术对比', duration: '20分钟', handout: '<h4>SD-OCT和SS-OCT技术对比</h4><p>频域OCT（SD-OCT）采用光谱仪同时检测所有波长的干涉信号，扫描速度68,000-100,000 A-scans/秒。扫频源OCT（SS-OCT）采用波长可调谐激光器，扫描速度可达200,000-400,000 A-scans/秒。</p>' },
+                { id: 's6_1_2', title: '1.2 正常黄斑OCT结构分层', duration: '18分钟', handout: '<h4>正常黄斑OCT结构分层</h4><p>OCT可清晰显示视网膜各层次结构：内界膜（ILM）、神经纤维层（NFL）、神经节细胞层（GCL）、内丛状层（IPL）、内核层（INL）、外丛状层（OPL）、外核层（ONL）、外界膜（ELM）、椭圆体带（EZ）、嵌合体带（IZ）和RPE/Bruch膜复合体。</p>' }
             ]}
         ],
         quiz: [
@@ -1053,7 +1117,7 @@ const MOCK_COURSES = [
         icon: '⚡', coverClass: 'c7',
         chapters: [
             { id: 'c7_1', title: '第一章 激光物理基础与生物效应', sections: [
-                { id: 's7_1_1', title: '1.1 激光-组织相互作用', duration: '26分钟' }
+                { id: 's7_1_1', title: '1.1 激光-组织相互作用', duration: '26分钟', handout: '<h4>激光-组织相互作用</h4><p>激光与眼底组织的相互作用主要有三种效应：光热效应（占主导）、光化学效应和光机械效应。眼底激光治疗主要利用光热效应，RPE中的黑色素颗粒吸收激光能量将其转化为热能。</p>' }
             ]}
         ],
         quiz: [
@@ -1070,7 +1134,7 @@ const MOCK_COURSES = [
         icon: '🩻', coverClass: 'c8',
         chapters: [
             { id: 'c8_1', title: '第一章 FFA基本原理与时相判定', sections: [
-                { id: 's8_1_1', title: '1.1 荧光素钠的药代动力学', duration: '24分钟' }
+                { id: 's8_1_1', title: '1.1 荧光素钠的药代动力学', duration: '24分钟', handout: '<h4>荧光素钠的药代动力学</h4><p>荧光素钠（分子量376.27 Da）静脉注射后约80%与血浆白蛋白结合，20%为游离状态。游离荧光素钠分子可自由通过正常脉络膜毛细血管的窗孔，但不能通过完整的视网膜血管内皮紧密连接（血-视网膜内屏障）和RPE紧密连接（血-视网膜外屏障）。</p>' }
             ]}
         ],
         quiz: [
@@ -1250,12 +1314,15 @@ function isCourseVideoComplete(course) {
 }
 
 function getSectionCompletionState(course, sectionId) {
-    if (!course || !sectionId) return { video: false };
-    if (isCourseVideoComplete(course)) return { video: true };
+    if (!course || !sectionId) return { video: false, article: false };
+    if (isCourseVideoComplete(course)) return { video: true, article: true };
     const raw = completedSectionIdsByCourse[course.id] && completedSectionIdsByCourse[course.id][sectionId];
-    if (raw === true) return { video: true };
-    if (raw && typeof raw === 'object') return { video: !!raw.video };
-    return { video: false };
+    if (raw === true) return { video: true, article: true };
+    if (raw && typeof raw === 'object') return {
+        video: !!raw.video,
+        article: !!raw.article
+    };
+    return { video: false, article: false };
 }
 
 function isSectionPartComplete(course, sectionId, part) {
@@ -1269,7 +1336,7 @@ function isSectionComplete(course, chapterIndex, sectionIndex) {
     const section = course.chapters[chapterIndex].sections[sectionIndex];
     if (!section) return false;
     const state = getSectionCompletionState(course, section.id);
-    return state.video;
+    return state.video && state.article;
 }
 
 function isChapterComplete(course, chapterIndex) {
@@ -1296,7 +1363,7 @@ function markSectionPartComplete(course, sectionId, part) {
 function markSectionComplete(course, sectionId) {
     if (!course || !sectionId) return;
     if (!completedSectionIdsByCourse[course.id]) completedSectionIdsByCourse[course.id] = {};
-    completedSectionIdsByCourse[course.id][sectionId] = { video: true };
+    completedSectionIdsByCourse[course.id][sectionId] = { video: true, article: true };
     persistCompletedSections();
 }
 
@@ -1750,7 +1817,7 @@ function goCourseQuiz(courseId) {
     if (!course) return;
     const target = findCourseQuizTarget(course, true);
     if (!target) {
-        alert('请先完成任意一个章节的全部视频学习，再进入章节测验。');
+        alert('请先完成任意一个章节的全部视频和图文学习，再进入章节测验。');
         continueCourse(courseId);
         return;
     }
@@ -1898,23 +1965,45 @@ function renderChapterQuizEntry(course) {
 }
 
 function switchLearningMode(mode) {
-    currentLearningMode = 'video';
-    const videoPanel = document.getElementById('videoLearningPanel');
-    if (videoPanel) videoPanel.classList.add('active');
+    currentLearningMode = mode === 'article' ? 'article' : 'video';
+    document.getElementById('modeVideoTab').classList.toggle('active', currentLearningMode === 'video');
+    document.getElementById('modeArticleTab').classList.toggle('active', currentLearningMode === 'article');
+    document.getElementById('videoLearningPanel').classList.toggle('active', currentLearningMode === 'video');
+    document.getElementById('articleLearningPanel').classList.toggle('active', currentLearningMode === 'article');
+    if (currentLearningMode === 'article') {
+        window.setTimeout(handleArticleScroll, 0);
+    }
 }
 
 function updateLearningPartStatus() {
     const course = getCourseById(currentCourseId);
-    const section = course && currentSectionId ? getSectionCompletionState(course, currentSectionId) : { video: false };
+    const section = course && currentSectionId ? getSectionCompletionState(course, currentSectionId) : { video: false, article: false };
     const videoEl = document.getElementById('videoPartStatus');
+    const articleEl = document.getElementById('articlePartStatus');
     if (videoEl) {
         videoEl.textContent = section.video ? '视频已完成' : '视频未完成';
         videoEl.classList.toggle('done', section.video);
     }
+    if (articleEl) {
+        articleEl.textContent = section.article ? '图文已完成' : '图文未完成';
+        articleEl.classList.toggle('done', section.article);
+    }
 }
 
 function handleArticleScroll() {
-    // 已删除的学习模式保留空函数，避免历史事件绑定报错。
+    const course = getCourseById(currentCourseId);
+    const panel = document.getElementById('articleContentSection');
+    const fill = document.getElementById('articleReadProgressFill');
+    if (!course || !currentSectionId || !panel) return;
+    const maxScroll = panel.scrollHeight - panel.clientHeight;
+    const pct = maxScroll <= 0 ? 100 : Math.min(100, Math.round(panel.scrollTop / maxScroll * 100));
+    if (fill) fill.style.width = pct + '%';
+    if (pct >= 98) {
+        markSectionPartComplete(course, currentSectionId, 'article');
+        updateLearningPartStatus();
+        renderChapterTree();
+        checkSectionLearningComplete(course);
+    }
 }
 
 function toggleChapter(ci) {
@@ -1938,6 +2027,9 @@ function selectSection(sectionId, ci, si) {
     // 如果跳到之前已完成的节，标记为done
     renderChapterTree();
     renderVideoSection();
+    // 滚动图文内容到顶部
+    const articlePanel = document.getElementById('articleContentSection');
+    if (articlePanel) articlePanel.scrollTop = 0;
 }
 
 function renderVideoSection() {
@@ -1954,6 +2046,16 @@ function renderVideoSection() {
 
     document.getElementById('toolbarCourseTitle').textContent = course.name;
     document.getElementById('toolbarSectionBadge').textContent = section.title;
+    document.getElementById('handoutTitle').textContent = '在线讲义 - ' + section.title;
+    const diff = getDifficultyLabel(course.difficulty);
+    document.getElementById('handoutMeta').textContent = '时长：' + section.duration + ' | 难度等级：' + diff.text + ' ' + diff.stars;
+    document.getElementById('handoutBody').innerHTML = section.handout || '<p>暂无讲义内容</p>';
+    document.getElementById('articleContentTitle').textContent = section.title;
+    document.getElementById('articleContentBody').innerHTML = section.handout || '<p>暂无图文内容</p>';
+    const articlePanel = document.getElementById('articleContentSection');
+    if (articlePanel) articlePanel.scrollTop = 0;
+    const articleFill = document.getElementById('articleReadProgressFill');
+    if (articleFill) articleFill.style.width = isSectionPartComplete(course, currentSectionId, 'article') ? '100%' : '0%';
     switchLearningMode(currentLearningMode);
     updateLearningPartStatus();
 
@@ -1967,7 +2069,7 @@ function renderVideoSection() {
     const completeHint = document.getElementById('sectionCompleteHint');
     completeHint.style.display = 'none';
     completeHint.innerHTML = `
-        <span class="complete-text">✅ 本节视频已完成。</span>
+        <span class="complete-text">✅ 本节视频和图文均已完成。</span>
         <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
     `;
 
@@ -2047,18 +2149,18 @@ function checkSectionLearningComplete(course) {
     if (!course || !currentSectionId) return;
     const hint = document.getElementById('sectionCompleteHint');
     const state = getSectionCompletionState(course, currentSectionId);
-    if (state.video) {
+    if (state.video && state.article) {
         hint.style.display = 'flex';
         hint.innerHTML = `
-            <span class="complete-text">✅ 本节视频已完成。你可以继续学习任意章节，完成本章全部小节后开放章节测验。</span>
+            <span class="complete-text">✅ 本节视频和图文均已完成。你可以继续学习任意章节，完成本章全部小节后开放章节测验。</span>
             <button class="btn btn-primary btn-sm" onclick="nextSection()">下一节</button>
         `;
         checkLastSection(course);
     } else {
         hint.style.display = 'flex';
         hint.innerHTML = `
-            <span class="complete-text">当前小节尚未完成：请完整播放视频。</span>
-            <button class="btn btn-outline btn-sm" onclick="switchLearningMode('video')">去看视频</button>
+            <span class="complete-text">当前小节尚未完成：${state.video ? '视频已完成' : '请完整播放视频'}；${state.article ? '图文已完成' : '请阅读图文到底'}。</span>
+            <button class="btn btn-outline btn-sm" onclick="switchLearningMode('${state.video ? 'article' : 'video'}')">${state.video ? '去读图文' : '去看视频'}</button>
         `;
     }
 }
@@ -2104,7 +2206,7 @@ function nextSection() {
             `;
         } else {
             document.getElementById('sectionCompleteHint').innerHTML = `
-                <span class="complete-text">本章还有视频未完成，你可以在目录中自由选择任意章节继续学习。</span>
+                <span class="complete-text">本章还有视频或图文未完成，你可以在目录中自由选择任意章节继续学习。</span>
                 <button class="btn btn-outline btn-sm" onclick="switchLearningMode('video')">继续学习</button>
             `;
         }
@@ -2236,6 +2338,10 @@ function openQuizWithData(course, quizData, chapterTitle) {
 
 function closeModalQuizPrompt() {
     document.getElementById('modalQuizPrompt').style.display = 'none';
+}
+
+function downloadHandout() {
+    alert('模拟下载：讲义PDF文件（' + document.getElementById('handoutTitle').textContent + '）');
 }
 
 function selectAnswer(qid, oi, el) {
@@ -2381,6 +2487,9 @@ function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, sele
     const attemptLabel = selectedAttemptIndex === history.length - 1
         ? '本次：第' + selectedAttemptNo + '次 / 共' + attempts + '次'
         : '当前查看：第' + selectedAttemptNo + '次 / 共' + attempts + '次';
+    const bestAccuracy = storedRecord
+        ? Math.max(storedRecord.bestAccuracy || 0, ...history.map(item => item.accuracy || 0))
+        : pct;
     currentResultContext = {
         feedbackKey: getFeedbackKey(course, resultChapter, selectedAttemptNo),
         attemptNo: selectedAttemptNo,
@@ -2398,6 +2507,7 @@ function showResultPage(courseName, quizData, elapsedSeconds, storedRecord, sele
     document.getElementById('rTotal').textContent = total;
     document.getElementById('resultLearningProgress').textContent = '本章学习进度：' + learningProgress + '%';
     document.getElementById('resultAttempts').textContent = attemptLabel;
+    document.getElementById('resultBestAccuracy').textContent = '历史最高：' + bestAccuracy + '%';
     renderKnowledgeMastery(result.mastery);
     renderQuizHistory(course, currentQuizChapterIndex, storedRecord, selectedAttempt);
     renderCourseFeedbackContext(course, resultChapter);
@@ -2857,6 +2967,7 @@ function buildLearningPathHtml(wrongItems, accuracy) {
     });
 
     const weakItems = Array.from(weakMap.values()).sort((a, b) => b.count - a.count);
+    const configNote = `<div class="ra-config-note">配置逻辑：后台运营人员需先维护知识点库，再在章节课程和测验题目上传时绑定同一知识点；系统根据本次错题命中的知识点，反查课程内容和外部参考资料。</div>`;
     const cards = weakItems.map((item, index) => {
         const wrongQuestions = uniqueNumbers(item.questions);
         const relatedQuestions = getKnowledgeQuestionNumbers(item.keyword, currentQuizData);
@@ -2871,11 +2982,15 @@ function buildLearningPathHtml(wrongItems, accuracy) {
                     <div class="ra-section-title">推荐下一步学习内容：基础课程内课程内容</div>
                     ${buildInternalCourseRecommendations(item.keyword)}
                 </div>
+                <div class="ra-section">
+                    <div class="ra-section-title">推荐下一步学习内容：外部参考学习</div>
+                    ${buildExternalReferenceRecommendations(item.keyword)}
+                </div>
             </div>
         </div>`;
     }).join('');
 
-    return `<div class="ra-list">${cards}</div>`;
+    return configNote + `<div class="ra-list">${cards}</div>`;
 }
 
 function uniqueNumbers(numbers) {
@@ -2902,7 +3017,7 @@ function getRecommendationConfig(keyword) {
     return matchedKey ? KNOWLEDGE_POINT_RECOMMENDATIONS[matchedKey] : {
         courses: [{ courseId: currentQuizCourseId || currentCourseId, chapterIndex: currentQuizChapterIndex || 0, sectionIndex: 0, reason: '回到当前章节首节内容，重新梳理本题相关概念。' }],
         references: [
-            { title: '本课程配套教材对应章节', source: '课程建设时绑定的教材章节出处', focus: '概念定义、适用场景和易错点。' },
+            { title: '本课程配套教材对应章节', source: '课程建设时绑定的教材章节或讲义出处', focus: '概念定义、适用场景和易错点。' },
             { title: '专业指南或综述资料', source: '中华医学会指南、AAO/WHO等公开专业资料', focus: '临床应用边界和最新共识。' }
         ]
     };
@@ -2937,6 +3052,16 @@ function buildInternalCourseRecommendations(keyword) {
         </div>`;
     }).join('');
     return `<div class="ra-course-list">${cards || '<div class="ra-course-card">当前知识点暂未绑定基础课程内容，请先在后台知识点库完成课程小节绑定。</div>'}</div>`;
+}
+
+function buildExternalReferenceRecommendations(keyword) {
+    const config = getRecommendationConfig(keyword);
+    const refs = (config.references || []).map(ref => `<div class="ra-ref-item">
+        <div class="ra-ref-name">${ref.title}</div>
+        <div class="ra-ref-source">出处：${ref.source}</div>
+        <div class="ra-ref-source">建议关注：${ref.focus}</div>
+    </div>`).join('');
+    return `<div class="ra-ref-list">${refs || '<div class="ra-ref-item">当前知识点暂未配置外部参考资料。</div>'}</div>`;
 }
 
 function openRecommendedSection(courseId, chapterIndex, sectionIndex) {
@@ -3125,8 +3250,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getSectionIntro(section) {
-        if (!section) return '';
-        const text = section.title || '';
+        const text = stripHtmlText(section && section.handout);
         return text.length > 150 ? text.slice(0, 150) + '...' : text;
     }
 
@@ -3406,7 +3530,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (tabs) tabs.classList.add('active');
         } else {
             if (title) title.textContent = '医学课程问答';
-            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答。';
+            if (subtitle) subtitle.textContent = '基于当前医学课程范围进行自然语言问答，不涉及课程难点讲解。';
             if (tabs) tabs.classList.remove('active');
             if (input) input.placeholder = '请输入医学课程相关问题...';
         }
@@ -3430,7 +3554,7 @@ document.addEventListener('DOMContentLoaded', function() {
             : ['医学课程问答', '疾病知识问答', '诊断标准梳理'];
         const welcomeText = isSection
             ? '当前问答已固定在本小节内。你可以围绕本节课程内容进行自然语言问答，也可以切换到课程难点讲解查看本节绑定知识点。'
-            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。';
+            : '当前问答基于当前医学课程范围，请勿询问与医学无关的内容。这里仅提供课程相关问答解析，不展示课程难点讲解。';
         const firstMsg = isSection
             ? '你好，我会基于“' + getAIContextLabel() + '”回答问题。你可以直接问本小节概念、房水排出通路、眼压变化原因或测验易错点。'
             : '你好，我是AI学习助手。当前只回答医学课程相关问题，请勿询问与医学无关的内容。';
@@ -3473,7 +3597,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function canOpenSectionAiQa() {
         const ctx = getCurrentLearningContext();
         if (!ctx || !ctx.course || !ctx.section) return false;
-        return !!getSectionCompletionState(ctx.course, ctx.section.id).video;
+        return !!getSectionCompletionState(ctx.course, ctx.section.id).video && !!getSectionCompletionState(ctx.course, ctx.section.id).article;
     }
 
     window.openAiQaSystem = function() {
@@ -3484,7 +3608,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             if (!canOpenSectionAiQa()) {
-                alert('请先学完当前小节：视频播放到100%后，才能打开课程内AI智能答疑系统。');
+                alert('请先学完当前小节：视频播放到100%，图文从头阅读到页面底部后，才能打开课程内AI智能答疑系统。');
                 return;
             }
             aiQaContextType = 'section';
@@ -3559,4 +3683,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
-

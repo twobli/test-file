@@ -52,12 +52,7 @@
 @media (max-width: 680px) { .recommendation-page .source-summary, .recommendation-page .resource-grid, .recommendation-page .route-line { grid-template-columns: 1fr; } .recommendation-page .filter-tabs { width: 100%; } .recommendation-page .filter-tab { flex: 1; } }
 
 .direction-desc { margin:6px 0 12px; font-size:13px; color:var(--gray-700); line-height:1.7; }
-.ai-advice-block { padding:18px 20px; background:linear-gradient(135deg,#eef3ff,#f6f1ff); border:1px solid #dbe4ff; border-radius:12px; }
-.ai-advice-body { font-size:14px; line-height:1.8; color:var(--gray-800); margin-bottom:12px; }
-.ai-advice-body strong { color:#175CD3; }
-.ai-advice-list { display:flex; flex-direction:column; gap:10px; }
-.ai-advice-item { font-size:13px; line-height:1.75; color:var(--gray-700); padding:11px 13px; background:#fff; border:1px solid #e5ebff; border-radius:8px; }
-.ai-advice-item strong { color:#175CD3; }</style>
+</style>
 </head>
 <body>
 <div class="header">
@@ -101,19 +96,55 @@
         <div><h1 class="page-title">智能反馈与学习建议</h1><p class="page-desc">系统根据 AI 能力雷达图中的六维能力评估，自动给出针对性的学习方向与实践内容。</p></div>
         <div class="head-actions"><button class="btn btn-primary" onclick="refreshAdvice()">重新生成建议</button></div>
     </div>
-    
-<section class="card recommendation-card">
-    <div class="card-header"><div><div class="card-title">🤖 AI学习建议</div><div class="card-subtitle">基于你最近的 AI 能力雷达图评估，为你生成以下学习方向与实践内容。</div></div></div>
-    <div class="recommendation-list">
-        <div class="ai-advice-block">
-            <div class="ai-advice-body">结合你当前的 AI 能力雷达图评估，综合能力 <strong>B+</strong>，建议从以下几个方向加强学习与实践：</div>
-            <div class="ai-advice-list">
-                <div class="ai-advice-item"><strong>1. 强化影像判读与诊断能力</strong>：建议加强多模态影像（眼底彩照、OCT、FFA、OCTA）的判读与诊断决策训练，结合典型病例反复练习，提升对关键征象的识别与判断能力。</div>
-                <div class="ai-advice-item"><strong>2. 提升模型构建与数据分析能力</strong>：建议加强数据标注、图像处理、模型训练与结果评估的实操练习，理解 AI 模型的构建流程与评估指标。</div>
-                <div class="ai-advice-item"><strong>3. 深化科研创新与文献研究</strong>：建议强化文献检索、研究设计、结果分析与学术表达训练，形成规范的科研与论证思路。</div>
-                <div class="ai-advice-item"><strong>4. 巩固临床应用与知识综合运用</strong>：建议加强系统化课程学习、模块化考核与综合测评，夯实基础并提升临床知识的综合运用能力。</div>
-            </div>
+    <section class="card feedback-source-card">
+    <div class="card-header"><div><div class="card-title">AI能力评估</div><div class="card-subtitle">基于最近一次 AI 能力雷达图进行六维能力评估。</div></div><span class="tag blue">自动生成</span></div>
+    <div class="source-layout">
+        <div class="source-primary"><span class="eyebrow">评估依据</span><strong>AI能力雷达图</strong><span>围绕知识掌握、诊断能力、模型构建、科研创新、病例分析、知识应用六个维度，综合评估你的能力结构与提升方向。</span></div>
+        <div class="source-summary">
+            <div class="source-stat"><b>6</b><span>能力维度</span></div>
+            <div class="source-stat"><b>B+</b><span>综合能力</span></div>
         </div>
+    </div>
+</section>
+<section class="card recommendation-card">
+    <div class="card-header"><div><div class="card-title">学习方向与实践内容</div><div class="card-subtitle">根据 AI 能力雷达图六维评估，为你推荐以下学习方向及其实践内容。</div></div></div>
+    <div class="recommendation-list">
+        <article class="recommendation-item is-knowledge">
+            <div class="recommendation-head"><span class="recommendation-type knowledge">● 学习方向</span></div>
+            <h3 class="recommendation-title">强化影像判读与诊断能力</h3>
+            <p class="direction-desc">针对雷达图中「病例分析 / 诊断能力」维度，建议加强多模态影像（眼底彩照、OCT、FFA、OCTA）的判读与诊断决策训练。</p>
+            <div class="resource-grid">
+                <div class="resource-group"><h4>实践内容</h4><a class="resource-link" href="经典病例诊断实训.html">经典病例诊断实训<span>影像判读与诊断决策</span></a><a class="resource-link" href="读片与病例大赛系统.html">读片与病例大赛系统<span>真题演练与错题复盘</span></a><a class="resource-link" href="虚拟临床技能实训.html">虚拟临床技能实训<span>影像判读与诊断决策</span></a></div>
+                <div class="resource-group"><h4>AI助力</h4><a class="resource-link" href="AI能力雷达图.html">AI能力雷达图<span>跟踪判读能力变化</span></a><a class="resource-link" href="智能反馈与学习建议.html">诊断报告AI评分<span>逐题针对性反馈</span></a></div>
+            </div>
+        </article>
+        <article class="recommendation-item is-knowledge">
+            <div class="recommendation-head"><span class="recommendation-type knowledge">● 学习方向</span></div>
+            <h3 class="recommendation-title">提升模型构建与数据分析能力</h3>
+            <p class="direction-desc">针对「模型构建」维度，建议加强数据标注、图像处理、模型训练与结果评估的实操训练。</p>
+            <div class="resource-grid">
+                <div class="resource-group"><h4>实践内容</h4><a class="resource-link" href="数据标注与AI实训.html">数据标注与AI实训<span>标注任务与数据规范</span></a><a class="resource-link" href="影像标注工具.html">影像标注工具<span>多模态影像标注实操</span></a><a class="resource-link" href="医学影像存储与转码.html">医学影像存储与转码<span>图像处理与格式管理</span></a></div>
+                <div class="resource-group"><h4>AI助力</h4><a class="resource-link" href="AI能力雷达图.html">AI能力雷达图<span>跟踪模型构建能力变化</span></a></div>
+            </div>
+        </article>
+        <article class="recommendation-item is-knowledge">
+            <div class="recommendation-head"><span class="recommendation-type knowledge">● 学习方向</span></div>
+            <h3 class="recommendation-title">深化科研创新与文献研究</h3>
+            <p class="direction-desc">针对「科研创新」维度，建议强化文献检索、研究设计、结果分析与学术表达训练。</p>
+            <div class="resource-grid">
+                <div class="resource-group"><h4>实践内容</h4><a class="resource-link" href="科技文献检索推荐.html">科技文献检索推荐<span>文献检索与推荐</span></a><a class="resource-link" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨<span>病例研讨与学术分析</span></a><a class="resource-link" href="知识图谱查询与推理.html">知识图谱查询与推理<span>科研知识检索</span></a></div>
+                <div class="resource-group"><h4>AI助力</h4><a class="resource-link" href="AI能力雷达图.html">AI能力雷达图<span>跟踪科研创新能力变化</span></a></div>
+            </div>
+        </article>
+        <article class="recommendation-item is-knowledge">
+            <div class="recommendation-head"><span class="recommendation-type knowledge">● 学习方向</span></div>
+            <h3 class="recommendation-title">巩固临床应用与知识综合运用</h3>
+            <p class="direction-desc">针对「知识应用 / 知识掌握」维度，建议加强课程学习、模块考核与综合考试训练，巩固临床知识体系。</p>
+            <div class="resource-grid">
+                <div class="resource-group"><h4>实践内容</h4><a class="resource-link" href="基础课程.html">基础课程<span>课程学习与章节测评</span></a><a class="resource-link" href="考试中心.html">考试中心<span>模块与综合测评</span></a><a class="resource-link" href="智能教学服务.html">智能教学服务<span>个性化学习反馈</span></a></div>
+                <div class="resource-group"><h4>AI助力</h4><a class="resource-link" href="AI能力雷达图.html">AI能力雷达图<span>跟踪知识掌握变化</span></a></div>
+            </div>
+        </article>
     </div>
 </section>
 </main>

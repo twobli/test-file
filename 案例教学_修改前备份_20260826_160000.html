@@ -1894,7 +1894,12 @@ function renderCompareDiff(compareCase){
     compareRows.forEach(row=>{
         diffHtml += '<tr><td><strong>'+escHtml(row.name)+'</strong></td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
-
+    const diagRow = rows[0];
+    if(diagRow.status.cls !== 'match'){
+        diffHtml += '<tr class="highlight"><td><strong>复盘重点</strong></td><td colspan="5" style="color:#b06000;">请重点核对学员诊断意见与 AI 诊断结果不一致的原因，并查看系统给出的差异反馈。</td></tr>';
+    }else{
+        diffHtml += '<tr class="highlight"><td><strong>复盘重点</strong></td><td colspan="5" style="color:#137333;">学员诊断意见与 AI 方向一致，可继续查看 AI 的分析依据，巩固诊断判断过程。</td></tr>';
+    }
     diffHtml += '</tbody></table>';
     document.getElementById('diffPanel').innerHTML = diffHtml;
 }
@@ -2228,7 +2233,7 @@ function generateIntegratedLearningReport(){
 
     let html = '<div class="report-content">';
     html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统自动评分：诊断准确率 / 逻辑完整度</div></div>';
-    html += '<div class="report-meta"><div>学员：管理员</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
+    html += '<div class="report-meta"><div>学员：管理员</div><div>病例：'+escHtml(currentCase.title)+'</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
     html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病程推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程时间轴作答和系统评分固定保留。</div>';
     html += '<div class="report-score-section">';
     html += '<div class="report-score-big"><div class="big-score" style="color:'+scoreColor+';">'+assessment.overallScore+'</div><div class="big-label">'+(assessment.overallScore>=90?'优秀':assessment.overallScore>=75?'良好':assessment.overallScore>=60?'一般':'需提高')+'</div></div>';
@@ -2243,27 +2248,27 @@ function generateIntegratedLearningReport(){
     html += '<div class="report-module-card">';
     html += '<div class="report-module-head"><div><div class="report-module-title">AI诊断对比学习</div><div class="report-module-desc">按学员提交的诊断字段与 AI 诊断结果逐项对比，系统自动评分诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
-    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+compare.diagnosisAccuracy+'分</div></div>';
-    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+compare.logicCompleteness+'分</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+compare.diagnosisAccuracy+'分</div><div class="score-pill-desc">'+escHtml(compare.diagnosisComment)+'</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+compare.logicCompleteness+'分</div><div class="score-pill-desc">'+escHtml(compare.logicComment)+'</div></div>';
     html += '</div>';
     html += '<table class="diff-table"><thead><tr><th>评分字段</th><th>学员提交内容</th><th>AI诊断结果</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     compareRowsForReport.forEach(row=>{
         html += '<tr><td>'+escHtml(row.name)+'</td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
-    
+    html += '<tr class="highlight"><td><strong>模块评分</strong></td><td colspan="2">系统自动评分汇总</td><td>'+compare.diagnosisAccuracy+'分</td><td>'+compare.logicCompleteness+'分</td><td>'+escHtml(compare.diagnosisComment)+' '+escHtml(compare.logicComment)+'</td></tr>';
     html += '</tbody></table></div>';
 
     html += '<div class="report-module-card">';
     html += '<div class="report-module-head"><div><div class="report-module-title">病程推理实训</div><div class="report-module-desc">按病程时间轴各时间点的单选题作答，系统自动评判诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
-    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+evolution.diagnosisAccuracy+'分</div></div>';
-    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+evolution.logicCompleteness+'分</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+evolution.diagnosisAccuracy+'分</div><div class="score-pill-desc">'+escHtml(evolution.diagnosisComment)+'</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+evolution.logicCompleteness+'分</div><div class="score-pill-desc">'+escHtml(evolution.logicComment)+'</div></div>';
     html += '</div>';
     html += '<table class="diff-table"><thead><tr><th>时间节点</th><th>学员选择</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     assessment.fieldAssessments.forEach(item=>{
         html += '<tr><td><strong>'+escHtml(item.name)+'</strong></td><td>'+escHtml(item.user)+'</td><td>'+escHtml(item.accuracyScore)+'分</td><td>'+escHtml(item.logicScore)+'分</td><td>'+escHtml(item.accuracyComment)+' '+escHtml(item.logicComment)+'</td></tr>';
     });
-    
+    html += '<tr class="highlight"><td><strong>模块评分</strong></td><td>系统自动评分汇总</td><td>'+evolution.diagnosisAccuracy+'分</td><td>'+evolution.logicCompleteness+'分</td><td>'+escHtml(evolution.diagnosisComment)+' '+escHtml(evolution.logicComment)+'</td></tr>';
     html += '</tbody></table></div></div>';
     html += '<div class="report-actions"><button class="btn btn-outline" onclick="printReport()">打印</button><button class="btn btn-primary" onclick="closeReport()">关闭</button></div>';
     html += '</div>';
@@ -2271,7 +2276,7 @@ function generateIntegratedLearningReport(){
     saveLearningReport(currentCaseId, {
         caseId: currentCaseId,
         caseTitle: currentCase.title,
-        reportVersion: 'case-learning-score-v5',
+        reportVersion: 'case-learning-score-v4',
         generatedAt: dateStr,
         metrics: {
             diagnosisAccuracy: assessment.diagnosisAccuracy,
@@ -2308,7 +2313,7 @@ function openSavedLearningReport(caseId){
     }
     const targetCaseId = caseId || currentCaseId;
     const canRegenerate = targetCaseId === currentCaseId && currentTab === 'evolution';
-    if(report.reportVersion !== 'case-learning-score-v5' && canRegenerate){
+    if(report.reportVersion !== 'case-learning-score-v4' && canRegenerate){
         delete caseLearningReports[targetCaseId];
         persistTeachingState();
         generateIntegratedLearningReport();

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>经典病例诊断实训管理</title>
+  <link rel="stylesheet" href="技能实践管理.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>AI教育后台</strong><span>独立运营管理系统</span></div></a>
+      <div class="nav-group-title">业务工作台</div>
+      <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
+      <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
+      <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
+      <a class="nav-item child" href="虚拟临床技能实训管理.html"><span class="nav-icon">01</span>虚拟临床技能实训</a>
+      <a class="nav-item active child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
+      <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
+      <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
+      <a class="nav-item" href="index.html#profiles"><span class="nav-icon">◎</span>学员档案与能力评估</a>
+      <a class="nav-item" href="index.html#certs"><span class="nav-icon">◇</span>证书学分管理</a>
+      <a class="nav-item" href="index.html#aiqa"><span class="nav-icon">AI</span>AI答疑与模型配置</a>
+      <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
+      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
+      <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
+      <a class="nav-item" href="index.html#audit"><span class="nav-icon">↺</span>内容审核与运营日志</a>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">Skill Practice / Module 02</p><h1>经典病例诊断实训管理</h1><p class="page-desc">按学生端病例信息与病史、主影像浏览的展示逻辑，维护结构化病例和单一主影像资料；诊断分析与评分由前端 AI 逻辑自动完成。</p></div>
+        <div class="top-actions"><a class="btn" href="技能实践管理.html">返回技能实践管理</a><button class="btn primary" onclick="openModal('add')">＋ 新增经典病例</button></div>
+      </header>
+      <div class="breadcrumb"><a href="技能实践管理.html">技能实践管理</a><span class="sep">&gt;</span><span>经典病例诊断实训</span></div>
+      <div class="toolbar">
+        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号、患者姓名或病种" oninput="render()"><select class="select" id="difficulty" onchange="render()"><option value="">全部难度</option><option>基础</option><option>进阶</option><option>疑难</option></select><select class="select" id="statusFilter" onchange="render()"><option value="">全部状态</option><option>已发布</option><option>已下线</option></select></div>
+        <span class="status info">管理对象：病例基本信息、患者病史、单一主影像、发布状态</span>
+      </div>
+      <section class="panel">
+        <div class="panel-head"><div><h2 class="panel-title">经典病例库</h2><p class="panel-subtitle">后台只维护前端病例内容；学生提交的诊断报告、AI分析和综合评分不在此处配置。</p></div></div>
+        <div class="table-wrap"><table><thead><tr><th>病例名称</th><th>病例号</th><th>病种</th><th>难度</th><th>主影像类型</th><th>状态</th><th>操作</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+      </section>
+    </main>
+  </div>
+  <div class="modal-mask" id="mask" onclick="closeModal()"></div>
+  <section class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><h2 id="modalTitle">新增经典病例</h2><p id="modalDesc">按学生端病例信息、病史和主影像结构维护内容。</p></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">取消</button><button class="btn primary" id="saveBtn" onclick="save()">保存</button></div>
+  </section>
+  <div class="toast" id="toast"></div>
+  <script>
+    var rows = [
+      {code:'DR2026001',name:'非增殖期糖尿病视网膜病变',disease:'糖尿病视网膜病变',difficulty:'基础',status:'已发布',patient:{caseNo:'DR2026001',name:'张秀兰',gender:'女',age:'56',chief:'视力下降半年，糖尿病史8年'},primaryImaging:{type:'眼底彩照',right:{fileName:''},left:{fileName:''}}},
+      {code:'GLA2026002',name:'原发性开角型青光眼',disease:'青光眼',difficulty:'进阶',status:'已发布',patient:{caseNo:'GLA2026002',name:'王志明',gender:'男',age:'62',chief:'进行性视野缺损2年，眼压波动于24-28mmHg'},primaryImaging:{type:'OCT',right:{fileName:''},left:{fileName:''}}},
+      {code:'AMD2026003',name:'湿性年龄相关性黄斑变性',disease:'AMD',difficulty:'进阶',status:'已发布',patient:{caseNo:'AMD2026003',name:'李国强',gender:'男',age:'71',chief:'右眼视物变形伴中心暗点3个月'},primaryImaging:{type:'OCTA',right:{fileName:''},left:{fileName:''}}},
+      {code:'DR2026004',name:'增殖期糖尿病视网膜病变',disease:'糖尿病视网膜病变',difficulty:'疑难',status:'已发布',patient:{caseNo:'DR2026004',name:'刘美华',gender:'女',age:'48',chief:'突发右眼视力急剧下降至眼前手动3天'},primaryImaging:{type:'眼底彩照',right:{fileName:''},left:{fileName:''}}}
+    ];
+    var editing = null, mode = 'add';
+    function esc(v){return String(v == null ? '' : v).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];});}
+    function render(){
+      var q=(document.getElementById('search').value||'').toLowerCase(),df=document.getElementById('difficulty').value,st=document.getElementById('statusFilter').value;
+      var list=rows.filter(function(r){var p=r.patient||{};return(!q||[r.name,r.code,r.disease,p.name].join(' ').toLowerCase().indexOf(q)>-1)&&(!df||r.difficulty===df)&&(!st||r.status===st);});
+      document.getElementById('tableBody').innerHTML=list.length?list.map(function(r){
+        var pi=r.primaryImaging||{},dClass=r.difficulty==='疑难'?'bad':r.difficulty==='进阶'?'wait':'info';
+        return '<tr><td><strong>'+esc(r.name)+'</strong></td><td class="mono">'+esc(r.code)+'</td><td>'+esc(r.disease)+'</td><td><span class="status '+dClass+'">'+esc(r.difficulty)+'</span></td><td><span class="status info">'+esc(pi.type||'未配置')+'</span></td><td><span class="status '+(r.status==='已发布'?'ok':'gray')+'">'+esc(r.status)+'</span></td><td><div class="table-actions"><button class="btn small" onclick="openModal(\'view\',\''+r.code+'\')">查看</button><button class="btn small" onclick="openModal(\'edit\',\''+r.code+'\')">编辑</button><button class="btn small danger" onclick="removeRow(\''+r.code+'\')">删除</button></div></td></tr>';
+      }).join(''):'<tr><td colspan="7"><div class="empty-note">没有匹配的经典病例。</div></td></tr>';
+    }
+    function inputField(id,label,value,read,fieldClass,inputClass){return '<div class="form-field'+(fieldClass?' '+fieldClass:'')+'"><label>'+label+'</label><input class="input'+(inputClass?' '+inputClass:'')+'" id="'+id+'" value="'+esc(value||'')+'"'+(read?' disabled':'')+'></div>';}
+    function textField(id,label,value,read,fieldClass){return '<div class="form-field'+(fieldClass?' '+fieldClass:'')+'"><label>'+label+'</label><textarea id="'+id+'"'+(read?' disabled':'')+'>'+esc(value||'')+'</textarea></div>';}
+    function fileField(id,label,value,read){return '<div class="form-field"><label>'+label+'</label><input class="input" type="file" id="'+id+'" accept="image/*"'+(read?' disabled':'')+'><div class="muted">'+(value?'已配置：'+esc(value):'支持 JPG、PNG 等影像文件')+'</div></div>';}
+    function fields(r,read){
+      var p=r.patient||{},pi=r.primaryImaging||{},right=pi.right||{},left=pi.left||{};
+      return '<div class="section-block"><h3>一、病例基本信息</h3><p class="section-note">对应前端“病例信息与病史”卡片中的病例基础字段。</p><div class="info-grid">'+inputField('f_name','病例名称',r.name,read,'span-2')+inputField('f_code','病例号',r.code,read,'','mono')+inputField('f_disease','病种',r.disease,read)+ '<div class="form-field"><label>难度</label><select class="select" id="f_difficulty"'+(read?' disabled':'')+'><option'+(r.difficulty==='基础'?' selected':'')+'>基础</option><option'+(r.difficulty==='进阶'?' selected':'')+'>进阶</option><option'+(r.difficulty==='疑难'?' selected':'')+'>疑难</option></select></div></div></div>'+
+      '<div class="section-block"><h3>二、患者信息与病史</h3><p class="section-note">这些字段会直接展示在前端病例信息卡片中，主诉 / 病史单独维护。</p><div class="info-grid">'+inputField('f_patient_name','患者姓名',p.name,read)+ '<div class="form-field"><label>性别</label><select class="select" id="f_gender"'+(read?' disabled':'')+'><option'+(p.gender==='女'?' selected':'')+'>女</option><option'+(p.gender==='男'?' selected':'')+'>男</option><option'+(p.gender==='其他'?' selected':'')+'>其他</option></select></div>'+inputField('f_age','年龄',p.age,read)+textField('f_chief','主诉 / 病史',p.chief,read,'span-4')+'</div></div>'+
+      '<div class="section-block"><h3>三、主影像资料</h3><p class="section-note">一个病例只配置一种主影像类型；右眼、左眼分别上传对应图像。</p><div class="info-grid"><div class="form-field span-2"><label>主影像类型</label><select class="select" id="f_primary_type"'+(read?' disabled':'')+'>'+['眼底彩照','OCT','OCTA','FFA','视野','UBM','B超','其他'].map(function(type){return '<option'+(pi.type===type?' selected':'')+'>'+type+'</option>';}).join('')+'</select></div></div><div class="option-stack"><div class="option-title"><span>右眼主影像</span><span class="status info">仅上传图像</span></div><div class="info-grid">'+fileField('f_right_file','右眼影像文件',right.fileName,read)+'</div><div class="option-title"><span>左眼主影像</span><span class="status info">仅上传图像</span></div><div class="info-grid">'+fileField('f_left_file','左眼影像文件',left.fileName,read)+'</div></div></div>'+
+      '';
+    }
+    function openModal(m,code){
+      mode=m;editing=rows.find(function(r){return r.code===code;})||{code:'CASE-'+String(rows.length+1).padStart(3,'0'),name:'',disease:'',difficulty:'基础',status:'已发布',patient:{caseNo:'',name:'',gender:'女',age:'',chief:''},primaryImaging:{type:'眼底彩照',right:{fileName:''},left:{fileName:''}}};
+      var read=m==='view';document.getElementById('modalTitle').textContent=m==='add'?'新增经典病例':m==='edit'?'编辑经典病例':'查看经典病例';document.getElementById('modalDesc').textContent=read?'查看病例基本信息、患者病史和主影像配置。':'按前端展示逻辑维护病例字段和主影像资料。';document.getElementById('modalBody').innerHTML=fields(editing,read);document.getElementById('saveBtn').style.display=read?'none':'inline-flex';document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
+    }
+    function closeModal(){document.getElementById('mask').classList.remove('open');document.getElementById('modal').classList.remove('open');}
+    function fileName(id,oldValue){var el=document.getElementById(id);return el&&el.files&&el.files[0]?el.files[0].name:(oldValue||'');}
+    function save(){
+      var oldPi=editing.primaryImaging||{},oldRight=oldPi.right||{},oldLeft=oldPi.left||{};
+      var item={code:document.getElementById('f_code').value.trim(),name:document.getElementById('f_name').value.trim(),disease:document.getElementById('f_disease').value.trim(),difficulty:document.getElementById('f_difficulty').value,status:'已发布',patient:{caseNo:document.getElementById('f_code').value.trim(),name:document.getElementById('f_patient_name').value.trim(),gender:document.getElementById('f_gender').value,age:document.getElementById('f_age').value.trim(),chief:document.getElementById('f_chief').value.trim()},primaryImaging:{type:document.getElementById('f_primary_type').value,right:{fileName:fileName('f_right_file',oldRight.fileName)},left:{fileName:fileName('f_left_file',oldLeft.fileName)}}};
+      if(!item.name||!item.code||!item.patient.name){showToast('请填写病例名称、病例号和患者姓名');return;}var idx=rows.findIndex(function(r){return r.code===editing.code;});if(mode==='edit'&&idx>-1)rows[idx]=item;else rows.unshift(item);closeModal();render();showToast('经典病例已保存');
+    }
+    function removeRow(code){var r=rows.find(function(x){return x.code===code;});if(!r||!confirm('确定删除“'+r.name+'”吗？'))return;rows=rows.filter(function(x){return x.code!==code;});render();showToast('经典病例已删除');}
+    function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
+    render();
+  </script>
+</body>
+</html>

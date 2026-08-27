@@ -2637,6 +2637,8 @@
         + '<div class="question-grid">'
         + '<div class="form-field"><label>题目标题</label><input class="input" placeholder="请输入题目标题"></div>'
         + '<div class="form-field"><label>题型</label><select class="select" disabled><option selected>单选题</option></select></div>'
+        + '<div class="form-field"><label>分数</label><input class="input" type="number" min="1" value="10"></div>'
+        + '<div class="form-field"><label>关联小节</label><select class="select"><option>1.1 Keith-Wagener-Barker分级</option><option>1.2 Scheie分级与临床应用</option></select></div>'
         + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" multiple size="5" required>' + courseKnowledgeOptionHtml() + '</select></div>'
         + '<div class="form-field wide"><label>题干</label><textarea placeholder="请输入单选题题干"></textarea></div>'
         + '<div class="form-field wide"><label>选项</label><textarea placeholder="A. ...&#10;B. ...&#10;C. ...&#10;D. ..."></textarea></div>'

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -268,10 +268,6 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 
 @media (max-width:1280px) { .content-split { flex-direction:column; } .case-list-panel { width:100%; max-height:400px; } .case-overview-grid, .report-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:1024px) { .sidebar { width:60px; } .sidebar .menu-item span { display:none; } .sidebar .menu-group-title { display:none; } .main-content { margin-left:60px; } .submenu .menu-item { padding-left:10px; } .lightbox-nav.prev { left:10px; } .lightbox-nav.next { right:10px; } .case-overview-grid, .report-grid { grid-template-columns:1fr; } }
-
-.report-textarea-lg { min-height:180px; }
-
-.case-list-note { margin:6px 0 12px; padding:8px 10px; font-size:12px; color:#5f3dc4; background:#f3efff; border-radius:8px; line-height:1.6; }
 </style>
 </head>
 <body>
@@ -306,7 +302,19 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 
 <!-- 区域一：病例筛选 -->
 <div class="filter-bar" id="filterBar">
-        <div class="filter-group">
+    <div class="filter-group">
+        <span class="filter-label">疾病分类：</span>
+        <select id="filterDisease" onchange="applyFilters()">
+            <option value="all">全部</option>
+            <option value="糖尿病视网膜病变">糖尿病视网膜病变</option>
+            <option value="青光眼">青光眼</option>
+            <option value="AMD">AMD</option>
+            <option value="高血压视网膜病变">高血压视网膜病变</option>
+            <option value="RVO">RVO</option>
+            <option value="视神经病变">视神经病变</option>
+        </select>
+    </div>
+    <div class="filter-group">
         <span class="filter-label">难度等级：</span>
         <select id="filterDifficulty" onchange="applyFilters()">
             <option value="all">全部</option>
@@ -326,7 +334,6 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 <div class="content-split">
     <div class="case-list-panel" id="caseListPanel">
         <div class="panel-header">病例列表 <span class="count-badge" id="listCount">15个</span></div>
-        <div class="case-list-note">以下病例属于不同病种归类，具体是何种病种，请完成相关诊断</div>
         <div class="case-list-body" id="caseListBody"></div>
     </div>
     <div class="case-detail-panel" id="caseDetailPanel">
@@ -481,13 +488,13 @@ function persistReportStatus() {
 }
 
 function applyFilters() {
-    var dEl = document.getElementById('filterDisease'); var d = dEl ? dEl.value : 'all';
+    var d = document.getElementById('filterDisease').value;
     var lv = document.getElementById('filterDifficulty').value;
     var s = document.getElementById('filterSearch').value.toLowerCase().trim();
     filteredCases = mockCases.filter(function(c) {
         if (d!=='all' && c.disease!==d) return false;
         if (lv!=='all' && c.difficulty!==lv) return false;
-        if (s && (('病例'+c.id+' '+(c.patient?c.patient.caseNo:'')+' '+c.name).toLowerCase().indexOf(s)===-1)) return false;
+        if (s && c.name.toLowerCase().indexOf(s)===-1) return false;
         return true;
     });
     document.getElementById('listCount').textContent = filteredCases.length+'个';
@@ -502,9 +509,10 @@ function renderCaseList() {
     var h = '';
     filteredCases.forEach(function(c) {
         var sel = c.id===currentCaseId?' selected':'';
+        var dc='tag-blue'; if(c.disease==='糖尿病视网膜病变')dc='tag-green'; else if(c.disease==='AMD')dc='tag-orange'; else if(c.disease==='RVO')dc='tag-purple'; else if(c.disease==='视神经病变')dc='tag-red';
         var status = getCaseStatus(c);
         h+='<div class="case-item'+sel+'" onclick="selectCase('+c.id+')">';
-        h+='<div class="ci-header"><span class="ci-name">病例'+c.id+'</span></div>';
+        h+='<div class="ci-header"><span class="ci-name">'+c.name+'</span><div class="ci-tags"><span class="tag '+dc+'">'+c.disease+'</span></div></div>';
         h+='<div class="ci-footer"><div class="ci-meta">'+getDifficultyBadge(c)+'</div><div class="ci-status"><span class="status-badge '+status.cls+'">'+status.text+'</span></div></div></div>';
     });
     if (filteredCases.length===0) h='<div style="padding:40px;text-align:center;color:var(--gray-500);">没有匹配的病例</div>';
@@ -592,14 +600,16 @@ function getDiseaseTagClass(disease) {
 
 function buildCaseOverviewHtml(c, primaryType) {
     var p = c.patient;
+    var diseaseTag = getDiseaseTagClass(c.disease);
     return '' +
         '<div class="card case-overview-card" id="caseOverviewCard">' +
-            '<div class="card-header"><span class="card-title">📋 病例信息与病史</span><div class="case-overview-tags">'+getDifficultyBadge(c)+'</div></div>' +
+            '<div class="card-header"><span class="card-title">📋 病例信息与病史</span><div class="case-overview-tags"><span class="tag '+diseaseTag+'">'+escapeHtml(c.disease)+'</span>'+getDifficultyBadge(c)+'</div></div>' +
             '<div class="card-body">' +
                 '<div class="case-overview-grid">' +
                     '<div class="case-overview-item"><div class="label">病例号</div><div class="value">'+escapeHtml(p.caseNo)+'</div></div>' +
                     '<div class="case-overview-item"><div class="label">患者姓名</div><div class="value">'+escapeHtml(p.name)+'</div></div>' +
                     '<div class="case-overview-item"><div class="label">性别 / 年龄</div><div class="value">'+escapeHtml(p.gender+' / '+p.age+'岁')+'</div></div>' +
+                    '<div class="case-overview-item"><div class="label">疾病分类</div><div class="value"><span class="tag '+diseaseTag+'">'+escapeHtml(c.disease)+'</span></div></div>' +
                     '<div class="case-overview-item full emphasis"><div class="label">主诉 / 病史</div><div class="value">'+escapeHtml(p.chief)+'</div></div>' +
                 '</div>' +
                 '<div class="case-overview-note"><strong>阅读顺序：</strong>先核对病例信息与病史，再查看主影像，最后进入诊断报告撰写。</div>' +
@@ -645,14 +655,17 @@ function buildReportFormHtml(c, primaryType, dr, isCompleted) {
     var p = c.patient;
     var html = '';
     html += '<div class="card" id="diagnosisReportCard">';
-    html += '<div class="card-header"><span class="card-title">📝 诊断报告撰写</span><span class="tag tag-blue">影像判读与诊断决策</span></div>';
+    html += '<div class="card-header"><span class="card-title">📝 诊断报告撰写</span><span class="tag tag-blue">结构化模板</span></div>';
     html += '<div class="card-body">';
     html += '<div class="report-intro">';
     html += '<div class="report-intro-title">撰写要求</div>';
-    html += '<div class="report-intro-text">当前病例：病例'+c.id+'；病例号：'+escapeHtml(p.caseNo)+'；主影像类型：'+escapeHtml(primaryType)+'。请结合病史与主影像，写出你的诊断结论、影像学依据、鉴别诊断与处置建议。</div>';
+    html += '<div class="report-intro-text">当前病例：'+escapeHtml(c.name)+'；病例号：'+escapeHtml(p.caseNo)+'；主影像类型：'+escapeHtml(primaryType)+'。请按“诊断结论 - 影像学依据 - 鉴别诊断 - 处置建议”的顺序撰写，尽量写清疾病名称、侧别、分期/分级，以及主影像的关键征象和处理路径。</div>';
     html += '</div>';
-    html += '<div class="form-group report-field full"><label>诊断报告 <span style="color:var(--danger);">*</span></label>';
-    html += '<textarea id="diagReport" class="report-textarea-lg" placeholder="请填写你的诊断报告，包括诊断结论、影像学依据、鉴别诊断与处置建议...">'+escapeHtml(dr.report || '')+'</textarea>';
+    html += '<div class="report-grid">';
+    html += '<div class="form-group report-field"><label>诊断结论 <span style="color:var(--danger)">*</span></label><textarea id="diagConclusion" placeholder="请写明疾病名称、侧别及分期/分级，例如：右眼增殖性糖尿病视网膜病变（PDR）">'+escapeHtml(dr.conclusion || '')+'</textarea><div class="field-hint">建议写成“疾病名称 + 侧别 + 分期/分级/伴随并发症”。</div></div>';
+    html += '<div class="form-group report-field"><label>影像学依据 <span style="color:var(--danger)">*</span></label><textarea id="diagBasis" placeholder="请写明病灶部位、主要征象及与病史的对应关系，例如：黄斑区出血、渗出、CNV渗漏...">'+escapeHtml(dr.basis || '')+'</textarea><div class="field-hint">建议按“病变部位 + 关键影像征象 + 证据链”来写。</div></div>';
+    html += '<div class="form-group report-field full"><label>鉴别诊断 <span style="color:var(--danger)">*</span></label><textarea id="diagDiff" placeholder="请列出1-2个需要鉴别的疾病，并写明排除理由">'+escapeHtml(dr.diff || '')+'</textarea><div class="field-hint">建议至少写出一个鉴别对象和排除逻辑，避免只写病名不写理由。</div></div>';
+    html += '<div class="form-group report-field full"><label>处置建议 <span style="color:var(--danger)">*</span></label><textarea id="diagTreatment" placeholder="请写明首选治疗、补充检查、风险控制及复查安排">'+escapeHtml(dr.treatment || '')+'</textarea><div class="field-hint">建议包含治疗方式、必要检查、风险控制和随访节奏。</div></div>';
     html += '</div>';
     html += '<div class="form-actions"><button class="btn btn-outline" onclick="resetForm('+c.id+')">🔄 重置</button><button class="btn btn-primary btn-lg" onclick="submitReport('+c.id+')"'+(isCompleted?' disabled title="该病例已完成AI诊断分析，请先重置后再提交"':'')+'>📤 提交AI诊断分析</button></div>';
     html += '</div></div>';
@@ -774,8 +787,7 @@ document.addEventListener('keydown',function(e){var lb=document.getElementById('
 
 function saveDraft(caseId, quiet) {
     var dk=getCaseKey(caseId);
-    var el=document.getElementById('diagReport');
-    draftData[dk]={report: el ? el.value : ''};
+    draftData[dk]={conclusion:document.getElementById('diagConclusion').value,basis:document.getElementById('diagBasis').value,diff:document.getElementById('diagDiff').value,treatment:document.getElementById('diagTreatment').value};
     try{localStorage.setItem('case_diag_drafts',JSON.stringify(draftData));}catch(e){}
     renderCaseList();
     if(!quiet) showToast('草稿已保存','success');
@@ -783,7 +795,7 @@ function saveDraft(caseId, quiet) {
 
 function resetForm(caseId) {
     showConfirm('确认重置','重置后将清空当前填写内容，并删除已生成的AI诊断分析结果，病例会恢复为未诊断状态。确定要重置吗？',function(){
-        var el=document.getElementById('diagReport'); if(el) el.value='';
+        ['diagConclusion','diagBasis','diagDiff','diagTreatment'].forEach(function(id){document.getElementById(id).value='';});
         delete draftData[getCaseKey(caseId)]; try{localStorage.setItem('case_diag_drafts',JSON.stringify(draftData));}catch(e){}
         delete reportStatus[getCaseKey(caseId)]; persistReportStatus(); scoringResult=null;
         renderCaseList(); var c=mockCases.find(function(c){return c.id===caseId;}); if(c) renderCaseDetail(c);
@@ -796,7 +808,10 @@ function submitReport(caseId) {
         showToast('该病例已完成AI诊断分析，请先重置后再提交','warning');
         return;
     }
-    if(!document.getElementById('diagReport').value.trim()){showToast('请填写诊断报告','warning');return;}
+    if(!document.getElementById('diagConclusion').value.trim()){showToast('请填写诊断结论','warning');return;}
+    if(!document.getElementById('diagBasis').value.trim()){showToast('请填写诊断依据','warning');return;}
+    if(!document.getElementById('diagDiff').value.trim()){showToast('请填写鉴别诊断','warning');return;}
+    if(!document.getElementById('diagTreatment').value.trim()){showToast('请填写治疗建议','warning');return;}
     showConfirm('提交AI诊断分析','提交后将进行自动评分，提交后不可修改。确定要提交吗？',function(){
         saveDraft(caseId, true); calculateScore(caseId);
         reportStatus[getCaseKey(caseId)]={state:'completed',score:scoringResult.total,result:scoringResult,submittedAt:new Date().toISOString()};
@@ -810,17 +825,17 @@ function submitReport(caseId) {
 function calculateScore(caseId) {
     var c=mockCases.find(function(c){return c.id===caseId;});
     var dr=draftData[getCaseKey(caseId)]||{};
-    var u=(dr.report||'').toLowerCase();
+    var ud=(dr.conclusion||'').toLowerCase(), ub=(dr.basis||'').toLowerCase(), ut=(dr.treatment||'').toLowerCase();
     function kw(user,std){var sw=std.split(/\s+/).filter(function(w){return w.length>=2;});var mc=0;sw.forEach(function(w){if(user.indexOf(w)!==-1)mc++;});return sw.length>0?mc/sw.length:0;}
-    var ds=Math.round(kw(u,c.standardAnswer.diagnosis.toLowerCase())*40);
-    var bs=Math.round(kw(u,c.standardAnswer.basis.toLowerCase())*25);
-    var ts=Math.round(kw(u,c.standardAnswer.treatment.toLowerCase())*20);
-    var basisItems=(dr.report||'').split(/\n|。|；|;/).filter(function(x){return x.trim().length>4;}).length;
-    var hasStructured=/(\n|\d+[\.、]|[一二三四五六七八九十]+[、.])/.test(dr.report||'');
-    var ls=Math.min(15,(dr.report||'').length>30?7:3);
+    var ds=Math.round(kw(ud,c.standardAnswer.diagnosis.toLowerCase())*40);
+    var bs=Math.round(kw(ub,c.standardAnswer.basis.toLowerCase())*25);
+    var ts=Math.round(kw(ut,c.standardAnswer.treatment.toLowerCase())*20);
+    var basisItems=(dr.basis||'').split(/\n|。|；|;/).filter(function(x){return x.trim().length>4;}).length;
+    var hasStructured=/(\n|\d+[\.、]|[一二三四五六七八九十]+[、.])/.test((dr.basis||'')+(dr.treatment||''));
+    ls=Math.min(15,(dr.diff||'').length>20?7:3);
     if(basisItems>=3) ls+=4; else if(basisItems>=2) ls+=2;
     if(hasStructured) ls+=2;
-    if((dr.report||'').length>60) ls+=2;
+    if((dr.treatment||'').length>50) ls+=2;
     ls=Math.min(15,ls);
     ds=Math.min(40,Math.max(5,ds)); bs=Math.min(25,Math.max(3,bs)); ts=Math.min(20,Math.max(3,ts));
     var total=ds+bs+ts+ls;

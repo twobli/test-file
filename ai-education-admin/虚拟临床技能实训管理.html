@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>虚拟临床技能实训管理</title>
+  <link rel="stylesheet" href="技能实践管理.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>AI教育后台</strong><span>独立运营管理系统</span></div></a>
+      <div class="nav-group-title">业务工作台</div>
+      <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
+      <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
+      <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
+      <a class="nav-item active child" href="虚拟临床技能实训管理.html"><span class="nav-icon">01</span>虚拟临床技能实训</a>
+      <a class="nav-item child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
+      <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
+      <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
+      <a class="nav-item" href="index.html#profiles"><span class="nav-icon">◎</span>学员档案与能力评估</a>
+      <a class="nav-item" href="index.html#certs"><span class="nav-icon">◇</span>证书学分管理</a>
+      <a class="nav-item" href="index.html#aiqa"><span class="nav-icon">AI</span>AI答疑与模型配置</a>
+      <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
+      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
+      <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
+      <a class="nav-item" href="index.html#audit"><span class="nav-icon">↺</span>内容审核与运营日志</a>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">Skill Practice / Module 01</p><h1>虚拟临床技能实训管理</h1><p class="page-desc">围绕学生端“病例刷新 → 患者信息与影像 → 影像判读 → 综合诊断与风险分层 → 提交判定”维护实训任务。</p></div>
+        <div class="top-actions"><a class="btn" href="技能实践管理.html">返回技能实践管理</a><button class="btn primary" onclick="openModal('add')">＋ 新建实训任务</button></div>
+      </header>
+      <div class="breadcrumb"><a href="技能实践管理.html">技能实践管理</a><span class="sep">&gt;</span><span>虚拟临床技能实训</span></div>
+      <div class="toolbar">
+        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号或患者姓名" oninput="render()"></div>
+        <span class="status info">管理对象：病例信息、眼底彩照、问诊问答、临床诊断题目</span>
+      </div>
+      <section class="panel">
+        <div class="panel-head"><div><h2 class="panel-title">虚拟病例列表</h2><p class="panel-subtitle">列表只展示病例配置对象；进入新增或编辑后，可完整录入前台病例信息、双眼眼底彩照、问诊问答和临床诊断题目。</p></div></div>
+        <div class="table-wrap"><table><thead><tr><th>病例名称</th><th>病例号</th><th>患者信息</th><th>主诉</th><th>影像资料</th><th>状态</th><th>操作</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+      </section>
+    </main>
+  </div>
+  <div class="modal-mask" id="mask" onclick="closeModal()"></div>
+  <section class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><h2 id="modalTitle">新建实训任务</h2><p id="modalDesc">维护学生端实际会使用的病例与诊断数据。</p></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">取消</button><button class="btn primary" id="saveBtn" onclick="save()">保存</button></div>
+  </section>
+  <div class="toast" id="toast"></div>
+  <script>
+    var fixedQuestionConfig = {
+      imagePrompt: '请结合双眼眼底彩照，填写影像判读依据，例如病变位置、眼别和分期判断依据。',
+      diagnosisOptions: [
+        {value:'none', label:'无明确糖尿病视网膜病变'},
+        {value:'mild', label:'轻度非增殖性DR（轻度NPDR）'},
+        {value:'moderate', label:'中度非增殖性DR（中度NPDR）'},
+        {value:'severe', label:'重度非增殖性DR（重度NPDR）'},
+        {value:'pdr', label:'增殖性DR（PDR）'}
+      ],
+      riskOptions: [
+        {value:'low', label:'常规管理'},
+        {value:'followup', label:'定期复查'},
+        {value:'urgent', label:'尽快专科处理'}
+      ],
+      actionOptions: [
+        {value:'routine', label:'常规复查'},
+        {value:'oct', label:'完善OCT/相关检查'},
+        {value:'referral', label:'眼科专科复诊'},
+        {value:'control', label:'强化血糖血压管理'}
+      ]
+    };
+    var rows = [
+      {
+        code:'VC-2026-001', name:'2型糖尿病 - 中度NPDR', status:'已发布',
+        patient:{name:'小王', gender:'女', age:'58', history:'2型糖尿病12年，高血压6年，高脂血症5年，口服二甲双胍+格列美脲降糖。', chiefComplaint:'双眼视力模糊3个月，加重伴左眼视物变形1周。无明显眼痛、眼红、畏光。'},
+        vitals:[['血压','145/92 mmHg'],['空腹血糖','8.7 mmol/L'],['HbA1c','8.2%'],['BMI','26.8 kg/m²'],['视力（右）','0.5'],['视力（左）','0.3'],['眼压（右）','16 mmHg'],['眼压（左）','17 mmHg']],
+        imaging:{right:{url:''},left:{url:''}},
+        dialogue:[
+          ['您的主要症状是什么？','最近三个月看东西越来越模糊，左眼看东西有点变形，直线看起来弯弯曲曲的。'],
+          ['症状持续多久了？','差不多三个月了，最近一周左眼变形感明显加重。'],
+          ['有无糖尿病家族史？','我母亲也有糖尿病，但她眼睛好像没什么大问题。'],
+          ['近期血糖控制如何？','最近半年血糖控制得不太好，空腹经常8点几，餐后有时能到13-14。'],
+          ['有无高血压病史？','有高血压，6年了，一直在吃硝苯地平。'],
+          ['平时用什么降糖药？','二甲双胍早晚各一片，格列美脲早上一片。']
+        ],
+        answers:{diagnosis:'moderate',risk:'followup',actions:['routine','oct','control'],imageBasis:'双眼后极部可见微血管瘤、点片状出血及硬性渗出，左眼可见棉绒斑及静脉串珠样改变。',notes:'结合病史、影像和风险分层说明综合判断与处理思路。'}
+      },
+      {
+        code:'VC-2026-002', name:'1型糖尿病 - 轻度NPDR', status:'已发布',
+        patient:{name:'小张', gender:'男', age:'32', history:'1型糖尿病8年，胰岛素泵治疗。否认高血压、高脂血症。', chiefComplaint:'年度眼科常规筛查，无明显视力下降。近半年偶有视物模糊，休息后可缓解。'},
+        vitals:[['血压','118/76 mmHg'],['空腹血糖','6.5 mmol/L'],['HbA1c','7.1%'],['BMI','22.4 kg/m²'],['视力（右）','1.0'],['视力（左）','0.9'],['眼压（右）','14 mmHg'],['眼压（左）','15 mmHg']],
+        imaging:{right:{url:''},left:{url:''}},
+        dialogue:[
+          ['您的主要症状是什么？','没什么特别不舒服，就是来做年度筛查。偶尔看电脑时间长了有点模糊。'],
+          ['糖尿病多长时间了？','1型糖尿病，确诊8年了。'],
+          ['最近视力有没有变化？','感觉跟以前差不多，没有明显变化。'],
+          ['平时血糖控制得怎么样？','用胰岛素泵，糖化最近7.1%，空腹一般6点多。'],
+          ['家里有没有人得糖尿病？','我父母都没有糖尿病。'],
+          ['有没有眼睛做过检查？','每年都查一次眼底，去年医生说有轻度改变。']
+        ],
+        answers:{diagnosis:'mild',risk:'followup',actions:['routine','control'],imageBasis:'双眼后极部仅见少量微血管瘤，未见明显出血、渗出、棉绒斑或新生血管。',notes:'结合筛查结果和血糖控制情况说明随访建议。'}
+      },
+      {
+        code:'VC-2026-003', name:'重度NPDR合并黄斑水肿', status:'已发布',
+        patient:{name:'老李', gender:'男', age:'65', history:'2型糖尿病20年，高血压15年，冠心病5年，口服胰岛素、二甲双胍和达格列净。', chiefComplaint:'右眼视物模糊伴飞蚊感2个月，近2周加重，偶有闪光感。'},
+        vitals:[['血压','152/88 mmHg'],['空腹血糖','10.2 mmol/L'],['HbA1c','9.5%'],['BMI','28.1 kg/m²'],['视力（右）','0.2'],['视力（左）','0.4'],['眼压（右）','18 mmHg'],['眼压（左）','15 mmHg']],
+        imaging:{right:{url:''},left:{url:''}},
+        dialogue:[
+          ['您的主要症状是什么？','右眼前总有黑点飘来飘去，最近两周越来越严重，有时还看到闪光。'],
+          ['右眼的飞蚊感是什么样的？','像很多小蚊子或蜘蛛网在眼前飘，有时候突然出现一大片。'],
+          ['糖尿病多久了，血糖控制得怎么样？','糖尿病20年了，最近两年血糖控制得都不好。'],
+          ['有没有其它慢性病？','高血压15年，冠心病5年前放了支架。'],
+          ['最近有没有做过眼底检查？','去年查过一次，说出血挺多的，让我好好控制血糖。'],
+          ['平时眼睛有没有疼痛感？','眼睛不疼。']
+        ],
+        answers:{diagnosis:'severe',risk:'urgent',actions:['referral','oct','control'],imageBasis:'四个象限大量出血、棉绒斑、静脉串珠和IRMA，提示重度NPDR并需关注黄斑水肿。',notes:'结合飞蚊感、闪光感和眼底高危征象说明处置优先级。'}
+      },
+      {
+        code:'VC-2026-004', name:'增殖性糖尿病视网膜病变', status:'已发布',
+        patient:{name:'老赵', gender:'男', age:'61', history:'2型糖尿病18年，血糖控制极差，高血压10年，糖尿病肾病IV期透析中。', chiefComplaint:'左眼突然视力急剧下降3天，仅存光感；右眼视物模糊伴视野缺损半年。'},
+        vitals:[['血压','168/95 mmHg'],['空腹血糖','13.5 mmol/L'],['HbA1c','11.2%'],['BMI','24.5 kg/m²'],['视力（右）','0.1'],['视力（左）','光感'],['眼压（右）','22 mmHg'],['眼压（左）','25 mmHg']],
+        imaging:{right:{url:''},left:{url:''}},
+        dialogue:[
+          ['左眼是什么时候突然看不清的？','三天前早上起来，突然发现左眼一片黑，只能感觉到一点点光。'],
+          ['之前有没有类似的情况？','从来没有过，这是第一次。去年右眼做过一次激光。'],
+          ['糖尿病控制得怎么样？','控制得很不好，糖化一直在11左右。'],
+          ['右眼视野缺损是什么样的？','右边看东西中间一片黑，走路经常撞到右边的物体。'],
+          ['最近有没有做过眼部治疗？','去年右眼打过激光，医生说左眼也要打。'],
+          ['有没有吃过什么抗凝药？','透析时要打肝素，平时不吃抗凝药。']
+        ],
+        answers:{diagnosis:'pdr',risk:'urgent',actions:['referral','control'],imageBasis:'左眼玻璃体积血、视网膜前出血及新生血管膜，右眼可见视盘和视网膜新生血管。',notes:'结合突发视力下降和新生血管征象说明紧急处理路径。'}
+      }
+    ];
+    var editing = null, mode = 'add';
+    function esc(v){return String(v == null ? '' : v).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];});}
+    function render(){
+      var q=(document.getElementById('search').value||'').toLowerCase();
+      var list=rows.filter(function(r){return (!q||(r.name+r.code+r.patient.name).toLowerCase().indexOf(q)>-1);});
+      document.getElementById('tableBody').innerHTML=list.length?list.map(function(r){
+        return '<tr><td><strong>'+esc(r.name)+'</strong></td>'
+          +'<td class="mono">'+esc(r.code)+'</td>'
+          +'<td>'+esc(r.patient.name)+' / '+esc(r.patient.gender)+' / '+esc(r.patient.age)+'岁</td>'
+          +'<td>'+esc(r.patient.chiefComplaint).slice(0,32)+(r.patient.chiefComplaint.length>32?'…':'')+'</td>'
+          +'<td>眼底彩照<div class="muted">右眼、左眼 2份</div></td>'
+          +'<td><span class="status ok">已发布</span></td>'
+          +'<td><div class="table-actions"><button class="btn small" onclick="openModal(\'view\',\''+r.code+'\')">查看</button><button class="btn small" onclick="openModal(\'edit\',\''+r.code+'\')">编辑</button><button class="btn small danger" onclick="removeRow(\''+r.code+'\')">删除</button></div></td></tr>';
+      }).join(''):'<tr><td colspan="7"><div class="empty-note">没有匹配的虚拟病例。</div></td></tr>';
+    }
+    function inputField(id,label,value,dis,cls){
+      var fieldClass=cls==='span-2'?' span-2':'';
+      var inputClass=cls==='mono'?' mono':'';
+      return '<div class="form-field'+fieldClass+'"><label>'+label+'</label><input class="input'+inputClass+'" id="'+id+'" value="'+esc(value)+'"'+(dis?' disabled':'')+'></div>';
+    }
+    function textField(id,label,value,dis,full){
+      return '<div class="form-field '+(full?'span-4':'')+'"><label>'+label+'</label><textarea id="'+id+'"'+(dis?' disabled':'')+'>'+esc(value)+'</textarea></div>';
+    }
+    function fixedOptions(name,items,selected,type,dis){
+      return items.map(function(item){
+        var checked=type==='checkbox'?(selected||[]).indexOf(item.value)>-1:selected===item.value;
+        return '<label class="option-card"><input type="'+type+'" name="'+name+'" value="'+item.value+'"'+(checked?' checked':'')+(dis?' disabled':'')+'><span>'+item.label+'</span></label>';
+      }).join('');
+    }
+    function fields(r,readonly){
+      var dis=readonly, p=r.patient||{}, v=r.vitals||[], im=r.imaging||{right:{},left:{}}, a=r.answers||{}, dialogue=r.dialogue||[];
+      var vitalLabels=['血压','空腹血糖','HbA1c','BMI','视力（右）','视力（左）','眼压（右）','眼压（左）'];
+      var vitalHtml=vitalLabels.map(function(label,index){var pair=v[index]||[label,''];return '<div class="form-field"><label>'+label+'</label><input class="input" id="f_vital_'+index+'" value="'+esc(pair[1])+'"'+(dis?' disabled':'')+'></div>';}).join('');
+      var dialogueHtml=dialogue.map(function(item,index){return '<div class="option-group"><div class="option-title"><span>固定问诊问题 '+(index+1)+'</span><span class="status gray">前台固定展示</span></div><input class="input dialogue-question" value="'+esc(item[0])+'" disabled><textarea id="f_answer_'+index+'"'+(dis?' disabled':'')+' placeholder="录入该问题对应的模拟患者回答">'+esc(item[1])+'</textarea></div>';}).join('');
+      return '<div class="section-block"><h3>一、病例基本信息</h3><p class="section-note">对应前台“虚拟病人信息”卡片，病例号、姓名、性别、年龄、既往史和主诉会直接展示给学员。</p><div class="info-grid">'
+        +inputField('f_name','病例名称',r.name,dis,'span-2')+inputField('f_code','病例号',r.code,dis,'mono')+inputField('f_patient_name','姓名',p.name,dis)+
+        '<div class="form-field"><label>性别</label><select class="select" id="f_gender"'+(dis?' disabled':'')+'><option'+(p.gender==='男'?' selected':'')+'>男</option><option'+(p.gender==='女'?' selected':'')+'>女</option></select></div>'+
+        inputField('f_age','年龄',p.age,dis)+textField('f_history','既往史',p.history,dis,true)+textField('f_chief','主诉',p.chiefComplaint,dis,true)+'</div></div>'+
+        '<div class="section-block"><h3>二、生命体征与检查数据</h3><p class="section-note">前台按固定顺序展示以下 8 项数据；后台只录入病例值，不配置额外指标。</p><div class="info-grid">'+vitalHtml+'</div></div>'+
+        '<div class="section-block"><h3>三、患者影像资料</h3><p class="section-note">影像类型固定为“眼底彩照”，分别维护右眼和左眼影像文件。</p><div class="info-grid">'+
+        '<div class="form-field span-4"><label>影像类型</label><input class="input" value="眼底彩照" disabled></div>'+ 
+        '<div class="form-field span-4"><label>上传右眼影像</label><input type="file" accept="image/*"'+(dis?' disabled':'')+'></div>'+ 
+        '<div class="form-field span-4"><label>上传左眼影像</label><input type="file" accept="image/*"'+(dis?' disabled':'')+'></div></div></div>'+ 
+        '<div class="section-block"><h3>四、临床问诊对话</h3><p class="section-note">题目固定为前台的 6 个预设问诊问题，后台只录入每个问题对应的模拟患者回答。</p><div class="option-stack">'+dialogueHtml+'</div></div>'+
+        '<div class="section-block"><h3>五、临床诊断题目配置</h3><p class="section-note">学生端按以下固定结构完成临床诊断；本病例只需要维护影像判读参考和各题的判定参考。</p>'+
+        '<div class="option-group"><div class="option-title"><span>1. 影像判读依据</span><span class="status info">必填文本题</span></div><textarea id="f_image_basis"'+(dis?' disabled':'')+'>'+esc(a.imageBasis||fixedQuestionConfig.imagePrompt)+'</textarea></div>'+
+        '<div class="option-group"><div class="option-title"><span>2. 综合临床诊断</span><span class="status info">固定单选题</span></div><div class="option-grid">'+fixedOptions('diagnosis',fixedQuestionConfig.diagnosisOptions,a.diagnosis,'radio',dis)+'</div></div>'+
+        '<div class="option-group"><div class="option-title"><span>3. 临床风险分层</span><span class="status info">固定单选题</span></div><div class="option-grid">'+fixedOptions('risk',fixedQuestionConfig.riskOptions,a.risk,'radio',dis)+'</div></div>'+
+        '<div class="option-group"><div class="option-title"><span>4. 下一步处理建议</span><span class="status info">固定多选题</span></div><div class="option-grid">'+fixedOptions('actions',fixedQuestionConfig.actionOptions,a.actions,'checkbox',dis)+'</div></div>'+
+        '<div class="option-group"><div class="option-title"><span>5. 综合诊断说明</span><span class="status info">必填文本题</span></div><textarea id="f_notes"'+(dis?' disabled':'')+'>'+esc(a.notes||'')+'</textarea></div>'+
+        '</div>';
+    }
+    function openModal(m,code){
+      mode=m; editing=rows.find(function(r){return r.code===code;})||{
+        code:'VC-2026-'+String(rows.length+1).padStart(3,'0'),name:'',status:'已发布',
+        patient:{name:'',gender:'女',age:'',history:'',chiefComplaint:''},
+        vitals:[['血压',''],['空腹血糖',''],['HbA1c',''],['BMI',''],['视力（右）',''],['视力（左）',''],['眼压（右）',''],['眼压（左）','']],
+        imaging:{right:{url:''},left:{url:''}},
+        dialogue:fixedQuestionConfig.diagnosisOptions.slice(0,0).concat([
+          ['您的主要症状是什么？',''],['症状持续多久了？',''],['有无糖尿病家族史？',''],['近期血糖控制如何？',''],['有无高血压病史？',''],['平时用什么降糖药？','']
+        ]),
+        answers:{diagnosis:'',risk:'',actions:[],imageBasis:'',notes:''}
+      };
+      var read=m==='view';
+      document.getElementById('modalTitle').textContent=m==='add'?'新建虚拟病例':m==='edit'?'编辑虚拟病例':'查看虚拟病例';
+      document.getElementById('modalDesc').textContent=read?'查看病例信息、眼底彩照、问诊回答和临床诊断题目配置。':'录入学生端会看到的病例虚拟信息与临床诊断题目。';
+      document.getElementById('modalBody').innerHTML=fields(editing,read);
+      document.getElementById('saveBtn').style.display=read?'none':'inline-flex';
+      document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
+    }
+    function closeModal(){document.getElementById('mask').classList.remove('open');document.getElementById('modal').classList.remove('open');}
+    function value(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+    function save(){
+      var item={
+        code:value('f_code'),name:value('f_name'),status:'已发布',
+        patient:{name:value('f_patient_name'),gender:document.getElementById('f_gender').value,age:value('f_age'),history:value('f_history'),chiefComplaint:value('f_chief')},
+        vitals:[['血压',value('f_vital_0')],['空腹血糖',value('f_vital_1')],['HbA1c',value('f_vital_2')],['BMI',value('f_vital_3')],['视力（右）',value('f_vital_4')],['视力（左）',value('f_vital_5')],['眼压（右）',value('f_vital_6')],['眼压（左）',value('f_vital_7')]],
+        imaging:{right:{},left:{}},
+        dialogue:[0,1,2,3,4,5].map(function(i){return [document.querySelectorAll('.dialogue-question')[i].value,value('f_answer_'+i)];}),
+        answers:{diagnosis:(document.querySelector('input[name="diagnosis"]:checked')||{}).value||'',risk:(document.querySelector('input[name="risk"]:checked')||{}).value||'',actions:Array.from(document.querySelectorAll('input[name="actions"]:checked')).map(function(el){return el.value;}),imageBasis:value('f_image_basis'),notes:value('f_notes')}
+      };
+      if(!item.name||!item.code||!item.patient.name){showToast('请至少填写病例名称、病例号和患者姓名');return;}
+      var idx=rows.findIndex(function(r){return r.code===editing.code;});if(mode==='edit'&&idx>-1)rows[idx]=item;else rows.unshift(item);
+      closeModal();render();showToast('虚拟病例已保存');
+    }
+    function removeRow(code){var r=rows.find(function(x){return x.code===code;});if(!r||!confirm('确定删除“'+r.name+'”吗？'))return;rows=rows.filter(function(x){return x.code!==code;});render();showToast('虚拟病例已删除');}
+    function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
+    render();
+  </script>
+</body>
+</html>
