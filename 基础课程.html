@@ -677,7 +677,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
             <div class="learning-mode-bar">
                 <div class="learning-mode-status">
                     <span class="learning-part-pill" id="videoPartStatus">视频未完成</span>
-                    <span class="learning-rule-tip">首次学习需视频完整播放后才开放章节测验。</span>
+                    <span class="learning-rule-tip">章节测验可随时进入，学习进度会继续保留。</span>
                 </div>
             </div>
             <div class="learning-panel active" id="videoLearningPanel">
@@ -697,7 +697,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                         </div>
                     </div>
                 </div>
-                <div class="video-learn-tip" id="videoLearnTip">完成条件：视频播放到 100% 后，本节视频学习才会标记完成。</div>
+                <div class="video-learn-tip" id="videoLearnTip">完成条件：视频播放到 100% 后，本节视频学习将标记完成。</div>
             </div>
             <div class="section-complete-hint" id="sectionCompleteHint" style="display:none;">
                 <span class="complete-text">✅ 你已完成本章节的学习</span>
@@ -1387,9 +1387,7 @@ function getCourseLearningProgress(course) {
 
 function canEnterChapterQuiz(course, chapterIndex) {
     const chapter = course && course.chapters ? course.chapters[chapterIndex] : null;
-    if (!course || !chapter || !getChapterQuiz(chapter.id)) return false;
-    if (getChapterQuizRecord(course.id, chapter.id)) return true;
-    return isChapterComplete(course, chapterIndex);
+    return !!(course && chapter && getChapterQuiz(chapter.id));
 }
 
 function findCourseQuizTarget(course, preferRetake) {
@@ -1413,14 +1411,13 @@ function findCourseQuizTarget(course, preferRetake) {
         }
     }
 
-    const firstNewEligible = chaptersWithQuiz.find(item => !item.record && isChapterComplete(course, item.index));
+    const firstNewEligible = chaptersWithQuiz.find(item => !item.record);
     if (firstNewEligible) return firstNewEligible;
 
     const firstRetake = chaptersWithQuiz.find(item => !!item.record);
     if (firstRetake) return firstRetake;
 
-    const firstCompleted = chaptersWithQuiz.find(item => isChapterComplete(course, item.index));
-    return firstCompleted || null;
+    return chaptersWithQuiz[0] || null;
 }
 
 function getMasteryState(accuracy) {
@@ -1546,7 +1543,7 @@ function getLatestQuizRecord(course) {
 
 function isCourseQuizPending(course) {
     if (!course || isCourseQuizCompleted(course)) return false;
-    return !!findCourseQuizTarget(course, false);
+    return getQuizChapterList(course).length > 0;
 }
 
 function isCourseQuizCompleted(course) {
@@ -1627,8 +1624,14 @@ function renderCourseList() {
         let diff = getDifficultyLabel(c.difficulty);
         let btnHtml = '';
         let cardAction = getCourseCardAction(c);
+        const hasQuizChapter = getQuizChapterList(c).length > 0;
         if (c.progress === 0) {
-            btnHtml = '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();startLearning(' + c.id + ')">开始学习</button>';
+            btnHtml = hasQuizChapter
+                ? '<div class="card-actions">'
+                    + '<button class="btn btn-primary btn-sm" onclick="event.stopPropagation();startLearning(' + c.id + ')">开始学习</button>'
+                    + '<button class="btn btn-warning btn-sm" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">去进行章节测验</button>'
+                    + '</div>'
+                : '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();startLearning(' + c.id + ')">开始学习</button>';
         } else if (isCourseQuizCompleted(c)) {
             btnHtml = '<div class="card-actions">'
                 + '<button class="btn btn-primary btn-sm" onclick="event.stopPropagation();continueCourse(' + c.id + ')">再次学习</button>'
@@ -1641,7 +1644,12 @@ function renderCourseList() {
                 + '<button class="btn btn-warning btn-sm" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">去进行章节测验</button>'
                 + '</div>';
         } else {
-            btnHtml = '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();continueCourse(' + c.id + ')">继续学习</button>';
+            btnHtml = hasQuizChapter
+                ? '<div class="card-actions">'
+                    + '<button class="btn btn-primary btn-sm" onclick="event.stopPropagation();continueCourse(' + c.id + ')">继续学习</button>'
+                    + '<button class="btn btn-warning btn-sm" onclick="event.stopPropagation();goCourseQuiz(' + c.id + ')">去进行章节测验</button>'
+                    + '</div>'
+                : '<button class="btn btn-primary btn-sm card-btn" onclick="event.stopPropagation();continueCourse(' + c.id + ')">继续学习</button>';
         }
         const learningProgress = getCourseLearningProgress(c);
         html += `
@@ -1750,8 +1758,7 @@ function goCourseQuiz(courseId) {
     if (!course) return;
     const target = findCourseQuizTarget(course, true);
     if (!target) {
-        alert('请先完成任意一个章节的全部视频学习，再进入章节测验。');
-        continueCourse(courseId);
+        alert('当前课程暂无测验数据。');
         return;
     }
     currentCourseId = courseId;
@@ -1869,7 +1876,6 @@ function renderChapterQuizEntry(course) {
     const ch = course.chapters[currentChapterIndex];
     const hasQuiz = ch && getChapterQuiz(ch.id);
     const quizRecord = ch ? getChapterQuizRecord(course.id, ch.id) : null;
-    const chapterLearned = isChapterComplete(course, currentChapterIndex);
     if (quizRecord) {
         panel.innerHTML = `
             <button class="chapter-quiz-entry" type="button" onclick="startChapterQuiz()">
@@ -1880,19 +1886,19 @@ function renderChapterQuizEntry(course) {
             </button>
             <div class="quiz-note">本章学习进度 ${quizRecord ? quizRecord.learningProgress : 100}% · 最近正确率 ${quizRecord ? quizRecord.latestAccuracy : '--'}%</div>
         `;
-    } else if (hasQuiz && chapterLearned) {
+    } else if (hasQuiz) {
         panel.innerHTML = `
             <button class="chapter-quiz-entry" type="button" onclick="startChapterQuiz()">
                 <span>📝</span><span>去进行章节测验</span>
             </button>
-            <div class="quiz-note">${ch.title} 已学完，可进入测验</div>
+            <div class="quiz-note">${ch.title} 可直接进入测验</div>
         `;
     } else {
         panel.innerHTML = `
             <button class="chapter-quiz-entry locked" type="button" onclick="showQuizLockedTip()">
-                <span>🔒</span><span>章节测验</span>
+                <span>📝</span><span>章节测验</span>
             </button>
-            <div class="quiz-note">${ch ? ch.title : '当前章节'} 学完后开放</div>
+            <div class="quiz-note">${ch ? ch.title : '当前章节'} 暂无测验数据</div>
         `;
     }
 }
@@ -2126,10 +2132,6 @@ function startChapterQuiz() {
         alert('当前章节暂无测验数据，请选择其他章节。');
         return;
     }
-    if (!canEnterChapterQuiz(course, currentChapterIndex)) {
-        alert('请先完成本章全部课程学习，再进入章节测验。');
-        return;
-    }
     document.getElementById('sectionCompleteHint').style.display = 'none';
     currentQuizCourseId = currentCourseId;
     currentQuizChapterIndex = currentChapterIndex;
@@ -2144,10 +2146,6 @@ function jumpToChapterQuiz(ci, chapterId) {
     }
     const course = getCourseById(currentCourseId);
     if (!course) return;
-    if (!canEnterChapterQuiz(course, ci)) {
-        alert('请先完成本章全部课程学习，再进入章节测验。');
-        return;
-    }
     currentChapterIndex = ci;
     currentQuizCourseId = currentCourseId;
     currentQuizChapterIndex = ci;
@@ -2155,7 +2153,7 @@ function jumpToChapterQuiz(ci, chapterId) {
 }
 
 function showQuizLockedTip() {
-    alert('请先完成本章全部课程学习，再进入章节测验。');
+    alert('当前章节暂无测验数据。');
 }
 
 function updateQuizButtonState() {
@@ -2189,10 +2187,6 @@ function startQuiz() {
     closeModalQuizPrompt();
     const course = getCourseById(currentCourseId);
     if (!course) return;
-    if (!canEnterChapterQuiz(course, currentChapterIndex)) {
-        alert('请先完成本章全部课程学习，再进入章节测验。');
-        return;
-    }
     currentQuizCourseId = currentCourseId;
     currentQuizChapterIndex = currentChapterIndex;
     let ch = course.chapters[currentChapterIndex];
