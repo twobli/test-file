@@ -78,17 +78,52 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 .filter-bar .filter-label { font-size:13px; font-weight:500; color:var(--gray-700); white-space:nowrap; }
 .filter-bar select { padding:7px 32px 7px 12px; border:1px solid var(--gray-300); border-radius:6px; font-size:13px; font-family:inherit; outline:none; background:#fff; cursor:pointer; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; }
 .filter-bar select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,115,232,0.1); }
-.filter-bar .search-box { position:relative; flex:1; min-width:180px; max-width:280px; }
-.filter-bar .search-box input { width:100%; padding:7px 12px 7px 34px; border:1px solid var(--gray-300); border-radius:6px; font-size:13px; font-family:inherit; outline:none; }
-.filter-bar .search-box input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,115,232,0.1); }
-.filter-bar .search-box .search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--gray-500); font-size:14px; pointer-events:none; }
 .filter-bar .result-count { margin-left:auto; font-size:12px; color:var(--gray-600); white-space:nowrap; }
 
 .content-split { display:flex; gap:16px; align-items:flex-start; }
 .case-list-panel { width:340px; flex-shrink:0; background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; max-height:calc(100vh - var(--header-height) - 180px); display:flex; flex-direction:column; }
-.case-list-panel .panel-header { padding:14px 20px; border-bottom:1px solid var(--gray-200); font-size:14px; font-weight:600; color:var(--gray-800); display:flex; align-items:center; justify-content:space-between; }
+.case-list-panel .panel-header { padding:14px 20px; border-bottom:1px solid var(--gray-200); font-size:14px; font-weight:600; color:var(--gray-800); display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.case-list-panel .panel-header .panel-title { display:flex; align-items:center; gap:6px; }
 .case-list-panel .panel-header .count-badge { font-size:12px; color:var(--gray-500); font-weight:400; }
+.case-list-panel .panel-help {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    border:1px solid #b8d6ff;
+    color:var(--primary);
+    font-size:12px;
+    font-weight:700;
+    cursor:help;
+    background:#f7fbff;
+    flex-shrink:0;
+}
+.case-list-panel .panel-help:hover { background:var(--primary-light); }
 .case-list-body { flex:1; overflow-y:auto; padding:4px 0; }
+.case-list-pagination {
+    border-top:1px solid var(--gray-200);
+    padding:10px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    background:#fff;
+}
+.case-page-btn {
+    border:1px solid var(--gray-300);
+    background:#fff;
+    color:var(--gray-700);
+    border-radius:6px;
+    padding:6px 10px;
+    font-size:12px;
+    cursor:pointer;
+    transition:var(--transition);
+}
+.case-page-btn:hover:not(:disabled) { border-color:var(--primary); color:var(--primary); background:var(--primary-lighter); }
+.case-page-btn:disabled { opacity:0.45; cursor:not-allowed; }
+.case-page-info { font-size:12px; color:var(--gray-600); white-space:nowrap; }
 
 .case-item { padding:14px 20px; cursor:pointer; border-left:3px solid transparent; border-bottom:1px solid var(--gray-100); transition:var(--transition); }
 .case-item:hover { background:var(--gray-50); }
@@ -306,7 +341,7 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
 
 <!-- 区域一：病例筛选 -->
 <div class="filter-bar" id="filterBar">
-        <div class="filter-group">
+    <div class="filter-group">
         <span class="filter-label">难度等级：</span>
         <select id="filterDifficulty" onchange="applyFilters()">
             <option value="all">全部</option>
@@ -315,19 +350,18 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
             <option value="疑难">疑难</option>
         </select>
     </div>
-    <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="filterSearch" placeholder="搜索病例名称..." oninput="applyFilters()">
-    </div>
     <span class="result-count" id="resultCount">共 15 个病例</span>
 </div>
 
 <!-- 区域二：病例列表 + 区域三：病例详情 -->
 <div class="content-split">
     <div class="case-list-panel" id="caseListPanel">
-        <div class="panel-header">病例列表 <span class="count-badge" id="listCount">15个</span></div>
-        <div class="case-list-note">以下病例属于不同病种归类，具体是何种病种，请完成相关诊断</div>
+        <div class="panel-header">
+            <div class="panel-title">病例列表 <span class="panel-help" title="以下病例属于不同病种归类，具体是何种病种，请完成相关诊断">?</span></div>
+            <span class="count-badge" id="listCount">15个</span>
+        </div>
         <div class="case-list-body" id="caseListBody"></div>
+        <div class="case-list-pagination" id="caseListPagination"></div>
     </div>
     <div class="case-detail-panel" id="caseDetailPanel">
         <div class="case-detail-empty"><div class="empty-icon">📋</div><p>请从左侧列表中选择一个病例查看详情</p></div>
@@ -444,6 +478,8 @@ const mockCases = [
 
 let currentCaseId = 1;
 let filteredCases = [...mockCases];
+let currentCasePage = 1;
+const casePageSize = 5;
 let lightboxImages = [], lightboxIndex = 0, lightboxScale = 1;
 let draftData = {}, reportStatus = {}, scoringResult = null;
 let selectedPrimaryImagingByCase = {};
@@ -480,40 +516,84 @@ function persistReportStatus() {
     try { localStorage.setItem('case_diag_status', JSON.stringify(reportStatus)); } catch(e) {}
 }
 
+function getFilteredCasePageCount() {
+    return Math.max(1, Math.ceil(filteredCases.length / casePageSize));
+}
+
+function getCasePageIndex(caseId) {
+    var idx = filteredCases.findIndex(function(c) { return c.id === caseId; });
+    if (idx < 0) return 1;
+    return Math.floor(idx / casePageSize) + 1;
+}
+
+function setCasePage(page) {
+    var totalPages = getFilteredCasePageCount();
+    currentCasePage = Math.min(Math.max(1, page), totalPages);
+    renderCaseList();
+}
+
 function applyFilters() {
     var dEl = document.getElementById('filterDisease'); var d = dEl ? dEl.value : 'all';
     var lv = document.getElementById('filterDifficulty').value;
-    var s = document.getElementById('filterSearch').value.toLowerCase().trim();
     filteredCases = mockCases.filter(function(c) {
         if (d!=='all' && c.disease!==d) return false;
         if (lv!=='all' && c.difficulty!==lv) return false;
-        if (s && (('病例'+c.id+' '+(c.patient?c.patient.caseNo:'')+' '+c.name).toLowerCase().indexOf(s)===-1)) return false;
         return true;
     });
     document.getElementById('listCount').textContent = filteredCases.length+'个';
     document.getElementById('resultCount').textContent = '共 '+filteredCases.length+' 个病例';
-    renderCaseList();
     if (filteredCases.length>0) {
-        if (!filteredCases.find(function(c){return c.id===currentCaseId;})) { currentCaseId=filteredCases[0].id; selectCase(currentCaseId); }
-    } else { currentCaseId=null; showEmptyDetail(); }
+        if (!filteredCases.find(function(c){return c.id===currentCaseId;})) {
+            currentCaseId = filteredCases[0].id;
+            currentCasePage = 1;
+        } else {
+            currentCasePage = getCasePageIndex(currentCaseId);
+        }
+    } else {
+        currentCaseId=null;
+        currentCasePage=1;
+        showEmptyDetail();
+    }
+    renderCaseList();
+    if (currentCaseId) {
+        var matched = filteredCases.find(function(c){return c.id===currentCaseId;});
+        if (matched) renderCaseDetail(matched);
+    }
 }
 
 function renderCaseList() {
+    var totalPages = getFilteredCasePageCount();
+    if (currentCasePage > totalPages) currentCasePage = totalPages;
+    var start = (currentCasePage - 1) * casePageSize;
+    var pageCases = filteredCases.slice(start, start + casePageSize);
+
     var h = '';
-    filteredCases.forEach(function(c) {
+    pageCases.forEach(function(c) {
         var sel = c.id===currentCaseId?' selected':'';
         var status = getCaseStatus(c);
         h+='<div class="case-item'+sel+'" onclick="selectCase('+c.id+')">';
         h+='<div class="ci-header"><span class="ci-name">病例'+c.id+'</span></div>';
         h+='<div class="ci-footer"><div class="ci-meta">'+getDifficultyBadge(c)+'</div><div class="ci-status"><span class="status-badge '+status.cls+'">'+status.text+'</span></div></div></div>';
     });
-    if (filteredCases.length===0) h='<div style="padding:40px;text-align:center;color:var(--gray-500);">没有匹配的病例</div>';
+    if (pageCases.length===0) h='<div style="padding:40px;text-align:center;color:var(--gray-500);">没有匹配的病例</div>';
     document.getElementById('caseListBody').innerHTML = h;
+
+    var pagination = document.getElementById('caseListPagination');
+    if (pagination) {
+        if (filteredCases.length <= casePageSize) {
+            pagination.innerHTML = '<div class="case-page-info">共 '+filteredCases.length+' 个病例</div>';
+        } else {
+            pagination.innerHTML = '<button class="case-page-btn" '+(currentCasePage<=1?'disabled':'')+' onclick="setCasePage('+(currentCasePage-1)+')">上一页</button><div class="case-page-info">第 '+currentCasePage+' / '+totalPages+' 页</div><button class="case-page-btn" '+(currentCasePage>=totalPages?'disabled':'')+' onclick="setCasePage('+(currentCasePage+1)+')">下一页</button>';
+        }
+    }
 }
 
 function selectCase(id) {
     currentCaseId=id; var c=mockCases.find(function(c){return c.id===id;}); if(!c)return;
-    scoringResult=getStoredScoring(id); renderCaseList(); renderCaseDetail(c);
+    scoringResult=getStoredScoring(id);
+    currentCasePage = getCasePageIndex(id);
+    renderCaseList();
+    renderCaseDetail(c);
 }
 
 function showEmptyDetail() {

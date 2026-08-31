@@ -124,6 +124,9 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .case-oct-visual { background:linear-gradient(180deg,#08111f,#111827); }
 .case-oct-visual::before { content:''; position:absolute; left:10px; right:10px; top:20px; height:2px; background:#94a3b8; border-radius:999px; box-shadow:0 12px 0 #60a5fa, 0 24px 0 #38bdf8, 0 36px 0 #0ea5e9; }
 .case-oct-visual::after { content:''; position:absolute; left:35px; top:36px; width:30px; height:14px; border-radius:50%; border:2px solid rgba(248,113,113,.9); background:rgba(248,113,113,.12); }
+.case-octa-visual { background:radial-gradient(circle at 50% 50%, #0f172a 0%, #08101f 55%, #020617 100%); }
+.case-octa-visual::before { content:''; position:absolute; inset:12px; border-radius:50%; border:1px solid rgba(125,211,252,.65); box-shadow:inset 0 0 0 1px rgba(255,255,255,.06), 0 0 18px rgba(56,189,248,.18); }
+.case-octa-visual::after { content:''; position:absolute; left:18px; right:18px; top:28px; height:2px; background:linear-gradient(90deg, rgba(96,165,250,.2), rgba(125,211,252,.95), rgba(96,165,250,.2)); border-radius:999px; box-shadow:0 14px 0 rgba(56,189,248,.7), 0 28px 0 rgba(14,165,233,.55); }
 .case-ffa-visual { background:radial-gradient(circle at 50% 50%,#0f172a,#020617); }
 .case-ffa-visual::before { content:''; position:absolute; left:16px; right:14px; top:22px; height:2px; background:#e0f2fe; border-radius:999px; transform:rotate(-8deg); box-shadow:14px 14px 0 #bae6fd, -4px 28px 0 #7dd3fc; }
 .case-ffa-visual::after { content:''; position:absolute; right:18px; bottom:14px; width:18px; height:18px; border-radius:50%; background:rgba(251,191,36,.9); box-shadow:0 0 18px rgba(251,191,36,.7); }
@@ -323,17 +326,38 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .btn-gen-report:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(23,92,211,0.45); }
 .btn-gen-report .report-icon { font-size: 16px; }
 
-/* 病程推理实训 */
+/* 病例推理实训 */
 .evolution-workspace { background: #f7f9fc; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
 .evolution-panel { background: #fff; border-radius: 12px; box-shadow: var(--shadow); padding: 20px; }
 .evolution-panel-title { font-size: 16px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
 .evolution-panel-subtitle { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
-.evolution-timeline { position: relative; display: flex; flex-direction: column; gap: 14px; margin-top: 16px; padding-left: 6px; }
-.evolution-timeline::before { content: ''; position: absolute; top: 18px; bottom: 18px; left: 98px; width: 2px; background: #dbe7ff; }
-.evolution-event { display: grid; grid-template-columns: 78px 1fr; gap: 26px; position: relative; align-items: stretch; }
-.evo-time { font-size: 12px; font-weight: 800; color: #175CD3; text-align: right; padding-top: 13px; }
+.evolution-timeline { position: relative; display: flex; flex-direction: column; gap: 14px; margin-top: 16px; padding-left: 6px; overflow: visible; }
+.evolution-timeline::before { content: ''; position: absolute; top: 18px; bottom: 18px; left: 116px; width: 2px; background: #dbe7ff; }
+.evolution-event { display: grid; grid-template-columns: 100px 1fr; gap: 18px; position: relative; align-items: stretch; }
+.evo-time {
+    font-size: 13px;
+    font-weight: 800;
+    color: #175CD3;
+    text-align: center;
+    padding: 9px 10px;
+    min-width: 92px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #eff6ff 0%, #e8f0ff 100%);
+    border: 1px solid #cfe0ff;
+    box-shadow: 0 1px 3px rgba(23,92,211,0.08);
+    line-height: 1.2;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.evo-time-date { display:block; }
+.evo-score { display:inline-flex; align-items:center; justify-content:center; min-width: 48px; padding: 1px 8px; border-radius: 999px; background: #fff; border: 1px solid #cfe0ff; color: #175CD3; font-size: 12px; font-weight: 800; }
+.evo-score.zero { color: #d93025; border-color: #f3b4ae; background: #fff7f7; }
+.evo-score.full { color: #137333; border-color: #b7e1c1; background: #f4fbf5; }
 .evo-card { position: relative; background: #f8faff; border: 1px solid #e5edff; border-radius: 10px; padding: 13px 15px; }
-.evo-card::before { content: ''; position: absolute; left: -34px; top: 16px; width: 12px; height: 12px; border-radius: 50%; background: #175CD3; border: 3px solid #fff; box-shadow: 0 0 0 2px #dbe7ff; }
+.evo-card::before { content: ''; position: absolute; left: -26px; top: 16px; width: 12px; height: 12px; border-radius: 50%; background: #175CD3; border: 3px solid #fff; box-shadow: 0 0 0 2px #dbe7ff; }
 .evo-card-title { font-size: 14px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
 .evo-card-detail { font-size: 13px; color: var(--gray-700); line-height: 1.65; }
 .evo-focus { margin-top: 8px; font-size: 12px; color: #5f3dc4; background: #f3efff; border-radius: 8px; padding: 7px 10px; line-height: 1.5; }
@@ -583,7 +607,26 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* ===== 共享布局：左侧病例树 + 右侧三级Tab内容区 ===== */
 .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; min-height: calc(100vh - 180px); }
 .main-layout .case-tree-panel { background: #fff; border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; height: fit-content; max-height: calc(100vh - 180px); position: sticky; top: 80px; }
-.main-layout .case-tree-header { padding: 16px 20px; font-size: 15px; font-weight: 700; color: #1E3F8A; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 8px; }
+.main-layout .case-tree-header { padding: 16px 20px; font-size: 15px; font-weight: 700; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.16); display: flex; align-items: center; gap: 8px; }
+.main-layout .case-tree-header .tree-icon { color: #fff; }
+.main-layout .case-tree-header .tree-help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-left: 2px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.55);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
+    cursor: help;
+    position: relative;
+}
+.main-layout .case-tree-header .tree-help:hover {
+    background: rgba(255,255,255,0.16);
+}
 .main-layout .case-tree-body { padding: 8px 12px; overflow-y: auto; flex: 1; }
 .tab-content-right { min-width: 0; }
 .tab-content-inner { display: none; }
@@ -657,6 +700,12 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .inline-reply strong { color: var(--gray-900); margin-right: 6px; }
 .inline-reply .reply-time { color: var(--gray-400); margin-left: 6px; }
 .discussion-empty-tip { background: #fff; border: 1px dashed #cfd8e3; border-radius: 10px; padding: 22px; text-align: center; color: var(--gray-500); font-size: 13px; }
+.discussion-locked-state { background:#fff; border:1px dashed var(--gray-300); border-radius:12px; padding:40px 24px; text-align:center; color:var(--gray-600); box-shadow:var(--shadow); }
+.discussion-locked-state .lock-icon { font-size:42px; margin-bottom:10px; }
+.discussion-locked-state h3 { font-size:16px; color:var(--gray-900); margin-bottom:8px; }
+.discussion-locked-state p { font-size:13px; line-height:1.7; color:var(--gray-600); margin-bottom:16px; }
+.discussion-locked-state .btn { display:inline-flex; align-items:center; justify-content:center; }
+#postCardList { padding-bottom: 132px; }
 
 /* 帖子卡片 - 匹配原型图 */
 .post-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 16px 18px; margin-bottom: 10px; transition: all 0.2s ease; position: relative; }
@@ -686,6 +735,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 /* 发帖输入区 - 匹配原型图 */
 .post-input-area { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 16px 18px; }
 .post-input-area.primary-compose { border: 1px solid #dbe6ff; box-shadow: 0 2px 10px rgba(26,115,232,0.06); }
+.post-input-area.primary-compose.discussion-footer-compose { position: sticky; bottom: 16px; z-index: 12; margin-top: 8px; box-shadow: 0 -4px 18px rgba(26,115,232,0.08), 0 2px 10px rgba(26,115,232,0.08); }
 .post-input-area .input-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--gray-600); }
 .post-input-area .input-header .user-avatar-sm { width: 28px; height: 28px; border-radius: 50%; background: #1a73e8; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; }
 .post-input-area textarea { width: 100%; min-height: 70px; padding: 10px 14px; border: 1px solid #dadce0; border-radius: 8px; font-family: inherit; font-size: 13px; resize: vertical; outline: none; background: #fafbfc; color: var(--gray-800); }
@@ -798,7 +848,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
     <div class="tabs" id="mainTabs">
         <button class="tab-btn active" data-tab="reasoning">病例推理实训</button>
         <button class="tab-btn" data-tab="compare">AI诊断对比学习</button>
-        <button class="tab-btn" data-tab="evolution">病程推理实训</button>
+        <button class="tab-btn" data-tab="evolution">病例推理实训</button>
         <button class="tab-btn" data-tab="discussion">病例讨论</button>
     </div>
 
@@ -807,7 +857,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <!-- 左侧：共享病例树面板（四个Tab共用） -->
         <div class="case-tree-panel" id="sharedCaseTree">
             <div class="case-tree-header">
-                <span class="tree-icon">☰</span>病例列表
+                <span class="tree-icon">☰</span>病例列表<span class="tree-help" title="列表中案例均从标准病例库中获取，涵盖多病种，以此来进行案例分层教学">?</span>
             </div>
             <div class="case-tree-body" id="caseTreeBody"></div>
         </div>
@@ -856,16 +906,16 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                     </div>
                     <div class="diff-analysis" id="diffPanel"></div>
                     <div class="compare-bottom-actions">
-                        <button class="btn-gen-report" onclick="switchToEvolutionTab()"><span class="report-icon">↪</span> 进入病程推理实训</button>
+                        <button class="btn-gen-report" onclick="switchToEvolutionTab()"><span class="report-icon">↪</span> 进入病例推理实训</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 3: 病程推理实训 -->
+            <!-- Tab 3: 病例推理实训 -->
             <div id="tab-evolution" class="tab-content-inner">
                 <div class="no-case-selected" id="emptyStateEvolution">
                     <div class="empty-icon">📈</div>
-                    <div class="empty-text">请从左侧病例列表中选择一个病例<br>进行病程推理实训</div>
+                    <div class="empty-text">请从左侧病例列表中选择一个病例<br>进行病例推理实训</div>
                 </div>
                 <div id="evolutionContent" style="display:none;"></div>
             </div>
@@ -890,7 +940,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                                     <span class="disc-status" id="discStatus">共 0 条讨论</span>
                                 </div>
                             </div>
-                            <div class="post-input-area primary-compose" id="quickPostArea">
+                            <div id="postCardList"></div>
+                            <div class="post-input-area primary-compose discussion-footer-compose" id="quickPostArea">
                                 <div class="input-header">
                                     <span class="user-avatar-sm">管</span>
                                     <span>参与当前病例研讨</span>
@@ -904,7 +955,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                                 </div>
                                 <div id="quickVoicePreview"></div>
                             </div>
-                            <div id="postCardList"></div>
                         </div>
                     </div>
                 </div>
@@ -1127,14 +1177,31 @@ function loadTeachingState(){
     }
 }
 
+function getPersistableCaseIds(){
+    return Object.keys(caseLearningReports || {}).filter(function(caseId) {
+        return !!getLearningReport(caseId);
+    });
+}
+
+function filterTeachingMap(source, allowedIds){
+    const output = {};
+    Object.keys(source || {}).forEach(function(key) {
+        if (allowedIds.indexOf(key) >= 0) {
+            output[key] = source[key];
+        }
+    });
+    return output;
+}
+
 function persistTeachingState(){
     try{
+        const allowedIds = getPersistableCaseIds();
         const payload = {
-            completedCases,
-            submittedReasoning,
-            aiReadyCases,
-            evolutionAnswers,
-            caseLearningReports
+            completedCases: filterTeachingMap(completedCases, allowedIds),
+            submittedReasoning: filterTeachingMap(submittedReasoning, allowedIds),
+            aiReadyCases: filterTeachingMap(aiReadyCases, allowedIds),
+            evolutionAnswers: filterTeachingMap(evolutionAnswers, allowedIds),
+            caseLearningReports: filterTeachingMap(caseLearningReports, allowedIds)
         };
         localStorage.setItem(CASE_TEACHING_STATE_KEY, JSON.stringify(payload));
     }catch(e){}
@@ -1147,11 +1214,18 @@ function hydrateTeachingState(){
     aiReadyCases = stored.aiReadyCases || {};
     evolutionAnswers = stored.evolutionAnswers || {};
     caseLearningReports = stored.caseLearningReports || {};
+    const allowedIds = getPersistableCaseIds();
+    completedCases = filterTeachingMap(completedCases, allowedIds);
+    submittedReasoning = filterTeachingMap(submittedReasoning, allowedIds);
+    aiReadyCases = filterTeachingMap(aiReadyCases, allowedIds);
+    evolutionAnswers = filterTeachingMap(evolutionAnswers, allowedIds);
+    caseLearningReports = filterTeachingMap(caseLearningReports, allowedIds);
     ['basic','advanced','research'].forEach(level=>{
         caseData[level].forEach(c=>{
             c.status = completedCases[c.id] ? 'completed' : 'not_started';
         });
     });
+    persistTeachingState();
 }
 
 function getLearningReport(caseId){
@@ -1322,16 +1396,33 @@ function getCaseTimeline(caseObj, compareCase){
     ];
 }
 
-function pickImageModality(eyeExam, imaging){
-    const order = [
-        { label:'眼底彩照', visual:'case-fundus-visual', has: !!(eyeExam && eyeExam.fundus) },
-        { label:'OCTA', visual:'case-ffa-visual', has: !!(imaging && imaging.octa) },
-        { label:'OCT结构影像', visual:'case-oct-visual', has: !!(imaging && imaging.oct) },
-        { label:'FFA', visual:'case-ffa-visual', has: !!(imaging && imaging.ffa) },
-        { label:'ICGA', visual:'case-ffa-visual', has: !!(imaging && imaging.icga) },
-        { label:'视野', visual:'case-oct-visual', has: !!(imaging && imaging.vf) }
-    ];
-    return order.find(m=>m.has) || { label:'眼底彩照', visual:'case-fundus-visual' };
+function pickImageModality(caseId, eyeExam, imaging){
+    var preferredMap = {
+        B1: 'fundus',
+        B2: 'oct',
+        B3: 'octa',
+        B4: 'fundus',
+        B5: 'oct',
+        A1: 'oct',
+        A2: 'fundus',
+        A3: 'octa',
+        A4: 'fundus',
+        R1: 'octa',
+        R2: 'oct',
+        R3: 'fundus'
+    };
+    var candidates = {
+        fundus: { label:'眼底彩照', visual:'case-fundus-visual', has: !!(eyeExam && eyeExam.fundus) },
+        oct: { label:'OCT', visual:'case-oct-visual', has: !!(imaging && imaging.oct) },
+        octa: { label:'OCTA', visual:'case-octa-visual', has: !!(imaging && imaging.octa) }
+    };
+    var preferred = preferredMap[caseId] || 'fundus';
+    var orderedKeys = [preferred, 'fundus', 'oct', 'octa'].filter(function(key, idx, arr){ return arr.indexOf(key) === idx; });
+    for (var i = 0; i < orderedKeys.length; i++) {
+        var item = candidates[orderedKeys[i]];
+        if (item && item.has) return item;
+    }
+    return candidates[preferred] || candidates.fundus;
 }
 
 function renderReasoningCaseProfile(caseObj){
@@ -1346,7 +1437,7 @@ function renderReasoningCaseProfile(caseObj){
     const chiefText = eyeHistory ? eyeHistory.chiefComplaint : caseObj.info;
     const presentText = eyeHistory ? eyeHistory.presentIllness : caseObj.info;
     const historyText = systemicHistory ? [systemicHistory.diabetes, systemicHistory.hypertension, systemicHistory.other, systemicHistory.familyHistory].filter(Boolean).join(' ') : '请结合病例简介与危险因素判断疾病背景。';
-    const modality = pickImageModality(eyeExam, imaging);
+    const modality = pickImageModality(caseObj.id, eyeExam, imaging);
 
     let html = '<div class="case-profile-card">';
     html += '<div class="case-profile-title"><span>标准病例库资料</span><span class="tag tag-blue">'+difficultyText+'</span></div>';
@@ -1514,7 +1605,7 @@ function buildLearningReportAssessment(rows, evo, userDiag, aiDiag, currentCase,
     const compareOverallScore = Math.round((compareDiagnosisAccuracy + compareLogicCompleteness) / 2);
     const compareFieldAssessments = buildCompareFieldAssessments(rows, userDiag, aiDiag, compareBasisLogic, compareDiagnosisAccuracy, compareLogicCompleteness);
 
-    // ===== 病程推理实训：时间轴单选题评分 =====
+    // ===== 病例推理实训：时间轴单选题评分 =====
     const quiz = buildEvolutionQuiz(currentCase, compareCase);
     let correctCount = 0;
     const evolutionFields = (evo && evo.qa) ? evo.qa.map(function(q, i){
@@ -1635,7 +1726,7 @@ function confirmResetCurrentCase(){
     var message = '重置后，当前病例的以下数据都会被清除：\n\n'
         + '• 病例推理实训作答\n'
         + '• AI诊断对比学习数据\n'
-        + '• 病程推理实训作答\n'
+        + '• 病例推理实训作答\n'
         + '• 已生成的学习报告和评分\n\n'
         + '这些数据清除后无法恢复，确定要重置当前病例吗？';
     if(confirm(message)) resetCase();
@@ -1953,7 +2044,7 @@ function renderCompareView(){
         return;
     }
     if(!document.getElementById('userComparePanel') || !document.getElementById('aiPanel')) {
-        document.getElementById('compareContent').innerHTML = '<div class="compare-top-bar"><span class="learning-status" id="compareStatus">AI诊断已完成</span></div><div class="compare-layout"><div class="user-panel" id="userComparePanel"></div><div class="ai-panel" id="aiPanel"></div></div><div class="diff-analysis" id="diffPanel"></div><div class="compare-bottom-actions"><button class="btn-gen-report" onclick="switchToEvolutionTab()"><span class="report-icon">↪</span> 进入病程推理实训</button></div>';
+        document.getElementById('compareContent').innerHTML = '<div class="compare-top-bar"><span class="learning-status" id="compareStatus">AI诊断已完成</span></div><div class="compare-layout"><div class="user-panel" id="userComparePanel"></div><div class="ai-panel" id="aiPanel"></div></div><div class="diff-analysis" id="diffPanel"></div><div class="compare-bottom-actions"><button class="btn-gen-report" onclick="switchToEvolutionTab()"><span class="report-icon">↪</span> 进入病例推理实训</button></div>';
     }
     currentCompareCase = findCompareCaseForCurrentCase();
     document.getElementById('emptyStateCompare').style.display = 'none';
@@ -2076,8 +2167,7 @@ function saveEvolutionDraft(){
         alert('该病例已生成学习报告，病程推理数据已固定。');
         return;
     }
-    saveEvolutionAnswers();
-    alert('病程推理进度已保存。');
+    alert('当前病例未生成学习报告，退出页面后不会保存进度；请直接完成作答并生成学习报告。');
 }
 
 function getEvolutionQuiz(){ return buildEvolutionQuiz(currentCase, findCompareCaseForCurrentCase()); }
@@ -2118,7 +2208,7 @@ function renderEvolutionTraining(){
     empty.style.display = 'none';
     content.style.display = 'block';
     if(!aiReadyCases[currentCaseId]){
-        content.innerHTML = '<div class="compare-locked"><div class="lock-icon">🔒</div><h3>病程推理实训暂未开放</h3><p>请先在“病例推理实训”中完成诊断推理，并查看AI诊断对比学习。完成前序对比后，再进入病程时间轴推理。</p><button class="btn btn-primary" onclick="switchToReasoningTab()">返回病例推理实训</button></div>';
+        content.innerHTML = '<div class="compare-locked"><div class="lock-icon">🔒</div><h3>病例推理实训暂未开放</h3><p>请先在“病例推理实训”中完成诊断推理，并查看AI诊断对比学习。完成前序对比后，再进入病程时间轴推理。</p><button class="btn btn-primary" onclick="switchToReasoningTab()">返回病例推理实训</button></div>';
         return;
     }
     let report = getLearningReport(currentCaseId);
@@ -2148,8 +2238,9 @@ function renderEvolutionTraining(){
         if(answered || i < ans.current) cls += ' evo-done';
         if(isCurrent && !answered) cls += ' evo-active';
         if(!answered && i > ans.current) cls += ' evo-locked';
+        const stepScore = answered ? ((q.selected === step.correct) ? 100 : 0) : null;
         html += '<div class="'+cls+'">';
-        html += '<div class="evo-time">'+escHtml(step.date)+(answered?' <span class="evo-check">✓</span>':'')+'</div>';
+        html += '<div class="evo-time"><span class="evo-time-date">'+escHtml(step.date)+'</span>'+(stepScore !== null ? '<span class="evo-score '+(stepScore===100?'full':'zero')+'">'+stepScore+'分</span>' : '')+'</div>';
         html += '<div class="evo-card">';
         html += '<div class="evo-card-title">'+escHtml(step.title)+'</div>';
         if(answered || isCurrent){
@@ -2188,8 +2279,7 @@ function renderEvolutionTraining(){
         if(allDone){
             html += '<button class="btn-gen-report" onclick="generateIntegratedLearningReport()"><span class="report-icon">📊</span> 生成学习报告</button>';
         } else {
-            html += '<button class="btn btn-outline" onclick="saveEvolutionDraft()">保存进度</button>';
-            html += '<span class="evo-tip">完成全部单选题后即可生成学习报告</span>';
+            html += '<span class="evo-tip">完成全部单选题后即可生成学习报告；未生成学习报告前，退出页面不会保存进度</span>';
         }
     } else {
         html += '<button class="btn-reset-case" onclick="confirmResetCurrentCase()">重置当前病例</button>';
@@ -2229,14 +2319,14 @@ function generateIntegratedLearningReport(){
     let html = '<div class="report-content">';
     html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统自动评分：诊断准确率 / 逻辑完整度</div></div>';
     html += '<div class="report-meta"><div>学员：管理员</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
-    html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病程推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程时间轴作答和系统评分固定保留。</div>';
+    html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病例推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程时间轴作答和系统评分固定保留。</div>';
     html += '<div class="report-score-section">';
     html += '<div class="report-score-big"><div class="big-score" style="color:'+scoreColor+';">'+assessment.overallScore+'</div><div class="big-label">'+(assessment.overallScore>=90?'优秀':assessment.overallScore>=75?'良好':assessment.overallScore>=60?'一般':'需提高')+'</div></div>';
     html += '<div class="report-score-detail">';
     html += '<div class="score-bar-item"><div class="score-bar-header"><span>AI诊断对比学习 - 诊断准确率</span><span>'+compare.diagnosisAccuracy+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+compare.diagnosisAccuracy+'%;background:'+scoreBarColor(compare.diagnosisAccuracy)+'"></div></div></div>';
     html += '<div class="score-bar-item"><div class="score-bar-header"><span>AI诊断对比学习 - 逻辑完整度</span><span>'+compare.logicCompleteness+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+compare.logicCompleteness+'%;background:'+scoreBarColor(compare.logicCompleteness)+'"></div></div></div>';
-    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病程推理实训 - 诊断准确率</span><span>'+evolution.diagnosisAccuracy+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.diagnosisAccuracy+'%;background:'+scoreBarColor(evolution.diagnosisAccuracy)+'"></div></div></div>';
-    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病程推理实训 - 逻辑完整度</span><span>'+evolution.logicCompleteness+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.logicCompleteness+'%;background:'+scoreBarColor(evolution.logicCompleteness)+'"></div></div></div>';
+    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病例推理实训 - 诊断准确率</span><span>'+evolution.diagnosisAccuracy+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.diagnosisAccuracy+'%;background:'+scoreBarColor(evolution.diagnosisAccuracy)+'"></div></div></div>';
+    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病例推理实训 - 逻辑完整度</span><span>'+evolution.logicCompleteness+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.logicCompleteness+'%;background:'+scoreBarColor(evolution.logicCompleteness)+'"></div></div></div>';
     html += '</div></div>';
 
     html += '<div class="report-module-grid">';
@@ -2254,7 +2344,7 @@ function generateIntegratedLearningReport(){
     html += '</tbody></table></div>';
 
     html += '<div class="report-module-card">';
-    html += '<div class="report-module-head"><div><div class="report-module-title">病程推理实训</div><div class="report-module-desc">按病程时间轴各时间点的单选题作答，系统自动评判诊断准确率和逻辑完整度。</div></div></div>';
+    html += '<div class="report-module-head"><div><div class="report-module-title">病例推理实训</div><div class="report-module-desc">按病程时间轴各时间点的单选题作答，系统自动评判诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
     html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+evolution.diagnosisAccuracy+'分</div></div>';
     html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+evolution.logicCompleteness+'分</div></div>';
@@ -2340,16 +2430,40 @@ function selectCompareCase(id){
 }
 
 // ==================== Tab 3: 病例讨论（新版样式） ====================
+function isDiscussionUnlocked(caseId){
+    return !!getLearningReport(caseId || currentCaseId);
+}
+
+function renderDiscussionLockedState(caseId){
+    const caseInfo = findDiscussionCase(caseId) || currentCase || { title:'当前病例' };
+    return '<div class="discussion-locked-state"><div class="lock-icon">🔒</div><h3>病例讨论暂未开放</h3><p>“'+escHtml(caseInfo.title)+'” 还没有生成学习报告。请先完成病例推理实训并生成学习报告后，再进入病例讨论板块。</p><button class="btn btn-primary" onclick="switchToEvolutionTab()">返回病例推理实训</button></div>';
+}
+
 function renderPostList(sortBy){
     sortBy = sortBy || discussionSortBy || 'publish_time';
     if(!currentCaseId) {
         document.getElementById('emptyStateDiscussion').style.display = 'block';
         document.getElementById('discussionContent').style.display = 'none';
+        const postCardList = document.getElementById('postCardList');
+        if(postCardList) postCardList.style.paddingBottom = '0';
         return;
     }
     document.getElementById('emptyStateDiscussion').style.display = 'none';
     document.getElementById('discussionContent').style.display = 'block';
     document.getElementById('discussionListView').style.display = 'block';
+
+    const quickPostArea = document.getElementById('quickPostArea');
+    const postCardList = document.getElementById('postCardList');
+    const messageWrap = document.getElementById('discussionMessageWrap');
+    const isUnlocked = isDiscussionUnlocked(currentCaseId);
+    if(quickPostArea) quickPostArea.style.display = isUnlocked ? 'block' : 'none';
+    if(messageWrap) messageWrap.style.display = isUnlocked ? 'block' : 'none';
+    if(postCardList) postCardList.style.paddingBottom = isUnlocked ? '132px' : '0';
+    if(!isUnlocked){
+        postCardList.innerHTML = renderDiscussionLockedState(currentCaseId);
+        document.getElementById('discStatus').textContent = '未生成学习报告';
+        return;
+    }
 
     let posts = postDataByCase[currentCaseId] || postDataByCase['all'];
     if(!posts || posts.length === 0) posts = postDataByCase['all'];
@@ -2368,7 +2482,7 @@ function renderPostList(sortBy){
     }
     html += '</div>';
 
-    document.getElementById('postCardList').innerHTML = html;
+    postCardList.innerHTML = html;
     document.getElementById('discStatus').textContent = '共 '+posts.length+' 条发言';
 }
 
@@ -2528,6 +2642,7 @@ function openDiscussionNotification(notificationId){
 }
 
 function quickPublish(){
+    if(!isDiscussionUnlocked()) return;
     const input = document.getElementById('quickPostInput');
     if(activeDiscussionRecording && activeDiscussionRecording.draftKey === 'quick') finishDiscussionRecording();
     const text = input.value.trim();
@@ -2577,6 +2692,7 @@ function closeReplyComposer(postId){
 }
 
 function submitDiscussionReply(postId){
+    if(!isDiscussionUnlocked()) return;
     const composer = document.getElementById('replyComposer_'+postId);
     const textarea = composer ? composer.querySelector('textarea') : null;
     if(activeDiscussionRecording && activeDiscussionRecording.draftKey === postId) finishDiscussionRecording();
@@ -2646,3 +2762,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script></body></html>
+
