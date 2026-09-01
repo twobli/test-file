@@ -259,8 +259,60 @@
 
         .panel-head .filter-actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .panel-head .filter-actions .category-tabs {
+            width: 100%;
+            padding: 0;
+            margin: 0 0 2px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px 18px 0;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            display: inline-flex;
             align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 0 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--gray-700);
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .category-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .category-tab.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .category-tab .tab-count {
+            padding: 1px 6px;
+            border-radius: 999px;
+            background: rgba(26, 115, 232, .1);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .panel-head .diff-filter {
@@ -376,7 +428,7 @@
             border-color: #bbf7d0;
         }
 
-        .task-card.answered .task-score-num {
+        .task-card.answered .task-score-percent {
             color: var(--success);
         }
 
@@ -393,6 +445,13 @@
             margin-bottom: 0;
             flex: 1;
             min-width: 0;
+        }
+
+        .task-subtitle {
+            margin-top: 4px;
+            color: var(--gray-600);
+            font-size: 11px;
+            line-height: 1.4;
         }
 
         .task-heading {
@@ -448,10 +507,23 @@
             border-color: #fde293;
         }
 
+        .task-tag.status-done {
+            background: #e6f4ea;
+            color: #137333;
+            border-color: #b7dfc3;
+        }
+
+        .task-tag.status-undone {
+            background: #f8fafc;
+            color: var(--gray-600);
+            border-color: var(--gray-300);
+        }
+
         .task-score {
             display: flex;
+            flex-direction: column;
             align-items: baseline;
-            gap: 6px;
+            gap: 2px;
             font-size: 11px;
             color: var(--gray-500);
             flex-shrink: 0;
@@ -459,7 +531,18 @@
             text-align: right;
         }
 
+        .task-score-label {
+            font-size: 10px;
+            color: var(--gray-500);
+        }
+
         .task-score-num {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .task-score-percent {
             font-size: 12px;
             font-weight: 700;
             color: var(--primary);
@@ -645,6 +728,63 @@
             border-radius: 4px;
         }
 
+        .reading-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            border: 1px solid #dbe5f0;
+            border-radius: 10px;
+            background: #f8fbff;
+            align-items: center;
+        }
+
+        .reading-panel .reading-preview {
+            width: 110px;
+            height: 78px;
+            flex: 0 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #cfe0f1;
+            background: #fff;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45);
+        }
+
+        .reading-panel .reading-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .reading-panel .reading-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-width: 0;
+            align-items: center;
+        }
+
+        .reading-panel .reading-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #fff;
+            border: 1px solid #cfe0f1;
+            color: var(--gray-700);
+            font-size: 12px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .reading-panel .reading-chip strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
         .question-progress {
             margin-left: auto;
             font-size: 12px;
@@ -748,6 +888,15 @@
             border-radius: 10px;
             font-size: 13px;
             line-height: 1.6;
+        }
+
+        .exam-feedback .feedback-line {
+            margin-top: 4px;
+        }
+
+        .exam-feedback .feedback-explain {
+            margin-top: 8px;
+            white-space: pre-wrap;
         }
 
         .exam-feedback.ok {
@@ -864,6 +1013,12 @@
 
         .report-score-main span {
             font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .report-accuracy-note {
+            margin-top: 4px;
+            font-size: 12px;
             color: var(--gray-600);
         }
 
@@ -1121,16 +1276,12 @@
                     <div class="panel-head">
                         <h4>题集</h4>
                         <div class="filter-actions">
+                            <div class="category-tabs" id="categoryTabs"></div>
                             <select class="diff-filter" id="diffFilter" onchange="renderTasks()">
                                 <option value="">全部难度</option>
                                 <option value="基础">基础</option>
                                 <option value="进阶">进阶</option>
                                 <option value="高阶">高阶</option>
-                            </select>
-                            <select class="diff-filter" id="categoryFilter" onchange="renderTasks()">
-                                <option value="">全部类型</option>
-                                <option value="classification">图像分类</option>
-                                <option value="segmentation">图像分割</option>
                             </select>
                             <select class="diff-filter" id="answerFilter" onchange="renderTasks()">
                                 <option value="">全部状态</option>
@@ -1197,7 +1348,7 @@
             <div class="form-actions">
                 <button class="btn" onclick="closeModal('examReportModal')">关闭</button>
                 <button class="btn btn-primary"
-                    onclick="closeModal('examReportModal');confirmRedo({fromReport:true});">再考一次</button>
+                    onclick="closeModal('examReportModal');confirmRedo({fromReport:true});">重新作答</button>
             </div>
         </div>
     </div>
@@ -1207,14 +1358,15 @@
     <script>
         /* =============== STATE =============== */
         var STORAGE_KEY = 'life_med_model_training';
-        var CATEGORY_LABELS = { classification: '图像分类', segmentation: '图像分割' };
+        var CATEGORY_LABELS = { classification: '医学图像分类', segmentation: '医学图像分割' };
         var state = {
             currentTask: '',            // 当前疾病 taskKey
             currentAttempt: null,       // { id, taskKey, taskTitle, category, startedAt, finishedAt, questions:[10], items:[10], totalScore, maxScore, band }
             currentIndex: 0,            // 当前第几题 0..9
             submitted: false,
             cachedStore: null,
-            drafts: {}                  // { taskKey: { answers:[10], index } } 进行中的草稿
+            drafts: {},                 // { taskKey: { answers:[10], index } } 进行中的草稿
+            selectedCategory: 'classification'
         };
 
         /* =============== 选择题题库（医学图像分类 / 医学图像分割） =============== */
@@ -1222,31 +1374,91 @@
             'medical-classification-basics': {
                 category: 'classification', disease: '医学图像分类基础', difficulty: '基础', knowledge: '模型训练基础',
                 questions: [
-                    { id: 'medical-classification-basics-q1', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', score: 10, explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
-                    { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', score: 10, explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
-                    { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', score: 10, explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
-                    { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', score: 10, explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
-                    { id: 'medical-classification-basics-q5', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', score: 10, explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
-                    { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', score: 10, explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
-                    { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', score: 10, explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
-                    { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', score: 10, explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
-                    { id: 'medical-classification-basics-q9', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', score: 10, explain: '灵敏度反映模型发现阳性病例的能力。' },
-                    { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', score: 10, explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
+                    { id: 'medical-classification-basics-q1', kind: 'choice', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', score: 10, explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
+                    { id: 'medical-classification-basics-q2', kind: 'reading', readingType: '眼底彩照', eyeSide: '左眼', reading: '请观察一张眼底彩照：黄斑区见出血和渗出，医生需要先判断整幅图像属于哪一类疾病状态。', q: '在这个任务中，模型最终应输出的是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', score: 10, explain: '阅片题仍是单选题，但核心输出依旧是整幅图像所属的类别。' },
+                    { id: 'medical-classification-basics-q3', kind: 'choice', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', score: 10, explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
+                    { id: 'medical-classification-basics-q4', kind: 'choice', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', score: 10, explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
+                    { id: 'medical-classification-basics-q5', kind: 'reading', readingType: 'OCT', eyeSide: '右眼', reading: '阅片时医生已经确认图像来源，但还需要判断该图像与哪种疾病标签对应。', q: '下列哪项最符合医学图像分类的学习目标？', options: ['判断整幅图像属于哪一类', '标出病灶边界', '计算患者住院天数', '记录设备编号'], answer: 'A', score: 10, explain: '分类任务的核心是输出图像类别，而不是像素级轮廓。' },
+                    { id: 'medical-classification-basics-q6', kind: 'choice', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', score: 10, explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
+                    { id: 'medical-classification-basics-q7', kind: 'choice', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', score: 10, explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
+                    { id: 'medical-classification-basics-q8', kind: 'choice', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', score: 10, explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
+                    { id: 'medical-classification-basics-q9', kind: 'reading', readingType: 'OCTA', eyeSide: '双眼', reading: '在一组糖网筛查图像里，模型需要尽量把真正的阳性病例找出来，不漏掉高风险患者。', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', score: 10, explain: '灵敏度反映模型发现阳性病例的能力。' },
+                    { id: 'medical-classification-basics-q10', kind: 'choice', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', score: 10, explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
                 ]
             },
             'medical-segmentation-basics': {
                 category: 'segmentation', disease: '医学图像分割基础', difficulty: '基础', knowledge: '模型训练基础',
                 questions: [
-                    { id: 'medical-segmentation-basics-q1', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', score: 10, explain: '分割任务重点是定位目标区域并描述其范围。' },
-                    { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', score: 10, explain: '分割结果一般是每个像素属于目标或背景的标记。' },
-                    { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', score: 10, explain: '分割需要明确目标结构的具体轮廓和边界。' },
-                    { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', score: 10, explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
-                    { id: 'medical-segmentation-basics-q5', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', score: 10, explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
-                    { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', score: 10, explain: '分割掩码必须与图像保持一致的空间变换。' },
-                    { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', score: 10, explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
-                    { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', score: 10, explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
-                    { id: 'medical-segmentation-basics-q9', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', score: 10, explain: '小目标前景稀少，模型更容易忽略。' },
-                    { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', score: 10, explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
+                    { id: 'medical-segmentation-basics-q1', kind: 'reading', reading: '请观察一张胸部 CT：医生希望在图像上勾出肺结节的轮廓，而不是只判断整张图像属于哪一类。', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', score: 10, explain: '分割任务重点是定位目标区域并描述其范围。' },
+                    { id: 'medical-segmentation-basics-q2', kind: 'choice', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', score: 10, explain: '分割结果一般是每个像素属于目标或背景的标记。' },
+                    { id: 'medical-segmentation-basics-q3', kind: 'choice', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', score: 10, explain: '分割需要明确目标结构的具体轮廓和边界。' },
+                    { id: 'medical-segmentation-basics-q4', kind: 'choice', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', score: 10, explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
+                    { id: 'medical-segmentation-basics-q5', kind: 'reading', reading: '如果图像被翻转或旋转，对应的掩码必须保持与目标边界一一对应。', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', score: 10, explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
+                    { id: 'medical-segmentation-basics-q6', kind: 'choice', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', score: 10, explain: '分割掩码必须与图像保持一致的空间变换。' },
+                    { id: 'medical-segmentation-basics-q7', kind: 'choice', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', score: 10, explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
+                    { id: 'medical-segmentation-basics-q8', kind: 'choice', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', score: 10, explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
+                    { id: 'medical-segmentation-basics-q9', kind: 'reading', reading: '当分割目标很小、背景很多时，模型更容易漏掉前景区域。', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', score: 10, explain: '小目标前景稀少，模型更容易忽略。' },
+                    { id: 'medical-segmentation-basics-q10', kind: 'choice', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', score: 10, explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
+                ]
+            },
+            'medical-classification-fundus-screening': {
+                category: 'classification', disease: '眼底筛查进阶', difficulty: '进阶', knowledge: '模型训练基础',
+                questions: [
+                    { id: 'medical-classification-fundus-screening-q1', kind: 'choice', q: '眼底筛查任务中，模型更常面对的输入是：', options: ['整张眼底彩照', '手术视频切片', '病理组织块编号', '化验单文本'], answer: 'A', score: 10, explain: '眼底筛查的典型输入是整张眼底图像。' },
+                    { id: 'medical-classification-fundus-screening-q2', kind: 'reading', readingType: '眼底彩照', eyeSide: '右眼', reading: '请观察一张眼底彩照：视盘边缘尚清，但黄斑区可见出血和硬性渗出，医生需要判断是否存在糖网筛查阳性。', q: '这类任务更符合下列哪种模型输出？', options: ['整幅图像所属的疾病类别', '病灶像素级轮廓', '患者的检验数值', '拍摄设备型号'], answer: 'A', score: 10, explain: '筛查类任务通常输出整幅图像的类别判断。' },
+                    { id: 'medical-classification-fundus-screening-q3', kind: 'choice', q: '在糖网筛查场景里，最需要关注的指标之一通常是：', options: ['灵敏度', '图像文件大小', '患者体重', '图像颜色名称'], answer: 'A', score: 10, explain: '筛查任务往往更关注尽量少漏诊。' },
+                    { id: 'medical-classification-fundus-screening-q4', kind: 'choice', q: '模型训练中，若希望覆盖更多真实场景，最合适的做法是：', options: ['让训练数据包含不同设备和不同拍摄条件', '只保留最清晰的一批图像', '把所有图像统一改成同一种假标签', '直接删除边缘样本'], answer: 'A', score: 10, explain: '多来源、多条件数据更利于泛化。' },
+                    { id: 'medical-classification-fundus-screening-q5', kind: 'reading', readingType: '眼底彩照', eyeSide: '左眼', reading: '某次阅片中，医生重点查看眼底是否存在渗出灶、出血灶和黄斑水肿。', q: '此时模型输出应更接近：', options: ['糖网筛查类别', '病灶精确边界', '患者手术方式', '检查科室名称'], answer: 'A', score: 10, explain: '筛查模型主要给出疾病类别或风险判断。' },
+                    { id: 'medical-classification-fundus-screening-q6', kind: 'choice', q: '如果一个筛查模型在新设备上明显掉分，首先应考虑：', options: ['数据分布发生了变化', '模型自动失效', '标签永远正确', '不用重新评估'], answer: 'A', score: 10, explain: '设备和人群差异可能导致分布偏移。' },
+                    { id: 'medical-classification-fundus-screening-q7', kind: 'choice', q: '对于辅助筛查模型，临床上更稳妥的定位是：', options: ['辅助医生初筛与分诊', '完全替代复核医生', '无需任何验证直接使用', '只用于展示结果'], answer: 'A', score: 10, explain: '筛查模型应服务于辅助决策。' },
+                    { id: 'medical-classification-fundus-screening-q8', kind: 'reading', reading: '一批图像中，少数阳性病例很容易被大量阴性样本淹没。', q: '这种场景下，最需要避免的问题是：', options: ['漏诊阳性病例', '把全部样本都标成阳性', '忽略图像尺寸', '不做任何预处理'], answer: 'A', score: 10, explain: '筛查任务最怕漏掉真正需要提示的病例。' },
+                    { id: 'medical-classification-fundus-screening-q9', kind: 'choice', q: '在模型评估中，单看训练集准确率高通常意味着：', options: ['还不能直接判断泛化能力', '模型一定可以上线', '模型一定没有问题', '训练已完成全部验证'], answer: 'A', score: 10, explain: '训练集准确率高并不代表泛化能力一定好。' },
+                    { id: 'medical-classification-fundus-screening-q10', kind: 'choice', q: '眼底筛查模型上线前最重要的环节之一是：', options: ['独立测试与临床验证', '直接把结果写入病历', '删除所有错误样本', '只看一轮训练损失'], answer: 'A', score: 10, explain: '临床应用前应经过独立验证。' }
+                ]
+            },
+            'medical-segmentation-liver-boundary': {
+                category: 'segmentation', disease: '肝脏边界分割进阶', difficulty: '进阶', knowledge: '模型训练基础',
+                questions: [
+                    { id: 'medical-segmentation-liver-boundary-q1', kind: 'reading', reading: '请观察一张腹部 CT：需要勾出肝脏的完整轮廓，用于后续体积测量。', q: '这类任务最符合哪种输出形式？', options: ['肝脏的像素级掩码', '整张图像类别', '患者姓名列表', '设备编号'], answer: 'A', score: 10, explain: '分割任务输出的是像素级区域。' },
+                    { id: 'medical-segmentation-liver-boundary-q2', kind: 'choice', q: '肝脏分割中，人工标注最常见的工作量是：', options: ['沿边界逐像素勾画', '只填一行疾病名称', '直接复制原图', '只写拍摄时间'], answer: 'A', score: 10, explain: '分割标注通常需要逐像素或逐区域勾画。' },
+                    { id: 'medical-segmentation-liver-boundary-q3', kind: 'choice', q: '如果肝脏边界不清晰，模型更容易出现：', options: ['边界偏移或漏分割', '标签自动消失', '图像文件损坏', '设备编号错误'], answer: 'A', score: 10, explain: '边界模糊会增加分割难度。' },
+                    { id: 'medical-segmentation-liver-boundary-q4', kind: 'reading', reading: '一张 CT 图像中，肝脏与周围组织灰度接近，边界容易和背景混在一起。', q: '此时更适合关注的指标是：', options: ['Dice 或 IoU', '患者身高', '图像导出时间', '科室名称'], answer: 'A', score: 10, explain: '分割任务常用 Dice 和 IoU 评价重叠程度。' },
+                    { id: 'medical-segmentation-liver-boundary-q5', kind: 'choice', q: '做空间增强时，最重要的是：', options: ['图像与掩码保持同步变化', '只变图像不变掩码', '只变掩码不变图像', '让二者随机错位'], answer: 'A', score: 10, explain: '图像和掩码必须保持对应关系。' },
+                    { id: 'medical-segmentation-liver-boundary-q6', kind: 'choice', q: '分割任务中，后处理的常见目的可能是：', options: ['去除孤立噪点、平滑结果', '删除所有标签', '把输出改成分类名称', '压缩图像尺寸到一像素'], answer: 'A', score: 10, explain: '后处理可让结果更连贯、更接近真实结构。' },
+                    { id: 'medical-segmentation-liver-boundary-q7', kind: 'reading', reading: '医生希望基于分割结果进一步计算肝脏体积。', q: '这说明分割结果还可以用于：', options: ['量化结构大小和边界', '替代所有临床判断', '自动生成病历编号', '删除原始图像'], answer: 'A', score: 10, explain: '分割有助于定量分析。' },
+                    { id: 'medical-segmentation-liver-boundary-q8', kind: 'choice', q: '当目标结构很大且连续时，分割模型通常更容易学习：', options: ['整体轮廓和空间范围', '患者生活习惯', '检查预约信息', '设备型号'], answer: 'A', score: 10, explain: '较大结构更容易建立稳定的空间表示。' },
+                    { id: 'medical-segmentation-liver-boundary-q9', kind: 'choice', q: '在分割结果评估里，预测区域与真实标注重叠越高，说明：', options: ['模型越接近人工标注', '模型一定不需要验证', '图像越模糊', '数据量越少'], answer: 'A', score: 10, explain: '重叠程度越高，结果通常越接近标注。' },
+                    { id: 'medical-segmentation-liver-boundary-q10', kind: 'choice', q: '肝脏边界分割最直接的临床用途之一是：', options: ['辅助术前评估和体积测量', '完全替代医生', '自动取消检查', '把所有图像转成文本'], answer: 'A', score: 10, explain: '分割常用于量化分析和术前规划。' }
+                ]
+            },
+            'medical-classification-retina-grade': {
+                category: 'classification', disease: '视网膜病变分级', difficulty: '高阶', knowledge: '模型训练基础',
+                questions: [
+                    { id: 'medical-classification-retina-grade-q1', kind: 'reading', readingType: '眼底彩照', eyeSide: '双眼', reading: '请观察一张眼底照：视网膜可见多处微动脉瘤和点状出血，医生需要判断病变分级。', q: '该题最符合的任务类型是：', options: ['整幅图像分类', '病灶轮廓分割', '文本病历生成', '设备质控检测'], answer: 'A', score: 10, explain: '分级判断仍属于分类任务。' },
+                    { id: 'medical-classification-retina-grade-q2', kind: 'choice', q: '在视网膜病变分级中，模型输出通常是：', options: ['疾病等级或风险类别', '病灶的精确边界', '患者的体温', '图像的压缩格式'], answer: 'A', score: 10, explain: '分级任务输出通常是类别或等级。' },
+                    { id: 'medical-classification-retina-grade-q3', kind: 'choice', q: '如果高阶筛查任务特别关注漏诊，应优先参考：', options: ['Sensitivity', '文件名长度', '图像宽高比', '采集日期'], answer: 'A', score: 10, explain: '漏诊控制和灵敏度密切相关。' },
+                    { id: 'medical-classification-retina-grade-q4', kind: 'reading', readingType: 'OCT', eyeSide: '左右眼', reading: '同一患者左右眼图像差异较大，模型要分别给出判断。', q: '这说明训练时应注意：', options: ['样本多样性和左右眼独立标注', '只保留一侧眼图像', '把所有标签统一成无病', '不需要验证集'], answer: 'A', score: 10, explain: '多样数据和独立标注有助于提升模型稳定性。' },
+                    { id: 'medical-classification-retina-grade-q5', kind: 'choice', q: '如果病变分级标签之间边界模糊，说明：', options: ['类别间存在较强主观性', '模型一定不能训练', '图像必须删除', '分级不需要专家参与'], answer: 'A', score: 10, explain: '部分分级任务本身具有一定主观性和边界模糊性。' },
+                    { id: 'medical-classification-retina-grade-q6', kind: 'choice', q: '分类模型常见的输入组织方式是：', options: ['整幅图像与其类别标签', '图像与像素掩码', '患者姓名与电话', '只输入一个边框'], answer: 'A', score: 10, explain: '分类任务以整幅图像对应类别标签训练。' },
+                    { id: 'medical-classification-retina-grade-q7', kind: 'reading', readingType: 'OCTA', eyeSide: '右眼', reading: '医生在阅片时先识别图像是否有明显渗出，再决定病变分级。', q: '这类任务更依赖哪种信息？', options: ['图像整体特征', '像素级轮廓', '病史编号', '检查设备型号'], answer: 'A', score: 10, explain: '分类更依赖整体视觉特征。' },
+                    { id: 'medical-classification-retina-grade-q8', kind: 'choice', q: '当训练集准确率很高、测试集明显下降时，最可能的原因是：', options: ['过拟合', '欠标注', '类别名称太长', '图像大小固定'], answer: 'A', score: 10, explain: '训练与测试差距大常提示过拟合。' },
+                    { id: 'medical-classification-retina-grade-q9', kind: 'choice', q: '高阶分类任务上线前更稳妥的做法是：', options: ['独立验证与临床复核', '只看一次训练结果', '直接替代医生', '不做任何测试'], answer: 'A', score: 10, explain: '上线前需要独立验证与临床把关。' },
+                    { id: 'medical-classification-retina-grade-q10', kind: 'choice', q: '视网膜病变分级最核心的输出应是：', options: ['风险等级或病变类别', '像素边界图', '患者住址', '设备型号'], answer: 'A', score: 10, explain: '分级任务的核心是输出类别或等级。' }
+                ]
+            },
+            'medical-segmentation-brain-lesion': {
+                category: 'segmentation', disease: '脑病灶边界分割', difficulty: '高阶', knowledge: '模型训练基础',
+                questions: [
+                    { id: 'medical-segmentation-brain-lesion-q1', kind: 'reading', reading: '请观察一张脑部 MRI：需要勾出病灶范围，并尽量与正常脑组织区分开。', q: '该任务输出更接近：', options: ['病灶掩码', '整图分类', '患者列表', '检查次数'], answer: 'A', score: 10, explain: '分割任务的输出是像素级掩码。' },
+                    { id: 'medical-segmentation-brain-lesion-q2', kind: 'choice', q: '脑病灶分割的标注通常需要：', options: ['医师逐区域勾画边界', '只填一个疾病名称', '不看原图直接生成', '自动从文件名推断'], answer: 'A', score: 10, explain: '分割标注要明确边界和范围。' },
+                    { id: 'medical-segmentation-brain-lesion-q3', kind: 'choice', q: '如果病灶很小，模型更容易出现：', options: ['漏分割', '过度分词', '标签自动扩展', '图像变成文本'], answer: 'A', score: 10, explain: '小目标更容易被背景淹没。' },
+                    { id: 'medical-segmentation-brain-lesion-q4', kind: 'reading', reading: '病灶边界和脑沟、脑室结构相邻，背景复杂。', q: '此时评价分割结果时更需要关注：', options: ['边界重叠程度', '患者血型', '图像来源城市', '检查单号'], answer: 'A', score: 10, explain: '边界重叠程度能反映分割质量。' },
+                    { id: 'medical-segmentation-brain-lesion-q5', kind: 'choice', q: '数据增强时，若对图像做旋转，掩码应当：', options: ['同步旋转', '保持原位不变', '改成分类标签', '直接删除'], answer: 'A', score: 10, explain: '图像和掩码必须同步变换。' },
+                    { id: 'medical-segmentation-brain-lesion-q6', kind: 'choice', q: '分割模型结果常用于：', options: ['术前规划和病灶量化', '完全替代临床诊断', '更改病历编号', '取消随访'], answer: 'A', score: 10, explain: '分割结果可支持量化和规划。' },
+                    { id: 'medical-segmentation-brain-lesion-q7', kind: 'choice', q: '若模型输出区域边缘锯齿明显，通常可考虑：', options: ['后处理或更高分辨率输入', '删掉全部训练集', '改成纯文本输入', '只保留阴性样本'], answer: 'A', score: 10, explain: '后处理与输入分辨率有助于改善边缘质量。' },
+                    { id: 'medical-segmentation-brain-lesion-q8', kind: 'reading', reading: '医生希望统计病灶体积变化，而不是只看一张图像的类别。', q: '这说明分割结果还能帮助：', options: ['动态量化随访变化', '直接替代化验', '自动修改设备参数', '删除病灶标签'], answer: 'A', score: 10, explain: '分割结果可用于随访比较和体积测量。' },
+                    { id: 'medical-segmentation-brain-lesion-q9', kind: 'choice', q: '分割任务中最常见的评价指标之一是：', options: ['Dice', 'AUC only', '召回时间', '图像编号'], answer: 'A', score: 10, explain: 'Dice 是分割中常见的重叠评价指标。' },
+                    { id: 'medical-segmentation-brain-lesion-q10', kind: 'choice', q: '脑病灶边界分割最重要的价值之一是：', options: ['辅助医生观察范围变化', '完全不用人工复核', '替代患者咨询', '自动写入药方'], answer: 'A', score: 10, explain: '分割常用于辅助观察范围变化。' }
                 ]
             }
         };
@@ -1307,9 +1519,13 @@
                 var key = String(e.taskKey).trim();
                 if (!key) return;
                 var realQs = e.questions.map(function (q, i) {
+                    var kind = String(q.kind || q.type || 'choice').toLowerCase();
+                    if (kind !== 'reading') kind = 'choice';
                     return {
                         id: q.id || (key + '-q' + (i + 1)),
                         q: q.q || '',
+                        kind: kind,
+                        reading: q.reading || q.readingPrompt || '',
                         options: Array.isArray(q.options) ? q.options.slice(0, 4) : [],
                         answer: String(q.answer || 'A').toUpperCase(),
                         score: Number(q.score) || 10,
@@ -1356,9 +1572,91 @@
             return;
         }
 
+        function getTaskPanelState() {
+            var bestByTask = {};
+            try {
+                var store = ensureStore();
+                (store.attempts || []).forEach(function (a) {
+                    if (!a || !a.taskKey) return;
+                    var pct = a.maxScore > 0 ? (a.totalScore / a.maxScore) : 0;
+                    if (!bestByTask[a.taskKey] || bestByTask[a.taskKey].pct < pct) {
+                        bestByTask[a.taskKey] = { totalScore: a.totalScore, maxScore: a.maxScore, pct: pct };
+                    }
+                });
+            } catch (e) { }
+
+            var diffFilter = document.getElementById('diffFilter');
+            var answerFilter = document.getElementById('answerFilter');
+            var selectedDifficulty = diffFilter ? diffFilter.value : '';
+            var selectedAnswerStatus = answerFilter ? answerFilter.value : '';
+
+            var groups = { classification: [], segmentation: [] };
+            for (var key in QUIZ_BANK) {
+                var t = QUIZ_BANK[key];
+                if (!hasRealQuestions(t)) continue;
+                if (selectedDifficulty && (t.difficulty || '高阶') !== selectedDifficulty) continue;
+                var best = bestByTask[key];
+                var isRedoing = !!state.drafts[key];
+                var answered = !!best && !isRedoing;
+                if (selectedAnswerStatus === 'answered' && !answered) continue;
+                if (selectedAnswerStatus === 'unanswered' && answered) continue;
+                groups[t.category || 'classification'].push(key);
+            }
+
+            return {
+                bestByTask: bestByTask,
+                groups: groups,
+                selectedDifficulty: selectedDifficulty,
+                selectedAnswerStatus: selectedAnswerStatus
+            };
+        }
+
+        function renderCategoryTabs(panelState) {
+            var tabs = document.getElementById('categoryTabs');
+            if (!tabs) return;
+            var selected = state.selectedCategory === 'segmentation' ? 'segmentation' : 'classification';
+            var counts = panelState && panelState.groups ? panelState.groups : { classification: [], segmentation: [] };
+            if (!counts[selected] || !counts[selected].length) {
+                if (counts.classification && counts.classification.length) selected = 'classification';
+                else if (counts.segmentation && counts.segmentation.length) selected = 'segmentation';
+                state.selectedCategory = selected;
+            }
+            tabs.innerHTML = ['classification', 'segmentation'].map(function (cat) {
+                var active = (state.selectedCategory === cat) ? ' active' : '';
+                var label = CATEGORY_LABELS[cat] || cat;
+                var count = counts[cat] ? counts[cat].length : 0;
+                return '<button class="category-tab ' + cat + active + '" type="button" onclick="selectCategory(\'' + cat + '\')">' +
+                    '<span>' + escapeHtml(label) + '</span><span class="tab-count">' + count + ' 套</span></button>';
+            }).join('');
+        }
+
+        function selectCategory(cat) {
+            if (cat !== 'classification' && cat !== 'segmentation') cat = 'classification';
+            state.selectedCategory = cat;
+            var panelState = getTaskPanelState();
+            renderCategoryTabs(panelState);
+            var list = panelState.groups[cat] || [];
+            if (!list.length) {
+                state.currentTask = '';
+                renderTasks();
+                renderQuestion();
+                return;
+            }
+            var current = QUIZ_BANK[state.currentTask];
+            if (!current || current.category !== cat) {
+                selectTask(list[0]);
+                return;
+            }
+            renderTasks();
+            if (state.currentTask) renderQuestion();
+        }
+
         function refreshTrainingTasks() {
             mergeAdminSchemeBank();
             buildTrainingTasks();
+            var current = QUIZ_BANK[state.currentTask];
+            if (current && current.category) state.selectedCategory = current.category;
+            renderCategoryTabs(getTaskPanelState());
             renderTasks();
             if (state.currentTask && QUIZ_BANK[state.currentTask]) renderQuestion();
         }
@@ -1366,12 +1664,13 @@
         /* =============== STORAGE MIGRATION =============== */
         function migrateModelTrainingStore() {
             var raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return seedEmptyStore();
+            if (!raw) return seedDemoStore();
             try {
                 var parsed = JSON.parse(raw);
                 if (Array.isArray(parsed.attempts)) {
+                    if (!parsed.attempts.length) return seedDemoStore();
                     return {
-                        attempts: parsed.attempts,
+                        attempts: ensureDemoAttempts(parsed.attempts),
                         legacyModels: Array.isArray(parsed.legacyModels) ? parsed.legacyModels : [],
                         legacyHistory: Array.isArray(parsed.legacyHistory) ? parsed.legacyHistory : []
                     };
@@ -1381,9 +1680,61 @@
                     legacyModels: Array.isArray(parsed.models) ? parsed.models : [],
                     legacyHistory: Array.isArray(parsed.history) ? parsed.history : []
                 };
-            } catch (e) { return seedEmptyStore(); }
+            } catch (e) { return seedDemoStore(); }
         }
         function seedEmptyStore() { return { attempts: [], legacyModels: [], legacyHistory: [] }; }
+        function ensureDemoAttempts(attempts) {
+            var list = Array.isArray(attempts) ? attempts.slice() : [];
+            var existing = {};
+            list.forEach(function (a) { if (a && a.taskKey) existing[a.taskKey] = true; });
+            var demoSeeds = [
+                { key: 'medical-classification-basics', answers: ['A','A','A','A','A','A','A','A','A','A'], offset: 72 },
+                { key: 'medical-segmentation-basics', answers: ['A','A','A','A','A','A','A','B','A','A'], offset: 24 },
+                { key: 'medical-classification-fundus-screening', answers: ['A','A','A','B','A','A','A','A','B','A'], offset: 12 }
+            ];
+            demoSeeds.forEach(function (seed) {
+                if (!existing[seed.key]) {
+                    var demo = buildDemoAttempt(seed.key, seed.answers, seed.offset);
+                    if (demo) {
+                        list.push(demo);
+                        existing[seed.key] = true;
+                    }
+                }
+            });
+            return list;
+        }
+        function buildDemoAttempt(taskKey, answers, offsetHours) {
+            var bank = QUIZ_BANK[taskKey];
+            if (!bank || !Array.isArray(bank.questions) || !bank.questions.length) return null;
+            var items = [];
+            var total = 0;
+            var maxScore = bank.questions.reduce(function (s, q) { return s + (Number(q.score) || 0); }, 0);
+            bank.questions.forEach(function (q, i) {
+                var given = String((answers && answers[i]) || q.answer || '').trim().toUpperCase();
+                var r = scoreChoice(q, given);
+                items.push({ qId: q.id, type: q.kind || 'choice', answer: given, score: r.score, correct: r.correct, feedback: r.feedback });
+                total += r.score;
+            });
+            var startedAt = new Date(Date.now() - (Number(offsetHours) || 48) * 3600 * 1000).toISOString();
+            var finishedAt = new Date(Date.now() - (Number(offsetHours) || 48) * 3600 * 1000 + 28 * 60000).toISOString();
+            var pct = maxScore > 0 ? Math.round(total / maxScore * 100) : 0;
+            return {
+                id: 'demo_' + taskKey,
+                taskKey: taskKey,
+                taskTitle: bank.disease,
+                category: bank.category,
+                startedAt: startedAt,
+                finishedAt: finishedAt,
+                questions: bank.questions,
+                items: items,
+                totalScore: total,
+                maxScore: maxScore,
+                band: getScoreBandInfo(pct).label
+            };
+        }
+        function seedDemoStore() {
+            return { attempts: ensureDemoAttempts([]), legacyModels: [], legacyHistory: [] };
+        }
         function saveTrainingStore() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -1403,7 +1754,7 @@
             var refText = (q.options[refIdx] || '').replace(/^[A-D]\.\s*/, '');
             return {
                 score: correct ? q.score : 0, correct: correct,
-                feedback: correct ? '✓ 回答正确' : ('✗ 参考答案：' + q.answer + ' · ' + refText + (q.explain ? ('\n解析：' + q.explain) : ''))
+                feedback: (correct ? '✓ 回答正确' : '✗ 回答错误') + ' ｜ 参考答案：' + q.answer + ' · ' + refText
             };
         }
         function getScoreBandInfo(scorePct) {
@@ -1420,7 +1771,7 @@
             if (!bank) return;
             var questions = bank.questions;
             var items = questions.map(function (q) {
-                return { qId: q.id, type: 'choice', answer: '', score: 0, correct: false, feedback: '' };
+                return { qId: q.id, type: q.kind || 'choice', answer: '', score: 0, correct: false, feedback: '' };
             });
             var maxScore = questions.reduce(function (s, q) { return s + (Number(q.score) || 0); }, 0);
             var att = {
@@ -1458,9 +1809,9 @@
             if (!att) { startAttempt(true); return; }
             var fromReport = opts && opts.fromReport;
             var msg = state.submitted
-                ? '重新作答将清空当前已提交的答卷（含本轮得分），确认继续？\n（历史最高得分会保留在题集卡片）'
+                ? '重新作答将清空当前已提交的答卷（含本轮准确率），确认继续？\n（历史最好准确率会保留在题集卡片）'
                 : '已有未提交的作答内容，重新作答将清空当前草稿，确认继续？';
-            if (fromReport) msg = '再考一次将清空当前已提交的答卷，确认继续？';
+            if (fromReport) msg = '重新作答将清空当前已提交的答卷，确认继续？';
             if (!window.confirm(msg)) return;
             if (att.taskKey) delete state.drafts[att.taskKey];
             startAttempt(true);
@@ -1486,7 +1837,7 @@
             var att = state.currentAttempt;
             if (!att) return;
             var unanswered = att.items.filter(function (it) { return !String(it.answer || '').trim(); }).length;
-            if (unanswered > 0 && !window.confirm('还有 ' + unanswered + ' 题未作答，未答题将计 0 分。确认提交本套？')) return;
+            if (unanswered > 0 && !window.confirm('还有 ' + unanswered + ' 题未作答，未答题将计为 0% 准确率。确认提交本套？')) return;
             var total = 0;
             att.items.forEach(function (it, i) {
                 var q = att.questions[i];
@@ -1507,7 +1858,42 @@
             renderQuestion();
             renderTasks();
             renderReport();
-            toast('本套阅卷完成：' + total + ' / ' + att.maxScore + ' 分', 'success');
+            toast('本套阅卷完成：准确率 ' + (att.maxScore > 0 ? Math.round(total / att.maxScore * 100) : 0) + '%', 'success');
+        }
+
+        function getReadingMeta(q) {
+            var text = String(q && q.reading ? q.reading : '');
+            var type = String(q && (q.readingType || q.imageType || q.modality) ? (q.readingType || q.imageType || q.modality) : '').trim();
+            var eye = String(q && (q.eyeSide || q.eye || q.laterality) ? (q.eyeSide || q.eye || q.laterality) : '').trim();
+            if (!type) {
+                if (/OCTA/i.test(text)) type = 'OCTA';
+                else if (/OCT/i.test(text)) type = 'OCT';
+                else if (/眼底彩照|眼底照|眼底照片/.test(text)) type = '眼底彩照';
+                else if (/CT/.test(text)) type = 'CT';
+                else if (/MRI/.test(text)) type = 'MRI';
+                else type = '影像阅片';
+            }
+            if (!eye) {
+                if (/左眼/.test(text)) eye = '左眼';
+                else if (/右眼/.test(text)) eye = '右眼';
+                else if (/双眼|左右眼/.test(text)) eye = '双眼';
+                else if (/眼底|视网膜|糖网|黄斑|视盘/.test(text)) eye = '双眼';
+                else eye = '未注明';
+            }
+            return { type: type, eye: eye };
+        }
+
+        function getReadingPreviewSrc(q) {
+            var text = String(q && q.reading ? q.reading : '').toLowerCase();
+            var type = String(q && (q.readingType || q.imageType || q.modality) ? (q.readingType || q.imageType || q.modality) : '').toLowerCase();
+            var haystack = text + ' ' + type;
+            if (haystack.indexOf('octa') >= 0 || haystack.indexOf('oct') >= 0 || haystack.indexOf('dicom') >= 0 || haystack.indexOf('ct') >= 0 || haystack.indexOf('mri') >= 0) {
+                return 'img/db_2_imaging.png';
+            }
+            if (haystack.indexOf('fundus') >= 0 || haystack.indexOf('retina') >= 0 || haystack.indexOf('眼底') >= 0 || haystack.indexOf('黄斑') >= 0 || haystack.indexOf('视网膜') >= 0 || haystack.indexOf('视盘') >= 0 || haystack.indexOf('糖网') >= 0) {
+                return 'img/db_5_retina.png';
+            }
+            return 'img/db_1_eye_clinic.png';
         }
 
         /* =============== RENDERING =============== */
@@ -1524,6 +1910,8 @@
             var q = att.questions[state.currentIndex];
             var item = att.items[state.currentIndex];
             var total = att.questions.length;
+            var correctCount = att.items.filter(function (it) { return it.correct; }).length;
+            var accuracyPct = total > 0 ? Math.round(correctCount / total * 100) : 0;
 
             var stepperHtml = '<div class="q-stepper">';
             for (var si = 0; si < total; si++) {
@@ -1533,18 +1921,29 @@
                     sCls += ' current';
                 } else {
                     var sAns = String(att.items[si].answer || '').trim();
-                    if (sAns) { sCls += ' answered'; }
+                    if (sAns) sCls += ' answered';
                 }
-                var sClick = (si === state.currentIndex || state.submitted) ? '' : (' onclick="gotoQuestion(' + si + ')"');
+                var sClick = ' onclick="gotoQuestion(' + si + ')"';
                 stepperHtml += '<div class="' + sCls + '"' + sClick + ' title="第 ' + (si + 1) + ' 题">' + sContent + '</div>';
             }
             stepperHtml += '</div>';
 
             var html = stepperHtml;
+            if (q.kind === 'reading') {
+                var readingMeta = getReadingMeta(q);
+                var readingPreviewSrc = getReadingPreviewSrc(q);
+                html += '<div class="reading-panel">' +
+                    '<div class="reading-preview"><img src="' + escapeHtml(readingPreviewSrc) + '" alt="' + escapeHtml(readingMeta.type + ' 影像预览') + '"></div>' +
+                    '<div class="reading-meta">' +
+                    '<span class="reading-chip"><strong>影像类型</strong>' + escapeHtml(readingMeta.type) + '</span>' +
+                    '<span class="reading-chip"><strong>眼别</strong>' + escapeHtml(readingMeta.eye) + '</span>' +
+                    '</div>' +
+                    '</div>';
+            }
             html += '<div class="question-stem">' + escapeHtml(q.q) + '</div>';
             html += '<div class="question-meta">';
+            html += '<span class="badge">题型：' + escapeHtml(q.kind === 'reading' ? '阅片单选题' : '普通单选题') + '</span>';
             if (q.difficulty) html += '<span class="badge">难度：' + escapeHtml(q.difficulty) + '</span>';
-            html += '<span class="badge">本题 ' + (Number(q.score) || 10) + ' 分</span>';
             html += '<span class="question-progress">第 ' + (state.currentIndex + 1) + ' / ' + total + ' 题</span>';
             html += '</div>';
             html += '<div class="exam-options">';
@@ -1567,13 +1966,20 @@
             html += '</div>';
             if (state.submitted) {
                 var fbCls = item.correct ? 'ok' : 'bad';
-                html += '<div class="exam-feedback ' + fbCls + '"><strong>本题得分：' + item.score + ' / ' + (Number(q.score) || 10) + '</strong><br>' + escapeHtml(item.feedback) + '</div>';
+                html += '<div class="exam-feedback ' + fbCls + '"><strong>本题准确率：' + (item.correct ? '100%' : '0%') + '</strong>' +
+                    '<div class="feedback-line">' + escapeHtml(item.feedback) + '</div>' +
+                    (q.explain ? '<div class="feedback-explain">解析：' + escapeHtml(q.explain) + '</div>' : '') +
+                    '</div>';
             }
             html += '<div class="exam-nav">';
             html += '<button class="nav-btn" ' + (state.currentIndex === 0 ? 'disabled' : 'onclick="gotoQuestion(' + (state.currentIndex - 1) + ')"') + '>上一题</button>';
             if (state.submitted) {
-                html += '<span class="nav-info">本套已提交 · 共 ' + total + ' 题</span>';
+                html += '<span class="nav-info">本套已提交 · 可继续翻阅每题</span>';
+                html += '<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">';
+                if (state.currentIndex < total - 1) html += '<button class="nav-btn primary" onclick="gotoQuestion(' + (state.currentIndex + 1) + ')">下一题</button>';
+                html += '<button class="nav-btn" onclick="renderReport()">查看结果</button>';
                 html += '<button class="nav-btn primary" onclick="confirmRedo()">重新作答</button>';
+                html += '</div>';
             } else if (state.currentIndex === total - 1) {
                 html += '<span class="nav-info">最后一题</span>';
                 html += '<button class="nav-btn success" onclick="submitCurrentSet()">提交本套</button>';
@@ -1586,7 +1992,7 @@
         }
         function gotoQuestion(idx) {
             var att = state.currentAttempt;
-            if (!att || state.submitted) return;
+            if (!att) return;
             if (idx < 0 || idx >= att.questions.length) return;
             state.currentIndex = idx;
             if (state.drafts[att.taskKey]) state.drafts[att.taskKey].index = idx;
@@ -1598,22 +2004,21 @@
             var pct = att.maxScore > 0 ? Math.round(att.totalScore / att.maxScore * 100) : 0;
             var band = getScoreBandInfo(pct);
             var correctCount = att.items.filter(function (it) { return it.correct; }).length;
+            var readingCount = att.questions.filter(function (q) { return q && String(q.kind || 'choice').toLowerCase() === 'reading'; }).length;
             var html = '<div class="report-score-block">';
-            html += '<div class="report-score-main"><b>' + att.totalScore + '</b><span>/ ' + att.maxScore + '</span></div>';
-            html += '<div class="report-score-caption">本次得分 · 答对 ' + correctCount + ' / ' + att.questions.length + ' 题 · 区间：<span class="band-pill ' + band.key + '">' + band.label + '</span></div>';
+            html += '<div class="report-score-main"><b>' + pct + '%</b><span>准确率</span></div>';
+            html += '<div class="report-accuracy-note">本次答对 ' + correctCount + ' / ' + att.questions.length + ' 题 · ' + readingCount + ' 道阅片题 · 区间：<span class="band-pill ' + band.key + '">' + band.label + '</span></div>';
+            html += '<div style="margin-top:8px;font-size:12px;color:var(--gray-700);">题集：' + escapeHtml(att.taskTitle || '') + '</div>';
+            html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">';
+            html += '<span class="task-tag status-done">已答完</span>';
+            html += '<span class="task-tag ' + (att.category === 'segmentation' ? 'segmentation' : 'classification') + '">' + escapeHtml(CATEGORY_LABELS[att.category || 'classification']) + '</span>';
+            html += '<span class="band-pill ' + band.key + '">' + escapeHtml(band.label) + '</span>';
             html += '</div>';
-            var bands = [
-                { range: '90-100', label: '优秀' },
-                { range: '80-89', label: '良好' },
-                { range: '60-79', label: '合格' },
-                { range: '30-59', label: '待提升' },
-                { range: '0-29', label: '需努力' }
-            ];
-            html += '<div class="score-band-list">';
-            bands.forEach(function (b) {
-                var cur = (band.label === b.label) ? 'current' : '';
-                html += '<div class="score-band-line ' + cur + '"><strong>' + b.range + '</strong><span>' + b.label + '</span></div>';
-            });
+            html += '<div style="margin-top:10px;padding:10px 12px;border-radius:8px;background:#fff;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-700);line-height:1.6;">';
+            html += '<div style="font-weight:700;color:var(--gray-900);margin-bottom:4px;">准确率区间说明</div>';
+            html += '<div>0-20%：很差 · 20-30%：较差 · 30-60%：待提升 · 60-80%：合格 · 80-90%：良好 · 90-100%：优秀</div>';
+            html += '<div style="margin-top:4px;">本次结果属于：<span class="band-pill ' + band.key + '">' + escapeHtml(band.label) + '</span></div>';
+            html += '</div>';
             html += '</div>';
             html += '<div class="report-item-list">';
             att.items.forEach(function (it, idx) {
@@ -1622,7 +2027,7 @@
                 var refIdx = q.answer.charCodeAt(0) - 65;
                 var refText = (q.options[refIdx] || '').replace(/^[A-D]\.\s*/, '');
                 html += '<div class="report-item-row ' + cls + '">';
-                html += '<div class="ri-head"><span class="ri-q">第 ' + (idx + 1) + ' 题 · ' + escapeHtml(q.q) + '</span><span class="ri-meta">' + it.score + ' / ' + (Number(q.score) || 10) + ' 分</span></div>';
+                html += '<div class="ri-head"><span class="ri-q">第 ' + (idx + 1) + ' 题 · ' + escapeHtml(q.q) + '（' + escapeHtml(q.kind === 'reading' ? '阅片单选题' : '普通单选题') + '）</span></div>';
                 html += '<div class="ri-feedback">你的答案：' + escapeHtml(it.answer || '未作答') + ' ｜ 参考答案：' + escapeHtml(q.answer + ' · ' + refText) + '</div>';
                 if (q.explain) html += '<div class="ri-feedback">解析：' + escapeHtml(q.explain) + '</div>';
                 html += '</div>';
@@ -1636,63 +2041,51 @@
         function renderTasks() {
             var list = document.getElementById('taskList');
             if (!list) return;
-            var bestByTask = {};
-            try {
-                var store = ensureStore();
-                (store.attempts || []).forEach(function (a) {
-                    if (!a || !a.taskKey) return;
-                    var pct = a.maxScore > 0 ? (a.totalScore / a.maxScore) : 0;
-                    if (!bestByTask[a.taskKey] || bestByTask[a.taskKey].pct < pct) {
-                        bestByTask[a.taskKey] = { totalScore: a.totalScore, maxScore: a.maxScore, pct: pct };
-                    }
-                });
-            } catch (e) { }
-            var diffFilter = document.getElementById('diffFilter');
-            var answerFilter = document.getElementById('answerFilter');
-            var categoryFilter = document.getElementById('categoryFilter');
-            var selectedDifficulty = diffFilter ? diffFilter.value : '';
-            var selectedAnswerStatus = answerFilter ? answerFilter.value : '';
-            var selectedCategory = categoryFilter ? categoryFilter.value : '';
+            var panelState = getTaskPanelState();
+            renderCategoryTabs(panelState);
+            var selectedCategory = state.selectedCategory === 'segmentation' ? 'segmentation' : 'classification';
+            var groups = panelState.groups;
+            if (!groups[selectedCategory] || !groups[selectedCategory].length) {
+                if (groups.classification && groups.classification.length) selectedCategory = 'classification';
+                else if (groups.segmentation && groups.segmentation.length) selectedCategory = 'segmentation';
+                state.selectedCategory = selectedCategory;
+            }
 
-            var groups = { classification: [], segmentation: [] };
-            for (var key in QUIZ_BANK) {
-                var t = QUIZ_BANK[key];
-                if (!hasRealQuestions(t)) continue;
-                if (selectedDifficulty && (t.difficulty || '高阶') !== selectedDifficulty) continue;
-                var best = bestByTask[key];
-                var isRedoing = !!state.drafts[key];
-                var answered = !!best && !isRedoing;
-                if (selectedAnswerStatus === 'answered' && !answered) continue;
-                if (selectedAnswerStatus === 'unanswered' && answered) continue;
-                groups[t.category || 'classification'].push(key);
+            var keys = groups[selectedCategory] || [];
+            if (!keys.length) {
+                list.innerHTML = '<div class="task-empty">暂无符合条件的题目</div>';
+                return;
             }
 
             var html = '';
-            (selectedCategory ? [selectedCategory] : ['classification', 'segmentation']).forEach(function (cat) {
-                if (!groups[cat].length) return;
-                var label = CATEGORY_LABELS[cat] || cat;
-                html += '<div class="task-group-title ' + cat + '"><span class="group-bar"></span>' + escapeHtml(label) + '<span class="group-count">' + groups[cat].length + ' 套题</span></div>';
-                groups[cat].forEach(function (key) {
-                    var t = QUIZ_BANK[key];
-                    var active = key === state.currentTask ? 'active' : '';
-                    var best = bestByTask[key];
-                    var isRedoing = !!state.drafts[key];
-                    var answered = !!best && !isRedoing;
-                    var scoreHtml = (best && !isRedoing)
-                        ? '<span class="task-score-num">' + best.totalScore + '</span>'
-                        : '';
-                    var answeredClass = answered ? 'answered' : '';
-                    var difficultyClass = (t.difficulty === '基础') ? 'difficulty-basic'
-                        : ((t.difficulty === '进阶') ? 'difficulty-medium' : 'difficulty-advanced');
-                    var catTag = t.category === 'segmentation' ? 'segmentation' : 'classification';
-                    html += '<div class="task-card ' + active + ' ' + answeredClass + '" onclick="selectTask(\'' + escapeHtml(key) + '\')">'
-                        + '<div class="task-heading"><div class="task-title">' + escapeHtml(t.disease) + '</div>'
-                        + '<span class="task-tag ' + difficultyClass + '">' + escapeHtml(t.difficulty || '高阶') + '</span></div>'
-                        + '<div class="task-score">' + scoreHtml + '</div>'
-                        + '</div>';
+            keys.forEach(function (key) {
+                var t = QUIZ_BANK[key];
+                var active = key === state.currentTask ? 'active' : '';
+                var best = panelState.bestByTask[key];
+                var isRedoing = !!state.drafts[key];
+                var answered = !!best && !isRedoing;
+                var scoreHtml = answered
+                    ? '<span class="task-score-percent">' + Math.round((best.pct || 0) * 100) + '%</span><span class="task-score-label">准确率</span>'
+                    : '<span class="task-score-empty">暂无提交</span>';
+                var answeredClass = answered ? 'answered' : '';
+                var difficultyClass = (t.difficulty === '基础') ? 'difficulty-basic'
+                    : ((t.difficulty === '进阶') ? 'difficulty-medium' : 'difficulty-advanced');
+                var readingCount = 0;
+                (t.questions || []).forEach(function (q) {
+                    if (q && String(q.kind || 'choice').toLowerCase() === 'reading') readingCount++;
                 });
+                var statusClass = answered ? 'status-done' : 'status-undone';
+                var statusLabel = answered ? '已答完' : '未作答';
+                html += '<div class="task-card ' + active + ' ' + answeredClass + '" onclick="selectTask(\'' + escapeHtml(key) + '\')">'
+                    + '<div style="min-width:0;flex:1;">'
+                    + '<div class="task-heading"><div class="task-title">' + escapeHtml(t.disease) + '</div>'
+                    + '<span class="task-tag ' + statusClass + '">' + statusLabel + '</span>'
+                    + '<span class="task-tag ' + difficultyClass + '">' + escapeHtml(t.difficulty || '高阶') + '</span></div>'
+                    + '<div class="task-subtitle">' + escapeHtml(CATEGORY_LABELS[t.category || 'classification'] + ' · 共 ' + (t.questions || []).length + ' 题 · ' + readingCount + ' 道阅片题') + '</div>'
+                    + '</div>'
+                    + '<div class="task-score">' + scoreHtml + '</div>'
+                    + '</div>';
             });
-            if (!html) html = '<div class="task-empty">暂无符合条件的题目</div>';
             list.innerHTML = html;
         }
         function selectTask(key) {
@@ -1704,6 +2097,7 @@
                 }
             }
             if (!key) { state.currentTask = ''; renderQuestion(); return; }
+            state.selectedCategory = (QUIZ_BANK[key] && QUIZ_BANK[key].category) ? QUIZ_BANK[key].category : state.selectedCategory;
             state.currentTask = key;
             renderTasks();
             // 1) 进行中的草稿优先（保留已选答案与所在题号）
@@ -1711,7 +2105,7 @@
                 var draft = state.drafts[key];
                 var bank = QUIZ_BANK[key];
                 var items = bank.questions.map(function (q, i) {
-                    return { qId: q.id, type: 'choice', answer: draft.answers[i] || '', score: 0, correct: false, feedback: '' };
+                    return { qId: q.id, type: q.kind || 'choice', answer: draft.answers[i] || '', score: 0, correct: false, feedback: '' };
                 });
                 state.currentAttempt = {
                     id: 'att_draft_' + key, taskKey: key, taskTitle: bank.disease, category: bank.category,

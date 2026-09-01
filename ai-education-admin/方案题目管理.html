@@ -580,6 +580,85 @@
       margin-top: 10px;
     }
 
+    .reading-block {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f7fbff;
+      border: 1px solid #dbe7f4;
+      border-radius: 10px;
+    }
+
+    .reading-block-title {
+      margin-bottom: 10px;
+      color: #1d4e89;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .image-slot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .image-slot {
+      min-width: 0;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #d8e3ef;
+      border-radius: 10px;
+    }
+
+    .image-slot .slot-name {
+      margin-bottom: 8px;
+      color: #41556d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .image-slot .slot-file {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+
+    .personnel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .personnel-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid #d8e3ef;
+      border-radius: 10px;
+    }
+
+    .personnel-item input {
+      margin: 0;
+    }
+
+    .personnel-item span {
+      display: grid;
+      gap: 2px;
+      color: #243b53;
+      font-size: 13px;
+    }
+
+    .personnel-item em {
+      color: #7a8798;
+      font-style: normal;
+      font-size: 12px;
+    }
+
     .q-meta-line {
       margin-top: 8px;
       font-size: 12px;
@@ -640,12 +719,8 @@
       <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
       <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
       <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
-      <a class="nav-item child" href="虚拟临床技能实训管理.html"><span class="nav-icon">01</span>虚拟临床技能实训</a>
-      <a class="nav-item child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
-      <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
       <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
       <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
-      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
       <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
       <a class="nav-item" href="标注图像管理.html"><span class="nav-icon">⊞</span>标注图像管理</a>
       <a class="nav-item active" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
@@ -655,8 +730,7 @@
         <div class="page-copy">
           <p class="eyebrow">LIFE MEDICINE AI EDUCATION ADMIN</p>
           <h1>方案题目管理</h1>
-          <p class="page-desc">维护「模型训练实训」中使用的选择题集：每套题对应一种疾病（图像分类 / 图像分割），包含若干道单选题（题干、4 个选项、正确答案、分值、解析）。支持新增 / 编辑 / 删除 /
-            预览，学员端实时同步。</p>
+          <p class="page-desc">维护「模型训练实训」中使用的选择题集：每套题对应一种疾病（医学图像分类 / 医学图像分割），包含若干道单选题（题干、4 个选项、正确答案、解析）。支持新增和配置人员，学员端实时同步。</p>
         </div>
       </div>
       <div class="section-actionbar"><button class="btn primary" type="button" onclick="openEditModal()">新增选择题集</button></div>
@@ -715,8 +789,8 @@
           <div class="form-field full"><label for="schemeTitle">题集名称（疾病名）<span class="req">*必填</span></label><input
               class="input" id="schemeTitle" placeholder="如 DR 筛查（微血管瘤检测）"></div>
           <div class="form-field"><label for="schemeCategory">类型</label><select class="select" id="schemeCategory">
-              <option value="classification">图像分类</option>
-              <option value="segmentation">图像分割</option>
+              <option value="classification">医学图像分类</option>
+              <option value="segmentation">医学图像分割</option>
             </select></div>
           <div class="form-field"><label for="schemeDifficulty">难度</label><select class="select" id="schemeDifficulty">
               <option>基础</option>
@@ -724,7 +798,7 @@
               <option selected>高阶</option>
             </select></div>
         </div>
-        <div class="form-field full" style="margin-top:14px;"><label>题目（单选题）</label>
+        <div class="form-field full" style="margin-top:14px;"><label>题目</label>
           <div id="questionList"></div>
           <button class="btn small" type="button" onclick="addQuestionRow()" style="margin-top:6px;">+ 添加题目</button>
         </div>
@@ -749,6 +823,26 @@
     </section>
   </div>
 
+  <!-- 配置人员 弹窗 -->
+  <div class="modal-mask" id="audienceMask" aria-hidden="true" onclick="closeAudienceModal(event)">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="audienceTitle"
+      onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <div>
+          <h2 id="audienceTitle">配置人员</h2>
+          <p class="panel-subtitle">只配置当前题集的可见人员，不修改题目内容。</p>
+        </div><button class="modal-close" type="button" aria-label="关闭" onclick="closeAudienceModal()">×</button>
+      </div>
+      <div class="modal-body" id="audienceBody"></div>
+      <div class="modal-body" style="padding-top:0;">
+        <div class="button-row" style="margin-top:0;">
+          <button class="btn primary" type="button" onclick="saveAudience()">保存配置人员</button>
+          <button class="btn" type="button" onclick="closeAudienceModal()">取消</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script>
@@ -758,31 +852,31 @@
       {
         taskKey: 'medical-classification-basics', title: '医学图像分类基础', category: 'classification', difficulty: '基础', knowledge: '模型训练基础',
         questions: [
-          { id: 'medical-classification-basics-q1', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', score: 10, explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
-          { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', score: 10, explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
-          { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', score: 10, explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
-          { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', score: 10, explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
-          { id: 'medical-classification-basics-q5', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', score: 10, explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
-          { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', score: 10, explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
-          { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', score: 10, explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
-          { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', score: 10, explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
-          { id: 'medical-classification-basics-q9', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', score: 10, explain: '灵敏度反映模型发现阳性病例的能力。' },
-          { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', score: 10, explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
+          { id: 'medical-classification-basics-q1', kind: 'reading', reading: '请观察一张眼底彩照：黄斑区见出血和渗出，医生需要先判断整幅图像属于哪一类疾病状态。', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
+          { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
+          { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
+          { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
+          { id: 'medical-classification-basics-q5', kind: 'reading', reading: '阅片时医生已经确认图像来源，但还需要判断该图像与哪种疾病标签对应。', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
+          { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
+          { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
+          { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
+          { id: 'medical-classification-basics-q9', kind: 'reading', reading: '在一组糖网筛查图像里，模型需要尽量把真正的阳性病例找出来，不漏掉高风险患者。', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', explain: '灵敏度反映模型发现阳性病例的能力。' },
+          { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
         ]
       },
       {
         taskKey: 'medical-segmentation-basics', title: '医学图像分割基础', category: 'segmentation', difficulty: '基础', knowledge: '模型训练基础',
         questions: [
-          { id: 'medical-segmentation-basics-q1', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', score: 10, explain: '分割任务重点是定位目标区域并描述其范围。' },
-          { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', score: 10, explain: '分割结果一般是每个像素属于目标或背景的标记。' },
-          { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', score: 10, explain: '分割需要明确目标结构的具体轮廓和边界。' },
-          { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', score: 10, explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
-          { id: 'medical-segmentation-basics-q5', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', score: 10, explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
-          { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', score: 10, explain: '分割掩码必须与图像保持一致的空间变换。' },
-          { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', score: 10, explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
-          { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', score: 10, explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
-          { id: 'medical-segmentation-basics-q9', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', score: 10, explain: '小目标前景稀少，模型更容易忽略。' },
-          { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', score: 10, explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
+          { id: 'medical-segmentation-basics-q1', kind: 'reading', reading: '请观察一张胸部 CT：医生希望在图像上勾出肺结节的轮廓，而不是只判断整张图像属于哪一类。', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', explain: '分割任务重点是定位目标区域并描述其范围。' },
+          { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', explain: '分割结果一般是每个像素属于目标或背景的标记。' },
+          { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', explain: '分割需要明确目标结构的具体轮廓和边界。' },
+          { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
+          { id: 'medical-segmentation-basics-q5', kind: 'reading', reading: '如果图像被翻转或旋转，对应的掩码必须保持与目标边界一一对应。', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
+          { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', explain: '分割掩码必须与图像保持一致的空间变换。' },
+          { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
+          { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
+          { id: 'medical-segmentation-basics-q9', kind: 'reading', reading: '当分割目标很小、背景很多时，模型更容易漏掉前景区域。', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', explain: '小目标前景稀少，模型更容易忽略。' },
+          { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
         ]
       }
     ];
@@ -805,9 +899,7 @@
         if (raw) {
           var p = JSON.parse(raw);
           if (Array.isArray(p)) {
-            var allowed = {};
-            SEED_SCHEMES.forEach(function (seed) { if (seed && seed.taskKey) allowed[seed.taskKey] = true; });
-            return p.filter(function (item) { return item && item.taskKey && allowed[item.taskKey]; });
+            return p.filter(function (item) { return item && item.taskKey; });
           }
         }
       } catch (e) { }
@@ -818,17 +910,16 @@
     }
     function ensureSeed() {
       var list = readSchemeBank();
-      var allowed = {};
-      SEED_SCHEMES.forEach(function (seed) { if (seed && seed.taskKey) allowed[seed.taskKey] = true; });
-      list = list.filter(function (item) { return item && item.taskKey && allowed[item.taskKey]; });
       var map = {};
       list.forEach(function (item) {
         if (item && item.taskKey) map[item.taskKey] = item;
       });
       var merged = [];
       var changed = false;
+      var seen = {};
       SEED_SCHEMES.forEach(function (seed) {
         if (!seed || !seed.taskKey) return;
+        seen[seed.taskKey] = true;
         if (!map[seed.taskKey]) {
           merged.push(seed);
           changed = true;
@@ -836,9 +927,13 @@
           merged.push(map[seed.taskKey]);
         }
       });
+      list.forEach(function (item) {
+        if (!item || !item.taskKey || seen[item.taskKey]) return;
+        merged.push(item);
+      });
       if (changed || merged.length !== list.length) writeSchemeBank(merged);
     }
-    function categoryLabel(cat) { return cat === 'segmentation' ? '图像分割' : '图像分类'; }
+    function categoryLabel(cat) { return cat === 'segmentation' ? '医学图像分割' : '医学图像分类'; }
 
     function renderSchemeTable() {
       var list = readSchemeBank();
@@ -866,9 +961,7 @@
           '<td><span class="diff-tag ' + diffCls + '">' + escapeHtml(e.difficulty || '高阶') + '</span></td>' +
           '<td>' + cnt + ' 题</td>' +
           '<td><div class="table-actions" style="display:flex;gap:8px;">' +
-          '<button class="btn small" type="button" onclick="openPreviewModal(\'' + escapeHtml(e.taskKey) + '\')">预览</button>' +
-          '<button class="btn small" type="button" onclick="openEditModal(\'' + escapeHtml(e.taskKey) + '\')">编辑</button>' +
-          '<button class="btn small danger" type="button" onclick="deleteScheme(\'' + escapeHtml(e.taskKey) + '\')">删除</button>' +
+          '<button class="btn small" type="button" onclick="openAudienceModal(\'' + escapeHtml(e.taskKey) + '\')">配置人员</button>' +
           '</div></td>' +
           '</tr>';
       }).join('');
@@ -877,7 +970,28 @@
     /* ---- 题目编辑器 ---- */
     var editingQuestions = [];
     function blankQuestion() {
-      return { id: '', q: '', options: ['', '', '', ''], answer: 'A', score: 10, explain: '' };
+      return { id: '', kind: 'choice', q: '', options: ['', '', '', ''], answer: 'A', explain: '', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }] };
+    }
+    function readingImageTypeLabel(value) {
+      if (value === 'oct') return 'OCT';
+      if (value === 'octa') return 'OCTA';
+      return '眼底彩照';
+    }
+    function readingEyeSideLabel(value) {
+      if (value === 'left') return '左眼';
+      if (value === 'right') return '右眼';
+      return '双眼';
+    }
+    function readingEyeSideCount(value) {
+      return value === 'both' ? 2 : 1;
+    }
+    function readingSlotLabel(value, slotIndex) {
+      if (value === 'both') return slotIndex === 0 ? '左眼影像上传' : '右眼影像上传';
+      return readingEyeSideLabel(value) + '影像上传';
+    }
+    function readingFileName(q, slotIndex) {
+      if (!q || !Array.isArray(q.images) || !q.images[slotIndex]) return '';
+      return q.images[slotIndex].name || '';
     }
     function renderQuestionEditors() {
       var box = document.getElementById('questionList');
@@ -890,36 +1004,89 @@
         var ansOpts = letters.map(function (L) {
           return '<option value="' + L + '"' + (q.answer === L ? ' selected' : '') + '>' + L + '</option>';
         }).join('');
+        var isReading = (q.kind || 'choice') === 'reading';
+        var kindOpts = '<option value="choice"' + (!isReading ? ' selected' : '') + '>普通单选题</option>' +
+          '<option value="reading"' + (isReading ? ' selected' : '') + '>阅片单选题</option>';
+        var imageTypeOpts = ['fundus', 'oct', 'octa'].map(function (value) {
+          return '<option value="' + value + '"' + (String(q.imageType || 'fundus') === value ? ' selected' : '') + '>' + readingImageTypeLabel(value) + '</option>';
+        }).join('');
+        var eyeSideOpts = ['both', 'left', 'right'].map(function (value) {
+          return '<option value="' + value + '"' + (String(q.eyeSide || 'both') === value ? ' selected' : '') + '>' + readingEyeSideLabel(value) + '</option>';
+        }).join('');
+        var readingField = isReading ? (
+          '<div class="reading-block">' +
+          '<div class="reading-block-title">阅片设置</div>' +
+          '<div class="q-row" style="grid-template-columns: 1fr 1fr; margin-top:0;">' +
+          '<div class="form-field"><label>影像类型</label><select class="select" id="q_imageType_' + i + '">' + imageTypeOpts + '</select></div>' +
+          '<div class="form-field"><label>眼别</label><select class="select" id="q_eyeSide_' + i + '" onchange="toggleReadingEyeSide(' + i + ')">' + eyeSideOpts + '</select></div>' +
+          '</div>' +
+          '<div class="image-slot-grid" style="margin-top:12px;">' +
+          Array.from({ length: readingEyeSideCount(String(q.eyeSide || 'both')) }).map(function (_, slotIndex) {
+            return '<div class="image-slot">' +
+              '<div class="slot-name">' + escapeHtml(readingSlotLabel(String(q.eyeSide || 'both'), slotIndex)) + '</div>' +
+              '<input class="input" type="file" accept="image/*" id="q_image_' + i + '_' + slotIndex + '">' +
+              '<div class="slot-file">已选择：' + escapeHtml(readingFileName(q, slotIndex) || '暂无文件') + '</div>' +
+              '</div>';
+          }).join('') +
+          '</div>' +
+          '</div>'
+        ) : '';
         return '<div class="q-editor" data-qidx="' + i + '">' +
           '<div class="q-editor-head"><strong>第 ' + (i + 1) + ' 题</strong>' +
           '<button class="btn small danger" type="button" onclick="removeQuestionRow(' + i + ')">删除此题</button></div>' +
+          '<div class="q-row" style="grid-template-columns: 160px 1fr;"><div class="form-field"><label>题型</label><select class="select" id="q_kind_' + i + '" onchange="toggleQuestionKind(' + i + ')">' + kindOpts + '</select></div>' +
+          '<div class="form-field"><label>正确答案</label><select class="select" id="q_ans_' + i + '">' + ansOpts + '</select></div></div>' +
           '<div class="form-field full"><label>题干</label><textarea class="input" id="q_stem_' + i + '" placeholder="请输入题干">' + escapeHtml(q.q) + '</textarea></div>' +
+          readingField +
           '<label style="margin-top:8px;">选项（A-D）</label><div class="opt-grid">' + opts + '</div>' +
-          '<div class="q-row">' +
-          '<div class="form-field"><label>正确答案</label><select class="select" id="q_ans_' + i + '">' + ansOpts + '</select></div>' +
-          '<div class="form-field"><label>分值</label><input class="input" id="q_score_' + i + '" type="number" min="1" value="' + (Number(q.score) || 10) + '"></div>' +
-          '</div>' +
           '<div class="form-field full" style="margin-top:10px;"><label>解析</label><textarea class="input" id="q_explain_' + i + '" placeholder="提交后展示给学员的解析">' + escapeHtml(q.explain) + '</textarea></div>' +
           '</div>';
       }).join('');
     }
+    function toggleQuestionKind(i) {
+      syncEditingFromDom();
+      var kind = document.getElementById('q_kind_' + i);
+      if (editingQuestions[i]) editingQuestions[i].kind = kind ? kind.value : 'choice';
+      renderQuestionEditors();
+    }
+    function toggleReadingEyeSide(i) {
+      syncEditingFromDom();
+      var side = document.getElementById('q_eyeSide_' + i);
+      if (editingQuestions[i]) editingQuestions[i].eyeSide = side ? side.value : 'both';
+      renderQuestionEditors();
+    }
     function syncEditingFromDom() {
       editingQuestions = editingQuestions.map(function (q, i) {
         var stem = document.getElementById('q_stem_' + i);
+        var kind = document.getElementById('q_kind_' + i);
         var ans = document.getElementById('q_ans_' + i);
-        var score = document.getElementById('q_score_' + i);
         var explain = document.getElementById('q_explain_' + i);
+        var imageType = document.getElementById('q_imageType_' + i);
+        var eyeSide = document.getElementById('q_eyeSide_' + i);
+        var readingSide = eyeSide ? eyeSide.value : (q.eyeSide || 'both');
+        var readingCount = readingEyeSideCount(readingSide);
+        var images = [];
         var opts = [0, 1, 2, 3].map(function (oi) {
           var el = document.getElementById('q_opt_' + i + '_' + oi);
           return el ? el.value : '';
         });
+        for (var si = 0; si < readingCount; si++) {
+          var fileInput = document.getElementById('q_image_' + i + '_' + si);
+          var prev = q.images && q.images[si] ? q.images[si] : {};
+          var fileName = prev.name || '';
+          if (fileInput && fileInput.files && fileInput.files.length) fileName = fileInput.files[0].name;
+          images.push({ name: fileName });
+        }
         return {
           id: q.id || '',
+          kind: kind ? kind.value : (q.kind || 'choice'),
           q: stem ? stem.value : q.q,
           options: opts,
           answer: ans ? ans.value : q.answer,
-          score: score ? Number(score.value) || 10 : q.score,
-          explain: explain ? explain.value : q.explain
+          explain: explain ? explain.value : q.explain,
+          imageType: imageType ? imageType.value : (q.imageType || 'fundus'),
+          eyeSide: readingSide,
+          images: images
         };
       });
     }
@@ -956,7 +1123,25 @@
       document.getElementById('schemeDifficulty').value = editing ? (editing.difficulty || '高阶') : '高阶';
       if (editing && Array.isArray(editing.questions) && editing.questions.length) {
         editingQuestions = editing.questions.map(function (q) {
-          return { id: q.id || '', q: q.q || '', options: (Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', '']), answer: String(q.answer || 'A').toUpperCase(), score: Number(q.score) || 10, explain: q.explain || '' };
+          var readingSide = String(q.eyeSide || q.eye || 'both');
+          if (readingSide !== 'left' && readingSide !== 'right') readingSide = 'both';
+          var readingCount = readingEyeSideCount(readingSide);
+          var imageList = Array.isArray(q.images) ? q.images : [];
+          var images = [];
+          for (var k = 0; k < readingCount; k++) {
+            images.push({ name: (imageList[k] && imageList[k].name) ? imageList[k].name : '' });
+          }
+          return {
+            id: q.id || '',
+            kind: String(q.kind || q.type || 'choice').toLowerCase() === 'reading' ? 'reading' : 'choice',
+            q: q.q || '',
+            options: (Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', '']),
+            answer: String(q.answer || 'A').toUpperCase(),
+            explain: q.explain || '',
+            imageType: String(q.imageType || q.image || 'fundus'),
+            eyeSide: readingSide,
+            images: images
+          };
         });
       } else {
         editingQuestions = [];
@@ -981,14 +1166,25 @@
       var questions = editingQuestions.map(function (q, i) {
         var opts = (q.options || []).map(function (o) { return (o || '').trim(); });
         if (opts.length < 4) { for (var j = opts.length; j < 4; j++) opts.push(''); }
-        return {
+        var kind = String(q.kind || 'choice').toLowerCase() === 'reading' ? 'reading' : 'choice';
+        var question = {
           id: q.id || (editingKey || 'custom') + '-q' + (i + 1),
+          kind: kind,
           q: (q.q || '').trim(),
           options: opts,
           answer: String(q.answer || 'A').toUpperCase(),
-          score: Number(q.score) || 10,
           explain: (q.explain || '').trim()
         };
+        if (kind === 'reading') {
+          var readingSide = q.eyeSide === 'left' || q.eyeSide === 'right' ? q.eyeSide : 'both';
+          var readingCount = readingEyeSideCount(readingSide);
+          var images = Array.isArray(q.images) ? q.images.slice(0, readingCount) : [];
+          while (images.length < readingCount) images.push({ name: '' });
+          question.imageType = String(q.imageType || 'fundus');
+          question.eyeSide = readingSide;
+          question.images = images.map(function (item) { return { name: (item && item.name) ? item.name : '' }; });
+        }
+        return question;
       }).filter(function (q) { return q.q; });
       if (!questions.length) { showToast('请至少填写一道题目的题干'); return; }
       var key = editingKey || generateSchemeKey();
@@ -1025,12 +1221,22 @@
         '</div>';
       (e.questions || []).forEach(function (q, i) {
         var letters = ['A', 'B', 'C', 'D'];
+        var kindLabel = String(q.kind || q.type || 'choice').toLowerCase() === 'reading' ? '阅片单选题' : '普通单选题';
         var opts = letters.map(function (L, oi) {
           var mark = (L === q.answer) ? ' <strong style="color:#1a7f37;">[正确答案]</strong>' : '';
           return '<div>' + L + '. ' + escapeHtml((q.options && q.options[oi]) || '') + mark + '</div>';
         }).join('');
         html += '<div class="answer-box" style="margin-top:12px;background:#f3f8ff;">' +
-          '<strong>第 ' + (i + 1) + ' 题 · ' + escapeHtml(q.q) + '（' + (Number(q.score) || 10) + ' 分）</strong>' +
+          '<strong>第 ' + (i + 1) + ' 题 · ' + escapeHtml(q.q) + '（' + escapeHtml(kindLabel) + '）</strong>' +
+          (kindLabel === '阅片单选题' ? (
+            '<div style="margin-top:8px;padding:10px 12px;background:#fff;border:1px solid #dbe5f0;border-radius:8px;color:#4b5b6b;line-height:1.7;">' +
+            '<div>影像类型：' + escapeHtml(readingImageTypeLabel(q.imageType || 'fundus')) + '</div>' +
+            '<div>眼别：' + escapeHtml(readingEyeSideLabel(q.eyeSide || 'both')) + '</div>' +
+            '<div style="margin-top:6px;">影像文件：' + (Array.isArray(q.images) && q.images.length ? q.images.map(function (item, idx) {
+              return escapeHtml(readingSlotLabel(q.eyeSide || 'both', idx)) + ' · ' + escapeHtml((item && item.name) ? item.name : '暂无文件');
+            }).join(' / ') : '暂无文件') + '</div>' +
+            '</div>'
+          ) : '') +
           '<div style="margin-top:6px;line-height:1.9;">' + opts + '</div>' +
           (q.explain ? '<div style="margin-top:6px;color:#1a4f8a;">解析：' + escapeHtml(q.explain) + '</div>' : '') +
           '</div>';
@@ -1047,17 +1253,61 @@
       mask.setAttribute('aria-hidden', 'true');
     }
 
-    /* ---- 删除 ---- */
-    function deleteScheme(taskKey) {
+    /* ---- 配置人员 ---- */
+    var audienceEditingKey = '';
+    var audienceStaff = [
+      { name: '张医生', role: '眼底病方向' },
+      { name: '李医生', role: '住院医师' },
+      { name: '王医生', role: '青光眼方向' },
+      { name: '赵医生', role: '眼底病方向' },
+      { name: '陈医生', role: '黄斑病方向' },
+      { name: '周医生', role: '科研组' },
+      { name: '孙医生', role: '规培医师' },
+      { name: '刘医生', role: '高级研修班' },
+      { name: '韩医生', role: '科研课题组' }
+    ];
+    function openAudienceModal(taskKey) {
+      var mask = document.getElementById('audienceMask');
+      if (!mask) return;
       var list = readSchemeBank();
       var entry = null;
       for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { entry = list[i]; break; } }
-      var name = entry ? entry.title : taskKey;
-      if (!window.confirm('确定删除选择题集「' + name + '」？此操作不可撤销。')) return;
-      var remaining = list.filter(function (e) { return e.taskKey !== taskKey; });
-      writeSchemeBank(remaining);
+      if (!entry) { showToast('未找到该选择题集'); return; }
+      audienceEditingKey = taskKey;
+      var selected = Array.isArray(entry.audience) ? entry.audience : [];
+      var html = '<div class="form-field full"><label>题集名称</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(entry.title) + '</div></div>' +
+        '<div class="form-field full" style="margin-top:10px;"><label>可见人员</label><div class="personnel-grid">' +
+        audienceStaff.map(function (person) {
+          var checked = selected.indexOf(person.name) >= 0 ? ' checked' : '';
+          return '<label class="personnel-item"><input type="checkbox" class="audience-check" value="' + escapeHtml(person.name) + '"' + checked + '>' +
+            '<span><strong>' + escapeHtml(person.name) + '</strong><em>' + escapeHtml(person.role) + '</em></span></label>';
+        }).join('') +
+        '</div><div class="hint">只配置当前题集的可见人员，不修改题目内容。</div></div>';
+      var body = document.getElementById('audienceBody');
+      if (body) body.innerHTML = html;
+      mask.classList.add('open');
+      mask.setAttribute('aria-hidden', 'false');
+    }
+    function closeAudienceModal(event) {
+      var mask = document.getElementById('audienceMask');
+      if (!mask) return;
+      if (event && event.target !== mask) return;
+      mask.classList.remove('open');
+      mask.setAttribute('aria-hidden', 'true');
+    }
+    function saveAudience() {
+      var list = readSchemeBank();
+      var entry = null;
+      for (var i = 0; i < list.length; i++) { if (list[i].taskKey === audienceEditingKey) { entry = list[i]; break; } }
+      if (!entry) { showToast('未找到该选择题集'); return; }
+      var checks = document.querySelectorAll('#audienceBody .audience-check:checked');
+      var selected = [];
+      for (var j = 0; j < checks.length; j++) selected.push(checks[j].value);
+      entry.audience = selected;
+      writeSchemeBank(list);
       renderSchemeTable();
-      showToast('已删除选择题集：' + name);
+      closeAudienceModal();
+      showToast('已保存配置人员：' + entry.title);
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1068,5 +1318,6 @@
 </body>
 
 </html>
+
 
 
