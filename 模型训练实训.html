@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>模型训练实训</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --primary-light: #e8f0fe;
+            --success: #34a853;
+            --warning: #fbbc04;
+            --danger: #ea4335;
+            --accent: #2dd4bf;
+            --gray-50: #f8f9fa;
+            --gray-100: #f5f7fa;
+            --gray-200: #e8ecf0;
+            --gray-300: #dadce0;
+            --gray-400: #bdc1c6;
+            --gray-500: #9aa0a6;
+            --gray-600: #80868b;
+            --gray-700: #5f6368;
+            --gray-800: #3c4043;
+            --gray-900: #202124;
+            --sidebar-width: 220px;
+            --header-height: 56px;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-serif;
+            font-size: 14px;
+            color: #333;
+            background: #1a1a2e;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            overscroll-behavior: none;
+            line-height: 1.6;
+        }
+
+        /* ============ Header ============ */
+        .header {
+            height: var(--header-height);
+            background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .header .logo {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .header .header-nav {
+            display: flex;
+            gap: 4px;
+            margin-left: 40px;
+        }
+
+        .header .header-nav a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .header .header-nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .header .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+        }
+
+        .header .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* ============ Sidebar ============ */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: #fff;
+            border-right: 1px solid var(--gray-200);
+            overflow-y: auto;
+            z-index: 999;
+            padding: 8px 0;
+        }
+
+        .sidebar .menu-group-title {
+            padding: 12px 20px 6px;
+            font-size: 11px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-size: 13px;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar .menu-item:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .sidebar .menu-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar .menu-icon {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .sidebar .arrow {
+            margin-left: auto;
+            font-size: 10px;
+            transition: var(--transition);
+        }
+
+        .sidebar .has-submenu.expanded .arrow {
+            transform: rotate(90deg);
+        }
+
+        .sidebar .submenu {
+            display: none;
+        }
+
+        .sidebar .submenu.open {
+            display: block;
+        }
+
+        .sidebar .submenu .menu-item {
+            padding-left: 48px;
+            font-size: 12px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar .submenu .menu-item.active {
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ============ Main Content ============ */
+        .main-content {
+            margin-top: var(--header-height);
+            margin-left: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            display: flex;
+            flex-direction: column;
+            background: var(--gray-50);
+        }
+
+        /* ============ Workspace ============ */
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            overflow: hidden;
+            background: var(--gray-100);
+        }
+
+        .panel {
+            background: #fff;
+            border-right: 1px solid var(--gray-200);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel.left {
+            height: 100%;
+        }
+
+        .panel-section {
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-section.flex {
+            flex: 1;
+            min-height: 0;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+            flex-shrink: 0;
+        }
+
+        .panel-head h4 {
+            font-size: 13px;
+            color: var(--gray-900);
+            font-weight: 700;
+        }
+
+        .panel-head .head-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .panel-head .filter-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .panel-head .diff-filter {
+            max-width: 86px;
+            height: 28px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--gray-700);
+            font-size: 12px;
+        }
+
+        .panel-head .head-btn {
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-300);
+            background: #fff;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 12px;
+            display: grid;
+            place-items: center;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .panel-head .head-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            min-height: 0;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-empty {
+            padding: 18px 12px;
+            border: 1px dashed var(--gray-300);
+            border-radius: var(--radius);
+            color: var(--gray-500);
+            font-size: 12px;
+            text-align: center;
+            background: var(--gray-50);
+        }
+
+        .task-group-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 4px 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--gray-800);
+            letter-spacing: .5px;
+        }
+
+        .task-group-title:first-child {
+            padding-top: 4px;
+        }
+
+        .task-group-title .group-bar {
+            width: 4px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        .task-group-title.classification .group-bar {
+            background: var(--primary);
+        }
+
+        .task-group-title.segmentation .group-bar {
+            background: #b06000;
+        }
+
+        .task-group-title .group-count {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        .task-card {
+            padding: 12px;
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .task-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+
+        .task-card.answered {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .task-card.answered .task-score-num {
+            color: var(--success);
+        }
+
+        .task-card.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 1px var(--primary) inset;
+        }
+
+        .task-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .task-heading .task-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .task-tag {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            flex-shrink: 0;
+            font-size: 10px;
+        }
+
+        .task-tag.difficulty-basic {
+            background: #eef6ff;
+            color: #2563a8;
+            border-color: #c9def5;
+        }
+
+        .task-tag.difficulty-medium {
+            background: #fff7e8;
+            color: #a15c00;
+            border-color: #f3d39a;
+        }
+
+        .task-tag.difficulty-advanced {
+            background: #f3efff;
+            color: #6842a5;
+            border-color: #d9cdf6;
+        }
+
+        .task-tag.classification {
+            background: #e8f0fe;
+            color: var(--primary);
+            border-color: #c2dafe;
+        }
+
+        .task-tag.segmentation {
+            background: #fef7e0;
+            color: #b06000;
+            border-color: #fde293;
+        }
+
+        .task-score {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--gray-500);
+            flex-shrink: 0;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .task-score-num {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .task-score-empty {
+            color: var(--gray-400);
+            font-size: 10px;
+        }
+
+        /* ============ Modals (复用) ============ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            width: min(560px, calc(100vw - 32px));
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, .25);
+        }
+
+        .modal-box h3 {
+            font-size: 16px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .form-row {
+            margin-bottom: 12px;
+        }
+
+        .form-row label {
+            display: block;
+            font-size: 12px;
+            color: var(--gray-700);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            background: #fff;
+            color: var(--gray-900);
+        }
+
+        .form-row .hint {
+            display: block;
+            margin-top: 3px;
+            font-size: 10px;
+            color: var(--gray-500);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            background: #fff;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: 10px 20px;
+            background: rgba(15, 23, 42, .85);
+            color: #fff;
+            font-size: 13px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease, transform .25s ease;
+            z-index: 3000;
+            max-width: min(560px, calc(100vw - 40px));
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============ Exam Stage (题目面板) ============ */
+        .exam-stage {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .exam-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 40px;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .exam-card {
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .question-stem {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1.55;
+            margin-bottom: 8px;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .question-meta .badge {
+            padding: 2px 8px;
+            background: var(--gray-100);
+            border-radius: 4px;
+        }
+
+        .question-progress {
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .exam-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-row:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .option-row.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 1px var(--primary) inset;
+        }
+
+        .option-row.correct {
+            border-color: var(--success);
+            background: #e6f4ea;
+            box-shadow: 0 0 0 1px var(--success) inset;
+        }
+
+        .option-row.wrong {
+            border-color: var(--danger);
+            background: #fce8e6;
+            box-shadow: 0 0 0 1px var(--danger) inset;
+        }
+
+        .option-radio {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--gray-400);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            margin-top: 1px;
+            transition: var(--transition);
+        }
+
+        .option-row.selected .option-radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .option-row.selected .option-radio::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .option-row.correct .option-radio {
+            border-color: var(--success);
+            background: var(--success);
+        }
+
+        .option-row.wrong .option-radio {
+            border-color: var(--danger);
+            background: var(--danger);
+        }
+
+        .option-text {
+            font-size: 14px;
+            color: var(--gray-900);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            margin-right: 6px;
+            color: var(--gray-700);
+        }
+
+        .exam-feedback {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .exam-feedback.ok {
+            background: #e6f4ea;
+            border: 1px solid #c8e6c9;
+            color: #1e7a3a;
+        }
+
+        .exam-feedback.bad {
+            background: #fce8e6;
+            border: 1px solid #fad2cf;
+            color: #b3261e;
+        }
+
+        .exam-feedback.warn {
+            background: #fef7e0;
+            border: 1px solid #fde293;
+            color: #874900;
+        }
+
+        .exam-feedback strong {
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .exam-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 22px;
+            gap: 10px;
+        }
+
+        .exam-nav .nav-info {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .exam-nav .nav-btn {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .exam-nav .nav-btn:hover:not(:disabled) {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .exam-nav .nav-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .exam-nav .nav-btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .exam-nav .nav-btn.primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .exam-nav .nav-btn.success {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+
+        .exam-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--gray-500);
+            gap: 12px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .exam-empty .icon {
+            font-size: 40px;
+        }
+
+        /* ============ Report Modal ============ */
+        .report-score-block {
+            text-align: center;
+            padding: 22px 16px;
+            background: linear-gradient(135deg, #e8f0fe 0%, #f0f6ff 100%);
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+
+        .report-score-main {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .report-score-main b {
+            font-size: 36px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .report-score-main span {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .report-score-caption {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        .score-band-list {
+            display: flex;
+            gap: 4px;
+            margin: 12px 0;
+        }
+
+        .score-band-line {
+            flex: 1;
+            padding: 8px 6px;
+            text-align: center;
+            border-radius: 6px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            font-size: 11px;
+        }
+
+        .score-band-line strong {
+            display: block;
+            font-size: 13px;
+            color: var(--gray-700);
+            margin-bottom: 2px;
+        }
+
+        .score-band-line.current {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .score-band-line.current strong {
+            color: #fff;
+        }
+
+        .report-item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+            max-height: 360px;
+            overflow-y: auto;
+        }
+
+        .report-item-row {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .report-item-row.correct {
+            border-left: 3px solid var(--success);
+            background: #f6fbf7;
+        }
+
+        .report-item-row.wrong {
+            border-left: 3px solid var(--danger);
+            background: #fef6f5;
+        }
+
+        .report-item-row .ri-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .report-item-row .ri-q {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .report-item-row .ri-meta {
+            font-size: 10px;
+            color: var(--gray-500);
+        }
+
+        .report-item-row .ri-feedback {
+            color: var(--gray-700);
+            font-size: 11px;
+            margin-top: 4px;
+            white-space: pre-wrap;
+        }
+
+        .band-pill {
+            padding: 1px 6px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .band-pill.excellent {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .band-pill.good {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .band-pill.qualified {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .band-pill.improve {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .band-pill.need {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ============ 答题进度条 ============ */
+        .q-stepper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .q-step {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+            position: relative;
+        }
+
+        .q-step:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .q-step.answered {
+            background: #e6f4ea;
+            color: #1e8e3e;
+            border-color: #a8d5b5;
+        }
+
+        .q-step.answered .q-step-check {
+            font-size: 18px;
+            line-height: 1;
+            font-weight: 800;
+        }
+
+        .q-step.current {
+            background: #fff;
+            color: var(--gray-700);
+            border: 2px dashed #9aa0a6;
+            cursor: default;
+        }
+
+        .q-step.current:hover {
+            transform: none;
+            border-color: #9aa0a6;
+        }
+    
+
+        /* 嵌入到“数据标注与AI实训”父页面时，只保留具体功能工作区，不展示子页面导航壳 */
+        html.embedded-module,
+        html.embedded-module body {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            overflow: hidden !important;
+            background: #fff !important;
+        }
+
+        html.embedded-module .header,
+        html.embedded-module .sidebar,
+        html.embedded-module .breadcrumb,
+        html.embedded-module .page-title {
+            display: none !important;
+        }
+
+        html.embedded-module .main-content {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+        }
+    </style>
+
+    <script>
+        (function () {
+            if (/[?&]embed=1(?:&|$)/.test(window.location.search)) {
+                document.documentElement.classList.add('embedded-module');
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a>
+        <div class="header-nav">
+            <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+            <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+            <a href="基础课程.html">生命医学AI教育平台</a>
+            <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+        </div>
+        <div class="header-right">
+            <span id="headerUserName">管理员</span>
+            <button class="btn-logout" onclick="logout()">退出</button>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="menu-group">
+            <div class="menu-group-title">AI教育平台</div>
+            <a class="menu-item" href="基础课程.html"><span class="menu-icon">📖</span>基础课程</a>
+            <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span>案例教学</a>
+            <div class="menu-item has-submenu expanded" onclick="toggleSubmenu(this)">
+                <span class="menu-icon">🔧</span>技能实践<span class="arrow">▶</span>
+            </div>
+            <div class="submenu open">
+                <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
+                <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
+                <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+                <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
+                <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
+                <a class="menu-item active" href="模型训练实训.html">模型训练实训</a>
+            </div>
+            <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span>考试中心</a>
+            <a class="menu-item" href="个人中心与能力评估.html"><span class="menu-icon">👤</span>个人中心与能力评估</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="workspace">
+            <div class="panel left">
+                <div class="panel-section flex">
+                    <div class="panel-head">
+                        <h4>题集</h4>
+                        <div class="filter-actions">
+                            <select class="diff-filter" id="diffFilter" onchange="renderTasks()">
+                                <option value="">全部难度</option>
+                                <option value="基础">基础</option>
+                                <option value="进阶">进阶</option>
+                                <option value="高阶">高阶</option>
+                            </select>
+                            <select class="diff-filter" id="categoryFilter" onchange="renderTasks()">
+                                <option value="">全部类型</option>
+                                <option value="classification">图像分类</option>
+                                <option value="segmentation">图像分割</option>
+                            </select>
+                            <select class="diff-filter" id="answerFilter" onchange="renderTasks()">
+                                <option value="">全部状态</option>
+                                <option value="answered">已作答</option>
+                                <option value="unanswered">未作答</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="task-list" id="taskList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-stage" id="examStage">
+                <div class="exam-body" id="examBody">
+                    <div class="exam-empty" id="examEmpty">
+                        <div class="icon">📝</div>
+                        <div>请在左侧题集选择一道题开始作答</div>
+                        <div style="font-size:12px;">题型：医学图像分类 / 医学图像分割 · 每部分 10 道单选题</div>
+                    </div>
+                    <div class="exam-card" id="examCard" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ Modals ============ -->
+    <div class="modal-overlay" id="dataSourceModal">
+        <div class="modal-box">
+            <h3>题集来源</h3>
+            <p style="font-size:12px;color:var(--gray-600);line-height:1.6;">
+                当前「模型训练实训」采用单选题作答模式，「题集」按<strong style="color:var(--primary);">医学图像分类 /
+                    医学图像分割</strong>两大类型组织，每类各 10 道基础单选题：
+            </p>
+            <ul style="font-size:12px;color:var(--gray-600);line-height:1.7;margin:6px 0 10px 18px;">
+                <li><strong
+                        style="color:var(--primary);">内置题库</strong>：医学图像分类基础、医学图像分割基础两套单选题，覆盖训练集、验证集、测试集、标注、过拟合、数据泄漏、Accuracy、Sensitivity、Specificity、Dice
+                    与 IoU 等核心概念。</li>
+                <li><strong style="color:var(--primary);">后台「方案题目管理」</strong>：管理员维护的选择题集（每 taskKey
+                    一套题），学员切题时实时同步最新题库，已存在的 taskKey 覆盖、缺失的追加。</li>
+                <li><strong style="color:var(--primary);">「标注图像管理」</strong>：从标注平台导入数据集后，按数据集派生的题型，与题集联动。</li>
+            </ul>
+            <div
+                style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px;margin:10px 0;font-size:11px;">
+                <strong>数据流：</strong><br>
+                方案题目管理（题库主入口）⇄ 标注平台 → 任务审核通过 → 标注图像管理「从标注平台导入」重命名为新数据集 → 题集（自动纳入）→ 模型训练实训（单选题作答）
+            </div>
+            <div class="form-actions">
+                <button class="btn" onclick="closeModal('dataSourceModal')">关闭</button>
+                <button class="btn"
+                    onclick="closeModal('dataSourceModal');location.href='ai-education-admin/方案题目管理.html'"
+                    style="border:1px solid var(--primary);color:var(--primary);background:#fff;">前往方案题目管理</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('dataSourceModal');location.href='数据标注与AI实训.html'">前往标注模块</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="examReportModal">
+        <div class="modal-box" style="width:min(720px,calc(100vw - 32px));">
+            <h3>本卷阅卷报告</h3>
+            <div id="examReportBody"></div>
+            <div class="form-actions">
+                <button class="btn" onclick="closeModal('examReportModal')">关闭</button>
+                <button class="btn btn-primary"
+                    onclick="closeModal('examReportModal');confirmRedo({fromReport:true});">再考一次</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* =============== STATE =============== */
+        var STORAGE_KEY = 'life_med_model_training';
+        var CATEGORY_LABELS = { classification: '图像分类', segmentation: '图像分割' };
+        var state = {
+            currentTask: '',            // 当前疾病 taskKey
+            currentAttempt: null,       // { id, taskKey, taskTitle, category, startedAt, finishedAt, questions:[10], items:[10], totalScore, maxScore, band }
+            currentIndex: 0,            // 当前第几题 0..9
+            submitted: false,
+            cachedStore: null,
+            drafts: {}                  // { taskKey: { answers:[10], index } } 进行中的草稿
+        };
+
+        /* =============== 选择题题库（医学图像分类 / 医学图像分割） =============== */
+        var QUIZ_BANK = {
+            'medical-classification-basics': {
+                category: 'classification', disease: '医学图像分类基础', difficulty: '基础', knowledge: '模型训练基础',
+                questions: [
+                    { id: 'medical-classification-basics-q1', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', score: 10, explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
+                    { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', score: 10, explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
+                    { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', score: 10, explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
+                    { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', score: 10, explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
+                    { id: 'medical-classification-basics-q5', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', score: 10, explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
+                    { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', score: 10, explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
+                    { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', score: 10, explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
+                    { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', score: 10, explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
+                    { id: 'medical-classification-basics-q9', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', score: 10, explain: '灵敏度反映模型发现阳性病例的能力。' },
+                    { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', score: 10, explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
+                ]
+            },
+            'medical-segmentation-basics': {
+                category: 'segmentation', disease: '医学图像分割基础', difficulty: '基础', knowledge: '模型训练基础',
+                questions: [
+                    { id: 'medical-segmentation-basics-q1', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', score: 10, explain: '分割任务重点是定位目标区域并描述其范围。' },
+                    { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', score: 10, explain: '分割结果一般是每个像素属于目标或背景的标记。' },
+                    { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', score: 10, explain: '分割需要明确目标结构的具体轮廓和边界。' },
+                    { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', score: 10, explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
+                    { id: 'medical-segmentation-basics-q5', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', score: 10, explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
+                    { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', score: 10, explain: '分割掩码必须与图像保持一致的空间变换。' },
+                    { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', score: 10, explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
+                    { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', score: 10, explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
+                    { id: 'medical-segmentation-basics-q9', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', score: 10, explain: '小目标前景稀少，模型更容易忽略。' },
+                    { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', score: 10, explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
+                ]
+            }
+        };
+
+        /* =============== 题库与后台「方案题目管理」合并（选择题格式） ===============
+           后台 ai-education-admin/方案题目管理.html 维护 life_med_admin_scheme_bank，
+           新 schema：{ taskKey, title, category, difficulty, knowledge, questions:[{id,q,options,answer,score,explain}] }
+           已存在的 taskKey 会被后台最新版本覆盖，缺失的 taskKey 会被追加。
+        */
+        var ADMIN_SCHEME_BANK_KEY = 'life_med_admin_scheme_bank';
+        function readAdminSchemeBank() {
+            try {
+                var raw = localStorage.getItem(ADMIN_SCHEME_BANK_KEY);
+                if (raw) {
+                    var p = JSON.parse(raw);
+                    if (Array.isArray(p)) {
+                        var allowed = { 'medical-classification-basics': true, 'medical-segmentation-basics': true };
+                        var filtered = p.filter(function (item) { return item && item.taskKey && allowed[item.taskKey]; });
+                        if (filtered.length !== p.length) {
+                            try { localStorage.setItem(ADMIN_SCHEME_BANK_KEY, JSON.stringify(filtered)); } catch (e) { }
+                        }
+                        return filtered;
+                    }
+                }
+            } catch (e) { }
+            return [];
+        }
+        function mergeAdminSchemeBank() {
+            if (!mergeAdminSchemeBank._builtinSnap) {
+                var snap = {};
+                Object.keys(QUIZ_BANK).forEach(function (k) { snap[k] = QUIZ_BANK[k]; });
+                mergeAdminSchemeBank._builtinSnap = snap;
+            }
+            var adminList = readAdminSchemeBank();
+            // 清理后台题库里「无真实题目」的空套题（用户要求彻底删除），真实套题全部保留
+            var pruned = adminList.filter(function (e) { return hasRealQuestions(e); });
+            if (pruned.length !== adminList.length) {
+                try { localStorage.setItem(ADMIN_SCHEME_BANK_KEY, JSON.stringify(pruned)); } catch (e) { }
+                adminList = pruned;
+            }
+            if (mergeAdminSchemeBank._prevKeys) {
+                mergeAdminSchemeBank._prevKeys.forEach(function (key) {
+                    var exists = false;
+                    for (var i = 0; i < adminList.length; i++) {
+                        if (adminList[i] && adminList[i].taskKey === key) { exists = true; break; }
+                    }
+                    if (!exists && mergeAdminSchemeBank._builtinSnap[key]) {
+                        QUIZ_BANK[key] = mergeAdminSchemeBank._builtinSnap[key];
+                    } else if (!exists) {
+                        delete QUIZ_BANK[key];
+                    }
+                });
+            }
+            if (!adminList || !adminList.length) { mergeAdminSchemeBank._prevKeys = []; return 0; }
+            var merged = 0, newKeys = [];
+            adminList.forEach(function (e) {
+                if (!e || !e.taskKey || !Array.isArray(e.questions) || !e.questions.length) return;
+                var key = String(e.taskKey).trim();
+                if (!key) return;
+                var realQs = e.questions.map(function (q, i) {
+                    return {
+                        id: q.id || (key + '-q' + (i + 1)),
+                        q: q.q || '',
+                        options: Array.isArray(q.options) ? q.options.slice(0, 4) : [],
+                        answer: String(q.answer || 'A').toUpperCase(),
+                        score: Number(q.score) || 10,
+                        explain: q.explain || ''
+                    };
+                }).filter(function (q) {
+                    var qtext = String(q.q).trim();
+                    var opts = q.options.filter(function (o) { return String(o == null ? '' : o).trim() !== ''; });
+                    var ans = q.answer;
+                    return qtext && opts.length >= 2 && ans >= 'A' && ans <= 'D' && (ans.charCodeAt(0) - 65) < opts.length;
+                });
+                if (!realQs.length) return; // 无真实题目的后台套题：不覆盖内置、不进面板
+                QUIZ_BANK[key] = {
+                    category: e.category === 'segmentation' ? 'segmentation' : 'classification',
+                    disease: e.title || key,
+                    difficulty: e.difficulty || '高阶',
+                    knowledge: e.knowledge || '模型训练',
+                    questions: realQs
+                };
+                newKeys.push(key);
+                merged++;
+            });
+            mergeAdminSchemeBank._prevKeys = newKeys;
+            return merged;
+        }
+
+        function escapeHtml(value) { return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+        function hasRealQuestions(t) {
+            if (!t || !Array.isArray(t.questions)) return false;
+            for (var i = 0; i < t.questions.length; i++) {
+                var q = t.questions[i];
+                if (!q) continue;
+                var qtext = String(q.q == null ? '' : q.q).trim();
+                var opts = Array.isArray(q.options) ? q.options.filter(function (o) { return String(o == null ? '' : o).trim() !== ''; }) : [];
+                var ans = String(q.answer == null ? '' : q.answer).toUpperCase();
+                if (qtext && opts.length >= 2 && ans >= 'A' && ans <= 'D' && (ans.charCodeAt(0) - 65) < opts.length) return true;
+            }
+            return false;
+        }
+        function buildTrainingTasks() {
+            // 标注数据集不再派生占位题集：旧逻辑会把未命中内置/后台题库的数据集（如 amd-oct）
+            // 生成为只有 1 道通用占位题的「空题集」，已在「题集」面板移除。
+            // 若需从标注图像生成完整选择题，请在后台「方案题目管理」维护后由 mergeAdminSchemeBank 合并。
+            return;
+        }
+
+        function refreshTrainingTasks() {
+            mergeAdminSchemeBank();
+            buildTrainingTasks();
+            renderTasks();
+            if (state.currentTask && QUIZ_BANK[state.currentTask]) renderQuestion();
+        }
+
+        /* =============== STORAGE MIGRATION =============== */
+        function migrateModelTrainingStore() {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return seedEmptyStore();
+            try {
+                var parsed = JSON.parse(raw);
+                if (Array.isArray(parsed.attempts)) {
+                    return {
+                        attempts: parsed.attempts,
+                        legacyModels: Array.isArray(parsed.legacyModels) ? parsed.legacyModels : [],
+                        legacyHistory: Array.isArray(parsed.legacyHistory) ? parsed.legacyHistory : []
+                    };
+                }
+                return {
+                    attempts: [],
+                    legacyModels: Array.isArray(parsed.models) ? parsed.models : [],
+                    legacyHistory: Array.isArray(parsed.history) ? parsed.history : []
+                };
+            } catch (e) { return seedEmptyStore(); }
+        }
+        function seedEmptyStore() { return { attempts: [], legacyModels: [], legacyHistory: [] }; }
+        function saveTrainingStore() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    attempts: state.cachedStore.attempts,
+                    legacyModels: state.cachedStore.legacyModels,
+                    legacyHistory: state.cachedStore.legacyHistory
+                }));
+            } catch (e) { }
+        }
+        function ensureStore() { if (!state.cachedStore) state.cachedStore = migrateModelTrainingStore(); return state.cachedStore; }
+
+        /* =============== SCORING =============== */
+        function scoreChoice(q, answer) {
+            var given = String(answer || '').trim().toUpperCase();
+            var correct = given === q.answer;
+            var refIdx = q.answer.charCodeAt(0) - 65;
+            var refText = (q.options[refIdx] || '').replace(/^[A-D]\.\s*/, '');
+            return {
+                score: correct ? q.score : 0, correct: correct,
+                feedback: correct ? '✓ 回答正确' : ('✗ 参考答案：' + q.answer + ' · ' + refText + (q.explain ? ('\n解析：' + q.explain) : ''))
+            };
+        }
+        function getScoreBandInfo(scorePct) {
+            if (scorePct >= 90) return { label: '优秀', key: 'excellent' };
+            if (scorePct >= 80) return { label: '良好', key: 'good' };
+            if (scorePct >= 60) return { label: '合格', key: 'qualified' };
+            if (scorePct >= 30) return { label: '待提升', key: 'improve' };
+            return { label: '需努力', key: 'need' };
+        }
+
+        /* =============== ATTEMPT LIFECYCLE =============== */
+        function startAttempt(silent) {
+            var bank = QUIZ_BANK[state.currentTask];
+            if (!bank) return;
+            var questions = bank.questions;
+            var items = questions.map(function (q) {
+                return { qId: q.id, type: 'choice', answer: '', score: 0, correct: false, feedback: '' };
+            });
+            var maxScore = questions.reduce(function (s, q) { return s + (Number(q.score) || 0); }, 0);
+            var att = {
+                id: 'att_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                taskKey: state.currentTask,
+                taskTitle: bank.disease,
+                category: bank.category,
+                startedAt: new Date().toISOString(),
+                finishedAt: null,
+                questions: questions,
+                items: items,
+                totalScore: 0,
+                maxScore: maxScore,
+                band: ''
+            };
+            state.currentAttempt = att;
+            state.currentIndex = 0;
+            state.submitted = false;
+            state.drafts[state.currentTask] = { answers: items.map(function () { return ''; }), index: 0 };
+            renderQuestion();
+            renderTasks();
+        }
+        function onChoice(qIndex, letter) {
+            var att = state.currentAttempt;
+            if (!att || state.submitted) return;
+            att.items[qIndex].answer = letter;
+            if (state.drafts[att.taskKey]) {
+                state.drafts[att.taskKey].answers[qIndex] = letter;
+                state.drafts[att.taskKey].index = qIndex;
+            }
+            renderQuestion();
+        }
+        function confirmRedo(opts) {
+            var att = state.currentAttempt;
+            if (!att) { startAttempt(true); return; }
+            var fromReport = opts && opts.fromReport;
+            var msg = state.submitted
+                ? '重新作答将清空当前已提交的答卷（含本轮得分），确认继续？\n（历史最高得分会保留在题集卡片）'
+                : '已有未提交的作答内容，重新作答将清空当前草稿，确认继续？';
+            if (fromReport) msg = '再考一次将清空当前已提交的答卷，确认继续？';
+            if (!window.confirm(msg)) return;
+            if (att.taskKey) delete state.drafts[att.taskKey];
+            startAttempt(true);
+        }
+        function buildAttemptRecord(att) {
+            return {
+                id: att.id,
+                taskKey: att.taskKey,
+                taskTitle: att.taskTitle,
+                category: att.category,
+                startedAt: att.startedAt,
+                finishedAt: att.finishedAt,
+                items: att.items.map(function (it, i) {
+                    var q = att.questions[i];
+                    return { qId: it.qId, type: it.type, answer: it.answer, score: it.score, correct: it.correct, feedback: it.feedback, q: q ? (q.q + '||' + (q.options || []).join('|') + '||' + q.answer) : '' };
+                }),
+                totalScore: att.totalScore,
+                maxScore: att.maxScore,
+                band: att.band
+            };
+        }
+        function submitCurrentSet() {
+            var att = state.currentAttempt;
+            if (!att) return;
+            var unanswered = att.items.filter(function (it) { return !String(it.answer || '').trim(); }).length;
+            if (unanswered > 0 && !window.confirm('还有 ' + unanswered + ' 题未作答，未答题将计 0 分。确认提交本套？')) return;
+            var total = 0;
+            att.items.forEach(function (it, i) {
+                var q = att.questions[i];
+                var r = scoreChoice(q, it.answer);
+                it.score = r.score; it.correct = r.correct; it.feedback = r.feedback;
+                total += r.score;
+            });
+            att.totalScore = total;
+            att.finishedAt = new Date().toISOString();
+            var pct = att.maxScore > 0 ? Math.round(total / att.maxScore * 100) : 0;
+            att.band = getScoreBandInfo(pct).label;
+            state.submitted = true;
+            if (state.drafts[att.taskKey]) delete state.drafts[att.taskKey];
+            var store = ensureStore();
+            store.attempts.unshift(buildAttemptRecord(att));
+            if (store.attempts.length > 50) store.attempts.length = 50;
+            saveTrainingStore();
+            renderQuestion();
+            renderTasks();
+            renderReport();
+            toast('本套阅卷完成：' + total + ' / ' + att.maxScore + ' 分', 'success');
+        }
+
+        /* =============== RENDERING =============== */
+        function renderQuestion() {
+            var att = state.currentAttempt;
+            if (!att) {
+                var ec = document.getElementById('examCard'); if (ec) ec.style.display = 'none';
+                var ee = document.getElementById('examEmpty'); if (ee) ee.style.display = 'block';
+                return;
+            }
+            document.getElementById('examEmpty').style.display = 'none';
+            var card = document.getElementById('examCard');
+            card.style.display = 'block';
+            var q = att.questions[state.currentIndex];
+            var item = att.items[state.currentIndex];
+            var total = att.questions.length;
+
+            var stepperHtml = '<div class="q-stepper">';
+            for (var si = 0; si < total; si++) {
+                var sCls = 'q-step';
+                var sContent = (si + 1);
+                if (si === state.currentIndex) {
+                    sCls += ' current';
+                } else {
+                    var sAns = String(att.items[si].answer || '').trim();
+                    if (sAns) { sCls += ' answered'; }
+                }
+                var sClick = (si === state.currentIndex || state.submitted) ? '' : (' onclick="gotoQuestion(' + si + ')"');
+                stepperHtml += '<div class="' + sCls + '"' + sClick + ' title="第 ' + (si + 1) + ' 题">' + sContent + '</div>';
+            }
+            stepperHtml += '</div>';
+
+            var html = stepperHtml;
+            html += '<div class="question-stem">' + escapeHtml(q.q) + '</div>';
+            html += '<div class="question-meta">';
+            if (q.difficulty) html += '<span class="badge">难度：' + escapeHtml(q.difficulty) + '</span>';
+            html += '<span class="badge">本题 ' + (Number(q.score) || 10) + ' 分</span>';
+            html += '<span class="question-progress">第 ' + (state.currentIndex + 1) + ' / ' + total + ' 题</span>';
+            html += '</div>';
+            html += '<div class="exam-options">';
+            (q.options || []).forEach(function (opt, oi) {
+                var letter = String.fromCharCode(65 + oi);
+                var cls = 'option-row';
+                var selected = String(item.answer || '').toUpperCase() === letter;
+                if (state.submitted) {
+                    if (letter === q.answer) cls += ' correct';
+                    else if (selected) cls += ' wrong';
+                } else if (selected) {
+                    cls += ' selected';
+                }
+                var disabled = state.submitted ? 'data-disabled="1"' : 'onclick="onChoice(' + state.currentIndex + ',\'' + letter + '\')"';
+                html += '<div class="' + cls + '" ' + disabled + '>';
+                html += '<div class="option-radio"></div>';
+                html += '<div class="option-text"><span class="option-letter">' + letter + '.</span>' + escapeHtml(opt) + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            if (state.submitted) {
+                var fbCls = item.correct ? 'ok' : 'bad';
+                html += '<div class="exam-feedback ' + fbCls + '"><strong>本题得分：' + item.score + ' / ' + (Number(q.score) || 10) + '</strong><br>' + escapeHtml(item.feedback) + '</div>';
+            }
+            html += '<div class="exam-nav">';
+            html += '<button class="nav-btn" ' + (state.currentIndex === 0 ? 'disabled' : 'onclick="gotoQuestion(' + (state.currentIndex - 1) + ')"') + '>上一题</button>';
+            if (state.submitted) {
+                html += '<span class="nav-info">本套已提交 · 共 ' + total + ' 题</span>';
+                html += '<button class="nav-btn primary" onclick="confirmRedo()">重新作答</button>';
+            } else if (state.currentIndex === total - 1) {
+                html += '<span class="nav-info">最后一题</span>';
+                html += '<button class="nav-btn success" onclick="submitCurrentSet()">提交本套</button>';
+            } else {
+                html += '<span class="nav-info">第 ' + (state.currentIndex + 1) + ' / ' + total + ' 题</span>';
+                html += '<button class="nav-btn primary" onclick="gotoQuestion(' + (state.currentIndex + 1) + ')">下一题</button>';
+            }
+            html += '</div>';
+            card.innerHTML = html;
+        }
+        function gotoQuestion(idx) {
+            var att = state.currentAttempt;
+            if (!att || state.submitted) return;
+            if (idx < 0 || idx >= att.questions.length) return;
+            state.currentIndex = idx;
+            if (state.drafts[att.taskKey]) state.drafts[att.taskKey].index = idx;
+            renderQuestion();
+        }
+        function renderReport() {
+            var att = state.currentAttempt;
+            if (!att) return;
+            var pct = att.maxScore > 0 ? Math.round(att.totalScore / att.maxScore * 100) : 0;
+            var band = getScoreBandInfo(pct);
+            var correctCount = att.items.filter(function (it) { return it.correct; }).length;
+            var html = '<div class="report-score-block">';
+            html += '<div class="report-score-main"><b>' + att.totalScore + '</b><span>/ ' + att.maxScore + '</span></div>';
+            html += '<div class="report-score-caption">本次得分 · 答对 ' + correctCount + ' / ' + att.questions.length + ' 题 · 区间：<span class="band-pill ' + band.key + '">' + band.label + '</span></div>';
+            html += '</div>';
+            var bands = [
+                { range: '90-100', label: '优秀' },
+                { range: '80-89', label: '良好' },
+                { range: '60-79', label: '合格' },
+                { range: '30-59', label: '待提升' },
+                { range: '0-29', label: '需努力' }
+            ];
+            html += '<div class="score-band-list">';
+            bands.forEach(function (b) {
+                var cur = (band.label === b.label) ? 'current' : '';
+                html += '<div class="score-band-line ' + cur + '"><strong>' + b.range + '</strong><span>' + b.label + '</span></div>';
+            });
+            html += '</div>';
+            html += '<div class="report-item-list">';
+            att.items.forEach(function (it, idx) {
+                var q = att.questions[idx];
+                var cls = it.correct ? 'correct' : 'wrong';
+                var refIdx = q.answer.charCodeAt(0) - 65;
+                var refText = (q.options[refIdx] || '').replace(/^[A-D]\.\s*/, '');
+                html += '<div class="report-item-row ' + cls + '">';
+                html += '<div class="ri-head"><span class="ri-q">第 ' + (idx + 1) + ' 题 · ' + escapeHtml(q.q) + '</span><span class="ri-meta">' + it.score + ' / ' + (Number(q.score) || 10) + ' 分</span></div>';
+                html += '<div class="ri-feedback">你的答案：' + escapeHtml(it.answer || '未作答') + ' ｜ 参考答案：' + escapeHtml(q.answer + ' · ' + refText) + '</div>';
+                if (q.explain) html += '<div class="ri-feedback">解析：' + escapeHtml(q.explain) + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            document.getElementById('examReportBody').innerHTML = html;
+            openModal('examReportModal');
+        }
+
+        /* =============== TASK LIB RENDER =============== */
+        function renderTasks() {
+            var list = document.getElementById('taskList');
+            if (!list) return;
+            var bestByTask = {};
+            try {
+                var store = ensureStore();
+                (store.attempts || []).forEach(function (a) {
+                    if (!a || !a.taskKey) return;
+                    var pct = a.maxScore > 0 ? (a.totalScore / a.maxScore) : 0;
+                    if (!bestByTask[a.taskKey] || bestByTask[a.taskKey].pct < pct) {
+                        bestByTask[a.taskKey] = { totalScore: a.totalScore, maxScore: a.maxScore, pct: pct };
+                    }
+                });
+            } catch (e) { }
+            var diffFilter = document.getElementById('diffFilter');
+            var answerFilter = document.getElementById('answerFilter');
+            var categoryFilter = document.getElementById('categoryFilter');
+            var selectedDifficulty = diffFilter ? diffFilter.value : '';
+            var selectedAnswerStatus = answerFilter ? answerFilter.value : '';
+            var selectedCategory = categoryFilter ? categoryFilter.value : '';
+
+            var groups = { classification: [], segmentation: [] };
+            for (var key in QUIZ_BANK) {
+                var t = QUIZ_BANK[key];
+                if (!hasRealQuestions(t)) continue;
+                if (selectedDifficulty && (t.difficulty || '高阶') !== selectedDifficulty) continue;
+                var best = bestByTask[key];
+                var isRedoing = !!state.drafts[key];
+                var answered = !!best && !isRedoing;
+                if (selectedAnswerStatus === 'answered' && !answered) continue;
+                if (selectedAnswerStatus === 'unanswered' && answered) continue;
+                groups[t.category || 'classification'].push(key);
+            }
+
+            var html = '';
+            (selectedCategory ? [selectedCategory] : ['classification', 'segmentation']).forEach(function (cat) {
+                if (!groups[cat].length) return;
+                var label = CATEGORY_LABELS[cat] || cat;
+                html += '<div class="task-group-title ' + cat + '"><span class="group-bar"></span>' + escapeHtml(label) + '<span class="group-count">' + groups[cat].length + ' 套题</span></div>';
+                groups[cat].forEach(function (key) {
+                    var t = QUIZ_BANK[key];
+                    var active = key === state.currentTask ? 'active' : '';
+                    var best = bestByTask[key];
+                    var isRedoing = !!state.drafts[key];
+                    var answered = !!best && !isRedoing;
+                    var scoreHtml = (best && !isRedoing)
+                        ? '<span class="task-score-num">' + best.totalScore + '</span>'
+                        : '';
+                    var answeredClass = answered ? 'answered' : '';
+                    var difficultyClass = (t.difficulty === '基础') ? 'difficulty-basic'
+                        : ((t.difficulty === '进阶') ? 'difficulty-medium' : 'difficulty-advanced');
+                    var catTag = t.category === 'segmentation' ? 'segmentation' : 'classification';
+                    html += '<div class="task-card ' + active + ' ' + answeredClass + '" onclick="selectTask(\'' + escapeHtml(key) + '\')">'
+                        + '<div class="task-heading"><div class="task-title">' + escapeHtml(t.disease) + '</div>'
+                        + '<span class="task-tag ' + difficultyClass + '">' + escapeHtml(t.difficulty || '高阶') + '</span></div>'
+                        + '<div class="task-score">' + scoreHtml + '</div>'
+                        + '</div>';
+                });
+            });
+            if (!html) html = '<div class="task-empty">暂无符合条件的题目</div>';
+            list.innerHTML = html;
+        }
+        function selectTask(key) {
+            if (!QUIZ_BANK[key] || !hasRealQuestions(QUIZ_BANK[key])) {
+                var keys = Object.keys(QUIZ_BANK);
+                key = '';
+                for (var ki = 0; ki < keys.length; ki++) {
+                    if (hasRealQuestions(QUIZ_BANK[keys[ki]])) { key = keys[ki]; break; }
+                }
+            }
+            if (!key) { state.currentTask = ''; renderQuestion(); return; }
+            state.currentTask = key;
+            renderTasks();
+            // 1) 进行中的草稿优先（保留已选答案与所在题号）
+            if (state.drafts[key]) {
+                var draft = state.drafts[key];
+                var bank = QUIZ_BANK[key];
+                var items = bank.questions.map(function (q, i) {
+                    return { qId: q.id, type: 'choice', answer: draft.answers[i] || '', score: 0, correct: false, feedback: '' };
+                });
+                state.currentAttempt = {
+                    id: 'att_draft_' + key, taskKey: key, taskTitle: bank.disease, category: bank.category,
+                    startedAt: new Date().toISOString(), finishedAt: null,
+                    questions: bank.questions, items: items, totalScore: 0, maxScore: bank.questions.reduce(function (s, q) { return s + (Number(q.score) || 0); }, 0), band: ''
+                };
+                state.currentIndex = Math.min(draft.index || 0, bank.questions.length - 1);
+                state.submitted = false;
+                renderQuestion();
+                return;
+            }
+            // 2) 已提交的最新作答记录
+            var latest = null;
+            try {
+                var store = ensureStore();
+                latest = (store.attempts || []).find(function (a) { return a && a.taskKey === key; });
+            } catch (e) { }
+            var bank2 = QUIZ_BANK[key];
+            if (latest) {
+                state.currentAttempt = {
+                    id: latest.id, taskKey: key, taskTitle: bank2.disease, category: bank2.category,
+                    startedAt: latest.startedAt, finishedAt: latest.finishedAt,
+                    questions: bank2.questions, items: latest.items, totalScore: latest.totalScore, maxScore: latest.maxScore, band: latest.band
+                };
+                state.currentIndex = 0;
+                state.submitted = true;
+                renderQuestion();
+            } else {
+                startAttempt();
+            }
+        }
+
+        /* =============== MODAL & TOAST =============== */
+        function openModal(id) { var m = document.getElementById(id); if (m) m.classList.add('open'); }
+        function closeModal(id) { var m = document.getElementById(id); if (m) m.classList.remove('open'); }
+        function openDataSourceModal() { openModal('dataSourceModal'); }
+        function toast(message, type) {
+            var t = document.getElementById('toast');
+            t.textContent = message;
+            t.style.background = (type === 'warn') ? 'rgba(251, 188, 4, .92)'
+                : (type === 'error') ? 'rgba(234, 67, 53, .92)'
+                    : (type === 'success') ? 'rgba(52, 168, 83, .92)'
+                        : 'rgba(15, 23, 42, .85)';
+            t.classList.add('show');
+            window.clearTimeout(toast._timer);
+            toast._timer = window.setTimeout(function () { t.classList.remove('show'); }, 2400);
+        }
+
+        /* =============== SUBMENU & LOGOUT =============== */
+        function toggleSubmenu(el) {
+            var sub = el.nextElementSibling;
+            if (!sub) return;
+            sub.classList.toggle('open');
+            el.classList.toggle('expanded');
+        }
+        function logout() { if (window.confirm('确定退出登录？')) location.href = 'app-center.html'; }
+        function initHeaderUser() {
+            try {
+                var u = JSON.parse(localStorage.getItem('life_med_current_user') || 'null');
+                var el = document.getElementById('headerUserName');
+                if (el && u && u.name) el.textContent = u.name;
+            } catch (e) { }
+        }
+
+        /* =============== INIT =============== */
+        initHeaderUser();
+        state.cachedStore = migrateModelTrainingStore();
+        mergeAdminSchemeBank();
+        buildTrainingTasks();
+        renderTasks();
+        var firstKey = Object.keys(QUIZ_BANK)[0];
+        if (firstKey) selectTask(firstKey);
+    </script>
+</body>
+
+</html>

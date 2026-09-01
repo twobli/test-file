@@ -9,7 +9,7 @@
 <body>
   <div class="admin-shell">
     <aside class="sidebar">
-      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>AI教育后台</strong><span>独立运营管理系统</span></div></a>
+      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>生命医学管理后台</strong><span>独立运营管理系统</span></div></a>
       <div class="nav-group-title">业务工作台</div>
       <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
       <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
@@ -18,24 +18,18 @@
       <a class="nav-item active child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
       <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
       <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
-      <a class="nav-item" href="index.html#profiles"><span class="nav-icon">◎</span>学员档案与能力评估</a>
-      <a class="nav-item" href="index.html#certs"><span class="nav-icon">◇</span>证书学分管理</a>
-      <a class="nav-item" href="index.html#aiqa"><span class="nav-icon">AI</span>AI答疑与模型配置</a>
       <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
-      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
       <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
-      <a class="nav-item" href="index.html#audit"><span class="nav-icon">↺</span>内容审核与运营日志</a>
+      <a class="nav-item" href="标注图像管理.html"><span class="nav-icon">⊞</span>标注图像管理</a>
+      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
     </aside>
     <main class="main">
       <header class="topbar">
-        <div><p class="eyebrow">Skill Practice / Module 02</p><h1>经典病例诊断实训管理</h1><p class="page-desc">按学生端病例信息与病史、主影像浏览的展示逻辑，维护结构化病例和单一主影像资料；诊断分析与评分由前端 AI 逻辑自动完成。</p></div>
-        <div class="top-actions"><a class="btn" href="技能实践管理.html">返回技能实践管理</a><button class="btn primary" onclick="openModal('add')">＋ 新增经典病例</button></div>
+        <div><p class="eyebrow">Skill Practice / Module 02</p><h1>经典病例诊断实训管理</h1></div>
       </header>
       <div class="breadcrumb"><a href="技能实践管理.html">技能实践管理</a><span class="sep">&gt;</span><span>经典病例诊断实训</span></div>
       <div class="toolbar">
-        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号、患者姓名或病种" oninput="render()"><select class="select" id="difficulty" onchange="render()"><option value="">全部难度</option><option>基础</option><option>进阶</option><option>疑难</option></select><select class="select" id="statusFilter" onchange="render()"><option value="">全部状态</option><option>已发布</option><option>已下线</option></select></div>
-        <span class="status info">管理对象：病例基本信息、患者病史、单一主影像、发布状态</span>
-      </div>
+        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号、患者姓名或病种" oninput="render()"><select class="select" id="difficulty" onchange="render()"><option value="">全部难度</option><option>基础</option><option>进阶</option><option>疑难</option></select><select class="select" id="statusFilter" onchange="render()"><option value="">全部状态</option><option>已发布</option><option>已下线</option></select></div><button class="btn primary" style="margin-left:auto;" onclick="openModal('add')">＋ 新增经典病例</button></div>
       <section class="panel">
         <div class="panel-head"><div><h2 class="panel-title">经典病例库</h2><p class="panel-subtitle">后台只维护前端病例内容；学生提交的诊断报告、AI分析和综合评分不在此处配置。</p></div></div>
         <div class="table-wrap"><table><thead><tr><th>病例名称</th><th>病例号</th><th>病种</th><th>难度</th><th>主影像类型</th><th>状态</th><th>操作</th></tr></thead><tbody id="tableBody"></tbody></table></div>
@@ -93,3 +87,4 @@
   </script>
 </body>
 </html>
+

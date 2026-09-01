@@ -143,14 +143,14 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
 .btn-registered { background: #e8ecf0; color: #9aa0a6; border: 1px solid #dadce0; cursor: not-allowed; pointer-events: none; }
 
 /* ===== 比赛结果弹窗样式（参照原型图） ===== */
-.result-modal-box { max-width: 860px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.18); animation: fadeInUp 0.3s ease; }
+.result-modal-box { max-width: 860px; max-height: calc(100vh - 48px); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.18); animation: fadeInUp 0.3s ease; display: flex; flex-direction: column; }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .result-header { display: flex; align-items: center; padding: 16px 24px; background: #fff; border-bottom: 1px solid #e8ecf0; gap: 12px; }
 .result-title { font-size: 16px; font-weight: 600; color: #202124; flex: 1; margin: 0; }
 .tag-result-status { background: #fce8e6; color: #c5221f; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
 .result-close { font-size: 18px; color: #9aa0a6; cursor: pointer; background: none; border: none; padding: 4px; }
 .result-close:hover { color: #3c4043; }
-.result-body { padding: 24px; }
+.result-body { padding: 24px; overflow-y: auto; flex: 1; min-height: 0; }
 .result-grid-new { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
 .result-card-new { padding: 20px 16px; border-radius: 10px; text-align: center; transition: transform 0.2s; }
 .result-card-new:hover { transform: translateY(-2px); }
@@ -205,7 +205,7 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
 .compare-pct { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: 600; color: #202124; }
 
 /* 底部按钮 */
-.result-footer { display: flex; justify-content: center; gap: 12px; }
+.result-footer { position: sticky; bottom: 0; display: flex; justify-content: center; gap: 12px; padding: 12px 0 2px; margin-top: 10px; background: linear-gradient(180deg, rgba(255,255,255,0.92), #fff 28%); box-shadow: 0 -10px 18px rgba(255,255,255,0.92); z-index: 2; }
 .btn-review { padding: 8px 20px; font-size: 14px; border-radius: 6px; }
 .btn-primary-result { padding: 8px 24px; font-size: 14px; background: #E53935; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
 .btn-primary-result:hover { background: #C62828; }
@@ -308,7 +308,6 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
                         <div class="option-item" onclick="selectOption(this, 'B')"><span class="opt-radio"></span>B. 轻度非增殖期DR</div>
                         <div class="option-item selected" onclick="selectOption(this, 'C')"><span class="opt-radio"></span>C. 中度非增殖期DR</div>
                         <div class="option-item" onclick="selectOption(this, 'D')"><span class="opt-radio"></span>D. 重度非增殖期DR</div>
-                        <div class="option-item" onclick="selectOption(this, 'E')"><span class="opt-radio"></span>E. 增殖期DR</div>
                     </div>
                     <!-- 题号导航 -->
                     <div class="qnav" id="qnav">
@@ -441,35 +440,35 @@ var mockQuestions = [
     {
         desc: '根据上述眼底图像表现，该患者糖尿病视网膜病变的分级应为？',
         type: '单选',
-        options: ['A. 无明显DR改变','B. 轻度非增殖期DR','C. 中度非增殖期DR','D. 重度非增殖期DR','E. 增殖期DR'],
+        options: ['A. 无明显DR改变','B. 轻度非增殖期DR','C. 中度非增殖期DR','D. 重度非增殖期DR'],
         answer: 'C',
         analysis: '散在微血管瘤与点状出血已超过轻度改变范围，但尚未达到重度非增殖期或增殖期标准，因此判断为中度非增殖期DR。'
     },
     {
         desc: 'OCT显示黄斑区可见视网膜下液，最可能的诊断是？',
         type: '单选',
-        options: ['A. 黄斑裂孔','B. 中心性浆液性脉络膜视网膜病变','C. 年龄相关性黄斑变性','D. 黄斑前膜','E. 糖尿病黄斑水肿'],
+        options: ['A. 黄斑裂孔','B. 中心性浆液性脉络膜视网膜病变','C. 年龄相关性黄斑变性','D. 黄斑前膜'],
         answer: 'B',
         analysis: '视网膜下液伴黄斑区局灶性浆液性脱离更符合中心性浆液性脉络膜视网膜病变的影像特征。'
     },
     {
         desc: 'FFA早晚期图像显示荧光渗漏，病变位于？',
         type: '单选',
-        options: ['A. 视网膜内层','B. 视网膜外层','C. 脉络膜层','D. 玻璃体腔','E. 视神经'],
+        options: ['A. 视网膜内层','B. 视网膜外层','C. 脉络膜层','D. 玻璃体腔'],
         answer: 'B',
         analysis: '荧光从早期局灶染色到晚期渗漏，提示血管屏障受损，常见于视网膜外层相关病变。'
     },
     {
         desc: '患者视野检查显示鼻侧阶梯，最可能的诊断？',
         type: '单选',
-        options: ['A. 白内障','B. 青光眼','C. 视神经炎','D. 视网膜脱离','E. 黄斑病变'],
+        options: ['A. 白内障','B. 青光眼','C. 视神经炎','D. 视网膜脱离'],
         answer: 'B',
         analysis: '鼻侧阶梯属于青光眼典型视野缺损表现，结合视神经结构改变更支持青光眼。'
     },
     {
         desc: '该OCT图像中，椭圆体带的完整性如何？',
         type: '单选',
-        options: ['A. 完全正常','B. 局部中断','C. 弥漫性消失','D. 增厚','E. 无法判断'],
+        options: ['A. 完全正常','B. 局部中断','C. 弥漫性消失','D. 增厚'],
         answer: 'C',
         analysis: '椭圆体带连续性缺失且范围较广，提示光感受器结构受损明显，因此选择弥漫性消失。'
     }
@@ -1219,7 +1218,7 @@ function loadQuestion(qIdx) {
     var qData = mockQuestions[(qIdx - 1) % mockQuestions.length];
     document.getElementById('qDesc').textContent = qData.desc;
     var optHtml = '';
-    var labels = ['A', 'B', 'C', 'D', 'E'];
+    var labels = ['A', 'B', 'C', 'D'];
     for (var i = 0; i < qData.options.length; i++) {
         var sel = userAnswers[qIdx] === labels[i] ? ' selected' : '';
         optHtml += '<div class="option-item' + sel + '" onclick="selectOption(this,\'' + labels[i] + '\')"><span class="opt-radio"></span>' + qData.options[i] + '</div>';

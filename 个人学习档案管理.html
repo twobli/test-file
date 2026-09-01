@@ -319,13 +319,13 @@ function renderExamArchive() {
     var rows = getArchiveExamRows();
     document.getElementById('examArchiveCount').textContent = rows.length;
     document.getElementById('archiveTable').innerHTML =
-        '<thead><tr><th>测评名称</th><th>考试类型</th><th>考核范围</th><th>最近状态</th><th>最高成绩</th><th>最近一次成绩</th><th>测评次数</th><th>最近考试时间</th></tr></thead><tbody>' +
+        '<thead><tr><th>测评名称</th><th>考试类型</th><th>最近状态</th><th>最高成绩</th><th>最近一次成绩</th><th>测评次数</th><th>最近考试时间</th></tr></thead><tbody>' +
         rows.map(function(item) {
             var last = item.history && item.history.length ? item.history[item.history.length - 1] : null;
             var status = getExamStatus(item.status);
             var best = item.bestScore === null || item.bestScore === undefined ? '-' : item.bestScore + ' / ' + item.totalScore;
             return '<tr><td><strong>' + escapeArchiveHtml(item.name) + '</strong></td><td>' + escapeArchiveHtml(item.examType) + '</td>' +
-                '<td>' + escapeArchiveHtml(item.target) + '</td><td><span class="status ' + status.cls + '">' + status.text + '</span></td>' +
+                '<td><span class="status ' + status.cls + '">' + status.text + '</span></td>' +
                 '<td>' + best + '</td><td>' + (last ? last.score + ' / ' + item.totalScore + '（' + escapeArchiveHtml(last.rate) + '）' : '-') + '</td>' +
                 '<td>' + escapeArchiveHtml(item.examCount) + '</td><td>' + escapeArchiveHtml(last ? last.time : '-') + '</td></tr>';
         }).join('') + '</tbody>';

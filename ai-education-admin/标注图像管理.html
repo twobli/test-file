@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标注图像管理</title>
+  <style>
+    :root { --bg:#f4f7fb; --panel:#fff; --text:#172234; --muted:#6b7280; --line:#dce5ef; --primary:#1769c2; --primary-dark:#0f4f98; --sidebar:#102033; --sidebar-text:#cfe1f7; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--text); background:var(--bg); font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    button,input,select,textarea { font:inherit; letter-spacing:0; }
+    .app-shell { display:grid; grid-template-columns:248px minmax(0,1fr); min-height:100vh; }
+    .sidebar { position:sticky; top:0; height:100vh; overflow:auto; padding:18px 14px; color:var(--sidebar-text); background:var(--sidebar); border-right:1px solid rgba(255,255,255,.08); }
+    .brand { display:flex; align-items:center; gap:10px; padding:12px 10px 18px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,.12); }
+    .brand-mark { width:36px; height:36px; display:grid; place-items:center; border-radius:8px; color:#fff; background:linear-gradient(135deg,#1e88e5,#00a896); font-size:13px; font-weight:800; }
+    .brand-title { display:grid; gap:2px; }
+    .brand-title strong { color:#fff; font-size:15px; }
+    .brand-title span { color:#a9bdd6; font-size:12px; }
+    .nav-group-title { padding:14px 10px 8px; color:#8fb0d3; font-size:12px; }
+    .nav-item { width:100%; display:flex; align-items:center; gap:10px; min-height:40px; margin:3px 0; padding:10px 12px; color:var(--sidebar-text); background:transparent; border:0; border-radius:8px; text-align:left; cursor:pointer; }
+    .nav-item:hover { color:#fff; background:rgba(255,255,255,.08); }
+    .nav-item.active { color:#102033; background:#fff; font-weight:700; }
+    .nav-item.child { padding-left:28px; font-size:13px; }
+    .nav-icon { width:18px; color:currentColor; text-align:center; }
+    .content { min-width:0; padding:28px 34px 44px; }
+    .page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:18px; }
+    .page-copy { min-width:0; display:grid; gap:8px; }
+    .eyebrow { margin:0; color:var(--primary); font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    h1,h2,p { margin:0; }
+    h1 { color:var(--text); font-size:32px; line-height:1.2; }
+    .page-desc { max-width:780px; color:var(--muted); font-size:14px; line-height:1.7; }
+    .panel { min-width:0; margin-bottom:18px; background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 28px rgba(31,42,55,.07); overflow:hidden; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 22px 16px; border-bottom:1px solid #e5ebf2; }
+    .panel-title { color:var(--text); font-size:18px; font-weight:800; }
+    .panel-actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; flex:0 0 auto; }
+    .panel-subtitle { margin-top:7px; color:#7a8798; font-size:13px; line-height:1.65; }
+    .cert-rule-hint { display:block; margin-top:6px; color:#2f8f5b; font-size:12px; line-height:1.5; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .form-field { min-width:0; }
+    .form-field.full { grid-column:1 / -1; }
+    label { display:block; margin-bottom:8px; color:#41556d; font-size:13px; font-weight:700; }
+    .req { margin-left:6px; color:#c62828; font-weight:400; }
+    .input,.select { width:100%; min-height:42px; padding:9px 12px; color:var(--text); background:#fff; border:1px solid #d7e1ec; border-radius:10px; outline:0; }
+    textarea.input { min-height:104px; resize:vertical; line-height:1.6; }
+    .input:focus,.select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(23,105,194,.12); }
+    .file-trigger { display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .file-trigger-btn { flex:0 0 auto; display:inline-flex; align-items:center; min-height:30px; padding:0 12px; color:#334155; background:#fff; border:1px solid #d1dce8; border-radius:8px; font-size:12px; white-space:nowrap; }
+    .file-trigger:hover .file-trigger-btn { color:var(--primary-dark); background:#f6faff; border-color:#b8cde3; }
+    .file-trigger-name { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#8a94a6; font-size:13px; }
+    .file-trigger:focus-within { border-color:var(--primary); box-shadow:0 0 0 3px rgba(23,105,194,.12); }
+    .file-input-hidden { position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0; opacity:0; overflow:hidden; clip:rect(0 0 0 0); pointer-events:none; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:0 14px; color:#334155; background:#fff; border:1px solid #d1dce8; border-radius:9px; cursor:pointer; white-space:nowrap; }
+    .btn:hover { color:var(--primary-dark); background:#f6faff; border-color:#b8cde3; }
+    .btn.primary { color:#fff; background:var(--primary); border-color:var(--primary); box-shadow:0 10px 22px rgba(23,105,194,.18); }
+    .btn.primary:hover { color:#fff; background:var(--primary-dark); border-color:var(--primary-dark); }
+    .btn.small { min-height:34px; padding:0 12px; font-size:12px; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; min-width:980px; border-collapse:collapse; font-size:13px; }
+    th,td { padding:15px 18px; border-bottom:1px solid #e8eef5; text-align:left; vertical-align:middle; }
+    th { height:54px; color:#526276; background:#f4f8fc; border-bottom-color:#dfe8f1; font-size:13px; font-weight:800; white-space:nowrap; }
+    .thumb-img { width:64px; height:48px; display:block; object-fit:cover; border:1px solid #dbe3ee; border-radius:7px; background:#f1f5f9; }
+    .status { display:inline-flex; align-items:center; min-height:27px; padding:3px 10px; color:#1d6ac1; background:#eaf3ff; border:1px solid #cfe3fb; border-radius:999px; white-space:nowrap; font-weight:700; }
+    .answer-cell { max-width:320px; color:#475569; line-height:1.55; white-space:pre-wrap; }
+    .empty { padding:30px 16px; color:#8895a7; text-align:center; }
+    .page-tabs { display:flex; gap:6px; margin-bottom:18px; border-bottom:1px solid #e1e8f0; }
+    .page-tab { position:relative; padding:12px 18px 14px; color:#6b7280; background:transparent; border:0; border-bottom:3px solid transparent; font-size:15px; font-weight:700; cursor:pointer; }
+    .page-tab:hover { color:var(--primary-dark); }
+    .page-tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+    .hidden { display:none; }
+    .toast { position:fixed; right:22px; bottom:22px; z-index:40; max-width:min(420px,calc(100vw - 44px)); padding:11px 14px; color:#fff; background:#1f2937; border-radius:8px; box-shadow:0 10px 24px rgba(15,23,42,.2); opacity:0; pointer-events:none; transform:translateY(10px); transition:opacity .2s ease,transform .2s ease; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .modal-mask { position:fixed; inset:0; z-index:20; display:none; place-items:center; padding:28px; background:rgba(15,23,42,.6); }
+    .modal-mask.open { display:grid; }
+    .modal { width:min(1120px,100%); max-height:calc(100vh - 56px); overflow:auto; background:#fff; border:1px solid #dbe5f0; border-radius:16px; box-shadow:0 28px 64px rgba(15,23,42,.22); }
+    .modal-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:22px 24px 18px; border-bottom:1px solid #e6edf5; background:linear-gradient(180deg,#fff 0%,#f8fbff 100%); }
+    .modal-head h2 { color:var(--text); font-size:22px; }
+    .modal-close { width:34px; height:34px; flex:0 0 auto; color:#64748b; background:#fff; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer; font-size:22px; line-height:1; }
+    .modal-body { padding:22px 24px 24px; }
+    .upload-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,.82fr); gap:22px; }
+    .preview-column { display:grid; gap:14px; padding:18px; border-left:1px solid #e8eef5; background:#fbfdff; }
+    .image-preview { min-height:220px; display:grid; place-items:center; padding:12px; color:#77859a; background:#f3f7fb; border:1px solid #dbe6f1; border-radius:12px; text-align:center; overflow:hidden; }
+    .image-preview img { width:100%; height:240px; display:block; object-fit:contain; background:#0f172a; border-radius:8px; }
+    .button-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    .modal-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .modal-image { width:100%; max-height:48vh; display:block; object-fit:contain; background:#111827; border-radius:8px; }
+    .answer-box { margin-top:14px; padding:12px 14px; color:#243b53; background:#f3f8ff; border:1px solid #d7e6fb; border-radius:8px; line-height:1.7; white-space:pre-wrap; }
+    .answer-box strong { display:block; margin-bottom:5px; color:#1a4f8a; }
+    @media (max-width:980px) { .app-shell{grid-template-columns:1fr;} .sidebar{position:relative;height:auto;} .content{padding:22px 20px 36px;} .page-head{flex-direction:column;} .upload-layout{grid-template-columns:1fr;} .preview-column{border-left:0;border-top:1px solid #e8eef5;} }
+    @media (max-width:720px) { .grid,.modal-grid{grid-template-columns:1fr;} .form-field.full{grid-column:auto;} .modal-mask{padding:14px;} h1{font-size:28px;} }
+      .section-actionbar { display:flex; justify-content:flex-end; align-items:center; margin:0 0 12px; gap:10px; }
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="../app-center.html"><span class="brand-mark">AI</span><span class="brand-title"><strong>生命医学管理后台</strong><span>独立运营管理系统</span></span></a>
+      <div class="nav-group-title">业务工作台</div>
+      <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
+      <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
+      <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
+      <a class="nav-item child" href="虚拟临床技能实训管理.html"><span class="nav-icon">01</span>虚拟临床技能实训</a>
+      <a class="nav-item child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
+      <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
+      <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
+      <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
+      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
+      <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
+      <a class="nav-item active" href="标注图像管理.html"><span class="nav-icon">⊞</span>标注图像管理</a>
+        <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
+    </aside>
+    <main class="content">
+      <div class="page-head">
+        <div class="page-copy"><p class="eyebrow">LIFE MEDICINE AI EDUCATION ADMIN</p><h1>标注图像管理</h1><p class="page-desc">上传训练影像、标准答案标注图和结构化答案结果，上传后仅支持查看。</p></div>
+</div>
+      <div class="page-tabs">
+        <button class="page-tab active" type="button" data-tab="images" onclick="switchAdminTab('images')">影像列表</button>
+        <button class="page-tab" type="button" data-tab="datasets" onclick="switchAdminTab('datasets')">数据集</button>
+      </div>
+      <section class="panel" id="panelImages">
+        <div class="panel-head"><div><h2 class="panel-title">已上传影像</h2><p class="panel-subtitle">共 <strong id="annoCount">0</strong> 张，上传后仅支持查看。</p></div><div class="panel-actions"><button class="btn primary" type="button" onclick="openUploadModal()">上传影像</button><button class="btn small" type="button" onclick="loadAnnotationImages()">刷新</button></div></div>
+        <div class="filter-bar" style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-bottom:14px;">
+          <div class="form-field" style="margin:0;min-width:200px;"><label for="annoFilterDataset">按数据集筛选</label><select class="select" id="annoFilterDataset"><option value="">全部数据集</option></select></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>编号</th><th>缩略图</th><th>名称</th><th>数据集</th><th>尺寸</th><th>上传时间</th><th>标准答案</th><th>操作</th></tr></thead><tbody id="annoImageTable"></tbody></table></div>
+      </section>
+      <section class="panel" id="panelDatasets" style="display:none"><div class="panel-head"><div><h2 class="panel-title">数据集管理</h2><p class="panel-subtitle">新建分类并维护训练影像归属。已有影像的分类仅支持查看，不可删除。</p></div><div class="panel-actions"><button class="btn primary" type="button" onclick="openCreateCategoryModal()">新建分类</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>名称</th><th>已包含图像</th><th>创建时间</th><th>描述</th><th>操作</th></tr></thead><tbody id="categoryList"></tbody></table></div>
+      </section>
+    </main>
+  </div>
+  <div class="modal-mask" id="uploadMask" aria-hidden="true" onclick="closeUploadModal(event)">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="uploadTitle" onclick="event.stopPropagation()">
+      <div class="modal-head"><div><h2 id="uploadTitle">上传标注影像</h2><p class="panel-subtitle">上传训练影像和对应的标准答案标注图，填写答案结果后保存到图库。</p></div><button class="modal-close" type="button" aria-label="关闭上传弹窗" onclick="closeUploadModal()">×</button></div>
+      <div class="modal-body upload-layout">
+        <div><div class="grid">
+          <div class="form-field"><label for="annoFileInput">选择训练影像<span class="req">*必填</span></label><label class="input file-trigger" for="annoFileInput"><span class="file-trigger-btn">选择文件</span><span class="file-trigger-name" data-placeholder="未选择文件">未选择文件</span><input type="file" accept="image/*" id="annoFileInput" class="file-input-hidden"></label></div>
+          <div class="form-field"><label for="annoDataset">归属数据集</label><select class="select" id="annoDataset"></select></div>
+          <div class="form-field"><label for="annoAnswerImageInput">标准答案标注图<span class="req">*必填</span></label><label class="input file-trigger" for="annoAnswerImageInput"><span class="file-trigger-btn">选择文件</span><span class="file-trigger-name" data-placeholder="未选择文件">未选择文件</span><input type="file" accept="image/*" id="annoAnswerImageInput" class="file-input-hidden"></label></div>
+          <div class="form-field"><label for="annoDisease">疾病分类<span class="req">*必填</span></label><input class="input" id="annoDisease" placeholder="例如：糖尿病视网膜病变"></div>
+          <div class="form-field"><label for="annoLevel">病情程度 / 结果<span class="req">*必填</span></label><input class="input" id="annoLevel" placeholder="例如：中度 NPDR"></div>
+          <div class="form-field"><label for="annoKeywords">关键标注<span class="req">*必填</span></label><input class="input" id="annoKeywords" placeholder="用顿号或逗号分隔，例如：微血管瘤、出血斑、硬性渗出"></div>
+          <div class="form-field full"><label for="annoExplanation">答案说明<span class="req">*必填</span></label><textarea class="input" id="annoExplanation" placeholder="说明标准答案、标注要点以及判断依据。"></textarea></div>
+        </div><div class="button-row"><button class="btn primary" type="button" onclick="saveAnnotationImage()">保存到图库</button><button class="btn" type="button" onclick="resetAnnotationUpload()">清空</button></div></div>
+        <div class="preview-column"><div class="image-preview" id="annoPreview">选择训练影像后显示预览</div><div class="image-preview" id="annoAnswerPreview">选择标准答案标注图后显示预览</div></div>
+      </div>
+    </section>
+  </div>
+  <div class="modal-mask" id="previewMask" onclick="closePreview(event)"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle" onclick="event.stopPropagation()"><div class="modal-head"><div><h2 id="previewTitle">影像预览</h2><p class="panel-subtitle" id="previewMeta"></p></div><button class="modal-close" type="button" aria-label="关闭预览" onclick="closePreview()">×</button></div><div class="modal-body" id="previewBody"></div></section></div>
+  <div class="modal-mask" id="createCategoryMask" onclick="closeCreateCategoryModal(event)"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="createCategoryTitle" onclick="event.stopPropagation()"><div class="modal-head"><div><h2 id="createCategoryTitle">新建分类</h2><p class="panel-subtitle">填写分类名称即可创建，创建后可用于归属上传影像，并同步到学员端数据集。</p></div><button class="modal-close" type="button" aria-label="关闭新建分类" onclick="closeCreateCategoryModal()">×</button></div><div class="modal-body"><div class="grid"><div class="form-field full"><label for="catName">分类名称<span class="req">*必填</span></label><input class="input" id="catName" placeholder="例如：糖尿病视网膜病变增强数据集"></div><div class="form-field full"><label for="catDesc">描述<span class="req">可选</span></label><input class="input" id="catDesc" placeholder="简要说明该分类的影像来源与用途"></div></div><div class="button-row"><button class="btn primary" type="button" onclick="saveCategory()">保存分类</button><button class="btn" type="button" onclick="closeCreateCategoryModal()">取消</button></div></div></section></div>
+  <div class="modal-mask" id="viewCategoryMask" onclick="closeViewCategoryModal(event)"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="viewCategoryTitle" onclick="event.stopPropagation()"><div class="modal-head"><div><h2 id="viewCategoryTitle">分类影像</h2><p class="panel-subtitle" id="viewCategoryMeta"></p></div><button class="modal-close" type="button" aria-label="关闭查看" onclick="closeViewCategoryModal()">×</button></div><div class="modal-body" id="viewCategoryBody"></div></section></div>
+  <div class="modal-mask" id="certRuleMask" onclick="closeCertRuleModal(event)"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="certRuleTitle" onclick="event.stopPropagation()"><div class="modal-head"><div><h2 id="certRuleTitle">数据集认证规则</h2><p class="panel-subtitle">设置学生完成该数据集标注实训后自动获得实验认证的达标条件。</p></div><button class="modal-close" type="button" aria-label="关闭认证规则" onclick="closeCertRuleModal()">×</button></div><div class="modal-body"><div class="grid"><div class="form-field full"><label for="certRuleScore">达标分数（0-100）<span class="req">必填</span></label><input class="input" id="certRuleScore" type="number" min="0" max="100" placeholder="例如 80"></div><div class="form-field full"><label for="certRuleCount">达标张数（≥1）<span class="req">必填</span></label><input class="input" id="certRuleCount" type="number" min="1" placeholder="例如 2"></div></div><div class="button-row"><button class="btn primary" type="button" onclick="saveCertRule(currentCertRuleId)">保存规则</button><button class="btn" type="button" onclick="closeCertRuleModal()">取消</button></div></div></section></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script>
+    var ANNOTATION_IMAGES_KEY = 'life_med_annotation_images';
+    var annoPendingPreview = null;
+    var annoPendingAnswerPreview = null;
+    var DATASET_CAT_KEY = 'life_med_dataset_categories';
+    var DEFAULT_DATASET_CATS = [
+        { id: 'dr-screening', name: 'DR筛查数据集', desc: '眼底彩照 DR 分级标注', label: 'DR筛查数据集', batch: '', keyword: 'DR筛查', emptyText: '暂无DR筛查示例影像', createdAt: '', certRule: { requiredScore: 80, requiredCount: 3 } },
+        { id: 'glaucoma', name: '青光眼标注数据集', desc: '视盘结构标注', label: '青光眼标注数据集', batch: '', keyword: '青光眼', emptyText: '暂无青光眼示例影像', createdAt: '', certRule: { requiredScore: 75, requiredCount: 2 } },
+        { id: 'amd-oct', name: '黄斑病变OCT数据集', desc: 'OCT 黄斑区标注', label: '黄斑病变OCT数据集', batch: '', keyword: '黄斑病变', emptyText: '暂无黄斑病变OCT示例影像', createdAt: '', certRule: { requiredScore: 85, requiredCount: 2 } },
+        { id: 'vessel-seg', name: '血管分割训练集', desc: '视网膜血管分割', label: '血管分割训练集', batch: '', keyword: '血管分割', emptyText: '暂无血管分割示例影像', createdAt: '', certRule: { requiredScore: 78, requiredCount: 1 } }
+    ];
+    function loadDatasets() {
+        try {
+            var raw = localStorage.getItem(DATASET_CAT_KEY);
+            if (raw) { var parsed = JSON.parse(raw); if (Array.isArray(parsed) && parsed.length) return parsed; }
+        } catch (error) { }
+        localStorage.setItem(DATASET_CAT_KEY, JSON.stringify(DEFAULT_DATASET_CATS));
+        return DEFAULT_DATASET_CATS.slice();
+    }
+    function saveDatasets(list) { localStorage.setItem(DATASET_CAT_KEY, JSON.stringify(list)); }
+    function removeUploadedBucket() {
+        try {
+            var rawCats = localStorage.getItem(DATASET_CAT_KEY);
+            if (rawCats) {
+                var cats = JSON.parse(rawCats);
+                if (Array.isArray(cats) && cats.some(function (c) { return c.id === 'uploaded'; })) {
+                    localStorage.setItem(DATASET_CAT_KEY, JSON.stringify(cats.filter(function (c) { return c.id !== 'uploaded'; })));
+                }
+            }
+        } catch (error) { }
+        try {
+            var rawImgs = localStorage.getItem(ANNOTATION_IMAGES_KEY);
+            if (rawImgs) {
+                var imgs = JSON.parse(rawImgs);
+                if (Array.isArray(imgs) && imgs.some(function (i) { return i.datasetId === 'uploaded'; })) {
+                    localStorage.setItem(ANNOTATION_IMAGES_KEY, JSON.stringify(imgs.filter(function (i) { return i.datasetId !== 'uploaded'; })));
+                }
+            }
+        } catch (error) { }
+    }
+    function isDatasetAB(entry) {
+        if (!entry) return false;
+        var values = [entry.id, entry.name, entry.label].map(function (value) {
+            return String(value || '').replace(/\s+/g, '').toLowerCase();
+        });
+        return values.some(function (value) {
+            return value === 'a' || value === 'b' || value === '数据集a' || value === '数据集b' || value === 'dataseta' || value === 'datasetb' || value === 'dataset-a' || value === 'dataset-b';
+        });
+    }
+    function removeDatasetAB() {
+        var removedIds = [];
+        try {
+            var rawCats = localStorage.getItem(DATASET_CAT_KEY);
+            if (rawCats) {
+                var cats = JSON.parse(rawCats);
+                if (Array.isArray(cats)) {
+                    removedIds = cats.filter(isDatasetAB).map(function (entry) { return entry.id; });
+                    localStorage.setItem(DATASET_CAT_KEY, JSON.stringify(cats.filter(function (entry) { return !isDatasetAB(entry); })));
+                }
+            }
+        } catch (error) { }
+        try {
+            var rawImgs = localStorage.getItem(ANNOTATION_IMAGES_KEY);
+            if (rawImgs) {
+                var imgs = JSON.parse(rawImgs);
+                if (Array.isArray(imgs)) {
+                    localStorage.setItem(ANNOTATION_IMAGES_KEY, JSON.stringify(imgs.filter(function (item) {
+                        return removedIds.indexOf(item.datasetId) === -1 && !isDatasetAB({ id: item.datasetId, name: item.datasetId, label: item.datasetId });
+                    })));
+                }
+            }
+        } catch (error) { }
+    }
+    removeUploadedBucket();
+    removeDatasetAB();
+    var DATASETS = loadDatasets();
+    DEFAULT_DATASET_CATS.forEach(function (def) {
+        if (!def.certRule) return;
+        var existing = DATASETS.filter(function (d) { return d.id === def.id; })[0];
+        if (existing && !existing.certRule) { existing.certRule = def.certRule; }
+    });
+    saveDatasets(DATASETS);
+    var datasetLabels = {};
+    DATASETS.forEach(function (ds) { datasetLabels[ds.id] = ds.label; });
+    function readAnnotationImages() { var list = []; try { list = JSON.parse(localStorage.getItem(ANNOTATION_IMAGES_KEY) || '[]'); } catch (error) { list = []; } return Array.isArray(list) ? list : []; }
+    function escapeHtml(value) { return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+    function parseAnnotationKeywords(value) { return String(value || '').split(/[，,、\n]+/).map(function (item) { return item.trim(); }).filter(Boolean); }
+    function getAnnotationAnswer(item) { if (item && item.standardAnswer) return item.standardAnswer; return { disease:'', level:'', keywords:[], example:item && item.answer ? item.answer : '' }; }
+    function formatAnnotationAnswer(item) { var answer = getAnnotationAnswer(item); var parts = []; if (answer.disease) parts.push('疾病分类：' + answer.disease); if (answer.level) parts.push('病情程度 / 结果：' + answer.level); if (answer.keywords && answer.keywords.length) parts.push('关键标注：' + answer.keywords.join('、')); if (answer.example) parts.push('答案说明：' + answer.example); return parts.join('；') || '未填写'; }
+    function formatDate(value) { var date = new Date(value || Date.now()); if (Number.isNaN(date.getTime())) return '-'; return date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2); }
+    function showToast(message) { var toast = document.getElementById('toast'); toast.textContent = message; toast.classList.add('show'); window.clearTimeout(showToast.timer); showToast.timer = window.setTimeout(function () { toast.classList.remove('show'); }, 2600); }
+    function openUploadModal() { var mask = document.getElementById('uploadMask'); if (!mask) return; mask.classList.add('open'); mask.setAttribute('aria-hidden','false'); }
+    function closeUploadModal(event) { var mask = document.getElementById('uploadMask'); if (!mask) return; if (event && event.target !== mask) return; mask.classList.remove('open'); mask.setAttribute('aria-hidden','true'); }
+    function previewAnnotationImage(input, targetId) { var target = document.getElementById(targetId); var file = input.files && input.files[0]; if (!target || !file) return; var reader = new FileReader(); reader.onload = function (event) { var dataUrl = event.target.result; target.innerHTML = '<img src="' + escapeHtml(dataUrl) + '" alt="医学影像预览">'; var image = new Image(); image.onload = function () { var preview = { dataUrl:dataUrl, width:image.naturalWidth, height:image.naturalHeight }; if (targetId === 'annoAnswerPreview') annoPendingAnswerPreview = preview; else annoPendingPreview = preview; }; image.src = dataUrl; }; reader.readAsDataURL(file); }
+    function resetAnnotationUpload() { ['annoFileInput','annoAnswerImageInput'].forEach(function (id) { var input = document.getElementById(id); if (input) input.value = ''; var nameEl = input && input.parentNode ? input.parentNode.querySelector('.file-trigger-name') : null; if (nameEl) nameEl.textContent = nameEl.dataset.placeholder || '未选择文件'; }); ['annoDisease','annoLevel','annoKeywords','annoExplanation'].forEach(function (id) { var field = document.getElementById(id); if (field) field.value = ''; }); document.getElementById('annoPreview').textContent = '选择训练影像后显示预览'; document.getElementById('annoAnswerPreview').textContent = '选择标准答案标注图后显示预览'; annoPendingPreview = null; annoPendingAnswerPreview = null; }
+    function saveAnnotationImage() { if (!annoPendingPreview) { showToast('请先选择训练影像'); return; } if (!annoPendingAnswerPreview) { showToast('请先选择标准答案标注图'); return; } var disease = document.getElementById('annoDisease').value.trim(); var level = document.getElementById('annoLevel').value.trim(); var keywords = parseAnnotationKeywords(document.getElementById('annoKeywords').value); var example = document.getElementById('annoExplanation').value.trim(); if (!disease || !level || !keywords.length || !example) { showToast('请完整填写标准答案结果'); return; } var input = document.getElementById('annoFileInput'); var standardAnswer = { disease:disease, level:level, keywords:keywords, example:example }; var list = readAnnotationImages(); list.push({ id:'img_' + Date.now() + '_' + Math.floor(Math.random()*1000), name:input.files && input.files[0] ? input.files[0].name : ('标注影像_' + Date.now()), dataUrl:annoPendingPreview.dataUrl, width:annoPendingPreview.width || 0, height:annoPendingPreview.height || 0, datasetId:document.getElementById('annoDataset').value, standardAnswerImage:{ dataUrl:annoPendingAnswerPreview.dataUrl, width:annoPendingAnswerPreview.width || 0, height:annoPendingAnswerPreview.height || 0 }, standardAnswer:standardAnswer, answer:formatAnnotationAnswer({ standardAnswer:standardAnswer }), createdAt:new Date().toISOString() }); localStorage.setItem(ANNOTATION_IMAGES_KEY, JSON.stringify(list)); resetAnnotationUpload(); loadAnnotationImages(); showToast('已保存到图库，上传记录仅支持查看'); closeUploadModal(); }
+    function loadAnnotationImages() {
+        var all = readAnnotationImages();
+        var list = annoFilterDataset ? all.filter(function (item) { return item.datasetId === annoFilterDataset; }) : all;
+        document.getElementById('annoCount').textContent = list.length;
+        var tbody = document.getElementById('annoImageTable');
+        if (!list.length) { tbody.innerHTML = '<tr><td class="empty" colspan="8">' + (all.length ? '没有符合筛选条件的影像，调整条件或上传新影像。' : '暂无上传影像，上传后将用于数据标注与 AI 实训。') + '</td></tr>'; return; }
+        tbody.innerHTML = list.map(function (item, index) { return '<tr><td style="text-align:center;color:#8a94a6;width:52px;white-space:nowrap;">' + (index + 1) + '</td><td><img class="thumb-img" src="' + escapeHtml(item.dataUrl || '') + '" alt="缩略图"></td><td>' + escapeHtml(item.name || '未命名') + '</td><td><span class="status">' + escapeHtml(datasetLabels[item.datasetId] || item.datasetId || '未归类') + '</span></td><td>' + escapeHtml(item.width || '-') + ' × ' + escapeHtml(item.height || '-') + '</td><td>' + formatDate(item.createdAt) + '</td><td class="answer-cell">' + escapeHtml(formatAnnotationAnswer(item)) + '</td><td><button class="btn small" type="button" onclick="openPreview(\'' + escapeHtml(item.id) + '\')">查看</button></td></tr>'; }).join('');
+    }
+    function openPreview(id) { var item = readAnnotationImages().filter(function (entry) { return entry.id === id; })[0]; if (!item) { showToast('未找到该影像'); return; } var answerImage = item.standardAnswerImage && (item.standardAnswerImage.dataUrl || item.standardAnswerImage); document.getElementById('previewTitle').textContent = item.name || '影像预览'; document.getElementById('previewMeta').textContent = (datasetLabels[item.datasetId] || item.datasetId || '未归类') + ' · ' + (item.width || '-') + ' × ' + (item.height || '-'); document.getElementById('previewBody').innerHTML = '<div class="modal-grid"><div><strong>当前影像</strong><img class="modal-image" style="margin-top:8px;" src="' + escapeHtml(item.dataUrl || '') + '" alt="当前影像"></div><div><strong>标准答案标注图</strong>' + (answerImage ? '<img class="modal-image" style="margin-top:8px;" src="' + escapeHtml(answerImage) + '" alt="标准答案标注图">' : '<div class="image-preview">暂无标准答案标注图</div>') + '</div></div><div class="answer-box"><strong>标准答案结果</strong>' + escapeHtml(formatAnnotationAnswer(item)) + '</div>'; document.getElementById('previewMask').classList.add('open'); }
+    function closePreview(event) { if (event && event.target !== document.getElementById('previewMask')) return; document.getElementById('previewMask').classList.remove('open'); }
+    document.getElementById('annoFileInput').addEventListener('change', function () { previewAnnotationImage(this, 'annoPreview'); });
+    document.getElementById('annoAnswerImageInput').addEventListener('change', function () { previewAnnotationImage(this, 'annoAnswerPreview'); });
+    function bindFileTrigger(input) {
+        var nameEl = input.parentNode.querySelector('.file-trigger-name');
+        if (!nameEl) return;
+        input.addEventListener('change', function () {
+            nameEl.textContent = (input.files && input.files[0]) ? input.files[0].name : (nameEl.dataset.placeholder || '未选择文件');
+        });
+    }
+    bindFileTrigger(document.getElementById('annoFileInput'));
+    bindFileTrigger(document.getElementById('annoAnswerImageInput'));
+    document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closePreview(); closeUploadModal(); closeCreateCategoryModal(); closeViewCategoryModal(); closeCertRuleModal(); closeImportPlatformModal(); } });
+    var annoFilterDataset = '';
+    function populateDatasetSelect() {
+        datasetLabels = {};
+        DATASETS.forEach(function (ds) { datasetLabels[ds.id] = ds.label; });
+        var sel = document.getElementById('annoDataset');
+        if (sel) sel.innerHTML = DATASETS.map(function (ds) { return '<option value="' + ds.id + '">' + ds.label + ' · ' + ds.desc + '</option>'; }).join('');
+        var fsel = document.getElementById('annoFilterDataset');
+        if (fsel) fsel.innerHTML = '<option value="">全部数据集</option>' + DATASETS.map(function (ds) { return '<option value="' + ds.id + '">' + ds.label + '</option>'; }).join('');
+    }
+    populateDatasetSelect();
+    (function bindFilterEvents() {
+        var fsel = document.getElementById('annoFilterDataset');
+        if (fsel) fsel.addEventListener('change', function () { annoFilterDataset = this.value; loadAnnotationImages(); });
+    })();
+    loadAnnotationImages();
+    function switchAdminTab(tab) {
+        var tabs = document.querySelectorAll('.page-tab');
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === tab);
+        document.getElementById('panelImages').style.display = tab === 'images' ? '' : 'none';
+        document.getElementById('panelDatasets').style.display = tab === 'datasets' ? '' : 'none';
+        if (tab === 'datasets') renderCategoryList();
+    }
+    function renderCategoryList() {
+        var tbody = document.getElementById('categoryList');
+        if (!tbody) return;
+        var images = readAnnotationImages();
+        if (!DATASETS.length) { tbody.innerHTML = '<tr><td class="empty" colspan="5">暂无分类</td></tr>'; return; }
+        tbody.innerHTML = DATASETS.map(function (ds) {
+            var count = images.filter(function (item) { return item.datasetId === ds.id; }).length;
+            var createdAt = ds.createdAt ? formatDate(ds.createdAt) : '—';
+            var actions = '<button class="btn small" type="button" onclick="viewCategory(\'' + ds.id + '\')">查看</button>';
+            actions += ' <button class="btn small" type="button" onclick="openCertRuleModal(\'' + ds.id + '\')">认证规则</button>';
+            if (count === 0) actions += ' <button class="btn small" type="button" onclick="deleteCategory(\'' + ds.id + '\')">删除</button>';
+            var ruleText = ds.certRule
+                ? ('认证规则：达标 ' + ds.certRule.requiredScore + ' 分 / 需 ' + ds.certRule.requiredCount + ' 张')
+                : '未配置认证规则';
+            return '<tr><td>' + escapeHtml(ds.name) + '</td><td>' + count + ' 张</td><td>' + escapeHtml(createdAt) + '</td><td>' + escapeHtml(ds.desc || '') + '<br><span class="cert-rule-hint">' + escapeHtml(ruleText) + '</span></td><td>' + actions + '</td></tr>';
+        }).join('');
+    }
+    function openCreateCategoryModal() {
+        var mask = document.getElementById('createCategoryMask');
+        if (!mask) return;
+        var nameInput = document.getElementById('catName');
+        var descInput = document.getElementById('catDesc');
+        if (nameInput) nameInput.value = '';
+        if (descInput) descInput.value = '';
+        mask.classList.add('open');
+    }
+    function closeCreateCategoryModal(event) {
+        var mask = document.getElementById('createCategoryMask');
+        if (!mask) return;
+        if (event && event.target !== mask) return;
+        mask.classList.remove('open');
+    }
+    function saveCategory() {
+        var nameInput = document.getElementById('catName');
+        var descInput = document.getElementById('catDesc');
+        if (!nameInput) return;
+        var name = nameInput.value.trim();
+        var desc = descInput ? descInput.value.trim() : '';
+        if (!name) { showToast('请填写分类名称'); return; }
+        DATASETS.push({ id: 'cat-' + Date.now(), name: name, desc: desc, label: name, batch: '', keyword: '', emptyText: '暂无' + name + '示例影像', createdAt: new Date().toISOString() });
+        saveDatasets(DATASETS);
+        populateDatasetSelect();
+        renderCategoryList();
+        closeCreateCategoryModal();
+        showToast('已新建分类「' + name + '」，已同步到学员端数据集');
+    }
+    function viewCategory(id) {
+        var ds = DATASETS.filter(function (entry) { return entry.id === id; })[0];
+        var list = readAnnotationImages().filter(function (item) { return item.datasetId === id; });
+        document.getElementById('viewCategoryTitle').textContent = (ds ? ds.name : '分类') + ' · 影像';
+        document.getElementById('viewCategoryMeta').textContent = '共 ' + list.length + ' 张影像';
+        var body = document.getElementById('viewCategoryBody');
+        if (!list.length) { body.innerHTML = '<div class="empty">该分类暂无影像，上传时选择此数据集即可归入。</div>'; }
+        else { body.innerHTML = '<div class="table-wrap"><table><thead><tr><th>缩略图</th><th>名称</th><th>尺寸</th><th>上传时间</th></tr></thead><tbody>' + list.map(function (item) { return '<tr><td><img class="thumb-img" src="' + escapeHtml(item.dataUrl || '') + '" alt="缩略图"></td><td>' + escapeHtml(item.name || '未命名') + '</td><td>' + escapeHtml(item.width || '-') + ' × ' + escapeHtml(item.height || '-') + '</td><td>' + formatDate(item.createdAt) + '</td></tr>'; }).join('') + '</tbody></table></div>'; }
+        document.getElementById('viewCategoryMask').classList.add('open');
+    }
+    function closeViewCategoryModal(event) {
+        var mask = document.getElementById('viewCategoryMask');
+        if (!mask) return;
+        if (event && event.target !== mask) return;
+        mask.classList.remove('open');
+    }
+    var currentCertRuleId = '';
+    function openCertRuleModal(id) {
+        var ds = DATASETS.filter(function (entry) { return entry.id === id; })[0];
+        if (!ds) return;
+        currentCertRuleId = id;
+        var scoreInput = document.getElementById('certRuleScore');
+        var countInput = document.getElementById('certRuleCount');
+        if (scoreInput) scoreInput.value = ds.certRule ? ds.certRule.requiredScore : 80;
+        if (countInput) countInput.value = ds.certRule ? ds.certRule.requiredCount : 2;
+        var mask = document.getElementById('certRuleMask');
+        if (mask) mask.classList.add('open');
+    }
+    function saveCertRule(id) {
+        var ds = DATASETS.filter(function (entry) { return entry.id === id; })[0];
+        if (!ds) return;
+        var score = Number(document.getElementById('certRuleScore').value);
+        var count = Number(document.getElementById('certRuleCount').value);
+        if (!(score >= 0 && score <= 100)) { showToast('达标分数需在 0-100 之间'); return; }
+        if (!(count >= 1)) { showToast('达标张数需 ≥ 1'); return; }
+        ds.certRule = { requiredScore: score, requiredCount: count };
+        saveDatasets(DATASETS);
+        renderCategoryList();
+        closeCertRuleModal();
+        showToast('已保存「' + ds.name + '」的认证规则');
+    }
+    function closeCertRuleModal(event) {
+        var mask = document.getElementById('certRuleMask');
+        if (!mask) return;
+        if (event && event.target !== mask) return;
+        mask.classList.remove('open');
+    }
+    function deleteCategory(id) {
+        var ds = DATASETS.filter(function (entry) { return entry.id === id; })[0];
+        if (!ds) return;
+        var hasImages = readAnnotationImages().some(function (item) { return item.datasetId === id; });
+        if (hasImages) { showToast('该分类已有影像，仅支持查看，不可删除'); return; }
+        if (!window.confirm('确定删除分类「' + (ds.name || id) + '」？此操作仅移除分类，不影响影像。')) return;
+        DATASETS = DATASETS.filter(function (entry) { return entry.id !== id; });
+        saveDatasets(DATASETS);
+        populateDatasetSelect();
+        renderCategoryList();
+        showToast('已删除分类「' + (ds.name || id) + '」');
+    }
+  </script>
+</body>
+</html>

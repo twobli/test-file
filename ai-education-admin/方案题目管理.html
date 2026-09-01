@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>方案题目管理</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #fff;
+      --text: #172234;
+      --muted: #6b7280;
+      --line: #dce5ef;
+      --primary: #1769c2;
+      --primary-dark: #0f4f98;
+      --sidebar: #102033;
+      --sidebar-text: #cfe1f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+      letter-spacing: 0;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 18px 14px;
+      color: var(--sidebar-text);
+      background: var(--sidebar);
+      border-right: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 10px 18px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, #1e88e5, #00a896);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .brand-title {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand-title strong {
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .brand-title span {
+      color: #a9bdd6;
+      font-size: 12px;
+    }
+
+    .nav-group-title {
+      padding: 14px 10px 8px;
+      color: #8fb0d3;
+      font-size: 12px;
+    }
+
+    .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      margin: 3px 0;
+      padding: 10px 12px;
+      color: var(--sidebar-text);
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .nav-item.active {
+      color: #102033;
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .nav-item.child {
+      padding-left: 28px;
+      font-size: 13px;
+    }
+
+    .nav-icon {
+      width: 18px;
+      color: currentColor;
+      text-align: center;
+    }
+
+    .content {
+      min-width: 0;
+      padding: 28px 34px 44px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    .page-copy {
+      min-width: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      color: var(--text);
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .page-desc {
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .panel {
+      min-width: 0;
+      margin-bottom: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 28px rgba(31, 42, 55, .07);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid #e5ebf2;
+      flex-wrap: wrap;
+    }
+
+    .panel-title {
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .panel-subtitle {
+      margin-top: 7px;
+      color: #7a8798;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-field {
+      min-width: 0;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #41556d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .req {
+      margin-left: 6px;
+      color: #c62828;
+      font-weight: 400;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 12px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid #d7e1ec;
+      border-radius: 10px;
+      outline: 0;
+    }
+
+    textarea.input {
+      min-height: 80px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .input:focus,
+    .select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(23, 105, 194, .12);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 14px;
+      color: #334155;
+      background: #fff;
+      border: 1px solid #d1dce8;
+      border-radius: 9px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      color: var(--primary-dark);
+      background: #f6faff;
+      border-color: #b8cde3;
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 10px 22px rgba(23, 105, 194, .18);
+    }
+
+    .btn.primary:hover {
+      color: #fff;
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
+    .btn.small {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+
+    .btn.danger {
+      color: #b42318;
+      border-color: #f1c4bc;
+    }
+
+    .btn.danger:hover {
+      color: #fff;
+      background: #d6453a;
+      border-color: #d6453a;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 15px 18px;
+      border-bottom: 1px solid #e8eef5;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      height: 54px;
+      color: #526276;
+      background: #f4f8fc;
+      border-bottom-color: #dfe8f1;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .stem-cell {
+      max-width: 340px;
+      color: #475569;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .diff-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .diff-基础 {
+      color: #2f8f5b;
+      background: #e7f6ee;
+      border: 1px solid #bfe6cf;
+    }
+
+    .diff-进阶 {
+      color: #1d6ac1;
+      background: #eaf3ff;
+      border: 1px solid #cfe3fb;
+    }
+
+    .diff-高阶 {
+      color: #b4561d;
+      background: #fdf0e3;
+      border: 1px solid #f3d9bd;
+    }
+
+    .cat-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .cat-classification {
+      color: #1d6ac1;
+      background: #eaf3ff;
+      border: 1px solid #cfe3fb;
+    }
+
+    .cat-segmentation {
+      color: #b06000;
+      background: #fef7e0;
+      border: 1px solid #f3d9bd;
+    }
+
+    .empty {
+      padding: 30px 16px;
+      color: #8895a7;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 40;
+      max-width: min(460px, calc(100vw - 44px));
+      padding: 11px 14px;
+      color: #fff;
+      background: #1f2937;
+      border-radius: 8px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .2);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: 28px;
+      background: rgba(15, 23, 42, .6);
+    }
+
+    .modal-mask.open {
+      display: grid;
+    }
+
+    .modal {
+      width: min(960px, 100%);
+      max-height: calc(100vh - 56px);
+      overflow: auto;
+      background: #fff;
+      border: 1px solid #dbe5f0;
+      border-radius: 16px;
+      box-shadow: 0 28px 64px rgba(15, 23, 42, .22);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid #e6edf5;
+      background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+      position: sticky;
+      top: 0;
+    }
+
+    .modal-head h2 {
+      color: var(--text);
+      font-size: 22px;
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      color: #64748b;
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 22px 24px 24px;
+    }
+
+    .answer-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      color: #243b53;
+      background: #f3f8ff;
+      border: 1px solid #d7e6fb;
+      border-radius: 8px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .answer-box strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #1a4f8a;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .hint {
+      margin-top: 6px;
+      color: #7a8798;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* ---- 选择题编辑 ---- */
+    .q-editor {
+      border: 1px solid #e2e9f1;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      background: #fbfdff;
+    }
+
+    .q-editor-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .q-editor-head strong {
+      color: #1d4e89;
+      font-size: 14px;
+    }
+
+    .opt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .opt-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .opt-item .opt-letter {
+      width: 26px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      background: #e8f0fe;
+      color: #1769c2;
+      border-radius: 8px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .opt-item .input {
+      min-height: 34px;
+    }
+
+    .q-row {
+      display: grid;
+      grid-template-columns: 160px 120px;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .q-meta-line {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #7a8798;
+    }
+
+    @media (max-width:980px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      .content {
+        padding: 22px 20px 36px;
+      }
+
+      .page-head {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width:720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-field.full {
+        grid-column: auto;
+      }
+
+      .modal-mask {
+        padding: 14px;
+      }
+
+      .opt-grid,
+      .q-row {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+    }
+      .section-actionbar { display:flex; justify-content:flex-end; align-items:center; margin:0 0 12px; gap:10px; }
+</style>
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="../app-center.html"><span class="brand-mark">AI</span><span
+          class="brand-title"><strong>生命医学管理后台</strong><span>独立运营管理系统</span></span></a>
+      <div class="nav-group-title">业务工作台</div>
+      <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
+      <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
+      <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
+      <a class="nav-item child" href="虚拟临床技能实训管理.html"><span class="nav-icon">01</span>虚拟临床技能实训</a>
+      <a class="nav-item child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
+      <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
+      <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
+      <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
+      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
+      <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
+      <a class="nav-item" href="标注图像管理.html"><span class="nav-icon">⊞</span>标注图像管理</a>
+      <a class="nav-item active" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
+    </aside>
+    <main class="content">
+      <div class="page-head">
+        <div class="page-copy">
+          <p class="eyebrow">LIFE MEDICINE AI EDUCATION ADMIN</p>
+          <h1>方案题目管理</h1>
+          <p class="page-desc">维护「模型训练实训」中使用的选择题集：每套题对应一种疾病（图像分类 / 图像分割），包含若干道单选题（题干、4 个选项、正确答案、分值、解析）。支持新增 / 编辑 / 删除 /
+            预览，学员端实时同步。</p>
+        </div>
+      </div>
+      <div class="section-actionbar"><button class="btn primary" type="button" onclick="openEditModal()">新增选择题集</button></div>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">选择题集列表</h2>
+            <p class="panel-subtitle">共 <strong id="schemeCount">0</strong> 套选择题集。</p>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+            <div class="form-field" style="margin:0;min-width:220px;"><label for="schemeSearch"
+                style="margin-bottom:6px;">搜索</label><input class="input" id="schemeSearch" placeholder="按名称筛选"
+                oninput="renderSchemeTable()"></div>
+            <div class="form-field" style="margin:0;min-width:150px;"><label for="schemeDifficultyFilter"
+                style="margin-bottom:6px;">难度</label><select class="select" id="schemeDifficultyFilter"
+                onchange="renderSchemeTable()">
+                <option value="">全部难度</option>
+                <option value="基础">基础</option>
+                <option value="进阶">进阶</option>
+                <option value="高阶">高阶</option>
+              </select></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>题集名称</th>
+                <th>类型</th>
+                <th>难度</th>
+                <th>题数</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="schemeTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 新增 / 编辑 弹窗 -->
+  <div class="modal-mask" id="editMask" aria-hidden="true" onclick="closeEditModal(event)">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle"
+      onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <div>
+          <h2 id="editTitle">新增选择题集</h2>
+          <p class="panel-subtitle">每套题对应一种疾病，建议 10 道单选题，围绕该疾病的模型训练展开。</p>
+        </div><button class="modal-close" type="button" aria-label="关闭" onclick="closeEditModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editOriginalKey" value="">
+        <div class="grid">
+          <div class="form-field full"><label for="schemeTitle">题集名称（疾病名）<span class="req">*必填</span></label><input
+              class="input" id="schemeTitle" placeholder="如 DR 筛查（微血管瘤检测）"></div>
+          <div class="form-field"><label for="schemeCategory">类型</label><select class="select" id="schemeCategory">
+              <option value="classification">图像分类</option>
+              <option value="segmentation">图像分割</option>
+            </select></div>
+          <div class="form-field"><label for="schemeDifficulty">难度</label><select class="select" id="schemeDifficulty">
+              <option>基础</option>
+              <option>进阶</option>
+              <option selected>高阶</option>
+            </select></div>
+        </div>
+        <div class="form-field full" style="margin-top:14px;"><label>题目（单选题）</label>
+          <div id="questionList"></div>
+          <button class="btn small" type="button" onclick="addQuestionRow()" style="margin-top:6px;">+ 添加题目</button>
+        </div>
+        <div class="button-row">
+          <button class="btn primary" type="button" onclick="saveScheme()">保存选择题集</button>
+          <button class="btn" type="button" onclick="closeEditModal()">取消</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 预览 弹窗 -->
+  <div class="modal-mask" id="previewMask" aria-hidden="true" onclick="closePreviewModal(event)">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle"
+      onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <div>
+          <h2 id="previewTitle">选择题集预览</h2>
+        </div><button class="modal-close" type="button" aria-label="关闭" onclick="closePreviewModal()">×</button>
+      </div>
+      <div class="modal-body" id="previewBody"></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var SCHEME_BANK_KEY = 'life_med_admin_scheme_bank';
+    // 后台示例选择题集：只保留当前两套基础题
+    var SEED_SCHEMES = [
+      {
+        taskKey: 'medical-classification-basics', title: '医学图像分类基础', category: 'classification', difficulty: '基础', knowledge: '模型训练基础',
+        questions: [
+          { id: 'medical-classification-basics-q1', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', score: 10, explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
+          { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', score: 10, explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
+          { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', score: 10, explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
+          { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', score: 10, explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
+          { id: 'medical-classification-basics-q5', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', score: 10, explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
+          { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', score: 10, explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
+          { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', score: 10, explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
+          { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', score: 10, explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
+          { id: 'medical-classification-basics-q9', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', score: 10, explain: '灵敏度反映模型发现阳性病例的能力。' },
+          { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', score: 10, explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
+        ]
+      },
+      {
+        taskKey: 'medical-segmentation-basics', title: '医学图像分割基础', category: 'segmentation', difficulty: '基础', knowledge: '模型训练基础',
+        questions: [
+          { id: 'medical-segmentation-basics-q1', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', score: 10, explain: '分割任务重点是定位目标区域并描述其范围。' },
+          { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', score: 10, explain: '分割结果一般是每个像素属于目标或背景的标记。' },
+          { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', score: 10, explain: '分割需要明确目标结构的具体轮廓和边界。' },
+          { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', score: 10, explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
+          { id: 'medical-segmentation-basics-q5', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', score: 10, explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
+          { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', score: 10, explain: '分割掩码必须与图像保持一致的空间变换。' },
+          { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', score: 10, explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
+          { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', score: 10, explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
+          { id: 'medical-segmentation-basics-q9', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', score: 10, explain: '小目标前景稀少，模型更容易忽略。' },
+          { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', score: 10, explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
+        ]
+      }
+    ];
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+    function showToast(message) {
+      var toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(function () { toast.classList.remove('show'); }, 2600);
+    }
+    function readSchemeBank() {
+      try {
+        var raw = localStorage.getItem(SCHEME_BANK_KEY);
+        if (raw) {
+          var p = JSON.parse(raw);
+          if (Array.isArray(p)) {
+            var allowed = {};
+            SEED_SCHEMES.forEach(function (seed) { if (seed && seed.taskKey) allowed[seed.taskKey] = true; });
+            return p.filter(function (item) { return item && item.taskKey && allowed[item.taskKey]; });
+          }
+        }
+      } catch (e) { }
+      return [];
+    }
+    function writeSchemeBank(list) {
+      try { localStorage.setItem(SCHEME_BANK_KEY, JSON.stringify(list)); } catch (e) { }
+    }
+    function ensureSeed() {
+      var list = readSchemeBank();
+      var allowed = {};
+      SEED_SCHEMES.forEach(function (seed) { if (seed && seed.taskKey) allowed[seed.taskKey] = true; });
+      list = list.filter(function (item) { return item && item.taskKey && allowed[item.taskKey]; });
+      var map = {};
+      list.forEach(function (item) {
+        if (item && item.taskKey) map[item.taskKey] = item;
+      });
+      var merged = [];
+      var changed = false;
+      SEED_SCHEMES.forEach(function (seed) {
+        if (!seed || !seed.taskKey) return;
+        if (!map[seed.taskKey]) {
+          merged.push(seed);
+          changed = true;
+        } else {
+          merged.push(map[seed.taskKey]);
+        }
+      });
+      if (changed || merged.length !== list.length) writeSchemeBank(merged);
+    }
+    function categoryLabel(cat) { return cat === 'segmentation' ? '图像分割' : '图像分类'; }
+
+    function renderSchemeTable() {
+      var list = readSchemeBank();
+      var kw = (val('schemeSearch') || '').trim().toLowerCase();
+      var difficulty = val('schemeDifficultyFilter') || '';
+      if (kw) {
+        list = list.filter(function (e) { return (e.title || '').toLowerCase().indexOf(kw) >= 0; });
+      }
+      if (difficulty) {
+        list = list.filter(function (e) { return (e.difficulty || '高阶') === difficulty; });
+      }
+      var tbody = document.getElementById('schemeTable');
+      document.getElementById('schemeCount').textContent = readSchemeBank().length;
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无选择题集，点击右上角「新增选择题集」创建。</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(function (e) {
+        var diffCls = 'diff-' + (e.difficulty || '高阶');
+        var catCls = e.category === 'segmentation' ? 'cat-segmentation' : 'cat-classification';
+        var cnt = Array.isArray(e.questions) ? e.questions.length : 0;
+        return '<tr>' +
+          '<td><strong>' + escapeHtml(e.title) + '</strong></td>' +
+          '<td><span class="cat-tag ' + catCls + '">' + escapeHtml(categoryLabel(e.category)) + '</span></td>' +
+          '<td><span class="diff-tag ' + diffCls + '">' + escapeHtml(e.difficulty || '高阶') + '</span></td>' +
+          '<td>' + cnt + ' 题</td>' +
+          '<td><div class="table-actions" style="display:flex;gap:8px;">' +
+          '<button class="btn small" type="button" onclick="openPreviewModal(\'' + escapeHtml(e.taskKey) + '\')">预览</button>' +
+          '<button class="btn small" type="button" onclick="openEditModal(\'' + escapeHtml(e.taskKey) + '\')">编辑</button>' +
+          '<button class="btn small danger" type="button" onclick="deleteScheme(\'' + escapeHtml(e.taskKey) + '\')">删除</button>' +
+          '</div></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    /* ---- 题目编辑器 ---- */
+    var editingQuestions = [];
+    function blankQuestion() {
+      return { id: '', q: '', options: ['', '', '', ''], answer: 'A', score: 10, explain: '' };
+    }
+    function renderQuestionEditors() {
+      var box = document.getElementById('questionList');
+      if (!box) return;
+      box.innerHTML = editingQuestions.map(function (q, i) {
+        var letters = ['A', 'B', 'C', 'D'];
+        var opts = letters.map(function (L, oi) {
+          return '<div class="opt-item"><span class="opt-letter">' + L + '</span><input class="input" id="q_opt_' + i + '_' + oi + '" placeholder="选项 ' + L + '" value="' + escapeHtml(q.options[oi] || '') + '"></div>';
+        }).join('');
+        var ansOpts = letters.map(function (L) {
+          return '<option value="' + L + '"' + (q.answer === L ? ' selected' : '') + '>' + L + '</option>';
+        }).join('');
+        return '<div class="q-editor" data-qidx="' + i + '">' +
+          '<div class="q-editor-head"><strong>第 ' + (i + 1) + ' 题</strong>' +
+          '<button class="btn small danger" type="button" onclick="removeQuestionRow(' + i + ')">删除此题</button></div>' +
+          '<div class="form-field full"><label>题干</label><textarea class="input" id="q_stem_' + i + '" placeholder="请输入题干">' + escapeHtml(q.q) + '</textarea></div>' +
+          '<label style="margin-top:8px;">选项（A-D）</label><div class="opt-grid">' + opts + '</div>' +
+          '<div class="q-row">' +
+          '<div class="form-field"><label>正确答案</label><select class="select" id="q_ans_' + i + '">' + ansOpts + '</select></div>' +
+          '<div class="form-field"><label>分值</label><input class="input" id="q_score_' + i + '" type="number" min="1" value="' + (Number(q.score) || 10) + '"></div>' +
+          '</div>' +
+          '<div class="form-field full" style="margin-top:10px;"><label>解析</label><textarea class="input" id="q_explain_' + i + '" placeholder="提交后展示给学员的解析">' + escapeHtml(q.explain) + '</textarea></div>' +
+          '</div>';
+      }).join('');
+    }
+    function syncEditingFromDom() {
+      editingQuestions = editingQuestions.map(function (q, i) {
+        var stem = document.getElementById('q_stem_' + i);
+        var ans = document.getElementById('q_ans_' + i);
+        var score = document.getElementById('q_score_' + i);
+        var explain = document.getElementById('q_explain_' + i);
+        var opts = [0, 1, 2, 3].map(function (oi) {
+          var el = document.getElementById('q_opt_' + i + '_' + oi);
+          return el ? el.value : '';
+        });
+        return {
+          id: q.id || '',
+          q: stem ? stem.value : q.q,
+          options: opts,
+          answer: ans ? ans.value : q.answer,
+          score: score ? Number(score.value) || 10 : q.score,
+          explain: explain ? explain.value : q.explain
+        };
+      });
+    }
+    function addQuestionRow() {
+      syncEditingFromDom();
+      editingQuestions.push(blankQuestion());
+      renderQuestionEditors();
+    }
+    function removeQuestionRow(i) {
+      syncEditingFromDom();
+      editingQuestions.splice(i, 1);
+      if (!editingQuestions.length) editingQuestions.push(blankQuestion());
+      renderQuestionEditors();
+    }
+
+    /* ---- 新增 / 编辑 ---- */
+    function generateSchemeKey() {
+      var ts = Date.now().toString(36);
+      var rand = Math.floor(Math.random() * 36 * 36).toString(36).padStart(2, '0');
+      return 'custom-' + ts + rand;
+    }
+    function openEditModal(taskKey) {
+      var mask = document.getElementById('editMask');
+      if (!mask) return;
+      var editing = null;
+      if (taskKey) {
+        var list = readSchemeBank();
+        for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { editing = list[i]; break; } }
+      }
+      document.getElementById('editTitle').textContent = editing ? '编辑选择题集' : '新增选择题集';
+      document.getElementById('editOriginalKey').value = editing ? editing.taskKey : '';
+      document.getElementById('schemeTitle').value = editing ? (editing.title || '') : '';
+      document.getElementById('schemeCategory').value = editing ? (editing.category || 'classification') : 'classification';
+      document.getElementById('schemeDifficulty').value = editing ? (editing.difficulty || '高阶') : '高阶';
+      if (editing && Array.isArray(editing.questions) && editing.questions.length) {
+        editingQuestions = editing.questions.map(function (q) {
+          return { id: q.id || '', q: q.q || '', options: (Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', '']), answer: String(q.answer || 'A').toUpperCase(), score: Number(q.score) || 10, explain: q.explain || '' };
+        });
+      } else {
+        editingQuestions = [];
+        for (var k = 0; k < 10; k++) editingQuestions.push(blankQuestion());
+      }
+      renderQuestionEditors();
+      mask.classList.add('open');
+      mask.setAttribute('aria-hidden', 'false');
+    }
+    function closeEditModal(event) {
+      var mask = document.getElementById('editMask');
+      if (!mask) return;
+      if (event && event.target !== mask) return;
+      mask.classList.remove('open');
+      mask.setAttribute('aria-hidden', 'true');
+    }
+    function saveScheme() {
+      syncEditingFromDom();
+      var editingKey = (val('editOriginalKey') || '').trim();
+      var title = (val('schemeTitle') || '').trim();
+      if (!title) { showToast('请填写题集名称'); return; }
+      var questions = editingQuestions.map(function (q, i) {
+        var opts = (q.options || []).map(function (o) { return (o || '').trim(); });
+        if (opts.length < 4) { for (var j = opts.length; j < 4; j++) opts.push(''); }
+        return {
+          id: q.id || (editingKey || 'custom') + '-q' + (i + 1),
+          q: (q.q || '').trim(),
+          options: opts,
+          answer: String(q.answer || 'A').toUpperCase(),
+          score: Number(q.score) || 10,
+          explain: (q.explain || '').trim()
+        };
+      }).filter(function (q) { return q.q; });
+      if (!questions.length) { showToast('请至少填写一道题目的题干'); return; }
+      var key = editingKey || generateSchemeKey();
+      var entry = {
+        id: key,
+        taskKey: key,
+        title: title,
+        category: val('schemeCategory') === 'segmentation' ? 'segmentation' : 'classification',
+        difficulty: val('schemeDifficulty') || '高阶',
+        knowledge: '模型训练',
+        questions: questions
+      };
+      var list = readSchemeBank().filter(function (e) { return e.taskKey !== key; });
+      list.push(entry);
+      writeSchemeBank(list);
+      renderSchemeTable();
+      closeEditModal();
+      showToast((editingKey ? '已更新' : '已新增') + '选择题集：' + title + '（' + questions.length + ' 题）');
+    }
+
+    /* ---- 预览 ---- */
+    function openPreviewModal(taskKey) {
+      var mask = document.getElementById('previewMask');
+      if (!mask) return;
+      var list = readSchemeBank();
+      var e = null;
+      for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { e = list[i]; break; } }
+      if (!e) { showToast('未找到该选择题集'); return; }
+      var body = document.getElementById('previewBody');
+      var html = '<div class="form-field full"><label>题集名称</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(e.title) + '</div></div>';
+      html += '<div class="grid" style="margin-top:6px;">' +
+        '<div class="form-field"><label>类型</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(categoryLabel(e.category)) + '</div></div>' +
+        '<div class="form-field"><label>难度</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(e.difficulty || '高阶') + '</div></div>' +
+        '</div>';
+      (e.questions || []).forEach(function (q, i) {
+        var letters = ['A', 'B', 'C', 'D'];
+        var opts = letters.map(function (L, oi) {
+          var mark = (L === q.answer) ? ' <strong style="color:#1a7f37;">[正确答案]</strong>' : '';
+          return '<div>' + L + '. ' + escapeHtml((q.options && q.options[oi]) || '') + mark + '</div>';
+        }).join('');
+        html += '<div class="answer-box" style="margin-top:12px;background:#f3f8ff;">' +
+          '<strong>第 ' + (i + 1) + ' 题 · ' + escapeHtml(q.q) + '（' + (Number(q.score) || 10) + ' 分）</strong>' +
+          '<div style="margin-top:6px;line-height:1.9;">' + opts + '</div>' +
+          (q.explain ? '<div style="margin-top:6px;color:#1a4f8a;">解析：' + escapeHtml(q.explain) + '</div>' : '') +
+          '</div>';
+      });
+      body.innerHTML = html;
+      mask.classList.add('open');
+      mask.setAttribute('aria-hidden', 'false');
+    }
+    function closePreviewModal(event) {
+      var mask = document.getElementById('previewMask');
+      if (!mask) return;
+      if (event && event.target !== mask) return;
+      mask.classList.remove('open');
+      mask.setAttribute('aria-hidden', 'true');
+    }
+
+    /* ---- 删除 ---- */
+    function deleteScheme(taskKey) {
+      var list = readSchemeBank();
+      var entry = null;
+      for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { entry = list[i]; break; } }
+      var name = entry ? entry.title : taskKey;
+      if (!window.confirm('确定删除选择题集「' + name + '」？此操作不可撤销。')) return;
+      var remaining = list.filter(function (e) { return e.taskKey !== taskKey; });
+      writeSchemeBank(remaining);
+      renderSchemeTable();
+      showToast('已删除选择题集：' + name);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      ensureSeed();
+      renderSchemeTable();
+    });
+  </script>
+</body>
+
+</html>
+
+

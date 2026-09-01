@@ -9,7 +9,7 @@
 <body>
   <div class="admin-shell">
     <aside class="sidebar">
-      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>AI教育后台</strong><span>独立运营管理系统</span></div></a>
+      <a class="brand" href="../app-center.html"><div class="brand-mark">AI</div><div class="brand-title"><strong>生命医学管理后台</strong><span>独立运营管理系统</span></div></a>
       <div class="nav-group-title">业务工作台</div>
       <a class="nav-item" href="index.html#courses"><span class="nav-icon">▤</span>教师课程管理端</a>
       <a class="nav-item" href="index.html#cases"><span class="nav-icon">◫</span>案例教学管理</a>
@@ -18,24 +18,18 @@
       <a class="nav-item child" href="经典病例诊断实训管理.html"><span class="nav-icon">02</span>经典病例诊断实训</a>
       <a class="nav-item child" href="读片与病例大赛系统管理.html"><span class="nav-icon">03</span>读片与病例大赛系统</a>
       <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
-      <a class="nav-item" href="index.html#profiles"><span class="nav-icon">◎</span>学员档案与能力评估</a>
-      <a class="nav-item" href="index.html#certs"><span class="nav-icon">◇</span>证书学分管理</a>
-      <a class="nav-item" href="index.html#aiqa"><span class="nav-icon">AI</span>AI答疑与模型配置</a>
       <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</a>
-      <a class="nav-item" href="index.html#knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</a>
       <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
-      <a class="nav-item" href="index.html#audit"><span class="nav-icon">↺</span>内容审核与运营日志</a>
+      <a class="nav-item" href="标注图像管理.html"><span class="nav-icon">⊞</span>标注图像管理</a>
+      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
     </aside>
     <main class="main">
       <header class="topbar">
-        <div><p class="eyebrow">Skill Practice / Module 01</p><h1>虚拟临床技能实训管理</h1><p class="page-desc">围绕学生端“病例刷新 → 患者信息与影像 → 影像判读 → 综合诊断与风险分层 → 提交判定”维护实训任务。</p></div>
-        <div class="top-actions"><a class="btn" href="技能实践管理.html">返回技能实践管理</a><button class="btn primary" onclick="openModal('add')">＋ 新建实训任务</button></div>
+        <div><p class="eyebrow">Skill Practice / Module 01</p><h1>虚拟临床技能实训管理</h1></div>
       </header>
       <div class="breadcrumb"><a href="技能实践管理.html">技能实践管理</a><span class="sep">&gt;</span><span>虚拟临床技能实训</span></div>
       <div class="toolbar">
-        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号或患者姓名" oninput="render()"></div>
-        <span class="status info">管理对象：病例信息、眼底彩照、问诊问答、临床诊断题目</span>
-      </div>
+        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号或患者姓名" oninput="render()"></div><button class="btn primary" style="margin-left:auto;" onclick="openModal('add')">＋ 新建实训任务</button></div>
       <section class="panel">
         <div class="panel-head"><div><h2 class="panel-title">虚拟病例列表</h2><p class="panel-subtitle">列表只展示病例配置对象；进入新增或编辑后，可完整录入前台病例信息、双眼眼底彩照、问诊问答和临床诊断题目。</p></div></div>
         <div class="table-wrap"><table><thead><tr><th>病例名称</th><th>病例号</th><th>患者信息</th><th>主诉</th><th>影像资料</th><th>状态</th><th>操作</th></tr></thead><tbody id="tableBody"></tbody></table></div>
@@ -224,3 +218,4 @@
   </script>
 </body>
 </html>
+

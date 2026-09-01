@@ -350,6 +350,14 @@ body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; f
             <option value="疑难">疑难</option>
         </select>
     </div>
+    <div class="filter-group">
+        <span class="filter-label">诊断状态：</span>
+        <select id="filterStatus" onchange="applyFilters()">
+            <option value="all">全部</option>
+            <option value="diagnosed">已诊断</option>
+            <option value="pending">未诊断</option>
+        </select>
+    </div>
     <span class="result-count" id="resultCount">共 15 个病例</span>
 </div>
 
@@ -535,9 +543,13 @@ function setCasePage(page) {
 function applyFilters() {
     var dEl = document.getElementById('filterDisease'); var d = dEl ? dEl.value : 'all';
     var lv = document.getElementById('filterDifficulty').value;
+    var svEl = document.getElementById('filterStatus'); var sv = svEl ? svEl.value : 'all';
     filteredCases = mockCases.filter(function(c) {
         if (d!=='all' && c.disease!==d) return false;
         if (lv!=='all' && c.difficulty!==lv) return false;
+        var status = getCaseStatus(c);
+        if (sv === 'diagnosed' && status.cls !== 'status-completed') return false;
+        if (sv === 'pending' && status.cls !== 'status-pending') return false;
         return true;
     });
     document.getElementById('listCount').textContent = filteredCases.length+'个';

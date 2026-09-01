@@ -849,7 +849,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         <button class="tab-btn active" data-tab="reasoning">病例推理实训</button>
         <button class="tab-btn" data-tab="compare">AI诊断对比学习</button>
         <button class="tab-btn" data-tab="evolution">病例推理实训</button>
-        <button class="tab-btn" data-tab="discussion">病例讨论</button>
+        <button class="tab-btn" data-tab="discussion">病例讨论与师生互动</button>
     </div>
 
     <!-- 共享布局：左侧病例树 + 右侧Tab内容区 -->
@@ -920,18 +920,18 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 <div id="evolutionContent" style="display:none;"></div>
             </div>
 
-            <!-- Tab 4: 病例讨论 -->
+            <!-- Tab 4: 病例讨论与师生互动 -->
             <div id="tab-discussion" class="tab-content-inner">
                 <div class="no-case-selected" id="emptyStateDiscussion">
                     <div class="empty-icon">💬</div>
-                    <div class="empty-text">请从左侧病例列表中选择一个病例<br>查看相关讨论</div>
+                    <div class="empty-text">请从左侧病例列表中选择一个病例<br>查看相关讨论与师生互动</div>
                 </div>
                 <div id="discussionContent" style="display:none;">
                     <!-- 讨论列表视图 -->
                     <div id="discussionListView">
                         <div class="discussion-container">
                             <div class="discussion-top-bar">
-                                <span class="disc-title">在线病例研讨室</span>
+            <span class="disc-title">病例讨论与师生互动</span>
                                 <div class="discussion-top-actions">
                                     <div class="discussion-message-wrap" id="discussionMessageWrap">
                                         <button type="button" class="discussion-message-btn" onclick="toggleDiscussionNotifications(event)">消息<span class="discussion-message-badge" id="discussionNotificationBadge">2</span></button>
@@ -1040,7 +1040,7 @@ const postDataByCase = {
         { id:'P4', title:'儿童先天性白内障的手术时机与人工晶体选择', author:'赵主任', role:'teacher', time:'2024-06-20 15:00', replies:56, lastReply:'2024-06-27 11:00', pinned:false, body:'关于婴幼儿先天性白内障的处理策略，是眼科领域持续讨论的话题。分享我们的临床经验。', images:[], replies_list:[]},
         { id:'P5', title:'高度近视黄斑劈裂的OCT特征与随访策略', author:'孙医生', role:'student', time:'2024-06-22 09:30', replies:45, lastReply:'2024-06-26 20:00', pinned:false, body:'近期遇到一例高度近视黄斑劈裂病例，OCT显示外层视网膜劈裂明显，目前BCVA 0.4，如何制定随访计划？', images:[], replies_list:[]},
         { id:'P6', title:'抗VEGF治疗中的T&E方案 vs PRN方案：临床选择依据', author:'李医生', role:'student', time:'2024-06-18 11:00', replies:76, lastReply:'2024-06-26 14:00', pinned:false, body:'在湿性AMD和DME的抗VEGF治疗中，T&E和PRN方案各有优劣。请大家分享实际工作中的选择经验。', images:[], replies_list:[]},
-        { id:'P7', title:'【置顶】病例讨论区规则与发帖须知', author:'管理员', role:'teacher', time:'2024-06-01 00:00', replies:35, lastReply:'2024-06-25 08:00', pinned:true, body:'欢迎来到病例讨论区！请在讨论时注意保护患者隐私，所有病例信息需脱敏处理。高质量的讨论将由教师团队点评并计入平时成绩。', images:[], replies_list:[]}
+        { id:'P7', title:'【置顶】病例讨论与师生互动区规则与发帖须知', author:'管理员', role:'teacher', time:'2024-06-01 00:00', replies:35, lastReply:'2024-06-25 08:00', pinned:true, body:'欢迎来到病例讨论与师生互动区！请在讨论时注意保护患者隐私，所有病例信息需脱敏处理。高质量的讨论将由教师团队点评并计入平时成绩。', images:[], replies_list:[]}
     ]
 };
 
@@ -1131,7 +1131,7 @@ function buildCaseDiscussionPosts(cid){
             body:'这个病例如果只看单一症状，可能会和相近疾病混淆。我建议讨论时把鉴别诊断也简单列出来，看哪些证据能排除其他可能。',
             images:[],
             replies_list:[
-                {author:'刘老师', role:'teacher', levelTag:'带教老师', time:'2024-06-28 10:05', body:'可以。病例讨论不要求一步到位给标准答案，重点是把证据链说清楚。'},
+                {author:'刘老师', role:'teacher', levelTag:'带教老师', time:'2024-06-28 10:05', body:'可以。病例讨论与师生互动不要求一步到位给标准答案，重点是把证据链说清楚。'},
                 {author:'李医生', role:'student', time:'2024-06-28 10:25', body:'我补充一个思路：先列出最像的两个疾病，再逐条用检查证据排除。'}
             ]
         }
@@ -1164,7 +1164,7 @@ let activeDiscussionRecording = null;
 let discussionNotifications = [
     { id:'N1', title:'王主任回复了你的讨论', detail:'这个顺序可以，关键是每个检查都要服务于诊断判断。', time:'今天 10:05', read:false },
     { id:'N2', title:'张教授回复了你的评论', detail:'尤其要说明哪些检查结果真正改变了判断。', time:'昨天 18:05', read:false },
-    { id:'N3', title:'刘老师参与了当前病例讨论', detail:'带教老师补充了病例分型的书写思路。', time:'2024-06-28 10:05', read:true }
+    { id:'N3', title:'刘老师参与了当前病例讨论与师生互动', detail:'带教老师补充了病例分型的书写思路。', time:'2024-06-28 10:05', read:true }
 ];
 const CASE_TEACHING_STATE_KEY = 'life_med_case_teaching_state_v2';
 
@@ -2317,7 +2317,7 @@ function generateIntegratedLearningReport(){
     const scoreBarColor = score => score >= 90 ? 'var(--success)' : score >= 70 ? 'var(--primary)' : 'var(--warning)';
 
     let html = '<div class="report-content">';
-    html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统自动评分：诊断准确率 / 逻辑完整度</div></div>';
+    html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统智能评估：诊断准确率 / 逻辑完整度</div></div>';
     html += '<div class="report-meta"><div>学员：管理员</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
     html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病例推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程时间轴作答和系统评分固定保留。</div>';
     html += '<div class="report-score-section">';
@@ -2429,14 +2429,14 @@ function selectCompareCase(id){
     renderCompareDiff(currentCompareCase);
 }
 
-// ==================== Tab 3: 病例讨论（新版样式） ====================
+// ==================== Tab 3: 病例讨论与师生互动（新版样式） ====================
 function isDiscussionUnlocked(caseId){
     return !!getLearningReport(caseId || currentCaseId);
 }
 
 function renderDiscussionLockedState(caseId){
     const caseInfo = findDiscussionCase(caseId) || currentCase || { title:'当前病例' };
-    return '<div class="discussion-locked-state"><div class="lock-icon">🔒</div><h3>病例讨论暂未开放</h3><p>“'+escHtml(caseInfo.title)+'” 还没有生成学习报告。请先完成病例推理实训并生成学习报告后，再进入病例讨论板块。</p><button class="btn btn-primary" onclick="switchToEvolutionTab()">返回病例推理实训</button></div>';
+    return '<div class="discussion-locked-state"><div class="lock-icon">🔒</div><h3>病例讨论与师生互动暂未开放</h3><p>“'+escHtml(caseInfo.title)+'” 还没有生成学习报告。请先完成病例推理实训并生成学习报告后，再进入病例讨论与师生互动板块。</p><button class="btn btn-primary" onclick="switchToEvolutionTab()">返回病例推理实训</button></div>';
 }
 
 function renderPostList(sortBy){
@@ -2473,7 +2473,7 @@ function renderPostList(sortBy){
     else posts = [...posts].sort((a,b)=>new Date(b.time)-new Date(a.time));
 
     const streamPosts = posts;
-    let html = '<div class="discussion-section-title">病例讨论</div>';
+    let html = '<div class="discussion-section-title">病例讨论与师生互动</div>';
     html += '<div class="discussion-stream">';
     if(streamPosts.length){
         streamPosts.forEach(p=>{ html += renderDiscussionPostCard(p); });

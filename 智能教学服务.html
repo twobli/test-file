@@ -343,7 +343,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
             </div>
             <div class="toolbar-right">
                 <div class="exam-stats">
-                    <span>未作答: <strong id="stat-pending">8</strong></span>
+                    <span>未作答: <strong id="stat-pending">12</strong></span>
                     <span>已作答: <strong id="stat-done">0</strong></span>
                 </div>
                 <button class="btn btn-primary knowledge-entry-btn" onclick="showKnowledge()" disabled title="完成全部阅片练习后开放知识点学习">知识点学习</button>
@@ -356,7 +356,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
                 <div class="film-list">
                     <div class="list-header">
                         <span class="list-title">阅片列表</span>
-                        <span class="list-count" id="film-count">8</span>
+                        <span class="list-count" id="film-count">12</span>
                     </div>
                     <div class="list-items" id="film-items"></div>
                 </div>
@@ -442,13 +442,13 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 </div>
 
 <script>
-// ===== Mock 数据：8道阅片练习题 =====
+// ===== Mock 数据：12道阅片练习题 =====
 const allExamQuestions = [
     {
         id: 'OPHTH-2023-0041',
         no: 'LM-RP-20260730-0001',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-31T23:59:59',
+        validFrom: '2026-06-01T00:00:00',
+        validTo: '2027-01-31T23:59:59',
         shelfStatus: '已上架',
         title: '彩色眼底照相',
         diagnosis: '糖尿病视网膜病变',
@@ -462,13 +462,13 @@ const allExamQuestions = [
         correctIndex: 1, // B
         images: [{ bg: 'fundus-bg-1', label: '彩色眼底照相', eye: '右眼' }],
         meta: { type: '彩色眼底照相', eye: '右眼', difficulty: 3 },
-        explanation: '该病例显示视网膜可见大量出血斑、微血管瘤及棉绒斑，符合增殖期糖尿病视网膜病变的典型表现。荧光血管造影显示广泛的无灌注区和新生血管渗漏。OCT显示黄斑水肿。患者有糖尿病病史10年，糖化血红蛋白控制不佳。鉴别诊断：AMD主要表现为玻璃膜疣和地图状萎缩；高血压性视网膜病变表现为动脉狭窄和交叉压迫征；重度非增殖性DR虽有出血但无新生血管。'
+        explanation: '该病例可见大量出血斑、微血管瘤及棉绒斑，符合增殖期糖尿病视网膜病变。FA可见无灌注区和新生血管渗漏，OCT可提示黄斑水肿。鉴别诊断要结合病史、出血形态和是否存在新生血管。'
     },
     {
         id: 'OPHTH-2023-0047',
         no: 'LM-RP-20260730-0002',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-31T23:59:59',
+        validFrom: '2026-06-08T00:00:00',
+        validTo: '2027-02-28T23:59:59',
         shelfStatus: '已上架',
         title: '彩色眼底照相',
         diagnosis: '青光眼',
@@ -482,13 +482,13 @@ const allExamQuestions = [
         correctIndex: 2, // C
         images: [{ bg: 'fundus-bg-2', label: '彩色眼底照相', eye: '左眼' }, { bg: 'fundus-bg-3', label: '彩色眼底照相', eye: '右眼' }],
         meta: { type: '彩色眼底照相', eye: '双眼', difficulty: 3 },
-        explanation: '眼底彩照显示视盘杯盘比明显增大（C/D≈0.8），盘沿变窄，符合青光眼性视神经病变。OCT显示视网膜神经纤维层（RNFL）变薄。患者眼压升高（26mmHg），视野检查显示弓形暗点。鉴别诊断：正常眼底C/D比一般<0.5；DR应有出血渗出；CRVO表现为广泛视网膜出血（"番茄酱"样眼底）。'
+        explanation: '视盘杯盘比增大、盘沿变窄，符合青光眼性视神经病变。OCT提示RNFL变薄，眼压升高和视野缺损进一步支持原发性开角型青光眼。'
     },
     {
         id: 'OPHTH-2023-0052',
         no: 'LM-RP-20260730-0003',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-20T23:59:59',
+        validFrom: '2026-06-15T00:00:00',
+        validTo: '2027-03-31T23:59:59',
         shelfStatus: '已上架',
         title: '光学相干断层扫描 OCT',
         diagnosis: 'AMD',
@@ -502,13 +502,13 @@ const allExamQuestions = [
         correctIndex: 0, // A
         images: [{ bg: 'oct-bg-1', label: '光学相干断层扫描 OCT', eye: '右眼' }],
         meta: { type: '光学相干断层扫描 OCT', eye: '右眼', difficulty: 2 },
-        explanation: '眼底彩照显示黄斑区出血、渗出及色素紊乱。FA显示典型的新生血管渗漏（经典型CNV）。OCT显示视网膜下液、色素上皮脱离（PED）和视网膜内囊样水肿，符合湿性AMD的特征。干性AMD主要表现为玻璃膜疣和地图状萎缩。中浆多见于年轻男性，OCT表现为浆液性PED而无出血。黄斑裂孔OCT显示全层视网膜缺损。'
+        explanation: 'OCT显示视网膜下液、PED和囊样水肿，符合湿性AMD。干性AMD通常以玻璃膜疣和地图状萎缩为主，视网膜下液和活动性渗漏并不典型。'
     },
     {
         id: 'OPHTH-2023-0058',
         no: 'LM-RP-20260730-0004',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-31T23:59:59',
+        validFrom: '2026-06-22T00:00:00',
+        validTo: '2027-04-30T23:59:59',
         shelfStatus: '已上架',
         title: '眼部彩色多普勒超声',
         diagnosis: '高血压性视网膜病变',
@@ -522,13 +522,13 @@ const allExamQuestions = [
         correctIndex: 1, // B
         images: [{ bg: 'doppler-bg-1', label: '眼部彩色多普勒超声', eye: '右眼' }, { bg: 'doppler-bg-2', label: '眼部彩色多普勒超声', eye: '左眼' }],
         meta: { type: '眼部彩色多普勒超声', eye: '双眼', difficulty: 2 },
-        explanation: '眼底显示视网膜动脉普遍狭窄，动静脉交叉压迫征阳性（Gunn征），可见少量棉绒斑和火焰状出血，符合高血压性视网膜病变II-III级。患者无糖尿病病史且血糖正常，排除DR。无静脉迂曲扩张及广泛出血，排除CRVO。鉴别要点：高血压眼底以动脉改变为主，DR以微血管瘤和出血为主要特征。'
+        explanation: '视网膜动脉普遍狭窄、动静脉交叉压迫征和棉绒斑，更符合高血压性视网膜病变。其核心特征是动脉改变为主，而不是糖网那种微血管瘤和点状出血。'
     },
     {
         id: 'OPHTH-2023-0063',
         no: 'LM-RP-20260730-0005',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-31T23:59:59',
+        validFrom: '2026-07-01T00:00:00',
+        validTo: '2027-05-31T23:59:59',
         shelfStatus: '已上架',
         title: '彩色眼底照相',
         diagnosis: '轻度非增殖性DR',
@@ -542,13 +542,13 @@ const allExamQuestions = [
         correctIndex: 1, // B
         images: [{ bg: 'fundus-bg-1', label: '彩色眼底照相', eye: '右眼' }, { bg: 'fundus-bg-2', label: '彩色眼底照相', eye: '左眼' }],
         meta: { type: '彩色眼底照相', eye: '双眼', difficulty: 1 },
-        explanation: '眼底显示后极部散在微血管瘤和点状出血，未见棉绒斑、新生血管或明显渗出，符合轻度NPDR（ETDRS分级）。关键鉴别：正常眼底无微血管瘤；增殖期DR可见新生血管（NVD/NVE）；高血压性视网膜病变表现为动脉改变为主。此阶段需加强血糖控制并定期随访。'
+        explanation: '后极部散在微血管瘤和点状出血，未见棉绒斑、新生血管或明显渗出，符合轻度NPDR。此阶段重点是血糖控制和随访。'
     },
     {
         id: 'OPHTH-2023-0068',
         no: 'LM-RP-20260730-0006',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-31T23:59:59',
+        validFrom: '2026-07-08T00:00:00',
+        validTo: '2027-06-30T23:59:59',
         shelfStatus: '已上架',
         title: '光学相干断层扫描 OCT',
         diagnosis: '视网膜中央静脉阻塞',
@@ -562,13 +562,13 @@ const allExamQuestions = [
         correctIndex: 1, // B
         images: [{ bg: 'oct-bg-1', label: '光学相干断层扫描 OCT', eye: '左眼' }],
         meta: { type: '光学相干断层扫描 OCT', eye: '左眼', difficulty: 2 },
-        explanation: '眼底显示广泛视网膜出血（以神经纤维层为主的火焰状出血），静脉迂曲扩张，视网膜水肿，呈典型的"番茄酱"样眼底，符合CRVO。FA显示静脉充盈延迟、毛细血管无灌注区。OCT显示黄斑水肿。鉴别：DR出血以前层（点状/斑状）为主且有微血管瘤；CRAO表现为视网膜苍白水肿+樱桃红斑；AION表现为视盘水肿而无弥漫出血。'
+        explanation: '广泛火焰状出血、静脉迂曲扩张和黄斑水肿构成CRVO的典型图像。与DR相比，CRVO更强调弥漫出血和静脉淤血。'
     },
     {
         id: 'OPHTH-2023-0073',
         no: 'LM-RP-20260730-0007',
-        validFrom: '2026-08-01T00:00:00',
-        validTo: '2026-08-31T23:59:59',
+        validFrom: '2026-07-15T00:00:00',
+        validTo: '2027-07-31T23:59:59',
         shelfStatus: '已上架',
         title: '眼眶核磁 MRI',
         diagnosis: '干性AMD',
@@ -582,14 +582,14 @@ const allExamQuestions = [
         correctIndex: 1, // B
         images: [{ bg: 'mri-bg-1', label: '眼眶核磁 MRI', eye: '右眼' }, { bg: 'mri-bg-2', label: '眼眶核磁 MRI', eye: '左眼' }],
         meta: { type: '眼眶核磁 MRI', eye: '双眼', difficulty: 2 },
-        explanation: '眼底显示黄斑区多发玻璃膜疣（drusen）、色素上皮改变及地图状萎缩，符合干性AMD。OCT显示RPE不规则、玻璃膜疣隆起及外层视网膜萎缩。无明显出血、渗出或视网膜下液，排除湿性AMD。病理性近视可见豹纹状眼底和后巩膜葡萄肿。Stargardt病多见于青少年，眼底有黄白色斑点。'
+        explanation: '多发玻璃膜疣、色素上皮改变及地图状萎缩符合干性AMD。无明显出血、渗出或视网膜下液，支持非渗出性病变。'
     },
     {
         id: 'OPHTH-2023-0078',
         no: 'LM-RP-20260730-0008',
         validFrom: '2026-07-20T00:00:00',
-        validTo: '2026-07-31T23:59:59',
-        shelfStatus: '已下架',
+        validTo: '2027-08-31T23:59:59',
+        shelfStatus: '已上架',
         title: '彩色眼底照相',
         diagnosis: '孔源性视网膜脱离',
         question: '患者45岁，高度近视，突发右眼视野缺损伴闪光感。最可能的诊断是？',
@@ -602,7 +602,87 @@ const allExamQuestions = [
         correctIndex: 1, // B
         images: [{ bg: 'fundus-bg-4', label: '彩色眼底照相', eye: '右眼' }],
         meta: { type: '彩色眼底照相', eye: '右眼', difficulty: 3 },
-        explanation: '眼底显示颞上方视网膜隆起，呈灰白色波浪状，可见马蹄形裂孔。高度近视是RRD的主要危险因素。OCT显示神经上皮层脱离。鉴别：玻璃体后脱离通常不伴视野缺损；渗出性RD由炎症/肿瘤引起，无裂孔且视网膜下液可移动；牵拉性RD见于DR/PVR，呈凹面脱离形态。需紧急手术处理。'
+        explanation: '灰白色波浪状隆起视网膜并可见马蹄形裂孔，符合孔源性视网膜脱离。该病需要尽快处理，避免黄斑受累导致永久视力损害。'
+    },
+    {
+        id: 'OPHTH-2023-0084',
+        no: 'LM-RP-20260820-0009',
+        validFrom: '2026-08-01T00:00:00',
+        validTo: '2027-09-30T23:59:59',
+        shelfStatus: '已上架',
+        title: '彩色眼底照相',
+        diagnosis: '分支视网膜静脉阻塞',
+        question: '患者59岁，右眼视力下降2周，眼底见局灶性扇形出血和静脉迂曲扩张，最可能的诊断是？',
+        options: [
+            'A. 糖尿病视网膜病变',
+            'B. 分支视网膜静脉阻塞',
+            'C. 高血压性视网膜病变',
+            'D. 视网膜动脉阻塞'
+        ],
+        correctIndex: 1, // B
+        images: [{ bg: 'fundus-bg-3', label: '彩色眼底照相', eye: '右眼' }],
+        meta: { type: '彩色眼底照相', eye: '右眼', difficulty: 2 },
+        explanation: 'BRVO常沿受累静脉分布，出血呈扇形或局灶性聚集，并可伴AV交叉处改变和黄斑水肿。其分布范围比CRVO更局限，更容易与DR区分。'
+    },
+    {
+        id: 'OPHTH-2023-0085',
+        no: 'LM-RP-20260910-0010',
+        validFrom: '2026-08-15T00:00:00',
+        validTo: '2027-10-31T23:59:59',
+        shelfStatus: '已上架',
+        title: '光学相干断层扫描 OCT',
+        diagnosis: '糖尿病黄斑水肿',
+        question: '患者56岁，2型糖尿病病史12年，视力逐渐下降，OCT示中心凹囊样水肿伴硬性渗出，最可能的诊断是？',
+        options: [
+            'A. 干性年龄相关性黄斑变性',
+            'B. 视网膜中央静脉阻塞',
+            'C. 糖尿病黄斑水肿',
+            'D. 原发性开角型青光眼'
+        ],
+        correctIndex: 2, // C
+        images: [{ bg: 'oct-bg-1', label: '光学相干断层扫描 OCT', eye: '右眼' }],
+        meta: { type: '光学相干断层扫描 OCT', eye: '右眼', difficulty: 3 },
+        explanation: 'OCT中心凹囊样水肿合并硬性渗出，符合糖尿病黄斑水肿。与AMD相比，本例更强调糖尿病病史和黄斑渗出性水肿；与CRVO相比，未见典型弥漫性静脉淤血表现。'
+    },
+    {
+        id: 'OPHTH-2023-0086',
+        no: 'LM-RP-20261005-0011',
+        validFrom: '2026-08-20T00:00:00',
+        validTo: '2027-11-30T23:59:59',
+        shelfStatus: '已上架',
+        title: '彩色眼底照相',
+        diagnosis: '原发性开角型青光眼',
+        question: '患者61岁，双眼杯盘比约0.85，盘沿切迹明显并伴RNFL变薄，最可能的诊断是？',
+        options: [
+            'A. 生理性大杯盘比',
+            'B. 原发性开角型青光眼',
+            'C. 前部缺血性视神经病变',
+            'D. 视网膜中央静脉阻塞'
+        ],
+        correctIndex: 1, // B
+        images: [{ bg: 'fundus-bg-2', label: '彩色眼底照相', eye: '左眼' }, { bg: 'fundus-bg-3', label: '彩色眼底照相', eye: '右眼' }],
+        meta: { type: '彩色眼底照相', eye: '双眼', difficulty: 3 },
+        explanation: '双眼杯盘比明显增大、盘沿切迹和RNFL变薄，是原发性开角型青光眼的典型结构损害。生理性大杯盘比不会出现进行性盘沿变窄和视野缺损。'
+    },
+    {
+        id: 'OPHTH-2023-0087',
+        no: 'LM-RP-20261112-0012',
+        validFrom: '2026-09-01T00:00:00',
+        validTo: '2027-12-31T23:59:59',
+        shelfStatus: '已上架',
+        title: '彩色眼底照相',
+        diagnosis: '孔源性视网膜脱离',
+        question: '患者45岁，高度近视，突发右眼闪光感和视野缺损，眼底见灰白色波浪状隆起并可见马蹄形裂孔，最可能的诊断是？',
+        options: [
+            'A. 渗出性视网膜脱离',
+            'B. 孔源性视网膜脱离',
+            'C. 牵拉性视网膜脱离',
+            'D. 玻璃体后脱离'
+        ],
+        correctIndex: 1, // B
+        images: [{ bg: 'fundus-bg-4', label: '彩色眼底照相', eye: '右眼' }],
+        meta: { type: '彩色眼底照相', eye: '右眼', difficulty: 3 },
+        explanation: '高度近视、闪光感、视野缺损和马蹄形裂孔共同支持孔源性视网膜脱离。渗出性脱离通常无裂孔，牵拉性脱离更常见于增殖性糖网，玻璃体后脱离不会造成明确的视网膜下液。'
     }
 ];
 
@@ -838,7 +918,7 @@ Object.assign(structuredKnowledgeData, {
     },
     '视网膜静脉阻塞': {
         type: '疾病',
-        source: '关联题号 LM-RP-20260730-0006',
+        source: '关联题号 LM-RP-20260730-0006、LM-RP-20260820-0009',
         title: '视网膜静脉阻塞（RVO）',
         subtitle: '常见视网膜血管病，阅片以静脉迂曲扩张、视网膜出血和黄斑水肿为关键线索。',
         sections: [
@@ -846,7 +926,7 @@ Object.assign(structuredKnowledgeData, {
             { title: '诊断要点', content: '<ul><li>CRVO常表现为弥漫性出血、静脉迂曲扩张和“番茄酱样”眼底。</li><li>OCT常见黄斑水肿，FA可提示静脉充盈延迟、毛细血管无灌注和血管渗漏。</li></ul>' }
         ],
         related: [
-            { label: '关联题目', value: 'LM-RP-20260730-0006' },
+            { label: '关联题目', value: 'LM-RP-20260730-0006、LM-RP-20260820-0009' },
             { label: '关联检查', value: 'OCT黄斑水肿评估' },
             { label: '后台规则', value: '错选DR或动脉阻塞时推送鉴别诊断' }
         ]
@@ -868,7 +948,7 @@ Object.assign(structuredKnowledgeData, {
     },
     '孔源性视网膜脱离': {
         type: '疾病',
-        source: '关联题号 LM-RP-20260730-0008',
+        source: '关联题号 LM-RP-20260730-0008、LM-RP-20261112-0012',
         title: '孔源性视网膜脱离',
         subtitle: '视网膜裂孔导致液化玻璃体进入视网膜下腔，是眼科急症相关的重要阅片知识点。',
         sections: [
@@ -876,7 +956,7 @@ Object.assign(structuredKnowledgeData, {
             { title: '诊断与处理要点', content: '<ul><li>阅片关注灰白色隆起视网膜、波浪状皱褶、马蹄形裂孔、视网膜下液和脱离范围。</li><li>高度近视、外伤和急性玻璃体后脱离人群风险更高，累及黄斑时需提示急诊处理。</li></ul>' }
         ],
         related: [
-            { label: '关联题目', value: 'LM-RP-20260730-0008' },
+            { label: '关联题目', value: 'LM-RP-20260730-0008、LM-RP-20261112-0012' },
             { label: '关联手术', value: '玻璃体切除术' },
             { label: '关联说明', value: '错选玻璃体后脱离或渗出性脱离时，高亮展示裂孔识别相关题目' }
         ]
@@ -943,7 +1023,7 @@ Object.assign(structuredKnowledgeData, {
     },
     'OCT RNFL检查解读': {
         type: '检验检查',
-        source: '关联青光眼题目 LM-RP-20260730-0002',
+        source: '关联青光眼题目 LM-RP-20260730-0002、LM-RP-20261005-0011',
         title: 'OCT RNFL检查解读',
         subtitle: '用于青光眼结构评估的核心检查知识点，重点关注RNFL和GCC变薄。',
         sections: [
@@ -951,7 +1031,7 @@ Object.assign(structuredKnowledgeData, {
             { title: '与疾病联动', content: '<p>当前台青光眼题目出现错答，后台规则将该检查知识点与疾病知识点一起推送，让学习路径从“看见视盘异常”延伸到“会看检查指标”。</p>' }
         ],
         related: [
-            { label: '关联题目', value: 'LM-RP-20260730-0002' },
+            { label: '关联题目', value: 'LM-RP-20260730-0002、LM-RP-20261005-0011' },
             { label: '关联疾病', value: '青光眼性视神经病变' },
             { label: '能力维度', value: '影像判读、检查解读' }
         ]

@@ -1189,7 +1189,6 @@ table tbody tr:hover { background: var(--gray-50); }
                                 <tr>
                                     <th>测评名称</th>
                                     <th>考试类型</th>
-                                    <th>考核范围</th>
                                     <th>状态</th>
                                     <th>总分</th>
                                     <th>成绩轴</th>
@@ -1228,7 +1227,6 @@ table tbody tr:hover { background: var(--gray-50); }
                                 <tr>
                                     <th>考核名称</th>
                                     <th>考试类型</th>
-                                    <th>考核范围</th>
                                     <th>状态</th>
                                     <th>总分</th>
                                     <th>成绩轴</th>
@@ -1853,7 +1851,7 @@ function renderTable(data, page) {
     var tbody = document.getElementById('examTableBody');
     var html = '';
     if (pageData.length === 0) {
-        html = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gray-400);">暂无数据</td></tr>';
+        html = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray-400);">暂无数据</td></tr>';
     }
     for (var i = 0; i < pageData.length; i++) {
         var item = pageData[i];
@@ -1863,7 +1861,6 @@ function renderTable(data, page) {
         html += '<tr>';
         html += '<td>' + item.name + '</td>';
         html += '<td>' + item.examType + '</td>';
-        html += '<td>' + item.target + '</td>';
         html += '<td>' + statusHtml + '</td>';
         html += '<td>' + item.totalScore + '分</td>';
         html += '<td>' + scoreAxisHtml + '</td>';
@@ -1985,7 +1982,7 @@ function renderComprehensiveTable(page) {
     var tbody = document.getElementById('comprehensiveTableBody');
     var html = '';
     if (pageData.length === 0) {
-        html = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gray-400);">暂无数据</td></tr>';
+        html = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray-400);">暂无数据</td></tr>';
     }
     for (var i = 0; i < pageData.length; i++) {
         var item = pageData[i];
@@ -1993,7 +1990,6 @@ function renderComprehensiveTable(page) {
         html += '<tr>';
         html += '<td>' + item.name + '</td>';
         html += '<td>' + item.examType + '</td>';
-        html += '<td>' + item.target + '</td>';
         html += '<td>' + getStatusHtml(item.status) + '</td>';
         html += '<td>' + item.totalScore + '分</td>';
         html += '<td>' + scoreAxisHtml + '</td>';

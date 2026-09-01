@@ -145,6 +145,7 @@
       gap: 10px;
       flex-wrap: wrap;
       justify-content: flex-end;
+      margin-left: auto;
     }
 
     .btn {
@@ -184,6 +185,18 @@
       gap: 12px;
       margin: 14px 0;
       flex-wrap: wrap;
+    }
+
+    .toolbar > .btn.primary {
+      margin-left: auto;
+    }
+
+    .section-actionbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
     }
 
     .filters {
@@ -1088,7 +1101,7 @@
       }
       .main { padding: 18px 14px 34px; }
       .topbar { display: grid; }
-      .top-actions { justify-content: flex-start; }
+      .top-actions { justify-content: flex-end; margin-left:auto; }
       .grid.kpi { grid-template-columns: 1fr; }
       .split-form { grid-template-columns: 1fr; }
       .exam-question-card .question-grid { grid-template-columns: 1fr; }
@@ -1106,7 +1119,7 @@
       <a class="brand" href="../app-center.html">
         <div class="brand-mark">AI</div>
         <div class="brand-title">
-          <strong>AI教育后台</strong>
+          <strong>生命医学管理后台</strong>
           <span>独立运营管理系统</span>
         </div>
       </a>
@@ -1116,13 +1129,10 @@
       <button class="nav-item" data-section="cases"><span class="nav-icon">◫</span>案例教学管理</button>
       <a class="nav-item" href="技能实践管理.html"><span class="nav-icon">◉</span>技能实践管理</a>
       <button class="nav-item" data-section="exams"><span class="nav-icon">✎</span>考试中心管理</button>
-      <button class="nav-item" data-section="profiles"><span class="nav-icon">◎</span>学员档案与能力评估</button>
-      <button class="nav-item" data-section="certs"><span class="nav-icon">◇</span>证书学分管理</button>
-      <button class="nav-item" data-section="aiqa"><span class="nav-icon">AI</span>AI答疑与模型配置</button>
       <button class="nav-item" data-section="knowledge"><span class="nav-icon">教</span>智能教学服务管理后台</button>
-      <button class="nav-item" data-section="knowledgeGraph"><span class="nav-icon">图</span>知识图谱管理</button>
       <button class="nav-item" data-section="literature"><span class="nav-icon">文</span>科技文献检索管理</button>
-      <button class="nav-item" data-section="audit"><span class="nav-icon">↺</span>内容审核与运营日志</button>
+      <a class="nav-item" href="标注图像管理.html"><span class="nav-icon">⊞</span>标注图像管理</a>
+      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
     </aside>
 
     <main class="main">
@@ -1145,12 +1155,10 @@
         </div>
 
         <div class="tab-pane" id="teacherCourseContent">
+          <div class="section-actionbar"><button class="btn primary" onclick="openDrawer('上传课程', '先填写课程名称、知识体系和难度等级，再按章节和小节逐步维护视频和知识点，接着配置章节测验和参与人员。', 'course')">上传课程</button></div>
           <div class="panel">
             <div class="panel-head">
               <div><h2 class="panel-title">课程列表与章节测验绑定</h2><p class="panel-subtitle">后台先维护知识点，再上传分章节课程；课程保存后紧接着在同一流程里配置章节测验，小节上传视频并绑定知识点。</p></div>
-              <div class="top-actions">
-                <button class="btn primary" onclick="openDrawer('上传课程', '先填写课程名称、知识体系和难度等级，再按章节和小节逐步维护视频和知识点，接着配置章节测验和参与人员。', 'course')">上传课程</button>
-              </div>
             </div>
             <div class="panel-body">
               <div class="logic-flow" style="grid-template-columns: repeat(4, minmax(180px, 1fr));">
@@ -1170,10 +1178,10 @@
         </div>
 
         <div class="tab-pane active" id="teacherKnowledgeAi">
+          <div class="section-actionbar"><button class="btn primary" onclick="openDrawer('新增知识点', '只维护知识点本身，不关联课程或AI讲解。', 'knowledge')">新增知识点</button></div>
           <div class="panel">
             <div class="panel-head">
               <div><h2 class="panel-title">知识点管理</h2><p class="panel-subtitle">维护知识点本体信息。</p></div>
-              <button class="btn primary" onclick="openDrawer('新增知识点', '只维护知识点本身，不关联课程或AI讲解。', 'knowledge')">新增知识点</button>
             </div>
             <div class="table-wrap">
               <table>
@@ -1248,14 +1256,14 @@
       <section class="section" id="exams">
         <div class="toolbar">
           <div class="filters">
-            <select class="select" id="examScopeFilter" onchange="applyExamAdminFilters()"><option value="all">全部考核范围</option><option value="单课程测评">单课程测评</option><option value="模块考核">模块考核</option><option value="全周期综合考试">全周期综合考试</option></select>
-            <input class="input" id="examKeywordFilter" placeholder="搜索考试名称/考核范围" oninput="applyExamAdminFilters()">
+            <select class="select" id="examScopeFilter" onchange="applyExamAdminFilters()"><option value="all">全部考试层级</option><option value="阶段测评">阶段测评</option><option value="综合考核">综合考核</option></select>
+            <input class="input" id="examKeywordFilter" placeholder="搜索考试名称/考试层级/考试类型" oninput="applyExamAdminFilters()">
           </div>
-          <button class="btn primary" onclick="openDrawer('创建试卷', '先填写试卷名称，再按顺序选择考试层级、考试类型和考核范围，随后在当前试卷页面逐题添加试题，最后确认创建。', 'exam')">创建试卷</button>
+          <button class="btn primary" onclick="openDrawer('创建试卷', '先填写试卷名称，再按顺序选择考试层级和考试类型，随后在当前试卷页面逐题添加试题，最后确认创建。', 'exam')">创建试卷</button>
         </div>
         <div class="panel">
           <div class="panel-head">
-            <div><h2 class="panel-title">考试中心管理</h2><p class="panel-subtitle">每张试卷在同一个配置页面内完成：先定考试归属和考核范围，再逐题添加题目、分数、知识点与难度，最后确认创建；后台不维护学员完成态与成绩报告。</p></div>
+            <div><h2 class="panel-title">考试中心管理</h2><p class="panel-subtitle">每张试卷在同一个配置页面内完成：先定考试层级和考试类型，再逐题添加题目、分数、知识点与难度，最后确认创建；后台不维护学员完成态与成绩报告。</p></div>
             <div class="tabs" data-tab-group="examAdminTabs">
               <button class="tab active" data-tab="examStageAdmin">阶段测评</button>
               <button class="tab" data-tab="examComprehensiveAdmin">综合考核</button>
@@ -1264,7 +1272,7 @@
           <div class="tab-pane active" id="examStageAdmin">
             <div class="table-wrap">
               <table>
-                <thead><tr><th>考试</th><th>考试类型</th><th>考试范围</th><th>总分 / 时长</th><th>允许重复次数</th><th>指定用户</th><th>操作</th></tr></thead>
+                <thead><tr><th>考试</th><th>考试层级</th><th>考试类型</th><th>总分 / 时长</th><th>允许重复次数</th><th>指定用户</th><th>操作</th></tr></thead>
                 <tbody id="examRows"></tbody>
               </table>
             </div>
@@ -1272,7 +1280,7 @@
           <div class="tab-pane" id="examComprehensiveAdmin">
             <div class="table-wrap">
               <table>
-                <thead><tr><th>考核</th><th>考试类型</th><th>考试范围</th><th>总分 / 时长</th><th>允许重复次数</th><th>指定用户</th><th>操作</th></tr></thead>
+                <thead><tr><th>考试</th><th>考试层级</th><th>考试类型</th><th>总分 / 时长</th><th>允许重复次数</th><th>指定用户</th><th>操作</th></tr></thead>
                 <tbody id="comprehensiveExamRows"></tbody>
               </table>
             </div>
@@ -1280,101 +1288,6 @@
         </div>
 
         </section>
-
-      <section class="section" id="profiles">
-        <div class="toolbar">
-          <div class="filters">
-            <input class="input" placeholder="搜索学员/班级/手机号">
-            <select class="select"><option>全部能力等级</option><option>优秀</option><option>达标</option><option>需强化</option></select>
-          </div>
-          <button class="btn primary" onclick="openDrawer('生成能力评估', '汇总学习档案、学习轨迹、能力雷达、教学反馈和证书学分。', 'profile')">生成评估</button>
-        </div>
-        <div class="grid two">
-          <div class="panel">
-            <div class="panel-head"><div><h2 class="panel-title">学员档案</h2><p class="panel-subtitle">个人中心页面的数据来源在后台统一汇总。</p></div></div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>学员</th><th>学习档案</th><th>考试记录</th><th>实训作品</th><th>能力短板</th><th>反馈状态</th><th>操作</th></tr></thead>
-                <tbody>
-                  <tr><td>李医生</td><td>课程 12/18，章节测验 88%</td><td>模块考核 86/92，综合考 108</td><td>报告2份，标注56张，模型1个</td><td>模型构建、病例分析</td><td><span class="status ok">已生成</span></td><td><button class="btn small">查看</button></td></tr>
-                  <tr><td>王同学</td><td>课程 7/18，章节测验 76%</td><td>单课程 72，模块未考</td><td>报告1份，标注18张</td><td>影像判读</td><td><span class="status wait">待更新</span></td><td><button class="btn small">生成</button></td></tr>
-                  <tr><td>赵老师</td><td>课程 18/18，章节测验 94%</td><td>综合考 132，比赛已完成</td><td>疑难病例3份，模型2个</td><td>无明显短板</td><td><span class="status ok">已归档</span></td><td><button class="btn small">证书</button></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><div><h2 class="panel-title">能力评估来源</h2><p class="panel-subtitle">让个人中心逻辑与课程、考试、实训形成一套完整闭环。</p></div></div>
-            <div class="panel-body">
-              <div class="bars">
-                <div class="bar-row"><span>基础课程</span><div class="progress"><span style="width:78%"></span></div><b>78%</b></div>
-                <div class="bar-row"><span>章节测验</span><div class="progress"><span style="width:88%"></span></div><b>88%</b></div>
-                <div class="bar-row"><span>考试中心</span><div class="progress"><span style="width:82%"></span></div><b>82%</b></div>
-                <div class="bar-row"><span>案例教学</span><div class="progress"><span style="width:64%"></span></div><b>64%</b></div>
-                <div class="bar-row"><span>技能实践</span><div class="progress"><span style="width:69%"></span></div><b>69%</b></div>
-                <div class="bar-row"><span>AI答疑</span><div class="progress"><span style="width:71%"></span></div><b>71%</b></div>
-              </div>
-              <div class="rules" style="margin-top:14px;">
-                <div class="rule-box"><b>反馈生成</b><p>后台根据错误率、薄弱知识点、实训评分和答疑记录生成个性化教学反馈，不硬跳具体学习页面。</p></div>
-                <div class="rule-box"><b>证书触发</b><p>达到课程完成、准确率、考试成绩或实训作品阈值后进入证书学分审核队列。</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="certs">
-        <div class="toolbar">
-          <div class="filters">
-            <select class="select"><option>全部证书类型</option><option>课程结业证书</option><option>实验实训证书</option><option>AI技能徽章</option><option>继续教育学分</option></select>
-            <select class="select"><option>全部审核状态</option><option>待审核</option><option>已生成</option><option>已撤销</option></select>
-          </div>
-          <button class="btn primary" onclick="openDrawer('证书规则', '配置发放条件、审核流程、查询码和撤销记录。', 'cert')">配置规则</button>
-        </div>
-        <div class="panel">
-          <div class="panel-head"><div><h2 class="panel-title">证书学分管理</h2><p class="panel-subtitle">证书发放必须可追溯到课程、测验、考试或实训作品。</p></div></div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>证书/学分</th><th>触发来源</th><th>发放条件</th><th>审核状态</th><th>前台展示</th><th>操作</th></tr></thead>
-              <tbody>
-                <tr><td>眼底影像诊断结业证书</td><td>基础课程 + 章节测验</td><td>课程完成率100%，测验准确率≥80%</td><td><span class="status ok">已生成</span></td><td>个人中心可查看/下载</td><td><button class="btn small">查看</button></td></tr>
-                <tr><td>虚拟临床技能实训证明</td><td>技能实践</td><td>诊断路径评分≥85，AI反馈无高危漏项</td><td><span class="status wait">待审核</span></td><td>审核后展示</td><td><button class="btn small">审核</button></td></tr>
-                <tr><td>AI模型构建能力徽章</td><td>数据标注与AI实训</td><td>模型AUC≥0.85，标注一致性≥90%</td><td><span class="status wait">待复核</span></td><td>个人中心显示徽章</td><td><button class="btn small">复核</button></td></tr>
-                <tr><td>继续教育学分 6分</td><td>全周期综合考试</td><td>综合考试≥90，完成病例讨论2次</td><td><span class="status gray">未满足</span></td><td>暂不展示</td><td><button class="btn small">规则</button></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="aiqa">
-        <div class="grid two">
-          <div class="panel">
-            <div class="panel-head"><div><h2 class="panel-title">AI智能答疑系统配置</h2><p class="panel-subtitle">对应基础课程里的 AI 智能答疑入口，后台维护语料、课程难点讲解和问答安全边界。</p></div></div>
-            <div class="panel-body">
-              <div class="split-form">
-                <div class="form-field"><label>绑定知识库</label><select class="select"><option>眼科基础课程语料库</option><option>AI诊疗课程语料库</option><option>影像判读课程语料库</option></select></div>
-                <div class="form-field"><label>回答范围</label><select class="select"><option>仅课程难点与医学教学解释</option><option>允许扩展到病例教学</option><option>允许扩展到考试解析</option></select></div>
-                <div class="form-field" style="grid-column:1/-1;"><label>系统提示词摘要</label><textarea>基于医学语言模型提供自然语言问答与课程难点讲解。回答需标注知识点来源，遇到诊疗决策问题时提示以临床规范和医生意见为准。</textarea></div>
-              </div>
-              <div class="toolbar"><button class="btn primary" onclick="showToast('AI答疑配置已保存，学生端入口将使用最新知识库。')">保存配置</button><button class="btn">测试问答</button></div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><div><h2 class="panel-title">答疑运营日志</h2><p class="panel-subtitle">答疑行为回写到个人学习档案和能力评估。</p></div></div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>问题类型</th><th>命中课程</th><th>薄弱知识点</th><th>处理方式</th><th>状态</th></tr></thead>
-                <tbody>
-                  <tr><td>课程难点讲解</td><td>糖尿病视网膜病变基础</td><td>DR分期</td><td>生成讲解并记录</td><td><span class="status ok">已完成</span></td></tr>
-                  <tr><td>病例诊断追问</td><td>案例教学</td><td>鉴别诊断</td><td>提示学习用途并引用病例资料</td><td><span class="status info">合规</span></td></tr>
-                  <tr><td>考试题目解析</td><td>考试中心</td><td>青光眼视野</td><td>只给解析，不泄露未作答答案</td><td><span class="status wait">受控</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section class="section" id="knowledge">
         <div class="toolbar">
@@ -1385,10 +1298,10 @@
         </div>
 
         <div class="tab-pane active" id="teachingItems" style="margin-top:14px;">
+          <div class="section-actionbar"><button class="btn primary small" onclick="openDrawer('上传阅片题', '上传影像、生成题号、设置有效日期、选择适用人员，配置题干答案解析，并绑定知识点后发布到前台。', 'teaching-question')">上传阅片题</button></div>
           <div class="panel">
             <div class="panel-head">
               <div><h2 class="panel-title">阅片题目管理</h2><p class="panel-subtitle">一条阅片题集中维护影像、题干、答案解析、人员范围、知识点和上架状态，避免运营在多个页面来回跳。</p></div>
-              <button class="btn primary small" onclick="openDrawer('上传阅片题', '上传影像、生成题号、设置有效日期、选择适用人员，配置题干答案解析，并绑定知识点后发布到前台。', 'teaching-question')">上传阅片题</button>
             </div>
             <div class="toolbar" style="padding:0 18px;">
               <div class="filters">
@@ -1413,8 +1326,9 @@
         </div>
 
         <div class="tab-pane" id="teachingKnowledgeRules" style="margin-top:14px;">
+          <div class="section-actionbar"><button class="btn primary small" onclick="openDrawer('新增知识点', '维护知识点类型、名称、简介和图文内容。', 'teaching-knowledge')">新增知识点</button></div>
           <div class="panel">
-            <div class="panel-head"><div><h2 class="panel-title">知识点管理</h2><p class="panel-subtitle">维护疾病、药品、手术操作、检验检查等知识点的简介和图文内容。前台展示所有关联题目的知识点，做错题仅用于高亮对应知识点和题号。</p></div><button class="btn primary small" onclick="openDrawer('新增知识点', '维护知识点类型、名称、简介和图文内容。', 'teaching-knowledge')">新增知识点</button></div>
+            <div class="panel-head"><div><h2 class="panel-title">知识点管理</h2><p class="panel-subtitle">维护疾病、药品、手术操作、检验检查等知识点的简介和图文内容。前台展示所有关联题目的知识点，做错题仅用于高亮对应知识点和题号。</p></div></div>
             <div class="table-wrap">
               <table>
                 <thead><tr><th>知识点</th><th>类型</th><th>知识点简介</th><th>关联题号</th><th>图文内容</th><th>操作</th></tr></thead>
@@ -1445,161 +1359,13 @@
           </div>
       </section>
 
-      <section class="section" id="knowledgeGraph">
-        <div class="toolbar">
-          <div class="tabs" data-tab-group="kgTabs">
-            <button class="tab active" data-tab="kgEntities">实体管理</button>
-            <button class="tab" data-tab="kgRelations">关系维护</button>
-            <button class="tab" data-tab="kgReasoning">病例推理配置</button>
-          </div>
-          <div class="top-actions">
-            <a class="btn" href="../知识图谱查询与推理.html">前台图谱</a>
-            <button class="btn primary" onclick="openDrawer('新增图谱实体', '维护疾病、药物、手术操作、检验检查、症状信息五类实体，并同步到前台图谱节点。', 'kg-entity')">新增实体</button>
-          </div>
-        </div>
-
-        <div class="grid kpi">
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">实体总量</span><span class="metric-dot">点</span></div>
-            <div class="value">28</div>
-            <div class="note">覆盖疾病、药物、手术操作、检验检查、症状信息五类前台图例。</div>
-          </div>
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">已维护关系</span><span class="metric-dot green">边</span></div>
-            <div class="value">35</div>
-            <div class="note">药物、手术操作、检验检查、症状信息相关关系会进入前台下拉筛选。</div>
-          </div>
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">病例推理规则</span><span class="metric-dot amber">推</span></div>
-            <div class="value">7</div>
-            <div class="note">暂时保留当前前台推理结果逻辑，仅维护规则说明和展示状态。</div>
-          </div>
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">前台筛选口径</span><span class="metric-dot violet">类</span></div>
-            <div class="value">5</div>
-            <div class="note">实体类型和关系类型与知识图谱查询与推理页面保持一致。</div>
-          </div>
-        </div>
-
-        <div class="tab-pane active" id="kgEntities" style="margin-top:14px;">
-          <div class="panel">
-            <div class="panel-head">
-              <div><h2 class="panel-title">图谱实体管理</h2><p class="panel-subtitle">维护前台图谱中的节点，实体类型决定节点颜色、图例归属和“全部实体”下拉筛选结果。</p></div>
-              <button class="btn primary small" onclick="openDrawer('新增图谱实体', '维护实体分类、中文名、英文名、编码别名、详情说明和前台展示状态。', 'kg-entity')">新增实体</button>
-            </div>
-            <div class="toolbar" style="padding:0 18px;">
-              <div class="filters">
-                <input class="input" placeholder="搜索实体名称/ICD编码/别名">
-                <select class="select"><option>全部实体类型</option><option>疾病</option><option>药物</option><option>手术操作</option><option>检验检查</option><option>症状信息</option></select>
-                <select class="select"><option>全部展示状态</option><option>前台展示</option><option>暂不展示</option></select>
-              </div>
-              <button class="btn" onclick="openDrawer('图例分类配置', '配置前台图例的实体分类、颜色和展示顺序。', 'kg-legend')">图例分类</button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>实体名称</th><th>类型</th><th>编码/别名</th><th>前台详情内容</th><th>关联关系</th><th>展示状态</th><th>操作</th></tr></thead>
-                <tbody>
-                  <tr><td><strong>糖尿病视网膜病变</strong><div class="muted">Diabetic Retinopathy (DR)</div></td><td><span class="kg-type"><span class="kg-dot disease"></span>疾病</span></td><td>E11.301+H36.0<div class="muted">糖网病、糖尿病性视网膜病变</div></td><td>实体说明、诊疗/阅片要点、知识来源已维护</td><td>9 条定义关系 / 2 条病例推理</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑实体 - 糖尿病视网膜病变', '修改后会同步影响前台图谱节点、详情面板和实体筛选。', 'kg-entity')">编辑</button><button class="btn small" onclick="openDrawer('实体预览 - 糖尿病视网膜病变', '预览前台右侧实体详情面板。', 'kg-entity-preview')">预览</button></div></td></tr>
-                  <tr><td><strong>抗VEGF药物治疗</strong><div class="muted">Anti-VEGF Therapy</div></td><td><span class="kg-type"><span class="kg-dot drug"></span>药物</span></td><td>-<div class="muted">可下钻到具体药物</div></td><td>适应证、治疗边界、随访说明已维护</td><td>7 条定义关系</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑实体 - 抗VEGF药物治疗', '维护药物实体说明和关联关系。', 'kg-entity')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                  <tr><td><strong>激光光凝治疗</strong><div class="muted">Laser Photocoagulation</div></td><td><span class="kg-type"><span class="kg-dot surgery"></span>手术操作</span></td><td>-<div class="muted">局灶/格栅光凝、全视网膜光凝</div></td><td>操作场景、适应证、注意事项已维护</td><td>5 条定义关系</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑实体 - 激光光凝治疗', '维护手术操作实体说明和关系。', 'kg-entity')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                  <tr><td><strong>OCT黄斑检查</strong><div class="muted">OCT Macular Scan</div></td><td><span class="kg-type"><span class="kg-dot exam"></span>检验检查</span></td><td>-<div class="muted">黄斑OCT、视网膜断层扫描</div></td><td>检查目的、关键指标、判读要点待补充</td><td>3 条定义关系</td><td><span class="status wait">待完善</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑实体 - OCT黄斑检查', '补充检验检查实体内容。', 'kg-entity')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                  <tr><td><strong>视力下降</strong><div class="muted">Vision Loss</div></td><td><span class="kg-type"><span class="kg-dot symptom"></span>症状信息</span></td><td>-<div class="muted">视物模糊、中心视力下降</div></td><td>症状说明、关联疾病、鉴别提示已维护</td><td>2 条定义关系</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑实体 - 视力下降', '维护症状信息实体说明。', 'kg-entity')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-pane" id="kgRelations" style="margin-top:14px;">
-          <div class="panel">
-            <div class="panel-head">
-              <div><h2 class="panel-title">图谱关系维护</h2><p class="panel-subtitle">维护前台连线标签和右侧关系详情。关系类型会影响“药物相关、手术操作相关、检验检查相关、症状信息相关”的下拉筛选。</p></div>
-              <button class="btn primary small" onclick="openDrawer('新增图谱关系', '选择源实体、目标实体、关系类型和关系说明，发布后同步到前台图谱连线。', 'kg-relation')">新增关系</button>
-            </div>
-            <div class="toolbar" style="padding:0 18px;">
-              <div class="filters">
-                <input class="input" placeholder="搜索源实体/目标实体/关系标签">
-                <select class="select"><option>全部关系类型</option><option>药物相关</option><option>手术操作相关</option><option>检验检查相关</option><option>症状信息相关</option></select>
-                <select class="select"><option>全部状态</option><option>前台展示</option><option>暂不展示</option></select>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>关系链路</th><th>筛选归属</th><th>关系说明</th><th>前台影响</th><th>展示状态</th><th>操作</th></tr></thead>
-                <tbody>
-                  <tr><td><span class="relation-route">糖尿病视网膜病变 <span class="relation-arrow">→</span> 抗VEGF药物治疗</span><div class="muted">标签：治疗</div></td><td><span class="kg-type"><span class="kg-dot drug"></span>药物相关</span></td><td>疾病可采用对应药物作为临床干预路径。</td><td>前台图谱连线、关系 tooltip、实体详情关联列表</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑关系 - DR → 抗VEGF药物治疗', '维护关系标签、筛选归属和前台说明。', 'kg-relation')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                  <tr><td><span class="relation-route">青光眼 <span class="relation-arrow">→</span> 激光光凝治疗</span><div class="muted">标签：激光治疗</div></td><td><span class="kg-type"><span class="kg-dot surgery"></span>手术操作相关</span></td><td>治疗方式属于激光手术操作路径。</td><td>前台手术操作筛选和关系详情说明</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑关系 - 青光眼 → 激光光凝治疗', '维护手术操作相关关系。', 'kg-relation')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                  <tr><td><span class="relation-route">高血压视网膜病变 <span class="relation-arrow">→</span> 血压测量</span><div class="muted">标签：检验检查</div></td><td><span class="kg-type"><span class="kg-dot exam"></span>检验检查相关</span></td><td>疾病实体与检验检查项目存在诊断、监测或随访关联。</td><td>前台检验检查筛选和实体详情关联列表</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑关系 - 高血压视网膜病变 → 血压测量', '维护检验检查相关关系。', 'kg-relation')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                  <tr><td><span class="relation-route">视网膜静脉阻塞 <span class="relation-arrow">→</span> 视力下降</span><div class="muted">标签：症状表现</div></td><td><span class="kg-type"><span class="kg-dot symptom"></span>症状信息相关</span></td><td>疾病实体可表现为对应症状信息，辅助临床识别和鉴别。</td><td>前台症状信息筛选和详情面板</td><td><span class="status ok">前台展示</span></td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('编辑关系 - RVO → 视力下降', '维护症状信息相关关系。', 'kg-relation')">编辑</button><button class="btn small">预览</button></div></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-pane" id="kgReasoning" style="margin-top:14px;">
-          <div class="grid two">
-            <div class="panel">
-              <div class="panel-head">
-                <div><h2 class="panel-title">病例之间的推理配置</h2><p class="panel-subtitle">暂时保留当前前台推理结果逻辑，后台仅维护推理规则名称、触发依据、说明文案和展示状态。</p></div>
-                <button class="btn primary small" onclick="openDrawer('新增病例推理规则', '配置推理名称、源实体、目标实体、规则依据和前台展示说明。', 'kg-reasoning')">新增推理规则</button>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>推理关系</th><th>触发依据</th><th>前台说明</th><th>状态</th><th>操作</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>共病风险</strong><div class="muted">糖尿病视网膜病变 → 高血压</div></td><td>DR患者常合并高血压，二者共同加重视网膜微血管损害。</td><td>在前台以橙色虚线展示，右侧推理结果列表保留。</td><td><span class="status ok">展示中</span></td><td><button class="btn small" onclick="openDrawer('编辑推理规则 - 共病风险', '维护病例推理规则说明，不调整当前推理结果逻辑。', 'kg-reasoning')">编辑</button></td></tr>
-                    <tr><td><strong>代谢综合征</strong><div class="muted">糖尿病视网膜病变 → 高脂血症</div></td><td>DR、糖尿病和高脂血症共享代谢异常背景。</td><td>运行图谱推理后在前台推理结果中展示。</td><td><span class="status ok">展示中</span></td><td><button class="btn small" onclick="openDrawer('编辑推理规则 - 代谢综合征', '维护病例推理规则说明。', 'kg-reasoning')">编辑</button></td></tr>
-                    <tr><td><strong>血管机制</strong><div class="muted">高血压 → 青光眼</div></td><td>高血压导致眼部灌注异常和血管调节异常。</td><td>前台点击后展示规则解释和实体跳转。</td><td><span class="status ok">展示中</span></td><td><button class="btn small" onclick="openDrawer('编辑推理规则 - 血管机制', '维护病例推理规则说明。', 'kg-reasoning')">编辑</button></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="panel-head"><div><h2 class="panel-title">前后台逻辑闭环</h2><p class="panel-subtitle">运营维护后，前台图谱按同一套实体和关系口径展示。</p></div></div>
-              <div class="panel-body">
-                <div class="logic-flow">
-                  <div class="flow-step"><b>1. 维护实体</b><p>选择疾病、药物、手术操作、检验检查、症状信息，生成前台节点。</p></div>
-                  <div class="flow-step"><b>2. 维护关系</b><p>选择源实体和目标实体，配置连线标签和关系说明。</p></div>
-                  <div class="flow-step"><b>3. 维护推理</b><p>配置病例之间的推理规则说明，保留当前推理结果展示逻辑。</p></div>
-                  <div class="flow-step"><b>4. 前台展示</b><p>同步到图例、实体下拉、关系下拉、右侧详情和推理结果。</p></div>
-                </div>
-                <div class="kg-mini-graph" style="margin-top:14px;">
-                  <div class="kg-mini-node disease">糖尿病视网膜病变</div>
-                  <div class="kg-mini-edge"><b>治疗</b><span>药物相关</span><span>→</span></div>
-                  <div class="kg-mini-node drug">抗VEGF药物治疗</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="section" id="literature">
         <div class="toolbar">
-          <div class="tabs" data-tab-group="literatureTabs">
-            <button class="tab active" data-tab="literatureManage">文献库管理</button>
-          </div>
-          <div class="top-actions">
-            <a class="btn" href="../科技文献检索推荐.html">前台页面</a>
+          <div class="top-actions" style="margin-left:auto;">
             <button class="btn primary" onclick="openDrawer('新增文献', '录入题名、作者、期刊、摘要、DOI、推荐理由和前台展示状态。', 'literature')">新增文献</button>
           </div>
         </div>
-
-        <div class="grid kpi">
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">文献总量</span><span class="metric-dot">文</span></div>
-            <div class="value">14</div>
-            <div class="note">对应前台已录入的科技文献总量，覆盖眼科、医学影像、临床医学、医学信息学等领域。</div>
-          </div>
-          <div class="panel kpi-card">
-            <div class="kpi-row"><span class="label">待完善元数据</span><span class="metric-dot violet">审</span></div>
-            <div class="value">3</div>
-            <div class="note">缺少完整作者信息、通讯邮箱或摘要的文献进入待处理队列。</div>
-          </div>
-        </div>
-
-        <div class="tab-pane active" id="literatureManage" style="margin-top:14px;">
+        <div class="tab-pane active" id="literatureManage">
           <div class="panel">
             <div class="panel-head">
               <div><h2 class="panel-title">文献数据管理</h2><p class="panel-subtitle">管理已上传的科技文献元数据：题名、作者、期刊、年份、类型、摘要等。</p></div>
@@ -1633,23 +1399,8 @@
             </div>
           </div>
         </div>
-
-        <section class="section" id="audit">
-        <div class="panel">
-          <div class="panel-head"><div><h2 class="panel-title">内容审核与运营日志</h2><p class="panel-subtitle">记录后台关键操作，便于后续独立部署时迁移审计逻辑。</p></div></div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>时间</th><th>操作对象</th><th>操作内容</th><th>影响前台</th><th>操作人</th><th>状态</th></tr></thead>
-              <tbody>
-                <tr><td>2026-07-17 10:20</td><td>考试中心</td><td>调整模块考核次数满额规则</td><td>隐藏“再考一次”入口</td><td>管理员</td><td><span class="status ok">已生效</span></td></tr>
-                <tr><td>2026-07-17 09:42</td><td>基础课程</td><td>发布章节测验结果模板</td><td>仅展示准确率与强化内容</td><td>教研员</td><td><span class="status ok">已发布</span></td></tr>
-                <tr><td>2026-07-16 18:13</td><td>读片大赛</td><td>生成退赛与缺考结果</td><td>结果页可查看0分和退赛标记</td><td>竞赛管理员</td><td><span class="status wait">部分完成</span></td></tr>
-                <tr><td>2026-07-16 15:31</td><td>AI答疑</td><td>更新课程难点语料库</td><td>答疑入口使用新版知识库</td><td>AI管理员</td><td><span class="status info">已同步</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </section>
+
     </main>
   </div>
 
@@ -1674,13 +1425,8 @@
       practice: ['技能实践管理', '进入三个独立子后台：虚拟临床技能实训、经典病例诊断实训、读片与病例大赛系统。'],
       contest: ['读片/病例大赛管理', '管理比赛有效期、固定答题时长、报名、进度保存、剩余时间，以及完成、退赛、缺考三种结果。'],
       exams: ['考试中心管理', '先选阶段测评或综合考核，再定单课程/模块/全周期，随后逐题创建题目并绑定知识点、难度和分数。'],
-      profiles: ['学员档案与能力评估', '汇总学习轨迹、章节测验、考试报告、实训作品、AI答疑和证书学分，生成能力雷达与教学反馈。'],
-      certs: ['证书学分管理', '基于课程完成、测验准确率、考试成绩和实训作品审核证书、徽章与继续教育学分。'],
-      aiqa: ['AI答疑与模型配置', '配置医学语言模型问答范围、课程难点讲解语料和答疑运营日志。'],
       knowledge: ['智能教学服务管理后台', '统一管理阅片影像、系统编号、题目与答案解析、知识点关联、错题高亮、学习记录和前台发布状态，覆盖智能教学服务完整业务链路。'],
-      knowledgeGraph: ['知识图谱管理', '统一维护图谱实体、关系和病例推理规则，并与前台知识图谱查询与推理页面共享同一套节点、边和筛选口径。'],
-      literature: ['科技文献检索管理', '管理科技文献元数据的录入、编辑和审核，为前台检索推荐提供数据基础。'],
-      audit: ['内容审核与运营日志', '记录课程、测验、考试、比赛、AI答疑、证书等后台操作，便于独立迁移和审计。']
+      literature: ['科技文献检索管理', ''],
     };
 
     var courses = [
@@ -1833,21 +1579,21 @@
     };
 
     var exams = [
-      { id: 1, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '糖尿病视网膜病变基础单课程测评', range: '单课程测评', target: '糖尿病视网膜病变基础', types: '单选题', questionStructure: '单选100%', meta: 'DR分期、筛查、治疗', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '张医生、李医生等3人', questionCount: '8题' },
-      { id: 2, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '青光眼诊疗基础单课程测评', range: '单课程测评', target: '青光眼诊疗基础', types: '单选题', questionStructure: '单选100%', meta: '眼压、视盘、视野、OCT RNFL', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '王医生、赵医生等5人', questionCount: '8题' },
-      { id: 3, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '眼科学基础模块考核', range: '模块考核', target: '解剖学', types: '混合题型', questionStructure: '单选35% / 多选25% / 简答20% / 病例20%', meta: '眼球解剖、视路、眼附属器', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '2次', audience: '高级研修班全体6人', questionCount: '10题' },
-      { id: 4, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '角膜病模块考核', range: '模块考核', target: '生理学', types: '混合题型', questionStructure: '单选30% / 多选20% / 简答20% / 病例30%', meta: '角膜病、屈光、角膜移植', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '3次', audience: '陈医生、周医生等2人', questionCount: '10题' },
-      { id: 5, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: 'AMD诊疗规范单课程测评', range: '单课程测评', target: 'AMD诊疗规范', types: '单选题', questionStructure: '单选100%', meta: '干性AMD、湿性AMD、抗VEGF', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '陈医生、周医生等2人', questionCount: '8题' },
-      { id: 6, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '高血压视网膜病变单课程测评', range: '单课程测评', target: '高血压视网膜病变', types: '单选题', questionStructure: '单选100%', meta: 'Keith-Wagener、Scheie、AV交叉征', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '刘医生、孙医生等4人', questionCount: '8题' },
-      { id: 7, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '青光眼模块考核', range: '模块考核', target: '生物信息学', types: '混合题型', questionStructure: '单选30% / 多选20% / 简答20% / 病例30%', meta: '青光眼诊断、OCT、视野、治疗', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '2次', audience: '王医生、赵医生等5人', questionCount: '10题' },
-      { id: 8, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '眼底激光治疗单课程测评', range: '单课程测评', target: '眼底激光治疗原理', types: '单选题', questionStructure: '单选100%', meta: 'PRP、局部光凝、适应证', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '刘医生、孙医生等4人', questionCount: '8题' },
-      { id: 9, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: 'RVO诊疗指南单课程测评', range: '单课程测评', target: 'RVO诊疗指南', types: '单选题', questionStructure: '单选100%', meta: 'BRVO、CRVO、黄斑水肿', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '张医生、李医生等3人', questionCount: '8题' },
-      { id: 10, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '糖尿病视网膜病变模块考核', range: '模块考核', target: '医学AI基础', types: '混合题型', questionStructure: '单选35% / 多选25% / 简答20% / 病例20%', meta: 'DR筛查、分期、AI辅助诊断', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '3次', audience: '高级研修班全体6人', questionCount: '10题' },
-      { id: 11, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: 'OCT读片实战训练单课程测评', range: '单课程测评', target: 'OCT读片实战训练', types: '单选题', questionStructure: '单选100%', meta: '黄斑OCT、RNFL、结构化判读', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '王医生、赵医生等5人', questionCount: '8题' },
-      { id: 12, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '眼底血管造影判读单课程测评', range: '单课程测评', target: '眼底血管造影判读', types: '单选题', questionStructure: '单选100%', meta: 'FFA、ICGA、OCTA影像判读', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '科研课题组全体5人', questionCount: '8题' },
-      { id: 101, category: 'comprehensive', stageType: '综合考核', examType: '全周期综合考试', name: '眼科基础全周期综合考试', range: '全周期综合考试', target: '解剖学 + 生理学', types: '混合题型', questionStructure: '单选20% / 多选20% / 简答20% / 病例30% / 代码10%', meta: '解剖学、生理学；基础至高阶', difficulty: '基础 / 进阶 / 高阶', totalScore: '150分', duration: '120分钟', attemptLimit: '2次', audience: '高级研修班全体6人', questionCount: '18题' },
-      { id: 102, category: 'comprehensive', stageType: '综合考核', examType: '全周期综合考试', name: 'AI诊疗全周期综合考试', range: '全周期综合考试', target: '生物信息学 + 医学AI基础', types: '混合题型', questionStructure: '单选20% / 多选20% / 简答20% / 病例30% / 代码10%', meta: 'AI诊疗全课程；基础至高阶', difficulty: '基础 / 进阶 / 高阶', totalScore: '120分', duration: '120分钟', attemptLimit: '2次', audience: '刘医生、孙医生、赵医生等6人', questionCount: '16题' },
-      { id: 103, category: 'comprehensive', stageType: '综合考核', examType: '全周期综合考试', name: '影像判读全周期综合考试', range: '全周期综合考试', target: '解剖学 + 生理学 + 生物信息学', types: '混合题型', questionStructure: '单选25% / 多选20% / 病例35% / 代码20%', meta: 'OCT、FFA、读片；进阶/高阶', difficulty: '进阶 / 高阶', totalScore: '150分', duration: '150分钟', attemptLimit: '3次', audience: '科研课题组全体5人', questionCount: '20题' }
+      { id: 1, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '糖尿病视网膜病变基础单课程测评', types: '单选题', questionStructure: '单选100%', meta: 'DR分期、筛查、治疗', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '张医生、李医生等3人', questionCount: '8题' },
+      { id: 2, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '青光眼诊疗基础单课程测评', types: '单选题', questionStructure: '单选100%', meta: '眼压、视盘、视野、OCT RNFL', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '王医生、赵医生等5人', questionCount: '8题' },
+      { id: 3, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '眼科学基础模块考核', types: '混合题型', questionStructure: '单选35% / 多选25% / 简答20% / 病例20%', meta: '眼球解剖、视路、眼附属器', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '2次', audience: '高级研修班全体6人', questionCount: '10题' },
+      { id: 4, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '角膜病模块考核', types: '混合题型', questionStructure: '单选30% / 多选20% / 简答20% / 病例30%', meta: '角膜病、屈光、角膜移植', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '3次', audience: '陈医生、周医生等2人', questionCount: '10题' },
+      { id: 5, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: 'AMD诊疗规范单课程测评', types: '单选题', questionStructure: '单选100%', meta: '干性AMD、湿性AMD、抗VEGF', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '陈医生、周医生等2人', questionCount: '8题' },
+      { id: 6, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '高血压视网膜病变单课程测评', types: '单选题', questionStructure: '单选100%', meta: 'Keith-Wagener、Scheie、AV交叉征', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '刘医生、孙医生等4人', questionCount: '8题' },
+      { id: 7, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '青光眼模块考核', types: '混合题型', questionStructure: '单选30% / 多选20% / 简答20% / 病例30%', meta: '青光眼诊断、OCT、视野、治疗', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '2次', audience: '王医生、赵医生等5人', questionCount: '10题' },
+      { id: 8, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '眼底激光治疗单课程测评', types: '单选题', questionStructure: '单选100%', meta: 'PRP、局部光凝、适应证', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '刘医生、孙医生等4人', questionCount: '8题' },
+      { id: 9, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: 'RVO诊疗指南单课程测评', types: '单选题', questionStructure: '单选100%', meta: 'BRVO、CRVO、黄斑水肿', difficulty: '基础 / 进阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '张医生、李医生等3人', questionCount: '8题' },
+      { id: 10, category: 'stage', stageType: '阶段测评', examType: '模块考核', name: '糖尿病视网膜病变模块考核', types: '混合题型', questionStructure: '单选35% / 多选25% / 简答20% / 病例20%', meta: 'DR筛查、分期、AI辅助诊断', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '60分钟', attemptLimit: '3次', audience: '高级研修班全体6人', questionCount: '10题' },
+      { id: 11, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: 'OCT读片实战训练单课程测评', types: '单选题', questionStructure: '单选100%', meta: '黄斑OCT、RNFL、结构化判读', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '90分钟', attemptLimit: '2次', audience: '王医生、赵医生等5人', questionCount: '8题' },
+      { id: 12, category: 'stage', stageType: '阶段测评', examType: '单课程测评', name: '眼底血管造影判读单课程测评', types: '单选题', questionStructure: '单选100%', meta: 'FFA、ICGA、OCTA影像判读', difficulty: '进阶 / 高阶', totalScore: '100分', duration: '90分钟', attemptLimit: '3次', audience: '科研课题组全体5人', questionCount: '8题' },
+      { id: 101, category: 'comprehensive', stageType: '综合考核', examType: '全周期综合考试', name: '眼科基础全周期综合考试', types: '混合题型', questionStructure: '单选20% / 多选20% / 简答20% / 病例30% / 代码10%', meta: '解剖学、生理学；基础至高阶', difficulty: '基础 / 进阶 / 高阶', totalScore: '150分', duration: '120分钟', attemptLimit: '2次', audience: '高级研修班全体6人', questionCount: '18题' },
+      { id: 102, category: 'comprehensive', stageType: '综合考核', examType: '全周期综合考试', name: 'AI诊疗全周期综合考试', types: '混合题型', questionStructure: '单选20% / 多选20% / 简答20% / 病例30% / 代码10%', meta: 'AI诊疗全课程；基础至高阶', difficulty: '基础 / 进阶 / 高阶', totalScore: '120分', duration: '120分钟', attemptLimit: '2次', audience: '刘医生、孙医生、赵医生等6人', questionCount: '16题' },
+      { id: 103, category: 'comprehensive', stageType: '综合考核', examType: '全周期综合考试', name: '影像判读全周期综合考试', types: '混合题型', questionStructure: '单选25% / 多选20% / 病例35% / 代码20%', meta: 'OCT、FFA、读片；进阶/高阶', difficulty: '进阶 / 高阶', totalScore: '150分', duration: '150分钟', attemptLimit: '3次', audience: '科研课题组全体5人', questionCount: '20题' }
     ];
 
     var literatureItems = [
@@ -2213,8 +1959,8 @@
       var keywordValue = keyword ? keyword.value.trim().toLowerCase() : '';
       return exams.filter(function(item) {
         if (item.category !== category) return false;
-        var scopeHit = scopeValue === 'all' || item.range === scopeValue;
-        var keywordHit = !keywordValue || (item.name + item.target + item.meta).toLowerCase().indexOf(keywordValue) >= 0;
+        var scopeHit = scopeValue === 'all' || item.stageType === scopeValue;
+        var keywordHit = !keywordValue || (item.name + item.stageType + item.examType + item.meta).toLowerCase().indexOf(keywordValue) >= 0;
         return scopeHit && keywordHit;
       });
     }
@@ -2238,8 +1984,8 @@
       target.innerHTML = data.map(function(item) {
         return '<tr>'
           + '<td><strong>' + escapeHtml(item.name) + '</strong></td>'
-          + '<td><span class="status info">' + escapeHtml(item.stageType) + '</span><div class="muted">' + escapeHtml(item.examType) + '</div></td>'
-          + '<td><strong>' + escapeHtml(item.target) + '</strong></td>'
+          + '<td><span class="status info">' + escapeHtml(item.stageType) + '</span></td>'
+          + '<td>' + escapeHtml(item.examType) + '</td>'
           + '<td><strong>' + escapeHtml(item.totalScore) + '</strong><div class="muted">' + escapeHtml(item.duration) + '</div></td>'
           + '<td><span class="status info">' + escapeHtml(getExamAttemptLimit(item)) + '</span><div class="muted">仅配置最大重复次数</div></td>'
           + '<td>' + escapeHtml(item.audience) + '</td>'
@@ -2267,10 +2013,8 @@
     function syncExamFrameworkOptions() {
       var stageSelect = document.querySelector('#drawerBody [data-exam-stage]');
       var typeSelect = document.querySelector('#drawerBody [data-exam-type]');
-      var targetSelect = document.querySelector('#drawerBody [data-exam-target]');
-      if (!stageSelect || !typeSelect || !targetSelect) return;
+      if (!stageSelect || !typeSelect) return;
       var stage = stageSelect.value;
-      var examType = typeSelect.value;
       typeSelect.querySelectorAll('option[data-exam-stage]').forEach(function(option) {
         var visible = option.getAttribute('data-exam-stage') === stage;
         option.hidden = !visible;
@@ -2281,19 +2025,7 @@
         var firstType = typeSelect.querySelector('option[data-exam-stage="' + stage + '"]:not([disabled])');
         if (firstType) {
           typeSelect.value = firstType.value;
-          examType = firstType.value;
         }
-      }
-      var visibleOptions = [];
-      targetSelect.querySelectorAll('option[data-exam-stage]').forEach(function(option) {
-        var visible = option.getAttribute('data-exam-stage') === stage && option.getAttribute('data-exam-type') === examType;
-        option.hidden = !visible;
-        option.disabled = !visible;
-        if (visible) visibleOptions.push(option);
-      });
-      var current = targetSelect.value;
-      if (!visibleOptions.some(function(option) { return option.value === current; })) {
-        targetSelect.value = visibleOptions.length ? visibleOptions[0].value : '';
       }
     }
 
@@ -2315,7 +2047,7 @@
         + '<div class="form-field"><label>题型</label><select class="select" data-question-type onchange="syncExamQuestionCard(this.closest(&quot;[data-exam-question-card]&quot;))"><option>单选题</option><option>多选题</option><option>简答题</option><option>病例分析题</option><option>代码题</option></select></div>'
         + '<div class="form-field"><label>题目分数</label><input class="input" type="number" min="0" value="10" data-question-score oninput="updateExamQuestionSummary()"></div>'
         + '<div class="form-field"><label>题目难度</label><select class="select" data-question-difficulty><option>基础</option><option>进阶</option><option>高阶</option></select></div>'
-        + '<div class="form-field"><label>关联知识点</label><select class="select knowledge-select" multiple size="4" data-question-knowledge>' + getExamKnowledgeOptions() + '</select></div>'
+        + '<div class="form-field"><label>关联知识点</label><select class="select knowledge-select" data-question-knowledge required>' + getExamKnowledgeOptions() + '</select></div>'
         + '<div class="form-field wide"><label>题干</label><textarea data-question-stem placeholder="请输入本题题干"></textarea></div>'
         + '<div class="form-field wide exam-question-choice"><label data-question-choice-label>单选题选项</label><textarea data-question-options placeholder="请按 A、B、C、D 分行填写选项"></textarea></div>'
         + '<div class="form-field wide"><label data-question-answer-label>正确答案与解析</label><textarea data-question-answer placeholder="填写正确答案、解析或评分标准"></textarea></div>'
@@ -2355,12 +2087,7 @@
       var difficultySelect = card.querySelector('[data-question-difficulty]');
       var knowledgeSelect = card.querySelector('[data-question-knowledge]');
       var examName = document.querySelector('#drawerBody [data-exam-name]');
-      var knowledge = [];
-      if (knowledgeSelect) {
-        Array.prototype.forEach.call(knowledgeSelect.options, function(option) {
-          if (option.selected) knowledge.push(option.textContent);
-        });
-      }
+      var knowledge = knowledgeSelect ? knowledgeSelect.value : '';
       return {
         examName: examName ? examName.value.trim() : '',
         type: typeSelect ? typeSelect.value : '单选题',
@@ -2374,7 +2101,7 @@
       var card = button.closest('[data-exam-question-card]');
       if (!card) return;
       var ctx = getExamQuestionContext(card);
-      if (!ctx.knowledge.length) {
+      if (!ctx.knowledge) {
         showToast('请先为本题选择关联知识点。');
         return;
       }
@@ -2391,7 +2118,7 @@
         var answerLabel = card.querySelector('[data-question-answer-label]');
         if (stemEl) {
           stemEl.value = ctx.examName
-            ? '结合"' + ctx.examName + '"中的' + ctx.knowledge[0] + '，选择最符合题意的答案。'
+            ? '结合"' + ctx.examName + '"中的' + ctx.knowledge + '，选择最符合题意的答案。'
             : '根据所选知识点，选择最符合题意的答案。';
         }
         if (type === '单选题') {
@@ -2480,14 +2207,9 @@
 
     function validateExamBeforeSave() {
       var name = document.querySelector('#drawerBody [data-exam-name]');
-      var target = document.querySelector('#drawerBody [data-exam-target]');
       var cards = document.querySelectorAll('#drawerBody [data-exam-question-card]');
       if (!name || !name.value.trim()) {
         showToast('请先填写试卷名称。');
-        return false;
-      }
-      if (!target || !target.value) {
-        showToast('请先选择考核范围。');
         return false;
       }
       if (!cards.length) {
@@ -2502,7 +2224,7 @@
         var knowledge = card.querySelector('[data-question-knowledge]');
         var type = card.querySelector('[data-question-type]');
         var options = card.querySelector('[data-question-options]');
-        var selectedKnowledge = knowledge ? Array.prototype.filter.call(knowledge.options, function(option) { return option.selected; }) : [];
+        var selectedKnowledge = knowledge ? knowledge.value : '';
         if (!stem || !stem.value.trim()) {
           showToast('第' + (i + 1) + '题还没有填写题干。');
           return false;
@@ -2511,7 +2233,7 @@
           showToast('第' + (i + 1) + '题的分数必须大于0。');
           return false;
         }
-        if (!selectedKnowledge.length) {
+        if (!selectedKnowledge) {
           showToast('第' + (i + 1) + '题请选择关联知识点。');
           return false;
         }
@@ -2521,6 +2243,47 @@
         }
         if (!answer || !answer.value.trim()) {
           showToast('第' + (i + 1) + '题还没有填写答案或评分说明。');
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function validateCourseBeforeSave() {
+      var cards = document.querySelectorAll('#drawerBody #courseQuizList .exam-question-card');
+      for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var title = card.querySelector('[data-course-question-title]');
+        var stem = card.querySelector('[data-course-question-stem]');
+        var knowledge = card.querySelector('[data-course-question-knowledge], .knowledge-select');
+        var correct = card.querySelector('[data-course-correct-answer]');
+        var analysis = card.querySelector('[data-course-question-analysis]');
+        if (!title || !title.value.trim()) {
+          showToast('课程第' + (i + 1) + '题请填写题目标题。');
+          return false;
+        }
+        if (!knowledge || !knowledge.value) {
+          showToast('课程第' + (i + 1) + '题请先绑定一个知识点。');
+          return false;
+        }
+        if (!stem || !stem.value.trim()) {
+          showToast('课程第' + (i + 1) + '题请填写题干。');
+          return false;
+        }
+        var optionKeys = ['A', 'B', 'C', 'D'];
+        for (var j = 0; j < optionKeys.length; j++) {
+          var optionInput = card.querySelector('[data-course-option="' + optionKeys[j] + '"]');
+          if (!optionInput || !optionInput.value.trim()) {
+            showToast('课程第' + (i + 1) + '题请填写' + optionKeys[j] + '选项。');
+            return false;
+          }
+        }
+        if (!correct || !correct.value) {
+          showToast('课程第' + (i + 1) + '题请选择正确答案。');
+          return false;
+        }
+        if (!analysis || !analysis.value.trim()) {
+          showToast('课程第' + (i + 1) + '题请填写解析说明。');
           return false;
         }
       }
@@ -2619,12 +2382,12 @@
     function courseSectionHtml(chapterIndex, sectionIndex) {
       var code = chapterIndex + '.' + sectionIndex;
       return '<div class="section-card">'
-        + '<div class="section-head"><strong>' + code + ' 小节</strong><div class="table-actions"><button class="btn small">上移</button><button class="btn small">下移</button><button class="btn small danger">删除</button></div></div>'
+        + '<div class="section-head"><strong>' + code + ' 小节</strong><div class="table-actions"><button class="btn small danger">删除</button></div></div>'
         + '<div class="split-form section-grid">'
         + '<div class="form-field"><label>小节名称</label><input class="input" placeholder="请输入小节名称"></div>'
         + '<div class="form-field"><label>小节编号</label><input class="input" value="' + code + '"></div>'
         + '<div class="form-field"><label>视频上传</label><input class="input" placeholder="上传视频文件"></div>'
-        + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" multiple size="5" required>' + courseKnowledgeOptionHtml() + '</select></div>'
+        + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" required>' + courseKnowledgeOptionHtml() + '</select></div>'
         + '</div>'
         + '</div>';
     }
@@ -2633,12 +2396,16 @@
       return '<div class="exam-question-card">'
         + '<div class="exam-question-card-head"><strong>第' + questionIndex + '题</strong><div class="exam-question-actions"><button type="button" class="btn small danger" onclick="removeCourseQuizQuestion(this)">删除本题</button></div></div>'
         + '<div class="question-grid">'
-        + '<div class="form-field"><label>题目标题</label><input class="input" placeholder="请输入题目标题"></div>'
-        + '<div class="form-field"><label>题型</label><select class="select" disabled><option selected>单选题</option></select></div>'
-        + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" multiple size="5" required>' + courseKnowledgeOptionHtml() + '</select></div>'
-        + '<div class="form-field wide"><label>题干</label><textarea placeholder="请输入单选题题干"></textarea></div>'
-        + '<div class="form-field wide"><label>选项</label><textarea placeholder="A. ...&#10;B. ...&#10;C. ...&#10;D. ..."></textarea></div>'
-        + '<div class="form-field wide"><label>正确答案与解析</label><textarea placeholder="填写正确答案和解析"></textarea></div>' + '<div class="form-field wide" style="font-size:12px;color:var(--gray-500);">提示：题目统一为单选题，必须绑定至少一个知识点后才能保存。</div>'
+        + '<div class="form-field"><label>题目标题</label><input class="input" data-course-question-title placeholder="请输入题目标题"></div>'
+        + '<div class="form-field"><label>绑定知识点 <span style="color:var(--danger)">*</span></label><select class="select knowledge-select" data-course-question-knowledge required>' + courseKnowledgeOptionHtml() + '</select></div>'
+        + '<div class="form-field wide"><label>题干 <span style="color:var(--danger)">*</span></label><textarea data-course-question-stem placeholder="请输入单选题题干"></textarea></div>'
+        + '<div class="form-field"><label>A 选项 <span style="color:var(--danger)">*</span></label><input class="input" data-course-option="A" placeholder="请输入A选项内容"></div>'
+        + '<div class="form-field"><label>B 选项 <span style="color:var(--danger)">*</span></label><input class="input" data-course-option="B" placeholder="请输入B选项内容"></div>'
+        + '<div class="form-field"><label>C 选项 <span style="color:var(--danger)">*</span></label><input class="input" data-course-option="C" placeholder="请输入C选项内容"></div>'
+        + '<div class="form-field"><label>D 选项 <span style="color:var(--danger)">*</span></label><input class="input" data-course-option="D" placeholder="请输入D选项内容"></div>'
+        + '<div class="form-field"><label>正确答案 <span style="color:var(--danger)">*</span></label><select class="select" data-course-correct-answer><option value="">请选择正确答案</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>'
+        + '<div class="form-field wide"><label>解析说明 <span style="color:var(--danger)">*</span></label><textarea data-course-question-analysis placeholder="请填写本题解析说明"></textarea></div>'
+        + '<div class="form-field wide" style="font-size:12px;color:var(--gray-500);">提示：章节测验题目固定为单选题，每题只允许 1 个正确答案，选项固定为 A / B / C / D。</div>'
         + '</div>'
         + '</div>';
     }
@@ -2710,7 +2477,7 @@
               <div class="section-card">
                 <div class="section-head">
                   <strong>1.1 小节</strong>
-                  <div class="table-actions"><button class="btn small">上移</button><button class="btn small">下移</button><button class="btn small danger">删除</button></div>
+                  <div class="table-actions"><button class="btn small danger">删除</button></div>
                 </div>
                 <div class="split-form section-grid">
                   <div class="form-field"><label>小节名称</label><input class="input" value="Keith-Wagener-Barker分级"></div>
@@ -2722,7 +2489,7 @@
               <div class="section-card">
                 <div class="section-head">
                   <strong>1.2 小节</strong>
-                  <div class="table-actions"><button class="btn small">上移</button><button class="btn small">下移</button><button class="btn small danger">删除</button></div>
+                  <div class="table-actions"><button class="btn small danger">删除</button></div>
                 </div>
                 <div class="split-form section-grid">
                   <div class="form-field"><label>小节名称</label><input class="input" value="Scheie分级与临床应用"></div>
@@ -2778,14 +2545,7 @@
           </div>
         </div>
       </div>`,
-      'course-aiqa': `<div class="split-form">
-        <div class="form-field"><label>首页AI答疑范围</label><select class="select"><option>仅医学课程自然语言问答</option><option>暂不开放</option></select></div>
-        <div class="form-field"><label>首页入场提示</label><input class="input" value="当前问答基于医学课程内容，请勿询问与医学无关的内容"></div>
-        <div class="form-field"><label>课程详情入口</label><select class="select"><option>当前小节视频完成后开放</option><option>未完成时提示先学完当前小节</option></select></div>
-        <div class="form-field"><label>详情页功能</label><select class="select"><option>当前小节问答 + 当前小节知识点难点讲解</option><option>仅当前小节问答</option></select></div>
-        <div class="form-field" style="grid-column:1/-1;"><label>知识点难点讲解</label><textarea>AI只读取当前小节绑定的知识点，按白话解释、临床例子、常见误区、教材/指南出处组织内容；未绑定知识点的小节不能发布难点讲解。</textarea></div>
-        <div class="form-field" style="grid-column:1/-1;"><label>问题拦截规则</label><textarea>首页AI答疑不提供课程难点讲解；非医学问题、与当前课程无关的问题需提示收敛到医学课程学习范围。</textarea></div>
-      </div>`,
+
       case: `<div class="split-form">
         <div class="form-field" style="grid-column:1/-1;"><label>前台同步逻辑</label><p class="form-hint">病例保存后同步到学生端“案例教学”左侧病例树；病种标签和病例资料由后台维护，推理流程、AI对比和学习报告由系统代码统一提供。</p></div>
         <div class="form-field"><label>标准病例名称</label><input class="input" value="轻度非增殖期糖尿病视网膜病变"></div>
@@ -2846,28 +2606,10 @@
         <div class="form-field" style="grid-column:1/-1;"><label>选择课程参与人员</label><select class="select knowledge-select" multiple size="10"><option selected>张医生（眼底病方向）</option><option selected>李医生（住院医师）</option><option>王医生（青光眼方向）</option><option>赵医生（眼底病方向）</option><option>陈医生（黄斑病方向）</option><option>周医生（科研组）</option><option>孙医生（规培医师）</option><option>刘医生（高级研修班）</option><option>韩医生（科研课题组）</option></select><p class="form-hint">只配置该课程的参与人员；保存后，只有被选中的用户登录后才能看到该课程。</p></div>
       </div>`,
       exam: `<div class="split-form">
-        <div class="form-field" style="grid-column:1/-1;"><label>配置顺序</label><p class="form-hint">1. 填写试卷名称；2. 选择阶段测评或综合考核；3. 根据考试层级选择考试类型；4. 选择考核范围；5. 在本页面逐题添加试题；6. 点击“确认创建试卷”。</p></div>
+        <div class="form-field" style="grid-column:1/-1;"><label>配置顺序</label><p class="form-hint">1. 填写试卷名称；2. 选择考试层级和考试类型；3. 在本页面逐题添加试题；4. 点击“确认创建试卷”。</p></div>
         <div class="form-field"><label>考试名称</label><input class="input" data-exam-name value="糖尿病视网膜病变基础单课程测评"></div>
         <div class="form-field"><label>考试层级</label><select class="select" data-exam-stage onchange="syncExamFrameworkOptions()"><option selected>阶段测评</option><option>综合考核</option></select></div>
         <div class="form-field"><label>考试类型</label><select class="select" data-exam-type onchange="syncExamFrameworkOptions()"><option selected data-exam-stage="阶段测评">单课程测评</option><option data-exam-stage="阶段测评">模块考核</option><option data-exam-stage="综合考核">全周期综合考试</option></select></div>
-        <div class="form-field"><label>考核范围</label><select class="select" data-exam-target>
-          <option value="">请选择考核范围</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">糖尿病视网膜病变基础</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">青光眼诊疗基础</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">AMD诊疗规范</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">高血压视网膜病变</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">眼底激光治疗原理</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">RVO诊疗指南</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">OCT读片实战训练</option>
-          <option data-exam-stage="阶段测评" data-exam-type="单课程测评">眼底血管造影判读</option>
-          <option data-exam-stage="阶段测评" data-exam-type="模块考核">解剖学</option>
-          <option data-exam-stage="阶段测评" data-exam-type="模块考核">生理学</option>
-          <option data-exam-stage="阶段测评" data-exam-type="模块考核">生物信息学</option>
-          <option data-exam-stage="阶段测评" data-exam-type="模块考核">医学AI基础</option>
-          <option data-exam-stage="综合考核" data-exam-type="全周期综合考试">解剖学 + 生理学</option>
-          <option data-exam-stage="综合考核" data-exam-type="全周期综合考试">生物信息学 + 医学AI基础</option>
-          <option data-exam-stage="综合考核" data-exam-type="全周期综合考试">解剖学 + 生理学 + 生物信息学</option>
-        </select></div>
         <div class="exam-question-builder">
           <div class="exam-question-builder-head">
             <div><strong>试题配置</strong><p>试题直接在当前试卷内逐题创建，不从题库抽取。每题必须配置题型、题干、分数、基础课程知识点和难度。</p></div>
@@ -3179,6 +2921,7 @@
     }
 
     function saveDrawer() {
+      if (document.querySelector('#drawerBody #courseQuizList') && !validateCourseBeforeSave()) return;
       if (document.querySelector('#drawerBody [data-exam-name]') && !validateExamBeforeSave()) return;
       closeDrawer();
       showToast('配置已保存，相关前台状态将在下一次刷新时同步。');
@@ -3216,4 +2959,9 @@
   </script>
 </body>
 </html>
+
+
+
+
+
 

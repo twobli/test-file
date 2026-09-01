@@ -1,17 +1,44 @@
-﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>数据标注与AI实训</title><style>
-:root { --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe; --success: #34a853; --warning: #fbbc04; --danger: #ea4335; --gray-50: #f8f9fa; --gray-100: #f5f7fa; --gray-200: #e8ecf0; --gray-300: #dadce0; --gray-400: #bdc1c6; --gray-500: #9aa0a6; --gray-600: #80868b; --gray-700: #5f6368; --gray-800: #3c4043; --gray-900: #202124; --sidebar-width: 220px; --header-height: 56px; --radius: 8px; --shadow: 0 1px 3px rgba(0,0,0,0.08); --shadow-lg: 0 4px 12px rgba(0,0,0,0.12); --transition: all 0.2s ease; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; font-size:14px; color:#333; background:#1a1a2e; min-height:100vh; line-height:1.6; }
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>数据标注与AI实训</title>
+<style>
+:root {
+    --primary: #1a73e8;
+    --primary-dark: #1557b0;
+    --primary-light: #e8f0fe;
+    --gray-50: #f8f9fa;
+    --gray-100: #f5f7fa;
+    --gray-200: #e8ecf0;
+    --gray-300: #dadce0;
+    --gray-500: #9aa0a6;
+    --gray-600: #80868b;
+    --gray-700: #5f6368;
+    --gray-800: #3c4043;
+    --gray-900: #202124;
+    --sidebar-width: 220px;
+    --header-height: 56px;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
+    --transition: all 0.2s ease;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; font-size:14px; color:#333; background:var(--gray-50); min-height:100vh; line-height:1.6; }
+a { color:inherit; text-decoration:none; }
 .header { height:var(--header-height); background:linear-gradient(135deg,#1a56db 0%,#2563eb 50%,#1d4ed8 100%); color:#fff; display:flex; align-items:center; padding:0 24px; position:fixed; top:0; left:0; right:0; z-index:1000; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size:18px; font-weight:700; letter-spacing:1px; }
-.header .header-nav { display:flex; gap:4px; margin-left:40px; }
-.header .header-nav a { color:rgba(255,255,255,0.85); text-decoration:none; padding:6px 14px; border-radius:6px; font-size:13px; transition:var(--transition); }
+.header .logo { font-size:18px; font-weight:700; letter-spacing:1px; white-space:nowrap; }
+.header .header-nav { display:flex; gap:4px; margin-left:40px; flex-wrap:wrap; }
+.header .header-nav a { color:rgba(255,255,255,0.85); padding:6px 14px; border-radius:6px; font-size:13px; transition:var(--transition); }
 .header .header-nav a:hover { background:rgba(255,255,255,0.15); color:#fff; }
 .header .header-right { margin-left:auto; display:flex; align-items:center; gap:16px; font-size:13px; }
 .header .btn-logout { background:rgba(255,255,255,0.2); color:#fff; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-size:12px; }
+.header .btn-logout:hover { background:rgba(255,255,255,0.35); }
 .sidebar { position:fixed; top:var(--header-height); left:0; width:var(--sidebar-width); height:calc(100vh - var(--header-height)); background:#fff; border-right:1px solid var(--gray-200); overflow-y:auto; z-index:999; padding:8px 0; }
 .sidebar .menu-group-title { padding:12px 20px 6px; font-size:11px; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
-.sidebar .menu-item { display:flex; align-items:center; padding:10px 20px; color:var(--gray-700); text-decoration:none; font-size:13px; transition:var(--transition); border-left:3px solid transparent; cursor:pointer; }
+.sidebar .menu-item { display:flex; align-items:center; padding:10px 20px; color:var(--gray-700); font-size:13px; transition:var(--transition); border-left:3px solid transparent; }
 .sidebar .menu-item:hover { background:var(--gray-50); color:var(--primary); }
 .sidebar .menu-item.active { background:var(--primary-light); color:var(--primary); border-left-color:var(--primary); font-weight:600; }
 .sidebar .menu-icon { width:20px; margin-right:10px; text-align:center; font-size:14px; }
@@ -22,93 +49,45 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .submenu.open { max-height:280px; }
 .submenu .menu-item { padding-left:50px; font-size:12px; }
 .submenu .menu-item.active { background:var(--primary-light); color:var(--primary); border-left-color:var(--primary); font-weight:600; }
-.main-content { margin-left:var(--sidebar-width); margin-top:var(--header-height); height:calc(100vh - var(--header-height)); display:flex; flex-direction:column; }
-.toolbar { display:flex; align-items:center; justify-content:space-between; padding:6px 16px; background:#2d2d44; border-bottom:1px solid #3d3d5a; flex-shrink:0; flex-wrap:wrap; gap:4px; }
-.toolbar .tb-left, .toolbar .tb-right { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
-.tool-btn { padding:5px 10px; border:1px solid #4a4a6a; background:#363652; color:#ccd; border-radius:4px; cursor:pointer; font-size:11px; font-family:inherit; transition:var(--transition); display:flex; align-items:center; gap:3px; white-space:nowrap; }
-.tool-btn:hover { background:#4a4a7a; border-color:#5a5a8a; }
-.tool-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
-.tool-btn.primary { background:var(--primary); color:#fff; border-color:var(--primary); }
-.tool-btn.success { background:var(--success); color:#fff; border-color:var(--success); }
-.tool-btn.danger { background:var(--danger); color:#fff; border-color:var(--danger); }
-.tool-btn .color-dot { display:inline-block; width:10px; height:10px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); }
-.tool-btn.sm { padding:3px 8px; font-size:10px; }
-.tool-sep { width:1px; height:22px; background:#4a4a6a; margin:0 4px; }
-#uploadInput { display:none; }
-.workspace { display:flex; flex:1; overflow:hidden; }
-.ann-panel-left { width:240px; background:#252540; border-right:1px solid #3d3d5a; padding:10px; overflow-y:auto; flex-shrink:0; }
-.ann-panel-left h4 { font-size:11px; color:#889; text-transform:uppercase; margin:10px 0 6px; letter-spacing:0.5px; }
-.ann-panel-left h4:first-child { margin-top:0; }
-.dataset-item { padding:7px 10px; border-radius:4px; cursor:pointer; font-size:12px; color:#aab; margin-bottom:3px; transition:var(--transition); }
-.dataset-item:hover { background:#363652; }
-.dataset-item.active { background:var(--primary); color:#fff; }
-.dataset-item .ds-progress { font-size:10px; color:#778; margin-top:2px; }
-.dataset-item.active .ds-progress { color:rgba(255,255,255,0.7); }
-.label-preset { display:flex; flex-wrap:wrap; gap:3px; }
-.label-preset .lbl-tag { padding:2px 7px; border-radius:10px; font-size:10px; cursor:pointer; border:1px solid transparent; transition:var(--transition); color:#ddd; }
-.label-preset .lbl-tag:hover { border-color:#889; }
-.label-preset .lbl-tag.active { border-color:#fff; font-weight:600; }
-.label-custom-row { display:flex; gap:3px; margin-top:4px; }
-.label-custom-row input { flex:1; padding:3px 6px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:3px; font-size:11px; font-family:inherit; }
-.label-custom-row button { padding:3px 8px; background:var(--primary); color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; }
-.ann-view-area { flex:1; display:flex; flex-direction:column; background:#0d0d1a; overflow:hidden; position:relative; }
-.image-tabs { display:flex; background:#1a1a2e; border-bottom:1px solid #3d3d5a; flex-shrink:0; overflow-x:auto; }
-.image-tab { padding:6px 12px; font-size:11px; color:#889; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:var(--transition); display:flex; align-items:center; gap:4px; }
-.image-tab:hover { color:#ccd; }
-.image-tab.active { color:#fff; border-bottom-color:var(--primary); }
-.image-tab .tab-close { margin-left:4px; font-size:14px; opacity:0.5; cursor:pointer; }
-.image-tab .tab-close:hover { opacity:1; color:var(--danger); }
-.canvas-container { flex:1; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-.canvas-container .no-image-hint { color:#667; font-size:14px; text-align:center; }
-.canvas-container .no-image-hint .mock-fundus { width:480px; height:480px; border-radius:50%; background:radial-gradient(circle at 42% 48%,#4a2000 8%,#2d1000 35%,#1a0800 65%,#0a0000 100%); position:relative; margin:0 auto 16px; }
-.canvas-container .no-image-hint .mock-fundus .vessel { position:absolute; background:rgba(180,60,40,0.35); border-radius:1px; }
-#imageLayer { display:none; position:absolute; pointer-events:none; max-width:100%; max-height:100%; object-fit:contain; }
-#annotationCanvas { position:absolute; cursor:crosshair; }
-.ann-panel-right { width:260px; background:#252540; border-left:1px solid #3d3d5a; padding:10px; overflow-y:auto; flex-shrink:0; }
-.ann-panel-right h4 { font-size:11px; color:#889; text-transform:uppercase; margin-bottom:8px; }
-.progress-ring { text-align:center; margin-bottom:12px; }
-.progress-ring .pr-num { font-size:32px; font-weight:700; color:var(--success); }
-.progress-ring .pr-label { font-size:11px; color:#889; }
-.progress-stats { display:flex; gap:6px; margin-bottom:10px; }
-.progress-stats .ps-item { flex:1; text-align:center; padding:6px; background:#2d2d44; border-radius:6px; }
-.progress-stats .ps-item .ps-val { font-size:15px; font-weight:700; color:#ccd; }
-.progress-stats .ps-item .ps-lbl { font-size:10px; color:#778; }
-.ann-section { margin-bottom:12px; }
-.ann-section .ann-section-title { font-size:11px; color:#889; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; }
-.ann-section .ann-section-title a { font-size:10px; color:var(--primary); text-decoration:none; cursor:pointer; }
-.result-card-mini { padding:8px 10px; background:#2d2d44; border-radius:6px; margin-bottom:5px; border-left:3px solid var(--success); }
-.result-card-mini .rc-title { font-size:11px; color:#aab; margin-bottom:2px; }
-.result-card-mini .rc-val { font-size:12px; color:#ccd; font-weight:600; }
-.result-card-mini .rc-link { font-size:10px; color:var(--primary); cursor:pointer; display:inline-block; margin-right:6px; margin-top:3px; }
-.btn { display:inline-flex; align-items:center; justify-content:center; padding:7px 14px; border:none; border-radius:6px; font-size:12px; font-weight:500; cursor:pointer; transition:var(--transition); gap:5px; }
-.btn-primary { background:var(--primary); color:#fff; } .btn-primary:hover { background:var(--primary-dark); }
-.btn-success { background:var(--success); color:#fff; }
-.btn-block { width:100%; }
-.status-bar { padding:5px 16px; background:#2d2d44; border-top:1px solid #3d3d5a; display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#889; flex-shrink:0; }
-.status-bar .status-info { display:flex; gap:10px; }
-.status-bar .status-hint { color:var(--success); }
-.modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; }
-.modal-overlay.show { display:flex; }
-.modal-box { background:#2d2d44; border-radius:10px; padding:24px; min-width:420px; max-width:600px; max-height:80vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,0.4); }
-.modal-box h3 { color:#fff; font-size:16px; margin-bottom:16px; }
-.modal-box .form-group { margin-bottom:12px; }
-.modal-box .form-group label { display:block; color:#aab; font-size:11px; margin-bottom:4px; }
-.modal-box .form-group select, .modal-box .form-group input { width:100%; padding:8px 10px; background:#363652; border:1px solid #4a4a6a; color:#ccd; border-radius:4px; font-size:13px; font-family:inherit; }
-.modal-box .form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
-.anno-list-item { padding:6px 8px; background:#2d2d44; border-radius:4px; margin-bottom:4px; font-size:11px; color:#aab; display:flex; align-items:center; gap:6px; cursor:pointer; }
-.anno-list-item:hover { background:#3d3d5a; }
-.anno-list-item.selected { background:var(--primary); color:#fff; }
-.anno-list-item .anno-color { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
-.anno-list-item .anno-del { margin-left:auto; color:var(--danger); cursor:pointer; font-size:14px; line-height:1; padding:0 4px; }
-.anno-list-item .anno-del:hover { opacity:0.8; }
-@media (max-width:1024px) { .sidebar { width:60px; } .sidebar .menu-item span { display:none; } .sidebar .menu-group-title { display:none; } .main-content { margin-left:60px; } .submenu .menu-item { padding-left:10px; } .ann-panel-left,.ann-panel-right { width:160px; } }
-</style></head><body>
-<div class="header"><a href="app-center.html" class="logo" style="color:#fff;text-decoration:none;">生命医学主题库应用</a><div class="header-nav"><a href="眼底图像输入.html">AI眼底疾病筛查</a><a href="临床数据开放共享.html">生命医学开放数据平台</a><a href="基础课程.html">生命医学AI教育平台</a><a href="临床决策支撑.html">眼病/慢病专家系统</a></div><div class="header-right"><span id="headerUserName">管理员</span><button class="btn-logout" onclick="logout()">退出</button></div></div>
+.main-content { margin-left:var(--sidebar-width); margin-top:var(--header-height); height:calc(100vh - var(--header-height)); padding:24px; display:flex; flex-direction:column; gap:16px; }
+.breadcrumb { font-size:13px; color:var(--gray-600); display:flex; align-items:center; gap:8px; }
+.breadcrumb a { color:var(--primary); }
+.breadcrumb span.sep { color:var(--gray-400); }
+.page-title { font-size:22px; font-weight:700; color:var(--gray-900); }
+.module-shell { flex:1; min-height:0; display:flex; flex-direction:column; background:#fff; border:1px solid var(--gray-200); border-radius:12px; box-shadow:var(--shadow); overflow:hidden; }
+.module-tabs { display:flex; gap:4px; padding:14px 18px 0; border-bottom:1px solid var(--gray-200); background:#fff; }
+.module-tab { appearance:none; border:none; background:transparent; color:var(--gray-600); font:inherit; font-size:14px; padding:10px 4px 12px; margin-right:20px; cursor:pointer; border-bottom:2px solid transparent; transition:var(--transition); }
+.module-tab:hover { color:var(--primary); }
+.module-tab.active { color:var(--primary); border-bottom-color:var(--primary); font-weight:600; }
+.module-body { flex:1; min-height:0; background:var(--gray-50); }
+.module-panel { display:none; width:100%; height:100%; }
+.module-panel.active { display:block; }
+.module-frame { width:100%; height:100%; border:0; background:#fff; }
+.module-hint { padding:16px 18px; font-size:12px; color:var(--gray-500); background:#fff; border-top:1px solid var(--gray-200); }
+@media (max-width:1024px) { .sidebar { width:60px; } .sidebar .menu-item span { display:none; } .sidebar .menu-group-title { display:none; } .main-content { margin-left:60px; } }
+</style>
+</head>
+<body>
+<div class="header">
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
+    <div class="header-nav">
+        <a href="眼底图像输入.html">AI眼底疾病筛查</a>
+        <a href="临床数据开放共享.html">生命医学开放数据平台</a>
+        <a href="基础课程.html">生命医学AI教育平台</a>
+        <a href="临床决策支撑.html">眼病/慢病专家系统</a>
+    </div>
+    <div class="header-right">
+        <span id="headerUserName">张教授</span>
+        <button class="btn-logout" onclick="logout()">退出</button>
+    </div>
+</div>
+
 <div class="sidebar" id="sidebar">
-    <div class="menu-group"><div class="menu-group-title">AI教育平台</div>
-        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📖</span>基础课程</a>
-        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span>案例教学</a>
-        <div class="menu-item has-submenu active expanded" onclick="toggleSubmenu(this)"><span class="menu-icon">🔧</span>技能实践<span class="arrow">▶</span></div>
+    <div class="menu-group">
+        <div class="menu-group-title">AI教育平台</div>
+        <a class="menu-item" href="基础课程.html"><span class="menu-icon">📖</span><span>基础课程</span></a>
+        <a class="menu-item" href="案例教学.html"><span class="menu-icon">📋</span><span>案例教学</span></a>
+        <div class="menu-item has-submenu expanded" onclick="toggleSubmenu(this)"><span class="menu-icon">🔧</span><span>技能实践</span><span class="arrow">▶</span></div>
         <div class="submenu open">
             <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
             <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
@@ -116,804 +95,51 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
             <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
             <a class="menu-item active" href="数据标注与AI实训.html">数据标注与AI实训</a>
         </div>
-        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span>考试中心</a>
-        <a class="menu-item" href="个人中心与能力评估.html"><span class="menu-icon">👤</span>个人中心与能力评估</a>
-    </div></div>
+        <a class="menu-item" href="考试中心.html"><span class="menu-icon">📝</span><span>考试中心</span></a>
+        <a class="menu-item" href="个人中心与能力评估.html"><span class="menu-icon">👤</span><span>个人中心与能力评估</span></a>
+    </div>
+</div>
+
 <div class="main-content">
-<div class="toolbar">
-    <div class="tb-left">
-        <button class="tool-btn primary" onclick="document.getElementById('uploadInput').click()">+ 添加文件</button>
-        <input type="file" id="uploadInput" accept=".jpg,.jpeg,.png,.dcm,.tiff,.tif,.bmp,.gif" multiple onchange="handleFileUpload(event)">
-        <span class="tool-sep"></span>
-        <button class="tool-btn" onclick="undo()" title="撤销">↩ 撤销</button>
-        <button class="tool-btn" onclick="redo()" title="重做">↪ 重做</button>
-        <span class="tool-sep"></span>
-        <button class="tool-btn active" data-tool="select" onclick="setTool('select',this)" title="选择/移动标注">⬜ 选择</button>
-        <button class="tool-btn" data-tool="rect" onclick="setTool('rect',this)" title="矩形标注框">▭ 矩形</button>
-        <button class="tool-btn" data-tool="polygon" onclick="setTool('polygon',this)" title="多边形病灶区">⬠ 多边形</button>
-        <button class="tool-btn" data-tool="brush" onclick="setTool('brush',this)" title="自由手绘轮廓">🖌 画笔</button>
-        <button class="tool-btn" data-tool="ellipse" onclick="setTool('ellipse',this)" title="圆形/椭圆形标注">◯ 椭圆</button>
-        <button class="tool-btn" data-tool="line" onclick="setTool('line',this)" title="线段/箭头指示">➤ 线段</button>
-        <button class="tool-btn danger" data-tool="delete" onclick="setTool('delete',this)" title="删除模式：点击标注删除">✕ 删除</button>
-        <span class="tool-sep"></span>
-        <span style="color:#667;font-size:11px;">缩放 <span id="zoomLabel">100</span>%</span>
-        <input type="range" min="20" max="300" value="100" style="width:60px;accent-color:var(--primary);" oninput="setZoom(this.value)" title="缩放影像">
-    </div>
-    <div class="tb-right">
-        <button class="tool-btn" onclick="toggleAIOverlay()" title="切换AI标注可见性">👁 AI标注</button>
-        <button class="tool-btn" id="btnOverlayMode" onclick="cycleOverlayMode()" title="切换显示模式：全部/AI/人工">🔀 全部显示</button>
-        <button class="tool-btn success" onclick="exportResults()">📥 导出结果</button>
-    </div>
-</div>
-<div class="workspace">
-    <div class="ann-panel-left">
-        <h4>数据集</h4>
-        <div class="dataset-item active"><div>DR筛查数据集 - 批次A</div><div class="ds-progress">76% | 14例</div></div>
-        <div class="dataset-item"><div>青光眼标注数据集</div><div class="ds-progress">42% | 8例</div></div>
-        <div class="dataset-item"><div>黄斑病变OCT数据集</div><div class="ds-progress">18% | 3例</div></div>
-        <div class="dataset-item"><div>血管分割训练集</div><div class="ds-progress">90% | 25例</div></div>
-        <h4>标注类别 / 颜色</h4>
-        <div class="label-preset" id="labelPresets"></div>
-        <div class="label-custom-row">
-            <input type="text" id="customLabelInput" placeholder="自定义标签..." onkeydown="if(event.key==='Enter')addCustomLabel()">
-            <button onclick="addCustomLabel()">+</button>
+    <div class="breadcrumb"><a href="#">AI教育平台</a><span class="sep">&gt;</span><span>数据标注与AI实训</span></div>
+    <div class="page-title">数据标注与AI实训</div>
+
+    <div class="module-shell">
+        <div class="module-tabs">
+            <button class="module-tab active" data-target="annPanel" onclick="switchModule(this)">医学影像AI标注</button>
+            <button class="module-tab" data-target="trainPanel" onclick="switchModule(this)">模型训练</button>
         </div>
-        <div style="margin-top:10px;">
-            <div style="font-size:10px;color:#667;margin-bottom:4px;">线条粗细: <span id="lineWidthVal">2</span>px</div>
-            <input type="range" min="1" max="10" value="2" style="width:100%;accent-color:var(--primary);" oninput="setLineWidth(this.value)">
-        </div>
-        <h4>标注列表 (<span id="annoCount">0</span>)</h4>
-        <div id="annoList" style="max-height:160px;overflow-y:auto;"></div>
-    </div>
-    <div class="ann-view-area">
-        <div class="image-tabs" id="imageTabs"></div>
-        <div class="canvas-container" id="canvasContainer">
-            <div class="no-image-hint" id="noImageHint">
-                <div class="mock-fundus">
-                    <div class="vessel" style="top:35%;left:20%;width:60%;height:2px;transform:rotate(-8deg);"></div>
-                    <div class="vessel" style="top:42%;left:22%;width:55%;height:1.5px;transform:rotate(-3deg);"></div>
-                    <div class="vessel" style="top:48%;left:25%;width:50%;height:1px;transform:rotate(2deg);"></div>
-                    <div class="vessel" style="top:55%;left:28%;width:45%;height:1.5px;transform:rotate(-5deg);"></div>
-                </div>
-                <div>点击<strong>"添加文件"</strong>上传医学影像<br><span style="font-size:11px;color:#556;">支持 JPG / PNG / DICOM / TIFF 等 · 单文件 ≤ 50MB · 支持多张批量上传</span></div>
+        <div class="module-body">
+            <div class="module-panel active" id="annPanel">
+                <iframe class="module-frame" id="annFrame" src="数据标注与AI实训(1).html?embed=1" title="医学影像AI标注"></iframe>
             </div>
-            <img id="imageLayer" alt="医学影像">
-            <canvas id="annotationCanvas"></canvas>
-        </div>
-    </div>
-    <div class="ann-panel-right">
-        <div class="progress-ring"><div class="pr-num" id="progressPercent">76%</div><div class="pr-label">标注进度</div></div>
-        <div class="progress-stats">
-            <div class="ps-item"><div class="ps-val" id="statClass">14</div><div class="ps-lbl">分类</div></div>
-            <div class="ps-item"><div class="ps-val" id="statBox">0</div><div class="ps-lbl">框选</div></div>
-            <div class="ps-item"><div class="ps-val" id="statSeg">0</div><div class="ps-lbl">分割</div></div>
-        </div>
-        <div style="font-size:10px;color:#889;margin-bottom:12px;">共计 <span id="statTotal">14</span> 例</div>
-        <div class="ann-section"><div class="ann-section-title"><span>🤖 自动标注</span><span style="font-size:10px;color:#aab;">DR分析: 2级</span></div>
-            <div class="result-card-mini"><div class="rc-title">AI诊断结果</div><div class="rc-val">糖尿病视网膜病变 - 中度非增殖期</div><div><span class="rc-link" onclick="toggleAIOverlay()">显示/隐藏AI标注</span><span class="rc-link" style="color:var(--success);">重新识别</span></div></div>
-        </div>
-        <div class="ann-section"><div class="ann-section-title"><span>🧠 智能诊断分类</span></div>
-            <div class="result-card-mini"><div class="rc-title">类别1: DR分级</div><div class="rc-val">DR分析: 2级（中度NPDR）</div><span class="rc-link">编辑</span></div>
-            <div class="result-card-mini"><div class="rc-title">类别2: DME评估</div><div class="rc-val">无黄斑水肿</div><span class="rc-link">编辑</span></div>
-        </div>
-        <div class="ann-section"><div class="ann-section-title"><span>🔍 AI辅助检测</span></div>
-            <div class="result-card-mini"><div class="rc-title">微血管瘤检测</div><div class="rc-val">检出 12 处（置信度 94%）</div><span class="rc-link">编辑</span></div>
-            <div class="result-card-mini"><div class="rc-title">出血斑检测</div><div class="rc-val">检出 5 处（置信度 89%）</div><span class="rc-link">编辑</span></div>
-            <div class="result-card-mini"><div class="rc-title">硬性渗出检测</div><div class="rc-val">检出 3 处（置信度 91%）</div><span class="rc-link">编辑</span></div>
-        </div>
-        <div class="ann-section"><div class="ann-section-title"><span>✋ 人工标注</span></div>
-            <div class="result-card-mini"><div class="rc-title">选中标注</div><div class="rc-val" id="selectedAnnoInfo" style="color:#889;">未选中</div></div>
-        </div>
-        <button class="btn btn-success btn-block" style="margin-top:6px;" onclick="submitAnnotation()">提交标注</button>
-    </div>
-</div>
-<div class="status-bar">
-    <div class="status-info"><span id="statusImgName">Mock眼底彩照 <span style="color:var(--success);">●</span></span><span id="statusImgSize">2164 × 1424 px</span><span>像素间距: 12.5 µm</span></div>
-    <div class="status-info"><span class="status-hint" id="statusHint">✅ AI标注已完成，等待人工确认</span><span style="color:#667;">快捷键: 1 选择 | S 选框 | P 多边形 | B 画笔 | E 椭圆 | L 线段 | Del 删除选中</span></div>
-</div>
-</div>
-<div class="modal-overlay" id="exportModal">
-    <div class="modal-box">
-        <h3>导出标注结果</h3>
-        <div class="form-group"><label>导出格式</label><select id="exportFormat"><option value="json">JSON（完整标注信息）</option><option value="csv">CSV（简洁表格格式）</option></select></div>
-        <div class="form-group"><label>标注者</label><input type="text" id="exportAnnotator" value="学员001"></div>
-        <div style="font-size:11px;color:#889;margin:8px 0;">当前图像: <span id="exportImgName">-</span><br>人工标注: <span id="exportAnnoCount">0</span> 个 | AI标注: <span id="exportAIAnnoCount">0</span> 个</div>
-        <div class="form-actions">
-            <button class="tool-btn" onclick="closeExportModal()">取消</button>
-            <button class="btn btn-success" onclick="doExport()">确认导出</button>
+            <div class="module-panel" id="trainPanel">
+                <iframe class="module-frame" id="trainFrame" src="模型训练实训.html?embed=1" title="模型训练"></iframe>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
-/* ============ STATE ============ */
-var uploadedImages = [];   // {name, url, width, height, annotations[], aiAnnotations[]}
-var currentImageIndex = -1;
-var manualAnnotations = [];
-var aiAnnotations = [];
-var annotationIdCounter = 1;
-var undoStack = [], redoStack = [];
-var activeTool = 'select';
-var selectedAnnotationId = null;
-var showAIAnnotations = true;
-var overlayMode = 'all';
-var currentLineWidth = 2;
-var currentLabel = '微血管瘤';
-var currentColor = '#FF4444';
-var zoomLevel = 1;
-
-/* drawing state */
-var isDrawing = false;
-var drawStartX, drawStartY, drawCurrentX, drawCurrentY;
-var polygonPoints = [];
-var brushPath = [];
-
-var LABEL_PRESETS = [
-    {label:'微血管瘤', color:'#FF4444'},
-    {label:'出血斑',   color:'#FF8844'},
-    {label:'硬性渗出', color:'#FFD700'},
-    {label:'新生血管', color:'#44AAFF'},
-    {label:'软性渗出', color:'#FF69B4'},
-    {label:'玻璃膜疣', color:'#AA88FF'},
-    {label:'视网膜水肿',color:'#44FFAA'},
-    {label:'纤维增生', color:'#FF9944'}
-];
-
-function buildAIBboxes(imgW, imgH) {
-    return [
-        {id:'ai1', type:'rect', label:'微血管瘤', bbox:[imgW*0.38, imgH*0.30, imgW*0.08, imgH*0.075], color:'#4488FF', source:'ai', confidence:0.94, lineWidth:2},
-        {id:'ai2', type:'rect', label:'出血斑',   bbox:[imgW*0.52, imgH*0.45, imgW*0.07, imgH*0.06], color:'#4488FF', source:'ai', confidence:0.89, lineWidth:2},
-        {id:'ai3', type:'rect', label:'硬性渗出', bbox:[imgW*0.25, imgH*0.55, imgW*0.06, imgH*0.05], color:'#4488FF', source:'ai', confidence:0.91, lineWidth:2},
-        {id:'ai4', type:'rect', label:'微血管瘤', bbox:[imgW*0.65, imgH*0.35, imgW*0.05, imgH*0.05], color:'#4488FF', source:'ai', confidence:0.87, lineWidth:2}
-    ];
-}
-
-var imageLayer = document.getElementById('imageLayer');
-var annotationCanvas = document.getElementById('annotationCanvas');
-var canvasContainer = document.getElementById('canvasContainer');
-var noImageHint = document.getElementById('noImageHint');
-var imageTabs = document.getElementById('imageTabs');
-var ctx = annotationCanvas.getContext('2d');
-
-/* ============ FILE UPLOAD ============ */
-function handleFileUpload(event) {
-    var files = event.target.files;
-    if (!files || files.length === 0) return;
-    var maxSize = 50 * 1024 * 1024;
-    for (var i = 0; i < files.length; i++) {
-        var f = files[i];
-        if (f.size > maxSize) { alert('文件 "' + f.name + '" 超过50MB限制，已跳过'); continue; }
-        var ext = f.name.split('.').pop().toLowerCase();
-        if (ext === 'dcm') { alert('DICOM文件 "' + f.name + '" 需专用解析器，当前仅浏览器预览支持。'); }
-        (function(file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.onload = function() {
-                    uploadedImages.push({
-                        name: file.name, url: e.target.result,
-                        width: img.naturalWidth, height: img.naturalHeight
-                    });
-                    if (currentImageIndex < 0) switchImage(uploadedImages.length - 1);
-                    renderTabs();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        })(f);
-    }
-    event.target.value = '';
-}
-
-/* ============ IMAGE TABS ============ */
-function renderTabs() {
-    var html = '';
-    for (var i = 0; i < uploadedImages.length; i++) {
-        var cls = i === currentImageIndex ? 'active' : '';
-        html += '<div class="image-tab ' + cls + '" onclick="switchImage(' + i + ')">'
-            + uploadedImages[i].name
-            + '<span class="tab-close" onclick="event.stopPropagation();closeImage(' + i + ')">×</span></div>';
-    }
-    imageTabs.innerHTML = html;
-}
-
-function switchImage(index) {
-    if (index === currentImageIndex) return;
-    saveAnnotations();
-    currentImageIndex = index;
-    var img = uploadedImages[index];
-    if (!img.annotations) img.annotations = [];
-    if (!img.aiAnnotations) img.aiAnnotations = buildAIBboxes(img.width, img.height);
-    manualAnnotations = img.annotations;
-    aiAnnotations = img.aiAnnotations;
-    undoStack = []; redoStack = [];
-    selectedAnnotationId = null;
-    imageLayer.src = img.url;
-    imageLayer.style.display = 'block';
-    noImageHint.style.display = 'none';
-    updateCanvasSize();
-    updateUI();
-    renderTabs();
-    document.getElementById('statusImgName').innerHTML = img.name + ' <span style="color:var(--success);">●</span>';
-    document.getElementById('statusImgSize').textContent = img.width + ' × ' + img.height + ' px';
-}
-
-function closeImage(index) {
-    if (uploadedImages.length <= 1) {
-        uploadedImages = [];
-        currentImageIndex = -1;
-        manualAnnotations = [];
-        aiAnnotations = [];
-        imageLayer.style.display = 'none';
-        imageLayer.src = '';
-        noImageHint.style.display = 'block';
-        annotationCanvas.width = 0; annotationCanvas.height = 0;
-        updateUI(); renderTabs();
-        document.getElementById('statusImgName').innerHTML = 'Mock眼底彩照 <span style="color:var(--success);">●</span>';
-        document.getElementById('statusImgSize').textContent = '2164 × 1424 px';
-        return;
-    }
-    uploadedImages.splice(index, 1);
-    if (currentImageIndex >= uploadedImages.length) currentImageIndex = uploadedImages.length - 1;
-    if (currentImageIndex < 0) { closeImage(0); return; }
-    switchImage(currentImageIndex);
-}
-
-function saveAnnotations() {
-    if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) {
-        uploadedImages[currentImageIndex].annotations = JSON.parse(JSON.stringify(manualAnnotations));
-        uploadedImages[currentImageIndex].aiAnnotations = JSON.parse(JSON.stringify(aiAnnotations));
-    }
-}
-
-/* ============ CANVAS SIZING ============ */
-function updateCanvasSize() {
-    if (currentImageIndex < 0) return;
-    var cw = canvasContainer.clientWidth, ch = canvasContainer.clientHeight;
-    var img = uploadedImages[currentImageIndex];
-    var scale = Math.min(cw / img.width, ch / img.height, 1) * zoomLevel;
-    var dw = img.width * scale, dh = img.height * scale;
-    imageLayer.style.width = dw + 'px';
-    imageLayer.style.height = dh + 'px';
-    annotationCanvas.width = dw;
-    annotationCanvas.height = dh;
-    annotationCanvas.style.width = dw + 'px';
-    annotationCanvas.style.height = dh + 'px';
-    var rect = imageLayer.getBoundingClientRect();
-    annotationCanvas.style.left = rect.left + 'px';
-    annotationCanvas.style.top = rect.top + 'px';
-    annotationCanvas.style.position = 'fixed';
-    annotationCanvas._imgRect = rect;
-    annotationCanvas._scale = scale;
-}
-window.addEventListener('resize', function() { if (currentImageIndex >= 0) updateCanvasSize(); });
-
-function getCanvasPos(e) {
-    var rect = annotationCanvas._imgRect || annotationCanvas.getBoundingClientRect();
-    var scale = annotationCanvas._scale || 1;
-    return { x: (e.clientX - rect.left) / scale, y: (e.clientY - rect.top) / scale };
-}
-
-function setZoom(v) {
-    zoomLevel = v / 100;
-    document.getElementById('zoomLabel').textContent = v;
-    if (currentImageIndex >= 0) updateCanvasSize();
-}
-
-/* ============ TOOL SWITCHING ============ */
-function setTool(tool, btn) {
-    activeTool = tool;
-    var buttons = document.querySelectorAll('.tool-btn[data-tool]');
-    for (var i = 0; i < buttons.length; i++) buttons[i].classList.remove('active');
-    if (btn) btn.classList.add('active');
-    if (tool !== 'polygon') polygonPoints = [];
-    brushPath = [];
-    annotationCanvas.style.cursor = tool === 'select' ? 'default' : tool === 'delete' ? 'not-allowed' : 'crosshair';
-}
-
-function setLineWidth(v) {
-    currentLineWidth = parseInt(v);
-    document.getElementById('lineWidthVal').textContent = v;
-    if (selectedAnnotationId) {
-        var a = findAnno(selectedAnnotationId);
-        if (a) { a.lineWidth = currentLineWidth; redraw(); updateUI(); }
-    }
-}
-
-function findAnno(id) {
-    for (var i = 0; i < manualAnnotations.length; i++) {
-        if (manualAnnotations[i].id === id) return manualAnnotations[i];
-    }
-    return null;
-}
-
-function hitTestAnno(x, y) {
-    for (var i = manualAnnotations.length - 1; i >= 0; i--) {
-        var a = manualAnnotations[i];
-        if (a.type === 'rect' && a.bbox) {
-            var rx = a.bbox[0], ry = a.bbox[1], rw = a.bbox[2], rh = a.bbox[3];
-            if (x >= rx && x <= rx + rw && y >= ry && y <= ry + rh) return a.id;
-        } else if (a.type === 'polygon' && a.points && a.points.length >= 3) {
-            if (pointInPolygon(x, y, a.points)) return a.id;
-        } else if (a.type === 'ellipse' && a.bbox) {
-            var ex = a.bbox[0], ey = a.bbox[1], ew = a.bbox[2], eh = a.bbox[3];
-            var cx = ex + ew / 2, cy = ey + eh / 2;
-            if (ew > 0 && eh > 0 &&
-                ((x - cx) * (x - cx) / (ew / 2 * ew / 2) + (y - cy) * (y - cy) / (eh / 2 * eh / 2)) <= 1)
-                return a.id;
-        }
-    }
-    return null;
-}
-
-function pointInPolygon(x, y, pts) {
-    var inside = false;
-    for (var i = 0, j = pts.length - 1; i < pts.length; j = i++) {
-        var xi = pts[i][0], yi = pts[i][1];
-        var xj = pts[j][0], yj = pts[j][1];
-        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
-    }
-    return inside;
-}
-
-/* ============ CANVAS MOUSE EVENTS ============ */
-annotationCanvas.addEventListener('mousedown', function(e) {
-    var pos = getCanvasPos(e);
-    if (activeTool === 'select') {
-        selectedAnnotationId = hitTestAnno(pos.x, pos.y);
-        updateUI(); redraw();
-        return;
-    }
-    if (activeTool === 'delete') {
-        var hit = hitTestAnno(pos.x, pos.y);
-        if (hit) { pushUndo(); manualAnnotations = manualAnnotations.filter(function(a) { return a.id !== hit; }); selectedAnnotationId = null; redraw(); updateUI(); }
-        return;
-    }
-    if (currentImageIndex < 0) return;
-    isDrawing = true;
-    drawStartX = pos.x; drawStartY = pos.y;
-    drawCurrentX = pos.x; drawCurrentY = pos.y;
-    if (activeTool === 'polygon') {
-        polygonPoints.push([pos.x, pos.y]);
-    } else if (activeTool === 'brush') {
-        brushPath = [[pos.x, pos.y]];
-    }
-    redraw();
-});
-
-annotationCanvas.addEventListener('mousemove', function(e) {
-    if (!isDrawing) return;
-    var pos = getCanvasPos(e);
-    drawCurrentX = pos.x; drawCurrentY = pos.y;
-    if (activeTool === 'brush') brushPath.push([pos.x, pos.y]);
-    redraw();
-});
-
-annotationCanvas.addEventListener('dblclick', function(e) {
-    if (activeTool === 'polygon' && polygonPoints.length >= 3) {
-        isDrawing = false;
-        pushUndo();
-        manualAnnotations.push({
-            id: annotationIdCounter++, type: 'polygon', label: currentLabel,
-            color: currentColor, source: 'manual', points: polygonPoints.slice(),
-            lineWidth: currentLineWidth
-        });
-        polygonPoints = [];
-        redraw(); updateUI();
-    }
-});
-
-annotationCanvas.addEventListener('mouseup', function(e) {
-    if (!isDrawing) return;
-    if (activeTool === 'polygon') return;
-    isDrawing = false;
-    var pos = getCanvasPos(e);
-    drawCurrentX = pos.x; drawCurrentY = pos.y;
-    var x1 = Math.min(drawStartX, drawCurrentX), y1 = Math.min(drawStartY, drawCurrentY);
-    var w = Math.abs(drawCurrentX - drawStartX), h = Math.abs(drawCurrentY - drawStartY);
-    if (activeTool === 'rect' && w > 3 && h > 3) {
-        pushUndo();
-        manualAnnotations.push({
-            id: annotationIdCounter++, type: 'rect', label: currentLabel,
-            color: currentColor, source: 'manual', bbox: [x1, y1, w, h], lineWidth: currentLineWidth
-        });
-    } else if (activeTool === 'ellipse' && w > 3 && h > 3) {
-        pushUndo();
-        manualAnnotations.push({
-            id: annotationIdCounter++, type: 'ellipse', label: currentLabel,
-            color: currentColor, source: 'manual', bbox: [x1, y1, w, h], lineWidth: currentLineWidth
-        });
-    } else if (activeTool === 'line' && (w > 3 || h > 3)) {
-        pushUndo();
-        manualAnnotations.push({
-            id: annotationIdCounter++, type: 'line', label: currentLabel,
-            color: currentColor, source: 'manual',
-            points: [[drawStartX, drawStartY], [drawCurrentX, drawCurrentY]],
-            lineWidth: currentLineWidth
-        });
-    } else if (activeTool === 'brush' && brushPath.length > 3) {
-        pushUndo();
-        manualAnnotations.push({
-            id: annotationIdCounter++, type: 'brush', label: currentLabel,
-            color: currentColor, source: 'manual', points: brushPath.slice(), lineWidth: currentLineWidth
-        });
-    }
-    brushPath = [];
-    redraw(); updateUI();
-});
-
-/* ============ RENDERING ============ */
-function redraw() {
-    ctx.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
-    if (showAIAnnotations && overlayMode !== 'manual-only') {
-        for (var i = 0; i < aiAnnotations.length; i++) drawAnnotation(aiAnnotations[i], true);
-    }
-    if (overlayMode !== 'ai-only') {
-        for (var j = 0; j < manualAnnotations.length; j++) drawAnnotation(manualAnnotations[j], false);
-    }
-    if (selectedAnnotationId && overlayMode !== 'ai-only') {
-        var a = findAnno(selectedAnnotationId);
-        if (a) drawSelectionHighlight(a);
-    }
-    if (isDrawing) drawCurrentShape();
-    if (activeTool === 'polygon' && polygonPoints.length > 0) drawPolygonPreview();
-}
-
-function drawAnnotation(a, isAI) {
-    ctx.save();
-    var alpha = isAI ? 0.45 : 1;
-    var col = isAI ? '#4488FF' : a.color;
-    ctx.strokeStyle = col;
-    ctx.fillStyle = hexToRgba(col, isAI ? 0.10 : 0.10);
-    ctx.lineWidth = a.lineWidth || 2;
-    ctx.globalAlpha = alpha;
-    if (a.type === 'rect' && a.bbox) {
-        var r = a.bbox;
-        ctx.fillRect(r[0], r[1], r[2], r[3]);
-        ctx.strokeRect(r[0], r[1], r[2], r[3]);
-        drawLabel(a.label, r[0], r[1] - 6, col, alpha);
-    } else if (a.type === 'polygon' && a.points && a.points.length >= 3) {
-        ctx.beginPath();
-        ctx.moveTo(a.points[0][0], a.points[0][1]);
-        for (var i = 1; i < a.points.length; i++) ctx.lineTo(a.points[i][0], a.points[i][1]);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
-        drawLabel(a.label, a.points[0][0], a.points[0][1] - 6, col, alpha);
-    } else if (a.type === 'ellipse' && a.bbox) {
-        var e = a.bbox;
-        ctx.beginPath();
-        ctx.ellipse(e[0] + e[2] / 2, e[1] + e[3] / 2, e[2] / 2, e[3] / 2, 0, 0, Math.PI * 2);
-        ctx.fill(); ctx.stroke();
-        drawLabel(a.label, e[0], e[1] - 6, col, alpha);
-    } else if (a.type === 'line' && a.points && a.points.length >= 2) {
-        ctx.beginPath();
-        ctx.moveTo(a.points[0][0], a.points[0][1]);
-        ctx.lineTo(a.points[1][0], a.points[1][1]);
-        ctx.stroke();
-        var dx = a.points[1][0] - a.points[0][0], dy = a.points[1][1] - a.points[0][1];
-        var len = Math.sqrt(dx * dx + dy * dy);
-        if (len > 10) {
-            var ux = dx / len, uy = dy / len;
-            var ax = a.points[1][0] - ux * 10, ay = a.points[1][1] - uy * 10;
-            ctx.beginPath();
-            ctx.moveTo(a.points[1][0], a.points[1][1]);
-            ctx.lineTo(ax - uy * 6, ay + ux * 6);
-            ctx.lineTo(ax + uy * 6, ay - ux * 6);
-            ctx.closePath();
-            ctx.fillStyle = col;
-            ctx.fill();
-        }
-        drawLabel(a.label, a.points[0][0], a.points[0][1] - 6, col, alpha);
-    } else if (a.type === 'brush' && a.points && a.points.length > 0) {
-        ctx.beginPath();
-        ctx.moveTo(a.points[0][0], a.points[0][1]);
-        for (var j = 1; j < a.points.length; j++) ctx.lineTo(a.points[j][0], a.points[j][1]);
-        ctx.stroke();
-    }
-    ctx.restore();
-}
-
-function drawLabel(text, x, y, col, alpha) {
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = col;
-    ctx.font = 'bold 10px Inter, Microsoft YaHei, sans-serif';
-    var m = ctx.measureText(text);
-    var pw = m.width + 8, ph = 16;
-    if (x + pw > annotationCanvas.width) x = annotationCanvas.width - pw;
-    if (x < 0) x = 0;
-    if (y - ph < 0) y = ph;
-    ctx.fillRect(x, y - ph, pw, ph);
-    ctx.fillStyle = '#000';
-    ctx.fillText(text, x + 4, y - 4);
-    ctx.restore();
-}
-
-function drawSelectionHighlight(a) {
-    ctx.save();
-    ctx.strokeStyle = '#FFFFFF';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 3]);
-    if (a.type === 'rect' && a.bbox) {
-        ctx.strokeRect(a.bbox[0] - 2, a.bbox[1] - 2, a.bbox[2] + 4, a.bbox[3] + 4);
-    } else if (a.type === 'ellipse' && a.bbox) {
-        ctx.beginPath();
-        ctx.ellipse(a.bbox[0] + a.bbox[2] / 2, a.bbox[1] + a.bbox[3] / 2, a.bbox[2] / 2 + 3, a.bbox[3] / 2 + 3, 0, 0, Math.PI * 2);
-        ctx.stroke();
-    }
-    ctx.restore();
-}
-
-function drawCurrentShape() {
-    if (activeTool === 'rect') {
-        var x = Math.min(drawStartX, drawCurrentX), y = Math.min(drawStartY, drawCurrentY);
-        var w = Math.abs(drawCurrentX - drawStartX), h = Math.abs(drawCurrentY - drawStartY);
-        ctx.save(); ctx.strokeStyle = currentColor; ctx.lineWidth = currentLineWidth; ctx.setLineDash([5, 3]);
-        ctx.strokeRect(x, y, w, h); ctx.restore();
-    } else if (activeTool === 'ellipse') {
-        var x = Math.min(drawStartX, drawCurrentX), y = Math.min(drawStartY, drawCurrentY);
-        var w = Math.abs(drawCurrentX - drawStartX), h = Math.abs(drawCurrentY - drawStartY);
-        ctx.save(); ctx.strokeStyle = currentColor; ctx.lineWidth = currentLineWidth; ctx.setLineDash([5, 3]);
-        ctx.beginPath(); ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
-    } else if (activeTool === 'line') {
-        ctx.save(); ctx.strokeStyle = currentColor; ctx.lineWidth = currentLineWidth;
-        ctx.beginPath(); ctx.moveTo(drawStartX, drawStartY); ctx.lineTo(drawCurrentX, drawCurrentY); ctx.stroke(); ctx.restore();
-    } else if (activeTool === 'brush' && brushPath.length > 1) {
-        ctx.save(); ctx.strokeStyle = currentColor; ctx.lineWidth = currentLineWidth * 2;
-        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        ctx.beginPath(); ctx.moveTo(brushPath[0][0], brushPath[0][1]);
-        for (var i = 1; i < brushPath.length; i++) ctx.lineTo(brushPath[i][0], brushPath[i][1]);
-        ctx.stroke(); ctx.restore();
-    }
-}
-
-function drawPolygonPreview() {
-    ctx.save();
-    ctx.strokeStyle = currentColor; ctx.lineWidth = currentLineWidth; ctx.setLineDash([4, 3]);
-    ctx.fillStyle = hexToRgba(currentColor, 0.08);
-    ctx.beginPath(); ctx.moveTo(polygonPoints[0][0], polygonPoints[0][1]);
-    for (var i = 1; i < polygonPoints.length; i++) ctx.lineTo(polygonPoints[i][0], polygonPoints[i][1]);
-    if (isDrawing && drawCurrentX !== undefined) ctx.lineTo(drawCurrentX, drawCurrentY);
-    ctx.fill(); ctx.stroke();
-    for (var j = 0; j < polygonPoints.length; j++) {
-        ctx.fillStyle = currentColor;
-        ctx.beginPath(); ctx.arc(polygonPoints[j][0], polygonPoints[j][1], 3, 0, Math.PI * 2); ctx.fill();
-    }
-    ctx.restore();
-}
-
-function hexToRgba(hex, alpha) {
-    var r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
-    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-}
-
-/* ============ UNDO / REDO ============ */
-function pushUndo() { undoStack.push(JSON.parse(JSON.stringify(manualAnnotations))); redoStack = []; }
-function undo() {
-    if (undoStack.length === 0) return;
-    redoStack.push(JSON.parse(JSON.stringify(manualAnnotations)));
-    manualAnnotations = undoStack.pop();
-    selectedAnnotationId = null; redraw(); updateUI();
-}
-function redo() {
-    if (redoStack.length === 0) return;
-    undoStack.push(JSON.parse(JSON.stringify(manualAnnotations)));
-    manualAnnotations = redoStack.pop();
-    selectedAnnotationId = null; redraw(); updateUI();
-}
-
-/* ============ OVERLAY MODE ============ */
-function toggleAIOverlay() { showAIAnnotations = !showAIAnnotations; redraw(); }
-function cycleOverlayMode() {
-    if (overlayMode === 'all') overlayMode = 'ai-only';
-    else if (overlayMode === 'ai-only') overlayMode = 'manual-only';
-    else overlayMode = 'all';
-    document.getElementById('btnOverlayMode').textContent =
-        overlayMode === 'all' ? '🔀 全部显示' : overlayMode === 'ai-only' ? '🤖 仅AI标注' : '✋ 仅人工标注';
-    redraw();
-}
-
-/* ============ LABEL MANAGEMENT ============ */
-function initLabelPresets() {
-    var container = document.getElementById('labelPresets');
-    var html = '';
-    for (var i = 0; i < LABEL_PRESETS.length; i++) {
-        var l = LABEL_PRESETS[i];
-        var cls = (l.label === currentLabel && l.color === currentColor) ? 'active' : '';
-        html += '<span class="lbl-tag ' + cls + '" style="background:' + l.color + '33;border-color:' + l.color + ';color:' +
-            l.color + '" onclick="selectPreset(\'' + l.label + '\',\'' + l.color + '\',this)">' + l.label + '</span>';
-    }
-    container.innerHTML = html;
-}
-
-function selectPreset(label, color, el) {
-    currentLabel = label; currentColor = color;
-    var tags = document.querySelectorAll('#labelPresets .lbl-tag');
-    for (var i = 0; i < tags.length; i++) tags[i].classList.remove('active');
-    el.classList.add('active');
-    if (selectedAnnotationId) {
-        var a = findAnno(selectedAnnotationId);
-        if (a) { a.label = label; a.color = color; pushUndo(); redraw(); updateUI(); }
-    }
-}
-
-function addCustomLabel() {
-    var input = document.getElementById('customLabelInput');
-    var val = input.value.trim();
-    if (!val) return;
-    currentLabel = val;
-    input.value = '';
-    updateUI();
-    if (selectedAnnotationId) {
-        var a = findAnno(selectedAnnotationId);
-        if (a) { a.label = val; pushUndo(); redraw(); updateUI(); }
-    }
-}
-
-/* ============ UI UPDATE ============ */
-function updateUI() {
-    document.getElementById('annoCount').textContent = manualAnnotations.length;
-    document.getElementById('statBox').textContent = manualAnnotations.length;
-    document.getElementById('progressPercent').textContent =
-        currentImageIndex >= 0 ? Math.min(100, Math.round(manualAnnotations.length * 5 + 50)) + '%' : '76%';
-    // Annotation list
-    var html = '';
-    for (var i = 0; i < manualAnnotations.length; i++) {
-        var a = manualAnnotations[i];
-        var cls = selectedAnnotationId === a.id ? 'selected' : '';
-        html += '<div class="anno-list-item ' + cls + '" onclick="selectAnno(' + a.id + ')">'
-            + '<span class="anno-color" style="background:' + a.color + '"></span>'
-            + '<span>#' + a.id + ' ' + a.label + ' (' + a.type + ')</span>'
-            + '<span class="anno-del" onclick="event.stopPropagation();deleteAnno(' + a.id + ')">×</span></div>';
-    }
-    document.getElementById('annoList').innerHTML = html;
-    // Selected info
-    if (selectedAnnotationId) {
-        var sa = findAnno(selectedAnnotationId);
-        if (sa) {
-            document.getElementById('selectedAnnoInfo').innerHTML =
-                '<span style="color:' + sa.color + '">#' + sa.id + '</span> ' + sa.label +
-                '<br><span style="font-size:10px;color:#889;">类型:' + sa.type + ' | 线宽:' + (sa.lineWidth || 2) + 'px</span>';
-        }
-    } else {
-        document.getElementById('selectedAnnoInfo').textContent = '未选中';
-    }
-}
-
-function selectAnno(id) {
-    selectedAnnotationId = id;
-    var a = findAnno(id);
-    if (a) { currentColor = a.color; currentLabel = a.label; }
-    updateUI(); redraw();
-}
-
-function deleteAnno(id) {
-    pushUndo();
-    manualAnnotations = manualAnnotations.filter(function(a) { return a.id !== id; });
-    if (selectedAnnotationId === id) selectedAnnotationId = null;
-    redraw(); updateUI();
-}
-
-/* ============ EXPORT ============ */
-function exportResults() {
-    if (currentImageIndex < 0) {
-        alert('请先上传或选择一张医学影像');
-        return;
-    }
-    var img = uploadedImages[currentImageIndex];
-    document.getElementById('exportImgName').textContent = img.name;
-    document.getElementById('exportAnnoCount').textContent = manualAnnotations.length;
-    document.getElementById('exportAIAnnoCount').textContent = aiAnnotations.length;
-    document.getElementById('exportModal').classList.add('show');
-}
-
-function closeExportModal() { document.getElementById('exportModal').classList.remove('show'); }
-
-function doExport() {
-    var format = document.getElementById('exportFormat').value;
-    var annotator = document.getElementById('exportAnnotator').value || '学员001';
-    var img = uploadedImages[currentImageIndex];
-    var data = {
-        image: { filename: img.name, width: img.width, height: img.height },
-        annotations: manualAnnotations.map(function(a) { var copy = {}; for (var k in a) copy[k] = a[k]; return copy; }),
-        ai_annotations: aiAnnotations.map(function(a) { var copy = {}; for (var k in a) copy[k] = a[k]; return copy; }),
-        metadata: { annotator: annotator, date: new Date().toISOString().slice(0, 10),
-            total_manual: manualAnnotations.length, total_ai: aiAnnotations.length }
-    };
-    var now = new Date();
-    var ts = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + '_' +
-        pad(now.getHours()) + '-' + pad(now.getMinutes()) + '-' + pad(now.getSeconds());
-    var content, mime, ext;
-    if (format === 'json') {
-        content = JSON.stringify(data, null, 2);
-        mime = 'application/json'; ext = 'json';
-    } else {
-        var rows = [['ID', '类型', '标签', '坐标/信息', '颜色', '来源', '置信度', '线宽']];
-        for (var i = 0; i < manualAnnotations.length; i++) {
-            var a = manualAnnotations[i];
-            var coords = '';
-            if (a.type === 'rect' || a.type === 'ellipse') coords = 'bbox:' + (a.bbox || []).join(',');
-            else if (a.points) coords = 'points:' + JSON.stringify(a.points);
-            rows.push([a.id, a.type, a.label, coords, a.color, a.source, a.confidence || '', a.lineWidth || 2]);
-        }
-        for (var j = 0; j < aiAnnotations.length; j++) {
-            var aa = aiAnnotations[j];
-            rows.push([aa.id, aa.type, aa.label, 'bbox:' + (aa.bbox || []).join(','), aa.color, aa.source, aa.confidence || '', aa.lineWidth || 2]);
-        }
-        content = '';
-        for (var r = 0; r < rows.length; r++) {
-            var row = rows[r];
-            var line = '';
-            for (var c = 0; c < row.length; c++) {
-                if (c > 0) line += ',';
-                line += '"' + String(row[c]).replace(/"/g, '""') + '"';
-            }
-            content += line + '\n';
-        }
-        mime = 'text/csv'; ext = 'csv';
-    }
-    var blob = new Blob(['\ufeff' + content], { type: mime + ';charset=utf-8' });
-    var url = URL.createObjectURL(blob);
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = img.name.replace(/\.[^.]+$/, '') + '_标注结果_' + ts + '.' + ext;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    closeExportModal();
-    alert('标注结果已导出: ' + link.download);
-}
-
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-/* ============ KEYBOARD SHORTCUTS ============ */
-document.addEventListener('keydown', function(e) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
-    if (e.key === 'Delete' || e.key === 'Del') {
-        if (selectedAnnotationId) { deleteAnno(selectedAnnotationId); }
-        return;
-    }
-    var toolMap = { '1': 'select', 's': 'rect', 'S': 'rect', 'p': 'polygon', 'P': 'polygon',
-        'b': 'brush', 'B': 'brush', 'e': 'ellipse', 'E': 'ellipse', 'l': 'line', 'L': 'line',
-        'd': 'delete', 'D': 'delete' };
-    if (toolMap[e.key]) {
-        var toolName = toolMap[e.key];
-        var btn = document.querySelector('.tool-btn[data-tool="' + toolName + '"]');
-        setTool(toolName, btn);
-    }
-});
-
-/* ============ MISC ============ */
-function submitAnnotation() {
-    saveAnnotations();
-    alert('标注已提交！AI模型将基于新标注进行迭代训练。\n当前人工标注: ' + manualAnnotations.length + ' 个');
-}
-
 function toggleSubmenu(el) {
     el.classList.toggle('expanded');
-    var sub = el.nextElementSibling;
-    if (sub && sub.classList.contains('submenu')) sub.classList.toggle('open');
+    var next = el.nextElementSibling;
+    if (next) next.classList.toggle('open');
+}
+
+function switchModule(btn) {
+    document.querySelectorAll('.module-tab').forEach(function(tab){
+        tab.classList.toggle('active', tab === btn);
+    });
+    var target = btn.getAttribute('data-target');
+    document.querySelectorAll('.module-panel').forEach(function(panel){
+        panel.classList.toggle('active', panel.id === target);
+    });
 }
 
 function logout() {
-    if (confirm('确定要退出？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; }
+    window.location.href = 'login.html';
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    initLabelPresets();
-    try {
-        var user = JSON.parse(localStorage.getItem('life_med_user'));
-        if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
-    } catch (e) {}
-});
-
-/* ============ AI IoU Utility ============ */
-function calcIoU(bbox1, bbox2) {
-    var x1 = Math.max(bbox1[0], bbox2[0]), y1 = Math.max(bbox1[1], bbox2[1]);
-    var x2 = Math.min(bbox1[0] + bbox1[2], bbox2[0] + bbox2[2]);
-    var y2 = Math.min(bbox1[1] + bbox1[3], bbox2[1] + bbox2[3]);
-    if (x2 <= x1 || y2 <= y1) return 0;
-    var inter = (x2 - x1) * (y2 - y1);
-    var area1 = bbox1[2] * bbox1[3], area2 = bbox2[2] * bbox2[3];
-    return inter / (area1 + area2 - inter);
-}
-</script></body></html>
+</script>
+</body>
+</html>
