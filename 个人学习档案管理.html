@@ -466,7 +466,7 @@
         <div class="submenu">
             <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
             <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
-            <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item" href="疑难病例分析与学术研讨.html">疑难病例分享与学术研讨</a>
             <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
             <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
         </div>
@@ -1033,7 +1033,7 @@ function flattenCaseReports(state) {
 function buildArchiveReportFallback(row) {
     return '<div class="report-content"><div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统自动评分：诊断准确率 / 逻辑完整度</div></div>' +
         '<div class="report-meta"><div>学员：管理员</div><div>报告编号：' + escapeArchiveHtml(getArchiveReportNo(row)) + '</div><div>病例：' + escapeArchiveHtml(row.item.title) + '</div><div>生成时间：' + escapeArchiveHtml(row.report.generatedAt || '-') + '</div></div>' +
-        '<div class="report-section"><h3>评分结果</h3><table><thead><tr><th>综合评分</th><th>AI诊断对比学习</th><th>病程推理实训</th></tr></thead><tbody><tr><td>' + formatArchiveReportScore(row.overallScore) + '</td><td>' + formatArchiveReportScore(row.compareScore) + '</td><td>' + formatArchiveReportScore(row.evolutionScore) + '</td></tr></tbody></table></div></div>';
+        '<div class="report-section"><h3>评分结果</h3><table><thead><tr><th>综合评分</th><th>AI诊断对比学习</th><th>病例推理实训</th></tr></thead><tbody><tr><td>' + formatArchiveReportScore(row.overallScore) + '</td><td>' + formatArchiveReportScore(row.compareScore) + '</td><td>' + formatArchiveReportScore(row.evolutionScore) + '</td></tr></tbody></table></div></div>';
 }
 
 function openArchiveReportDetail(caseId) {
@@ -1118,7 +1118,7 @@ function renderReportArchive() {
         document.getElementById('archiveTable').innerHTML = '<tbody><tr><td><div class="archive-empty"><strong>暂无已生成报告</strong><span>完成案例教学并生成报告后，会在这里归档展示。</span></div></td></tr></tbody>';
     } else {
         document.getElementById('archiveTable').innerHTML =
-            '<thead><tr><th>报告编号</th><th>难度</th><th>综合评分</th><th>AI诊断对比学习</th><th>病程推理实训</th><th>生成时间</th><th>操作</th></tr></thead><tbody>' +
+            '<thead><tr><th>报告编号</th><th>难度</th><th>综合评分</th><th>AI诊断对比学习</th><th>病例推理实训</th><th>生成时间</th><th>操作</th></tr></thead><tbody>' +
             rows.map(function(row) {
                 return '<tr><td><strong>报告编号：' + escapeArchiveHtml(getArchiveReportNo(row)) + '</strong></td>' +
                     '<td>' + getCaseDifficulty(row.item.difficulty) + '</td>' +

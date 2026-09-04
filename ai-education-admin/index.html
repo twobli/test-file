@@ -1447,7 +1447,7 @@
         name: '李子明',
         group: '规培医师A组',
         courses: [
-          { name: '糖尿病视网膜病变基础', progress: 65, quizAttempts: [], state: '课程学习中，章节测验未开放' },
+          { name: '糖尿病视网膜病变基础', progress: 65, quizAttempts: [], state: '课程学习中，可直接进行章节测验' },
           {
             name: '青光眼诊疗基础',
             progress: 100,
@@ -1478,24 +1478,24 @@
             ],
             state: '课程已完成，可反复进行章节测验'
           },
-          { name: 'AMD诊疗规范', progress: 0, quizAttempts: [], state: '尚未开始学习，章节测验未开放' }
+          { name: 'AMD诊疗规范', progress: 0, quizAttempts: [], state: '尚未开始学习，也可直接进行章节测验' }
         ]
       },
       {
         name: '王珂',
         group: '青光眼专题班',
         courses: [
-          { name: '青光眼诊疗基础', progress: 82, quizAttempts: [], state: '视频未播放到100%，章节测验未开放' },
-          { name: 'OCT读片实战训练', progress: 36, quizAttempts: [], state: '课程学习中，章节测验未开放' },
-          { name: '眼底血管造影判读', progress: 0, quizAttempts: [], state: '尚未开始学习，章节测验未开放' }
+          { name: '青光眼诊疗基础', progress: 82, quizAttempts: [], state: '视频未播放到100%，也可直接进行章节测验' },
+          { name: 'OCT读片实战训练', progress: 36, quizAttempts: [], state: '课程学习中，可直接进行章节测验' },
+          { name: '眼底血管造影判读', progress: 0, quizAttempts: [], state: '尚未开始学习，也可直接进行章节测验' }
         ]
       },
       {
         name: '刘敏',
         group: '眼底影像进阶班',
         courses: [
-          { name: '眼底血管造影判读', progress: 45, quizAttempts: [], state: '课程学习中，章节测验未开放' },
-          { name: 'RVO诊疗指南', progress: 0, quizAttempts: [], state: '尚未开始学习，章节测验未开放' },
+          { name: '眼底血管造影判读', progress: 45, quizAttempts: [], state: '课程学习中，可直接进行章节测验' },
+          { name: 'RVO诊疗指南', progress: 0, quizAttempts: [], state: '尚未开始学习，也可直接进行章节测验' },
           {
             name: '高血压视网膜病变',
             progress: 100,
@@ -1545,9 +1545,9 @@
         name: '陈华',
         group: 'DR专题班',
         courses: [
-          { name: '糖尿病视网膜病变基础', progress: 58, quizAttempts: [], state: '课程学习中，可自由跳学章节，测验未开放' },
-          { name: '眼底激光治疗原理', progress: 12, quizAttempts: [], state: '尚未完成前置小节，章节测验未开放' },
-          { name: 'AMD诊疗规范', progress: 0, quizAttempts: [], state: '尚未开始学习，章节测验未开放' }
+          { name: '糖尿病视网膜病变基础', progress: 58, quizAttempts: [], state: '课程学习中，可自由跳学章节，也可直接进行章节测验' },
+          { name: '眼底激光治疗原理', progress: 12, quizAttempts: [], state: '尚未完成前置小节，也可直接进行章节测验' },
+          { name: 'AMD诊疗规范', progress: 0, quizAttempts: [], state: '尚未开始学习，也可直接进行章节测验' }
         ]
       }
     ];
@@ -1677,7 +1677,7 @@
 
     function getCourseQuizSummary(course) {
       var attempts = getCourseQuizAttempts(course);
-      if (Number(course.progress) < 100) return '课程未完成，章节测验未开放';
+      if (Number(course.progress) < 100) return '课程学习中，可直接进行章节测验';
       if (!attempts.length) return '课程已完成，尚未进行章节测验';
       return attempts.map(function(attempt) {
         return attempt.label + attempt.score + '%';
@@ -1686,7 +1686,7 @@
 
     function getCourseQuizState(course) {
       var attempts = getCourseQuizAttempts(course);
-      if (Number(course.progress) < 100) return '课程未完成，章节测验未开放';
+      if (Number(course.progress) < 100) return '课程学习中，可直接进行章节测验';
       return attempts.length ? '课程已完成，可反复进行章节测验' : '课程已完成，章节测验待进行';
     }
 
@@ -2868,7 +2868,7 @@
         return '<div class="student-detail-item">'
           + '<div class="student-course-head"><strong>' + escapeHtml(course.name) + '</strong><span class="status ' + statusClass(course.state) + '">' + progress + '%</span></div>'
           + '<div class="progress"><span style="width:' + progress + '%"></span></div>'
-          + '<p>学习进度：' + progress + '%<br>章节测验所属章节：' + escapeHtml(course.quizChapter || '课程完成后按章节开放') + '<br>学习状态：' + escapeHtml(course.state) + '</p>'
+          + '<p>学习进度：' + progress + '%<br>章节测验所属章节：' + escapeHtml(course.quizChapter || '可直接进入章节测验') + '<br>学习状态：' + escapeHtml(course.state) + '</p>'
           + attemptMarkup
           + '</div>';
       }).join('');

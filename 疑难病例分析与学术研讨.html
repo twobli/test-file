@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>疑难病例分析与学术研讨</title>
+<title>疑难病例分享与学术研讨</title>
 <style>
 :root {
     --primary: #4a6fa5; --primary-dark: #3a5a8c; --primary-light: #edf2f7;
@@ -173,7 +173,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
         <div class="submenu open">
             <a class="menu-item" href="虚拟临床技能实训.html">虚拟临床技能实训</a>
             <a class="menu-item" href="经典病例诊断实训.html">经典病例诊断实训</a>
-            <a class="menu-item active" href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item active" href="疑难病例分析与学术研讨.html">疑难病例分享与学术研讨</a>
             <a class="menu-item" href="读片与病例大赛系统.html">读片与病例大赛系统</a>
             <a class="menu-item" href="数据标注与AI实训.html">数据标注与AI实训</a>
         </div>
@@ -186,13 +186,13 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 <div class="breadcrumb">
     <a href="技能实践.html">AI教育平台</a><span class="sep">&gt;</span>
     <a href="技能实践.html">技能实践</a><span class="sep">&gt;</span>
-    <span>疑难病例分析与学术研讨</span>
+    <span>疑难病例分享与学术研讨</span>
 </div>
 
 <!-- ====== 列表页视图 ====== -->
 <div id="listView">
     <div class="page-head">
-        <h1 class="page-title">疑难病例分析与学术研讨</h1>
+        <h1 class="page-title">疑难病例分享与学术研讨</h1>
         <div class="notification-widget">
             <button class="notification-trigger" onclick="toggleNotifications(event)">
                 <span>消息通知</span>
@@ -311,7 +311,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                 </select>
             </div>
             <div class="form-group">
-                <label>病例描述 <span style="color:var(--danger);">*</span></label>
+                <label>病例简介 <span style="color:var(--danger);">*</span></label>
                 <textarea id="shareDesc" placeholder="请详细描述病史、临床表现、检查结果、诊断思路等..."></textarea>
             </div>
             <div class="form-group">
@@ -890,7 +890,7 @@ function shareCase() {
 
     // 必填项校验
     if (!title || !disease || !desc) {
-        showToast('请填写完整信息（病例标题、疾病分类、病例描述为必填项）');
+        showToast('请填写完整信息（病例标题、疾病分类、病例简介为必填项）');
         return;
     }
 

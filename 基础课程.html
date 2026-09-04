@@ -548,7 +548,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
         <div class="submenu">
             <a class="menu-item " href="虚拟临床技能实训.html">虚拟临床技能实训</a>
             <a class="menu-item " href="经典病例诊断实训.html">经典病例诊断实训</a>
-            <a class="menu-item " href="疑难病例分析与学术研讨.html">疑难病例分析与学术研讨</a>
+            <a class="menu-item " href="疑难病例分析与学术研讨.html">疑难病例分享与学术研讨</a>
             <a class="menu-item " href="读片与病例大赛系统.html">读片与病例大赛系统</a>
             <a class="menu-item " href="数据标注与AI实训.html">数据标注与AI实训</a>
         </div>
@@ -795,7 +795,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
         <div class="cf-head">
             <div>
                 <div class="cf-title">课程反馈</div>
-                <div class="cf-subtitle">针对当前章节课程内容、章节测验或学习体验提交反馈；同一次测验只能提交一次，提交后会在本页形成记录并进入教师课程管理端。</div>
+                <div class="cf-subtitle">针对当前章节课程内容、章节测验或学习体验提交反馈；每次测验只能提交一次，提交后会在本页形成记录并进入教师课程管理端。</div>
             </div>
             <div class="cf-context" id="courseFeedbackContext">当前章节</div>
         </div>
@@ -2859,7 +2859,6 @@ function buildLearningPathHtml(wrongItems, accuracy) {
                 <span class="ra-badge">薄弱项${index + 1}</span>
                 <span class="ra-name">${item.keyword}</span>
             </div>
-            <div class="ra-track">知识追踪：此知识点关联本章节的${formatQuestionList(relatedQuestions)}；你在${formatQuestionList(wrongQuestions)}出错。</div>
             <div class="ra-recommend-grid">
                 <div class="ra-section">
                     <div class="ra-section-title">推荐下一步学习内容：基础课程内课程内容</div>
