@@ -400,7 +400,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .report-header { text-align: center; margin-bottom: 24px; }
 .report-header h2 { font-size: 24px; font-weight: 700; color: var(--gray-900); }
 .report-header .report-subtitle { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
-.report-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray-600); margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-100); }
+.report-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px 18px; font-size: 13px; color: var(--gray-600); margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-100); }
 .report-score-section { display: grid; grid-template-columns: 160px 1fr; gap: 24px; margin-bottom: 24px; align-items: center; }
 .report-score-big { text-align: center; background: var(--primary-light); border-radius: 16px; padding: 24px 16px; }
 .report-score-big .big-score { font-size: 48px; font-weight: 800; color: var(--primary); line-height: 1; }
@@ -1242,6 +1242,89 @@ function saveLearningReport(caseId, report){
     persistTeachingState();
 }
 
+function formatCaseReportDate(value){
+    const date = value instanceof Date ? value : new Date();
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return '' + y + m + d;
+}
+
+function parseCaseReportDate(value){
+    const match = String(value || '').match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+    if(!match) return new Date();
+    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function buildCaseLearningReportNo(caseId, date){
+    const rawId = String(caseId || 'CASE').replace(/[^A-Za-z0-9]/g, '').toUpperCase() || 'CASE';
+    const numericPart = rawId.replace(/\D/g, '') || '1';
+    return 'BLR-' + formatCaseReportDate(date) + '-' + rawId + '-' + numericPart.padStart(3, '0').slice(-3);
+}
+
+function ensureReportNumberHtml(html, reportNo){
+    if(!html || !reportNo || html.indexOf('报告编号：') >= 0) return html;
+    return html.replace('<div class="report-meta"><div>学员：管理员</div>', '<div class="report-meta"><div>学员：管理员</div><div>报告编号：'+escHtml(reportNo)+'</div>');
+}
+
+function formatReportScore(value){
+    return formatReportScoreValue(value) + '分';
+}
+
+function formatReportScoreValue(value){
+    const num = Number(value);
+    if(!Number.isFinite(num)) return escHtml(value);
+    return String(Math.round(num * 100) / 100);
+}
+
+function averageReportScores(){
+    const values = Array.prototype.slice.call(arguments).map(Number).filter(Number.isFinite);
+    if(!values.length) return 0;
+    return Math.round(values.reduce((sum, value)=>sum + value, 0) / values.length * 100) / 100;
+}
+
+function normalizeLearningReportScores(report){
+    if(!report) return report;
+    const metrics = report.metrics || {};
+    const compare = report.assessment && report.assessment.compareModule ? report.assessment.compareModule : null;
+    const evolution = report.assessment && report.assessment.evolutionModule ? report.assessment.evolutionModule : null;
+    const compareDiagnosis = compare && compare.diagnosisAccuracy !== undefined ? compare.diagnosisAccuracy : metrics.compareDiagnosisAccuracy;
+    const compareLogic = compare && compare.logicCompleteness !== undefined ? compare.logicCompleteness : metrics.compareLogicCompleteness;
+    const evolutionDiagnosis = evolution && evolution.diagnosisAccuracy !== undefined ? evolution.diagnosisAccuracy : metrics.evolutionDiagnosisAccuracy;
+    const evolutionLogic = evolution && evolution.logicCompleteness !== undefined ? evolution.logicCompleteness : metrics.evolutionLogicCompleteness;
+    const compareOverall = averageReportScores(compareDiagnosis, compareLogic);
+    const evolutionOverall = averageReportScores(evolutionDiagnosis, evolutionLogic);
+    const overallScore = averageReportScores(compareOverall, evolutionOverall);
+    report.metrics = Object.assign({}, metrics, {
+        compareOverallScore: compareOverall,
+        evolutionOverallScore: evolutionOverall,
+        overallScore: overallScore,
+        diagnosisAccuracy: averageReportScores(compareDiagnosis, evolutionDiagnosis),
+        logicCompleteness: averageReportScores(compareLogic, evolutionLogic)
+    });
+    if(report.assessment){
+        report.assessment.compareModule = Object.assign({}, compare || {}, { overallScore: compareOverall });
+        report.assessment.evolutionModule = Object.assign({}, evolution || {}, { overallScore: evolutionOverall });
+        report.assessment.overallScore = overallScore;
+        report.assessment.diagnosisAccuracy = report.metrics.diagnosisAccuracy;
+        report.assessment.logicCompleteness = report.metrics.logicCompleteness;
+    }
+    return report;
+}
+
+function normalizeReportScoreHtml(html, report){
+    const normalized = normalizeLearningReportScores(report);
+    if(!normalized || !normalized.metrics) return html;
+    const score = normalized.metrics.overallScore;
+    const scoreColor = score >= 90 ? 'var(--success)' : score >= 75 ? 'var(--primary)' : 'var(--warning)';
+    return String(html || '').replace(/(<div class="big-score"[^>]*>)[\s\S]*?(<\/div><div class="big-label">)/, '$1' + formatReportScoreValue(score) + '$2')
+        .replace(/<div class="big-score" style="color:[^;]+;">/g, '<div class="big-score" style="color:' + scoreColor + ';">');
+}
+
+function normalizeEmptyReportScoresHtml(html){
+    return String(html || '').replace(/<td>\s*分\s*<\/td>/g, '<td>0分</td>');
+}
+
 // ==================== Tab 切换 ====================
 document.getElementById('mainTabs').addEventListener('click', function(e){
     if(e.target.classList.contains('tab-btn')){
@@ -1602,7 +1685,7 @@ function buildLearningReportAssessment(rows, evo, userDiag, aiDiag, currentCase,
     const compareDiagnosisAccuracy = Math.min(100, Math.round(directionScore + stageScore + eyeScore + basisScore));
     const compareBasisLogic = assessLogicField(userText, evidenceKeywords.concat(['病史','主诉','眼底','眼压','OCT','FFA','OCTA','视野','影像','检查','诊断','考虑','符合','提示','建议']), 70, '诊断意见能够串联病例资料、影像表现与诊断结论，证据链较完整。');
     const compareLogicCompleteness = Math.min(100, Math.round((userText ? 20 : 0) + compareBasisLogic.score + ((stageStatus.cls === 'match' || eyeStatus.cls === 'match') ? 10 : 0)));
-    const compareOverallScore = Math.round((compareDiagnosisAccuracy + compareLogicCompleteness) / 2);
+    const compareOverallScore = averageReportScores(compareDiagnosisAccuracy, compareLogicCompleteness);
     const compareFieldAssessments = buildCompareFieldAssessments(rows, userDiag, aiDiag, compareBasisLogic, compareDiagnosisAccuracy, compareLogicCompleteness);
 
     // ===== 病例推理实训：时间轴单选题评分 =====
@@ -1625,13 +1708,13 @@ function buildLearningReportAssessment(rows, evo, userDiag, aiDiag, currentCase,
     }) : [];
     const evolutionDiagnosisAccuracy = quiz.length ? Math.round(correctCount / quiz.length * 100) : 0;
     const evolutionLogicCompleteness = quiz.length ? Math.round(correctCount / quiz.length * 100) : 0;
-    const evolutionOverallScore = Math.round((evolutionDiagnosisAccuracy + evolutionLogicCompleteness) / 2);
+    const evolutionOverallScore = averageReportScores(evolutionDiagnosisAccuracy, evolutionLogicCompleteness);
     const evolutionDiagnosisComment = evolutionDiagnosisAccuracy >= 80 ? '时间轴推理整体正确，能抓住各时间点的关键判断。' : evolutionDiagnosisAccuracy >= 50 ? '时间轴推理部分正确，个别关键点需再对照。' : '时间轴推理正确率偏低，需结合各时间点的症状与检查重新梳理。';
     const evolutionLogicComment = evolutionDiagnosisComment;
 
-    const diagnosisAccuracy = Math.round((compareDiagnosisAccuracy + evolutionDiagnosisAccuracy) / 2);
-    const logicCompleteness = Math.round((compareLogicCompleteness + evolutionLogicCompleteness) / 2);
-    const overallScore = Math.round((compareOverallScore + evolutionOverallScore) / 2);
+    const diagnosisAccuracy = averageReportScores(compareDiagnosisAccuracy, evolutionDiagnosisAccuracy);
+    const logicCompleteness = averageReportScores(compareLogicCompleteness, evolutionLogicCompleteness);
+    const overallScore = averageReportScores(compareOverallScore, evolutionOverallScore);
     const compareDiagnosisComment = compareDiagnosisAccuracy >= 85 ? '学员诊断意见与 AI 诊断结果方向高度一致。' : compareDiagnosisAccuracy >= 70 ? '学员诊断方向基本一致，部分细节仍需对照。' : '学员诊断意见与 AI 结果差异较明显。';
     const compareLogicComment = compareLogicCompleteness >= 85 ? '诊断意见表述完整，能够形成较清楚的证据链。' : compareLogicCompleteness >= 70 ? '诊断意见基本完整，可再补充关键证据。' : '诊断意见偏简略，逻辑链条不够清楚。';
 
@@ -1777,10 +1860,11 @@ function generateReasoningReport(){
 
     const now = new Date();
     const dateStr = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    const reportNo = buildCaseLearningReportNo(currentCaseId, now);
 
     let html = '<div class="report-content">';
     html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">眼科病例实训系统</div></div>';
-    html += '<div class="report-meta"><div>学员：管理员</div><div>病例：'+currentCase.title+'</div><div>完成时间：'+dateStr+'</div></div>';
+    html += '<div class="report-meta"><div>学员：管理员</div><div>报告编号：'+reportNo+'</div><div>病例：'+escHtml(currentCase.title)+'</div><div>完成时间：'+dateStr+'</div></div>';
     html += '<div class="report-score-section">';
     html += '<div class="report-score-big"><div class="big-score">'+total+'</div><div class="big-label">'+(total>=90?'优秀':total>=75?'良好':total>=60?'一般':'需提高')+'</div></div>';
     html += '<div class="report-score-detail">';
@@ -1983,7 +2067,7 @@ function renderCompareDiff(compareCase){
     let diffHtml = '<div class="diff-title">诊断解析：用户诊断意见与AI模型结果对比</div>';
     diffHtml += '<table class="diff-table"><thead><tr><th>分析维度</th><th>学员提交内容</th><th>AI模型结果</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     compareRows.forEach(row=>{
-        diffHtml += '<tr><td><strong>'+escHtml(row.name)+'</strong></td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
+        diffHtml += '<tr><td><strong>'+escHtml(row.name)+'</strong></td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+formatReportScore(row.accuracyScore)+'</td><td>'+formatReportScore(row.logicScore)+'</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
 
     diffHtml += '</tbody></table>';
@@ -1994,6 +2078,7 @@ function generateCompareReport(){
     if(!currentCompareCase) return;
     const now = new Date();
     const dateStr = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
+    const reportNo = buildCaseLearningReportNo(currentCaseId || currentCompareCase.id, now);
     const ans = getSubmittedReasoning(currentCaseId);
     const userDiag = getUserDiagnosisInfo(ans);
     const rows = buildCompareRows(currentCompareCase);
@@ -2004,14 +2089,14 @@ function generateCompareReport(){
 
     let html = '<div class="report-content">';
     html += '<div class="report-header"><h2>AI诊断对比学习报告</h2><div class="report-subtitle">眼科病例实训系统</div></div>';
-    html += '<div class="report-meta"><div>学员：管理员</div><div>病例：'+escHtml(currentCompareCase.title)+'</div><div>完成时间：'+dateStr+'</div></div>';
+    html += '<div class="report-meta"><div>学员：管理员</div><div>报告编号：'+reportNo+'</div><div>病例：'+escHtml(currentCompareCase.title)+'</div><div>完成时间：'+dateStr+'</div></div>';
     html += '<div class="report-suggest"><h4>对比结果摘要</h4>';
     html += '<p style="font-size:13px;color:var(--gray-600);">用户诊断意见：'+escHtml(userDiag.diagnosis)+'<br>AI诊断结果：'+escHtml(aiDiag.diagnosis)+'</p>';
     html += '</div>';
     html += '<div class="report-suggest"><h4>用户诊断意见 vs AI诊断结果</h4>';
     html += '<table class="diff-table"><thead><tr><th>对比项</th><th>学员提交内容</th><th>AI模型结果</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     compareRows.forEach(row=>{
-        html += '<tr><td>'+escHtml(row.name)+'</td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
+        html += '<tr><td>'+escHtml(row.name)+'</td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+formatReportScore(row.accuracyScore)+'</td><td>'+formatReportScore(row.logicScore)+'</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
     html += '</tbody></table></div>';
     html += '<div class="report-suggest"><h4>关键差异点分析</h4>';
@@ -2306,6 +2391,7 @@ function generateIntegratedLearningReport(){
 
     const now = new Date();
     const dateStr = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
+    const reportNo = buildCaseLearningReportNo(currentCaseId, now);
     const rows = buildCompareRows(currentCompareCase);
     const userDiag = getUserDiagnosisInfo(getSubmittedReasoning(currentCaseId));
     const aiDiag = getAiDiagnosisInfo(currentCompareCase);
@@ -2318,27 +2404,27 @@ function generateIntegratedLearningReport(){
 
     let html = '<div class="report-content">';
     html += '<div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统智能评估：诊断准确率 / 逻辑完整度</div></div>';
-    html += '<div class="report-meta"><div>学员：管理员</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
+    html += '<div class="report-meta"><div>学员：管理员</div><div>报告编号：'+reportNo+'</div><div>生成时间：'+dateStr+'</div><div>状态：已完成</div></div>';
     html += '<div class="report-fixed-note">本报告由“AI诊断对比学习”和“病例推理实训”两部分组成。报告生成后随病例保存，诊断意见、病程时间轴作答和系统评分固定保留。</div>';
     html += '<div class="report-score-section">';
-    html += '<div class="report-score-big"><div class="big-score" style="color:'+scoreColor+';">'+assessment.overallScore+'</div><div class="big-label">'+(assessment.overallScore>=90?'优秀':assessment.overallScore>=75?'良好':assessment.overallScore>=60?'一般':'需提高')+'</div></div>';
+    html += '<div class="report-score-big"><div class="big-score" style="color:'+scoreColor+';">'+formatReportScoreValue(assessment.overallScore)+'</div><div class="big-label">'+(assessment.overallScore>=90?'优秀':assessment.overallScore>=75?'良好':assessment.overallScore>=60?'一般':'需提高')+'</div></div>';
     html += '<div class="report-score-detail">';
-    html += '<div class="score-bar-item"><div class="score-bar-header"><span>AI诊断对比学习 - 诊断准确率</span><span>'+compare.diagnosisAccuracy+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+compare.diagnosisAccuracy+'%;background:'+scoreBarColor(compare.diagnosisAccuracy)+'"></div></div></div>';
-    html += '<div class="score-bar-item"><div class="score-bar-header"><span>AI诊断对比学习 - 逻辑完整度</span><span>'+compare.logicCompleteness+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+compare.logicCompleteness+'%;background:'+scoreBarColor(compare.logicCompleteness)+'"></div></div></div>';
-    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病例推理实训 - 诊断准确率</span><span>'+evolution.diagnosisAccuracy+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.diagnosisAccuracy+'%;background:'+scoreBarColor(evolution.diagnosisAccuracy)+'"></div></div></div>';
-    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病例推理实训 - 逻辑完整度</span><span>'+evolution.logicCompleteness+'分</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.logicCompleteness+'%;background:'+scoreBarColor(evolution.logicCompleteness)+'"></div></div></div>';
+    html += '<div class="score-bar-item"><div class="score-bar-header"><span>AI诊断对比学习 - 诊断准确率</span><span>'+formatReportScore(compare.diagnosisAccuracy)+'</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+compare.diagnosisAccuracy+'%;background:'+scoreBarColor(compare.diagnosisAccuracy)+'"></div></div></div>';
+    html += '<div class="score-bar-item"><div class="score-bar-header"><span>AI诊断对比学习 - 逻辑完整度</span><span>'+formatReportScore(compare.logicCompleteness)+'</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+compare.logicCompleteness+'%;background:'+scoreBarColor(compare.logicCompleteness)+'"></div></div></div>';
+    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病例推理实训 - 诊断准确率</span><span>'+formatReportScore(evolution.diagnosisAccuracy)+'</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.diagnosisAccuracy+'%;background:'+scoreBarColor(evolution.diagnosisAccuracy)+'"></div></div></div>';
+    html += '<div class="score-bar-item"><div class="score-bar-header"><span>病例推理实训 - 逻辑完整度</span><span>'+formatReportScore(evolution.logicCompleteness)+'</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:'+evolution.logicCompleteness+'%;background:'+scoreBarColor(evolution.logicCompleteness)+'"></div></div></div>';
     html += '</div></div>';
 
     html += '<div class="report-module-grid">';
     html += '<div class="report-module-card">';
     html += '<div class="report-module-head"><div><div class="report-module-title">AI诊断对比学习</div><div class="report-module-desc">按学员提交的诊断字段与 AI 诊断结果逐项对比，系统自动评分诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
-    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+compare.diagnosisAccuracy+'分</div></div>';
-    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+compare.logicCompleteness+'分</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+formatReportScore(compare.diagnosisAccuracy)+'</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+formatReportScore(compare.logicCompleteness)+'</div></div>';
     html += '</div>';
     html += '<table class="diff-table"><thead><tr><th>评分字段</th><th>学员提交内容</th><th>AI诊断结果</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     compareRowsForReport.forEach(row=>{
-        html += '<tr><td>'+escHtml(row.name)+'</td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+escHtml(row.accuracyScore)+'分</td><td>'+escHtml(row.logicScore)+'分</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
+        html += '<tr><td>'+escHtml(row.name)+'</td><td>'+escHtml(row.user)+'</td><td>'+escHtml(row.ai)+'</td><td>'+formatReportScore(row.accuracyScore)+'</td><td>'+formatReportScore(row.logicScore)+'</td><td><span class="'+row.status.cls+'">'+escHtml(row.status.text)+'</span></td></tr>';
     });
     
     html += '</tbody></table></div>';
@@ -2346,12 +2432,12 @@ function generateIntegratedLearningReport(){
     html += '<div class="report-module-card">';
     html += '<div class="report-module-head"><div><div class="report-module-title">病例推理实训</div><div class="report-module-desc">按病程时间轴各时间点的单选题作答，系统自动评判诊断准确率和逻辑完整度。</div></div></div>';
     html += '<div class="report-score-pair">';
-    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+evolution.diagnosisAccuracy+'分</div></div>';
-    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+evolution.logicCompleteness+'分</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">诊断准确率</div><div class="score-pill-value">'+formatReportScore(evolution.diagnosisAccuracy)+'</div></div>';
+    html += '<div class="score-pill"><div class="score-pill-label">逻辑完整度</div><div class="score-pill-value">'+formatReportScore(evolution.logicCompleteness)+'</div></div>';
     html += '</div>';
     html += '<table class="diff-table"><thead><tr><th>时间节点</th><th>学员选择</th><th>诊断准确率评分</th><th>逻辑完整度评分</th><th>系统评判</th></tr></thead><tbody>';
     assessment.fieldAssessments.forEach(item=>{
-        html += '<tr><td><strong>'+escHtml(item.name)+'</strong></td><td>'+escHtml(item.user)+'</td><td>'+escHtml(item.accuracyScore)+'分</td><td>'+escHtml(item.logicScore)+'分</td><td>'+escHtml(item.accuracyComment)+' '+escHtml(item.logicComment)+'</td></tr>';
+        html += '<tr><td><strong>'+escHtml(item.name)+'</strong></td><td>'+escHtml(item.user)+'</td><td>'+formatReportScore(item.accuracyScore)+'</td><td>'+formatReportScore(item.logicScore)+'</td><td>'+escHtml(item.accuracyComment)+' '+escHtml(item.logicComment)+'</td></tr>';
     });
     
     html += '</tbody></table></div></div>';
@@ -2362,11 +2448,14 @@ function generateIntegratedLearningReport(){
         caseId: currentCaseId,
         caseTitle: currentCase.title,
         reportVersion: 'case-learning-score-v5',
+        reportNo: reportNo,
         generatedAt: dateStr,
         metrics: {
             diagnosisAccuracy: assessment.diagnosisAccuracy,
             logicCompleteness: assessment.logicCompleteness,
             overallScore: assessment.overallScore,
+            compareOverallScore: compare.overallScore,
+            evolutionOverallScore: evolution.overallScore,
             compareDiagnosisAccuracy: compare.diagnosisAccuracy,
             compareLogicCompleteness: compare.logicCompleteness,
             evolutionDiagnosisAccuracy: evolution.diagnosisAccuracy,
@@ -2404,7 +2493,16 @@ function openSavedLearningReport(caseId){
         generateIntegratedLearningReport();
         return;
     }
-    document.getElementById('reportContent').innerHTML = report.html;
+    if(!report.reportNo){
+        report.reportNo = buildCaseLearningReportNo(targetCaseId, parseCaseReportDate(report.generatedAt));
+    }
+    normalizeLearningReportScores(report);
+    const reportHtml = normalizeReportScoreHtml(normalizeEmptyReportScoresHtml(ensureReportNumberHtml(report.html, report.reportNo)), report);
+    if(reportHtml !== report.html){
+        report.html = reportHtml;
+        saveLearningReport(targetCaseId, report);
+    }
+    document.getElementById('reportContent').innerHTML = reportHtml;
     document.getElementById('reportOverlay').style.display = 'flex';
 }
 

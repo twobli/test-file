@@ -118,31 +118,227 @@
     }
 
     .main-content {
-      margin-left: 0;
+      margin-left: var(--sidebar-width);
       margin-top: var(--header-height);
       height: calc(100vh - var(--header-height));
       display: flex;
       flex-direction: column;
     }
 
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      width: var(--sidebar-width);
+      height: calc(100vh - var(--header-height));
+      background: #202038;
+      border-right: 1px solid #3d3d5a;
+      overflow-y: auto;
+      z-index: 999;
+      padding: 8px 0;
+    }
+
+    .menu-group {
+      margin-bottom: 4px;
+    }
+
+    .menu-group-title {
+      padding: 12px 20px 6px;
+      font-size: 11px;
+      color: #8f91aa;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      color: #c7c9df;
+      text-decoration: none;
+      font-size: 13px;
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+    }
+
+    .menu-item.active {
+      background: rgba(26, 115, 232, .22);
+      color: #fff;
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .workbench-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 12px;
+      background: #24243a;
+      border-bottom: 1px solid #3d3d5a;
+      flex-shrink: 0;
+    }
+
+    .workbench-nav-title {
+      color: #eef;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .workbench-nav-hint {
+      color: #8f91aa;
+      font-size: 11px;
+      display: none;
+    }
+
+    .workbench-nav .tool-btn {
+      min-height: 26px;
+      background: #3a3a5a;
+    }
+
     .toolbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 6px 16px;
+      padding: 6px 12px;
       background: #2d2d44;
       border-bottom: 1px solid #3d3d5a;
       flex-shrink: 0;
-      flex-wrap: wrap;
       gap: 4px;
+      overflow: visible;
     }
 
+    .toolbar-row,
     .toolbar .tb-left,
     .toolbar .tb-right {
       display: flex;
       align-items: center;
-      gap: 4px;
       flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .toolbar-actions {
+      justify-content: space-between;
+    }
+
+    .toolbar-main {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+      flex: 1;
+      min-width: 0;
+      overflow: visible;
+    }
+
+    .toolbar-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 4px;
+      border: 1px solid rgba(86, 86, 128, .65);
+      border-radius: 7px;
+      background: rgba(20, 20, 38, .32);
+    }
+
+    .toolbar-group-label {
+      color: #8f91aa;
+      font-size: 10px;
+      line-height: 1;
+      padding: 0 4px 0 1px;
+      margin-right: 1px;
+      border-right: 1px solid rgba(112, 112, 150, .7);
+      white-space: nowrap;
+    }
+
+    .toolbar-menu {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .toolbar-menu summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      color: #ccd;
+      font-size: 11px;
+      line-height: 1;
+      min-height: 27px;
+      padding: 4px 7px;
+      border: 1px solid #4a4a6a;
+      border-radius: 4px;
+      background: #363652;
+      list-style: none;
+      user-select: none;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .toolbar-menu summary:hover {
+      background: #4a4a7a;
+      border-color: #5a5a8a;
+    }
+
+    .toolbar-menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .toolbar-menu summary::after {
+      content: '⌄';
+      color: #9da0bb;
+      font-size: 10px;
+      margin-left: 2px;
+    }
+
+    .toolbar-menu[open] summary {
+      background: #4a4a7a;
+      border-color: var(--primary);
+    }
+
+    .toolbar-menu-panel {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 5px);
+      z-index: 1200;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      min-width: 220px;
+      max-width: 520px;
+      padding: 7px;
+      border: 1px solid #4a4a6a;
+      border-radius: 8px;
+      background: #24243a;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .24);
+    }
+
+    .assist-menu .toolbar-menu-panel {
+      min-width: 290px;
+    }
+
+    .params-menu .toolbar-menu-panel {
+      right: 0;
+      left: auto;
+      min-width: 620px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-params {
+      border-top: 0;
+      margin-top: 0;
+      padding: 7px;
+    }
+
+    .toolbar-params .toolbar-group-label {
+      border-right: 0;
+      color: #a9abc2;
+      font-weight: 600;
     }
 
     .tool-btn {
@@ -163,9 +359,27 @@
 
     .toolbar .tool-btn.icon-only {
       min-width: 32px;
-      padding: 5px 8px;
+      padding: 5px 7px;
       justify-content: center;
       gap: 0;
+    }
+
+    .toolbar .tool-btn {
+      min-height: 27px;
+    }
+
+    .toolbar .tool-btn.compact {
+      padding: 4px 6px;
+    }
+
+    .tool-btn .tool-ico {
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .tool-btn .tool-text {
+      font-size: 10px;
+      line-height: 1;
     }
 
     .tool-btn:hover {
@@ -235,6 +449,9 @@
       color: #889;
       font-size: 10px;
       white-space: nowrap;
+      padding: 3px 7px;
+      border-radius: 12px;
+      background: rgba(20, 20, 38, .24);
     }
 
     .viewer-range input {
@@ -1164,6 +1381,37 @@
       margin-bottom: 8px;
     }
 
+    .diagnosis-mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .diagnosis-mode-btn {
+      border: 1px solid #4a4a6a;
+      border-radius: 8px;
+      background: #2d2d4a;
+      color: #ccd;
+      padding: 7px 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .diagnosis-mode-btn.active {
+      border-color: var(--primary);
+      background: rgba(45, 123, 246, 0.18);
+      color: #fff;
+    }
+
+    .diagnosis-pane {
+      display: none;
+    }
+
+    .diagnosis-pane.active {
+      display: block;
+    }
+
     .manual-diagnosis-results .scope-label {
       display: block;
       font-size: 10px;
@@ -1200,6 +1448,25 @@
       .ann-panel-left,
       .ann-panel-right {
         width: 160px;
+      }
+    }
+
+    @media (max-width:720px) {
+      .header-nav {
+        display: none;
+      }
+
+      .sidebar {
+        width: 64px;
+      }
+
+      .menu-group-title,
+      .menu-item span {
+        display: none;
+      }
+
+      .main-content {
+        margin-left: 64px;
       }
     }
 
@@ -1464,6 +1731,9 @@
       font-size: 12px;
       line-height: 1;
     }
+  
+      .task-context-badge { margin-left: 8px; padding: 3px 8px; border-radius: 12px; background: rgba(255,255,255,.16); color:#fff; font-size:11px; }
+
   </style>
 </head>
 
@@ -1481,84 +1751,130 @@
       <button class="btn-logout" onclick="logout()">退出</button>
     </div>
   </div>
+
+  <div class="sidebar">
+    <div class="menu-group">
+      <div class="menu-group-title">标注工作台</div>
+      <a class="menu-item" href="影像标注任务管理.html?panel=data"><span>图像数据</span></a>
+      <a class="menu-item" href="影像标注任务管理.html?panel=tasks"><span>任务管理</span></a>
+      <a class="menu-item" href="影像标注任务管理.html?panel=labels"><span>标签/疾病管理</span></a>
+      <a class="menu-item active" href="影像标注工具.html"><span>影像标注工具</span></a>
+    </div>
+  </div>
+
   <div class="main-content">
-    <!-- 工具栏 -->
+    <!-- 页面级导航 -->
+    <div class="workbench-nav">
+      <span class="workbench-nav-title">影像标注工作台</span>
+      <span class="workbench-nav-hint">可通过左侧导航切换图像数据、任务管理和标签/疾病管理。</span>
+    </div>
+    <!-- 画布工具栏 -->
     <div class="toolbar">
-      <div class="tb-left">
-        <button class="tool-btn icon-only" onclick="goBackToTaskList()" title="返回任务列表" aria-label="返回任务列表">↩</button>
-        <span class="tool-sep"></span>
-        <button class="tool-btn icon-only" onclick="undoAction()" title="撤销" aria-label="撤销">↶</button>
-        <button class="tool-btn icon-only" onclick="redoAction()" title="重做" aria-label="重做">↷</button>
-        <span class="tool-sep"></span>
-        <!-- 基础浏览工具 -->
-        <button class="tool-btn icon-only" onclick="zoomIn()" title="放大" aria-label="放大">🔍+</button>
-        <button class="tool-btn icon-only" onclick="zoomOut()" title="缩小" aria-label="缩小">🔍-</button>
-        <button class="tool-btn icon-only" onclick="fitToView()" title="适窗显示" aria-label="适窗显示">▣</button>
-        <button class="tool-btn icon-only" onclick="resetViewer()" title="重置阅片视图" aria-label="重置阅片视图">↺</button>
-        <button class="tool-btn icon-only" onclick="togglePan()" title="平移模式" aria-label="平移模式" id="btnPan">✋</button>
-        <button class="tool-btn icon-only" onclick="rotateImage()" title="旋转" aria-label="旋转">🔄</button>
-        <button class="tool-btn icon-only" onclick="flipImage('h')" title="水平翻转" aria-label="水平翻转"
-          id="btnFlipH">⇄</button>
-        <button class="tool-btn icon-only" onclick="flipImage('v')" title="垂直翻转" aria-label="垂直翻转"
-          id="btnFlipV">⇅</button>
-        <button class="tool-btn icon-only" onclick="toggleWindowLevel()" title="窗宽窗位" aria-label="窗宽窗位"
-          id="btnWL">🌗</button>
-        <span class="tool-sep"></span>
-        <!-- 绘制工具 -->
-        <button class="tool-btn icon-only" data-tool="select" onclick="setTool('select',this)" title="选择标注"
-          aria-label="选择标注">☝</button>
-        <button class="tool-btn icon-only" data-tool="rect" onclick="setTool('rect',this)" title="矩形勾画"
-          aria-label="矩形勾画">▭</button>
-        <button class="tool-btn icon-only" data-tool="polygon" onclick="setTool('polygon',this)" title="多边形勾画"
-          aria-label="多边形勾画">⬠</button>
-        <button class="tool-btn icon-only" data-tool="brush" onclick="setTool('brush',this)" title="画笔勾画"
-          aria-label="画笔勾画">✎</button>
-        <button class="tool-btn icon-only" data-tool="fill" onclick="setTool('fill',this)" title="区域填充"
-          aria-label="区域填充">▰</button>
-        <button class="tool-btn icon-only" data-tool="ellipse" onclick="setTool('ellipse',this)" title="椭圆勾画"
-          aria-label="椭圆勾画">⬭</button>
-        <button class="tool-btn icon-only" data-tool="line" onclick="setTool('line',this)" title="线段勾画"
-          aria-label="线段勾画">╱</button>
-        <span class="tool-sep"></span>
-        <!-- 测量工具 -->
-        <button class="tool-btn icon-only" data-tool="measure-length" onclick="setTool('measure-length',this)"
-          title="长度测量" aria-label="长度测量" id="btnMeasureLength">📏</button>
-        <button class="tool-btn icon-only" data-tool="measure-angle" onclick="setTool('measure-angle',this)"
-          title="角度测量" aria-label="角度测量" id="btnMeasureAngle">📐</button>
-        <button class="tool-btn icon-only" data-tool="measure-area" onclick="setTool('measure-area',this)" title="面积测量"
-          aria-label="面积测量" id="btnMeasureArea">⬡</button>
-        <button class="tool-btn icon-only" data-tool="measure-ellipse" onclick="setTool('measure-ellipse',this)"
-          title="椭圆测量" aria-label="椭圆测量" id="btnMeasureEllipse">⬭</button>
-        <button class="tool-btn icon-only" data-tool="measure-rect" onclick="setTool('measure-rect',this)" title="矩形测量"
-          aria-label="矩形测量" id="btnMeasureRect">▭</button>
-        <!-- 辅助工具 -->
-        <button class="tool-btn icon-only" onclick="toggleAnnotation()" title="注释" aria-label="注释"
-          id="btnAnnotation">📝</button>
-        <button class="tool-btn icon-only" onclick="toggleMagnifier()" title="放大镜" aria-label="放大镜"
-          id="btnMagnifier">🔎</button>
-        <button class="tool-btn icon-only" onclick="toggleProbe()" title="探针" aria-label="探针" id="btnProbe">📍</button>
-        <button class="tool-btn icon-only" onclick="toggleEraser()" title="橡皮擦" aria-label="橡皮擦"
-          id="btnEraser">🧹</button>
-        <button class="tool-btn icon-only danger" onclick="clearAllViewerMarks()" title="清除标注与测量"
-          aria-label="清除标注与测量">🗑</button>
-        <span class="viewer-range">灰度 <input type="range" id="graySlider" min="0" max="100" value="0"
-            oninput="setGrayScale(this.value)"></span>
-        <span class="viewer-range">对比 <input type="range" id="contrastSlider" min="50" max="180" value="100"
-            oninput="setContrast(this.value)"></span>
-        <span class="viewer-range">亮度 <input type="range" id="brightnessSlider" min="50" max="160" value="100"
-            oninput="setBrightness(this.value)"></span>
-        <!-- 自动标注 -->
-        <button class="tool-btn icon-only green" onclick="runAutoAnnotation()" title="自动标注" aria-label="自动标注"
-          id="btnAutoAnnotate">🤖</button>
-        <span style="color:#667;font-size:11px;">缩放 <span id="zoomLabel">100</span>%</span>
-        <input type="range" min="20" max="300" value="100" style="width:60px;accent-color:var(--primary);"
-          oninput="setZoom(this.value)" title="缩放影像">
-        <span class="viewer-range">线条粗细 <span id="lineWidthVal">2</span>px <input type="range" min="1" max="10"
-            value="2" style="width:60px;accent-color:var(--primary);" oninput="setLineWidth(this.value)"
-            title="调整线条粗细"></span>
-        <span class="viewer-range">橡皮擦 <span id="eraserRadiusVal">12</span>px <input type="range" min="4" max="32"
-            value="12" style="width:60px;accent-color:var(--primary);" oninput="setEraserRadius(this.value)"
-            title="调整橡皮擦大小"></span>
+      <div class="toolbar-row toolbar-actions">
+        <div class="toolbar-main">
+          <div class="toolbar-group">
+            <span class="toolbar-group-label">历史</span>
+            <button class="tool-btn compact" onclick="undoAction()" title="撤销" aria-label="撤销"><span
+                class="tool-ico">↶</span><span class="tool-text">撤销</span></button>
+            <button class="tool-btn compact" onclick="redoAction()" title="重做" aria-label="重做"><span
+                class="tool-ico">↷</span><span class="tool-text">重做</span></button>
+          </div>
+          <div class="toolbar-group">
+            <span class="toolbar-group-label">阅片</span>
+            <button class="tool-btn compact" onclick="zoomIn()" title="放大" aria-label="放大"><span
+                class="tool-ico">🔍+</span><span class="tool-text">放大</span></button>
+            <button class="tool-btn compact" onclick="zoomOut()" title="缩小" aria-label="缩小"><span
+                class="tool-ico">🔍-</span><span class="tool-text">缩小</span></button>
+            <button class="tool-btn compact" onclick="fitToView()" title="适窗显示" aria-label="适窗显示"><span
+                class="tool-ico">▣</span><span class="tool-text">适窗</span></button>
+            <button class="tool-btn compact" onclick="resetViewer()" title="重置阅片视图" aria-label="重置阅片视图"><span
+                class="tool-ico">↺</span><span class="tool-text">重置</span></button>
+            <button class="tool-btn compact" onclick="togglePan()" title="平移模式" aria-label="平移模式" id="btnPan"><span
+                class="tool-ico">✋</span><span class="tool-text">平移</span></button>
+            <button class="tool-btn compact" onclick="rotateImage()" title="旋转" aria-label="旋转"><span
+                class="tool-ico">🔄</span><span class="tool-text">旋转</span></button>
+            <button class="tool-btn compact" onclick="flipImage('h')" title="水平翻转" aria-label="水平翻转"
+              id="btnFlipH"><span class="tool-ico">⇄</span><span class="tool-text">水平</span></button>
+            <button class="tool-btn compact" onclick="flipImage('v')" title="垂直翻转" aria-label="垂直翻转"
+              id="btnFlipV"><span class="tool-ico">⇅</span><span class="tool-text">垂直</span></button>
+            <button class="tool-btn compact" onclick="toggleWindowLevel()" title="窗宽窗位" aria-label="窗宽窗位"
+              id="btnWL"><span class="tool-ico">🌗</span><span class="tool-text">窗位</span></button>
+          </div>
+          <div class="toolbar-group">
+            <span class="toolbar-group-label">标注</span>
+            <button class="tool-btn compact" data-tool="select" onclick="setTool('select',this)" title="选择标注"
+              aria-label="选择标注"><span class="tool-ico">☝</span><span class="tool-text">选择</span></button>
+            <button class="tool-btn compact" data-tool="rect" onclick="setTool('rect',this)" title="矩形勾画"
+              aria-label="矩形勾画"><span class="tool-ico">▭</span><span class="tool-text">矩形</span></button>
+            <button class="tool-btn compact" data-tool="polygon" onclick="setTool('polygon',this)" title="多边形勾画"
+              aria-label="多边形勾画"><span class="tool-ico">⬠</span><span class="tool-text">多边</span></button>
+            <button class="tool-btn compact" data-tool="brush" onclick="setTool('brush',this)" title="画笔勾画"
+              aria-label="画笔勾画"><span class="tool-ico">✎</span><span class="tool-text">画笔</span></button>
+            <button class="tool-btn compact" data-tool="fill" onclick="setTool('fill',this)" title="区域填充"
+              aria-label="区域填充"><span class="tool-ico">▰</span><span class="tool-text">填充</span></button>
+            <button class="tool-btn compact" data-tool="ellipse" onclick="setTool('ellipse',this)" title="椭圆勾画"
+              aria-label="椭圆勾画"><span class="tool-ico">⬭</span><span class="tool-text">椭圆</span></button>
+            <button class="tool-btn compact" data-tool="line" onclick="setTool('line',this)" title="线段勾画"
+              aria-label="线段勾画"><span class="tool-ico">╱</span><span class="tool-text">线段</span></button>
+          </div>
+          <details class="toolbar-menu measurement-menu">
+            <summary><span class="tool-ico">📏</span><span class="tool-text">测量</span></summary>
+            <div class="toolbar-menu-panel">
+              <button class="tool-btn compact" data-tool="measure-length" onclick="setTool('measure-length',this)"
+                title="长度测量" aria-label="长度测量" id="btnMeasureLength"><span class="tool-ico">📏</span><span
+                  class="tool-text">长度</span></button>
+              <button class="tool-btn compact" data-tool="measure-angle" onclick="setTool('measure-angle',this)"
+                title="角度测量" aria-label="角度测量" id="btnMeasureAngle"><span class="tool-ico">📐</span><span
+                  class="tool-text">角度</span></button>
+              <button class="tool-btn compact" data-tool="measure-area" onclick="setTool('measure-area',this)"
+                title="面积测量" aria-label="面积测量" id="btnMeasureArea"><span class="tool-ico">⬡</span><span
+                  class="tool-text">面积</span></button>
+              <button class="tool-btn compact" data-tool="measure-ellipse" onclick="setTool('measure-ellipse',this)"
+                title="椭圆测量" aria-label="椭圆测量" id="btnMeasureEllipse"><span class="tool-ico">⬭</span><span
+                  class="tool-text">椭圆</span></button>
+              <button class="tool-btn compact" data-tool="measure-rect" onclick="setTool('measure-rect',this)"
+                title="矩形测量" aria-label="矩形测量" id="btnMeasureRect"><span class="tool-ico">▭</span><span
+                  class="tool-text">矩形</span></button>
+            </div>
+          </details>
+          <details class="toolbar-menu assist-menu">
+            <summary><span class="tool-ico">🧰</span><span class="tool-text">辅助</span></summary>
+            <div class="toolbar-menu-panel">
+              <button class="tool-btn compact" onclick="toggleAnnotation()" title="注释" aria-label="注释"
+                id="btnAnnotation"><span class="tool-ico">📝</span><span class="tool-text">注释</span></button>
+              <button class="tool-btn compact" onclick="toggleMagnifier()" title="放大镜" aria-label="放大镜"
+                id="btnMagnifier"><span class="tool-ico">🔎</span><span class="tool-text">放大镜</span></button>
+              <button class="tool-btn compact" onclick="toggleProbe()" title="探针" aria-label="探针" id="btnProbe"><span
+                  class="tool-ico">📍</span><span class="tool-text">探针</span></button>
+              <button class="tool-btn compact" onclick="toggleEraser()" title="橡皮擦" aria-label="橡皮擦"
+                id="btnEraser"><span class="tool-ico">🧹</span><span class="tool-text">橡皮擦</span></button>
+              <button class="tool-btn compact green" onclick="runAutoAnnotation()" title="自动标注" aria-label="自动标注"
+                id="btnAutoAnnotate"><span class="tool-ico">🤖</span><span class="tool-text">AI标注</span></button>
+              <button class="tool-btn compact danger" onclick="clearAllViewerMarks()" title="清除标注与测量"
+                aria-label="清除标注与测量"><span class="tool-ico">🗑</span><span class="tool-text">清除</span></button>
+            </div>
+          </details>
+          <details class="toolbar-menu params-menu">
+            <summary><span class="tool-ico">🎚</span><span class="tool-text">显示参数</span></summary>
+            <div class="toolbar-menu-panel toolbar-params">
+              <span style="color:#a9abc2;font-size:11px;">缩放 <span id="zoomLabel">100</span>%</span>
+              <input type="range" min="20" max="300" value="100" style="width:88px;accent-color:var(--primary);"
+                oninput="setZoom(this.value)" title="缩放影像">
+              <span class="viewer-range">灰度 <input type="range" id="graySlider" min="0" max="100" value="0"
+                  oninput="setGrayScale(this.value)"></span>
+              <span class="viewer-range">对比 <input type="range" id="contrastSlider" min="50" max="180" value="100"
+                  oninput="setContrast(this.value)"></span>
+              <span class="viewer-range">亮度 <input type="range" id="brightnessSlider" min="50" max="160" value="100"
+                  oninput="setBrightness(this.value)"></span>
+              <span class="viewer-range">线条粗细 <span id="lineWidthVal">2</span>px <input type="range" min="1" max="10"
+                  value="2" style="width:72px;accent-color:var(--primary);" oninput="setLineWidth(this.value)"
+                  title="调整线条粗细"></span>
+              <span class="viewer-range">橡皮擦 <span id="eraserRadiusVal">12</span>px <input type="range" min="4" max="32"
+                  value="12" style="width:72px;accent-color:var(--primary);" oninput="setEraserRadius(this.value)"
+                  title="调整橡皮擦大小"></span>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
     <!-- 工作区 -->
@@ -1587,7 +1903,7 @@
           <select id="filterAnnotationStatus" onchange="filterImages()" title="标注状态">
             <option value="">全部状态</option>
             <option value="未阅片">未阅片</option>
-            <option value="已标注">已标注</option>
+            <option value="已提交">已提交</option>
           </select>
           <select id="filterQualityStatus" onchange="filterImages()" title="质控状态">
             <option value="">全部质控</option>
@@ -1692,20 +2008,24 @@
           </div>
           <div class="ann-section">
             <div class="ann-section-title"><span>疾病分类</span></div>
-            <div class="category-manager" id="categoryManager"></div>
-          </div>
-          <!-- 功能5：AI诊断分类 -->
-          <div class="ann-section">
-            <div class="ann-section-title">
-              <span>AI诊断分类</span>
-              <div class="section-actions help-actions"><button class="tool-btn sm" id="btnAIDiagnosis"
+            <div class="diagnosis-mode-switch">
+              <button type="button" class="diagnosis-mode-btn active" id="diagnosisModeManual" onclick="setDiagnosisMode('manual')">手工分类</button>
+              <button type="button" class="diagnosis-mode-btn" id="diagnosisModeAI" onclick="setDiagnosisMode('ai')">AI辅助诊断</button>
+            </div>
+            <div class="diagnosis-pane active" id="manualDiagnosisPane">
+              <div class="category-manager" id="categoryManager"></div>
+              <button class="tool-btn success sm" type="button" onclick="confirmManualDiagnosisResult()">确认手工分类</button>
+              <div class="manual-diagnosis-results" id="manualDiagnosisResults"></div>
+            </div>
+            <div class="diagnosis-pane" id="aiDiagnosisPane">
+              <div class="section-actions help-actions" style="margin-bottom:6px;"><button class="tool-btn sm" id="btnAIDiagnosis"
                   onclick="runAIDiagnosis()">诊断</button><button type="button"
                   class="tool-btn sm icon-only ai-diagnosis-help-btn" id="btnAIDiagnosisHelp"
                   onclick="toggleAIDiagnosisHint(event)" aria-expanded="false" aria-controls="aiDiagnosisHelpBubble"
-                  title="说明">?</button><div class="ai-diagnosis-help-bubble" id="aiDiagnosisHelpBubble">支持多任务联合分类与多标签输出；结合结构特征与病灶特征的多模态输入</div></div>
+                  title="说明">?</button><div class="ai-diagnosis-help-bubble" id="aiDiagnosisHelpBubble">结合当前影像、标注和测量生成疾病分类建议</div></div>
+              <button class="tool-btn success sm" type="button" id="btnAdoptAIDiagnosis" style="display:none;margin-top:6px;" onclick="adoptAIDiagnosisResult()">采用AI结果</button>
+              <div id="aiDiagnosisResults"></div>
             </div>
-            <div class="manual-diagnosis-results" id="manualDiagnosisResults"></div>
-            <div id="aiDiagnosisResults"></div>
           </div>
         </div>
         <div class="submit-actions">
@@ -1798,6 +2118,10 @@
       var currentOCTIndex = 0;
       var aiDiagnosisResult = null;
       var manualDiagnosisResult = [];
+      var diagnosisMode = 'manual';
+      var finalDiagnosisSource = '';
+      var finalDiagnosisResult = [];
+      var finalDiagnosisConfirmed = false;
       var activeAIAnnotationEditIndex = null;
       var activeAIAnnotationEditBackup = null;
       var showAllDates = false;
@@ -1837,19 +2161,6 @@
       var activeTaskLabelSets = [];
       var annotationLabelSets = [];
       var annotationDiseases = [];
-
-      var DISEASE_CATEGORIES = [
-        { name: '糖尿病视网膜病变', levels: ['无DR', '轻度NPDR', '中度NPDR', '重度NPDR', 'PDR'] },
-        { name: '青光眼', levels: ['正常', '可疑', '早期', '中期', '晚期'] },
-        { name: '高血压视网膜病变', levels: ['无', 'I级', 'II级', 'III级', 'IV级'] },
-        { name: '年龄相关性黄斑变性', levels: ['无', '早期', '中期', '晚期干性', '湿性'] },
-        { name: '视网膜静脉阻塞', levels: ['无', '分支静脉阻塞', '中央静脉阻塞', '缺血型', '非缺血型'] },
-        { name: '视网膜脱离', levels: ['无', '可疑', '局限性', '广泛性', '累及黄斑'] },
-        { name: '病理性近视', levels: ['无', '轻度改变', '豹纹状眼底', '脉络膜萎缩', 'CNV可疑'] },
-        { name: '白内障相关影像异常', levels: ['无', '轻度混浊', '中度混浊', '重度混浊', '影响判读'] },
-        { name: '视神经病变', levels: ['无', '可疑', '轻度', '中度', '重度'] }
-      ];
-      var DEFAULT_DISEASE_LEVELS = ['无', '可疑', '轻度', '中度', '重度'];
 
       var imageLayer = document.getElementById('imageLayer');
       var annotationCanvas = document.getElementById('annotationCanvas');
@@ -2068,7 +2379,8 @@
           if (resultVal && !hasImageDiseaseLabel(img, resultVal)) return false;
           if (annotationStatusVal && (img.annotationStatus || '未阅片') !== annotationStatusVal) return false;
           if (qualityStatusVal) {
-            var qualityReport = ensureQualityAssessment(img);
+            var qualityReport = img.qualityReport || null;
+            if (!qualityReport) return false;
             if (qualityStatusVal === 'pass' && qualityReport.status !== 'pass') return false;
             if (qualityStatusVal === 'not-pass' && qualityReport.status === 'pass') return false;
           }
@@ -2252,6 +2564,10 @@
         var img = uploadedImages[currentImageIndex];
         img.aiDiagnosisResult = aiDiagnosisResult ? JSON.parse(JSON.stringify(aiDiagnosisResult)) : null;
         img.manualDiagnosisResult = manualDiagnosisResult ? JSON.parse(JSON.stringify(manualDiagnosisResult)) : [];
+        img.diagnosisMode = diagnosisMode;
+        img.finalDiagnosisSource = finalDiagnosisSource;
+        img.finalDiagnosisResult = finalDiagnosisResult ? JSON.parse(JSON.stringify(finalDiagnosisResult)) : [];
+        img.finalDiagnosisConfirmed = !!finalDiagnosisConfirmed;
       }
 
       function saveCurrentWork() {
@@ -2268,17 +2584,104 @@
       function loadAnalysisResults(img) {
         aiDiagnosisResult = img && img.aiDiagnosisResult ? JSON.parse(JSON.stringify(img.aiDiagnosisResult)) : null;
         manualDiagnosisResult = img && img.manualDiagnosisResult ? JSON.parse(JSON.stringify(img.manualDiagnosisResult)) : [];
+        diagnosisMode = img && img.diagnosisMode ? img.diagnosisMode : 'manual';
+        finalDiagnosisSource = img && img.finalDiagnosisSource ? img.finalDiagnosisSource : '';
+        finalDiagnosisResult = img && img.finalDiagnosisResult ? JSON.parse(JSON.stringify(img.finalDiagnosisResult)) : [];
+        finalDiagnosisConfirmed = !!(img && img.finalDiagnosisConfirmed);
         refreshLabelSetBySelectedDisease();
       }
 
       function updateAnalysisActionLabels() {
         var diagnosisBtn = document.getElementById('btnAIDiagnosis');
         if (diagnosisBtn) diagnosisBtn.textContent = aiDiagnosisResult && aiDiagnosisResult.length ? '重新诊断' : '诊断';
+        var adoptBtn = document.getElementById('btnAdoptAIDiagnosis');
+        if (adoptBtn) adoptBtn.style.display = aiDiagnosisResult && aiDiagnosisResult.length ? '' : 'none';
+      }
+
+      function getDiagnosisSourceLabel(source) {
+        if (source === 'manual') return '手工分类';
+        if (source === 'ai') return 'AI辅助诊断';
+        return '未选择';
+      }
+
+      function getCurrentDraftDiagnosisResult(source) {
+        return source === 'ai'
+          ? (aiDiagnosisResult ? JSON.parse(JSON.stringify(aiDiagnosisResult)) : [])
+          : (manualDiagnosisResult ? JSON.parse(JSON.stringify(manualDiagnosisResult)) : []);
+      }
+
+      function markFinalDiagnosisDraft(source) {
+        if (finalDiagnosisSource === source && finalDiagnosisConfirmed) {
+          finalDiagnosisResult = getCurrentDraftDiagnosisResult(source);
+          finalDiagnosisConfirmed = false;
+        }
+      }
+
+      function renderDiagnosisModeState() {
+        var manualBtn = document.getElementById('diagnosisModeManual');
+        var aiBtn = document.getElementById('diagnosisModeAI');
+        var manualPane = document.getElementById('manualDiagnosisPane');
+        var aiPane = document.getElementById('aiDiagnosisPane');
+        if (manualBtn) manualBtn.classList.toggle('active', diagnosisMode === 'manual');
+        if (aiBtn) aiBtn.classList.toggle('active', diagnosisMode === 'ai');
+        if (manualPane) manualPane.classList.toggle('active', diagnosisMode === 'manual');
+        if (aiPane) aiPane.classList.toggle('active', diagnosisMode === 'ai');
+      }
+
+      function setDiagnosisMode(mode) {
+        diagnosisMode = mode === 'ai' ? 'ai' : 'manual';
+        saveAnalysisResults();
+        renderDiagnosisModeState();
+        updateAnalysisActionLabels();
+        document.getElementById('statusHint').textContent = '已切换到' + getDiagnosisSourceLabel(diagnosisMode);
+      }
+
+      function confirmManualDiagnosisResult() {
+        var result = getCurrentDraftDiagnosisResult('manual');
+        if (!result.length) {
+          alert('请先选择疾病分类，再确认手工分类');
+          return;
+        }
+        var missingConfig = result.some(function (item) { return item && item.disease && (!item.allLevels || !item.allLevels.length); });
+        if (missingConfig) {
+          alert('当前疾病未配置分级，请先在任务管理的疾病管理中维护分级');
+          return;
+        }
+        var missingLevel = result.some(function (item) { return item && item.disease && !item.level; });
+        if (missingLevel) {
+          alert('请先为已选择的疾病分类选择分级');
+          return;
+        }
+        finalDiagnosisSource = 'manual';
+        finalDiagnosisResult = result;
+        finalDiagnosisConfirmed = true;
+        diagnosisMode = 'manual';
+        saveAnalysisResults();
+        renderDiagnosisModeState();
+        renderManualDiagnosisDisplay();
+        document.getElementById('statusHint').textContent = '已确认手工疾病分类为最终结果';
+      }
+
+      function adoptAIDiagnosisResult() {
+        var result = getCurrentDraftDiagnosisResult('ai');
+        if (!result.length) {
+          alert('请先完成AI诊断，再采用AI结果');
+          return;
+        }
+        finalDiagnosisSource = 'ai';
+        finalDiagnosisResult = result;
+        finalDiagnosisConfirmed = true;
+        diagnosisMode = 'ai';
+        saveAnalysisResults();
+        renderDiagnosisModeState();
+        updateDiagnosisDisplay(aiDiagnosisResult || []);
+        document.getElementById('statusHint').textContent = '已采用AI诊断结果为最终疾病分类';
       }
 
       function refreshRightResultPanels() {
         updateUI();
         updateAutoAnnoDisplay();
+        renderDiagnosisModeState();
         updateDiagnosisDisplay(aiDiagnosisResult || []);
         renderManualDiagnosisDisplay();
         updateAnalysisActionLabels();
@@ -2494,8 +2897,7 @@
         var report = ensureQualityAssessment(img);
         renderQualityGate();
         if (report.status === 'pass') return true;
-        if (report.status === 'review' && options && options.allowReview) return true;
-        alert((actionName || 'AI分析') + '已被图像质量门控拦截：' + report.statusText + '（评分 ' + report.score + '）。请重新采集或重新质控后再继续。');
+        alert((actionName || '操作') + '已被图像质量门控拦截：' + report.statusText + '（评分 ' + report.score + '）。请标记为“需重新采集”，或重新质控通过后再继续。');
         document.getElementById('statusHint').textContent = '图像质量门控拦截：' + report.statusText;
         return false;
       }
@@ -2833,6 +3235,8 @@
       }
 
       function setTool(tool, btn) {
+        var gatedTools = ['rect', 'polygon', 'brush', 'fill', 'ellipse', 'line', 'measure-length', 'measure-angle', 'measure-area', 'measure-ellipse', 'measure-rect'];
+        if (gatedTools.indexOf(tool) >= 0 && !canUseAIForCurrentImage('人工标注与测量')) return;
         if (activeTool === 'polygon' && tool !== 'polygon' && polygonPoints.length > 0) {
           polygonPoints = [];
           isDrawing = false;
@@ -2958,23 +3362,20 @@
         return ids;
       }
 
-      function getDiseaseCategoryTemplate(name) {
-        var normalizedName = String(name || '');
-        for (var i = 0; i < DISEASE_CATEGORIES.length; i++) {
-          var cat = DISEASE_CATEGORIES[i];
-          if (!cat || !cat.name) continue;
-          if (cat.name === normalizedName || normalizedName.indexOf(cat.name) >= 0 || cat.name.indexOf(normalizedName) >= 0) return cat;
-          if (cat.name === '年龄相关性黄斑变性' && (normalizedName === '黄斑病变' || normalizedName.indexOf('黄斑') >= 0)) return cat;
-        }
-        return null;
+      function normalizeDiseaseLevels(levels) {
+        var seen = {};
+        return (levels || []).map(function (item) { return String(item || '').trim(); }).filter(function (item) {
+          if (!item || seen[item]) return false;
+          seen[item] = true;
+          return true;
+        });
       }
 
       function buildDiseaseCategoryFromRecord(disease) {
-        var template = getDiseaseCategoryTemplate(disease && disease.name);
         return {
           id: disease && disease.id ? disease.id : '',
           name: disease && disease.name ? disease.name : '',
-          levels: template && template.levels ? template.levels.slice() : DEFAULT_DISEASE_LEVELS.slice()
+          levels: normalizeDiseaseLevels(disease && disease.levels ? disease.levels : [])
         };
       }
 
@@ -3277,6 +3678,12 @@
           return;
         }
         var img = uploadedImages[currentImageIndex];
+        var report = ensureQualityAssessment(img);
+        if (label === '正常' && report && report.status !== 'pass') {
+          alert('当前影像' + report.statusText + '，不能标记为“正常”。请标记为“需重新采集”，或重新质控通过后再继续。');
+          document.getElementById('statusHint').textContent = '质控未通过：仅允许标记为需重新采集';
+          return;
+        }
         img.classificationLabel = label;
         img.examResult = label;
         saveAnalysisResults();
@@ -3347,6 +3754,7 @@
       }
 
       function updateDiagnosisCategories() {
+        markFinalDiagnosisDraft('manual');
         saveAnalysisResults();
         refreshLabelSetBySelectedDisease();
         updateAnalysisActionLabels();
@@ -3455,17 +3863,18 @@
         var container = document.getElementById('manualDiagnosisResults');
         if (!container) return;
         if (!manualDiagnosisResult || !manualDiagnosisResult.length) {
-          container.innerHTML = '';
+          container.innerHTML = '<div class="result-card-mini" style="border-left-color:#4a4a6a;color:#889;">暂无手工分类结果</div>';
           return;
         }
-        var html = '<span class="scope-label">人工诊断分类</span>';
+        var adopted = finalDiagnosisSource === 'manual' && finalDiagnosisConfirmed;
+        var html = '<span class="scope-label">' + (adopted ? '手工分类结果 · 已确认' : '手工分类结果 · 待确认') + '</span>';
         for (var i = 0; i < manualDiagnosisResult.length; i++) {
           var r = manualDiagnosisResult[i];
           html += '<div class="result-card-mini manual-diagnosis-card" style="border-left-color:#A78BFA;">' +
-            '<div class="rc-title">' + escapeLabelText(r.disease) + '<span class="manual-tag">人工</span></div>' +
-            '<div class="rc-val">' + escapeLabelText(r.level || '未分级') + '</div>' +
+            '<div class="rc-title">' + escapeLabelText(r.disease) + '<span class="manual-tag">' + (adopted ? '已确认' : '人工') + '</span></div>' +
+            '<div class="rc-val">' + escapeLabelText(r.allLevels && r.allLevels.length ? (r.level || '未分级') : '未配置分级') + '</div>' +
             '<div style="margin-top:3px;">';
-          for (var j = 0; j < r.allLevels.length; j++) {
+          for (var j = 0; j < (r.allLevels || []).length; j++) {
             var level = r.allLevels[j];
             var selectedClass = level === r.level ? 'selected' : '';
             html += '<span class="diagnosis-tag ' + selectedClass + '" style="background:' + (level === r.level ? '#A78BFA' : '#363652') + ';" onclick="selectManualDiagnosisLevel(' + i + ',' + j + ')">' + escapeLabelText(level) + '</span>';
@@ -3480,6 +3889,7 @@
         var result = manualDiagnosisResult[diseaseIdx];
         result.level = result.allLevels[levelIdx];
         result.manuallyCorrected = true;
+        markFinalDiagnosisDraft('manual');
         saveAnalysisResults();
         renderManualDiagnosisDisplay();
         updateImageList();
@@ -3511,10 +3921,13 @@
         annotation.label = PENDING_LABEL;
         annotation.color = PENDING_COLOR;
         annotation.source = annotation.source || 'manual';
+        annotation.manualConfirmed = false;
+        annotation.manualStatus = '待确认';
         manualAnnotations.push(annotation);
         selectedAnnotationId = annotation.id;
         currentLabel = PENDING_LABEL;
         currentColor = PENDING_COLOR;
+        document.getElementById('statusHint').textContent = '已新增人工标注 #' + annotation.id + '，请在人工标注列表选择标签并确认本条';
         return annotation;
       }
 
@@ -3544,9 +3957,12 @@
               var note = prompt('请输入阅片注释');
               if (note && note.trim()) {
                 pushUndo();
-                manualAnnotations.push({ id: annotationIdCounter++, type: 'note', label: note.trim(), color: '#FFD700', source: 'manual', point: [pos.x, pos.y], lineWidth: 1 });
+                var noteId = annotationIdCounter++;
+                manualAnnotations.push({ id: noteId, type: 'note', label: note.trim(), color: '#FFD700', source: 'manual', point: [pos.x, pos.y], lineWidth: 1, manualConfirmed: false, manualStatus: '待确认' });
+                selectedAnnotationId = noteId;
                 saveAnnotations();
                 updateUI();
+                document.getElementById('statusHint').textContent = '已新增阅片注释 #' + noteId + '，请在人工标注列表确认本条';
               }
               pendingNotePoint = null;
               redraw();
@@ -3562,7 +3978,7 @@
         }
         if (activeTool === 'delete') {
           var hit = hitTestAnno(pos.x, pos.y);
-          if (hit) { pushUndo(); manualAnnotations = manualAnnotations.filter(function (a) { return a.id !== hit; }); selectedAnnotationId = null; saveAnnotations(); redraw(); updateUI(); }
+          if (hit) { deleteAnno(hit); }
           return;
         }
         if (currentImageIndex < 0) return;
@@ -3646,7 +4062,7 @@
         polygonPoints = [];
         saveAnnotations();
         redraw(); updateUI();
-        document.getElementById('statusHint').textContent = '多边形已完成，请在下拉列表选择标签';
+        document.getElementById('statusHint').textContent = '多边形已完成，请在人工标注列表选择标签并确认本条';
       }
 
       function cancelPolygon() {
@@ -3745,7 +4161,7 @@
           if (brushPath.length > 3) {
             pushUndo();
             addPendingManualAnnotation({ type: 'fill', points: brushPath.slice(), lineWidth: currentLineWidth });
-            document.getElementById('statusHint').textContent = '区域填充已完成，请在下拉列表选择标签';
+            document.getElementById('statusHint').textContent = '区域填充已完成，请在人工标注列表选择标签并确认本条';
           }
           brushPath = [];
         }
@@ -4243,6 +4659,22 @@
         return null;
       }
 
+      function isManualAnnotationConfirmed(annotation) {
+        return !!(annotation && annotation.manualConfirmed);
+      }
+
+      function canModifyManualAnnotation(annotation, actionName) {
+        return !!annotation;
+      }
+
+      function markManualAnnotationDraft(annotation) {
+        if (!annotation || !isManualAnnotationConfirmed(annotation)) return false;
+        annotation.manualConfirmed = false;
+        annotation.manualStatus = '待确认';
+        annotation.editedAfterConfirmAt = new Date().toISOString();
+        return true;
+      }
+
       function isPointInLabelBounds(pos, bounds) {
         if (!bounds) return false;
         return pos.x >= bounds.x && pos.x <= bounds.x + bounds.w && pos.y >= bounds.y && pos.y <= bounds.y + bounds.h;
@@ -4258,6 +4690,7 @@
         var annotation = findAnno(selectedAnnotationId);
         var bounds = annotationLabelBounds[selectedAnnotationId];
         if (!annotation || !isPointInLabelBounds(pos, bounds)) return false;
+        if (!canModifyManualAnnotation(annotation, '移动标签')) return false;
         isLabelDragging = true;
         labelDragAnnotationId = selectedAnnotationId;
         labelDragOffsetX = pos.x - bounds.anchorX;
@@ -4283,9 +4716,11 @@
         if (labelDragChanged && labelDragSnapshot) {
           undoStack.push(labelDragSnapshot);
           redoStack = [];
+          var annotation = findAnno(labelDragAnnotationId);
+          var changedConfirmed = markManualAnnotationDraft(annotation);
           saveAnnotations();
           updateUI();
-          document.getElementById('statusHint').textContent = '标签位置已更新';
+          document.getElementById('statusHint').textContent = changedConfirmed ? '标签位置已更新，该人工标注已回到待确认，请重新确认本条' : '标签位置已更新';
         }
         labelDragAnnotationId = null;
         labelDragSnapshot = null;
@@ -4687,7 +5122,7 @@
       function runAutoAnnotationForAll() {
         if (currentImageIndex < 0) { alert('请先选择影像'); return; }
         var currentReport = ensureQualityAssessment(uploadedImages[currentImageIndex]);
-        if (currentReport.status !== 'pass' && currentReport.status !== 'review') {
+        if (currentReport.status !== 'pass') {
           alert('当前影像未通过图像质量门控（' + currentReport.statusText + '），已取消批量 AI 自动标注');
           return;
         }
@@ -4698,7 +5133,7 @@
           var img = uploadedImages[i];
           if (!img) { skippedCount++; continue; }
           var report = ensureQualityAssessment(img);
-          if (report.status !== 'pass' && report.status !== 'review') {
+          if (report.status !== 'pass') {
             skippedCount++;
             continue;
           }
@@ -4751,6 +5186,7 @@
       }
 
       function applyAIAnnotationScope(scope) {
+        if (!confirmOverwriteConfirmedAI(scope)) return;
         closeAIAnnotationScopeModal();
         if (scope === 'current') {
           performAutoAnnotationForIndex(currentImageIndex, false);
@@ -4792,12 +5228,36 @@
         return false;
       }
 
+      function hasConfirmedAIAnnotationsForImage(img) {
+        var list = img && Array.isArray(img.aiAnnotations) ? img.aiAnnotations : [];
+        for (var i = 0; i < list.length; i++) {
+          if (isAIAnnotationConfirmed(list[i])) return true;
+        }
+        return false;
+      }
+
+      function confirmOverwriteConfirmedAI(scope) {
+        var hasLocked = false;
+        if (scope === 'all') {
+          for (var i = 0; i < uploadedImages.length; i++) {
+            if (hasConfirmedAIAnnotationsForImage(uploadedImages[i])) {
+              hasLocked = true;
+              break;
+            }
+          }
+        } else {
+          hasLocked = hasConfirmedAIAnnotationsForImage(uploadedImages[currentImageIndex]);
+        }
+        if (!hasLocked) return true;
+        return confirm('当前范围内存在已确认并锁定的 AI 标注结果。重新 AI 标注会清空并替换这些结果，是否继续？');
+      }
+
       function updateResultListButtonVisibility(sectionKey) {
         if (!sectionKey || sectionKey === 'autoAnno') {
-          setResultButtonVisible('btnToggleAutoAnnoList', hasUnconfirmedAIAnnotations());
+          setResultButtonVisible('btnToggleAutoAnnoList', aiAnnotations.length > 0);
         }
         if (!sectionKey || sectionKey === 'manualAnno') {
-          setResultButtonVisible('btnToggleManualAnnoList', manualAnnotations.length > 0 || hasConfirmedAIAnnotations());
+          setResultButtonVisible('btnToggleManualAnnoList', manualAnnotations.length > 0);
         }
         if (!sectionKey || sectionKey === 'measurement') {
           setResultButtonVisible('btnToggleMeasurementList', measurementResults.length > 0);
@@ -4826,6 +5286,15 @@
 
       function isAIAnnotationConfirmed(annotation) {
         return !!(annotation && annotation.aiConfirmed);
+      }
+
+      function canModifyAIAnnotation(index, actionName) {
+        if (!aiAnnotations[index]) return false;
+        if (isAIAnnotationConfirmed(aiAnnotations[index])) {
+          document.getElementById('statusHint').textContent = (actionName || '修改') + '已取消：该 AI 标注结果已确认并锁定';
+          return false;
+        }
+        return true;
       }
 
       function hasUnconfirmedAIAnnotations() {
@@ -4923,28 +5392,36 @@
       }
 
       function renderAutoAnnotationCard(index, annotation) {
+        var confirmed = isAIAnnotationConfirmed(annotation);
         var selectedClass = selectedAIAnnotationIndex === index ? ' selected' : '';
         var sourceLabel = annotation.sourceLabel || (isLesionAutoAnnotation(annotation) ? '病灶识别' : annotation.type);
         var html = '<div class="result-card-mini' + selectedClass + '" style="border-left-color:' + annotation.color + ';" onclick="selectAIAnnotation(' + index + ')">';
+        var statusBadge = confirmed ? ' <span style="font-size:9px;color:#34C759;">' + escapeLabelText(annotation.aiStatus || '已确认') + '</span>' : '';
         if (isLesionAutoAnnotation(annotation)) {
           var box = getAutoAnnotationBox(annotation);
-          html += '<div class="rc-title">' + escapeLabelText(annotation.label || annotation.type || '未命名病灶') + ' #' + (index + 1) + (annotation.manuallyCorrected ? ' <span style="font-size:9px;color:#FFB020;">已修正</span>' : '') + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(sourceLabel) + ')</span></div>' +
+          html += '<div class="rc-title">' + escapeLabelText(annotation.label || annotation.type || '未命名病灶') + ' #' + (index + 1) + (annotation.manuallyCorrected && !confirmed ? ' <span style="font-size:9px;color:#FFB020;">已修正</span>' : '') + statusBadge + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(sourceLabel) + ')</span></div>' +
             '<div class="rc-val">位置: ' + escapeLabelText(annotation.region || '-') + ' (' + box.x + ',' + box.y + ')</div>' +
             '<div class="rc-confidence">面积: ~' + (annotation.areaPx || Math.round(box.w * box.h)) + 'px² | 严重程度: ' + escapeLabelText(annotation.severity || '-') + ' | 置信度: ' + Math.round((annotation.confidence || 0) * 100) + '%</div>';
         } else {
-          html += '<div class="rc-title">' + escapeLabelText(annotation.label) + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(sourceLabel) + ')</span></div>' +
+          html += '<div class="rc-title">' + escapeLabelText(annotation.label) + statusBadge + ' <span style="font-size:9px;color:#889;">(' + escapeLabelText(sourceLabel) + ')</span></div>' +
             '<div class="rc-confidence">置信度: ' + Math.round((annotation.confidence || 0) * 100) + '%</div>';
         }
-        html += '<a class="rc-link" onclick="event.stopPropagation();editAIAnnotation(' + index + ')">' + (activeAIAnnotationEditIndex === index ? '收起' : '编辑') + '</a>' +
-          '<a class="rc-link" style="color:var(--danger);" onclick="event.stopPropagation();removeAIAnnotation(' + index + ')">删除</a>';
+        if (confirmed) {
+          html += '<div class="rc-confidence" style="color:#34C759;">已确认并锁定；如需重新生成，请点击上方“重新AI标注”。</div>';
+        } else {
+          html += '<a class="rc-link" onclick="event.stopPropagation();editAIAnnotation(' + index + ')">' + (activeAIAnnotationEditIndex === index ? '收起' : '编辑') + '</a>' +
+            '<a class="rc-link" style="color:var(--danger);" onclick="event.stopPropagation();removeAIAnnotation(' + index + ')">删除</a>';
+        }
         if (selectedAIAnnotationIndex === index) {
           if (isLesionAutoAnnotation(annotation)) {
-            if (activeAIAnnotationEditIndex === index) html += renderLesionAutoAnnotationEditForm(index, annotation);
+            if (!confirmed && activeAIAnnotationEditIndex === index) html += renderLesionAutoAnnotationEditForm(index, annotation);
             html += renderAnnotationMeasurementDetails(annotation);
           } else {
-            html += '<div class="ai-edit-row" onclick="event.stopPropagation()"><span>标签</span>' +
-              '<select class="ai-label-select" onchange="changeAIAnnotationLabel(' + index + ', this.value)">' +
-              buildSelectedLabelOptions(annotation.label) + '</select></div>';
+            if (!confirmed) {
+              html += '<div class="ai-edit-row" onclick="event.stopPropagation()"><span>标签</span>' +
+                '<select class="ai-label-select" onchange="changeAIAnnotationLabel(' + index + ', this.value)">' +
+                buildSelectedLabelOptions(annotation.label) + '</select></div>';
+            }
             html += renderAnnotationMeasurementDetails(annotation);
           }
         }
@@ -4958,7 +5435,6 @@
         var container = document.getElementById('autoAnnoResults');
         var html = '';
         for (var i = 0; i < aiAnnotations.length; i++) {
-          if (isAIAnnotationConfirmed(aiAnnotations[i])) continue;
           html += renderAutoAnnotationCard(i, aiAnnotations[i]);
         }
         container.innerHTML = html;
@@ -4989,7 +5465,7 @@
       }
 
       function editAIAnnotation(index) {
-        if (!aiAnnotations[index]) return;
+        if (!canModifyAIAnnotation(index, '编辑')) return;
         selectedAIAnnotationIndex = index;
         if (activeAIAnnotationEditIndex === index) {
           activeAIAnnotationEditIndex = null;
@@ -5015,7 +5491,7 @@
       }
 
       function syncAIAnnotationEditPreview(index) {
-        if (!aiAnnotations[index]) return;
+        if (!canModifyAIAnnotation(index, '编辑预览')) return;
         var annotation = aiAnnotations[index];
         var labelEl = document.getElementById('aiLesionType_' + index);
         var severityEl = document.getElementById('aiLesionSeverity_' + index);
@@ -5042,9 +5518,11 @@
       }
 
       function saveAIAnnotationEdit(index) {
-        if (!aiAnnotations[index]) return;
+        if (!canModifyAIAnnotation(index, '保存修正')) return;
         syncAIAnnotationEditPreview(index);
         aiAnnotations[index].manuallyCorrected = true;
+        aiAnnotations[index].aiConfirmed = true;
+        aiAnnotations[index].aiStatus = '已编辑';
         aiAnnotations[index].correctedAt = new Date().toISOString();
         activeAIAnnotationEditIndex = null;
         activeAIAnnotationEditBackup = null;
@@ -5056,7 +5534,7 @@
       }
 
       function changeAIAnnotationLabel(index, label) {
-        if (!label || !aiAnnotations[index]) return;
+        if (!label || !canModifyAIAnnotation(index, '修改标签')) return;
         aiAnnotations[index].label = label;
         aiAnnotations[index].color = getLabelColor(label, aiAnnotations[index].color || '#4488FF');
         saveAnnotations();
@@ -5067,6 +5545,7 @@
       }
 
       function removeAIAnnotation(index) {
+        if (!canModifyAIAnnotation(index, '删除')) return;
         if (selectedAIAnnotationIndex === index) selectedAIAnnotationIndex = null;
         else if (selectedAIAnnotationIndex !== null && selectedAIAnnotationIndex > index) selectedAIAnnotationIndex--;
         aiAnnotations.splice(index, 1);
@@ -5077,6 +5556,7 @@
       function confirmAIAnnotations() {
         for (var i = 0; i < aiAnnotations.length; i++) {
           aiAnnotations[i].aiConfirmed = true;
+          aiAnnotations[i].aiStatus = aiAnnotations[i].manuallyCorrected ? '已编辑' : '已确认';
         }
         activeAIAnnotationEditIndex = null;
         activeAIAnnotationEditBackup = null;
@@ -5088,6 +5568,17 @@
       }
 
       function rejectAIAnnotations() {
+        if (currentImageIndex >= 0 && uploadedImages[currentImageIndex] && aiAnnotations.length) {
+          var img = uploadedImages[currentImageIndex];
+          if (!Array.isArray(img.rejectedAIAnnotations)) img.rejectedAIAnnotations = [];
+          aiAnnotations.forEach(function (item) {
+            var rejected = JSON.parse(JSON.stringify(item));
+            rejected.aiConfirmed = false;
+            rejected.aiStatus = '已拒绝';
+            rejected.rejectedAt = new Date().toISOString();
+            img.rejectedAIAnnotations.push(rejected);
+          });
+        }
         aiAnnotations = [];
         activeAIAnnotationEditIndex = null;
         activeAIAnnotationEditBackup = null;
@@ -5162,6 +5653,7 @@
       }
 
       function pickExistingLevel(levels, preferred) {
+        if (!levels || !levels.length) return '';
         for (var i = 0; i < preferred.length; i++) {
           if (levels.indexOf(preferred[i]) >= 0) return preferred[i];
         }
@@ -5169,6 +5661,7 @@
       }
 
       function inferDiseaseLevel(cat, evidence, risk, offset) {
+        if (!cat || !cat.levels || !cat.levels.length) return '';
         var l = evidence.lesions;
         var riskBucket = Math.floor(((risk % 100) + offset) / 25);
         if (cat.name === '糖尿病视网膜病变') {
@@ -5277,6 +5770,7 @@
           var categories = getAvailableDiseaseCategories();
           if (!categories.length) {
             aiDiagnosisResult = [];
+            markFinalDiagnosisDraft('ai');
             saveAnalysisResults();
             updateDiagnosisDisplay([]);
             updateAnalysisActionLabels();
@@ -5286,6 +5780,7 @@
           for (var i = 0; i < categories.length; i++) {
             var cat = categories[i];
             var level = inferDiseaseLevel(cat, evidence, risk, i * 17);
+            if (!level) continue;
             if (isNegativeDiagnosisLevel(level)) continue;
             results.push({
               disease: cat.name,
@@ -5296,6 +5791,7 @@
             });
           }
           aiDiagnosisResult = results;
+          markFinalDiagnosisDraft('ai');
           saveAnalysisResults();
           updateDiagnosisDisplay(results);
           refreshLabelSetBySelectedDisease();
@@ -5313,13 +5809,15 @@
         if (!container) return;
         var html = '';
         if (!results || !results.length) {
-          container.innerHTML = '';
+          container.innerHTML = '<div class="result-card-mini" style="border-left-color:#4a4a6a;color:#889;">暂无AI诊断结果</div>';
           return;
         }
+        var adopted = finalDiagnosisSource === 'ai' && finalDiagnosisConfirmed;
+        html += '<span class="scope-label">' + (adopted ? 'AI诊断结果 · 已采用' : 'AI诊断结果 · 待采用') + '</span>';
         for (var i = 0; i < results.length; i++) {
           var r = results[i];
           html += '<div class="result-card-mini" style="border-left-color:var(--primary);">' +
-            '<div class="rc-title">' + escapeLabelText(r.disease) + '</div>' +
+            '<div class="rc-title">' + escapeLabelText(r.disease) + '<span style="font-size:9px;color:#8ab4ff;margin-left:4px;">' + (adopted ? '已采用' : 'AI建议') + '</span></div>' +
             '<div class="rc-val">' + escapeLabelText(r.level) + ' <span style="font-size:10px;color:#889;">(' + Math.round(r.confidence * 100) + '%)</span></div>' +
             '<div class="rc-confidence">依据: ' + escapeLabelText(r.basis || '影像特征综合判断') + '</div>' +
             '<div style="margin-top:3px;">';
@@ -5330,6 +5828,7 @@
           html += '</div></div>';
         }
         container.innerHTML = html;
+        updateAnalysisActionLabels();
       }
 
       function setAIDiagnosisHintVisible(visible) {
@@ -5362,6 +5861,7 @@
         result.level = result.allLevels[levelIdx];
         if (isNegativeDiagnosisLevel(result.level)) {
           aiDiagnosisResult.splice(diseaseIdx, 1);
+          markFinalDiagnosisDraft('ai');
           saveAnalysisResults();
           updateDiagnosisDisplay(aiDiagnosisResult);
           refreshLabelSetBySelectedDisease();
@@ -5376,6 +5876,7 @@
           result.basis = getMultimodalDiagnosisBasis(result.disease, result.level, collectDiagnosisEvidence(uploadedImages[currentImageIndex]));
         }
         result.manuallyCorrected = true;
+        markFinalDiagnosisDraft('ai');
         saveAnalysisResults();
         updateDiagnosisDisplay(aiDiagnosisResult);
         refreshLabelSetBySelectedDisease();
@@ -5437,6 +5938,7 @@
       /* ============ AUXILIARY TOOLS ============ */
       function toggleAnnotation() {
         var enable = !annotationMode;
+        if (enable && !canUseAIForCurrentImage('人工注释')) return;
         resetExclusiveToolModes(enable ? 'annotation' : '');
         annotationMode = enable;
         clearExclusiveToolButtons(enable ? document.getElementById('btnAnnotation') : null);
@@ -5457,6 +5959,7 @@
       }
       function toggleProbe() {
         var enable = !probeEnabled;
+        if (enable && !canUseAIForCurrentImage('探针标记')) return;
         resetExclusiveToolModes(enable ? 'probe' : '');
         probeEnabled = enable;
         clearExclusiveToolButtons(enable ? document.getElementById('btnProbe') : null);
@@ -5528,14 +6031,16 @@
           point: [pos.x, pos.y],
           grayValue: reading.grayValue,
           layer: reading.layer,
-          lineWidth: 1
+          lineWidth: 1,
+          manualConfirmed: false,
+          manualStatus: '待确认'
         });
         selectedAnnotationId = id;
         saveAnnotations();
         redraw();
         updateUI();
         updateProbe(e);
-        document.getElementById('statusHint').textContent = '已放置探针：X ' + reading.x + ' / Y ' + reading.y + ' / 灰度 ' + reading.grayValue;
+        document.getElementById('statusHint').textContent = '已放置探针：X ' + reading.x + ' / Y ' + reading.y + ' / 灰度 ' + reading.grayValue + '，请在人工标注列表确认本条';
       }
 
       function getAnnotationPathSegments(annotation) {
@@ -5679,6 +6184,7 @@
               } else {
                 target.segments = nextSegments;
                 target.points = nextSegments[0];
+                markManualAnnotationDraft(target);
               }
               eraserChanged = true;
             }
@@ -5718,11 +6224,6 @@
         for (var i = 0; i < manualAnnotations.length; i++) {
           html += buildAnnotationListItem(manualAnnotations[i]);
         }
-        for (var j = 0; j < aiAnnotations.length; j++) {
-          if (isAIAnnotationConfirmed(aiAnnotations[j])) {
-            html += renderAutoAnnotationCard(j, aiAnnotations[j]);
-          }
-        }
         var annoListEl = document.getElementById('annoList');
         var manualAnnoListEl = document.getElementById('manualAnnoList');
         if (annoListEl) annoListEl.innerHTML = html;
@@ -5730,7 +6231,7 @@
         updateResultListCollapseState('manualAnno');
         // Selected info
         var selInfo = document.getElementById('selectedAnnoInfo');
-        var hasManualAnnoResults = manualAnnotations.length > 0 || hasConfirmedAIAnnotations();
+        var hasManualAnnoResults = manualAnnotations.length > 0;
         if (selInfo) selInfo.style.display = hasManualAnnoResults ? '' : 'none';
         if (selectedAnnotationId) {
           var sa = findAnno(selectedAnnotationId);
@@ -5748,10 +6249,13 @@
 
       function buildAnnotationListItem(a) {
         var cls = selectedAnnotationId === a.id ? 'selected' : '';
+        var confirmed = isManualAnnotationConfirmed(a);
+        var statusText = confirmed ? (a.manualStatus || '已确认') : '待确认';
+        var statusColor = confirmed ? '#34C759' : '#FFB020';
         var html = '<div class="anno-list-item ' + cls + '" onclick="selectAnno(' + a.id + ')">' +
           '<div class="anno-row">' +
           '<span class="anno-color" style="background:' + a.color + '"></span>' +
-          '<span class="anno-title">#' + a.id + ' ' + escapeLabelText(a.label) + ' (' + escapeLabelText(a.type) + ')</span>' +
+          '<span class="anno-title">#' + a.id + ' ' + escapeLabelText(a.label) + ' (' + escapeLabelText(a.type) + ') <span style="font-size:9px;color:' + statusColor + ';">' + statusText + '</span></span>' +
           '<span class="anno-del" onclick="event.stopPropagation();deleteAnno(' + a.id + ')">×</span>' +
           '</div>';
         if (selectedAnnotationId === a.id) {
@@ -5760,6 +6264,14 @@
             '<select class="anno-label-select" onchange="changeAnnotationLabel(' + a.id + ', this.value)">' +
             buildSelectedLabelOptions(a.label) + '</select>' +
             '</div>';
+          if (confirmed) {
+            html += '<div class="anno-edit-row" onclick="event.stopPropagation()"><span style="font-size:10px;color:#889;">当前已确认；如继续编辑，系统会自动退回待确认。</span></div>';
+          } else {
+            html += '<div class="anno-edit-row" onclick="event.stopPropagation()">' +
+              '<button class="tool-btn success sm" onclick="confirmManualAnnotation(' + a.id + ')">确认本条</button>' +
+              '<span style="font-size:10px;color:#889;">确认当前这条人工标注后才可提交</span>' +
+              '</div>';
+          }
           html += renderAnnotationMeasurementDetails(a);
         }
         html += '</div>';
@@ -5817,12 +6329,37 @@
         selectedAnnotationId = id;
         annotation.label = label;
         annotation.color = getLabelColor(label, annotation.color);
+        var changedConfirmed = markManualAnnotationDraft(annotation);
         currentLabel = annotation.label;
         currentColor = annotation.color;
         saveAnnotations();
         initLabelPresets();
         redraw();
         updateUI();
+        document.getElementById('statusHint').textContent = changedConfirmed ? '已修改人工标注 #' + id + '，请重新确认本条' : '已更新人工标注 #' + id + ' 的标签';
+      }
+
+      function confirmManualAnnotation(id) {
+        var annotation = findAnno(id);
+        if (!annotation) return;
+        if (isManualAnnotationConfirmed(annotation)) {
+          document.getElementById('statusHint').textContent = '该人工标注已确认';
+          return;
+        }
+        if (!annotation.label || annotation.label === PENDING_LABEL) {
+          alert('请先为当前人工标注选择标签，再确认本条');
+          document.getElementById('statusHint').textContent = '人工标注确认被拦截：未选择标签';
+          return;
+        }
+        pushUndo();
+        annotation.manualConfirmed = true;
+        annotation.manualStatus = '已确认';
+        annotation.confirmedAt = new Date().toISOString();
+        selectedAnnotationId = id;
+        saveAnnotations();
+        redraw();
+        updateUI();
+        document.getElementById('statusHint').textContent = '人工标注 #' + id + ' 已确认；如发现错误仍可编辑或删除';
       }
 
       function getLabelColor(label, fallbackColor) {
@@ -5838,6 +6375,8 @@
       }
 
       function deleteAnno(id) {
+        var annotation = findAnno(id);
+        if (!canModifyManualAnnotation(annotation, '删除')) return;
         pushUndo();
         manualAnnotations = manualAnnotations.filter(function (a) { return a.id !== id; });
         if (selectedAnnotationId === id) selectedAnnotationId = null;
@@ -5847,15 +6386,11 @@
 
       /* ============ SUBMIT ============ */
       function getDiagnosisSubmitSummary() {
-        if (!manualDiagnosisResult || !manualDiagnosisResult.length) return '';
-        var selected = [];
-        for (var i = 0; i < manualDiagnosisResult.length; i++) {
-          var manual = manualDiagnosisResult[i];
-          if (!manual || !manual.disease) continue;
-          var level = manual.level || '未分级';
-          selected.push({ disease: manual.disease, level: level });
-        }
-        return selected.map(function (r) { return r.disease + ':' + r.level; }).join('; ');
+        if (!finalDiagnosisConfirmed || !finalDiagnosisResult || !finalDiagnosisResult.length) return '';
+        return finalDiagnosisResult.map(function (r) {
+          if (!r || !r.disease) return '';
+          return r.disease + ':' + (r.level || '未分级');
+        }).filter(function (text) { return !!text; }).join('; ');
       }
 
       function getSubmitBlockingIssues() {
@@ -5867,11 +6402,19 @@
           if (!label || label === PENDING_LABEL) pendingCount++;
         }
         if (pendingCount > 0) issues.push(pendingCount + ' 个标注仍为“待标注”，请先选择标签');
+        var unconfirmedManualCount = 0;
+        for (var m = 0; m < manualAnnotations.length; m++) {
+          var manual = manualAnnotations[m];
+          if (manual && manual.label && manual.label !== PENDING_LABEL && !isManualAnnotationConfirmed(manual)) unconfirmedManualCount++;
+        }
+        if (unconfirmedManualCount > 0) issues.push(unconfirmedManualCount + ' 个人工标注未确认，请在人工标注列表中逐条点击“确认本条”');
         var unconfirmedAICount = 0;
         for (var j = 0; j < aiAnnotations.length; j++) {
           if (!aiAnnotations[j] || !aiAnnotations[j].aiConfirmed) unconfirmedAICount++;
         }
         if (unconfirmedAICount > 0) issues.push(unconfirmedAICount + ' 个自动标注结果未确认，请先确认、编辑或拒绝');
+        var hasDiagnosisDraft = (manualDiagnosisResult && manualDiagnosisResult.length) || (aiDiagnosisResult && aiDiagnosisResult.length);
+        if (hasDiagnosisDraft && !finalDiagnosisConfirmed) issues.push('疾病分类已有结果但尚未确认最终结果，请确认手工分类或采用AI结果');
         if (isDrawing || polygonPoints.length > 0 || brushPath.length > 0 || measurePoints.length > 0 || pendingNotePoint) {
           issues.push('当前仍有绘制、测量或注释未完成，请先完成或取消当前操作');
         }
@@ -5917,7 +6460,8 @@
         var diagnosisSummary = getDiagnosisSubmitSummary() || '未选择';
         details.innerHTML =
           submitDetailItem('当前影像', img.name || '-') +
-          submitDetailItem('图像级疾病', classificationSummary) +
+          submitDetailItem('图像级分类', classificationSummary) +
+          submitDetailItem('疾病分类方式', finalDiagnosisConfirmed ? getDiagnosisSourceLabel(finalDiagnosisSource) : '未确认') +
           submitDetailItem('疾病分类', diagnosisSummary) +
           submitDetailItem('图像质量', report.statusText + ' ' + report.score) +
           submitDetailItem('人工标注', manualAnnotations.length + ' 个') +
@@ -5943,10 +6487,13 @@
         }
         saveAnnotations();
         var diagnosisSummary = getDiagnosisSubmitSummary();
-        img.annotationStatus = '已标注';
+        img.annotationStatus = '已提交';
         img.classificationLabel = classificationSummary;
         img.examResult = classificationSummary;
         img.diagnosisConclusion = diagnosisSummary || '';
+        img.finalDiagnosisSource = finalDiagnosisSource;
+        img.finalDiagnosisResult = finalDiagnosisResult ? JSON.parse(JSON.stringify(finalDiagnosisResult)) : [];
+        img.finalDiagnosisConfirmed = !!finalDiagnosisConfirmed;
         img.annotationSubmittedAt = new Date().toISOString();
         saveAnalysisResults();
         if (img.syntheticPreview) {
@@ -5962,7 +6509,7 @@
       }
 
       function goBackToTaskList() {
-        window.location.href = '影像标注任务管理.html?role=annotator';
+        window.location.href = '影像标注任务管理.html?panel=tasks&role=annotator';
       }
 
       /* ============ KEYBOARD SHORTCUTS ============ */
@@ -5995,17 +6542,190 @@
       });
 
       /* ============ INIT ============ */
+
+
+      /* ================= P0 闭环原型增强 ================= */
+      function p0ToolGetParam(name) { return getQueryParam(name) || ''; }
+      function p0ToolGetCurrentUser() {
+        var fromUrl = p0ToolGetParam('user');
+        if (fromUrl) return fromUrl;
+        try { var user = JSON.parse(localStorage.getItem('life_med_user') || 'null'); if (user && user.name) return user.name; } catch (e) { }
+        return '李医生';
+      }
+      function p0ToolGetTask() {
+        var taskId = p0ToolGetParam('taskId');
+        if (!taskId) return null;
+        try {
+          var tasks = JSON.parse(localStorage.getItem('life_med_annotation_tasks') || '[]');
+          return tasks.find(function (t) { return t && t.id === taskId; }) || null;
+        } catch (e) { return null; }
+      }
+      function p0ToolPersistTask(task) {
+        if (!task) return;
+        try {
+          var tasks = JSON.parse(localStorage.getItem('life_med_annotation_tasks') || '[]');
+          var index = tasks.findIndex(function (t) { return t && t.id === task.id; });
+          if (index >= 0) tasks[index] = task; else tasks.unshift(task);
+          localStorage.setItem('life_med_annotation_tasks', JSON.stringify(tasks));
+        } catch (e) { }
+      }
+      function p0ToolSyncTaskImage(img, finalSubmit) {
+        var task = p0ToolGetTask();
+        if (!task || !img) return;
+        if (!Array.isArray(task.images)) task.images = [];
+        var imageId = img.imageId || img.id || (task.id + '-IMG-' + String((currentImageIndex || 0) + 1).padStart(6, '0'));
+        var record = task.images.find(function (item) { return item && item.imageId === imageId; });
+        if (!record) {
+          record = { imageId: imageId, name: img.name || imageId, index: currentImageIndex + 1, datasetId: task.dataset, annotatorId: p0ToolGetCurrentUser(), annotations: [], aiAnnotations: [], rejectedAIAnnotations: [], measurements: [], reviewStatus: '未审核', version: 1 };
+          task.images.push(record);
+        }
+        record.name = img.name || record.name;
+        record.annotations = JSON.parse(JSON.stringify(img.annotations || manualAnnotations || []));
+        record.aiAnnotations = JSON.parse(JSON.stringify(img.aiAnnotations || aiAnnotations || []));
+        record.rejectedAIAnnotations = JSON.parse(JSON.stringify(img.rejectedAIAnnotations || []));
+        record.measurements = JSON.parse(JSON.stringify(img.measurements || measurementResults || []));
+        record.aiDiagnosisResult = img.aiDiagnosisResult ? JSON.parse(JSON.stringify(img.aiDiagnosisResult)) : null;
+        record.manualDiagnosisResult = img.manualDiagnosisResult ? JSON.parse(JSON.stringify(img.manualDiagnosisResult)) : [];
+        record.diagnosisMode = img.diagnosisMode || diagnosisMode || 'manual';
+        record.finalDiagnosisSource = img.finalDiagnosisSource || finalDiagnosisSource || '';
+        record.finalDiagnosisResult = img.finalDiagnosisResult ? JSON.parse(JSON.stringify(img.finalDiagnosisResult)) : [];
+        record.finalDiagnosisConfirmed = !!img.finalDiagnosisConfirmed;
+        record.classificationLabel = img.classificationLabel || getCurrentImageClassification() || '';
+        record.diagnosisConclusion = img.diagnosisConclusion || '';
+        record.qualityReport = img.qualityReport ? JSON.parse(JSON.stringify(img.qualityReport)) : null;
+        if (finalSubmit && record.reviewStatus === '退回修改') {
+          if (!Array.isArray(record.reviewHistory)) record.reviewHistory = [];
+          record.reviewHistory.push({
+            reviewStatus: record.reviewStatus,
+            reviewedBy: record.reviewedBy || '',
+            reviewedAt: record.reviewedAt || '',
+            reviewNote: record.reviewNote || '',
+            resubmittedAt: new Date().toISOString()
+          });
+          record.reviewStatus = '待审核';
+          record.reviewNote = '';
+          record.reviewedBy = '';
+          record.reviewedAt = '';
+          record.reviewRound = (record.reviewRound || 1) + 1;
+        }
+        record.annotationStatus = finalSubmit ? '已提交' : (record.annotationStatus || '标注中');
+        if (finalSubmit) record.submittedAt = new Date().toISOString();
+        record.annotatorId = record.annotatorId || p0ToolGetCurrentUser();
+        var images = task.images;
+        task.imageCount = images.length;
+        task.annotated = images.filter(function (item) { return item.annotationStatus === '已提交' || item.reviewStatus === '审核通过'; }).length;
+        task.submittedCount = images.filter(function (item) { return item.annotationStatus === '已提交' || item.reviewStatus === '审核通过'; }).length;
+        task.reviewed = images.filter(function (item) { return item.reviewStatus === '审核通过'; }).length;
+        task.returnedCount = images.filter(function (item) { return item.reviewStatus === '退回修改'; }).length;
+        var allSubmitted = images.length > 0 && task.submittedCount >= images.length;
+        var allReviewed = images.length > 0 && task.reviewed >= images.length;
+        if (allReviewed) { task.status = '已完成'; task.reviewStatus = '审核通过'; }
+        else if (task.returnedCount > 0) { task.status = '已退回'; task.reviewStatus = '审核退回'; }
+        else if (allSubmitted) { task.status = '待审核'; task.reviewStatus = '待审核'; task.submittedAt = task.submittedAt || new Date().toISOString(); }
+        else { task.status = '待标注'; task.reviewStatus = '未提交'; }
+        if (Array.isArray(task.assignments)) task.assignments.forEach(function (a) {
+          var owned = images.filter(function (item) { return item.annotatorId === a.person && item.index >= a.start && item.index <= a.end; });
+          a.total = owned.length || a.total || 0;
+          a.done = owned.filter(function (item) { return item.annotationStatus === '已提交' || item.reviewStatus === '审核通过'; }).length;
+          a.progress = a.total ? Math.round(a.done / a.total * 100) : 0;
+          if (a.status !== '已回收') a.status = a.done >= a.total && a.total ? '已提交' : a.done ? '标注中' : '未开始';
+        });
+        p0ToolPersistTask(task);
+      }
+      function p0ToolBuildTaskImages(task) {
+        if (!task || !Array.isArray(task.images) || !task.images.length) return false;
+        var currentUser = p0ToolGetCurrentUser();
+        var role = p0ToolGetParam('role') || 'annotator';
+        var source = task.images.filter(function (item) {
+          if (role !== 'annotator') return true;
+          return item.annotatorId === currentUser;
+        });
+        if (!source.length && role === 'annotator') source = task.images.filter(function (item) { return !item.annotatorId; });
+        source.forEach(function (item) {
+          uploadedImages.push({
+            imageId: item.imageId,
+            name: item.name || item.imageId,
+            url: buildSyntheticPreview(900, 520, { type: task.dataset || '影像', label: item.classificationLabel || '' }, 0),
+            width: 900, height: 520, type: task.type || '影像', date: (task.createdAt || '').slice(0, 10),
+            checkProject: task.project || '', examResult: item.classificationLabel || '待分类', patientId: item.imageId,
+            layerCount: 1, annotations: JSON.parse(JSON.stringify(item.annotations || [])), aiAnnotations: JSON.parse(JSON.stringify(item.aiAnnotations || [])),
+            rejectedAIAnnotations: JSON.parse(JSON.stringify(item.rejectedAIAnnotations || [])),
+            measurements: JSON.parse(JSON.stringify(item.measurements || [])), aiDiagnosisResult: item.aiDiagnosisResult || null, manualDiagnosisResult: item.manualDiagnosisResult || [],
+            diagnosisMode: item.diagnosisMode || 'manual', finalDiagnosisSource: item.finalDiagnosisSource || '', finalDiagnosisResult: item.finalDiagnosisResult || [], finalDiagnosisConfirmed: !!item.finalDiagnosisConfirmed,
+            classificationLabel: item.classificationLabel || '', diagnosisConclusion: item.diagnosisConclusion || '', qualityReport: item.qualityReport || null,
+            annotationStatus: item.annotationStatus || '待标注', syntheticPreview: true
+          });
+        });
+        return uploadedImages.length > 0;
+      }
+      function p0ToolUpdateContextHint() {
+        var task = p0ToolGetTask();
+        var hint = document.getElementById('statusHint');
+        if (!hint || !task) return;
+        var submitted = task.images ? task.images.filter(function (item) { return item.annotationStatus === '已提交' || item.reviewStatus === '审核通过'; }).length : 0;
+        hint.textContent = '任务 ' + task.id + ' · 当前标注员：' + p0ToolGetCurrentUser() + ' · 全部标注员进度：' + submitted + '/' + (task.imageCount || 0) + '（全部完成后统一进入审核）';
+      }
+
+      var p0OriginalSeedDemoImageList = seedDemoImageList;
+      seedDemoImageList = function () {
+        var task = p0ToolGetTask();
+        if (task) {
+          uploadedImages = [];
+          if (p0ToolBuildTaskImages(task)) {
+            updateImageCount(); updateImageList(); ensureFirstVisibleImageSelected(); p0ToolUpdateContextHint(); return;
+          }
+        }
+        p0OriginalSeedDemoImageList();
+      };
+      var p0OriginalSaveAnnotations = saveAnnotations;
+      saveAnnotations = function () {
+        p0OriginalSaveAnnotations();
+        if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) p0ToolSyncTaskImage(uploadedImages[currentImageIndex], false);
+        p0ToolUpdateContextHint();
+      };
+      var p0OriginalSaveAnalysisResults = saveAnalysisResults;
+      saveAnalysisResults = function () {
+        p0OriginalSaveAnalysisResults();
+        if (currentImageIndex >= 0 && uploadedImages[currentImageIndex]) p0ToolSyncTaskImage(uploadedImages[currentImageIndex], false);
+      };
+      var p0OriginalPerformSubmitAnnotation = performSubmitAnnotation;
+      performSubmitAnnotation = function () {
+        var before = currentImageIndex >= 0 && uploadedImages[currentImageIndex] ? uploadedImages[currentImageIndex].annotationSubmittedAt : '';
+        p0OriginalPerformSubmitAnnotation();
+        var img = currentImageIndex >= 0 && uploadedImages[currentImageIndex] ? uploadedImages[currentImageIndex] : null;
+        if (img && img.annotationSubmittedAt && img.annotationSubmittedAt !== before) {
+          p0ToolSyncTaskImage(img, true);
+          p0ToolUpdateContextHint();
+        }
+      };
+
       document.addEventListener('DOMContentLoaded', function () {
         loadTaskLabelSetPresets();
         initLabelPresets();
         initAIModelPanel();
         resetLayerControls('切换到 OCT / DICOM 多层影像后可用');
         seedDemoImageList();
+        p2ToolSelectQueryImage();
         try {
           var user = JSON.parse(localStorage.getItem('life_med_user'));
           if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
         } catch (e) { }
       });
+
+
+      /* P2 审核退回闭环：从标注员任务详情进入时，自动定位到被退回样本。 */
+      function p2ToolSelectQueryImage() {
+        var targetId = getQueryParam('imageId');
+        if (!targetId || !uploadedImages || !uploadedImages.length) return;
+        var index = uploadedImages.findIndex(function (img) { return img.imageId === targetId; });
+        if (index >= 0) {
+          switchImage(index);
+          var el = document.querySelectorAll('.image-list-item')[index];
+          if (el) el.classList.add('active');
+          var hint = document.getElementById('statusHint');
+          if (hint) hint.textContent = '已定位审核退回样本：' + targetId + '，请修改后重新提交';
+        }
+      }
 
       function logout() {
         if (confirm('确定要退出？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; }

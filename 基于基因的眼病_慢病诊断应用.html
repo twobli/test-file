@@ -295,8 +295,10 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
 .intake-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .intake-form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
 .intake-hint{font-size:12px;color:var(--soft)}
+.intake-selected-genome{display:flex;align-items:center;gap:8px;min-height:36px;padding:0 10px;border:1.5px solid var(--line);border-radius:7px;background:#fff;font-size:13px;color:var(--text)}
+.intake-selected-genome strong{color:var(--blue);font-weight:800}
 .intake-task-summary{
-  display:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;
+  display:none;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;
   padding:14px 16px;margin-bottom:16px;border:1px solid #bbf7d0;
   border-radius:10px;background:#f0fdf4;
 }
@@ -307,7 +309,7 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
 .intake-upload-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
 .intake-upload-title h3{font-size:15px;color:#1a1a2e}
 .intake-upload-title p{font-size:12px;color:var(--soft);margin-top:3px}
-.intake-upload-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.intake-upload-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .intake-upload-card{
   min-width:0;padding:16px;border:1px solid var(--line);border-radius:10px;
   background:#fff;transition:border-color .16s,box-shadow .16s,background .16s;
@@ -340,8 +342,13 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
 .intake-data-list{margin-top:16px}
 .intake-data-list table{margin-top:10px}
 .intake-empty{padding:24px;text-align:center;color:var(--soft);font-size:12px;border:1px dashed var(--line);border-radius:8px;background:#fafcfd}
+.intake-result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.intake-result-card{padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.intake-result-card strong{display:block;color:var(--text);font-size:13px;margin-bottom:6px}
+.intake-result-card span{display:block;color:var(--soft);font-size:12px;line-height:1.6}
+.intake-result-card.api{background:#f8fbff;border-color:#bfdbfe}
 @media(max-width:1000px){
-  .intake-upload-grid{grid-template-columns:1fr}
+  .intake-upload-grid,.intake-result-grid{grid-template-columns:1fr}
   .intake-form-grid,.intake-task-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:620px){
@@ -722,109 +729,120 @@ textarea.form-input{min-height:80px;padding:10px;resize:vertical}
 <div class="page-section active" id="page-data-mgmt">
   <h2 class="section-title">多模态数据接入与统一管理</h2>
   <div class="workflow-panel" id="workflowPanel">
-    <div class="workflow-step running" data-step="data" onclick="goToPage('page-data-mgmt')"><div class="num">1</div><strong>创建评估任务</strong><span>确认用户身份并生成任务编号</span></div>
-    <div class="workflow-step" data-step="prep" onclick="goToPage('page-gene-prep')"><div class="num">2</div><strong>预处理提特征</strong><span>基因清洗、影像增强、特征向量生成</span></div>
-    <div class="workflow-step" data-step="fusion" onclick="goToPage('page-fusion')"><div class="num">3</div><strong>跨模态融合</strong><span>关联热力图、权重分布、融合结论</span></div>
-    <div class="workflow-step" data-step="risk" onclick="goToPage('page-score')"><div class="num">4</div><strong>风险评估</strong><span>基因易感评分与影像异常提示</span></div>
-    <div class="workflow-step" data-step="report" onclick="goToPage('page-auto-report')"><div class="num">5</div><strong>结构化报告</strong><span>自动汇总风险、变异和影像依据</span></div>
-    <div class="workflow-step" data-step="decision" onclick="goToPage('page-treatment')"><div class="num">6</div><strong>临床决策</strong><span>会诊、科研分析、个体化方案推荐</span></div>
+    <div class="workflow-step running" data-step="data" onclick="goToPage('page-data-mgmt')"><div class="num">1</div><strong>创建筛查任务</strong><span>从数据库选择用户并生成任务</span></div>
+    <div class="workflow-step" data-step="fusion" onclick="goToPage('page-data-mgmt')"><div class="num">2</div><strong>多模态特征融合</strong><span>基因组与眼底影像联合分析</span></div>
+    <div class="workflow-step" data-step="risk" onclick="goToPage('page-score')"><div class="num">3</div><strong>疾病风险评估</strong><span>基因易感评分与影像异常提示</span></div>
+    <div class="workflow-step" data-step="report" onclick="goToPage('page-auto-report')"><div class="num">4</div><strong>综合评估报告</strong><span>风险等级、病灶标注和变异解读</span></div>
+    <div class="workflow-step" data-step="decision" onclick="goToPage('page-treatment')"><div class="num">5</div><strong>临床辅助与决策支持</strong><span>算法 API 支撑会诊、科研和治疗</span></div>
   </div>
   <div class="intake-intro">
     <div>
-      <h3>先创建评估任务，再上传用户多模态资料</h3>
-      <p>请先填写用户姓名、年龄和性别。系统生成评估任务号后，才可上传一维基因序列、眼底彩照和 OCT 影像。</p>
+      <h3>从用户库创建诊断筛查任务</h3>
+      <p>选择数据库用户后，系统自动带出该用户已有基因组；再选择一个基因组和一类眼底影像，完成基因与表型的联合分析。</p>
     </div>
     <span class="status-tag status-pending" id="intake-task-state">尚未创建任务</span>
   </div>
 
   <div class="intake-task-form">
-    <div class="card-header">1. 创建评估任务</div>
+    <div class="card-header">1. 创建诊断筛查任务</div>
     <div class="intake-form-grid">
       <div class="form-group" style="margin-bottom:0">
-        <label for="intake-patient-name">用户姓名 <span style="color:var(--red)">*</span></label>
-        <input class="form-input" id="intake-patient-name" type="text" placeholder="请输入用户姓名">
+        <label for="intake-patient-select">选择用户 <span style="color:var(--red)">*</span></label>
+        <select class="form-select" id="intake-patient-select" onchange="syncIntakePatientGenome()"></select>
       </div>
       <div class="form-group" style="margin-bottom:0">
-        <label for="intake-patient-age">年龄 <span style="color:var(--red)">*</span></label>
-        <input class="form-input" id="intake-patient-age" type="number" min="0" max="130" placeholder="请输入年龄">
+        <label for="intake-genome-select">用户基因组 <span style="color:var(--red)">*</span></label>
+        <select class="form-select" id="intake-genome-select" onchange="syncIntakeGenomePreview()"></select>
       </div>
       <div class="form-group" style="margin-bottom:0">
-        <label for="intake-patient-gender">性别 <span style="color:var(--red)">*</span></label>
-        <select class="form-select" id="intake-patient-gender">
-          <option value="">请选择</option>
-          <option value="男">男</option>
-          <option value="女">女</option>
+        <label>基因组预览</label>
+        <div class="intake-selected-genome" id="intake-genome-preview"><strong>BAP1</strong><span>突变位点待联合分析</span></div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label for="intake-image-type">眼底影像类型 <span style="color:var(--red)">*</span></label>
+        <select class="form-select" id="intake-image-type" onchange="syncIntakeImagePlan()">
+          <option value="fundus">眼底彩照</option>
+          <option value="oct">OCT</option>
+          <option value="octa">OCTA</option>
+          <option value="ffa">眼底血管造影</option>
         </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label for="intake-eye-side">眼别 <span style="color:var(--red)">*</span></label>
+        <select class="form-select" id="intake-eye-side" onchange="syncIntakeImagePlan()">
+          <option value="both">双眼</option>
+          <option value="left">左眼</option>
+          <option value="right">右眼</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>联合分析方式</label>
+        <div class="intake-selected-genome"><strong>深度学习 + 统计模型</strong><span>基因与表型交互映射</span></div>
       </div>
     </div>
     <div class="intake-form-actions">
-      <button class="btn btn-primary" id="intake-create-task-btn" type="button" onclick="createMultimodalAssessmentTask()">创建评估任务</button>
+      <button class="btn btn-primary" id="intake-create-task-btn" type="button" onclick="createMultimodalAssessmentTask()">创建筛查任务</button>
       <button class="btn btn-outline" type="button" onclick="resetMultimodalAssessmentTask()">重新填写</button>
-      <span class="intake-hint" id="intake-task-hint">任务创建后，将开放资料上传区域。</span>
+      <span class="intake-hint" id="intake-task-hint">任务创建后，开放所选眼别的影像上传位。</span>
     </div>
   </div>
 
   <div class="intake-task-summary" id="intake-task-summary">
     <div class="intake-summary-item"><span>评估任务号</span><strong id="intake-task-id">-</strong></div>
-    <div class="intake-summary-item"><span>用户姓名</span><strong id="intake-summary-name">-</strong></div>
-    <div class="intake-summary-item"><span>年龄 / 性别</span><strong id="intake-summary-demographic">-</strong></div>
+    <div class="intake-summary-item"><span>用户</span><strong id="intake-summary-name">-</strong></div>
+    <div class="intake-summary-item"><span>基因组</span><strong id="intake-summary-genome">-</strong></div>
+    <div class="intake-summary-item"><span>影像方案</span><strong id="intake-summary-image">-</strong></div>
     <div class="intake-summary-item"><span>任务状态</span><strong id="intake-summary-status">待上传资料</strong></div>
   </div>
 
   <div class="card">
     <div class="intake-upload-title">
       <div>
-        <h3>2. 上传评估资料</h3>
-        <p>每类资料上传 1 个文件，支持本地选择或拖拽上传。</p>
+        <h3>2. 上传眼底影像</h3>
+        <p>本任务只能选择一类眼底影像；双眼需要上传左眼和右眼，单眼只需上传对应眼别。</p>
       </div>
-      <span class="status-tag status-pending" id="intake-upload-count">0 / 3 已上传</span>
+      <span class="status-tag status-pending" id="intake-upload-count">0 / 2 已上传</span>
     </div>
     <div class="intake-upload-grid">
-      <div class="intake-upload-card locked" data-intake-type="gene">
-        <div class="intake-upload-card-head">
-          <div class="intake-upload-icon">DNA</div>
-          <div><h4>一维基因序列</h4><small>FASTA / VCF</small></div>
-        </div>
-        <input type="file" id="intake-file-gene" accept=".fasta,.fa,.vcf" hidden onchange="handleMultimodalFileChange('gene', this.files[0])">
-        <div class="intake-upload-zone disabled" id="intake-zone-gene" tabindex="0" role="button" aria-disabled="true" onclick="openMultimodalFilePicker('gene')" onkeydown="handleMultimodalZoneKey(event,'gene')" ondragover="handleMultimodalDragOver(event,'gene')" ondragleave="handleMultimodalDragLeave(event,'gene')" ondrop="handleMultimodalDrop(event,'gene')">
-          <span class="upload-plus">+</span><strong>上传基因序列</strong><span>点击选择或拖拽文件</span>
-        </div>
-        <div class="intake-file-status" id="intake-status-gene">创建任务后可上传</div>
-      </div>
-
-      <div class="intake-upload-card locked" data-intake-type="fundus">
+      <div class="intake-upload-card locked" data-intake-type="leftEye" id="intake-card-leftEye">
         <div class="intake-upload-card-head">
           <div class="intake-upload-icon">IMG</div>
-          <div><h4>眼底医学影像（彩照）</h4><small>JPG / PNG / DICOM</small></div>
+          <div><h4 id="intake-left-title">左眼影像</h4><small id="intake-left-format">JPG / PNG / DICOM</small></div>
         </div>
-        <input type="file" id="intake-file-fundus" accept=".jpg,.jpeg,.png,.dcm,.dicom,image/jpeg,image/png" hidden onchange="handleMultimodalFileChange('fundus', this.files[0])">
-        <div class="intake-upload-zone disabled" id="intake-zone-fundus" tabindex="0" role="button" aria-disabled="true" onclick="openMultimodalFilePicker('fundus')" onkeydown="handleMultimodalZoneKey(event,'fundus')" ondragover="handleMultimodalDragOver(event,'fundus')" ondragleave="handleMultimodalDragLeave(event,'fundus')" ondrop="handleMultimodalDrop(event,'fundus')">
-          <span class="upload-plus">+</span><strong>上传眼底彩照</strong><span>点击选择或拖拽文件</span>
+        <input type="file" id="intake-file-leftEye" accept=".jpg,.jpeg,.png,.dcm,.dicom,image/jpeg,image/png" hidden onchange="handleMultimodalFileChange('leftEye', this.files[0])">
+        <div class="intake-upload-zone disabled" id="intake-zone-leftEye" tabindex="0" role="button" aria-disabled="true" onclick="openMultimodalFilePicker('leftEye')" onkeydown="handleMultimodalZoneKey(event,'leftEye')" ondragover="handleMultimodalDragOver(event,'leftEye')" ondragleave="handleMultimodalDragLeave(event,'leftEye')" ondrop="handleMultimodalDrop(event,'leftEye')">
+          <span class="upload-plus">+</span><strong id="intake-left-zone-title">上传左眼影像</strong><span>点击选择或拖拽文件</span>
         </div>
-        <div class="intake-file-status" id="intake-status-fundus">创建任务后可上传</div>
+        <div class="intake-file-status" id="intake-status-leftEye">创建任务后可上传</div>
       </div>
 
-      <div class="intake-upload-card locked" data-intake-type="oct">
+      <div class="intake-upload-card locked" data-intake-type="rightEye" id="intake-card-rightEye">
         <div class="intake-upload-card-head">
-          <div class="intake-upload-icon">OCT</div>
-          <div><h4>二维眼底医学影像（OCT）</h4><small>PNG / JPG / DICOM</small></div>
+          <div class="intake-upload-icon">IMG</div>
+          <div><h4 id="intake-right-title">右眼影像</h4><small id="intake-right-format">JPG / PNG / DICOM</small></div>
         </div>
-        <input type="file" id="intake-file-oct" accept=".jpg,.jpeg,.png,.dcm,.dicom,image/jpeg,image/png" hidden onchange="handleMultimodalFileChange('oct', this.files[0])">
-        <div class="intake-upload-zone disabled" id="intake-zone-oct" tabindex="0" role="button" aria-disabled="true" onclick="openMultimodalFilePicker('oct')" onkeydown="handleMultimodalZoneKey(event,'oct')" ondragover="handleMultimodalDragOver(event,'oct')" ondragleave="handleMultimodalDragLeave(event,'oct')" ondrop="handleMultimodalDrop(event,'oct')">
-          <span class="upload-plus">+</span><strong>上传 OCT 影像</strong><span>点击选择或拖拽文件</span>
+        <input type="file" id="intake-file-rightEye" accept=".jpg,.jpeg,.png,.dcm,.dicom,image/jpeg,image/png" hidden onchange="handleMultimodalFileChange('rightEye', this.files[0])">
+        <div class="intake-upload-zone disabled" id="intake-zone-rightEye" tabindex="0" role="button" aria-disabled="true" onclick="openMultimodalFilePicker('rightEye')" onkeydown="handleMultimodalZoneKey(event,'rightEye')" ondragover="handleMultimodalDragOver(event,'rightEye')" ondragleave="handleMultimodalDragLeave(event,'rightEye')" ondrop="handleMultimodalDrop(event,'rightEye')">
+          <span class="upload-plus">+</span><strong id="intake-right-zone-title">上传右眼影像</strong><span>点击选择或拖拽文件</span>
         </div>
-        <div class="intake-file-status" id="intake-status-oct">创建任务后可上传</div>
+        <div class="intake-file-status" id="intake-status-rightEye">创建任务后可上传</div>
       </div>
     </div>
     <div class="intake-upload-footer">
       <span class="intake-overall-status" id="intake-overall-status">请先创建评估任务。</span>
-      <button class="btn btn-primary" id="intake-submit-btn" type="button" disabled onclick="submitMultimodalAssessmentTask()">保存任务资料</button>
+      <button class="btn btn-primary" id="intake-submit-btn" type="button" disabled onclick="submitMultimodalAssessmentTask()">保存并生成联合分析</button>
     </div>
   </div>
 
   <div class="card intake-data-list">
-    <div class="card-header">当前任务资料清单</div>
-    <div id="intake-data-list-body" class="intake-empty">创建任务后，这里会显示当前任务已上传的资料。</div>
+    <div class="card-header">当前任务与分析结果</div>
+    <div id="intake-data-list-body" class="intake-empty">创建任务后，这里会显示用户、基因组、眼底影像和联合分析结果。</div>
+    <div class="intake-result-grid">
+      <div class="intake-result-card"><strong>多模态特征融合</strong><span>通过深度学习和统计模型提取关键疾病相关特征，实现基因与表型的交互映射。</span></div>
+      <div class="intake-result-card"><strong>疾病风险评估</strong><span>根据基因突变位点、表型特征及历史病例数据库，生成基因易感性评分与影像异常提示。</span></div>
+      <div class="intake-result-card"><strong>综合评估报告</strong><span>自动生成结构化诊断报告，包括疾病风险等级、潜在病灶区域标注、基因变异解读及影像特征说明。</span></div>
+      <div class="intake-result-card api"><strong>临床辅助与决策支持</strong><span>算法调用 API：MDT 会诊、科研分析、个体化治疗数据支撑。</span></div>
+    </div>
   </div>
 </div>
 
@@ -2366,7 +2384,11 @@ function completeStep(step) {
   var order = ['data','prep','fusion','risk','report','decision'];
   var idx = order.indexOf(step);
   if (idx >= 0 && idx < order.length - 1) {
-    var next = document.querySelector('.workflow-step[data-step="'+order[idx + 1]+'"]');
+    var next = null;
+    for (var i = idx + 1; i < order.length; i++) {
+      next = document.querySelector('.workflow-step[data-step="'+order[i]+'"]');
+      if (next) break;
+    }
     if (next && !next.classList.contains('done')) next.classList.add('running');
   }
 }
@@ -2409,7 +2431,32 @@ var patientLibrary = [
 /* ===== Multimodal assessment task intake ===== */
 var MULTIMODAL_TASK_KEY = 'multimodal_assessment_task_v1';
 var multimodalAssessmentTask = null;
-var multimodalAssessmentFiles = { gene:null, fundus:null, oct:null };
+var multimodalAssessmentFiles = { leftEye:null, rightEye:null };
+var INTAKE_IMAGE_TYPES = {
+  fundus:{ label:'眼底彩照', icon:'IMG', formats:'JPG / PNG / DICOM' },
+  oct:{ label:'OCT', icon:'OCT', formats:'PNG / JPG / DICOM' },
+  octa:{ label:'OCTA', icon:'OCTA', formats:'PNG / JPG / DICOM' },
+  ffa:{ label:'眼底血管造影', icon:'FFA', formats:'JPG / PNG / DICOM' }
+};
+var PATIENT_GENOME_LIBRARY = {
+  P0001:[
+    { id:'BAP1', file:'WJG_BAP1_panel.vcf', variant:'BAP1 c.2050C>T', summary:'葡萄膜黑色素瘤/视网膜相关风险位点' },
+    { id:'CFH', file:'WJG_genome_2026.vcf', variant:'CFH rs1061170', summary:'AMD 易感相关位点' },
+    { id:'ARMS2', file:'WJG_ARMS2_panel.vcf', variant:'ARMS2 rs10490924', summary:'黄斑病变相关风险位点' }
+  ],
+  P0002:[
+    { id:'VEGFA', file:'LMH_VEGFA_panel.vcf', variant:'VEGFA rs3025039', summary:'血管新生相关风险位点' },
+    { id:'BAP1', file:'LMH_BAP1_panel.vcf', variant:'BAP1 exon 6', summary:'遗传易感复核位点' }
+  ],
+  P0003:[
+    { id:'MYOC', file:'ZW_MYOC_panel.vcf', variant:'MYOC p.Gln368Ter', summary:'青光眼相关风险位点' },
+    { id:'BAP1', file:'ZW_BAP1_panel.vcf', variant:'BAP1 c.1717delC', summary:'眼部肿瘤风险复核位点' }
+  ],
+  P0004:[
+    { id:'BAP1', file:'ZL_panel.vcf', variant:'BAP1 c.1787A>G', summary:'突变位点解析' },
+    { id:'HTRA1', file:'ZL_HTRA1_panel.vcf', variant:'HTRA1 rs11200638', summary:'黄斑区结构异常相关位点' }
+  ]
+};
 
 function getMultimodalTaskDate() {
   var d = new Date();
@@ -2425,23 +2472,10 @@ function getNextMultimodalTaskId() {
 }
 
 function getMultimodalFileConfig(type) {
-  return {
-    gene: {
-      label:'一维基因序列',
-      extensions:['fasta','fa','vcf'],
-      formats:'FASTA / VCF'
-    },
-    fundus: {
-      label:'眼底医学影像（彩照）',
-      extensions:['jpg','jpeg','png','dcm','dicom'],
-      formats:'JPG / PNG / DICOM'
-    },
-    oct: {
-      label:'二维眼底医学影像（OCT）',
-      extensions:['jpg','jpeg','png','dcm','dicom'],
-      formats:'PNG / JPG / DICOM'
-    }
-  }[type];
+  var imageType = multimodalAssessmentTask ? multimodalAssessmentTask.imageType : getIntakeImageType();
+  var image = INTAKE_IMAGE_TYPES[imageType] || INTAKE_IMAGE_TYPES.fundus;
+  var side = type === 'rightEye' ? '右眼' : '左眼';
+  return { label:side + image.label, extensions:['jpg','jpeg','png','dcm','dicom'], formats:image.formats };
 }
 
 function validateMultimodalFile(type, file) {
@@ -2471,20 +2505,113 @@ function persistMultimodalAssessmentTask() {
     localStorage.removeItem(MULTIMODAL_TASK_KEY);
     return;
   }
+  var existing = multimodalAssessmentTask.files || {};
   multimodalAssessmentTask.files = {
-    gene: multimodalAssessmentFiles.gene ? serializeMultimodalFile(multimodalAssessmentFiles.gene) : (multimodalAssessmentTask.files && multimodalAssessmentTask.files.gene) || null,
-    fundus: multimodalAssessmentFiles.fundus ? serializeMultimodalFile(multimodalAssessmentFiles.fundus) : (multimodalAssessmentTask.files && multimodalAssessmentTask.files.fundus) || null,
-    oct: multimodalAssessmentFiles.oct ? serializeMultimodalFile(multimodalAssessmentFiles.oct) : (multimodalAssessmentTask.files && multimodalAssessmentTask.files.oct) || null
+    leftEye: multimodalAssessmentFiles.leftEye ? serializeMultimodalFile(multimodalAssessmentFiles.leftEye) : existing.leftEye || null,
+    rightEye: multimodalAssessmentFiles.rightEye ? serializeMultimodalFile(multimodalAssessmentFiles.rightEye) : existing.rightEye || null
   };
   localStorage.setItem(MULTIMODAL_TASK_KEY, JSON.stringify(multimodalAssessmentTask));
+}
+
+function getPatientGenomes(patientId) {
+  var id = parsePatientId(patientId);
+  return PATIENT_GENOME_LIBRARY[id] || PATIENT_GENOME_LIBRARY.P0001;
+}
+
+function getIntakeImageType() {
+  var el = document.getElementById('intake-image-type');
+  return el && el.value ? el.value : 'fundus';
+}
+
+function getIntakeEyeSide() {
+  var el = document.getElementById('intake-eye-side');
+  return el && el.value ? el.value : 'both';
+}
+
+function getSelectedIntakeGenome() {
+  var patientId = getSelectedPatientId('intake-patient-select');
+  var select = document.getElementById('intake-genome-select');
+  var genomes = getPatientGenomes(patientId);
+  return genomes.find(function(item){ return item.id === (select && select.value); }) || genomes[0];
+}
+
+function getRequiredIntakeFileTypes() {
+  var side = multimodalAssessmentTask ? multimodalAssessmentTask.eyeSide : getIntakeEyeSide();
+  if (side === 'left') return ['leftEye'];
+  if (side === 'right') return ['rightEye'];
+  return ['leftEye','rightEye'];
 }
 
 function getMultimodalUploadedCount() {
   if (!multimodalAssessmentTask) return 0;
   var files = multimodalAssessmentTask.files || {};
-  return ['gene','fundus','oct'].filter(function(type){
+  return getRequiredIntakeFileTypes().filter(function(type){
     return !!(multimodalAssessmentFiles[type] || files[type]);
   }).length;
+}
+
+function getRequiredIntakeFileCount() {
+  return getRequiredIntakeFileTypes().length;
+}
+
+function formatIntakeImagePlan(task) {
+  var imageType = task ? task.imageType : getIntakeImageType();
+  var eyeSide = task ? task.eyeSide : getIntakeEyeSide();
+  var typeLabel = (INTAKE_IMAGE_TYPES[imageType] || INTAKE_IMAGE_TYPES.fundus).label;
+  var sideLabel = eyeSide === 'left' ? '左眼' : (eyeSide === 'right' ? '右眼' : '双眼');
+  return typeLabel + ' · ' + sideLabel;
+}
+
+function populateIntakePatients() {
+  var select = document.getElementById('intake-patient-select');
+  if (!select) return;
+  var active = multimodalAssessmentTask ? multimodalAssessmentTask.patientId : AppContext.activePatientId;
+  select.innerHTML = patientLibrary.map(function(p){
+    return '<option value="' + p.id + '">' + p.id + ' - ' + p.name + '（' + p.age + '岁 / ' + p.sex + '）</option>';
+  }).join('');
+  setSelectPatientValue('intake-patient-select', active);
+}
+
+function syncIntakePatientGenome() {
+  var patientId = getSelectedPatientId('intake-patient-select');
+  var select = document.getElementById('intake-genome-select');
+  var genomes = getPatientGenomes(patientId);
+  if (select) {
+    select.innerHTML = genomes.map(function(item){
+      return '<option value="' + item.id + '">' + item.id + ' · ' + item.file + '</option>';
+    }).join('');
+  }
+  syncIntakeGenomePreview();
+}
+
+function syncIntakeGenomePreview() {
+  var genome = getSelectedIntakeGenome();
+  var preview = document.getElementById('intake-genome-preview');
+  if (preview && genome) preview.innerHTML = '<strong>' + escapeHtml(genome.id) + '</strong><span>' + escapeHtml(genome.variant + '，' + genome.summary) + '</span>';
+}
+
+function syncIntakeImagePlan() {
+  var image = INTAKE_IMAGE_TYPES[getIntakeImageType()] || INTAKE_IMAGE_TYPES.fundus;
+  var side = getIntakeEyeSide();
+  var leftCard = document.getElementById('intake-card-leftEye');
+  var rightCard = document.getElementById('intake-card-rightEye');
+  var showLeft = side !== 'right';
+  var showRight = side !== 'left';
+  if (leftCard) leftCard.style.display = showLeft ? '' : 'none';
+  if (rightCard) rightCard.style.display = showRight ? '' : 'none';
+  [['intake-left-title','左眼'],['intake-right-title','右眼']].forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if (el) el.textContent = pair[1] + image.label;
+  });
+  [['intake-left-zone-title','上传左眼'],['intake-right-zone-title','上传右眼']].forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if (el) el.textContent = pair[1] + image.label;
+  });
+  ['intake-left-format','intake-right-format'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.textContent = image.formats;
+  });
+  updateMultimodalUploadCards();
 }
 
 function updateMultimodalTaskSummary() {
@@ -2493,11 +2620,13 @@ function updateMultimodalTaskSummary() {
   var summary = document.getElementById('intake-task-summary');
   var taskId = document.getElementById('intake-task-id');
   var summaryName = document.getElementById('intake-summary-name');
-  var summaryDemo = document.getElementById('intake-summary-demographic');
+  var summaryGenome = document.getElementById('intake-summary-genome');
+  var summaryImage = document.getElementById('intake-summary-image');
   var summaryStatus = document.getElementById('intake-summary-status');
   var hint = document.getElementById('intake-task-hint');
   var overall = document.getElementById('intake-overall-status');
   var count = getMultimodalUploadedCount();
+  var need = getRequiredIntakeFileCount();
   var submit = document.getElementById('intake-submit-btn');
 
   if (!task) {
@@ -2506,7 +2635,7 @@ function updateMultimodalTaskSummary() {
       state.textContent = '尚未创建任务';
     }
     if (summary) summary.classList.remove('show');
-    if (hint) hint.textContent = '任务创建后，将开放资料上传区域。';
+    if (hint) hint.textContent = '任务创建后，开放所选眼别的影像上传位。';
     if (overall) {
       overall.className = 'intake-overall-status';
       overall.textContent = '请先创建评估任务。';
@@ -2516,37 +2645,40 @@ function updateMultimodalTaskSummary() {
   }
 
   if (state) {
-    state.className = 'status-tag ' + (count === 3 ? 'status-done' : 'status-pending');
-    state.textContent = count === 3 ? '资料已齐全' : '任务已创建';
+    state.className = 'status-tag ' + (count === need ? 'status-done' : 'status-pending');
+    state.textContent = count === need ? '影像已齐全' : '任务已创建';
   }
   if (summary) summary.classList.add('show');
   if (taskId) taskId.textContent = task.id;
-  if (summaryName) summaryName.textContent = task.name;
-  if (summaryDemo) summaryDemo.textContent = task.age + ' 岁 / ' + task.gender;
-  if (summaryStatus) summaryStatus.textContent = task.status === '资料已保存' ? '资料已保存' : (count === 3 ? '资料待保存' : '待上传资料');
-  if (hint) hint.textContent = '评估任务号已生成，可继续上传三类资料。';
+  if (summaryName) summaryName.textContent = task.patientId + ' - ' + task.name;
+  if (summaryGenome) summaryGenome.textContent = task.genomeId;
+  if (summaryImage) summaryImage.textContent = formatIntakeImagePlan(task);
+  if (summaryStatus) summaryStatus.textContent = task.status === '联合分析已生成' ? '联合分析已生成' : (count === need ? '待生成联合分析' : '待上传影像');
+  if (hint) hint.textContent = '评估任务号已生成，可上传 ' + formatIntakeImagePlan(task) + '。';
   if (overall) {
-    overall.className = 'intake-overall-status' + (count === 3 ? ' ready' : '');
-    overall.textContent = count === 3 ? '三类资料已上传，可以保存任务资料。' : '已上传 ' + count + ' / 3，请补齐其余资料。';
+    overall.className = 'intake-overall-status' + (count === need ? ' ready' : '');
+    overall.textContent = count === need ? '影像资料已齐全，可以生成联合分析。' : '已上传 ' + count + ' / ' + need + '，请补齐所选眼别影像。';
   }
-  if (submit) submit.disabled = count !== 3;
+  if (submit) submit.disabled = count !== need;
 }
 
 function updateMultimodalUploadCards() {
   var count = getMultimodalUploadedCount();
+  var need = getRequiredIntakeFileCount();
   var countEl = document.getElementById('intake-upload-count');
   if (countEl) {
-    countEl.className = 'status-tag ' + (count === 3 ? 'status-done' : 'status-pending');
-    countEl.textContent = count + ' / 3 已上传';
+    countEl.className = 'status-tag ' + (count === need ? 'status-done' : 'status-pending');
+    countEl.textContent = count + ' / ' + need + ' 已上传';
   }
-  ['gene','fundus','oct'].forEach(function(type){
+  var required = getRequiredIntakeFileTypes();
+  ['leftEye','rightEye'].forEach(function(type){
     var card = document.querySelector('.intake-upload-card[data-intake-type="' + type + '"]');
     var zone = document.getElementById('intake-zone-' + type);
     var status = document.getElementById('intake-status-' + type);
     var file = multimodalAssessmentFiles[type];
     var stored = multimodalAssessmentTask && multimodalAssessmentTask.files ? multimodalAssessmentTask.files[type] : null;
     var display = file ? serializeMultimodalFile(file) : stored;
-    var enabled = !!multimodalAssessmentTask;
+    var enabled = !!multimodalAssessmentTask && required.indexOf(type) >= 0;
     if (card) card.classList.toggle('locked', !enabled);
     if (zone) {
       zone.classList.toggle('disabled', !enabled);
@@ -2554,7 +2686,7 @@ function updateMultimodalUploadCards() {
     }
     if (status) {
       status.className = 'intake-file-status' + (display ? ' success' : '');
-      status.textContent = display ? ('已选择：' + display.name + '（' + formatFileSize(display.size) + '）') : (enabled ? '尚未上传文件' : '创建任务后可上传');
+      status.textContent = display ? ('已选择：' + display.name + '（' + formatFileSize(display.size) + '）') : (!multimodalAssessmentTask ? '创建任务后可上传' : (enabled ? '尚未上传文件' : '当前眼别无需上传'));
     }
     if (card) card.classList.toggle('ready', !!display);
   });
@@ -2563,73 +2695,104 @@ function updateMultimodalUploadCards() {
 }
 
 function initMultimodalAssessmentTask() {
+  populateIntakePatients();
+  syncIntakePatientGenome();
   try {
     multimodalAssessmentTask = JSON.parse(localStorage.getItem(MULTIMODAL_TASK_KEY) || 'null');
   } catch (err) {
     multimodalAssessmentTask = null;
   }
-  multimodalAssessmentFiles = { gene:null, fundus:null, oct:null };
-  if (multimodalAssessmentTask) {
-    document.getElementById('intake-patient-name').value = multimodalAssessmentTask.name || '';
-    document.getElementById('intake-patient-age').value = multimodalAssessmentTask.age || '';
-    document.getElementById('intake-patient-gender').value = multimodalAssessmentTask.gender || '';
+  if (multimodalAssessmentTask && !multimodalAssessmentTask.patientId) {
+    var legacyPatient = patientLibrary.find(function(p){ return p.name === multimodalAssessmentTask.name; }) || patientLibrary[0];
+    var legacyGenome = getPatientGenomes(legacyPatient.id)[0];
+    var legacyFiles = multimodalAssessmentTask.files || {};
+    multimodalAssessmentTask.patientId = legacyPatient.id;
+    multimodalAssessmentTask.name = legacyPatient.name;
+    multimodalAssessmentTask.age = legacyPatient.age;
+    multimodalAssessmentTask.gender = legacyPatient.sex;
+    multimodalAssessmentTask.genomeId = legacyGenome.id;
+    multimodalAssessmentTask.genomeFile = legacyGenome.file;
+    multimodalAssessmentTask.genomeVariant = legacyGenome.variant;
+    multimodalAssessmentTask.genomeSummary = legacyGenome.summary;
+    multimodalAssessmentTask.imageType = legacyFiles.oct ? 'oct' : 'fundus';
+    multimodalAssessmentTask.eyeSide = 'right';
+    multimodalAssessmentTask.files = { leftEye:null, rightEye:legacyFiles.oct || legacyFiles.fundus || null };
+    if (multimodalAssessmentTask.status === '资料已保存') multimodalAssessmentTask.status = '联合分析已生成';
+    persistMultimodalAssessmentTask();
   }
-  ['intake-patient-name','intake-patient-age','intake-patient-gender'].forEach(function(id){
+  multimodalAssessmentFiles = { leftEye:null, rightEye:null };
+  if (multimodalAssessmentTask) {
+    setSelectPatientValue('intake-patient-select', multimodalAssessmentTask.patientId);
+    syncIntakePatientGenome();
+    setSelectValueIfExists('intake-genome-select', multimodalAssessmentTask.genomeId);
+    setSelectValueIfExists('intake-image-type', multimodalAssessmentTask.imageType);
+    setSelectValueIfExists('intake-eye-side', multimodalAssessmentTask.eyeSide);
+    syncIntakeGenomePreview();
+  }
+  ['intake-patient-select','intake-genome-select','intake-image-type','intake-eye-side'].forEach(function(id){
     var el = document.getElementById(id);
     if (el) el.disabled = !!multimodalAssessmentTask;
   });
+  syncIntakeImagePlan();
   updateMultimodalUploadCards();
   renderMultimodalDataList();
 }
 
 function createMultimodalAssessmentTask() {
-  var nameEl = document.getElementById('intake-patient-name');
-  var ageEl = document.getElementById('intake-patient-age');
-  var genderEl = document.getElementById('intake-patient-gender');
-  var name = nameEl.value.trim();
-  var age = parseInt(ageEl.value, 10);
-  var gender = genderEl.value;
-  if (!name || !gender || isNaN(age) || age < 0 || age > 130) {
-    toast('请完整填写用户姓名、年龄和性别');
-    return;
-  }
-  if (multimodalAssessmentTask && multimodalAssessmentTask.name === name && String(multimodalAssessmentTask.age) === String(age) && multimodalAssessmentTask.gender === gender) {
-    toast('当前用户的评估任务已存在：' + multimodalAssessmentTask.id);
+  var patientId = getSelectedPatientId('intake-patient-select');
+  var patient = getPatientById(patientId);
+  var genome = getSelectedIntakeGenome();
+  var imageType = getIntakeImageType();
+  var eyeSide = getIntakeEyeSide();
+  if (!patient || !genome || !imageType || !eyeSide) {
+    toast('请先选择用户、基因组、影像类型和眼别');
     return;
   }
   multimodalAssessmentTask = {
     id: getNextMultimodalTaskId(),
-    name: name,
-    age: age,
-    gender: gender,
+    patientId: patient.id,
+    name: patient.name,
+    age: patient.age,
+    gender: patient.sex,
+    genomeId: genome.id,
+    genomeFile: genome.file,
+    genomeVariant: genome.variant,
+    genomeSummary: genome.summary,
+    imageType: imageType,
+    eyeSide: eyeSide,
     createdAt: new Date().toLocaleString('zh-CN', { hour12:false }),
-    status: '待上传资料',
-    files: { gene:null, fundus:null, oct:null }
+    status: '待上传影像',
+    files: { leftEye:null, rightEye:null }
   };
-  multimodalAssessmentFiles = { gene:null, fundus:null, oct:null };
+  AppContext.setActivePatient(patient.id);
+  multimodalAssessmentFiles = { leftEye:null, rightEye:null };
   persistMultimodalAssessmentTask();
-  nameEl.disabled = true;
-  ageEl.disabled = true;
-  genderEl.disabled = true;
+  ['intake-patient-select','intake-genome-select','intake-image-type','intake-eye-side'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.disabled = true;
+  });
   toast('评估任务已创建：' + multimodalAssessmentTask.id);
+  syncIntakeImagePlan();
   updateMultimodalUploadCards();
 }
 
 function resetMultimodalAssessmentTask() {
   multimodalAssessmentTask = null;
-  multimodalAssessmentFiles = { gene:null, fundus:null, oct:null };
+  multimodalAssessmentFiles = { leftEye:null, rightEye:null };
   persistMultimodalAssessmentTask();
-  ['intake-patient-name','intake-patient-age','intake-patient-gender'].forEach(function(id){
+  ['intake-patient-select','intake-genome-select','intake-image-type','intake-eye-side'].forEach(function(id){
     var el = document.getElementById(id);
     if (el) {
-      el.value = '';
       el.disabled = false;
     }
   });
-  ['gene','fundus','oct'].forEach(function(type){
+  ['leftEye','rightEye'].forEach(function(type){
     var input = document.getElementById('intake-file-' + type);
     if (input) input.value = '';
   });
+  populateIntakePatients();
+  syncIntakePatientGenome();
+  syncIntakeImagePlan();
   toast('已清空当前评估任务');
   updateMultimodalUploadCards();
 }
@@ -2637,6 +2800,10 @@ function resetMultimodalAssessmentTask() {
 function openMultimodalFilePicker(type) {
   if (!multimodalAssessmentTask) {
     toast('请先创建评估任务');
+    return;
+  }
+  if (getRequiredIntakeFileTypes().indexOf(type) < 0) {
+    toast('当前眼别无需上传该侧影像');
     return;
   }
   var input = document.getElementById('intake-file-' + type);
@@ -2693,7 +2860,7 @@ function handleMultimodalFileChange(type, file) {
   }
   multimodalAssessmentFiles[type] = file;
   multimodalAssessmentTask.files[type] = serializeMultimodalFile(file);
-  multimodalAssessmentTask.status = '待保存资料';
+  multimodalAssessmentTask.status = '待生成联合分析';
   persistMultimodalAssessmentTask();
   updateMultimodalUploadCards();
   toast(getMultimodalFileConfig(type).label + '已加入当前任务');
@@ -2704,15 +2871,17 @@ function submitMultimodalAssessmentTask() {
     toast('请先创建评估任务');
     return;
   }
-  if (getMultimodalUploadedCount() !== 3) {
-    toast('请先上传一维基因序列、眼底彩照和 OCT 影像');
+  if (getMultimodalUploadedCount() !== getRequiredIntakeFileCount()) {
+    toast('请先上传所选眼别的眼底影像');
     return;
   }
-  multimodalAssessmentTask.status = '资料已保存';
+  multimodalAssessmentTask.status = '联合分析已生成';
   multimodalAssessmentTask.savedAt = new Date().toLocaleString('zh-CN', { hour12:false });
   persistMultimodalAssessmentTask();
+  completeStep('data');
+  completeStep('fusion');
   updateMultimodalUploadCards();
-  toast('任务资料已保存：' + multimodalAssessmentTask.id);
+  toast('联合分析已生成：' + multimodalAssessmentTask.id);
   renderMultimodalDataList();
 }
 
@@ -2721,21 +2890,20 @@ function renderMultimodalDataList() {
   if (!body) return;
   if (!multimodalAssessmentTask) {
     body.className = 'intake-empty';
-    body.textContent = '创建任务后，这里会显示当前任务已上传的资料。';
+    body.textContent = '创建任务后，这里会显示用户、基因组、眼底影像和联合分析结果。';
     return;
   }
   var files = multimodalAssessmentTask.files || {};
-  var rows = [
-    ['一维基因序列', files.gene, 'FASTA / VCF'],
-    ['眼底医学影像（彩照）', files.fundus, 'JPG / PNG / DICOM'],
-    ['二维眼底医学影像（OCT）', files.oct, 'PNG / JPG / DICOM']
-  ];
+  var image = INTAKE_IMAGE_TYPES[multimodalAssessmentTask.imageType] || INTAKE_IMAGE_TYPES.fundus;
+  var rows = getRequiredIntakeFileTypes().map(function(type){
+    return [type === 'leftEye' ? '左眼' + image.label : '右眼' + image.label, files[type], image.formats];
+  });
   body.className = '';
   body.innerHTML = '<div style="font-size:12px;color:var(--soft)">任务号：<strong style="color:var(--blue)">' + escapeHtml(multimodalAssessmentTask.id) + '</strong></div>' +
-    '<table class="data-table"><thead><tr><th>资料类型</th><th>文件名</th><th>格式</th><th>状态</th></tr></thead><tbody>' +
+    '<table class="data-table"><thead><tr><th>用户</th><th>基因组</th><th>眼底影像</th><th>文件名</th><th>联合分析状态</th></tr></thead><tbody>' +
     rows.map(function(row){
       var file = row[1];
-      return '<tr><td>' + row[0] + '</td><td>' + (file ? escapeHtml(file.name) : '—') + '</td><td>' + (file ? escapeHtml(file.format) : row[2]) + '</td><td><span class="status-tag ' + (file ? 'status-done' : 'status-pending') + '">' + (file ? '已上传' : '待上传') + '</span></td></tr>';
+      return '<tr><td>' + escapeHtml(multimodalAssessmentTask.patientId + ' - ' + multimodalAssessmentTask.name) + '</td><td>' + escapeHtml(multimodalAssessmentTask.genomeId + ' · ' + multimodalAssessmentTask.genomeVariant) + '</td><td>' + escapeHtml(row[0]) + '</td><td>' + (file ? escapeHtml(file.name) : '—') + '</td><td><span class="status-tag ' + (multimodalAssessmentTask.status === '联合分析已生成' ? 'status-done' : 'status-pending') + '">' + escapeHtml(multimodalAssessmentTask.status) + '</span></td></tr>';
     }).join('') + '</tbody></table>';
 }
 
@@ -2803,9 +2971,10 @@ var AppContext = {
   setActivePatient: function(patientId, sourcePageId) {
     var id = parsePatientId(patientId);
     this.activePatientId = id;
-    ['gene-patient-select','img-patient-select','fusion-patient','score-patient-select','anomaly-patient-select','core-vis-patient-select','treatment-patient-select'].forEach(function(selectId){
+    ['intake-patient-select','gene-patient-select','img-patient-select','fusion-patient','score-patient-select','anomaly-patient-select','core-vis-patient-select','treatment-patient-select'].forEach(function(selectId){
       setSelectPatientValue(selectId, id);
     });
+    if (typeof syncIntakePatientGenome === 'function' && !multimodalAssessmentTask) syncIntakePatientGenome();
     syncSourceFileForPatient(id);
     refreshPatientScopedPrepState(id);
     if (typeof updateFusionReadiness === 'function') updateFusionReadiness();

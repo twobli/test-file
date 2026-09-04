@@ -5,6 +5,438 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>个人学习档案管理 - 个人中心与能力评估</title>
 <link rel="stylesheet" href="个人中心与能力评估_子页面.css">
+<style>
+.archive-page .archive-report-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.52);
+    padding: 28px;
+}
+.archive-page .archive-report-dialog {
+    width: min(980px, 100%);
+    max-height: calc(100vh - 56px);
+    overflow: auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.26);
+}
+.archive-page .archive-report-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+}
+.archive-page .archive-report-toolbar strong {
+    color: var(--gray-900);
+    font-size: 16px;
+}
+.archive-page .archive-report-body {
+    padding: 0;
+}
+.archive-page .archive-report-body .report-content {
+    color: var(--gray-800);
+    padding: 32px;
+}
+.archive-page .archive-report-body .report-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+.archive-page .archive-report-body .report-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0;
+}
+.archive-page .archive-report-body .report-header .report-subtitle {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+.archive-page .archive-report-body .report-meta {
+    color: var(--gray-500);
+}
+.archive-page .archive-report-body .report-meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+}
+.archive-page .archive-report-body .report-fixed-note {
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f0f7ff;
+    border: 1px solid #d7e8ff;
+    color: #175CD3;
+    font-size: 13px;
+    line-height: 1.7;
+}
+.archive-page .archive-report-body .report-score-section {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+.archive-page .archive-report-body .report-score-big {
+    text-align: center;
+    background: var(--primary-light);
+    border-radius: 16px;
+    padding: 24px 16px;
+}
+.archive-page .archive-report-body .report-score-big .big-score {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+.archive-page .archive-report-body .report-score-big .big-label {
+    font-size: 14px;
+    color: var(--gray-600);
+    margin-top: 8px;
+}
+.archive-page .archive-report-body .report-score-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.archive-page .archive-report-body .report-score-block {
+    text-align: center;
+    padding: 22px 16px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #f0f6ff 100%);
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+.archive-page .archive-report-body .report-score-main {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+}
+.archive-page .archive-report-body .report-score-main b {
+    font-size: 36px;
+    color: var(--primary);
+    font-weight: 800;
+}
+.archive-page .archive-report-body .report-score-main span {
+    font-size: 14px;
+    color: var(--gray-600);
+}
+.archive-page .archive-report-body .report-accuracy-note {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--gray-600);
+}
+.archive-page .archive-report-body .report-item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+    max-height: 360px;
+    overflow-y: auto;
+}
+.archive-page .archive-report-body .report-item-row {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--gray-200);
+    font-size: 12px;
+    line-height: 1.55;
+}
+.archive-page .archive-report-body .report-item-row.correct {
+    border-left: 3px solid var(--success);
+    background: #f6fbf7;
+}
+.archive-page .archive-report-body .report-item-row.wrong {
+    border-left: 3px solid var(--danger);
+    background: #fef6f5;
+}
+.archive-page .archive-report-body .report-item-row .ri-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+.archive-page .archive-report-body .report-item-row .ri-q {
+    color: var(--gray-900);
+    font-weight: 600;
+}
+.archive-page .archive-report-body .report-item-row .ri-meta {
+    font-size: 10px;
+    color: var(--gray-500);
+}
+.archive-page .archive-report-body .report-item-row .ri-feedback {
+    color: var(--gray-700);
+    font-size: 11px;
+    margin-top: 4px;
+    white-space: pre-wrap;
+}
+.archive-page .archive-report-body .band-pill {
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.archive-page .archive-report-body .band-pill.excellent {
+    background: #d1fae5;
+    color: #065f46;
+}
+.archive-page .archive-report-body .band-pill.good {
+    background: #dbeafe;
+    color: #1e40af;
+}
+.archive-page .archive-report-body .band-pill.qualified {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+.archive-page .archive-report-body .band-pill.improve {
+    background: #fef3c7;
+    color: #92400e;
+}
+.archive-page .archive-report-body .band-pill.need {
+    background: #fee2e2;
+    color: #991b1b;
+}
+.archive-page .archive-report-body .score-bar-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+}
+.archive-page .archive-report-body .progress-bar {
+    height: 8px;
+    background: var(--gray-100);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.archive-page .archive-report-body .progress-bar-fill {
+    height: 100%;
+    border-radius: inherit;
+}
+.archive-page .archive-report-body .report-module-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.archive-page .archive-report-body .report-module-card,
+.archive-page .archive-report-body .report-section {
+    border: 1px solid var(--gray-100);
+    border-radius: 12px;
+    padding: 18px;
+    background: #fff;
+}
+.archive-page .archive-report-body .report-module-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--gray-900);
+}
+.archive-page .archive-report-body .report-module-desc {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--gray-500);
+}
+.archive-page .archive-report-body .report-score-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+}
+.archive-page .archive-report-body .score-pill {
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-100);
+}
+.archive-page .archive-report-body .score-pill-label {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+}
+.archive-page .archive-report-body .score-pill-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #175CD3;
+    line-height: 1;
+}
+.archive-page .archive-report-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+}
+.archive-page .archive-report-body th,
+.archive-page .archive-report-body td {
+    padding: 10px;
+    border-bottom: 1px solid var(--gray-200);
+    text-align: left;
+    vertical-align: top;
+}
+.archive-page .archive-report-body th {
+    background: var(--gray-50);
+    color: var(--gray-700);
+}
+.archive-page .archive-report-body .report-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-100);
+    margin-top: 20px;
+}
+.archive-page .archive-table.model-mode {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.archive-page .archive-table.model-mode td {
+    padding: 0;
+    border-bottom: 0;
+    background: transparent;
+}
+.archive-page .model-table-cell {
+    padding: 0 !important;
+    border-bottom: 0 !important;
+    background: transparent !important;
+}
+.archive-page .model-archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    padding: 4px 0 2px;
+}
+.archive-page .model-archive-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.archive-page .model-archive-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-light);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+.archive-page .model-archive-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+.archive-page .model-archive-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1.35;
+}
+.archive-page .model-archive-subtitle {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--gray-500);
+}
+.archive-page .model-archive-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.archive-page .model-archive-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    font-size: 12px;
+    color: var(--gray-600);
+}
+.archive-page .model-archive-meta div {
+    padding: 10px 12px;
+    border: 1px solid var(--gray-100);
+    border-radius: 10px;
+    background: var(--gray-50);
+}
+.archive-page .model-archive-meta strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--gray-900);
+    font-size: 15px;
+}
+.archive-page .model-archive-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 4px;
+}
+.archive-page .model-archive-score b {
+    display: block;
+    color: var(--primary);
+    font-size: 24px;
+    line-height: 1;
+}
+.archive-page .model-archive-score span {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+.archive-page .model-archive-empty-wrap {
+    padding: 12px 0;
+}
+.archive-page .model-archive-empty {
+    padding: 28px 20px;
+    text-align: center;
+    border: 1px dashed var(--gray-200);
+    border-radius: 14px;
+    background: var(--gray-50);
+}
+.archive-page .model-archive-empty strong {
+    display: block;
+    font-size: 16px;
+    color: var(--gray-900);
+}
+.archive-page .model-archive-empty span {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--gray-500);
+}
+.archive-page .status.done {
+    color: #059669;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+}
+@media (max-width: 768px) {
+    .archive-page .archive-report-overlay { padding: 12px; }
+    .archive-page .archive-report-body .report-content { padding: 24px 18px; }
+    .archive-page .archive-report-body .report-score-section,
+    .archive-page .archive-report-body .report-score-pair { grid-template-columns: 1fr; }
+    .archive-page .model-archive-meta { grid-template-columns: 1fr; }
+    .archive-page .model-archive-footer { flex-direction: column; align-items: stretch; }
+}
+</style>
 </head>
 <body class="archive-page">
 
@@ -71,7 +503,7 @@
         <div class="card-header">
             <div>
                 <div class="card-title">个人学习档案管理</div>
-                <div class="card-subtitle">记录课程、实验报告、考试成绩与模型作品。</div>
+                <div class="card-subtitle">记录课程、实验/实训报告、考试成绩与模型作品。</div>
             </div>
             <span class="tag blue">独立子页面</span>
         </div>
@@ -85,8 +517,8 @@
             <button type="button" class="archive-tile" data-archive-mode="exams" aria-selected="false">
                 <b id="examArchiveCount">0</b><span>考试成绩</span><em>考试中心</em>
             </button>
-            <button type="button" class="archive-tile pending" data-archive-mode="models" aria-selected="false">
-                <b>待定</b><span>模型作品</span><em>暂未设计</em>
+            <button type="button" class="archive-tile" data-archive-mode="models" aria-selected="false">
+                <b id="modelArchiveCount">0</b><span>模型作品</span><em>模型训练</em>
             </button>
         </div>
         <div class="archive-panel" id="archivePanel">
@@ -104,6 +536,18 @@
     </section>
 </main>
 
+<div class="archive-report-overlay" id="archiveReportOverlay" onclick="handleArchiveReportOverlayClick(event)">
+    <div class="archive-report-dialog" role="dialog" aria-modal="true" aria-label="病例学习报告">
+        <div class="archive-report-body" id="archiveReportBody"></div>
+    </div>
+</div>
+
+<div class="archive-report-overlay" id="modelArchiveOverlay" onclick="handleModelArchiveOverlayClick(event)">
+    <div class="archive-report-dialog" role="dialog" aria-modal="true" aria-label="模型作品详情">
+        <div class="archive-report-body" id="modelArchiveBody"></div>
+    </div>
+</div>
+
 <script>
 function toggleSubmenu(el) {
     el.classList.toggle('expanded');
@@ -119,14 +563,14 @@ function logout() {
 }
 
 var COURSE_ARCHIVE_CATALOG = [
-    { id: 1, name: '糖尿病视网膜病变基础', diseaseType: 'DR', difficulty: 'intermediate', duration: '12小时', chapterCount: 12, totalSections: 28, progress: 65 },
-    { id: 2, name: '青光眼诊疗基础', diseaseType: 'glaucoma', difficulty: 'advanced', duration: '15小时', chapterCount: 15, totalSections: 32, progress: 100 },
-    { id: 3, name: 'AMD诊疗规范', diseaseType: 'AMD', difficulty: 'advanced', duration: '10小时', chapterCount: 10, totalSections: 22, progress: 0 },
-    { id: 4, name: '高血压视网膜病变', diseaseType: 'hypertension', difficulty: 'beginner', duration: '8小时', chapterCount: 8, totalSections: 16, progress: 100 },
-    { id: 5, name: 'RVO诊疗指南', diseaseType: 'RVO', difficulty: 'intermediate', duration: '9小时', chapterCount: 9, totalSections: 20, progress: 0 },
-    { id: 6, name: 'OCT读片实战训练', diseaseType: 'all', difficulty: 'intermediate', duration: '6小时', chapterCount: 6, totalSections: 14, progress: 0 },
-    { id: 7, name: '眼底激光治疗原理', diseaseType: 'DR', difficulty: 'advanced', duration: '14小时', chapterCount: 14, totalSections: 30, progress: 12 },
-    { id: 8, name: '眼底血管造影判读', diseaseType: 'RVO', difficulty: 'intermediate', duration: '11小时', chapterCount: 11, totalSections: 24, progress: 45 }
+    { id: 1, name: '糖尿病视网膜病变基础', knowledgeSystem: '解剖学', difficulty: 'intermediate', duration: '12小时', chapterCount: 12, totalSections: 28, progress: 65 },
+    { id: 2, name: '青光眼诊疗基础', knowledgeSystem: '生理学', difficulty: 'advanced', duration: '15小时', chapterCount: 15, totalSections: 32, progress: 100 },
+    { id: 3, name: 'AMD诊疗规范', knowledgeSystem: '生物信息学', difficulty: 'advanced', duration: '10小时', chapterCount: 10, totalSections: 22, progress: 0 },
+    { id: 4, name: '高血压视网膜病变', knowledgeSystem: '医学AI基础', difficulty: 'beginner', duration: '8小时', chapterCount: 8, totalSections: 16, progress: 100 },
+    { id: 5, name: 'RVO诊疗指南', knowledgeSystem: '解剖学', difficulty: 'intermediate', duration: '9小时', chapterCount: 9, totalSections: 20, progress: 0 },
+    { id: 6, name: 'OCT读片实战训练', knowledgeSystem: '生物信息学', difficulty: 'intermediate', duration: '6小时', chapterCount: 6, totalSections: 14, progress: 0 },
+    { id: 7, name: '眼底激光治疗原理', knowledgeSystem: '生理学', difficulty: 'advanced', duration: '14小时', chapterCount: 14, totalSections: 30, progress: 12 },
+    { id: 8, name: '眼底血管造影判读', knowledgeSystem: '医学AI基础', difficulty: 'intermediate', duration: '11小时', chapterCount: 11, totalSections: 24, progress: 45 }
 ];
 
 var CASE_ARCHIVE_CATALOG = [
@@ -160,9 +604,9 @@ var EXAM_ARCHIVE_CATALOG = [
 var ARCHIVE_STORAGE_KEYS = {
     courseCompletion: 'life_med_basic_course_completion',
     courseQuiz: 'life_med_basic_course_quiz_records',
-    caseTeaching: 'life_med_case_teaching_state_v2'
+    caseTeaching: 'life_med_case_teaching_state_v2',
+    modelTraining: 'life_med_model_training'
 };
-var DEFAULT_REPORT_ARCHIVE_COUNT = 7;
 
 function readArchiveStorage(key, fallback) {
     try {
@@ -221,6 +665,345 @@ function getCaseDifficulty(value) {
     return { 1: '基础', 2: '基础', 3: '进阶', 4: '进阶', 5: '科研' }[value] || '-';
 }
 
+function formatArchiveReportDate(value) {
+    var date = value instanceof Date ? value : new Date();
+    var y = date.getFullYear();
+    var m = String(date.getMonth() + 1).padStart(2, '0');
+    var d = String(date.getDate()).padStart(2, '0');
+    return '' + y + m + d;
+}
+
+function parseArchiveReportDate(value) {
+    var match = String(value || '').match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+    if (!match) return new Date();
+    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function buildArchiveReportNo(caseId, date) {
+    var rawId = String(caseId || 'CASE').replace(/[^A-Za-z0-9]/g, '').toUpperCase() || 'CASE';
+    var numericPart = rawId.replace(/\D/g, '') || '1';
+    return 'BLR-' + formatArchiveReportDate(date) + '-' + rawId + '-' + numericPart.padStart(3, '0').slice(-3);
+}
+
+function getArchiveReportNo(row) {
+    if (row.report && row.report.reportNo) return row.report.reportNo;
+    return buildArchiveReportNo(row.item.id, parseArchiveReportDate(row.report ? row.report.generatedAt : ''));
+}
+
+function formatArchiveReportScore(value) {
+    if (value === '-') return '-';
+    return formatArchiveScoreValue(value) + '分';
+}
+
+function formatArchiveScoreValue(value) {
+    var num = Number(value);
+    if (!isFinite(num)) return escapeArchiveHtml(value);
+    return String(Math.round(num * 100) / 100);
+}
+
+function formatArchiveAccuracy(value) {
+    var num = Number(value);
+    if (!isFinite(num)) return '-';
+    return Math.round(num * 100) / 100 + '%';
+}
+
+function formatArchiveDateTime(value) {
+    if (!value) return '-';
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return escapeArchiveHtml(value);
+    var pad = function(n) { return String(n).padStart(2, '0'); };
+    return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
+}
+
+function getModelBandInfo(scorePct) {
+    if (scorePct >= 90) return { label: '优秀', key: 'excellent' };
+    if (scorePct >= 80) return { label: '良好', key: 'good' };
+    if (scorePct >= 60) return { label: '合格', key: 'qualified' };
+    if (scorePct >= 30) return { label: '待提升', key: 'improve' };
+    return { label: '需努力', key: 'need' };
+}
+
+function getModelCategoryLabel(category) {
+    return category === 'segmentation' ? '医学图像分割' : '医学图像分类';
+}
+
+function countReadingItems(items) {
+    return (items || []).reduce(function(sum, item) {
+        return sum + (item && String(item.type || '').toLowerCase() === 'reading' ? 1 : 0);
+    }, 0);
+}
+
+function getModelAttemptAccuracy(item) {
+    var total = Number(item && item.totalScore) || 0;
+    var max = Number(item && item.maxScore) || 0;
+    return max > 0 ? Math.round(total / max * 10000) / 100 : 0;
+}
+
+function parseModelArchiveQuestion(item) {
+    var raw = String(item && item.q ? item.q : '');
+    var parts = raw.split('||');
+    var question = parts[0] || '';
+    var options = parts[1] ? parts[1].split('|') : [];
+    var answer = parts[2] || '';
+    return {
+        question: question,
+        options: options,
+        answer: answer,
+        kind: String(item && item.type ? item.type : 'choice').toLowerCase()
+    };
+}
+
+function getModelArchiveCurrentAttempt(row) {
+    if (!row) return null;
+    if (row.attempt && row.attempt.finishedAt) return row.attempt;
+    if (Array.isArray(row.attempts) && row.attempts.length) return row.attempts[0];
+    return null;
+}
+
+function getModelArchiveScorePct(row) {
+    if (!row) return 0;
+    if (row.scorePct !== undefined && row.scorePct !== null) return Number(row.scorePct) || 0;
+    if (row.latestPct !== undefined && row.latestPct !== null) return Number(row.latestPct) || 0;
+    if (row.bestPct !== undefined && row.bestPct !== null) return Number(row.bestPct) || 0;
+    var attempt = getModelArchiveCurrentAttempt(row);
+    return attempt ? Number(attempt.pct) || 0 : 0;
+}
+
+function getModelArchiveFinishedAt(row) {
+    if (!row) return '';
+    return row.finishedAt || row.latestFinishedAt || (row.attempt && row.attempt.finishedAt) || '';
+}
+
+function getModelArchiveBandInfo(row) {
+    return getModelBandInfo(getModelArchiveScorePct(row));
+}
+
+function readModelTrainingStore() {
+    try {
+        var raw = localStorage.getItem(ARCHIVE_STORAGE_KEYS.modelTraining);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.attempts)) {
+            return {
+                attempts: parsed.attempts,
+                legacyModels: Array.isArray(parsed.legacyModels) ? parsed.legacyModels : [],
+                legacyHistory: Array.isArray(parsed.legacyHistory) ? parsed.legacyHistory : []
+            };
+        }
+        if (parsed && (Array.isArray(parsed.models) || Array.isArray(parsed.history))) {
+            return {
+                attempts: [],
+                legacyModels: Array.isArray(parsed.models) ? parsed.models : [],
+                legacyHistory: Array.isArray(parsed.history) ? parsed.history : []
+            };
+        }
+    } catch (e) { }
+    return null;
+}
+
+function buildDemoModelRows() {
+    return [
+        { taskKey: 'medical-classification-basics', taskTitle: '医学图像分类基础', category: 'classification', attemptCount: 3, bestPct: 92, latestPct: 88, latestFinishedAt: '2026-09-01T14:20:00', latestBand: '良好', questionCount: 10, readingCount: 3, attempts: [
+            { finishedAt: '2026-08-20T16:35:00', pct: 84, band: '良好' },
+            { finishedAt: '2026-08-28T09:12:00', pct: 92, band: '优秀' },
+            { finishedAt: '2026-09-01T14:20:00', pct: 88, band: '良好' }
+        ] },
+        { taskKey: 'medical-segmentation-basics', taskTitle: '医学图像分割基础', category: 'segmentation', attemptCount: 2, bestPct: 80, latestPct: 80, latestFinishedAt: '2026-08-30T11:05:00', latestBand: '良好', questionCount: 10, readingCount: 2, attempts: [
+            { finishedAt: '2026-08-18T10:18:00', pct: 76, band: '合格' },
+            { finishedAt: '2026-08-30T11:05:00', pct: 80, band: '良好' }
+        ] },
+        { taskKey: 'medical-classification-fundus-screening', taskTitle: '眼底筛查进阶', category: 'classification', attemptCount: 2, bestPct: 86, latestPct: 79, latestFinishedAt: '2026-08-29T18:40:00', latestBand: '合格', questionCount: 10, readingCount: 4, attempts: [
+            { finishedAt: '2026-08-22T13:10:00', pct: 86, band: '良好' },
+            { finishedAt: '2026-08-29T18:40:00', pct: 79, band: '合格' }
+        ] },
+        { taskKey: 'medical-segmentation-liver-boundary', taskTitle: '肝脏边界分割进阶', category: 'segmentation', attemptCount: 1, bestPct: 71, latestPct: 71, latestFinishedAt: '2026-08-27T09:50:00', latestBand: '合格', questionCount: 10, readingCount: 3, attempts: [
+            { finishedAt: '2026-08-27T09:50:00', pct: 71, band: '合格' }
+        ] },
+        { taskKey: 'medical-classification-retina-grading', taskTitle: '视网膜病变分级', category: 'classification', attemptCount: 2, bestPct: 95, latestPct: 95, latestFinishedAt: '2026-08-31T20:12:00', latestBand: '优秀', questionCount: 10, readingCount: 4, attempts: [
+            { finishedAt: '2026-08-23T15:00:00', pct: 91, band: '优秀' },
+            { finishedAt: '2026-08-31T20:12:00', pct: 95, band: '优秀' }
+        ] },
+        { taskKey: 'medical-segmentation-brain-lesion', taskTitle: '脑病灶边界分割', category: 'segmentation', attemptCount: 1, bestPct: 67, latestPct: 67, latestFinishedAt: '2026-08-25T08:30:00', latestBand: '待提升', questionCount: 10, readingCount: 2, attempts: [
+            { finishedAt: '2026-08-25T08:30:00', pct: 67, band: '待提升' }
+        ] }
+    ];
+}
+
+function buildModelArchiveRows() {
+    var store = readModelTrainingStore();
+    var attempts = store && Array.isArray(store.attempts) ? store.attempts.filter(function(item) {
+        return item && item.taskKey;
+    }) : [];
+    if (!attempts.length) return buildDemoModelRows();
+
+    var rowsMap = {};
+    attempts.forEach(function(item) {
+        var taskKey = String(item.taskKey || '').trim();
+        if (!taskKey) return;
+        var pct = getModelAttemptAccuracy(item);
+        var finishedAt = item.finishedAt || item.startedAt || '';
+        var finishedTs = new Date(finishedAt).getTime();
+        if (!isFinite(finishedTs)) finishedTs = 0;
+        var questionCount = Array.isArray(item.questions) ? item.questions.length : (Array.isArray(item.items) ? item.items.length : 0);
+        var readingCount = countReadingItems(item.items);
+        var attempt = {
+            id: item.id || '',
+            finishedAt: finishedAt,
+            pct: pct,
+            band: item.band || getModelBandInfo(pct).label,
+            questionCount: questionCount,
+            readingCount: readingCount,
+            totalScore: Number(item.totalScore) || 0,
+            maxScore: Number(item.maxScore) || 0,
+            items: Array.isArray(item.items) ? item.items.map(function(entry) {
+                return Object.assign({}, entry);
+            }) : []
+        };
+        var row = rowsMap[taskKey];
+        if (!row) {
+            row = rowsMap[taskKey] = {
+                taskKey: taskKey,
+                taskTitle: item.taskTitle || taskKey,
+                category: item.category || 'classification',
+                scorePct: pct,
+                finishedAt: finishedAt,
+                bandLabel: attempt.band,
+                questionCount: questionCount,
+                readingCount: readingCount,
+                attempt: attempt,
+                _finishedTs: finishedTs
+            };
+        }
+        if (finishedTs >= (row._finishedTs || 0)) {
+            row.scorePct = pct;
+            row.finishedAt = finishedAt;
+            row.bandLabel = attempt.band;
+            row.questionCount = questionCount;
+            row.readingCount = readingCount;
+            row.taskTitle = item.taskTitle || row.taskTitle;
+            row.category = item.category || row.category;
+            row.attempt = attempt;
+            row._finishedTs = finishedTs;
+        }
+    });
+
+    return Object.keys(rowsMap).map(function(key) {
+        var row = rowsMap[key];
+        delete row._finishedTs;
+        return row;
+    }).sort(function(a, b) {
+        return new Date(b.finishedAt || 0).getTime() - new Date(a.finishedAt || 0).getTime();
+    });
+}
+
+function buildModelArchiveCard(row) {
+    var pct = getModelArchiveScorePct(row);
+    var band = getModelArchiveBandInfo(row);
+    var finishedAt = getModelArchiveFinishedAt(row);
+    var taskKeyArg = JSON.stringify(String(row.taskKey || ''));
+    return "<div class='model-archive-card' onclick='openModelArchiveDetail(" + taskKeyArg + ")'>" +
+        "<div class='model-archive-head'>" +
+        "<div style='min-width:0;flex:1;'>" +
+        "<div class='model-archive-title'>" + escapeArchiveHtml(row.taskTitle || '-') + "</div>" +
+        "<div class='model-archive-subtitle'>" + escapeArchiveHtml(getModelCategoryLabel(row.category) + ' · ' + (row.questionCount || 0) + ' 题 · 阅片题 ' + (row.readingCount || 0) + ' 题') + "</div>" +
+        "</div>" +
+        "<span class='status done'>已答完</span>" +
+        "</div>" +
+        "<div class='model-archive-tags'>" +
+        "<span class='tag blue'>" + escapeArchiveHtml(getModelCategoryLabel(row.category)) + "</span>" +
+        "<span class='tag'>" + escapeArchiveHtml('提交时间：' + formatArchiveDateTime(finishedAt)) + "</span>" +
+        "<span class='tag'>" + escapeArchiveHtml('题集档次：' + band.label) + "</span>" +
+        "</div>" +
+        "<div class='model-archive-meta'>" +
+        "<div>准确率<strong>" + escapeArchiveHtml(formatArchiveAccuracy(pct)) + "</strong></div>" +
+        "<div>题集类型<strong>" + escapeArchiveHtml(getModelCategoryLabel(row.category)) + "</strong></div>" +
+        "<div>题量<strong>" + escapeArchiveHtml((row.questionCount || 0) + ' 题') + "</strong></div>" +
+        "<div>阅片题<strong>" + escapeArchiveHtml((row.readingCount || 0) + ' 题') + "</strong></div>" +
+        "</div>" +
+        "<div class='model-archive-footer'>" +
+        "<div class='model-archive-score'><b>" + escapeArchiveHtml(formatArchiveAccuracy(pct)) + "</b><span>准确率</span></div>" +
+        "<button type='button' class='btn-xs primary' onclick='event.stopPropagation();openModelArchiveDetail(" + taskKeyArg + ")'>查看报告</button>" +
+        "</div>" +
+        "</div>";
+}
+
+function buildModelArchiveDetail(row) {
+    var attempt = getModelArchiveCurrentAttempt(row) || {};
+    var questions = Array.isArray(attempt.items) ? attempt.items : [];
+    var pct = getModelArchiveScorePct(row);
+    var band = getModelArchiveBandInfo(row);
+    var correctCount = questions.filter(function(item) { return item && item.correct; }).length;
+    var readingCount = questions.filter(function(item) {
+        var parsed = parseModelArchiveQuestion(item);
+        return parsed.kind === 'reading';
+    }).length;
+    var rows = questions.map(function(item, idx) {
+        var parsed = parseModelArchiveQuestion(item);
+        var refIdx = parsed.answer ? parsed.answer.charCodeAt(0) - 65 : -1;
+        var refText = refIdx >= 0 && parsed.options[refIdx] ? String(parsed.options[refIdx]).replace(/^[A-D]\.\s*/, '') : '';
+        var cls = item && item.correct ? 'correct' : 'wrong';
+        return '<div class="report-item-row ' + cls + '"><div class="ri-head"><span class="ri-q">第 ' + (idx + 1) + ' 题 · ' + escapeArchiveHtml(parsed.question || '-') + '</span><span class="ri-meta">' + escapeArchiveHtml(parsed.kind === 'reading' ? '阅片单选题' : '普通单选题') + '</span></div><div class="ri-feedback">你的答案：' + escapeArchiveHtml(item && item.answer ? item.answer : '未作答') + ' ｜ 参考答案：' + escapeArchiveHtml((parsed.answer || '-') + (refText ? ' · ' + refText : '')) + '</div>' + (item && item.feedback ? '<div class="ri-feedback">解析：' + escapeArchiveHtml(item.feedback) + '</div>' : '') + '</div>';
+    }).join('');
+    var scoreColor = pct >= 90 ? 'var(--success)' : pct >= 75 ? 'var(--primary)' : 'var(--warning)';
+    return '<div class="report-content">' +
+        '<div class="archive-report-toolbar"><strong>模型作品报告</strong><button type="button" class="btn btn-outline" onclick="closeModelArchiveDetail()">关闭</button></div>' +
+        '<div class="report-header"><h2>' + escapeArchiveHtml(row.taskTitle || '模型作品') + '</h2><div class="report-subtitle">来自模型训练实训的单次题集报告</div></div>' +
+        '<div class="report-meta"><div>题集编号：' + escapeArchiveHtml(row.taskKey || '-') + '</div><div>题集类型：' + escapeArchiveHtml(getModelCategoryLabel(row.category)) + '</div><div>提交时间：' + escapeArchiveHtml(formatArchiveDateTime(getModelArchiveFinishedAt(row))) + '</div><div>题集档次：' + escapeArchiveHtml(band.label) + '</div></div>' +
+        '<div class="report-score-block"><div class="report-score-main"><b style="color:' + scoreColor + ';">' + escapeArchiveHtml(formatArchiveAccuracy(pct)) + '</b><span>准确率</span></div><div class="report-accuracy-note">本次答对 ' + correctCount + ' / ' + questions.length + ' 题 · ' + readingCount + ' 道阅片题 · 区间：<span class="band-pill ' + band.key + '">' + escapeArchiveHtml(band.label) + '</span></div><div style="margin-top:8px;font-size:12px;color:var(--gray-700);">题集：' + escapeArchiveHtml(row.taskTitle || '') + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center;"><span class="task-tag status-done">已答完</span><span class="task-tag ' + (row.category === 'segmentation' ? 'segmentation' : 'classification') + '">' + escapeArchiveHtml(getModelCategoryLabel(row.category)) + '</span><span class="band-pill ' + band.key + '">' + escapeArchiveHtml(band.label) + '</span></div><div style="margin-top:10px;padding:10px 12px;border-radius:8px;background:#fff;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-700);line-height:1.6;"><div style="font-weight:700;color:var(--gray-900);margin-bottom:4px;">准确率区间说明</div><div>0-20%：很差 · 20-30%：较差 · 30-60%：待提升 · 60-80%：合格 · 80-90%：良好 · 90-100%：优秀</div><div style="margin-top:4px;">本次结果属于：<span class="band-pill ' + band.key + '">' + escapeArchiveHtml(band.label) + '</span></div></div></div>' +
+        '<div class="report-item-list">' + (rows || '<div class="report-item-row"><div class="ri-feedback">暂无题目明细</div></div>') + '</div>' +
+        '</div>';
+}
+function averageArchiveScores() {
+    var values = Array.prototype.slice.call(arguments).map(Number).filter(isFinite);
+    if (!values.length) return 0;
+    return Math.round(values.reduce(function(sum, value) { return sum + value; }, 0) / values.length * 100) / 100;
+}
+
+function normalizeArchiveReportScores(report) {
+    if (!report) return report;
+    var metrics = report.metrics || {};
+    var compare = report.assessment && report.assessment.compareModule ? report.assessment.compareModule : null;
+    var evolution = report.assessment && report.assessment.evolutionModule ? report.assessment.evolutionModule : null;
+    var compareDiagnosis = compare && compare.diagnosisAccuracy !== undefined ? compare.diagnosisAccuracy : metrics.compareDiagnosisAccuracy;
+    var compareLogic = compare && compare.logicCompleteness !== undefined ? compare.logicCompleteness : metrics.compareLogicCompleteness;
+    var evolutionDiagnosis = evolution && evolution.diagnosisAccuracy !== undefined ? evolution.diagnosisAccuracy : metrics.evolutionDiagnosisAccuracy;
+    var evolutionLogic = evolution && evolution.logicCompleteness !== undefined ? evolution.logicCompleteness : metrics.evolutionLogicCompleteness;
+    var compareOverall = averageArchiveScores(compareDiagnosis, compareLogic);
+    var evolutionOverall = averageArchiveScores(evolutionDiagnosis, evolutionLogic);
+    var overallScore = averageArchiveScores(compareOverall, evolutionOverall);
+    report.metrics = Object.assign({}, metrics, {
+        compareOverallScore: compareOverall,
+        evolutionOverallScore: evolutionOverall,
+        overallScore: overallScore,
+        diagnosisAccuracy: averageArchiveScores(compareDiagnosis, evolutionDiagnosis),
+        logicCompleteness: averageArchiveScores(compareLogic, evolutionLogic)
+    });
+    if (report.assessment) {
+        report.assessment.compareModule = Object.assign({}, compare || {}, { overallScore: compareOverall });
+        report.assessment.evolutionModule = Object.assign({}, evolution || {}, { overallScore: evolutionOverall });
+        report.assessment.overallScore = overallScore;
+        report.assessment.diagnosisAccuracy = report.metrics.diagnosisAccuracy;
+        report.assessment.logicCompleteness = report.metrics.logicCompleteness;
+    }
+    return report;
+}
+
+function ensureArchiveReportNumberHtml(html, reportNo) {
+    if (!html || !reportNo || html.indexOf('报告编号：') >= 0) return html || '';
+    return html.replace('<div class="report-meta"><div>学员：管理员</div>', '<div class="report-meta"><div>学员：管理员</div><div>报告编号：' + escapeArchiveHtml(reportNo) + '</div>');
+}
+
+function normalizeArchiveReportHtml(html) {
+    return String(html || '').replace(/<td>\s*分\s*<\/td>/g, '<td>0分</td>');
+}
+
+function normalizeArchiveReportScoreHtml(html, row) {
+    var score = row.overallScore;
+    var scoreColor = score >= 90 ? 'var(--success)' : score >= 75 ? 'var(--primary)' : 'var(--warning)';
+    return String(html || '').replace(/(<div class="big-score"[^>]*>)[\s\S]*?(<\/div><div class="big-label">)/, '$1' + formatArchiveScoreValue(score) + '$2')
+        .replace(/<div class="big-score" style="color:[^;]+;">/g, '<div class="big-score" style="color:' + scoreColor + ';">');
+}
+
 function isValidLearningReport(report) {
     return !!(report && (
         report.reportVersion === 'case-learning-score-v2' ||
@@ -231,17 +1014,56 @@ function isValidLearningReport(report) {
 
 function flattenCaseReports(state) {
     var reports = state.caseLearningReports || {};
-    return CASE_ARCHIVE_CATALOG.map(function(item) {
+    return CASE_ARCHIVE_CATALOG.reduce(function(list, item) {
         var report = isValidLearningReport(reports[item.id]) ? reports[item.id] : null;
+        if (!report) return list;
+        normalizeArchiveReportScores(report);
         var metrics = report && report.metrics ? report.metrics : {};
-        return {
+        list.push({
             item: item,
             report: report,
             overallScore: metrics.overallScore !== undefined ? metrics.overallScore : '-',
-            compareScore: metrics.compareDiagnosisAccuracy !== undefined ? metrics.compareDiagnosisAccuracy : '-',
-            evolutionScore: metrics.evolutionDiagnosisAccuracy !== undefined ? metrics.evolutionDiagnosisAccuracy : '-'
-        };
-    });
+            compareScore: metrics.compareOverallScore !== undefined ? metrics.compareOverallScore : '-',
+            evolutionScore: metrics.evolutionOverallScore !== undefined ? metrics.evolutionOverallScore : '-'
+        });
+        return list;
+    }, []);
+}
+
+function buildArchiveReportFallback(row) {
+    return '<div class="report-content"><div class="report-header"><h2>病例学习报告</h2><div class="report-subtitle">系统自动评分：诊断准确率 / 逻辑完整度</div></div>' +
+        '<div class="report-meta"><div>学员：管理员</div><div>报告编号：' + escapeArchiveHtml(getArchiveReportNo(row)) + '</div><div>病例：' + escapeArchiveHtml(row.item.title) + '</div><div>生成时间：' + escapeArchiveHtml(row.report.generatedAt || '-') + '</div></div>' +
+        '<div class="report-section"><h3>评分结果</h3><table><thead><tr><th>综合评分</th><th>AI诊断对比学习</th><th>病程推理实训</th></tr></thead><tbody><tr><td>' + formatArchiveReportScore(row.overallScore) + '</td><td>' + formatArchiveReportScore(row.compareScore) + '</td><td>' + formatArchiveReportScore(row.evolutionScore) + '</td></tr></tbody></table></div></div>';
+}
+
+function openArchiveReportDetail(caseId) {
+    var state = readArchiveStorage(ARCHIVE_STORAGE_KEYS.caseTeaching, {});
+    var row = flattenCaseReports(state).filter(function(item) { return item.item.id === caseId; })[0];
+    if (!row || !row.report) {
+        alert('该报告尚未生成。');
+        return;
+    }
+    var reportNo = getArchiveReportNo(row);
+    var reportHtml = normalizeArchiveReportScoreHtml(normalizeArchiveReportHtml(ensureArchiveReportNumberHtml(row.report.html || buildArchiveReportFallback(row), reportNo)), row);
+    document.getElementById('archiveReportBody').innerHTML = reportHtml;
+    document.getElementById('archiveReportOverlay').style.display = 'flex';
+}
+
+function closeArchiveReportDetail() {
+    document.getElementById('archiveReportOverlay').style.display = 'none';
+    document.getElementById('archiveReportBody').innerHTML = '';
+}
+
+function handleArchiveReportOverlayClick(event) {
+    if (event.target && event.target.id === 'archiveReportOverlay') closeArchiveReportDetail();
+}
+
+function closeReport() {
+    closeArchiveReportDetail();
+}
+
+function printReport() {
+    window.print();
 }
 
 function getExamStatus(status) {
@@ -259,6 +1081,8 @@ function getArchiveExamRows() {
 }
 
 function renderCourseArchive() {
+    var table = document.getElementById('archiveTable');
+    if (table) table.classList.remove('model-mode');
     var completion = readArchiveStorage(ARCHIVE_STORAGE_KEYS.courseCompletion, {});
     var quizRecords = readArchiveStorage(ARCHIVE_STORAGE_KEYS.courseQuiz, {});
     var rows = COURSE_ARCHIVE_CATALOG.map(function(course) {
@@ -267,7 +1091,7 @@ function renderCourseArchive() {
         var status = getArchiveCourseStatus(progress.progress);
         return '<tr>' +
             '<td><strong>' + escapeArchiveHtml(course.name) + '</strong><span class="archive-secondary">' + escapeArchiveHtml(course.duration) + ' · ' + course.chapterCount + '章</span></td>' +
-            '<td>' + escapeArchiveHtml({ DR: '糖尿病视网膜病变', glaucoma: '青光眼', AMD: 'AMD', hypertension: '高血压视网膜病变', RVO: 'RVO', all: '综合' }[course.diseaseType]) + '</td>' +
+            '<td>' + escapeArchiveHtml(course.knowledgeSystem) + '</td>' +
             '<td>' + getArchiveDifficulty(course.difficulty) + '</td>' +
             '<td><div class="archive-progress"><i style="width:' + progress.progress + '%"></i></div><span>' + progress.progress + '%</span></td>' +
             '<td>' + progress.completed + ' / ' + course.totalSections + '节</td>' +
@@ -285,37 +1109,44 @@ function renderCourseArchive() {
 }
 
 function renderReportArchive() {
+    var table = document.getElementById('archiveTable');
+    if (table) table.classList.remove('model-mode');
     var state = readArchiveStorage(ARCHIVE_STORAGE_KEYS.caseTeaching, {});
     var rows = flattenCaseReports(state);
-    var savedReportCount = rows.filter(function(row) { return row.report; }).length;
-    var reportCount = savedReportCount || DEFAULT_REPORT_ARCHIVE_COUNT;
-    document.getElementById('reportArchiveCount').textContent = reportCount;
-    document.getElementById('archiveTable').innerHTML =
-        '<thead><tr><th>病例名称</th><th>疾病类型</th><th>难度</th><th>报告状态</th><th>综合评分</th><th>AI诊断对比学习</th><th>病程推理实训</th><th>生成时间</th></tr></thead><tbody>' +
-        rows.map(function(row) {
-            var reportStatus = row.report ? '<span class="status done">已生成</span>' : '<span class="status todo">未生成</span>';
-            return '<tr><td><strong>' + escapeArchiveHtml(row.item.title) + '</strong><span class="archive-secondary">病例编号 ' + row.item.id + '</span></td>' +
-                '<td>' + escapeArchiveHtml(row.item.disease) + '</td><td>' + getCaseDifficulty(row.item.difficulty) + '</td><td>' + reportStatus + '</td>' +
-                '<td>' + (row.overallScore === '-' ? '-' : row.overallScore + '分') + '</td>' +
-                '<td>' + (row.compareScore === '-' ? '-' : row.compareScore + '分') + '</td>' +
-                '<td>' + (row.evolutionScore === '-' ? '-' : row.evolutionScore + '分') + '</td>' +
-                '<td>' + escapeArchiveHtml(row.report ? row.report.generatedAt : '-') + '</td></tr>';
-        }).join('') + '</tbody>';
+    document.getElementById('reportArchiveCount').textContent = rows.length;
+    if (!rows.length) {
+        document.getElementById('archiveTable').innerHTML = '<tbody><tr><td><div class="archive-empty"><strong>暂无已生成报告</strong><span>完成案例教学并生成报告后，会在这里归档展示。</span></div></td></tr></tbody>';
+    } else {
+        document.getElementById('archiveTable').innerHTML =
+            '<thead><tr><th>报告编号</th><th>难度</th><th>综合评分</th><th>AI诊断对比学习</th><th>病程推理实训</th><th>生成时间</th><th>操作</th></tr></thead><tbody>' +
+            rows.map(function(row) {
+                return '<tr><td><strong>报告编号：' + escapeArchiveHtml(getArchiveReportNo(row)) + '</strong></td>' +
+                    '<td>' + getCaseDifficulty(row.item.difficulty) + '</td>' +
+                    '<td>' + formatArchiveReportScore(row.overallScore) + '</td>' +
+                    '<td>' + formatArchiveReportScore(row.compareScore) + '</td>' +
+                    '<td>' + formatArchiveReportScore(row.evolutionScore) + '</td>' +
+                    '<td>' + escapeArchiveHtml(row.report.generatedAt || '-') + '</td>' +
+                    '<td><button type="button" class="btn-xs primary" onclick="openArchiveReportDetail(\'' + escapeArchiveHtml(row.item.id) + '\')">查看报告</button></td></tr>';
+            }).join('') + '</tbody>';
+    }
     document.getElementById('archivePanelTitle').textContent = '实验/实训报告';
-    document.getElementById('archivePanelSubtitle').textContent = '来自案例教学的病例学习报告，按 AI 诊断对比学习和病程推理实训评分展示。';
+    document.getElementById('archivePanelSubtitle').textContent = '';
     document.getElementById('archivePanelLink').href = '案例教学.html';
     document.getElementById('archivePanelLink').textContent = '进入案例教学';
+    document.getElementById('archivePanelLink').className = 'btn btn-outline';
 }
 
 function renderArchiveSummaryCounts() {
     var state = readArchiveStorage(ARCHIVE_STORAGE_KEYS.caseTeaching, {});
     var rows = flattenCaseReports(state);
-    var savedReportCount = rows.filter(function(row) { return row.report; }).length;
-    document.getElementById('reportArchiveCount').textContent = savedReportCount || DEFAULT_REPORT_ARCHIVE_COUNT;
+    document.getElementById('reportArchiveCount').textContent = rows.length;
     document.getElementById('examArchiveCount').textContent = getArchiveExamRows().length;
+    document.getElementById('modelArchiveCount').textContent = buildModelArchiveRows().length;
 }
 
 function renderExamArchive() {
+    var table = document.getElementById('archiveTable');
+    if (table) table.classList.remove('model-mode');
     var rows = getArchiveExamRows();
     document.getElementById('examArchiveCount').textContent = rows.length;
     document.getElementById('archiveTable').innerHTML =
@@ -336,12 +1167,40 @@ function renderExamArchive() {
 }
 
 function renderModelArchive() {
-    document.getElementById('archiveTable').innerHTML = '<tbody><tr><td><div class="archive-empty"><strong>模型作品模块待设计</strong><span>当前暂不展示模型作品数据，待后续确定业务字段和作品沉淀规则后再接入。</span></div></td></tr></tbody>';
+    var table = document.getElementById('archiveTable');
+    if (table) table.classList.add('model-mode');
+    var rows = buildModelArchiveRows();
+    document.getElementById('modelArchiveCount').textContent = rows.length;
+    if (!rows.length) {
+        document.getElementById('archiveTable').innerHTML = '<tbody><tr><td colspan="7" class="model-table-cell"><div class="model-archive-empty-wrap"><div class="model-archive-empty"><strong>暂无模型作品</strong><span>完成模型训练中的题集后，这里会自动同步展示每一个已做过的题集。</span></div></div></td></tr></tbody>';
+    } else {
+        document.getElementById('archiveTable').innerHTML = '<tbody><tr><td colspan="7" class="model-table-cell"><div class="model-archive-grid">' + rows.map(function(row) { return buildModelArchiveCard(row); }).join('') + '</div></td></tr></tbody>';
+    }
     document.getElementById('archivePanelTitle').textContent = '模型作品';
-    document.getElementById('archivePanelSubtitle').textContent = '该模块暂不设计。';
-    document.getElementById('archivePanelLink').removeAttribute('href');
-    document.getElementById('archivePanelLink').textContent = '待定';
-    document.getElementById('archivePanelLink').className = 'btn btn-outline disabled';
+    document.getElementById('archivePanelSubtitle').textContent = '来自模型训练实训的已完成题集归档，按题集逐条展示每一次训练成果。';
+    document.getElementById('archivePanelLink').href = '模型训练实训.html';
+    document.getElementById('archivePanelLink').textContent = '进入模型训练';
+    document.getElementById('archivePanelLink').className = 'btn btn-outline';
+}
+
+function openModelArchiveDetail(taskKey) {
+    var rows = buildModelArchiveRows();
+    var row = rows.filter(function(item) { return item.taskKey === taskKey; })[0];
+    if (!row) {
+        alert('该模型作品暂未找到。');
+        return;
+    }
+    document.getElementById('modelArchiveBody').innerHTML = buildModelArchiveDetail(row);
+    document.getElementById('modelArchiveOverlay').style.display = 'flex';
+}
+
+function closeModelArchiveDetail() {
+    document.getElementById('modelArchiveOverlay').style.display = 'none';
+    document.getElementById('modelArchiveBody').innerHTML = '';
+}
+
+function handleModelArchiveOverlayClick(event) {
+    if (event.target && event.target.id === 'modelArchiveOverlay') closeModelArchiveDetail();
 }
 
 function switchArchiveMode(mode) {
@@ -360,6 +1219,16 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
         var user = JSON.parse(localStorage.getItem('life_med_user'));
         if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
+    } catch (e) {}
+    try {
+        var teachingState = readArchiveStorage(ARCHIVE_STORAGE_KEYS.caseTeaching, {});
+        var teachingReports = teachingState.caseLearningReports || {};
+        Object.keys(teachingReports).forEach(function(caseId) {
+            if (isValidLearningReport(teachingReports[caseId])) {
+                normalizeArchiveReportScores(teachingReports[caseId]);
+            }
+        });
+        localStorage.setItem(ARCHIVE_STORAGE_KEYS.caseTeaching, JSON.stringify(teachingState));
     } catch (e) {}
     document.querySelectorAll('#archiveTabs .archive-tile').forEach(function(tile) {
         tile.addEventListener('click', function() {

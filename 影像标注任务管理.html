@@ -595,6 +595,15 @@
       color: var(--gray-700)
     }
 
+    .mini-chip button {
+      border: none;
+      background: transparent;
+      color: var(--gray-500);
+      cursor: pointer;
+      margin-left: 4px;
+      padding: 0
+    }
+
     .person-status-chip {
       display: inline-flex;
       align-items: center;
@@ -1368,6 +1377,138 @@
         grid-template-columns: 1fr
       }
     }
+  
+    .p0-review-panel { margin-top: 16px; padding: 12px; border: 1px solid #dbe5f1; border-radius: 8px; background: #f8fbff; }
+    .p0-review-list-title { font-weight: 700; color: #1f3b64; margin-bottom: 8px; }
+    .p0-review-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; max-height: 220px; overflow: auto; }
+    .p0-review-sample { text-align: left; border: 1px solid #d9e2ef; background: #fff; border-radius: 6px; padding: 7px 9px; cursor: pointer; }
+    .p0-review-sample.active { border-color: #1a73e8; background: #e8f0fe; }
+    .p0-review-sample strong, .p0-review-sample span { display:block; font-size: 11px; }
+    .p0-review-sample span { color:#68778d; margin-top:2px; }
+    .p0-review-selected { margin-top: 8px; font-size: 12px; color: #52627a; }
+
+  
+
+    /* P0：任务列表操作栏多行显示，便于同时放置“回收/重新分配”等按钮 */
+    #tasksPanel .task-list-section .table-wrap {
+      overflow-x: auto;
+      position: relative;
+    }
+
+    #tasksPanel .task-list-section table {
+      min-width: 1500px;
+    }
+
+    #tasksPanel .task-list-section table th:last-child,
+    #tasksPanel .task-list-section table td:last-child {
+      min-width: 260px;
+      width: 260px;
+      white-space: normal;
+      vertical-align: top;
+      position: sticky;
+      right: 0;
+      z-index: 2;
+      background: #fff;
+      box-shadow: -6px 0 10px rgba(32, 33, 36, .08);
+    }
+
+    #tasksPanel .task-list-section table th:last-child {
+      z-index: 3;
+      background: var(--gray-100);
+    }
+
+    #tasksPanel .task-list-section table tbody tr:nth-child(even) td:last-child {
+      background: #fbfcfe;
+    }
+
+    #tasksPanel .task-list-section table tbody tr:hover td:last-child {
+      background: var(--gray-50);
+    }
+
+    #tasksPanel .task-list-section table td:last-child {
+      line-height: 1.8;
+    }
+
+    #tasksPanel .task-list-section .link-btn {
+      display: inline-block;
+      margin: 0 10px 6px 0;
+      line-height: 22px;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    #annotationDetailModal table th:last-child,
+    #annotationDetailModal table td:last-child {
+      min-width: 120px;
+      white-space: nowrap;
+    }
+
+  
+
+    /* 任务列表标题改为按角色展示的任务状态 Tab */
+    .task-status-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .task-status-tab {
+      border: 1px solid var(--gray-300);
+      background: #fff;
+      color: var(--gray-700);
+      border-radius: 16px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .task-status-tab:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .task-status-tab.active {
+      border-color: var(--primary);
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .task-status-tab .tab-count {
+      display: inline-block;
+      min-width: 16px;
+      margin-left: 4px;
+      padding: 0 4px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, .08);
+      font-size: 10px;
+      line-height: 16px;
+      text-align: center;
+    }
+
+    .task-status-tab.active .tab-count {
+      background: rgba(255, 255, 255, .22);
+    }
+
+    #filterStatusField {
+      display: none;
+    }
+
+  
+    /* P2 审核结果闭环：图像数据直接显示样本级审核信息，标注员详情显示退回记录。 */
+    .p2-review-summary { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+    .p2-review-chip { display:inline-flex; align-items:center; padding:3px 7px; border-radius:10px; font-size:11px; line-height:1.2; white-space:nowrap; }
+    .p2-review-chip.pass { color:#166534; background:#dcfce7; }
+    .p2-review-chip.return { color:#b42318; background:#fee4e2; }
+    .p2-review-chip.pending { color:#92400e; background:#fef3c7; }
+    .p2-feedback-panel { margin-top:16px; border:1px solid #f0c8c4; background:#fff8f7; border-radius:8px; padding:12px; }
+    .p2-feedback-title { font-weight:700; color:#b42318; margin-bottom:8px; }
+    .p2-feedback-item { padding:9px 0; border-top:1px solid #f3d8d5; }
+    .p2-feedback-item:first-child { border-top:0; padding-top:0; }
+    .p2-feedback-meta { color:#667085; font-size:12px; margin-bottom:4px; }
+    .p2-feedback-note { color:#344054; line-height:1.5; margin-bottom:7px; }
   </style>
 </head>
 
@@ -1392,6 +1533,7 @@
       <a class="menu-item admin-only active" data-panel="data" onclick="switchPanel('data',this)"><span>图像数据</span></a>
       <a class="menu-item" data-panel="tasks" onclick="switchPanel('tasks',this)"><span>任务管理</span></a>
       <a class="menu-item admin-only" data-panel="labels" onclick="switchPanel('labels',this)"><span>标签/疾病管理</span></a>
+      <a class="menu-item" href="影像标注工具.html"><span>影像标注工具</span></a>
     </div>
   </div>
 
@@ -1445,6 +1587,10 @@
                 <th>识别格式</th>
                 <th>导入时间</th>
                 <th>状态</th>
+                <th>审核状态</th>
+                <th>所属任务</th>
+                <th>审核员</th>
+                <th>审核时间</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -1551,10 +1697,9 @@
           </table>
         </div>
       </section>
-
       <section class="card task-list-section">
         <div class="card-header">
-          <span class="card-title">任务列表</span>
+          <div class="task-status-tabs" id="taskStatusTabs" role="tablist" aria-label="任务状态"></div>
         </div>
         <div class="filter-bar">
           <div class="filter-field"><label>任务名称</label><input id="filterName" type="text" placeholder="输入任务名称"
@@ -1566,7 +1711,7 @@
           <div class="filter-field"><label>标注类型</label><select id="filterType" onchange="renderTaskTable()">
               <option value="">全部类型</option>
             </select></div>
-          <div class="filter-field"><label>任务状态</label><select id="filterStatus"
+          <div class="filter-field" id="filterStatusField"><label>任务状态</label><select id="filterStatus"
               onchange="switchStatus(this.value)"></select></div>
           <div class="filter-field admin-only"><label>标注员/审核员</label><input id="filterMember" type="text"
               placeholder="输入人员姓名" oninput="renderTaskTable()"></div>
@@ -1710,6 +1855,7 @@
                   <th>疾病名称</th>
                   <th>疾病编码</th>
                   <th>别名</th>
+                  <th>分级设置</th>
                   <th>关联标签集</th>
                   <th>更新时间</th>
                   <th>操作</th>
@@ -1742,7 +1888,13 @@
               <option>JPG / PNG / BMP</option>
               <option>DICOM / OCT序列</option>
             </select></div>
+          <div class="form-group">
+            <label>任务标签集</label>
+            <select id="newLabelSet" onchange="renderNewTaskLabelPreview()"></select>
+          </div>
         </div>
+        <div class="label-preview" id="newLabelSetPreview">请先选择任务类型，系统将匹配可用标签集。</div>
+        <div class="label-preview">分片方式：系统按标注员自动均分样本，并保证同一影像同一时刻只分配给一个标注员。</div>
         <div class="form-group">
           <label>标注任务类型</label>
           <div class="radio-cards" id="typeCards">
@@ -1825,6 +1977,7 @@
         <div class="form-group"><label id="reviewResultLabel">复核结论</label><select id="reviewResult">
             <option>通过</option>
             <option>退回修改</option>
+            <option>多人复核</option>
           </select></div>
         <div class="form-group"><label id="reviewNoteLabel">复核意见</label><textarea id="reviewNote"
             placeholder="请直接填写本次审核发现的问题、修改要求或通过说明。"></textarea></div>
@@ -1896,6 +2049,39 @@
           <button class="btn btn-outline" onclick="closeModal('reviewerTaskModal')">关闭</button>
         </div>
       </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal-overlay" id="taskShardActionModal">
+    <div class="modal" style="max-width:980px;width:92vw;">
+      <div class="modal-header">
+        <h3 id="taskShardActionTitle">分片操作</h3><button class="modal-close" onclick="closeModal('taskShardActionModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="review-grid" style="margin-bottom:16px;">
+          <div class="review-metric"><span>任务</span><strong id="taskShardActionTaskName">-</strong></div>
+          <div class="review-metric"><span>操作类型</span><strong id="taskShardActionModeLabel">-</strong></div>
+          <div class="review-metric"><span>可操作分片</span><strong id="taskShardActionCount">0</strong></div>
+        </div>
+        <div class="page-desc" id="taskShardActionHint" style="margin-bottom:12px;">-</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>标注员</th>
+                <th>样本分片</th>
+                <th>完成量</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="taskShardActionBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('taskShardActionModal')">关闭</button></div>
     </div>
   </div>
 
@@ -1971,6 +2157,7 @@
                   <th>样本分片</th>
                   <th>完成量</th>
                   <th>质控结论</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody id="annotationAssignmentBody"></tbody>
@@ -2197,6 +2384,15 @@
         <div class="form-group"><label>疾病说明</label><textarea id="diseaseDescriptionInput"
             placeholder="填写疾病范围、影像特征或使用说明"></textarea></div>
         <div class="form-group">
+          <label>疾病分级</label>
+          <div style="display:flex;gap:8px;">
+            <input id="diseaseLevelInput" placeholder="如：轻度NPDR、中度、重度">
+            <button type="button" class="btn btn-outline btn-sm" id="addDiseaseLevelButton" onclick="addDiseaseLevel()">添加</button>
+          </div>
+          <div class="mini-list" id="diseaseLevelChips" style="margin-top:8px;"></div>
+          <div class="field-note">标注页只显示这里维护的分级；未配置时标注页会提示未配置分级。</div>
+        </div>
+        <div class="form-group">
           <label>关联标签集</label>
           <div class="mini-list" id="diseaseLinkedSetChips"></div>
           <div class="field-note" id="diseaseUpdatedAtText"></div>
@@ -2265,6 +2461,7 @@
     var editingLabelSetId = null;
     var selectedLabelSetDiseaseIds = [];
     var editingDiseaseId = null;
+    var pendingDiseaseLevels = [];
     var editingLinkedDatasetId = null;
     var editingImageDatasetId = null;
     var currentRole = 'admin';
@@ -2282,11 +2479,13 @@
     var statsReviewerVersions = ['审核中心 v2.9.1', '审核中心 v2.8.6', '质控复核台 v2.9.0', '审核中心 v2.9.2'];
     var currentRedistributeTaskId = null;
     var currentRedistributeAssignmentId = null;
+    var currentShardActionTaskId = null;
+    var currentShardActionMode = "reclaim";
     var tasks = [
       { id: 'T202608010001', name: 'DR病灶检测训练集标注', dataset: 'fundus_dr_batch_2026', project: '糖尿病视网膜病变AI训练', type: '分类+检测+分割', status: '待标注', reviewStatus: '未提交', imageCount: 480, annotated: 126, reviewed: 0, creator: '张教授', createdAt: '2026-08-01 09:20:15', annotators: ['李医生', '王医生'], reviewers: ['张教授'], quality: 88, reviewMode: '单人审核', recycleMode: '提交后进入待审核', labelSet: 'LS-DR-001' },
       { id: 'T202608010002', name: 'DR出血点检测提交复核', dataset: 'fundus_dr_batch_2026', project: '糖尿病视网膜病变AI训练', type: '目标检测', status: '待审核', reviewStatus: '待审核', imageCount: 260, annotated: 260, reviewed: 0, creator: '张教授', createdAt: '2026-08-01 10:36:42', annotators: ['李医生'], reviewers: ['张教授'], quality: 90, reviewMode: '单人审核', recycleMode: '提交后进入待审核', labelSet: 'LS-DR-001', submittedBy: '李医生', submittedAt: '2026-08-01 11:20:18' },
       { id: 'T202608010003', name: 'OCT RNFL结构描边初标', dataset: 'oct_glaucoma_followup', project: '青光眼结构参数研究', type: '图像分割', status: '待标注', reviewStatus: '已撤回', imageCount: 160, annotated: 142, reviewed: 0, creator: '刘主任', createdAt: '2026-08-01 08:48:30', annotators: ['李医生'], reviewers: ['刘主任'], quality: 82, reviewMode: '抽检审核', recycleMode: '提交后进入待审核', labelSet: 'LS-OCT-002' },
-      { id: 'T202607310006', name: 'OCT青光眼结构分割', dataset: 'oct_glaucoma_followup', project: '青光眼结构参数研究', type: '图像分割', status: '待审核', reviewStatus: '待审核', imageCount: 220, annotated: 220, reviewed: 168, creator: '刘主任', createdAt: '2026-07-31 16:42:08', annotators: ['赵研究员'], reviewers: ['张教授', '刘主任'], quality: 92, reviewMode: '多人复核', recycleMode: '达到质控阈值自动回收', labelSet: 'LS-OCT-002' },
+      { id: 'T202607310006', name: 'OCT青光眼结构分割', dataset: 'oct_glaucoma_followup', project: '青光眼结构参数研究', type: '图像分割', status: '待审核', reviewStatus: '待审核', imageCount: 220, annotated: 220, reviewed: 168, creator: '刘主任', createdAt: '2026-07-31 16:42:08', annotators: ['赵研究员'], reviewers: ['张教授', '刘主任'], quality: 92, reviewMode: '多人复核', recycleMode: '管理员手动回收', labelSet: 'LS-OCT-002' },
       { id: 'T202607300012', name: '眼底图像分类复核', dataset: 'retina_screening_clean', project: '多中心眼病筛查', type: '图像分类', status: '待审核', reviewStatus: '待审核', imageCount: 320, annotated: 320, reviewed: 0, creator: '陈医生', createdAt: '2026-07-30 11:08:32', annotators: ['陈医生', '王医生'], reviewers: ['周老师'], quality: 85, reviewMode: '抽检审核', recycleMode: '提交后进入待审核', labelSet: 'LS-CLS-003' },
       { id: 'T202607290015', name: '黄斑水肿分割退回修正', dataset: 'macula_lesion_set', project: '黄斑病变辅助诊断', type: '图像分割', status: '已退回', reviewStatus: '审核退回', imageCount: 96, annotated: 88, reviewed: 24, creator: '周老师', createdAt: '2026-07-29 15:14:05', annotators: ['李医生', '王医生'], reviewers: ['周老师'], quality: 76, reviewMode: '多人复核', recycleMode: '管理员手动回收', labelSet: 'LS-MAC-004', submittedBy: '王医生', submittedAt: '2026-07-29 17:42:30', reviewedBy: '周老师', reviewedAt: '2026-07-30 10:15:08', reviewNote: '对 96 张黄斑 OCT/眼底图像进行重点复核，发现主要问题集中在样本 7、14、21：①样本 7 黄斑出血框右移约 8% 视野、覆盖了视盘边缘，建议改为贴合病灶轮廓的多边形；②样本 14 漏标了黄斑渗出簇，中央区仅有 1 个渗出标签，但原图可识别 ≥3 个；③样本 21 使用了"新生血管"标签，但病灶形态更符合黄斑出血，请按标签集含义修正；样本 28 置信度评分偏低、需复核。样本 35 标注合规、保留。请整体退回，由两位标注员按"病灶完整性 + 标签合规"两条规则整改后重新提交，下一轮重点关注黄斑区 3 mm 范围内的标签是否齐全。', multiReviewRequestedBy: '张教授', multiReviewRequestedAt: '2026-07-30 09:32:11', multiReviewNote: '该数据集为黄斑病变多中心混合数据，单人审核把握度不足；先由黄斑专家周老师完成重点样本的二次复核。', withdrawnBy: '', withdrawnAt: '' },
       { id: 'T202607280009', name: '黄斑区病灶框选任务', dataset: 'macula_lesion_set', project: '黄斑病变辅助诊断', type: '目标检测', status: '已完成', reviewStatus: '审核通过', imageCount: 180, annotated: 180, reviewed: 180, creator: '张教授', createdAt: '2026-07-28 14:22:47', annotators: ['李医生'], reviewers: ['张教授'], quality: 96, reviewMode: '单人审核', recycleMode: '管理员手动回收', labelSet: 'LS-MAC-004' },
@@ -2317,9 +2516,9 @@
     var statusList = ['全部', '未完成标注', '待标注', '待审核', '审核通过', '审核退回', '已撤回'];
     var statusFilterList = statusList.filter(function (status) { return status !== '未完成标注'; });
     var diseases = [
-      { id: 'DIS-DR-001', name: '糖尿病视网膜病变', code: 'E10-E14.3', aliases: ['DR', '糖网'], description: '适用于糖网分级、病灶检测与分割。', status: '启用', labelSets: ['LS-DR-001', 'LS-CLS-003'], updatedAt: '2026-08-01 10:12:20' },
-      { id: 'DIS-OCT-002', name: '青光眼', code: 'H40', aliases: ['青光眼性视神经病变'], description: '适用于OCT结构描边、视盘视杯分析。', status: '启用', labelSets: ['LS-OCT-002'], updatedAt: '2026-07-31 17:05:44' },
-      { id: 'DIS-MAC-004', name: '黄斑病变', code: 'H35.3', aliases: ['黄斑水肿', '黄斑出血'], description: '适用于黄斑区域病灶检测与分割。', status: '启用', labelSets: ['LS-MAC-004'], updatedAt: '2026-07-28 15:18:03' }
+      { id: 'DIS-DR-001', name: '糖尿病视网膜病变', code: 'E10-E14.3', aliases: ['DR', '糖网'], description: '适用于糖网分级、病灶检测与分割。', status: '启用', levels: ['无DR', '轻度NPDR', '中度NPDR', '重度NPDR', 'PDR'], labelSets: ['LS-DR-001', 'LS-CLS-003'], updatedAt: '2026-08-01 10:12:20' },
+      { id: 'DIS-OCT-002', name: '青光眼', code: 'H40', aliases: ['青光眼性视神经病变'], description: '适用于OCT结构描边、视盘视杯分析。', status: '启用', levels: ['正常', '可疑', '早期', '中期', '晚期'], labelSets: ['LS-OCT-002'], updatedAt: '2026-07-31 17:05:44' },
+      { id: 'DIS-MAC-004', name: '黄斑病变', code: 'H35.3', aliases: ['黄斑水肿', '黄斑出血'], description: '适用于黄斑区域病灶检测与分割。', status: '启用', levels: ['无', '轻度', '中度', '重度'], labelSets: ['LS-MAC-004'], updatedAt: '2026-07-28 15:18:03' }
     ];
     var labelSets = [
       {
@@ -2402,8 +2601,15 @@
       return role === 'annotator' || role === 'reviewer' || role === 'admin' ? role : '';
     }
 
+    function getInitialPanelFromQuery() {
+      var params = new URLSearchParams(window.location.search || '');
+      var panel = params.get('panel') || (window.location.hash || '').replace('#', '');
+      return panel === 'data' || panel === 'tasks' || panel === 'labels' ? panel : '';
+    }
+
     function initPage() {
       var initialRole = getInitialRoleFromQuery();
+      var initialPanel = getInitialPanelFromQuery();
       if (initialRole) {
         currentRole = initialRole;
         activePanel = 'tasks';
@@ -2423,13 +2629,49 @@
       renderTaskTable();
       renderOperations();
       updateStats();
+      if (initialPanel) switchPanel(initialPanel);
       try {
         var user = JSON.parse(localStorage.getItem('life_med_user'));
         if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
       } catch (e) { }
     }
 
+
+    function getRoleTaskStatusTabs() {
+      if (currentRole === 'annotator') return ['全部', '待标注', '审核退回', '已完成'];
+      if (currentRole === 'reviewer') return ['全部', '待审核', '审核中', '多人复核中', '审核通过', '审核退回'];
+      return ['全部', '待标注', '待审核', '审核退回', '已完成'];
+    }
+
+    function getRoleVisibleTasksForTabs() {
+      return tasks.filter(function (t) {
+        if (currentRole === 'annotator') return t.annotators.indexOf(currentAnnotator) >= 0;
+        if (currentRole === 'reviewer') return t.reviewers.indexOf(currentReviewer) >= 0;
+        return true;
+      });
+    }
+
+    function getTaskStatusTabCount(status) {
+      var source = getRoleVisibleTasksForTabs();
+      if (status === '全部') return source.length;
+      return source.filter(function (t) {
+        return status === '待标注' ? isUnfinishedAnnotationTask(t) : getDisplayStatus(t) === status;
+      }).length;
+    }
+
+    function renderTaskStatusTabs() {
+      var container = document.getElementById('taskStatusTabs');
+      if (!container) return;
+      var statuses = getRoleTaskStatusTabs();
+      if (statuses.indexOf(activeStatus) < 0) activeStatus = '全部';
+      container.innerHTML = statuses.map(function (status) {
+        var active = status === activeStatus ? ' active' : '';
+        return '<button type="button" role="tab" aria-selected="' + (status === activeStatus ? 'true' : 'false') + '" class="task-status-tab' + active + '" onclick="switchStatus(\'' + status + '\')">' + status + '<span class="tab-count">' + getTaskStatusTabCount(status) + '</span></button>';
+      }).join('');
+    }
+
     function renderTabs() {
+      renderTaskStatusTabs();
       var select = document.getElementById('filterStatus');
       if (!select) return;
       select.innerHTML = (taskListReviewOnly ? '<option value=""></option>' : '') + statusFilterList.map(function (s) {
@@ -2625,7 +2867,7 @@
         html += '<tr>' +
           '<td>' + (i + 1) + '</td>' +
           '<td>' + t.id + '</td>' +
-          '<td><strong>' + t.name + '</strong><div class="stat-meta">' + normalizeReviewMode(t.reviewMode) + '</div></td>' +
+          '<td><strong>' + t.name + '</strong><div class="stat-meta">' + normalizeReviewMode(t.reviewMode) + ' · ' + getLabelSetName(getTaskLabelSetId(t)) + '</div></td>' +
           '<td>' + getTaskImageDataName(t) + '</td>' +
           '<td>' + t.project + '</td>' +
           '<td>' + typeTag(t.type) + '</td>' +
@@ -3663,7 +3905,8 @@
       document.getElementById('diseaseCodeInput').value = '';
       document.getElementById('diseaseAliasInput').value = '';
       document.getElementById('diseaseDescriptionInput').value = '';
-      renderDiseaseDetailExtras(null);
+      pendingDiseaseLevels = [];
+      renderDiseaseDetailExtras(null, false);
       openModal('diseaseFormModal');
     }
 
@@ -3677,7 +3920,8 @@
       document.getElementById('diseaseCodeInput').value = disease.code || '';
       document.getElementById('diseaseAliasInput').value = (disease.aliases || []).join('、');
       document.getElementById('diseaseDescriptionInput').value = disease.description || '';
-      renderDiseaseDetailExtras(disease);
+      pendingDiseaseLevels = normalizeDiseaseLevels(disease.levels || []);
+      renderDiseaseDetailExtras(disease, false);
       openModal('diseaseFormModal');
     }
 
@@ -3694,12 +3938,57 @@
       document.getElementById('diseaseCodeInput').disabled = true;
       document.getElementById('diseaseAliasInput').disabled = true;
       document.getElementById('diseaseDescriptionInput').disabled = true;
-      renderDiseaseDetailExtras(disease);
+      pendingDiseaseLevels = normalizeDiseaseLevels(disease.levels || []);
+      renderDiseaseDetailExtras(disease, true);
       document.getElementById('diseaseFormSubmitBtn').onclick = function () { closeDiseaseForm(); };
       openModal('diseaseFormModal');
     }
 
-    function renderDiseaseDetailExtras(disease) {
+    function normalizeDiseaseLevels(levels) {
+      var seen = {};
+      return (levels || []).map(function (item) { return String(item || '').trim(); }).filter(function (item) {
+        if (!item || seen[item]) return false;
+        seen[item] = true;
+        return true;
+      });
+    }
+
+    function renderDiseaseLevelChips(readonly) {
+      var wrap = document.getElementById('diseaseLevelChips');
+      if (!wrap) return;
+      if (!pendingDiseaseLevels.length) {
+        wrap.innerHTML = '<span class="empty-hint">暂无分级</span>';
+      } else {
+        wrap.innerHTML = pendingDiseaseLevels.map(function (level, index) {
+          return '<span class="mini-chip">' + escapeLabelText(level) + (readonly ? '' : '<button type="button" onclick="removeDiseaseLevel(' + index + ')">×</button>') + '</span>';
+        }).join('');
+      }
+      var input = document.getElementById('diseaseLevelInput');
+      var addBtn = document.getElementById('addDiseaseLevelButton');
+      if (input) input.disabled = !!readonly;
+      if (addBtn) addBtn.style.display = readonly ? 'none' : '';
+    }
+
+    function addDiseaseLevel() {
+      var input = document.getElementById('diseaseLevelInput');
+      var raw = input ? input.value : '';
+      var parts = raw.split(/[、,，;；\\n]/).map(function (item) { return item.trim(); }).filter(Boolean);
+      if (!parts.length) {
+        showToast('请输入疾病分级');
+        return;
+      }
+      pendingDiseaseLevels = normalizeDiseaseLevels(pendingDiseaseLevels.concat(parts));
+      if (input) input.value = '';
+      renderDiseaseLevelChips(false);
+    }
+
+    function removeDiseaseLevel(index) {
+      pendingDiseaseLevels.splice(index, 1);
+      renderDiseaseLevelChips(false);
+    }
+
+    function renderDiseaseDetailExtras(disease, readonly) {
+      renderDiseaseLevelChips(!!readonly);
       var linkedSets = disease ? (disease.labelSets || []).map(function (setId) { return getLabelSetName(setId); }) : [];
       var chipsWrap = document.getElementById('diseaseLinkedSetChips');
       if (chipsWrap) {
@@ -3712,13 +4001,16 @@
     }
 
     function closeDiseaseForm() {
-      ['diseaseNameInput', 'diseaseCodeInput', 'diseaseAliasInput', 'diseaseDescriptionInput'].forEach(function (id) {
+      ['diseaseNameInput', 'diseaseCodeInput', 'diseaseAliasInput', 'diseaseDescriptionInput', 'diseaseLevelInput'].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) el.disabled = false;
       });
+      var addLevelButton = document.getElementById('addDiseaseLevelButton');
+      if (addLevelButton) addLevelButton.style.display = '';
       var button = document.getElementById('diseaseFormSubmitBtn');
       if (button) button.onclick = saveDiseaseForm;
       editingDiseaseId = null;
+      pendingDiseaseLevels = [];
       closeModal('diseaseFormModal');
     }
 
@@ -3748,6 +4040,7 @@
       disease.code = code;
       disease.aliases = aliases;
       disease.description = description;
+      disease.levels = normalizeDiseaseLevels(pendingDiseaseLevels);
       disease.updatedAt = formatDateTime(new Date());
       syncDiseaseLabelSetLinks();
       closeDiseaseForm();
@@ -3864,11 +4157,12 @@
           '<td><strong>' + escapeLabelText(disease.name) + '</strong><div class="stat-meta">' + escapeLabelText(disease.description || '-') + '</div></td>' +
           '<td>' + escapeLabelText(disease.code || '-') + '</td>' +
           '<td>' + escapeLabelText((disease.aliases || []).join('、') || '-') + '</td>' +
+          '<td><div class="mini-list">' + (disease.levels && disease.levels.length ? chips(disease.levels) : '<span class="empty-hint">未配置分级</span>') + '</div></td>' +
           '<td><div class="mini-list">' + chips(linkedSets) + '</div></td>' +
           '<td>' + escapeLabelText(disease.updatedAt || '-') + '</td>' +
           '<td>' + actions + '</td>' +
           '</tr>';
-      }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--gray-500);padding:24px;">暂无匹配疾病</td></tr>';
+      }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-500);padding:24px;">暂无匹配疾病</td></tr>';
     }
 
     function isDiseaseUsed(disease) {
@@ -4012,27 +4306,31 @@
       return reviewStatus === '待审核' || reviewStatus === '多人复核中';
     }
 
-    function actionButtons(t) {
+    
+
+function actionButtons(t) {
       if (currentRole === 'annotator') {
-        var annotatorActions = '<button class="link-btn" onclick="viewTarget(\'' + t.id + '\')">查看</button>';
-        if (t.status !== '已完成') annotatorActions += '<button class="link-btn" onclick="openWorkbench(\'' + t.id + '\')">标注</button>';
-        if (canAnnotatorSubmit(t)) annotatorActions += '<button class="link-btn" onclick="submitAnnotatorTask(\'' + t.id + '\')">提交</button>';
-        if (canAnnotatorWithdraw(t)) annotatorActions += '<button class="link-btn danger" onclick="withdrawAnnotatorTask(\'' + t.id + '\')">撤回</button>';
+        var annotatorActions = `<button class="link-btn" onclick="viewTarget('${t.id}')">查看</button>`;
+        if (t.status !== '已完成') annotatorActions += `<button class="link-btn" onclick="openWorkbench('${t.id}')">标注</button>`;
+        if (canAnnotatorSubmit(t)) annotatorActions += `<button class="link-btn" onclick="submitAnnotatorTask('${t.id}')">提交</button>`;
+        if (canAnnotatorWithdraw(t)) annotatorActions += `<button class="link-btn danger" onclick="withdrawAnnotatorTask('${t.id}')">撤回</button>`;
         return annotatorActions;
       }
       if (currentRole === 'reviewer') {
-        var reviewerActions = '<button class="link-btn" onclick="openAdminTaskDetailModal(\'' + t.id + '\')">查看</button>';
-        if (canReviewerAudit(t)) reviewerActions += '<button class="link-btn" onclick="openReviewModal(\'' + t.id + '\')">审核</button>';
+        var reviewerActions = `<button class="link-btn" onclick="openAdminTaskDetailModal('${t.id}')">查看</button>`;
+        if (canReviewerAudit(t)) reviewerActions += `<button class="link-btn" onclick="openReviewModal('${t.id}')">审核</button>`;
         return reviewerActions;
       }
       if (isCompletedTaskForActions(t)) {
-        return canExportTask(t) ? '<button class="link-btn" onclick="openExportModal(\'' + t.id + '\')">导出</button>' : '';
+        return canExportTask(t) ? `<button class="link-btn" onclick="openExportModal('${t.id}')">导出</button>` : '';
       }
-      var actions = '<button class="link-btn" onclick="openAdminTaskDetailModal(\'' + t.id + '\')">查看</button>';
-      actions += canEditTask(t) ? '<button class="link-btn" onclick="openTaskModal(\'' + t.id + '\')">编辑</button>' : '<button class="link-btn" disabled>编辑</button>';
-      if (canAdminReview(t)) actions += '<button class="link-btn" onclick="openReviewModal(\'' + t.id + '\')">复核</button>';
-      if (canExportTask(t)) actions += '<button class="link-btn" onclick="openExportModal(\'' + t.id + '\')">导出</button>';
-      if (t.status !== '已完成') actions += '<button class="link-btn danger" onclick="deleteTask(\'' + t.id + '\')">删除</button>';
+      var actions = `<button class="link-btn" onclick="openAdminTaskDetailModal('${t.id}')">查看</button>`;
+      actions += canEditTask(t) ? `<button class="link-btn" onclick="openTaskModal('${t.id}')">编辑</button>` : '<button class="link-btn" disabled>编辑</button>';
+      if (hasReclaimableAssignments(t)) actions += `<button class="link-btn" onclick="openTaskShardActionModal('${t.id}','reclaim')">回收</button>`;
+      if (hasReclaimedAssignments(t)) actions += `<button class="link-btn" onclick="openTaskShardActionModal('${t.id}','redistribute')">重新分配</button>`;
+      if (canAdminReview(t)) actions += `<button class="link-btn" onclick="openReviewModal('${t.id}')">复核</button>`;
+      if (canExportTask(t)) actions += `<button class="link-btn" onclick="openExportModal('${t.id}')">导出</button>`;
+      if (t.status !== '已完成') actions += `<button class="link-btn danger" onclick="deleteTask('${t.id}')">删除</button>`;
       return actions;
     }
 
@@ -4297,8 +4595,9 @@
         t.status = '待标注';
         if (getReviewStatus(t) === '已撤回') t.reviewStatus = '未提交';
       }
+      if (typeof p0EnsureTaskImages === 'function') p0EnsureTaskImages();
       persistAnnotationConfig();
-      window.location.href = '影像标注工具.html?taskId=' + encodeURIComponent(taskId || '');
+      window.location.href = '影像标注工具.html?taskId=' + encodeURIComponent(taskId || '') + '&role=' + encodeURIComponent(currentRole) + '&user=' + encodeURIComponent(currentRole === 'annotator' ? currentAnnotator : currentRole === 'reviewer' ? currentReviewer : '张教授');
     }
 
     function viewTarget(taskId) {
@@ -4345,7 +4644,50 @@
       openAdminTaskDetailModal(taskId);
     }
 
-    function openAdminTaskDetailModal(taskId) {
+    
+    function hasReclaimableAssignments(t) {
+      return getTaskAssignments(t).some(function (a) { return a.status !== '已回收' && a.done < a.total && a.total > 0; });
+    }
+
+    function hasReclaimedAssignments(t) {
+      return getTaskAssignments(t).some(function (a) { return a.status === '已回收'; });
+    }
+
+    function openTaskShardActionModal(taskId, mode) {
+      var t = tasks.find(function (item) { return item.id === taskId; });
+      if (!t) {
+        showToast('未找到任务');
+        return;
+      }
+      ensureTaskAssignments(t);
+      var assignments = getTaskAssignments(t).filter(function (a) {
+        return mode === 'redistribute' ? a.status === '已回收' : a.status !== '已回收' && a.done < a.total && a.total > 0;
+      });
+      document.getElementById('taskShardActionTitle').textContent = mode === 'redistribute' ? '重新分配分片' : '回收分片';
+      document.getElementById('taskShardActionTaskName').textContent = t.name;
+      document.getElementById('taskShardActionModeLabel').textContent = mode === 'redistribute' ? '重新分配' : '回收';
+      document.getElementById('taskShardActionCount').textContent = assignments.length;
+      document.getElementById('taskShardActionHint').textContent = mode === 'redistribute'
+        ? '仅显示已回收分片。点击“重新分配”后进入人员选择。'
+        : '仅显示未提交的可回收分片。点击“回收”后该分片进入待重新分配。';
+      document.getElementById('taskShardActionBody').innerHTML = assignments.map(function (a) {
+        var op = mode === 'redistribute'
+          ? '<button class="link-btn" onclick="openRedistributeModal(\'' + t.id + '\',\'' + a.id + '\')">重新分配</button>'
+          : '<button class="link-btn" onclick="reclaimAssignment(\'' + t.id + '\',\'' + a.id + '\');closeModal(\'taskShardActionModal\')">回收</button>';
+        return '<tr>' +
+          '<td>' + a.person + '</td>' +
+          '<td>' + a.range + '</td>' +
+          '<td>' + a.done + '/' + a.total + '</td>' +
+          '<td>' + getReclaimTag(t, a) + '</td>' +
+          '<td>' + op + '</td>' +
+          '</tr>';
+      }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--gray-500);padding:16px;">暂无可操作分片</td></tr>';
+      currentShardActionTaskId = taskId;
+      currentShardActionMode = mode;
+      openModal('taskShardActionModal');
+    }
+
+function openAdminTaskDetailModal(taskId) {
       var t = tasks.find(function (item) { return item.id === taskId; });
       if (!t) {
         showToast('未找到任务');
@@ -4424,8 +4766,9 @@
           '<td>' + a.range + '</td>' +
           '<td>' + a.done + '/' + a.total + '</td>' +
           '<td><span class="tag ' + tagCls + '">' + conclusion + '</span></td>' +
+          '<td>' + getAssignmentActions(t, a) + '</td>' +
           '</tr>';
-      }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--gray-500);padding:16px;">暂无标注分片</td></tr>';
+      }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--gray-500);padding:16px;">暂无标注分片</td></tr>';
       openModal('annotationDetailModal');
     }
 
@@ -4529,7 +4872,7 @@
             id: img.id || sample.id || (t.id + '-IMG-' + pad(index + 1)),
             src: img.src || getAnnotationPreviewImage(t),
             source: owner ? owner.person : img.source || sample.source || t.annotators[index % Math.max(1, t.annotators.length)] || '标注员',
-            status: owner ? owner.status : img.status || (index < t.annotated ? '已标注' : '待标注'),
+            status: owner ? owner.status : img.status || (index < t.annotated ? '已提交' : '待标注'),
             diff: img.diff || sample.diff || (labels[index % Math.max(1, labels.length)] || '标注结果')
           };
         });
@@ -4544,7 +4887,7 @@
           id: sample.id || (t.id + '-IMG-' + pad(i + 1)),
           src: src,
           source: owner ? owner.person : sample.source || t.annotators[i % Math.max(1, t.annotators.length)] || '标注员',
-          status: owner ? owner.status : i < t.annotated ? '已标注' : '待标注',
+          status: owner ? owner.status : i < t.annotated ? '已提交' : '待标注',
           diff: sample.diff || (labels[i % Math.max(1, labels.length)] || '标注结果')
         });
       }
@@ -4607,6 +4950,17 @@
         showToast('该任务已完成，无需重复提交');
         return;
       }
+      if (t.status === '待审核') {
+        if (isAnnotatorTaskReadyForSubmit(t)) {
+          t.reviewStatus = t.reviewStatus || '待审核';
+          renderTaskTable();
+          persistAnnotationConfig();
+          showToast('全部样本已提交，任务已统一进入待审核');
+          return;
+        }
+        showToast('当前任务已进入审核流程，无需重复提交');
+        return;
+      }
       if (!canAnnotatorSubmit(t)) {
         var submitBtn = document.getElementById('annotatorSubmitBtn');
         if (submitBtn) submitBtn.style.display = 'none';
@@ -4658,6 +5012,9 @@
       selectedAnnotators = t ? t.annotators.slice() : ['李医生', '王医生'];
       selectedReviewers = t ? t.reviewers.slice() : ['张教授'];
       setTaskTypeCards(t ? typeTextToTypes(t.type) : ['图像分类', '目标检测', '图像分割']);
+      renderLabelSetOptions();
+      setSelectValue('newLabelSet', t ? getTaskLabelSetId(t) : (document.getElementById('newLabelSet') ? document.getElementById('newLabelSet').value : ''));
+      renderNewTaskLabelPreview();
       document.getElementById('newReviewMode').value = t ? normalizeReviewMode(t.reviewMode) : '单轮审核';
       renderPeoplePickers();
       setTaskFormEditMode(!!t);
@@ -4666,7 +5023,7 @@
     }
 
     function setTaskFormEditMode(isEditing) {
-      ['newTaskName', 'newDataset', 'newProject', 'newDataFormat', 'newReviewMode'].forEach(function (id) {
+      ['newTaskName', 'newDataset', 'newProject', 'newDataFormat', 'newReviewMode', 'newLabelSet'].forEach(function (id) {
         var field = document.getElementById(id);
         if (field) field.disabled = !!isEditing;
       });
@@ -4956,6 +5313,7 @@
     function selectCard(el) {
       if (el && el.classList.contains('disabled')) return;
       el.classList.toggle('selected');
+      renderLabelSetOptions();
     }
 
     function setTaskTypeCards(types) {
@@ -5055,8 +5413,14 @@
       }
       if (target) {
         var keepAssignments = target.assignments && samePeopleList(target.annotators, selectedAnnotators);
+        var selectedLabelSet = document.getElementById('newLabelSet') ? document.getElementById('newLabelSet').value : '';
+        if (!selectedLabelSet) {
+          showToast('请选择与任务类型匹配的标签集');
+          return;
+        }
         target.annotators = selectedAnnotators.slice();
         target.reviewers = selectedReviewers.slice();
+        target.labelSet = selectedLabelSet;
         target.assignments = keepAssignments ? target.assignments : buildInitialAssignments(target, selectedAnnotators);
         closeModal('taskModal');
         editingTaskId = null;
@@ -5077,6 +5441,11 @@
         showToast('请至少选择一种标注任务类型');
         return;
       }
+      var selectedLabelSet = document.getElementById('newLabelSet') ? document.getElementById('newLabelSet').value : '';
+      if (!selectedLabelSet) {
+        showToast('请选择与任务类型匹配的标签集');
+        return;
+      }
       var taskData = {
         id: 'T' + new Date().getFullYear() + pad(new Date().getMonth() + 1) + pad(new Date().getDate()) + pad(tasks.length + 1).padStart(4, '0'),
         name: name,
@@ -5092,15 +5461,16 @@
         createdAt: formatDateTime(new Date()),
         annotators: selectedAnnotators.slice(),
         reviewers: selectedReviewers.slice(),
-        labelSet: '',
+        labelSet: selectedLabelSet,
         quality: 0,
         reviewMode: document.getElementById('newReviewMode').value,
-        recycleMode: '提交后进入待审核',
+        recycleMode: '管理员手动回收',
         previewImages: datasetMeta ? buildDatasetPreviewImages(datasetMeta) : null,
         assignments: null
       };
       taskData.assignments = buildInitialAssignments(taskData, selectedAnnotators);
       tasks.unshift(taskData);
+      if (typeof p0EnsureTaskImages === 'function') p0EnsureTaskImages();
       if (previousDatasetId && previousDatasetId !== selectedDataset) syncDatasetStatusFromTasks(previousDatasetId);
       syncDatasetStatusFromTasks(selectedDataset);
       closeModal('taskModal');
@@ -5184,10 +5554,8 @@
     }
 
     function getRedistributeCandidates(t, assignment) {
-      var blocked = (t.annotators || []).slice();
       var oldPerson = assignment.reclaimedFrom || assignment.reassignedFrom || assignment.person;
-      if (blocked.indexOf(oldPerson) < 0) blocked.push(oldPerson);
-      return peopleOptions.filter(function (name) { return blocked.indexOf(name) < 0; });
+      return peopleOptions.filter(function (name) { return name && name !== oldPerson; });
     }
 
     function openRedistributeModal(taskId, assignmentId) {
@@ -5214,7 +5582,7 @@
         : '<option value="">暂无可用标注员</option>';
       var submitBtn = document.getElementById('redistributeSubmitBtn');
       if (submitBtn) submitBtn.disabled = !candidates.length;
-      setText('redistributePreview', candidates.length ? '只列出未参与当前任务且不是原分配人的标注员。' : '没有可接收该分片的新增标注员，请先在人员库中补充人员。');
+      setText('redistributePreview', candidates.length ? '只排除原标注员；可分配给当前任务内其他标注员或新增标注员，系统保持样本不重叠。' : '没有可接收该分片的其他标注员，请先在人员库中补充人员。');
       openModal('redistributeModal');
     }
 
@@ -5232,6 +5600,7 @@
       if (!t) return;
       var assignment = findTaskAssignment(t, assignmentRef);
       if (!assignment || assignment.status === '已回收') return;
+      var originalPerson = assignment.person;
       if (!t.reclaimedBy) t.reclaimedBy = [];
       if (t.reclaimedBy.indexOf(assignment.id) < 0) t.reclaimedBy.push(assignment.id);
       assignment.reclaimedFrom = assignment.person;
@@ -5602,6 +5971,7 @@
       document.getElementById('newTaskName').value = name + ' 标注任务';
       document.getElementById('newProject').value = project;
       setTaskTypeCards(taskTypes);
+      renderLabelSetOptions();
       showToast('数据已导入：' + name + '，已进入任务分配');
     }
 
@@ -5763,6 +6133,441 @@
         window.location.href = 'login.html';
       }
     }
+
+
+
+    /* ================= P0 闭环原型增强 ================= */
+    var p0SelectedReviewImageId = null;
+
+    function p0GetCurrentUserName() {
+      try {
+        var user = JSON.parse(localStorage.getItem('life_med_user') || 'null');
+        if (user && user.name) return user.name;
+      } catch (e) { }
+      return currentRole === 'reviewer' ? currentReviewer : currentRole === 'annotator' ? currentAnnotator : '张教授';
+    }
+
+    function p0EnsureTaskImages() {
+      if (!Array.isArray(tasks)) return;
+      tasks.forEach(function (t) {
+        if (!t || !t.imageCount) return;
+        var oldImages = Array.isArray(t.images) ? t.images : [];
+        var byId = {};
+        oldImages.forEach(function (img) { if (img && img.imageId) byId[img.imageId] = img; });
+        var assignments = getTaskAssignments(t);
+        var next = [];
+        for (var i = 0; i < t.imageCount; i++) {
+          var imageId = t.id + '-IMG-' + String(i + 1).padStart(6, '0');
+          var owner = assignments.find(function (a) { return i + 1 >= a.start && i + 1 <= a.end; });
+          var img = byId[imageId] || {
+            imageId: imageId,
+            name: imageId,
+            index: i + 1,
+            datasetId: t.dataset,
+            annotatorId: owner ? owner.person : (t.annotators && t.annotators[0]) || '未分配',
+            annotationStatus: '待标注',
+            reviewStatus: '未审核',
+            version: 1,
+            annotations: [],
+            aiAnnotations: [],
+            rejectedAIAnnotations: [],
+            measurements: [],
+            diagnosisConclusion: '',
+            classificationLabel: '',
+            qualityReport: null,
+            submittedAt: '',
+            reviewedAt: '',
+            reviewNote: ''
+          };
+          if (!img.annotatorId && owner) img.annotatorId = owner.person;
+          next.push(img);
+        }
+        /* 仅为演示数据初始化已有任务的进度，不覆盖真实标注结果。 */
+        if (!oldImages.length) {
+          var annotatedCount = Math.min(t.annotated || 0, next.length);
+          var reviewedCount = Math.min(t.reviewed || 0, annotatedCount);
+          for (var j = 0; j < annotatedCount; j++) {
+            next[j].annotationStatus = '已提交';
+            next[j].submittedAt = t.submittedAt || t.createdAt || '';
+            next[j].reviewStatus = j < reviewedCount ? '审核通过' : (t.status === '已退回' && j === 0 ? '退回修改' : '待审核');
+            if (j < reviewedCount) next[j].reviewedAt = t.reviewedAt || '';
+          }
+        }
+        if (t.status === '已完成') {
+          next.forEach(function (img) { img.annotationStatus = '已提交'; img.reviewStatus = '审核通过'; });
+        }
+        if (t.status === '已退回' && next.length && next[0].annotationStatus === '待标注') {
+          next[0].annotationStatus = '已提交';
+          next[0].reviewStatus = '退回修改';
+        }
+        t.images = next;
+        p0SyncTaskFromImages(t, false);
+      });
+    }
+
+    function p0SyncTaskFromImages(t, persist) {
+      if (!t || !Array.isArray(t.images)) return;
+      var images = t.images;
+      t.imageCount = images.length || t.imageCount || 0;
+      t.annotated = images.filter(function (img) { return ['已提交', '已标注'].indexOf(img.annotationStatus) >= 0 || img.reviewStatus === '审核通过'; }).length;
+      t.submittedCount = images.filter(function (img) { return img.annotationStatus === '已提交' || img.reviewStatus === '审核通过'; }).length;
+      t.reviewed = images.filter(function (img) { return img.reviewStatus === '审核通过'; }).length;
+      t.returnedCount = images.filter(function (img) { return img.reviewStatus === '退回修改'; }).length;
+      t.pendingReviewCount = images.filter(function (img) { return img.annotationStatus === '已提交' && img.reviewStatus !== '审核通过'; }).length;
+      var allSubmitted = t.imageCount > 0 && t.submittedCount >= t.imageCount;
+      var allReviewed = t.imageCount > 0 && t.reviewed >= t.imageCount;
+      if (allReviewed) {
+        t.status = '已完成';
+        t.reviewStatus = '审核通过';
+      } else if (t.returnedCount > 0) {
+        t.status = '已退回';
+        t.reviewStatus = '审核退回';
+      } else if (allSubmitted) {
+        /* 统一进入审核：必须所有标注员的样本都提交后，任务才进入待审核。 */
+        t.status = '待审核';
+        t.reviewStatus = t.reviewStatus === '多人复核中' ? '多人复核中' : '待审核';
+        if (!t.submittedAt) t.submittedAt = formatDateTime(new Date());
+      } else {
+        t.status = '待标注';
+        if (t.reviewStatus !== '已撤回') t.reviewStatus = '未提交';
+      }
+      if (Array.isArray(t.assignments)) {
+        t.assignments.forEach(function (a) {
+          var owned = images.filter(function (img) { return img.annotatorId === a.person && img.index >= a.start && img.index <= a.end; });
+          a.total = owned.length || a.total || 0;
+          a.done = owned.filter(function (img) { return img.annotationStatus === '已提交' || img.reviewStatus === '审核通过'; }).length;
+          a.progress = a.total ? Math.round(a.done / a.total * 100) : 0;
+          if (a.status !== '已回收') a.status = a.done >= a.total && a.total ? '已提交' : a.done ? '标注中' : '未开始';
+        });
+      }
+      if (persist) persistAnnotationConfig();
+    }
+
+    function p0RenderReviewSamples(t) {
+      var body = document.getElementById('p0ReviewSamples');
+      if (!body || !t || !Array.isArray(t.images)) return;
+      var list = t.images.filter(function (img) { return img.annotationStatus === '已提交' && img.reviewStatus !== '审核通过'; });
+      if (!list.length) list = t.images;
+      if (!p0SelectedReviewImageId || !list.some(function (img) { return img.imageId === p0SelectedReviewImageId; })) p0SelectedReviewImageId = list[0] ? list[0].imageId : null;
+      body.innerHTML = '<div class="p0-review-list-title">样本级审核（当前任务全部标注员完成后统一进入）</div>' +
+        '<div class="p0-review-list">' + list.map(function (img) {
+          var active = img.imageId === p0SelectedReviewImageId ? ' active' : '';
+          return '<button type="button" class="p0-review-sample' + active + '" onclick="p0SelectReviewSample(\'' + img.imageId + '\')">' +
+            '<strong>' + img.imageId + '</strong><span>' + (img.annotatorId || '-') + ' · ' + (img.reviewStatus || '未审核') + '</span></button>';
+        }).join('') + '</div>';
+      var selected = t.images.find(function (img) { return img.imageId === p0SelectedReviewImageId; });
+      if (selected) body.innerHTML += '<div class="p0-review-selected">当前样本：<b>' + selected.imageId + '</b>　标注员：' + (selected.annotatorId || '-') + '　标注状态：' + selected.annotationStatus + '　审核状态：' + selected.reviewStatus + '</div>';
+    }
+
+    function p0SelectReviewSample(imageId) {
+      p0SelectedReviewImageId = imageId;
+      var t = tasks.find(function (item) { return item.id === currentReviewTask; });
+      if (!t) return;
+      p0RenderReviewSamples(t);
+      var selected = t.images.find(function (img) { return img.imageId === imageId; });
+      if (selected) {
+        var note = document.getElementById('reviewNote');
+        if (note) note.value = selected.reviewNote || '';
+        var meta = document.getElementById('reviewImageMeta');
+        if (meta) meta.textContent = selected.imageId + ' · ' + (selected.annotatorId || '-') + ' · ' + selected.annotationStatus + ' · ' + selected.reviewStatus;
+      }
+    }
+
+    var p0OriginalInitPage = initPage;
+    initPage = function () {
+      p0EnsureTaskImages();
+      persistAnnotationConfig();
+      p0OriginalInitPage();
+    };
+
+    var p0OriginalOpenReviewModal = openReviewModal;
+    openReviewModal = function (taskId) {
+      p0OriginalOpenReviewModal(taskId);
+      var modalBody = document.querySelector('#reviewModal .modal-body');
+      if (modalBody && !document.getElementById('p0ReviewSamples')) {
+        var panel = document.createElement('div');
+        panel.id = 'p0ReviewSamples';
+        panel.className = 'p0-review-panel';
+        modalBody.appendChild(panel);
+      }
+      var t = tasks.find(function (item) { return item.id === taskId; });
+      if (t) { p0SelectedReviewImageId = null; p0RenderReviewSamples(t); }
+    };
+
+    var p0OriginalSubmitReview = submitReview;
+    submitReview = function () {
+      var t = tasks.find(function (item) { return item.id === currentReviewTask; });
+      var selected = t && t.images ? t.images.find(function (img) { return img.imageId === p0SelectedReviewImageId; }) : null;
+      if (!selected) { p0OriginalSubmitReview(); return; }
+      var result = document.getElementById('reviewResult').value;
+      var note = (document.getElementById('reviewNote').value || '').trim();
+      if (result === '退回修改' && !note) {
+        showToast('退回修改必须填写审核意见，说明样本问题和修改要求');
+        return;
+      }
+      if (result === '多人复核') {
+        t.reviewStatus = '多人复核中';
+        t.multiReviewRequestedBy = currentRole === 'reviewer' ? currentReviewer : '管理员';
+        t.multiReviewRequestedAt = formatDateTime(new Date());
+        t.multiReviewNote = note;
+      } else if (result === '通过') {
+        selected.reviewStatus = '审核通过';
+        selected.reviewNote = note;
+        selected.reviewedBy = currentRole === 'reviewer' ? currentReviewer : '管理员';
+        selected.reviewedAt = formatDateTime(new Date());
+      } else if (result === '退回修改') {
+        selected.reviewStatus = '退回修改';
+        selected.reviewNote = note;
+        selected.reviewedBy = currentRole === 'reviewer' ? currentReviewer : '管理员';
+        selected.reviewedAt = formatDateTime(new Date());
+      } else {
+        showToast('请选择审核结论');
+        return;
+      }
+      p0SyncTaskFromImages(t, false);
+      currentReviewDraftState = null;
+      closeModal('reviewModal');
+      renderTaskTable(); renderReviewQueue(); updateStats(); persistAnnotationConfig();
+      showToast(selected.reviewStatus === '审核通过' ? '当前样本审核通过' : selected.reviewStatus === '退回修改' ? '当前样本已退回修改' : '已发起多人复核');
+    };
+
+    var p0OriginalCanSubmit = isAnnotatorTaskReadyForSubmit;
+    isAnnotatorTaskReadyForSubmit = function (t) {
+      p0EnsureTaskImages();
+      return !!t && Array.isArray(t.images) && t.images.length > 0 && t.images.every(function (img) { return img.annotationStatus === '已提交' || img.reviewStatus === '审核通过'; }) && t.status !== '已完成';
+    };
+    canAnnotatorSubmit = function (t) { return isAnnotatorTaskReadyForSubmit(t); };
+
+    var p0OriginalSubmitAnnotatorTask = submitAnnotatorTask;
+    submitAnnotatorTask = function (taskId) {
+      var t = tasks.find(function (item) { return item.id === (taskId || currentAnnotatorTaskId); });
+      p0EnsureTaskImages();
+      if (t) p0SyncTaskFromImages(t, false);
+      if (t && t.status === '待审核') {
+        showToast('全部样本已提交，任务已统一进入待审核');
+        renderTaskTable(); renderReviewQueue(); updateStats(); persistAnnotationConfig();
+        return;
+      }
+      if (!t || !isAnnotatorTaskReadyForSubmit(t)) {
+        showToast('必须等待所有标注员完成全部样本后，任务才能统一提交审核');
+        return;
+      }
+      p0OriginalSubmitAnnotatorTask(taskId);
+    };
+
+
+
+    /* P0-2 最简分发回收规则：仅管理员手动回收未提交的完整分片，再重新分配。 */
+    var p0OriginalGetAssignmentActions = getAssignmentActions;
+    getAssignmentActions = function (t, a) {
+      if (currentRole !== 'admin') return '<span class="stat-meta">仅管理员可操作</span>';
+      if (!a) return '<span class="stat-meta">-</span>';
+      if (a.status === '已回收') return '<button class="link-btn" onclick="openRedistributeModal(\'' + t.id + '\',\'' + a.id + '\')">重新分配</button>';
+      if (t.status === '已完成' || a.status === '已提交') return '<span class="stat-meta">已提交，不可回收</span>';
+      return '<button class="link-btn" onclick="reclaimAssignment(\'' + t.id + '\',\'' + a.id + '\')">回收分片</button>';
+    };
+
+    reclaimAssignment = function (taskId, assignmentRef) {
+      if (currentRole !== 'admin') { showToast('仅管理员可以回收分片'); return; }
+      var t = tasks.find(function (item) { return item.id === taskId; });
+      if (!t) return;
+      var assignment = findTaskAssignment(t, assignmentRef);
+      if (!assignment || assignment.status === '已回收') return;
+      var originalPerson = assignment.person;
+      p0EnsureTaskImages();
+      var owned = (t.images || []).filter(function (img) { return img.index >= assignment.start && img.index <= assignment.end && img.annotatorId === assignment.person; });
+      var submitted = owned.filter(function (img) { return img.annotationStatus === '已提交' || img.reviewStatus === '审核通过'; });
+      var pending = owned.filter(function (img) { return img.annotationStatus !== '已提交' && img.reviewStatus !== '审核通过'; });
+      if (!pending.length) {
+        showToast('该分片全部已提交，不能回收');
+        return;
+      }
+      var reason = window.prompt('请输入回收原因：', '人员调整');
+      if (reason === null) return;
+      reason = reason.trim() || '未填写';
+      if (!t.reclaimRecords) t.reclaimRecords = [];
+      t.reclaimRecords.push({ assignmentId: assignment.id, from: originalPerson, reason: reason, at: formatDateTime(new Date()), operator: p0GetCurrentUserName(), pendingCount: pending.length });
+
+      /* 已提交样本保留原标注员；未提交样本拆为一个待重新分配分片。 */
+      var reclaimedId = assignment.id + '-R' + String((t.reclaimRecords.length)).padStart(2, '0');
+      var reclaimedIndexes = pending.map(function (img) { return img.index; }).sort(function (a, b) { return a - b; });
+      var reclaimedAssignment = {
+        id: reclaimedId,
+        person: '待重新分配',
+        start: reclaimedIndexes[0],
+        end: reclaimedIndexes[reclaimedIndexes.length - 1],
+        total: reclaimedIndexes.length,
+        done: 0,
+        progress: 0,
+        range: 'IMG-' + pad(reclaimedIndexes[0]) + ' 至 IMG-' + pad(reclaimedIndexes[reclaimedIndexes.length - 1]),
+        status: '已回收',
+        reclaimedFrom: originalPerson,
+        recycleReason: reason,
+        reclaimedAt: formatDateTime(new Date())
+      };
+      assignment.total = submitted.length;
+      assignment.done = submitted.length;
+      assignment.progress = assignment.total ? 100 : 0;
+      assignment.end = submitted.length ? Math.max.apply(null, submitted.map(function (img) { return img.index; })) : assignment.end;
+      assignment.status = submitted.length ? '已提交' : '已回收';
+      assignment.range = submitted.length ? '已提交样本 ' + submitted.length + ' 张' : assignment.range;
+      if (!submitted.length) {
+        assignment.person = '待重新分配';
+        assignment.reclaimedFrom = assignment.reclaimedFrom || originalPerson;
+        reclaimedAssignment.id = assignment.id;
+        t.assignments = (t.assignments || []).filter(function (a) { return a.id !== assignment.id; });
+        t.assignments.push(reclaimedAssignment);
+      } else {
+        t.assignments = (t.assignments || []).filter(function (a) { return a.id !== assignment.id; });
+        t.assignments.push(assignment);
+        t.assignments.push(reclaimedAssignment);
+      }
+      pending.forEach(function (img) {
+        img.assignmentId = reclaimedId;
+        img.annotatorId = '';
+        img.annotationStatus = '待重新分配';
+        img.reviewStatus = '未审核';
+      });
+      t.status = '待标注'; t.reviewStatus = '未提交';
+      p0SyncTaskFromImages(t, false);
+      renderTaskTable(); renderOperations(); updateStats(); persistAnnotationConfig();
+      showToast('已回收未提交样本 ' + pending.length + ' 张，请重新分配标注员');
+    };
+
+    redistributeTask = function (taskId, assignmentId, selectedPerson) {
+      if (currentRole !== 'admin') { showToast('仅管理员可以重新分配'); return; }
+      var t = tasks.find(function (item) { return item.id === taskId; });
+      if (!t) return;
+      var assignment = findTaskAssignment(t, assignmentId);
+      if (!assignment || assignment.status !== '已回收') { showToast('请选择已回收的分片'); return; }
+      if (!selectedPerson) { openRedistributeModal(taskId, assignmentId); return; }
+      if (getRedistributeCandidates(t, assignment).indexOf(selectedPerson) < 0) { showToast('所选标注员不可接收该分片'); return; }
+      var oldPerson = assignment.reclaimedFrom || assignment.person;
+      assignment.reassignedFrom = oldPerson;
+      assignment.person = selectedPerson;
+      assignment.status = '待标注';
+      assignment.reassignedAt = formatDateTime(new Date());
+      assignment.done = 0; assignment.progress = 0;
+      assignment.reclaimedAt = '';
+      (t.images || []).forEach(function (img) {
+        if (img.assignmentId === assignment.id || (img.index >= assignment.start && img.index <= assignment.end && (!img.annotatorId || img.annotationStatus === '待重新分配'))) {
+          img.assignmentId = assignment.id;
+          img.annotatorId = selectedPerson;
+          img.annotationStatus = (img.annotations && img.annotations.length) || (img.aiAnnotations && img.aiAnnotations.length) ? '标注中' : '待标注';
+          img.reviewStatus = '未审核';
+        }
+      });
+      if (!t.annotators) t.annotators = [];
+      if (t.annotators.indexOf(selectedPerson) < 0) t.annotators.push(selectedPerson);
+      t.status = '待标注'; t.reviewStatus = '未提交';
+      p0SyncTaskFromImages(t, false);
+      renderTaskTable(); renderOperations(); updateStats(); persistAnnotationConfig();
+      closeModal('redistributeModal'); currentRedistributeTaskId = null; currentRedistributeAssignmentId = null;
+      showToast('已将 ' + assignment.range + ' 重新分配给 ' + selectedPerson + '，请完成后再提交审核');
+    };
+
+    /* 不再提供“自动回收空闲分片”，避免没有明确业务依据的自动操作。 */
+    reclaimIdleAssignments = function () { showToast('当前原型仅支持管理员手动回收分片'); };
+
+    /* 原型中的页面需要使用正式文件名；同时把当前操作人带入标注工作台。 */
+
+
+    /* ============ P2 审核结果闭环 ============ */
+    function p2EnsureTaskImagesForView() {
+      if (typeof p0EnsureTaskImages === 'function') p0EnsureTaskImages();
+    }
+
+    function p2DatasetReviewSummary(datasetId) {
+      var records = [];
+      (tasks || []).forEach(function (task) {
+        if (task.dataset !== datasetId && task.datasetId !== datasetId) return;
+        p2EnsureTaskImagesForView();
+        (task.images || []).forEach(function (img) { records.push({ task: task, image: img }); });
+      });
+      var pass = records.filter(function (r) { return r.image.reviewStatus === '审核通过'; }).length;
+      var returned = records.filter(function (r) { return r.image.reviewStatus === '退回修改'; }).length;
+      var pending = records.filter(function (r) { return r.image.annotationStatus === '已提交' && r.image.reviewStatus !== '审核通过' && r.image.reviewStatus !== '退回修改'; }).length;
+      var latest = records.slice().sort(function (a, b) { return String(b.image.reviewedAt || '').localeCompare(String(a.image.reviewedAt || '')); })[0];
+      return { records: records, pass: pass, returned: returned, pending: pending, latest: latest };
+    }
+
+    var p2OriginalRenderDatasetPanel = renderDatasetPanel;
+    renderDatasetPanel = function () {
+      var body = document.getElementById('datasetTableBody');
+      if (!body) return p2OriginalRenderDatasetPanel();
+      var list = getFilteredDatasets();
+      body.innerHTML = list.map(function (dataset) {
+        var summary = p2DatasetReviewSummary(dataset.id);
+        var latest = summary.latest;
+        var statusHtml = '<div class="p2-review-summary">' +
+          (summary.pass ? '<span class="p2-review-chip pass">审核通过 ' + summary.pass + '</span>' : '') +
+          (summary.returned ? '<span class="p2-review-chip return">审核退回 ' + summary.returned + '</span>' : '') +
+          (summary.pending ? '<span class="p2-review-chip pending">待审核 ' + summary.pending + '</span>' : '') +
+          (!summary.pass && !summary.returned && !summary.pending ? '<span class="stat-meta">暂无审核记录</span>' : '') + '</div>';
+        var taskNames = []; summary.records.forEach(function (r) { if (taskNames.indexOf(r.task.name) < 0) taskNames.push(r.task.name); });
+        var reviewer = latest && latest.image.reviewedBy ? latest.image.reviewedBy : (latest && latest.task.reviewedBy ? latest.task.reviewedBy : '-');
+        var reviewedAt = latest && latest.image.reviewedAt ? latest.image.reviewedAt : (latest && latest.task.reviewedAt ? latest.task.reviewedAt : '-');
+        return '<tr>' +
+          '<td><strong>' + escapeLabelText(dataset.name || dataset.id) + '</strong><div class="stat-meta">' + escapeLabelText(dataset.id) + '</div></td>' +
+          '<td>' + escapeLabelText(getLinkedDatasetName(dataset)) + '</td>' +
+          '<td>' + escapeLabelText(dataset.project || '未命名项目') + '</td>' +
+          '<td>' + escapeLabelText(dataset.imageCount || 0) + ' 张</td>' +
+          '<td>' + escapeLabelText(dataset.format || '未识别') + '</td>' +
+          '<td>' + escapeLabelText(dataset.importedAt || '-') + '</td>' +
+          '<td>' + datasetStatusTag(dataset.status) + '</td>' +
+          '<td>' + statusHtml + '</td>' +
+          '<td>' + (taskNames.length ? escapeLabelText(taskNames.join('、')) : '<span class="stat-meta">-</span>') + '</td>' +
+          '<td>' + escapeLabelText(reviewer) + '</td>' +
+          '<td>' + escapeLabelText(reviewedAt) + '</td>' +
+          '<td>' + datasetActions(dataset) + '</td>' +
+          '</tr>';
+      }).join('') || '<tr><td colspan="12"><div class="empty-hint">暂无匹配图像数据</div></td></tr>';
+    };
+
+    function p2RenderAnnotatorFeedback(t) {
+      var modalBody = document.querySelector('#annotatorTaskModal .modal-body');
+      if (!modalBody || !t) return;
+      var panel = document.getElementById('p2AnnotatorFeedback');
+      if (!panel) { panel = document.createElement('div'); panel.id = 'p2AnnotatorFeedback'; panel.className = 'p2-feedback-panel'; modalBody.appendChild(panel); }
+      p2EnsureTaskImagesForView();
+      var person = currentAnnotator || '';
+      var returned = (t.images || []).filter(function (img) { return img.annotatorId === person && img.reviewStatus === '退回修改'; });
+      var history = [];
+      (t.images || []).forEach(function (img) {
+        if (img.annotatorId !== person || !Array.isArray(img.reviewHistory)) return;
+        img.reviewHistory.forEach(function (item) { history.push({ image: img, record: item }); });
+      });
+      if (!returned.length && !history.length) { panel.style.display = 'none'; panel.innerHTML = ''; return; }
+      panel.style.display = '';
+      var html = '<div class="p2-feedback-title">审核退回记录（当前待修改 ' + returned.length + ' 个，历史 ' + history.length + ' 条）</div>';
+      html += returned.map(function (img) {
+        var note = img.reviewNote || t.reviewNote || '审核员未填写具体意见';
+        var reviewer = img.reviewedBy || t.reviewedBy || '-';
+        var at = img.reviewedAt || t.reviewedAt || '-';
+        return '<div class="p2-feedback-item"><div class="p2-feedback-meta"><b>' + escapeLabelText(img.imageId) + '</b> · 审核员：' + escapeLabelText(reviewer) + ' · 审核时间：' + escapeLabelText(at) + ' · 当前待修改</div><div class="p2-feedback-note">退回原因：' + escapeLabelText(note) + '</div><button class="btn btn-outline" type="button" onclick="p2GoToAnnotate(\'' + img.imageId + '\')">去修改</button></div>';
+      }).join('');
+      html += history.map(function (item) {
+        var r = item.record;
+        return '<div class="p2-feedback-item"><div class="p2-feedback-meta"><b>' + escapeLabelText(item.image.imageId) + '</b> · 审核员：' + escapeLabelText(r.reviewedBy || '-') + ' · 审核时间：' + escapeLabelText(r.reviewedAt || '-') + ' · 已重新提交</div><div class="p2-feedback-note">退回原因：' + escapeLabelText(r.reviewNote || '审核员未填写具体意见') + '</div></div>';
+      }).join('');
+      panel.innerHTML = html;
+    }
+
+    function p2GoToAnnotate(imageId) {
+      var taskId = currentAnnotatorTaskId;
+      var task = tasks.find(function (item) { return item.id === taskId; });
+      if (!task) return;
+      persistAnnotationConfig();
+      var user = encodeURIComponent(currentAnnotator || '李医生');
+      window.location.href = '影像标注工具.html?taskId=' + encodeURIComponent(task.id) + '&imageId=' + encodeURIComponent(imageId) + '&role=annotator&user=' + user;
+    }
+
+    var p2OriginalOpenAnnotatorTaskModal = openAnnotatorTaskModal;
+    openAnnotatorTaskModal = function (taskId) {
+      p2OriginalOpenAnnotatorTaskModal(taskId);
+      var t = tasks.find(function (item) { return item.id === taskId; });
+      if (t) p2RenderAnnotatorFeedback(t);
+    };
 
     document.addEventListener('DOMContentLoaded', initPage);
   </script>

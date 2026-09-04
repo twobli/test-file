@@ -42,7 +42,7 @@ body.ai-qa-page-open { overflow: hidden; }
 
 /* ===== 顶部导航 ===== */
 .header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; }
+.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #fff; text-decoration: none; }
 .header .header-nav { display: flex; gap: 4px; margin-left: 40px; }
 .header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); }
 .header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
@@ -518,7 +518,7 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 
 <!-- ========== 顶部导航 ========== -->
 <div class="header">
-    <span class="logo">生命医学主题库应用</span>
+    <a href="app-center.html" class="logo">生命医学主题库应用</a>
     <div class="header-nav">
         <a href="眼底图像输入.html">AI眼底疾病筛查</a>
         <a href="临床数据开放共享.html">生命医学开放数据平台</a>
@@ -3553,5 +3553,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
 
 

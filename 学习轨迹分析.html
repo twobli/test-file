@@ -123,33 +123,32 @@
 <main class="main-content learning-track-page">
     <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>学习轨迹分析</span></div>
     <div class="page-head">
-        <div><h1 class="page-title">学习轨迹分析</h1><p class="page-desc">系统分析学习时间、活跃度和内容覆盖率等指标，方便后续独立调整统计口径。</p></div>
+        <div><h1 class="page-title">学习轨迹分析</h1></div>
         <div class="head-actions"><span class="tag green">自动统计</span></div>
     </div>
     <section class="card">
         <div class="card-header">
-            <div><div class="card-title">近7天学习时长</div><div class="card-subtitle">可查看全部学习构成，也可按基础课程、案例教学、技能实践、考试中心查看近7天趋势。</div></div>
+            <div><div class="card-title">近7天学习时长</div></div>
             <div class="track-tabs" id="trackTabs"></div>
         </div>
         <div class="track-layout" id="trackLayout">
             <div class="time-panel">
                 <div class="section-label"><b>每日总学习时长</b></div>
                 <div class="bar-chart" id="timeChart"></div>
-                <div class="chart-hint">选择“全部”时可点击日期查看当天构成；选择单个分类时右侧展示近7天趋势。</div>
             </div>
             <div class="daily-distribution" id="dailyDistribution"></div>
         </div>
     </section>
     <section class="card">
         <div class="card-header">
-            <div><div class="card-title">活跃度分析</div><div class="card-subtitle">将学习时长和学习频次拆开判断，分别对比基础课程、案例教学、技能实践、考试中心的活跃情况。</div></div>
+            <div><div class="card-title">活跃度分析</div></div>
             <span class="tag blue">活跃度</span>
         </div>
         <div class="analysis-panel" id="activityPanel"></div>
     </section>
     <section class="card">
         <div class="card-header">
-            <div><div class="card-title">内容覆盖率</div><div class="card-subtitle">按基础课程、案例教学、技能实践、考试中心分别统计已完成内容和应完成内容。</div></div>
+            <div><div class="card-title">内容覆盖率</div></div>
             <span class="tag green">覆盖率</span>
         </div>
         <div class="coverage-summary">
@@ -160,7 +159,7 @@
                 </div>
                 <div>
                     <div class="coverage-track"><i style="width:71%;background:var(--primary);"></i></div>
-                    <p class="coverage-summary-desc">综合基础课程、案例教学、技能实践、考试中心四类应完成内容，统计当前用户已完成学习范围。</p>
+                    <p class="coverage-summary-desc"></p>
                 </div>
                 <div class="coverage-summary-count">36 / 51<span>已完成 / 应完成</span></div>
             </div>
@@ -302,8 +301,8 @@ function renderActivityPanel(){
             '</div>';
     }).join('');
     panel.innerHTML='<div class="activity-split">'+
-        '<div class="activity-section"><div class="activity-section-title"><div><b>学习时长活跃度</b><span>以近7天累计学习时长进行对比，最高分类作为100%基准。</span></div><span class="tag blue">时长维度</span></div>'+durationRows+'</div>'+
-        '<div class="activity-section"><div class="activity-section-title"><div><b>学习频次活跃度</b><span>以近7天产生学习记录的天数进行对比，7天为满频次。</span></div><span class="tag green">频次维度</span></div>'+frequencyRows+'</div>'+
+        '<div class="activity-section"><div class="activity-section-title"><div><b>学习时长活跃度</b></div><span class="tag blue">时长维度</span></div>'+durationRows+'</div>'+
+        '<div class="activity-section"><div class="activity-section-title"><div><b>学习频次活跃度</b></div><span class="tag green">频次维度</span></div>'+frequencyRows+'</div>'+
         '</div>';
 }
 function switchTrackMode(key){currentTrackMode=key;renderTrackTabs();renderDailyDistribution();}

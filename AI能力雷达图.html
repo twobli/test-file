@@ -13,6 +13,7 @@
 .ability-row.active .ability-name { color: var(--primary); font-weight: 700; }
 .ability-detail-panel { margin-top: 16px; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; padding: 18px 18px 14px; }
 .ability-detail-chart { min-height: 230px; display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 18px; align-items: end; }
+.ability-detail-chart.model-layout { min-height: 230px; grid-template-columns: repeat(2, minmax(120px, 1fr)); align-items: end; }
 .ability-detail-chart.diagnosis-layout { display: block; min-height: 270px; }
 .ability-detail-chart.case-line-layout { display: block; min-height: 300px; }
 .ability-detail-chart.application-layout { min-height: 230px; grid-template-columns: repeat(3, minmax(120px, 1fr)); align-items: end; }
@@ -165,6 +166,64 @@ function calcAverage(items) {
         return sum + item.score;
     }, 0) / items.length);
 }
+var MODEL_TRAINING_STORAGE_KEY = 'life_med_model_training';
+function readModelTrainingStore() {
+    try {
+        var raw = localStorage.getItem(MODEL_TRAINING_STORAGE_KEY);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        return parsed && Array.isArray(parsed.attempts) ? parsed : null;
+    } catch (e) {
+        return null;
+    }
+}
+function getAttemptAccuracyPct(attempt) {
+    if (!attempt) return null;
+    var total = Number(attempt.totalScore);
+    var max = Number(attempt.maxScore);
+    if (isFinite(total) && isFinite(max) && max > 0) return total / max * 100;
+    if (attempt.scorePct !== undefined && attempt.scorePct !== null) return Number(attempt.scorePct);
+    if (attempt.latestPct !== undefined && attempt.latestPct !== null) return Number(attempt.latestPct);
+    if (attempt.bestPct !== undefined && attempt.bestPct !== null) return Number(attempt.bestPct);
+    return null;
+}
+function collectModelTrainingCategoryScores() {
+    var fallback = { classification: 87, segmentation: 73 };
+    var result = { classification: fallback.classification, segmentation: fallback.segmentation };
+    var store = readModelTrainingStore();
+    if (!store || !Array.isArray(store.attempts) || !store.attempts.length) return result;
+
+    var latestByTask = {};
+    store.attempts.forEach(function(attempt) {
+        if (!attempt || !attempt.taskKey) return;
+        var category = attempt.category === 'segmentation' ? 'segmentation' : 'classification';
+        var time = Date.parse(attempt.finishedAt || attempt.startedAt || attempt.createdAt || '') || 0;
+        var pct = getAttemptAccuracyPct(attempt);
+        var current = latestByTask[attempt.taskKey];
+        if (!current || time >= current.time) {
+            latestByTask[attempt.taskKey] = { category: category, time: time, pct: pct };
+        }
+    });
+
+    var grouped = { classification: [], segmentation: [] };
+    Object.keys(latestByTask).forEach(function(taskKey) {
+        var row = latestByTask[taskKey];
+        if (row && isFinite(row.pct)) grouped[row.category].push(Number(row.pct));
+    });
+
+    ['classification', 'segmentation'].forEach(function(category) {
+        if (!grouped[category].length) return;
+        result[category] = Math.round(grouped[category].reduce(function(sum, value) {
+            return sum + value;
+        }, 0) / grouped[category].length);
+    });
+
+    return result;
+}
+var modelTrainingCategoryScores = collectModelTrainingCategoryScores();
+var modelClassificationScore = modelTrainingCategoryScores.classification;
+var modelSegmentationScore = modelTrainingCategoryScores.segmentation;
+var modelOverallScore = Math.round((modelClassificationScore + modelSegmentationScore) / 2);
 var diagnosisSourceRows = {
     caseTeaching: [
         { name: '基础病例', score: 86, color: '#10b981' },
@@ -198,7 +257,7 @@ var caseAverageScore = calcAverage(caseCompetitionRecords.map(function(item) {
 var abilityData = [
     { key: 'knowledge', name: '知识掌握', score: knowledgeAverage, color: '#1a73e8' },
     { key: 'diagnosis', name: '诊断能力', score: diagnosisOverallScore, color: '#10b981' },
-    { key: 'model', name: '模型构建', score: 74, color: '#7c3aed' },
+    { key: 'model', name: '模型构建', score: modelOverallScore, color: '#7c3aed' },
     { key: 'research', name: '科研创新', score: 78, color: '#0891b2' },
     { key: 'case', name: '病例分析', score: caseAverageScore, color: '#f59e0b' },
     { key: 'application', name: '知识应用', score: 68, color: '#ef4444' }
@@ -219,11 +278,10 @@ var abilityDetails = {
     },
     model: {
         title: '模型构建',
-        tag: '综合评分 74%',
+        tag: '综合评分 ' + modelOverallScore + '%',
         rows: [
-            { name: '数据准备', score: 78, color: '#7c3aed' },
-            { name: '模型训练', score: 71, color: '#7c3aed' },
-            { name: '结果评估', score: 73, color: '#7c3aed' }
+            { name: '医学图像分类', score: modelClassificationScore, color: '#7c3aed' },
+            { name: '医学图像分割', score: modelSegmentationScore, color: '#7c3aed' }
         ]
     },
     research: {
@@ -276,9 +334,13 @@ function renderAbilityDetail(key) {
     document.getElementById('abilityDetailTag').textContent = detail.tag;
     var container = document.getElementById('abilityDetailChart');
     if (!container) return;
+    container.classList.remove('model-layout');
     container.classList.remove('diagnosis-layout');
     container.classList.remove('case-line-layout');
     container.classList.remove('application-layout');
+    if (key === 'model') {
+        container.classList.add('model-layout');
+    }
     if (key === 'diagnosis') {
         renderDiagnosisDetail(container, detail);
         return;

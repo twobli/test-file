@@ -16,13 +16,22 @@
 .credential-page .credential-metric.green { border-left:3px solid var(--success); }
 .credential-page .credential-metric.purple { border-left:3px solid var(--purple); }
 .credential-page .credential-metric.orange { border-left:3px solid var(--warning); }
+.credential-page .head-actions { display:flex; align-items:center; gap:10px; }
+.credential-page .result-search { display:flex; align-items:center; gap:8px; }
+.credential-page .result-search input { width:310px; height:40px; padding:0 12px; border:1px solid var(--gray-200); border-radius:8px; background:#fff; color:var(--gray-900); font-size:13px; outline:none; }
+.credential-page .result-search input:focus { border-color:#93c5fd; box-shadow:0 0 0 3px rgba(37,99,235,.08); }
+.credential-page .result-search button { height:40px; padding:0 16px; border:1px solid var(--primary); border-radius:8px; background:#fff; color:var(--primary); font-weight:700; cursor:pointer; }
+.credential-page .result-search button:hover { background:#eff6ff; }
 .credential-page .credential-panel { display:none; }
 .credential-page .credential-panel.active { display:block; }
 .credential-page .credential-panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
 .credential-page .credential-panel-head h3 { color:var(--gray-900); font-size:16px; }
 .credential-page .credential-panel-head p { color:var(--gray-500); font-size:12px; margin-top:3px; }
 .credential-page .credential-list { display:grid; gap:10px; }
+.credential-page .credential-group-title { margin:14px 0 8px; color:var(--gray-700); font-size:13px; font-weight:800; }
+.credential-page .credential-group-title:first-child { margin-top:0; }
 .credential-page .credential-item { display:grid; grid-template-columns:52px minmax(180px,1.1fr) minmax(180px,1fr) 116px auto; align-items:center; gap:14px; padding:14px; border:1px solid var(--gray-200); border-radius:10px; background:#fff; }
+.credential-page .course-cert-list .credential-item { grid-template-columns:52px minmax(220px,1fr) 116px auto; }
 .credential-page .credential-icon { width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:12px; font-size:22px; background:var(--primary-light); }
 .credential-page .credential-item.green .credential-icon { background:var(--success-light); }
 .credential-page .credential-item.purple .credential-icon { background:var(--purple-light); }
@@ -43,19 +52,40 @@
 .credential-page .credit-status.earned { color:var(--success); background:var(--success-light); }
 .credential-page .credit-status.pending { color:#b45309; background:var(--warning-light); }
 .credential-page .empty-note { padding:24px; text-align:center; color:var(--gray-500); font-size:12px; border:1px dashed var(--gray-300); border-radius:8px; }
+.credential-page .badge-board { display:grid; gap:18px; }
+.credential-page .badge-group { position:relative; padding:18px 20px; border:1px solid var(--gray-200); border-radius:10px; background:#fff; }
+.credential-page .badge-group-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.credential-page .badge-title strong { display:block; color:var(--gray-900); font-size:16px; line-height:1.35; }
+.credential-page .badge-title span { display:block; margin-top:5px; color:var(--gray-500); font-size:12px; }
+.credential-page .badge-level-tag { flex:0 0 auto; display:inline-flex; align-items:center; padding:5px 10px; border-radius:999px; background:var(--purple-light); color:var(--purple); font-size:12px; font-weight:800; }
+.credential-page .badge-level-tag.pending { color:var(--gray-500); background:var(--gray-100); }
+.credential-page .badge-levels { display:grid; grid-template-columns:repeat(4, minmax(118px, 1fr)); gap:22px; max-width:620px; }
+.credential-page .badge-level { display:grid; justify-items:center; gap:9px; color:var(--gray-500); }
+.credential-page .badge-medal { width:68px; height:68px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:#94a3b8; color:#fff; font-size:21px; font-weight:900; box-shadow:0 8px 22px rgba(148,163,184,.2), inset 0 0 0 7px rgba(255,255,255,.18); }
+.credential-page .badge-level.achieved .badge-medal { background:linear-gradient(135deg,#1d8fe8,#27b89a); box-shadow:0 10px 24px rgba(29,143,232,.24), inset 0 0 0 7px rgba(255,255,255,.2); }
+.credential-page .badge-name { color:var(--gray-900); font-size:13px; font-weight:800; text-align:center; }
+.credential-page .badge-rule { color:var(--gray-500); font-size:11px; text-align:center; line-height:1.5; }
 @media (max-width:1050px) {
     .credential-page .credential-overview { display:flex; }
     .credential-page .credential-item { grid-template-columns:52px minmax(180px,1fr) minmax(160px,1fr); }
+    .credential-page .course-cert-list .credential-item { grid-template-columns:52px minmax(180px,1fr); }
+    .credential-page .course-cert-list .credential-status,.credential-page .course-cert-list .credential-actions { grid-column:2; }
     .credential-page .credential-status,.credential-page .credential-actions { justify-self:start; }
     .credential-page .credit-item { grid-template-columns:1fr 1fr; }
     .credential-page .credit-status { justify-self:start; }
+    .credential-page .badge-levels { grid-template-columns:repeat(4, minmax(92px, 1fr)); gap:14px; max-width:none; }
 }
 @media (max-width:650px) {
     .credential-page .credential-overview { gap:6px; }
     .credential-page .credential-metric { flex:1 1 calc(50% - 6px); justify-content:center; padding:8px 9px; }
+    .credential-page .head-actions { width:100%; align-items:stretch; flex-direction:column; }
+    .credential-page .result-search { width:100%; }
+    .credential-page .result-search input { width:100%; min-width:0; }
     .credential-page .credential-item { grid-template-columns:44px 1fr; }
     .credential-page .credential-condition,.credential-page .credential-status,.credential-page .credential-actions { grid-column:2; }
     .credential-page .credit-item { grid-template-columns:1fr; }
+    .credential-page .badge-group-head { align-items:flex-start; }
+    .credential-page .badge-levels { grid-template-columns:repeat(2, minmax(120px, 1fr)); }
 }
 </style>
 </head>
@@ -98,106 +128,93 @@
 <main class="main-content credential-page">
     <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>证书与学分管理</span></div>
     <div class="page-head">
-        <div><h1 class="page-title">证书与学分管理</h1><p class="page-desc">根据课程完成情况和测评通过结果计算课程学分，并管理课程结业证书、实验认证和AI技能徽章。</p></div>
-        <div class="head-actions"><button class="btn btn-primary" onclick="alert('学习成果生成任务已提交')">生成学习成果</button></div>
+        <div><h1 class="page-title">证书与学分管理</h1></div>
+        <div class="head-actions">
+            <div class="result-search">
+                <input id="credentialSearchInput" type="search" placeholder="输入关键词查询学习成果" onkeydown="handleCredentialSearchKey(event)">
+                <button type="button" onclick="applyCredentialSearch()">搜索</button>
+            </div>
+            <button class="btn btn-primary" onclick="alert('学习成果生成任务已提交')">生成学习成果</button>
+        </div>
     </div>
     <section class="card">
-        <div class="card-header"><div><div class="card-title">学习成果中心</div><div class="card-subtitle">通过标签切换查看课程学分与各类学习成果。</div></div><span class="tag green">四类成果</span></div>
+        <div class="card-header"><div><div class="card-title">学习成果中心</div><div class="card-subtitle">通过标签切换查看已获考试学分与各类学习成果。</div></div><span class="tag green">四类成果</span></div>
         <div class="credential-overview">
             <button type="button" class="credential-metric blue active" role="tab" aria-selected="true" onclick="switchCredentialTab('credit', this)"><strong id="earnedCreditCount">0</strong><span>已获学分</span></button>
             <button type="button" class="credential-metric green" role="tab" aria-selected="false" onclick="switchCredentialTab('course', this)"><strong>3</strong><span>课程结业证书</span></button>
-            <button type="button" class="credential-metric purple" role="tab" aria-selected="false" onclick="switchCredentialTab('experiment', this)"><strong>2</strong><span>实验认证</span></button>
-            <button type="button" class="credential-metric orange" role="tab" aria-selected="false" onclick="switchCredentialTab('badge', this)"><strong>3</strong><span>AI技能徽章</span></button>
+            <button type="button" class="credential-metric purple" role="tab" aria-selected="false" onclick="switchCredentialTab('experiment', this)"><strong id="experimentMetricCount">0</strong><span>实验认证</span></button>
+            <button type="button" class="credential-metric orange" role="tab" aria-selected="false" onclick="switchCredentialTab('badge', this)"><strong id="badgeMetricCount">0</strong><span>AI技能徽章</span></button>
         </div>
         <div class="credential-panel active" id="credentialPanel-credit">
-            <div class="credential-panel-head"><div><h3>课程学分</h3><p>每门基础课程最多获得 1 学分；多次参加同一单课程测评，只要有一次通过即可计入。</p></div><span class="tag blue" id="earnedCreditLabel">已获得 0 项</span></div>
-            <div class="credit-rule"><strong>学分获取规则：</strong>完成一门基础课程，并通过该课程对应的单课程测评（正确率达到 80%），即可获得 1 学分。课程或测评未完成时，不计入已获学分；同一课程重复通过也只计 1 次。</div>
+            <div class="credential-panel-head"><div><h3>考试学分</h3><p>完成指定考试并达到对应分数线后即可获得学分，同一考试重复通过不重复计入。</p></div><span class="tag blue" id="earnedCreditLabel">已获得 0 学分</span></div>
+            <div class="credit-rule"><strong>学分获取规则：</strong>单课程测评超过 80 分，获得 1 学分；模块考核超过 80 分，获得 3 学分；全周期综合考试超过 80 分，获得 8 学分；同一考试多次通过只计 1 次。</div>
             <div class="credit-list" id="creditList"></div>
         </div>
         <div class="credential-panel" id="credentialPanel-course">
-            <div class="credential-panel-head"><div><h3>课程结业证书</h3><p>完成基础课程学习与章节测验后生成。</p></div><span class="tag blue">已获得 3 项</span></div>
-            <div class="credential-list">
+            <div class="credential-panel-head"><div><h3>课程结业证书</h3><p>基础课程中某一类课程进度超过 80%，且课后测验通过率超过 80%，即可生成对应课程结业证书。</p></div><span class="tag blue">已获得 3 项</span></div>
+            <div class="credential-list course-cert-list">
                 <div class="credential-item">
                     <div class="credential-icon">📜</div>
                     <div class="credential-name"><strong>眼底影像诊断结业证书</strong><span>基础课程 · 2026-06-18</span></div>
-                    <div class="credential-condition"><b>生成条件</b><span>课程完成，测验正确率 ≥ 80%</span></div>
                     <span class="credential-status done">已生成</span>
                     <div class="credential-actions"><button class="btn-xs primary" onclick="alert('打开课程结业证书预览')">查看</button><button class="btn-xs" onclick="alert('证书下载任务已提交')">下载</button></div>
                 </div>
                 <div class="credential-item">
                     <div class="credential-icon">📜</div>
                     <div class="credential-name"><strong>青光眼诊疗基础结业证书</strong><span>基础课程 · 2026-07-02</span></div>
-                    <div class="credential-condition"><b>生成条件</b><span>课程完成，章节测验全部通过</span></div>
                     <span class="credential-status done">已生成</span>
                     <div class="credential-actions"><button class="btn-xs primary" onclick="alert('打开课程结业证书预览')">查看</button><button class="btn-xs" onclick="alert('证书下载任务已提交')">下载</button></div>
                 </div>
                 <div class="credential-item">
                     <div class="credential-icon">📜</div>
                     <div class="credential-name"><strong>眼底影像判读基础结业证书</strong><span>基础课程 · 2026-08-06</span></div>
-                    <div class="credential-condition"><b>生成条件</b><span>课程完成，测验正确率 ≥ 80%</span></div>
                     <span class="credential-status done">已生成</span>
                     <div class="credential-actions"><button class="btn-xs primary" onclick="alert('打开课程结业证书预览')">查看</button><button class="btn-xs" onclick="alert('证书下载任务已提交')">下载</button></div>
                 </div>
             </div>
         </div>
-                <div class="credential-panel" id="credentialPanel-experiment">
-            <div class="credential-panel-head"><div><h3>实验认证</h3><p>完成案例教学 / 经典病例诊断实训相关病例诊断（得分＞90分）后获得对应认证。</p></div><span class="tag green" id="experimentCountTag">已获得 0 项</span></div>
+        <div class="credential-panel" id="credentialPanel-experiment">
+            <div class="credential-panel-head"><div><h3>实验认证</h3><p>达到案例教学、经典病例诊断实训或医学影像AI标注的对应条件后，自动生成实验认证证书。</p></div><span class="tag green" id="experimentCountTag">已获得 0 项</span></div>
             <div class="credential-list" id="experimentCertList"></div>
         </div><div class="credential-panel" id="credentialPanel-badge">
-            <div class="credential-panel-head"><div><h3>AI技能徽章</h3><p>根据 AI 实训、病例分析和考试表现授予对应技能徽章。</p></div><span class="tag purple">已获得 3 项</span></div>
-            <div class="credential-list">
-                <div class="credential-item purple">
-                    <div class="credential-icon">🏅</div>
-                    <div class="credential-name"><strong>AI模型构建能力徽章</strong><span>数据标注与AI实训</span></div>
-                    <div class="credential-condition"><b>生成条件</b><span>模型作品评分 ≥ 75</span></div>
-                    <span class="credential-status pending">待生成</span>
-                    <div class="credential-actions"><button class="btn-xs" onclick="alert('当前尚未满足生成条件')">查看条件</button></div>
-                </div>
-                <div class="credential-item purple">
-                    <div class="credential-icon">🏅</div>
-                    <div class="credential-name"><strong>眼底影像判读能力徽章</strong><span>读片与病例大赛系统</span></div>
-                    <div class="credential-condition"><b>生成条件</b><span>完成指定比赛并达到判读要求</span></div>
-                    <span class="credential-status done">已生成</span>
-                    <div class="credential-actions"><button class="btn-xs primary" onclick="alert('打开AI技能徽章预览')">查看</button><button class="btn-xs" onclick="alert('徽章下载任务已提交')">下载</button></div>
-                </div>
-                <div class="credential-item purple">
-                    <div class="credential-icon">🏅</div>
-                    <div class="credential-name"><strong>临床诊断分析能力徽章</strong><span>经典病例诊断实训</span></div>
-                    <div class="credential-condition"><b>生成条件</b><span>完成基础、进阶和疑难病例训练</span></div>
-                    <span class="credential-status done">已生成</span>
-                    <div class="credential-actions"><button class="btn-xs primary" onclick="alert('打开AI技能徽章预览')">查看</button><button class="btn-xs" onclick="alert('徽章下载任务已提交')">下载</button></div>
-                </div>
-            </div>
+            <div class="credential-panel-head"><div><h3>AI技能徽章</h3><p>按案例教学、经典病例诊断实训、医学影像AI标注和模型训练四类能力自动授予 Lv1-Lv4 徽章。</p></div><span class="tag purple" id="badgeCountTag">已获得 0 枚</span></div>
+            <div class="badge-board" id="badgeBoard"></div>
         </div>
     </section>
 </main>
 <script>
 var CREDIT_PASS_SCORE = 80;
-var CREDIT_COMPLETION_STORAGE_KEY = 'life_med_basic_course_completion';
 var CREDIT_EXAM_RESULTS_STORAGE_KEY = 'life_med_exam_results_v1';
 
-var CREDIT_COURSES = [
-    { id: 1, name: '糖尿病视网膜病变基础', totalSections: 28, fallbackProgress: 65 },
-    { id: 2, name: '青光眼诊疗基础', totalSections: 32, fallbackProgress: 100 },
-    { id: 3, name: 'AMD诊疗规范', totalSections: 22, fallbackProgress: 0 },
-    { id: 4, name: '高血压视网膜病变', totalSections: 16, fallbackProgress: 100 },
-    { id: 5, name: 'RVO诊疗指南', totalSections: 20, fallbackProgress: 0 },
-    { id: 6, name: 'OCT读片实战训练', totalSections: 14, fallbackProgress: 0 },
-    { id: 7, name: '眼底激光治疗原理', totalSections: 30, fallbackProgress: 12 },
-    { id: 8, name: '眼底血管造影判读', totalSections: 24, fallbackProgress: 45 }
-];
-
 var CREDIT_EXAMS = [
-    { id: 1, target: '糖尿病视网膜病变基础', history: [] },
-    { id: 2, target: '青光眼诊疗基础', history: [] },
-    { id: 5, target: 'AMD诊疗规范', history: [] },
-    { id: 6, target: '高血压视网膜病变', history: [] },
-    { id: 8, target: '眼底激光治疗原理', history: [] },
-    { id: 9, target: 'RVO诊疗指南', history: [] },
-    { id: 11, target: 'OCT读片实战训练', history: [] },
-    { id: 12, target: '眼底血管造影判读', history: [] }
+    { id: 1, name: '糖尿病视网膜病变基础单课程测评', examType: '单课程测评', credit: 1, target: '糖尿病视网膜病变基础', totalScore: 100 },
+    { id: 2, name: '青光眼诊疗基础单课程测评', examType: '单课程测评', credit: 1, target: '青光眼诊疗基础', totalScore: 100 },
+    { id: 3, name: '眼科学基础模块考核', examType: '模块考核', credit: 3, target: '解剖学', totalScore: 100 },
+    { id: 4, name: '角膜病模块考核', examType: '模块考核', credit: 3, target: '生理学', totalScore: 100 },
+    { id: 5, name: 'AMD诊疗规范单课程测评', examType: '单课程测评', credit: 1, target: 'AMD诊疗规范', totalScore: 100 },
+    { id: 6, name: '高血压视网膜病变单课程测评', examType: '单课程测评', credit: 1, target: '高血压视网膜病变', totalScore: 100 },
+    { id: 7, name: '青光眼模块考核', examType: '模块考核', credit: 3, target: '生物信息学', totalScore: 100 },
+    { id: 8, name: '眼底激光治疗单课程测评', examType: '单课程测评', credit: 1, target: '眼底激光治疗原理', totalScore: 100 },
+    { id: 9, name: 'RVO诊疗指南单课程测评', examType: '单课程测评', credit: 1, target: 'RVO诊疗指南', totalScore: 100 },
+    { id: 10, name: '糖尿病视网膜病变模块考核', examType: '模块考核', credit: 3, target: '医学AI基础', totalScore: 100 },
+    { id: 11, name: 'OCT读片实战训练单课程测评', examType: '单课程测评', credit: 1, target: 'OCT读片实战训练', totalScore: 100 },
+    { id: 12, name: '眼底血管造影判读单课程测评', examType: '单课程测评', credit: 1, target: '眼底血管造影判读', totalScore: 100 },
+    { id: 101, name: '眼科基础全周期综合考试', examType: '全周期综合考试', credit: 8, target: '解剖学 + 生理学', totalScore: 150 },
+    { id: 102, name: 'AI诊疗全周期综合考试', examType: '全周期综合考试', credit: 8, target: '生物信息学 + 医学AI基础', totalScore: 120 },
+    { id: 103, name: '影像判读全周期综合考试', examType: '全周期综合考试', credit: 8, target: '解剖学 + 生理学 + 生物信息学', totalScore: 150 }
 ];
 
+var CREDIT_SAMPLE_RESULTS = [
+    { id: 1, history: [{ time: '2026-06-12', score: 84, rate: '84%', duration: '18分钟', result: '完成', attemptIndex: 1 }] },
+    { id: 3, history: [{ time: '2026-06-10', score: 92, rate: '92%', duration: '42分钟', result: '完成', attemptIndex: 2 }] },
+    { id: 5, history: [{ time: '2026-06-14', score: 88, rate: '88%', duration: '24分钟', result: '完成', attemptIndex: 1 }] },
+    { id: 7, history: [{ time: '2026-06-18', score: 95, rate: '95%', duration: '40分钟', result: '完成', attemptIndex: 2 }] },
+    { id: 8, history: [{ time: '2026-06-20', score: 86, rate: '86%', duration: '22分钟', result: '完成', attemptIndex: 1 }] },
+    { id: 10, history: [{ time: '2026-06-22', score: 89, rate: '89%', duration: '31分钟', result: '完成', attemptIndex: 1 }] },
+    { id: 11, history: [{ time: '2026-06-24', score: 91, rate: '91%', duration: '26分钟', result: '完成', attemptIndex: 1 }] },
+    { id: 101, history: [{ time: '2026-06-26', score: 128, rate: '85%', duration: '78分钟', result: '完成', attemptIndex: 1 }] },
+    { id: 102, history: [{ time: '2026-06-28', score: 108, rate: '90%', duration: '75分钟', result: '完成', attemptIndex: 1 }] }
+];
 function readCredentialStorage(key, fallback) {
     try {
         var raw = localStorage.getItem(key);
@@ -207,22 +224,23 @@ function readCredentialStorage(key, fallback) {
     }
 }
 
-function getCreditCourseProgress(course, completion) {
-    var stored = completion[String(course.id)] || completion[course.id] || {};
-    var completedSections = Object.keys(stored).filter(function(sectionId) {
-        var state = stored[sectionId];
-        return state === true || (state && state.video === true && state.article === true);
-    }).length;
-    var storedProgress = course.totalSections ? Math.round(completedSections / course.totalSections * 100) : 0;
-    return Math.min(100, Math.max(course.fallbackProgress || 0, storedProgress));
-}
-
 function getCreditExamRecord(exam, storedResults) {
     var stored = Array.isArray(storedResults) ? storedResults.find(function(item) {
         return String(item.id) === String(exam.id);
     }) : null;
-    if (stored && Array.isArray(stored.history)) return stored;
-    return exam;
+    if (!stored) return exam;
+    return {
+        id: exam.id,
+        name: exam.name,
+        examType: exam.examType,
+        credit: exam.credit,
+        target: exam.target,
+        totalScore: exam.totalScore,
+        history: Array.isArray(stored.history) ? stored.history : (exam.history || []),
+        bestScore: stored.bestScore,
+        examCount: stored.examCount,
+        status: stored.status
+    };
 }
 
 function getExamScorePercent(item, attempt) {
@@ -234,49 +252,78 @@ function getExamScorePercent(item, attempt) {
     return total ? Math.round(score / total * 100) : 0;
 }
 
-function getCreditQualification(course, completion, storedResults) {
-    var progress = getCreditCourseProgress(course, completion);
-    var exam = CREDIT_EXAMS.find(function(item) {
-        return item.target === course.name;
-    });
-    var record = exam ? getCreditExamRecord(exam, storedResults) : { history: [] };
+function getCreditQualification(exam, storedResults) {
+    var record = getCreditExamRecord(exam, storedResults);
     var passedAttempt = (record.history || []).find(function(attempt) {
-        return getExamScorePercent(record, attempt) >= CREDIT_PASS_SCORE;
+        return getExamScorePercent(record, attempt) > CREDIT_PASS_SCORE;
     });
     return {
-        progress: progress,
         exam: record,
         passed: !!passedAttempt,
         passedAttempt: passedAttempt || null,
-        earned: progress >= 100 && !!passedAttempt
+        earned: !!passedAttempt,
+        credit: exam.credit || 0
     };
+}
+
+function getCreditSourceResults(storedResults) {
+    var merged = CREDIT_SAMPLE_RESULTS.map(function(item) {
+        return {
+            id: item.id,
+            history: Array.isArray(item.history) ? item.history.slice() : []
+        };
+    });
+    if (!Array.isArray(storedResults)) return merged;
+    storedResults.forEach(function(item) {
+        if (!item || !Array.isArray(item.history) || item.history.length === 0) return;
+        var existingIndex = merged.findIndex(function(sample) {
+            return String(sample.id) === String(item.id);
+        });
+        if (existingIndex >= 0) merged[existingIndex] = item;
+        else merged.push(item);
+    });
+    return merged;
 }
 
 function renderCreditPanel() {
     var target = document.getElementById('creditList');
     if (!target) return;
-    var completion = readCredentialStorage(CREDIT_COMPLETION_STORAGE_KEY, {});
     var storedResults = readCredentialStorage(CREDIT_EXAM_RESULTS_STORAGE_KEY, []);
-    var rows = CREDIT_COURSES.map(function(course) {
-        var result = getCreditQualification(course, completion, storedResults);
-        var courseState = result.progress >= 100 ? '课程已完成' : '课程未完成（' + result.progress + '%）';
-        var examState = result.passed
-            ? '已通过单课程测评（' + getExamScorePercent(result.exam, result.passedAttempt) + '%）'
-            : '尚无通过记录';
+    var sourceResults = getCreditSourceResults(storedResults);
+    var earnedItems = CREDIT_EXAMS.map(function(exam) {
+        var result = getCreditQualification(exam, sourceResults);
+        return result.passed ? {
+            exam: exam,
+            result: result,
+            passedAttempt: result.passedAttempt
+        } : null;
+    }).filter(function(item) { return !!item; });
+    earnedItems.sort(function(a, b) {
+        var scoreA = getExamScorePercent(a.result.exam, a.passedAttempt);
+        var scoreB = getExamScorePercent(b.result.exam, b.passedAttempt);
+        return scoreB - scoreA;
+    });
+    var rows = earnedItems.map(function(item) {
+        var exam = item.exam;
+        var result = item.result;
+        var attempt = item.passedAttempt || {};
+        var score = getExamScorePercent(result.exam, attempt);
+        var timeText = attempt.time ? ('通过时间 ' + attempt.time + '；') : '';
+        var durationText = attempt.duration ? ('用时 ' + attempt.duration + '；') : '';
         return '<div class="credit-item">'
-            + '<div class="credit-course"><strong>' + escapeCredentialHtml(course.name) + '</strong><span>' + courseState + '</span></div>'
-            + '<div class="credit-condition"><b>获取条件</b><span>' + examState + '；' + (result.earned ? '满足 1 学分条件' : '完成课程并通过测评后获得 1 学分') + '</span></div>'
-            + '<span class="credit-status ' + (result.earned ? 'earned' : 'pending') + '">' + (result.earned ? '已获 1 学分' : '待获得') + '</span>'
+            + '<div class="credit-course"><strong>' + escapeCredentialHtml(exam.name) + '</strong><span>' + escapeCredentialHtml(exam.examType) + ' · ' + result.credit + ' 学分</span></div>'
+            + '<div class="credit-condition"><b>已获条件</b><span>' + timeText + durationText + '成绩 ' + score + '%；同一考试多次通过只计 1 次</span></div>'
+            + '<span class="credit-status earned">已获 ' + result.credit + ' 学分</span>'
             + '</div>';
     }).join('');
-    target.innerHTML = rows;
-    var earned = CREDIT_COURSES.filter(function(course) {
-        return getCreditQualification(course, completion, storedResults).earned;
-    }).length;
+    target.innerHTML = rows || '<div class="empty-note">当前暂无已获得的学分记录。</div>';
+    var earned = earnedItems.reduce(function(sum, item) {
+        return sum + (item.exam.credit || 0);
+    }, 0);
     var countEl = document.getElementById('earnedCreditCount');
     var labelEl = document.getElementById('earnedCreditLabel');
     if (countEl) countEl.textContent = earned;
-    if (labelEl) labelEl.textContent = '已获得 ' + earned + ' 项';
+    if (labelEl) labelEl.textContent = '已获得 ' + earned + ' 学分';
 }
 
 function escapeCredentialHtml(value) {
@@ -289,63 +336,382 @@ function escapeCredentialHtml(value) {
 }
 
 var CLASSIC_CASE_DIFF = {1:'基础',7:'基础',10:'基础',11:'基础',12:'基础',2:'进阶',3:'进阶',5:'进阶',9:'进阶',14:'进阶',4:'疑难',6:'疑难',8:'疑难',13:'疑难',15:'疑难'};
-function getCaseCertCounts() {
-    var c = { basic:0, advanced:0, research:0 };
+var CASE_TEACHING_CERT_RULES = [
+    { key:'basic', name:'案例教学基础实验认证', label:'基础病例', total:5, threshold:90, prefix:'B' },
+    { key:'advanced', name:'案例教学进阶实验认证', label:'进阶病例', total:4, threshold:80, prefix:'A' },
+    { key:'research', name:'案例教学科研实验认证', label:'科研病例', total:3, threshold:70, prefix:'R' }
+];
+var CLASSIC_CASE_CERT_RULES = [
+    { key:'basic', name:'经典病例诊断实训基础实验认证', label:'基础病例', threshold:90, diff:'基础' },
+    { key:'advanced', name:'经典病例诊断实训进阶实验认证', label:'进阶病例', threshold:80, diff:'进阶' },
+    { key:'hard', name:'经典病例诊断实训疑难实验认证', label:'疑难病例', threshold:70, diff:'疑难' }
+];
+var DEFAULT_ANNOTATION_DATASETS = [
+    { id:'dr-screening', name:'DR筛查数据集' },
+    { id:'glaucoma', name:'青光眼标注数据集' },
+    { id:'amd-oct', name:'黄斑病变OCT数据集' },
+    { id:'vessel-seg', name:'血管分割训练集' }
+];
+var DEFAULT_ANNOTATION_RECORD_STORE = {
+    catalog:[
+        { imageId:'dr-screening-01', datasetId:'dr-screening', name:'眼底彩照.png' },
+        { imageId:'dr-screening-02', datasetId:'dr-screening', name:'眼底彩照_补充.png' },
+        { imageId:'glaucoma-01', datasetId:'glaucoma', name:'青光眼视盘图.png' },
+        { imageId:'glaucoma-02', datasetId:'glaucoma', name:'青光眼视盘图_补充.png' },
+        { imageId:'amd-oct-01', datasetId:'amd-oct', name:'OCT黄斑扫描.png' },
+        { imageId:'amd-oct-02', datasetId:'amd-oct', name:'OCT黄斑扫描_补充.png' },
+        { imageId:'vessel-seg-02', datasetId:'vessel-seg', name:'血管分割训练图_补充.png' }
+    ],
+    images:{
+        'dr-screening-01':{ datasetId:'dr-screening', attempts:[{ score:86 }] },
+        'dr-screening-02':{ datasetId:'dr-screening', attempts:[{ score:84 }] },
+        'glaucoma-01':{ datasetId:'glaucoma', attempts:[{ score:78 }] },
+        'glaucoma-02':{ datasetId:'glaucoma', attempts:[{ score:79 }] },
+        'amd-oct-01':{ datasetId:'amd-oct', attempts:[{ score:91 }] },
+        'amd-oct-02':{ datasetId:'amd-oct', attempts:[{ score:88 }] },
+        'vessel-seg-02':{ datasetId:'vessel-seg', attempts:[{ score:81 }] }
+    }
+};
+
+function readCredentialJson(key, fallback) {
     try {
-        var state = JSON.parse(localStorage.getItem('life_med_case_teaching_state_v2') || '{}');
-        var reports = state.caseLearningReports || {};
-        Object.keys(reports).forEach(function(cid) {
-            var r = reports[cid];
-            var score = 0;
-            if (r && r.assessment) score = r.assessment.overallScore || 0;
-            else if (r && r.metrics) score = r.metrics.overallScore || 0;
-            if (score <= 90) return;
-            var p = String(cid).charAt(0);
-            if (p === 'B') c.basic++;
-            else if (p === 'A' || p === 'C') c.advanced++;
-            else if (p === 'R') c.research++;
+        var raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+    } catch(e) {
+        return fallback;
+    }
+}
+function getTeachingReportScore(report) {
+    if (!report) return 0;
+    if (report.assessment) return Number(report.assessment.overallScore) || 0;
+    if (report.metrics) return Number(report.metrics.overallScore) || 0;
+    return Number(report.overallScore) || 0;
+}
+function getCaseTeachingStats(rule) {
+    var state = readCredentialJson('life_med_case_teaching_state_v2', {});
+    var reports = state.caseLearningReports || {};
+    var diagnosed = 0;
+    var qualified = 0;
+    Object.keys(reports).forEach(function(cid) {
+        if (String(cid).charAt(0) !== rule.prefix) return;
+        diagnosed++;
+        if (getTeachingReportScore(reports[cid]) > 90) qualified++;
+    });
+    var pct = rule.total ? Math.round(diagnosed / rule.total * 100) : 0;
+    return { total:rule.total, diagnosed:diagnosed, qualified:qualified, pct:pct, done:rule.total > 0 && (diagnosed / rule.total * 100) > rule.threshold && diagnosed === qualified };
+}
+function getClassicCaseTotals() {
+    var totals = { '基础':0, '进阶':0, '疑难':0 };
+    Object.keys(CLASSIC_CASE_DIFF).forEach(function(id) {
+        var diff = CLASSIC_CASE_DIFF[id];
+        totals[diff] = (totals[diff] || 0) + 1;
+    });
+    return totals;
+}
+function getClassicCaseStats(rule) {
+    var status = readCredentialJson('case_diag_status', {});
+    var totals = getClassicCaseTotals();
+    var total = totals[rule.diff] || 0;
+    var diagnosed = 0;
+    var qualified = 0;
+    Object.keys(status).forEach(function(key) {
+        var id = parseInt(String(key).replace(/[^0-9]/g, ''), 10);
+        if (CLASSIC_CASE_DIFF[id] !== rule.diff) return;
+        var st = status[key];
+        var score = st && st.result ? Number(st.result.total) || 0 : 0;
+        diagnosed++;
+        if (score > 90) qualified++;
+    });
+    var pct = total ? Math.round(diagnosed / total * 100) : 0;
+    return { total:total, diagnosed:diagnosed, qualified:qualified, pct:pct, done:total > 0 && (diagnosed / total * 100) > rule.threshold && diagnosed === qualified };
+}
+function getAnnotationDatasetDefinitions() {
+    var stored = readCredentialJson('life_med_dataset_categories', []);
+    if (Array.isArray(stored) && stored.length) {
+        return stored.filter(function(item) { return item && item.id && item.id !== 'uploaded'; }).map(function(item) {
+            return { id:item.id, name:item.name || item.label || item.id };
         });
-    } catch(e) {}
-    try {
-        var status = JSON.parse(localStorage.getItem('case_diag_status') || '{}');
-        Object.keys(status).forEach(function(key) {
-            var st = status[key];
-            var score = st && st.result ? (st.result.total || 0) : 0;
-            if (score <= 90) return;
-            var id = parseInt(String(key).replace(/[^0-9]/g, ''), 10);
-            var diff = CLASSIC_CASE_DIFF[id];
-            if (diff === '基础') c.basic++;
-            else if (diff === '进阶') c.advanced++;
-            else if (diff === '疑难') c.research++;
-        });
-    } catch(e) {}
-    return c;
+    }
+    return DEFAULT_ANNOTATION_DATASETS.slice();
+}
+function getAnnotationRecordStore() {
+    var stored = readCredentialJson('life_med_annotation_training_records', null);
+    if (stored && typeof stored === 'object' && stored.images && Object.keys(stored.images).length) return stored;
+    return DEFAULT_ANNOTATION_RECORD_STORE;
+}
+function getBestAnnotationScore(record) {
+    if (!record) return 0;
+    if (record.bestScore !== undefined) return Number(record.bestScore) || 0;
+    var attempts = Array.isArray(record.attempts) ? record.attempts : [];
+    return attempts.reduce(function(max, item) {
+        return Math.max(max, Number(item && item.score) || 0);
+    }, 0);
+}
+function getAnnotationDatasetStats(datasetId) {
+    var store = getAnnotationRecordStore();
+    var catalog = Array.isArray(store.catalog) ? store.catalog : [];
+    var ids = catalog.filter(function(item) { return item && item.datasetId === datasetId && item.imageId; }).map(function(item) { return item.imageId; });
+    Object.keys(store.images || {}).forEach(function(imageId) {
+        var record = store.images[imageId];
+        if (record && record.datasetId === datasetId && ids.indexOf(imageId) < 0) ids.push(imageId);
+    });
+    var qualified = ids.filter(function(imageId) {
+        return getBestAnnotationScore(store.images && store.images[imageId]) >= 80;
+    }).length;
+    var total = ids.length;
+    var pct = total ? Math.round(qualified / total * 100) : 0;
+    return { total:total, qualified:qualified, pct:pct, done:total > 0 && (qualified / total * 100) > 80 };
+}
+function buildExperimentCertGroups() {
+    var caseTeaching = CASE_TEACHING_CERT_RULES.map(function(rule) {
+        var stats = getCaseTeachingStats(rule);
+        return {
+            name:rule.name,
+            sub:'案例教学 · ' + rule.label,
+            cond:rule.label + '中超过 ' + rule.threshold + '% 的病例已诊断，且已诊断病例评分均 > 90 分',
+            done:stats.done
+        };
+    });
+    var classic = CLASSIC_CASE_CERT_RULES.map(function(rule) {
+        var stats = getClassicCaseStats(rule);
+        return {
+            name:rule.name,
+            sub:'经典病例诊断实训 · ' + rule.label,
+            cond:rule.label + '中超过 ' + rule.threshold + '% 的病例已诊断，且已诊断病例评分均 > 90 分',
+            done:stats.done
+        };
+    });
+    var annotation = getAnnotationDatasetDefinitions().map(function(dataset) {
+        var stats = getAnnotationDatasetStats(dataset.id);
+        return {
+            name:dataset.name + ' 实验认证',
+            sub:'医学影像AI标注 · 数据集认证',
+            cond:'该数据集中超过 80% 的影像图片标注分数达到 80 分以上',
+            done:stats.done
+        };
+    });
+    return [
+        { title:'案例教学实验认证', items:caseTeaching },
+        { title:'经典病例诊断实训实验认证', items:classic },
+        { title:'医学影像AI标注实验认证', items:annotation }
+    ];
+}
+function renderExperimentCertItem(x) {
+    var actions = x.done
+        ? '<button class="btn-xs primary" onclick="alert(\'打开实验认证预览\')">查看</button><button class="btn-xs" onclick="alert(\'认证已加入下载任务\')">下载</button>'
+        : '';
+    return '<div class="credential-item green">' +
+        '<div class="credential-icon">🏅</div>' +
+        '<div class="credential-name"><strong>' + escapeCredentialHtml(x.name) + '</strong><span>' + escapeCredentialHtml(x.sub) + '</span></div>' +
+        '<div class="credential-condition"><b>生成条件</b><span>' + escapeCredentialHtml(x.cond) + '</span></div>' +
+        '<span class="credential-status ' + (x.done ? 'done' : 'pending') + '">' + (x.done ? '已生成' : '未满足') + '</span>' +
+        (actions ? '<div class="credential-actions">' + actions + '</div>' : '') +
+    '</div>';
 }
 function renderExperimentCerts() {
-    var c = getCaseCertCounts();
-    var certs = [
-        { name:'基础认证', sub:'案例教学 / 经典病例诊断实训 · 基础病例', cond:'基础病例诊断得分＞90分 达 10 个', have:c.basic, need:10 },
-        { name:'进阶认证', sub:'案例教学 / 经典病例诊断实训 · 进阶病例', cond:'进阶病例诊断得分＞90分 达 8 个', have:c.advanced, need:8 },
-        { name:'优秀认证', sub:'案例教学科研病例 / 经典病例诊断实训疑难病例', cond:'科研/疑难病例诊断得分＞90分 达 6 个', have:c.research, need:6 }
-    ];
-    var earned = certs.filter(function(x){ return x.have >= x.need; }).length;
+    var groups = buildExperimentCertGroups();
+    var earned = groups.reduce(function(sum, group) {
+        return sum + group.items.filter(function(item) { return item.done; }).length;
+    }, 0);
     var tag = document.getElementById('experimentCountTag');
+    var metric = document.getElementById('experimentMetricCount');
     if (tag) tag.textContent = '已获得 ' + earned + ' 项';
+    if (metric) metric.textContent = earned;
     var list = document.getElementById('experimentCertList');
     if (!list) return;
-    list.innerHTML = certs.map(function(x) {
-        var done = x.have >= x.need;
-        var actions = done
-            ? '<button class="btn-xs primary" onclick="alert(\'打开实验认证预览\')">查看</button><button class="btn-xs" onclick="alert(\'认证已加入下载任务\')">下载</button>'
-            : '<button class="btn-xs" onclick="alert(\'当前尚未满足生成条件\')">查看条件</button>';
-        return '<div class="credential-item green">' +
-            '<div class="credential-icon">🏅</div>' +
-            '<div class="credential-name"><strong>' + x.name + '</strong><span>' + x.sub + '</span></div>' +
-            '<div class="credential-condition"><b>生成条件</b><span>' + x.cond + '（当前 ' + x.have + '/' + x.need + '）</span></div>' +
-            '<span class="credential-status ' + (done ? 'done' : 'pending') + '">' + (done ? '已生成' : '未满足') + '</span>' +
-            '<div class="credential-actions">' + actions + '</div>' +
-        '</div>';
+    list.innerHTML = groups.map(function(group) {
+        return '<div class="credential-group-title">' + escapeCredentialHtml(group.title) + '</div>' + group.items.map(renderExperimentCertItem).join('');
     }).join('');
+}
+var BADGE_LEVEL_NAMES = ['入门级徽章','熟练级徽章','进阶级徽章','专家级徽章'];
+var BADGE_RULES = [
+    {
+        title:'案例教学',
+        countLabel:'个病例诊断',
+        defaultCount:12,
+        getCount:getCaseTeachingBadgeCount,
+        levels:[
+            { level:'Lv1', threshold:5, rule:'病例诊断超过 5 个' },
+            { level:'Lv2', threshold:10, rule:'病例诊断超过 10 个' },
+            { level:'Lv3', threshold:20, rule:'病例诊断超过 20 个' },
+            { level:'Lv4', threshold:50, rule:'病例诊断超过 50 个' }
+        ]
+    },
+    {
+        title:'经典病例诊断实训',
+        countLabel:'个病例诊断',
+        defaultCount:24,
+        getCount:getClassicCaseBadgeCount,
+        levels:[
+            { level:'Lv1', threshold:5, rule:'病例诊断超过 5 个' },
+            { level:'Lv2', threshold:10, rule:'病例诊断超过 10 个' },
+            { level:'Lv3', threshold:20, rule:'病例诊断超过 20 个' },
+            { level:'Lv4', threshold:50, rule:'病例诊断超过 50 个' }
+        ]
+    },
+    {
+        title:'医学影像AI标注',
+        countLabel:'张眼底图像标注',
+        defaultCount:68,
+        getCount:getAnnotationBadgeCount,
+        levels:[
+            { level:'Lv1', threshold:10, rule:'标注超过 10 张眼底图像' },
+            { level:'Lv2', threshold:30, rule:'标注超过 30 张眼底图像' },
+            { level:'Lv3', threshold:60, rule:'标注超过 60 张眼底图像' },
+            { level:'Lv4', threshold:100, rule:'标注超过 100 张眼底图像' }
+        ]
+    },
+    {
+        title:'模型训练',
+        countLabel:'个训练题目',
+        defaultCount:30,
+        getCount:getModelTrainingBadgeCount,
+        levels:[
+            { level:'Lv1', threshold:20, op:'gte', rule:'训练 20 个题目' },
+            { level:'Lv2', threshold:50, rule:'训练题目超过 50 个' },
+            { level:'Lv3', threshold:100, rule:'训练题目超过 100 个' },
+            { level:'Lv4', threshold:200, rule:'训练题目超过 200 个' }
+        ]
+    }
+];
+function hasCredentialStorage(key) {
+    try { return localStorage.getItem(key) !== null; } catch(e) { return false; }
+}
+function getCaseTeachingBadgeCount(rule) {
+    if (!hasCredentialStorage('life_med_case_teaching_state_v2')) return rule.defaultCount;
+    var state = readCredentialJson('life_med_case_teaching_state_v2', {});
+    return Object.keys(state.caseLearningReports || {}).length;
+}
+function getClassicCaseBadgeCount(rule) {
+    if (!hasCredentialStorage('case_diag_status')) return rule.defaultCount;
+    var status = readCredentialJson('case_diag_status', {});
+    return Object.keys(status || {}).filter(function(key) {
+        var item = status[key];
+        return item && (item.state === 'completed' || item.result);
+    }).length;
+}
+function getAnnotationBadgeCount(rule) {
+    if (!hasCredentialStorage('life_med_annotation_training_records')) return rule.defaultCount;
+    var store = readCredentialJson('life_med_annotation_training_records', {});
+    return Object.keys(store.images || {}).filter(function(imageId) {
+        var record = store.images[imageId];
+        return record && (record.bestScore !== undefined || (Array.isArray(record.attempts) && record.attempts.length));
+    }).length;
+}
+function getModelTrainingBadgeCount(rule) {
+    if (!hasCredentialStorage('life_med_model_training')) return rule.defaultCount;
+    var store = readCredentialJson('life_med_model_training', {});
+    var attempts = Array.isArray(store.attempts) ? store.attempts : [];
+    return attempts.reduce(function(sum, attempt) {
+        if (Array.isArray(attempt.items)) return sum + attempt.items.length;
+        if (Array.isArray(attempt.questions)) return sum + attempt.questions.length;
+        return sum + (Number(attempt.questionCount) || 0);
+    }, 0);
+}
+function isBadgeLevelAchieved(count, level) {
+    return level.op === 'gte' ? count >= level.threshold : count > level.threshold;
+}
+function getBadgeAchievedLevel(count, levels) {
+    return levels.reduce(function(total, level) {
+        return total + (isBadgeLevelAchieved(count, level) ? 1 : 0);
+    }, 0);
+}
+function renderBadgeGroup(rule) {
+    var count = rule.getCount(rule);
+    var achieved = getBadgeAchievedLevel(count, rule.levels);
+    var tag = achieved ? '已达到Lv' + achieved : '未达成';
+    var tagClass = achieved ? '' : ' pending';
+    return '<div class="badge-group">' +
+        '<div class="badge-group-head">' +
+            '<div class="badge-title"><strong>' + escapeCredentialHtml(rule.title + '能力徽章') + '</strong><span>' + escapeCredentialHtml('已完成 ' + count + ' ' + rule.countLabel) + '</span></div>' +
+            '<span class="badge-level-tag' + tagClass + '">' + tag + '</span>' +
+        '</div>' +
+        '<div class="badge-levels">' + rule.levels.map(function(level, index) {
+            var active = isBadgeLevelAchieved(count, level);
+            return '<div class="badge-level ' + (active ? 'achieved' : '') + '">' +
+                '<div class="badge-medal">' + escapeCredentialHtml(level.level) + '</div>' +
+                '<div class="badge-name">' + BADGE_LEVEL_NAMES[index] + '</div>' +
+                '<div class="badge-rule">' + escapeCredentialHtml(level.rule) + '</div>' +
+            '</div>';
+        }).join('') + '</div>' +
+    '</div>';
+}
+function renderBadgePanel() {
+    var totalEarned = BADGE_RULES.reduce(function(sum, rule) {
+        return sum + getBadgeAchievedLevel(rule.getCount(rule), rule.levels);
+    }, 0);
+    var tag = document.getElementById('badgeCountTag');
+    var metric = document.getElementById('badgeMetricCount');
+    var board = document.getElementById('badgeBoard');
+    if (tag) tag.textContent = '已获得 ' + totalEarned + ' 枚';
+    if (metric) metric.textContent = totalEarned;
+    if (board) board.innerHTML = BADGE_RULES.map(renderBadgeGroup).join('');
+}
+function normalizeCredentialSearchText(value) {
+    return String(value === undefined || value === null ? '' : value).trim().toLowerCase();
+}
+function getCredentialSearchKeyword() {
+    var input = document.getElementById('credentialSearchInput');
+    return normalizeCredentialSearchText(input ? input.value : '');
+}
+function getActiveCredentialPanel() {
+    return document.querySelector('.credential-panel.active');
+}
+function removeSearchEmpty(panel) {
+    panel.querySelectorAll('.search-empty').forEach(function(node) { node.remove(); });
+}
+function syncExperimentGroupTitles(panel) {
+    panel.querySelectorAll('.credential-group-title').forEach(function(title) {
+        var hasVisibleItem = false;
+        var node = title.nextElementSibling;
+        while (node && !node.classList.contains('credential-group-title')) {
+            if (node.classList.contains('credential-item') && node.style.display !== 'none') {
+                hasVisibleItem = true;
+                break;
+            }
+            node = node.nextElementSibling;
+        }
+        title.style.display = hasVisibleItem ? '' : 'none';
+    });
+}
+function getSearchItems(panel) {
+    if (!panel) return [];
+    if (panel.id === 'credentialPanel-credit') return Array.prototype.slice.call(panel.querySelectorAll('.credit-item'));
+    if (panel.id === 'credentialPanel-badge') return Array.prototype.slice.call(panel.querySelectorAll('.badge-group'));
+    return Array.prototype.slice.call(panel.querySelectorAll('.credential-item'));
+}
+function getSearchContainer(panel) {
+    if (!panel) return null;
+    if (panel.id === 'credentialPanel-credit') return panel.querySelector('.credit-list');
+    if (panel.id === 'credentialPanel-badge') return panel.querySelector('.badge-board');
+    return panel.querySelector('.credential-list');
+}
+function filterActiveCredentialPanel() {
+    var panel = getActiveCredentialPanel();
+    if (!panel) return;
+    removeSearchEmpty(panel);
+    var keyword = getCredentialSearchKeyword();
+    var items = getSearchItems(panel);
+    var visibleCount = 0;
+    items.forEach(function(item) {
+        var match = !keyword || normalizeCredentialSearchText(item.textContent).indexOf(keyword) >= 0;
+        item.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+    });
+    if (panel.id === 'credentialPanel-experiment') syncExperimentGroupTitles(panel);
+    if (keyword && visibleCount === 0) {
+        var container = getSearchContainer(panel);
+        if (container) container.insertAdjacentHTML('beforeend', '<div class="empty-note search-empty">未查询到匹配的学习成果。</div>');
+    }
+}
+function applyCredentialSearch() {
+    filterActiveCredentialPanel();
+}
+function handleCredentialSearchKey(event) {
+    if (event && event.key === 'Enter') {
+        event.preventDefault();
+        applyCredentialSearch();
+    }
 }
 function switchCredentialTab(type, button) {
     document.querySelectorAll('.credential-metric').forEach(function(tab) {
@@ -356,6 +722,9 @@ function switchCredentialTab(type, button) {
         panel.classList.toggle('active', panel.id === 'credentialPanel-' + type);
     });
     if (type === 'credit') renderCreditPanel();
+    if (type === 'experiment') renderExperimentCerts();
+    if (type === 'badge') renderBadgePanel();
+    filterActiveCredentialPanel();
 }
 function toggleSubmenu(el) { el.classList.toggle('expanded'); var submenu = el.nextElementSibling; if (submenu) submenu.classList.toggle('open'); }
 function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
@@ -366,6 +735,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (e) {}
     renderCreditPanel();
     renderExperimentCerts();
+    renderBadgePanel();
 });
 </script>
 </body>
