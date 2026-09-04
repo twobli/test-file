@@ -2458,11 +2458,12 @@
     var drawerTemplates = {
       'rule-check': '<div class="rules"><div class="rule-box"><b>课程</b><p>校验知识体系、难度等级、章节树、视频资源、章节测验是否完整。</p></div><div class="rule-box"><b>考试</b><p>校验题型混合、知识点覆盖、难度比例、次数限制和成绩报告字段。</p></div><div class="rule-box"><b>比赛</b><p>校验有效期、固定时长、进度保存、完成/退赛/缺考结果生成。</p></div><div class="rule-box"><b>个人中心</b><p>校验课程、测验、考试、实训、AI答疑、证书学分是否可进入能力评估。</p></div></div>',
       course: `<div class="course-builder">
-        <div class="course-builder-note">先填写课程名称、知识体系、难度等级，再在下方按顺序添加章节。章节只有名称；小节里上传视频并绑定知识点。课程保存后可继续配置章节测验，并在这里选择参与人员。</div>
+        <div class="course-builder-note">先填写课程名称、知识体系、难度等级和课程封面，再在下方按顺序添加章节。章节只有名称；小节里上传视频并绑定知识点。课程保存后可继续配置章节测验，并在这里选择参与人员。</div>
         <div class="split-form">
           <div class="form-field"><label>课程名称</label><input class="input" value="高血压视网膜病变"></div>
           <div class="form-field"><label>知识体系</label><select class="select"><option>解剖学</option><option selected>生理学</option><option>生物信息学</option><option>医学AI基础</option></select></div>
           <div class="form-field"><label>难度等级</label><select class="select"><option>初级</option><option selected>中级</option><option>高级</option></select></div>
+          <div class="form-field"><label>课程封面</label><input class="input" type="file" accept="image/*"></div>
         </div>
         <div class="course-chapter-list">
           <div class="chapter-card" data-chapter="1">
