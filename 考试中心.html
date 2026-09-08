@@ -1342,7 +1342,7 @@ table tbody tr:hover { background: var(--gray-50); }
                 <div style="overflow-x:auto;">
                     <table class="report-history-table">
                         <thead>
-                            <tr><th>次数</th><th>考试时间</th><th>得分</th><th>成绩档次</th><th>同次对照</th><th>用时</th><th>操作</th></tr>
+                            <tr><th>次数</th><th>考试时间</th><th>得分</th><th>成绩档次</th><th>用时</th><th>操作</th></tr>
                         </thead>
                         <tbody id="reportHistoryBody"></tbody>
                     </table>
@@ -2746,7 +2746,6 @@ function renderAttemptHistory(item, selectedAttemptIndex) {
         html += '<td>' + (h.time || '-') + '</td>';
         html += '<td><strong>' + h.score + '</strong>分</td>';
         html += '<td><span class="score-grade-tag ' + bandKey + '">' + band + '</span></td>';
-        html += '<td><span class="attempt-compare-tag">' + compareText + '</span></td>';
         html += '<td>' + (h.duration || '-') + '</td>';
         html += '<td><div class="action-btns"><button class="btn btn-outline" onclick="viewAttemptAnalysis(' + item.id + ',' + i + ')">查看题目解析</button></div></td>';
         html += '</tr>';

@@ -355,10 +355,6 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
                     <div class="rlbl-new">用时</div>
                 </div>
             </div>
-            <!-- 激励提示条 -->
-            <div class="result-motivation" id="resultMotivation">
-                💡 您已击败了 <span class="highlight-pct" id="rBeat">92%</span> 的参赛选手，继续保持！
-            </div>
             <!-- 各题得分详情列表 -->
             <div class="result-detail-section">
                 <div class="result-detail-title">各题得分详情</div>
@@ -368,30 +364,6 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
                         <tbody id="resultDetailBody">
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <!-- 横向对比 -->
-            <div class="result-compare">
-                <div class="compare-item">
-                    <div class="compare-label">排名分布</div>
-                    <div class="compare-bar-wrap">
-                        <div class="compare-bar-fill" style="width:92%;background:linear-gradient(90deg,#34a853,#66bb6a);"></div>
-                        <span class="compare-pct">TOP 2.2%</span>
-                    </div>
-                </div>
-                <div class="compare-item">
-                    <div class="compare-label">正确率分布</div>
-                    <div class="compare-bar-wrap">
-                        <div class="compare-bar-fill" style="width:88%;background:linear-gradient(90deg,#1a73e8,#64b5f6);"></div>
-                        <span class="compare-pct">高于 92% 参赛者</span>
-                    </div>
-                </div>
-                <div class="compare-item">
-                    <div class="compare-label">平均用时</div>
-                    <div class="compare-bar-wrap">
-                        <div class="compare-bar-fill" style="width:55%;background:linear-gradient(90deg,#fbbc04,#ffca28);"></div>
-                        <span class="compare-pct">快于 73% 参赛者</span>
-                    </div>
                 </div>
             </div>
             <!-- 底部操作按钮 -->
@@ -1114,28 +1086,10 @@ function showCompetitionResult(competitionName) {
     document.getElementById('rRank').innerHTML = result.rank + '<span class="rsub">/' + result.totalParticipants + '</span>';
     document.getElementById('rAccuracy').textContent = result.accuracy + '%';
     document.getElementById('rTime').textContent = result.timeUsed;
-    document.getElementById('rBeat').textContent = result.beatPct + '%';
-
-    if (result.type === 'completed') {
-        document.getElementById('resultMotivation').innerHTML = '💡 您已击败了 <span class="highlight-pct" id="rBeat">' + result.beatPct + '%</span> 的参赛选手，继续保持！';
-    } else if (result.type === 'quit') {
-        document.getElementById('resultMotivation').innerHTML = '💡 本场比赛记录为中途退赛，系统已按已作答 <span class="highlight-pct">' + result.answered + '/' + item.totalQ + '</span> 题自动计分。';
-    } else {
-        document.getElementById('resultMotivation').innerHTML = '💡 本场比赛记录为缺考，系统保留结果页以便回看赛事信息，本次成绩记为 <span class="highlight-pct">0 分</span>。';
-    }
 
     document.getElementById('resultDetailBody').innerHTML = details.map(function(row) {
         return '<tr><td>' + row.num + '</td><td class="td-type">' + row.type + '</td><td>' + row.resultHtml + '</td><td>' + row.score + '分</td><td>' + row.time + '</td></tr>';
     }).join('');
-
-    var compareBars = document.querySelectorAll('#resultModal .compare-bar-fill');
-    var comparePcts = document.querySelectorAll('#resultModal .compare-pct');
-    if (compareBars[0]) compareBars[0].style.width = Math.max(0, result.beatPct) + '%';
-    if (compareBars[1]) compareBars[1].style.width = Math.max(0, result.accuracy) + '%';
-    if (compareBars[2]) compareBars[2].style.width = result.type === 'absent' ? '0%' : Math.max(12, Math.round((item.durationMin * 60 - parseTime(result.timeUsed)) / (item.durationMin * 60) * 100)) + '%';
-    if (comparePcts[0]) comparePcts[0].textContent = 'TOP ' + Math.round(result.rank / result.totalParticipants * 100) + '%';
-    if (comparePcts[1]) comparePcts[1].textContent = '高于 ' + result.beatPct + '% 参赛者';
-    if (comparePcts[2]) comparePcts[2].textContent = result.type === 'absent' ? '未作答' : '固定时长 ' + item.durationMin + ' 分钟';
 
     openModal('resultModal');
 }
