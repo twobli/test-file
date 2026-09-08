@@ -10,6 +10,9 @@ button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .top{height:var(--head);display:flex;align-items:center;gap:16px;padding:0 26px;color:#fff;background:linear-gradient(100deg,#122a63,#1a56db 55%,#0e7d80);box-shadow:0 2px 10px #10182833;position:sticky;top:0;z-index:20}
 .brand{font-size:18px;font-weight:700}
+.brand-link{display:inline-flex;align-items:center;color:#fff;text-decoration:none;cursor:pointer}
+.brand-link:hover{opacity:.92}
+.brand-link:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
 .brand-sub{border-left:1px solid #ffffff44;padding-left:16px;color:#dbe6ff;font-size:12.5px}
 .wrap{max-width:1080px;margin:0 auto;padding:22px 20px 50px}
 .stepper{display:flex;align-items:center;margin:0 0 22px;padding:14px 20px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 3px #10182808}
@@ -50,6 +53,10 @@ button{cursor:pointer}
 .msel-item-group{border-top:1px dashed var(--line);margin-top:4px;padding-top:6px}
 .msel-item-group:first-child{border-top:none;margin-top:0;padding-top:0}
 .msel-item-group-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 8px;font-weight:600;font-size:12.5px;color:var(--text)}
+.selected-gene-summary{margin-top:10px;padding:10px 12px;border:1px solid #d7deea;border-radius:8px;background:#f8fbff}
+.selected-gene-title{margin:0 0 8px;font-size:12px;color:var(--muted)}
+.selected-gene-list{display:flex;flex-wrap:wrap;gap:8px}
+.selected-gene-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#e8f0ff;color:#173a8a;font-size:12px;line-height:1.2}
 .gene-opt{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe;cursor:pointer}
 .gene-opt:hover{border-color:#b9cdfa}
 .gene-opt input{margin:0}
@@ -72,6 +79,7 @@ button{cursor:pointer}
 .upload-slot h4{margin:0 0 8px;font-size:13px;color:var(--text)}
 .upload-preview{position:relative;height:170px;border-radius:8px;overflow:hidden;margin-bottom:10px;background:#0b1220}
 .upload-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.upload-empty{width:100%;height:100%;display:grid;place-items:center;color:#8a94a6;background:#eef3fb;font-size:12px}
 .fundus-demo{width:100%;height:100%;background:radial-gradient(circle at 54% 48%,#8a4a25 0 3%,#c98650 4% 8%,#e0a86b 9% 11%,#b45f3d 12% 20%,#6c3a2f 21% 31%,#241318 32% 39%,#05070a 40% 100%)}
 .fundus-demo-dr{width:100%;height:100%;background:
   radial-gradient(circle at 30% 38%,#7a1f1f 0 2.2%,transparent 3.2%),
@@ -84,6 +92,18 @@ button{cursor:pointer}
 .oct-demo-um{background:
   radial-gradient(ellipse 42% 28% at 50% 60%,#eab30899 0%,#eab30840 45%,transparent 72%),
   linear-gradient(180deg,#04101d 0%,#0a2540 18%,#123a5e 32%,#0a2540 46%,#175c78 58%,#0a2540 70%,#04101d 100%)}
+.octa-demo{width:100%;height:100%;background:
+  radial-gradient(circle at 50% 52%,#38bdf855 0 7%,transparent 8%),
+  repeating-linear-gradient(28deg,transparent 0 16px,#22d3ee55 16px 18px,transparent 18px 32px),
+  linear-gradient(180deg,#03111f 0%,#0b2038 22%,#123d63 45%,#0b2038 68%,#03111f 100%)}
+.octa-demo-um{background:
+  radial-gradient(circle at 50% 52%,#f59e0b66 0 7%,transparent 8%),
+  repeating-linear-gradient(28deg,transparent 0 16px,#f9731655 16px 18px,transparent 18px 32px),
+  linear-gradient(180deg,#03111f 0%,#10223b 22%,#5a3b15 45%,#10223b 68%,#03111f 100%)}
+.upload-config{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-bottom:12px}
+.upload-note{margin-top:10px;padding:10px 12px;border-left:3px solid var(--blue);background:#f3f7ff;border-radius:8px;color:#24427a;font-size:12px;line-height:1.6}
+.upload-slot-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;text-align:left}
+.eye-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;background:#e8eef9;color:#35518f;font-size:11px;white-space:nowrap}
 .upload-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 15px;border:1px solid #d7deea;border-radius:7px;background:#fff;color:var(--text);font-size:13px}
 .btn:hover{border-color:var(--blue);color:var(--blue)}
@@ -153,7 +173,7 @@ button{cursor:pointer}
 </style>
 </head>
 <body>
-<header class="top"><div class="brand">基于基因的眼病/慢病诊断应用</div><div class="brand-sub">支持糖尿病视网膜病变（DR）与脉络膜黑色素瘤（UM）两种疾病的基因—影像联合分析</div></header>
+<header class="top"><a class="brand brand-link" href="app-center.html">基于基因的眼病/慢病诊断应用</a><div class="brand-sub">支持糖尿病视网膜病变（DR）与脉络膜黑色素瘤（UM）两种疾病的基因—影像联合分析</div></header>
 <div class="wrap">
   <div class="stepper" id="stepper">
     <div class="step active" data-step="input"><span class="num">1</span><span class="st-title">输入信息</span></div>
@@ -166,48 +186,32 @@ button{cursor:pointer}
     <h1 class="h1">输入信息</h1>
     <p class="p-muted">录入患者的基因检测结果并上传眼底影像，系统将基于眼底影像判别疾病类型，并结合基因型证据一键生成多模态融合评估报告，无需提前手动指定疾病方向。</p>
 
+    <div class="card">
+      <div class="card-head"><h2>患者基本信息（选填）</h2></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="field"><label>姓名</label><input type="text" id="in-name" placeholder="选填"></div>
+          <div class="field"><label>年龄</label><input type="number" id="in-age" min="0" max="120" placeholder="选填"></div>
+          <div class="field"><label>性别</label><select id="in-gender"><option value="">选填</option><option>男</option><option>女</option></select></div>
+          <div class="field"><label>既往病史</label><input type="text" id="in-history" placeholder="如：高血压、糖尿病病程8年（选填）"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="card" style="overflow:visible">
       <div class="card-head"><h2>基因分型录入</h2><span class="sub">请根据患者已获得的基因检测报告，选择对应的分型结果</span></div>
       <div class="card-body" id="gene-panel"></div>
     </div>
 
     <div class="card">
-      <div class="card-head"><h2>眼底影像上传</h2><span class="sub">彩照 / OCT 均可选，至少提供一种；疾病类型（DR / UM）由影像判别给出</span></div>
-      <div class="card-body">
-        <div class="upload-grid">
-          <div class="upload-slot">
-            <h4>眼底彩照（CFP）</h4>
-            <div class="upload-preview" id="prev-cfp"><div class="fundus-demo-dr"></div></div>
-            <div class="upload-actions">
-              <label class="btn sm">上传本地图像<input type="file" accept="image/*" style="display:none" onchange="handleUpload(event,'cfp')"></label>
-              <button class="btn sm" onclick="useDemoImage('cfp','dr')">示例影像·DR特征</button>
-              <button class="btn sm" onclick="useDemoImage('cfp','um')">示例影像·UM特征</button>
-            </div>
-          </div>
-          <div class="upload-slot">
-            <h4>OCT 影像（选填）</h4>
-            <div class="upload-preview" id="prev-oct" style="display:none"><div class="oct-demo"></div></div>
-            <div class="upload-actions" id="oct-actions">
-              <label class="btn sm">上传本地图像<input type="file" accept="image/*" style="display:none" onchange="handleUpload(event,'oct')"></label>
-              <button class="btn sm" onclick="useDemoImage('oct','dr')">示例影像·DR特征</button>
-              <button class="btn sm" onclick="useDemoImage('oct','um')">示例影像·UM特征</button>
-              <button class="btn sm ghost" id="oct-clear-btn" style="display:none" onclick="clearImage('oct')">不提供 OCT</button>
-            </div>
-          </div>
-        </div>
-        <div class="opt-hint" style="margin-top:8px">示例影像用于原型演示疾病判别方向；若上传真实影像，本原型暂未接入真实的影像分类模型，判别结果将作为占位演示并在报告中注明。</div>
-      </div>
+      <div class="card-head"><h2>眼底影像上传</h2></div>
+      <div class="card-body" id="upload-panel"></div>
     </div>
 
     <div class="card">
-      <div class="card-head"><h2>患者基本信息（选填）</h2><span class="sub">不填写不影响分析，仅作为报告的背景信息展示</span></div>
+      <div class="card-head"><h2>多模态特征提示</h2></div>
       <div class="card-body">
-        <div class="form-row">
-          <div class="field"><label>年龄</label><input type="number" id="in-age" min="0" max="120" placeholder="选填"></div>
-          <div class="field"><label>性别</label><select id="in-gender"><option value="">选填</option><option>男</option><option>女</option></select></div>
-          <div class="field"><label>既往病史</label><input type="text" id="in-history" placeholder="如：高血压、糖尿病病程8年（选填）"></div>
-        </div>
-        <div class="opt-hint">以上信息仅作背景展示，不参与本演示的风险评分计算。</div>
+        <div class="alert" style="margin:0">多模态特征融合：支持将患者的一维基因序列与二维眼底医学影像（彩照、OCT、OCTA）进行联合分析，通过深度学习和统计模型提取关键疾病相关特征，实现基因与表型的交互映射。</div>
       </div>
     </div>
 
@@ -246,7 +250,7 @@ button{cursor:pointer}
     </div>
 
     <div class="card" id="patient-card">
-      <div class="card-head"><h2>患者背景信息</h2><span class="sub">选填项，仅作背景展示</span></div>
+      <div class="card-head"><h2>患者背景信息</h2></div>
       <div class="card-body"><div class="info-grid" id="patient-info-grid"></div></div>
     </div>
 
@@ -352,7 +356,60 @@ function umSf3b1(){ if(selFindings.has('SF3B1_mut'))return '突变型'; if(selFi
 function umEif1ax(){ if(selFindings.has('EIF1AX_mut'))return '突变型'; if(selFindings.has('EIF1AX_wt'))return '野生型'; return '未测'; }
 function umChr3(){ if(selFindings.has('chr3_mono'))return '单体3（monosomy 3）'; if(selFindings.has('chr3_di'))return '二体3（disomy 3）'; return '未测'; }
 function umDriver(){ const d=DISEASE.um.drivers.find(d=>d.value!=='none'&&selFindings.has('driver_'+d.value)); return d?d.value:'none'; }
-let images={cfp:{src:null,type:null,hint:null},oct:{src:null,type:null,hint:null}};
+const IMAGE_TYPES=[
+  {value:'cfp',label:'眼底彩照',short:'CFP'},
+  {value:'oct',label:'OCT',short:'OCT'},
+  {value:'octa',label:'OCTA',short:'OCTA'}
+];
+let imageConfig={type:'cfp',eyes:'single'};
+let images={};
+
+function selectedGeneLabels(){
+  const labels=[];
+  DISEASE.dr.t2dGenes.forEach(g=>{if(selFindings.has(g.key))labels.push(g.label)});
+  DISEASE.dr.drGenes.forEach(g=>{if(selFindings.has(g.key))labels.push(g.label)});
+  DISEASE.um.drivers.forEach(g=>{if(g.value!=='none'&&selFindings.has('driver_'+g.value))labels.push(g.label)});
+  ['BAP1_pos','BAP1_neg','SF3B1_mut','SF3B1_wt','EIF1AX_mut','EIF1AX_wt','chr3_mono','chr3_di'].forEach(id=>{
+    if(selFindings.has(id)){
+      const map={
+        BAP1_pos:'BAP1 阳性（保留表达）',
+        BAP1_neg:'BAP1 阴性（表达缺失）',
+        SF3B1_mut:'SF3B1 突变型',
+        SF3B1_wt:'SF3B1 野生型',
+        EIF1AX_mut:'EIF1AX 突变型',
+        EIF1AX_wt:'EIF1AX 野生型',
+        chr3_mono:'染色体3单体',
+        chr3_di:'染色体3二体'
+      };
+      labels.push(map[id]);
+    }
+  });
+  return labels;
+}
+function renderSelectedGeneSummary(){
+  const box=$('#gene-selected-summary');
+  if(!box)return;
+  const labels=selectedGeneLabels();
+  box.innerHTML='<div class="selected-gene-title">已选择的基因分型</div>'+
+    '<div class="selected-gene-list">'+(labels.length?labels.map(v=>'<span class="selected-gene-chip">'+v+'</span>').join(''):'<span class="opt-hint">暂无选择</span>')+'</div>';
+}
+function buildUploadSlots(){
+  const type=IMAGE_TYPES.find(t=>t.value===imageConfig.type)||IMAGE_TYPES[0];
+  const eyeCount=imageConfig.eyes==='double'?2:1;
+  const slots=[];
+  for(let i=0;i<eyeCount;i++){
+    slots.push({id:type.value+(eyeCount===2?'_'+(i===0?'od':'os'):''), type:type.value, eye:eyeCount===2?(i===0?'右眼':'左眼'):'单眼', index:i});
+  }
+  return slots;
+}
+function typeDemoClass(type,hint){
+  if(type==='oct')return hint==='um'?'oct-demo oct-demo-um':'oct-demo';
+  if(type==='octa')return hint==='um'?'octa-demo octa-demo-um':'octa-demo';
+  return hint==='um'?'fundus-demo':'fundus-demo-dr';
+}
+function imageCaption(type){
+  return ({cfp:'眼底彩照',oct:'OCT',octa:'OCTA'})[type]||type.toUpperCase();
+}
 
 function seqHtml(seq){
   if(!seq)return '';
@@ -374,10 +431,12 @@ function renderGenePanel(){
     '<div class="msel" id="geno-msel">'+
       '<button type="button" class="msel-trigger" id="geno-msel-trigger" onclick="toggleGenoMsel()">'+mselTriggerHtml()+'</button>'+
       '<div class="msel-panel" id="geno-msel-panel" hidden>'+buildGenoMselHtml()+'</div>'+
-    '</div></div>';
+    '</div><div id="gene-selected-summary" class="selected-gene-summary"></div></div>';
+  renderSelectedGeneSummary();
 }
 function mselTriggerHtml(){
-  const text=selFindings.size?('已选择 '+selFindings.size+' 项'):'点击选择检测到的阳性 / 异常项目';
+  const labels=selectedGeneLabels();
+  const text=labels.length?('已选择 '+labels.length+' 项'):'点击选择检测到的阳性 / 异常项目';
   return text+' <span class="msel-caret">▾</span>';
 }
 function updateMselTrigger(){
@@ -442,9 +501,52 @@ function toggleFinding(el){
     selFindings.delete(id);
   }
   updateMselTrigger();
+  renderSelectedGeneSummary();
 }
 
 /* ============ 影像上传 ============ */
+function renderUploadPanel(){
+  const box=$('#upload-panel');
+  if(!box)return;
+  const slots=buildUploadSlots();
+  const typeOptions=IMAGE_TYPES.map(t=>'<option value="'+t.value+'"'+(imageConfig.type===t.value?' selected':'')+'>'+t.label+'</option>').join('');
+  const eyeOptions='<option value="single"'+(imageConfig.eyes==='single'?' selected':'')+'>单眼</option><option value="double"'+(imageConfig.eyes==='double'?' selected':'')+'>双眼</option>';
+  box.innerHTML=
+    '<div class="upload-config">'+
+      '<div class="field"><label>眼底影像类型</label><select id="upload-type">'+typeOptions+'</select></div>'+
+      '<div class="field"><label>上传眼数</label><select id="upload-eyes">'+eyeOptions+'</select></div>'+
+    '</div>'+
+    '<div class="upload-grid">'+slots.map(slot=>{
+      const img=images[slot.id]||{src:null,type:null,hint:null};
+      const filled=!!img.type;
+      return '<div class="upload-slot">'+
+        '<div class="upload-slot-head"><h4>'+slot.eye+' · '+imageCaption(slot.type)+'</h4><span class="eye-badge">'+(slot.eye==='单眼'?'1 张':'2 张')+'</span></div>'+
+        '<div class="upload-preview" id="prev-'+slot.id+'"></div>'+
+        '<div class="upload-actions">'+
+          '<label class="btn sm">上传本地图像<input type="file" accept="image/*" style="display:none" onchange="handleUpload(event,\''+slot.id+'\')"></label>'+
+          '<button class="btn sm" onclick="useDemoImage(\''+slot.id+'\',\'dr\')">示例影像·DR</button>'+
+          '<button class="btn sm" onclick="useDemoImage(\''+slot.id+'\',\'um\')">示例影像·UM</button>'+
+          '<button class="btn sm ghost" style="'+(filled?'':'display:none')+'" onclick="clearImage(\''+slot.id+'\')">清除</button>'+
+        '</div>'+
+      '</div>';
+    }).join('')+'</div>';
+  $('#upload-type').onchange=e=>{
+    imageConfig.type=e.target.value;
+    syncImageSlots();
+    renderUploadPanel();
+  };
+  $('#upload-eyes').onchange=e=>{
+    imageConfig.eyes=e.target.value;
+    syncImageSlots();
+    renderUploadPanel();
+  };
+  slots.forEach(slot=>renderUploadPreview(slot.id));
+}
+function syncImageSlots(){
+  const keep={};
+  buildUploadSlots().forEach(slot=>{if(images[slot.id])keep[slot.id]=images[slot.id];else keep[slot.id]={src:null,type:null,hint:null};});
+  images=keep;
+}
 function handleUpload(evt,slot){
   const file=evt.target.files[0];if(!file)return;
   const url=URL.createObjectURL(file);
@@ -461,21 +563,17 @@ function clearImage(slot){
 }
 function renderUploadPreview(slot){
   const wrap=$('#prev-'+slot);
+  if(!wrap)return;
   const img=images[slot];
-  if(slot==='oct'){
-    wrap.style.display=img.type?'':'none';
-    $('#oct-clear-btn').style.display=img.type?'':'none';
-  }
-  if(!img.type){wrap.innerHTML='';return;}
+  if(!img||!img.type){wrap.innerHTML='<div class="upload-empty">暂无图像</div>';return;}
   if(img.type==='upload'){wrap.innerHTML='<img src="'+img.src+'">';}
-  else if(slot==='oct'){wrap.innerHTML='<div class="'+(img.hint==='um'?'oct-demo oct-demo-um':'oct-demo')+'"></div>';}
-  else{wrap.innerHTML='<div class="'+(img.hint==='um'?'fundus-demo':'fundus-demo-dr')+'"></div>';}
+  else{wrap.innerHTML='<div class="'+typeDemoClass(slot.split('_')[0],img.hint)+'"></div>';}
 }
-renderUploadPreview('cfp');
+renderUploadPanel();
 
 /* ============ 眼底影像疾病判别（示意性模拟：实际部署应调用已有的眼底影像分类模型接口） ============ */
 function classifyImage(){
-  const hints=[images.cfp.hint,images.oct.hint].filter(Boolean);
+  const hints=Object.values(images).map(x=>x&&x.hint).filter(Boolean);
   if(hints.includes('um'))return 'um';
   if(hints.includes('dr'))return 'dr';
   return 'dr'; // 真实上传影像：本原型未接入真实分类模型推理，默认按DR路径演示，并在报告中明确标注该结果为占位演示
@@ -489,9 +587,9 @@ const ANALYZE_STEPS=[
   {title:'生成结构化报告',desc:'汇总病灶标注、基因解读与方向性建议'}
 ];
 function startAnalysis(){
-  if(!images.cfp.type&&!images.oct.type){toast('请至少提供一种眼底影像（彩照或OCT）');return;}
+  if(!Object.values(images).some(img=>img&&img.type)){toast('请至少提供一种眼底影像');return;}
   disease=classifyImage();
-  const isSimulated=!(images.cfp.hint||images.oct.hint);
+  const isSimulated=!Object.values(images).some(img=>img&&img.hint);
   goStep('analyze');
   $('#analyze-steps').innerHTML=ANALYZE_STEPS.map((s,i)=>
     '<div class="a-step" id="a-step-'+i+'"><span class="dot">'+(i+1)+'</span><span class="txt"><div class="tt">'+s.title+'</div><div class="td">'+s.desc+'</div></span></div>'
@@ -530,8 +628,10 @@ function restart(){goStep('input');}
 const LESIONS={
   dr_cfp:[{label:'渗出',cls:'red',top:'30%',left:'42%'},{label:'微血管瘤',cls:'orange',top:'52%',left:'60%'},{label:'血管异常',cls:'blue',top:'66%',left:'34%'}],
   dr_oct:[{label:'视网膜增厚',cls:'orange',top:'40%',left:'50%'},{label:'囊样水肿',cls:'red',top:'62%',left:'58%'}],
+  dr_octa:[{label:'血流灌注异常',cls:'blue',top:'36%',left:'48%'},{label:'无灌注区',cls:'red',top:'60%',left:'62%'}],
   um_cfp:[{label:'瘤体边界',cls:'purple',top:'46%',left:'48%'},{label:'瘤体隆起',cls:'red',top:'40%',left:'55%'},{label:'视网膜脱离迹象',cls:'blue',top:'64%',left:'38%'}],
-  um_oct:[{label:'视网膜下积液',cls:'blue',top:'55%',left:'50%'},{label:'瘤体隆起截面',cls:'red',top:'42%',left:'46%'}]
+  um_oct:[{label:'视网膜下积液',cls:'blue',top:'55%',left:'50%'},{label:'瘤体隆起截面',cls:'red',top:'42%',left:'46%'}],
+  um_octa:[{label:'肿瘤灌注异质性',cls:'purple',top:'40%',left:'50%'},{label:'血管异常网络',cls:'blue',top:'62%',left:'40%'}]
 };
 
 /* ============ 风险评分（示意性规则算法） ============ */
@@ -586,14 +686,15 @@ function buildReport(isSimulated){
   $('#report-classify-note').textContent='眼底影像疾病判别结果：'+(disease==='dr'?'糖尿病视网膜病变（DR）特征':'脉络膜黑色素瘤（UM）特征')+(isSimulated?'——本次为真实上传影像，原型暂未接入真实的影像分类模型，该判别结果为占位演示；实际系统中由已部署的影像分类模型输出。':'——基于所选示例影像的预设判别方向（原型演示）。')+'以下基因证据解读与风险分层均围绕该判别结果展开。';
 
   // 患者信息
-  const age=$('#in-age').value,gender=$('#in-gender').value,history=$('#in-history').value.trim();
+  const name=$('#in-name').value.trim(),age=$('#in-age').value,gender=$('#in-gender').value,history=$('#in-history').value.trim();
   const patientGrid=$('#patient-info-grid');
-  if(!age&&!gender&&!history){
+  if(!name&&!age&&!gender&&!history){
     $('#patient-card .card-body').innerHTML='<div class="opt-hint">未填写患者背景信息（选填项）。</div>';
   }else{
     $('#patient-card .card-body').innerHTML='<div class="info-grid"></div>';
     const grid=$('#patient-card .info-grid');
     let cells='';
+    if(name)cells+='<div class="info-cell"><label>姓名</label><strong>'+name+'</strong></div>';
     if(age)cells+='<div class="info-cell"><label>年龄</label><strong>'+age+' 岁</strong></div>';
     if(gender)cells+='<div class="info-cell"><label>性别</label><strong>'+gender+'</strong></div>';
     if(history)cells+='<div class="info-cell" style="grid-column:span 2"><label>既往病史</label><strong style="font-size:13px">'+history+'</strong></div>';
@@ -603,15 +704,14 @@ function buildReport(isSimulated){
   // 影像 + 病灶标注
   const imgGrid=$('#report-image-grid');
   let imgHtml='';
-  ['cfp','oct'].forEach(slot=>{
-    const img=images[slot];
-    if(!img.type)return;
-    const lesionKey=disease+'_'+slot;
+  Object.entries(images).forEach(([slot,img])=>{
+    if(!img||!img.type)return;
+    const baseType=slot.split('_')[0];
+    const lesionKey=disease+'_'+baseType;
     const lesions=LESIONS[lesionKey]||[];
     const tagsHtml=lesions.map(l=>'<span class="lesion-tag '+l.cls+'" style="top:'+l.top+';left:'+l.left+'"><i></i>'+l.label+'</span>').join('');
-    const demoCls=slot==='oct'?(img.hint==='um'?'oct-demo oct-demo-um':'oct-demo'):(img.hint==='um'?'fundus-demo':'fundus-demo-dr');
-    const bg=img.type==='upload'?'<img src="'+img.src+'">':'<div class="'+demoCls+'" style="width:100%;height:100%"></div>';
-    imgHtml+='<div><div class="img-panel">'+bg+tagsHtml+'</div><div class="img-caption">'+(slot==='cfp'?'眼底彩照':'OCT 影像')+' · 标注 '+lesions.length+' 处潜在病灶（演示性示意）</div></div>';
+    const bg=img.type==='upload'?'<img src="'+img.src+'">':'<div class="'+typeDemoClass(baseType,img.hint)+'" style="width:100%;height:100%"></div>';
+    imgHtml+='<div><div class="img-panel">'+bg+tagsHtml+'</div><div class="img-caption">'+imageCaption(baseType)+(slot.includes('_')?' · '+(slot.endsWith('_od')?'右眼':'左眼'):'')+' · 标注 '+lesions.length+' 处潜在病灶（演示性示意）</div></div>';
   });
   imgGrid.innerHTML=imgHtml||'<div class="opt-hint">未提供影像</div>';
 
@@ -693,7 +793,8 @@ function buildReport(isSimulated){
     const drGenesSel=DISEASE.dr.drGenes.filter(g=>selFindings.has(g.key));
     const drModerate=drGenesSel.filter(g=>g.evid==='moderate');
     const drWeak=drGenesSel.filter(g=>g.evid!=='moderate');
-    const lesionNames=(LESIONS['dr_'+(images.cfp.type?'cfp':'oct')]||[]).map(l=>l.label);
+    const lesionBase=Object.keys(images).find(k=>images[k]&&images[k].type);
+    const lesionNames=(LESIONS['dr_'+((lesionBase||'cfp').split('_')[0])]||[]).map(l=>l.label);
     let p1=t2dNames.length?('该样本携带 '+t2dNames.join('、')+' 等2型糖尿病多基因风险位点。'):'该样本未勾选2型糖尿病遗传易感性相关位点。';
     let p2=lesionNames.length?('本次上传影像提示存在 '+lesionNames.join('、')+' 等改变。'):'本次未检出明显影像学异常标注。';
     let p3;
@@ -710,7 +811,8 @@ function buildReport(isSimulated){
     narrative.innerHTML='<p>'+p1+'</p><p>'+p2+'</p><p>'+p3+'</p><p>'+p4+'</p>';
   }else{
     const d=DISEASE.um.drivers.find(x=>x.value===umDriver());
-    const lesionNames=(LESIONS['um_'+(images.cfp.type?'cfp':'oct')]||[]).map(l=>l.label);
+    const lesionBase=Object.keys(images).find(k=>images[k]&&images[k].type);
+    const lesionNames=(LESIONS['um_'+((lesionBase||'cfp').split('_')[0])]||[]).map(l=>l.label);
     const conflict=umConflict();
     let p1='该样本驱动突变为 '+d.label+'，属肿瘤起始事件，文献显示其本身不改变预后判断。';
     let p2='预后相关基因方面，BAP1 '+umBap1()+'，SF3B1 '+umSf3b1()+'，EIF1AX '+umEif1ax()+'，染色体3状态为 '+umChr3()+'。';
