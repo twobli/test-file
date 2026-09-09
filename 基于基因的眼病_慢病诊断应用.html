@@ -682,7 +682,7 @@ function buildReport(isSimulated){
   const reportId='DG-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+String(Math.floor(1000+Math.random()*9000));
 
   $('#report-title').textContent=(disease==='dr'?'糖尿病视网膜病变':'脉络膜黑色素瘤（UM）')+' · 多模态融合评估报告';
-  $('#report-meta').textContent='报告编号：'+reportId+' | 生成时间：'+dateStr+' | 版本：V1.0（原型演示）';
+  $('#report-meta').textContent='报告编号：'+reportId+' | 生成时间：'+dateStr;
   $('#report-classify-note').textContent='眼底影像疾病判别结果：'+(disease==='dr'?'糖尿病视网膜病变（DR）特征':'脉络膜黑色素瘤（UM）特征')+(isSimulated?'——本次为真实上传影像，原型暂未接入真实的影像分类模型，该判别结果为占位演示；实际系统中由已部署的影像分类模型输出。':'——基于所选示例影像的预设判别方向（原型演示）。')+'以下基因证据解读与风险分层均围绕该判别结果展开。';
 
   // 患者信息
