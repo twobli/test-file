@@ -1323,12 +1323,12 @@
                     与 IoU 等核心概念。</li>
                 <li><strong style="color:var(--primary);">后台「方案题目管理」</strong>：管理员维护的选择题集（每 taskKey
                     一套题），学员切题时实时同步最新题库，已存在的 taskKey 覆盖、缺失的追加。</li>
-                <li><strong style="color:var(--primary);">「标注图像管理」</strong>：从标注平台导入数据集后，按数据集派生的题型，与题集联动。</li>
+                <li><strong style="color:var(--primary);">「标注平台」</strong>：从标注平台导入数据集后，按数据集派生题型，与题集联动。</li>
             </ul>
             <div
                 style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px;margin:10px 0;font-size:11px;">
                 <strong>数据流：</strong><br>
-                方案题目管理（题库主入口）⇄ 标注平台 → 任务审核通过 → 标注图像管理「从标注平台导入」重命名为新数据集 → 题集（自动纳入）→ 模型训练实训（单选题作答）
+                方案题目管理（题库主入口）⇄ 标注平台 → 任务审核通过 → 导入为新数据集 → 题集（自动纳入）→ 模型训练实训（单选题作答）
             </div>
             <div class="form-actions">
                 <button class="btn" onclick="closeModal('dataSourceModal')">关闭</button>
@@ -1568,7 +1568,7 @@
         function buildTrainingTasks() {
             // 标注数据集不再派生占位题集：旧逻辑会把未命中内置/后台题库的数据集（如 amd-oct）
             // 生成为只有 1 道通用占位题的「空题集」，已在「题集」面板移除。
-            // 若需从标注图像生成完整选择题，请在后台「方案题目管理」维护后由 mergeAdminSchemeBank 合并。
+            // 若需为标注数据集生成完整选择题，请在后台「方案题目管理」维护后由 mergeAdminSchemeBank 合并。
             return;
         }
 
