@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>经典病例诊断实训管理</title>
   <link rel="stylesheet" href="技能实践管理.css">
+  <style>
+    .image-slot-list { display: grid; gap: 10px; grid-column: 1 / -1; }
+    .image-slot { display: grid; gap: 6px; padding: 12px; border: 1px dashed #b8c7d9; border-radius: 8px; background: #fff; }
+    .image-slot strong { color: #435066; font-size: 13px; }
+    .assign-user-select { width: 100%; height: auto; min-height: 148px; padding: 8px 10px; line-height: 1.7; }
+    .assign-user-select option { padding: 5px 8px; }
+    .assign-user-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .assigned-users { color: var(--muted); line-height: 1.6; }
+  </style>
 </head>
 <body>
   <div class="admin-shell">
@@ -28,62 +37,152 @@
       </header>
       <div class="breadcrumb"><a href="技能实践管理.html">技能实践管理</a><span class="sep">&gt;</span><span>经典病例诊断实训</span></div>
       <div class="toolbar">
-        <div class="filters"><input class="input" id="search" placeholder="搜索病例名称、病例号、患者姓名或病种" oninput="render()"><select class="select" id="difficulty" onchange="render()"><option value="">全部难度</option><option>基础</option><option>进阶</option><option>疑难</option></select><select class="select" id="statusFilter" onchange="render()"><option value="">全部状态</option><option>已发布</option><option>已下线</option></select></div><button class="btn primary" style="margin-left:auto;" onclick="openModal('add')">＋ 新增经典病例</button></div>
+        <div class="filters">
+          <input class="input" id="search" placeholder="搜索病例号或患者姓名" oninput="render()">
+          <select class="select" id="difficulty" onchange="render()">
+            <option value="">全部难度</option><option>基础</option><option>进阶</option><option>疑难</option>
+          </select>
+        </div>
+        <button class="btn primary" style="margin-left:auto;" onclick="openModal()">＋ 新增经典病例</button>
+      </div>
       <section class="panel">
-        <div class="panel-head"><div><h2 class="panel-title">经典病例库</h2><p class="panel-subtitle">后台只维护前端病例内容；学生提交的诊断报告、AI分析和综合评分不在此处配置。</p></div></div>
-        <div class="table-wrap"><table><thead><tr><th>病例名称</th><th>病例号</th><th>病种</th><th>难度</th><th>主影像类型</th><th>状态</th><th>操作</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">经典病例库</h2>
+            <p class="panel-subtitle">维护前端“病例信息与病史”和“主影像浏览”所需内容，并分配可见用户。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>病例号</th><th>患者信息</th><th>主诉 / 病史</th><th>难度</th><th>主影像类型</th><th>已分配用户</th><th>操作</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
       </section>
     </main>
   </div>
+
   <div class="modal-mask" id="mask" onclick="closeModal()"></div>
   <section class="modal" id="modal" role="dialog" aria-modal="true">
-    <div class="modal-head"><h2 id="modalTitle">新增经典病例</h2><p id="modalDesc">按学生端病例信息、病史和主影像结构维护内容。</p></div>
+    <div class="modal-head">
+      <h2 id="modalTitle">新增经典病例</h2>
+      <p id="modalDesc">按前端病例信息、主影像资料录入病例，并分配可见用户。</p>
+    </div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-foot"><button class="btn" onclick="closeModal()">取消</button><button class="btn primary" id="saveBtn" onclick="save()">保存</button></div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn primary" id="saveBtn" onclick="save()">保存</button>
+    </div>
   </section>
+
+  <div class="modal-mask" id="audienceMask" onclick="closeAudienceModal()"></div>
+  <section class="modal" id="audienceModal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 id="audienceTitle">分配用户</h2>
+      <p id="audienceDesc">只分配当前经典病例的可见用户。</p>
+    </div>
+    <div class="modal-body" id="audienceBody"></div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeAudienceModal()">取消</button>
+      <button class="btn primary" onclick="saveAudience()">保存</button>
+    </div>
+  </section>
+
   <div class="toast" id="toast"></div>
   <script>
     var rows = [
-      {code:'DR2026001',name:'非增殖期糖尿病视网膜病变',disease:'糖尿病视网膜病变',difficulty:'基础',status:'已发布',patient:{caseNo:'DR2026001',name:'张秀兰',gender:'女',age:'56',chief:'视力下降半年，糖尿病史8年'},primaryImaging:{type:'眼底彩照',right:{fileName:''},left:{fileName:''}}},
-      {code:'GLA2026002',name:'原发性开角型青光眼',disease:'青光眼',difficulty:'进阶',status:'已发布',patient:{caseNo:'GLA2026002',name:'王志明',gender:'男',age:'62',chief:'进行性视野缺损2年，眼压波动于24-28mmHg'},primaryImaging:{type:'OCT',right:{fileName:''},left:{fileName:''}}},
-      {code:'AMD2026003',name:'湿性年龄相关性黄斑变性',disease:'AMD',difficulty:'进阶',status:'已发布',patient:{caseNo:'AMD2026003',name:'李国强',gender:'男',age:'71',chief:'右眼视物变形伴中心暗点3个月'},primaryImaging:{type:'OCTA',right:{fileName:''},left:{fileName:''}}},
-      {code:'DR2026004',name:'增殖期糖尿病视网膜病变',disease:'糖尿病视网膜病变',difficulty:'疑难',status:'已发布',patient:{caseNo:'DR2026004',name:'刘美华',gender:'女',age:'48',chief:'突发右眼视力急剧下降至眼前手动3天'},primaryImaging:{type:'眼底彩照',right:{fileName:''},left:{fileName:''}}}
+      {code:'DR2026001',difficulty:'基础',patient:{caseNo:'DR2026001',name:'张秀兰',gender:'女',age:'56',chief:'视力下降半年，糖尿病史8年'},primaryImaging:{type:'眼底彩照',eyeMode:'双眼',singleEye:'右眼',files:{right:'',left:''}},audience:['张医生','李医生']},
+      {code:'GLA2026002',difficulty:'进阶',patient:{caseNo:'GLA2026002',name:'王志明',gender:'男',age:'62',chief:'进行性视野缺损2年，眼压波动于24-28mmHg'},primaryImaging:{type:'OCT',eyeMode:'双眼',singleEye:'右眼',files:{right:'',left:''}},audience:['王医生','赵医生']},
+      {code:'AMD2026003',difficulty:'进阶',patient:{caseNo:'AMD2026003',name:'李国强',gender:'男',age:'71',chief:'右眼视物变形伴中心暗点3个月'},primaryImaging:{type:'OCTA',eyeMode:'单眼',singleEye:'右眼',files:{right:'',left:''}},audience:['陈医生','周医生']},
+      {code:'DR2026004',difficulty:'疑难',patient:{caseNo:'DR2026004',name:'刘美华',gender:'女',age:'48',chief:'突发右眼视力急剧下降至眼前手动3天'},primaryImaging:{type:'眼底彩照',eyeMode:'双眼',singleEye:'右眼',files:{right:'',left:''}},audience:['孙医生','刘医生']}
     ];
-    var editing = null, mode = 'add';
+    var audienceEditingCode = '';
+    var audienceStaff = [
+      {name:'张医生',role:'眼底病方向'},{name:'李医生',role:'住院医师'},{name:'王医生',role:'青光眼方向'},
+      {name:'赵医生',role:'眼底病方向'},{name:'陈医生',role:'黄斑病方向'},{name:'周医生',role:'科研组'},
+      {name:'孙医生',role:'规培医师'},{name:'刘医生',role:'高级研修班'},{name:'韩医生',role:'科研课题组'}
+    ];
+    var editing = null;
     function esc(v){return String(v == null ? '' : v).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];});}
+    function optionSelected(current,value){return current===value?' selected':'';}
     function render(){
-      var q=(document.getElementById('search').value||'').toLowerCase(),df=document.getElementById('difficulty').value,st=document.getElementById('statusFilter').value;
-      var list=rows.filter(function(r){var p=r.patient||{};return(!q||[r.name,r.code,r.disease,p.name].join(' ').toLowerCase().indexOf(q)>-1)&&(!df||r.difficulty===df)&&(!st||r.status===st);});
+      var q=(document.getElementById('search').value||'').toLowerCase(),df=document.getElementById('difficulty').value;
+      var list=rows.filter(function(r){var p=r.patient||{};return(!q||(r.code+p.name).toLowerCase().indexOf(q)>-1)&&(!df||r.difficulty===df);});
       document.getElementById('tableBody').innerHTML=list.length?list.map(function(r){
         var pi=r.primaryImaging||{},dClass=r.difficulty==='疑难'?'bad':r.difficulty==='进阶'?'wait':'info';
-        return '<tr><td><strong>'+esc(r.name)+'</strong></td><td class="mono">'+esc(r.code)+'</td><td>'+esc(r.disease)+'</td><td><span class="status '+dClass+'">'+esc(r.difficulty)+'</span></td><td><span class="status info">'+esc(pi.type||'未配置')+'</span></td><td><span class="status '+(r.status==='已发布'?'ok':'gray')+'">'+esc(r.status)+'</span></td><td><div class="table-actions"><button class="btn small" onclick="openModal(\'view\',\''+r.code+'\')">查看</button><button class="btn small" onclick="openModal(\'edit\',\''+r.code+'\')">编辑</button><button class="btn small danger" onclick="removeRow(\''+r.code+'\')">删除</button></div></td></tr>';
+        return '<tr><td class="mono">'+esc(r.code)+'</td><td>'+esc(r.patient.name)+' / '+esc(r.patient.gender)+' / '+esc(r.patient.age)+'岁</td>'
+          +'<td>'+esc(r.patient.chief).slice(0,34)+(r.patient.chief.length>34?'…':'')+'</td>'
+          +'<td><span class="status '+dClass+'">'+esc(r.difficulty)+'</span></td><td>'+imageSummary(r)+'</td>'
+          +'<td><div class="assigned-users">'+assignedSummary(r.audience)+'</div></td>'
+          +'<td><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">分配用户</button></td></tr>';
       }).join(''):'<tr><td colspan="7"><div class="empty-note">没有匹配的经典病例。</div></td></tr>';
     }
+    function imageSummary(r){var im=r.primaryImaging||{},side=im.eyeMode==='单眼'?(im.singleEye||'右眼')+' 1份':'右眼、左眼 2份';return esc(im.type||'未配置')+'<div class="muted">'+esc(side)+'</div>';}
+    function assignedSummary(list){list=Array.isArray(list)?list:[];if(!list.length)return '待分配用户';return list.length<=2?esc(list.join('、')):esc(list.slice(0,2).join('、'))+'等'+list.length+'人';}
     function inputField(id,label,value,read,fieldClass,inputClass){return '<div class="form-field'+(fieldClass?' '+fieldClass:'')+'"><label>'+label+'</label><input class="input'+(inputClass?' '+inputClass:'')+'" id="'+id+'" value="'+esc(value||'')+'"'+(read?' disabled':'')+'></div>';}
     function textField(id,label,value,read,fieldClass){return '<div class="form-field'+(fieldClass?' '+fieldClass:'')+'"><label>'+label+'</label><textarea id="'+id+'"'+(read?' disabled':'')+'>'+esc(value||'')+'</textarea></div>';}
-    function fileField(id,label,value,read){return '<div class="form-field"><label>'+label+'</label><input class="input" type="file" id="'+id+'" accept="image/*"'+(read?' disabled':'')+'><div class="muted">'+(value?'已配置：'+esc(value):'支持 JPG、PNG 等影像文件')+'</div></div>';}
-    function fields(r,read){
-      var p=r.patient||{},pi=r.primaryImaging||{},right=pi.right||{},left=pi.left||{};
-      return '<div class="section-block"><h3>一、病例基本信息</h3><p class="section-note">对应前端“病例信息与病史”卡片中的病例基础字段。</p><div class="info-grid">'+inputField('f_name','病例名称',r.name,read,'span-2')+inputField('f_code','病例号',r.code,read,'','mono')+inputField('f_disease','病种',r.disease,read)+ '<div class="form-field"><label>难度</label><select class="select" id="f_difficulty"'+(read?' disabled':'')+'><option'+(r.difficulty==='基础'?' selected':'')+'>基础</option><option'+(r.difficulty==='进阶'?' selected':'')+'>进阶</option><option'+(r.difficulty==='疑难'?' selected':'')+'>疑难</option></select></div></div></div>'+
-      '<div class="section-block"><h3>二、患者信息与病史</h3><p class="section-note">这些字段会直接展示在前端病例信息卡片中，主诉 / 病史单独维护。</p><div class="info-grid">'+inputField('f_patient_name','患者姓名',p.name,read)+ '<div class="form-field"><label>性别</label><select class="select" id="f_gender"'+(read?' disabled':'')+'><option'+(p.gender==='女'?' selected':'')+'>女</option><option'+(p.gender==='男'?' selected':'')+'>男</option><option'+(p.gender==='其他'?' selected':'')+'>其他</option></select></div>'+inputField('f_age','年龄',p.age,read)+textField('f_chief','主诉 / 病史',p.chief,read,'span-4')+'</div></div>'+
-      '<div class="section-block"><h3>三、主影像资料</h3><p class="section-note">一个病例只配置一种主影像类型；右眼、左眼分别上传对应图像。</p><div class="info-grid"><div class="form-field span-2"><label>主影像类型</label><select class="select" id="f_primary_type"'+(read?' disabled':'')+'>'+['眼底彩照','OCT','OCTA','FFA','视野','UBM','B超','其他'].map(function(type){return '<option'+(pi.type===type?' selected':'')+'>'+type+'</option>';}).join('')+'</select></div></div><div class="option-stack"><div class="option-title"><span>右眼主影像</span><span class="status info">仅上传图像</span></div><div class="info-grid">'+fileField('f_right_file','右眼影像文件',right.fileName,read)+'</div><div class="option-title"><span>左眼主影像</span><span class="status info">仅上传图像</span></div><div class="info-grid">'+fileField('f_left_file','左眼影像文件',left.fileName,read)+'</div></div></div>'+
-      '';
+    function assignedUserSelect(selected,id){
+      selected=Array.isArray(selected)?selected:[];
+      return '<select class="select assign-user-select" id="'+id+'" multiple size="6">'+audienceStaff.map(function(person){
+        return '<option value="'+esc(person.name)+'"'+(selected.indexOf(person.name)>-1?' selected':'')+'>'+esc(person.name+'（'+person.role+'）')+'</option>';
+      }).join('')+'</select><p class="assign-user-note">必须至少选择1名具体用户；只有被分配的用户登录后才能看到该病例。</p>';
     }
-    function openModal(m,code){
-      mode=m;editing=rows.find(function(r){return r.code===code;})||{code:'CASE-'+String(rows.length+1).padStart(3,'0'),name:'',disease:'',difficulty:'基础',status:'已发布',patient:{caseNo:'',name:'',gender:'女',age:'',chief:''},primaryImaging:{type:'眼底彩照',right:{fileName:''},left:{fileName:''}}};
-      var read=m==='view';document.getElementById('modalTitle').textContent=m==='add'?'新增经典病例':m==='edit'?'编辑经典病例':'查看经典病例';document.getElementById('modalDesc').textContent=read?'查看病例基本信息、患者病史和主影像配置。':'按前端展示逻辑维护病例字段和主影像资料。';document.getElementById('modalBody').innerHTML=fields(editing,read);document.getElementById('saveBtn').style.display=read?'none':'inline-flex';document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
+    function fields(r){
+      var p=r.patient||{},pi=r.primaryImaging||{};
+      return '<div class="section-block"><h3>一、病例基本信息</h3><p class="section-note">对应前端“病例信息与病史”卡片中的病例号和难度等级。</p><div class="info-grid">'
+        +inputField('f_code','病例号',r.code,false,'','mono')+'<div class="form-field"><label>难度等级</label><select class="select" id="f_difficulty">'
+        +'<option'+optionSelected(r.difficulty,'基础')+'>基础</option><option'+optionSelected(r.difficulty,'进阶')+'>进阶</option><option'+optionSelected(r.difficulty,'疑难')+'>疑难</option></select></div></div></div>'
+        +'<div class="section-block"><h3>二、患者信息与病史</h3><p class="section-note">这些字段与前端病例详情中的患者信息、主诉 / 病史保持一致。</p><div class="info-grid">'
+        +inputField('f_patient_name','患者姓名',p.name,false)+'<div class="form-field"><label>性别</label><select class="select" id="f_gender">'
+        +'<option'+optionSelected(p.gender,'女')+'>女</option><option'+optionSelected(p.gender,'男')+'>男</option><option'+optionSelected(p.gender,'其他')+'>其他</option></select></div>'
+        +inputField('f_age','年龄',p.age,false)+textField('f_chief','主诉 / 病史',p.chief,false,'span-4')+'</div></div>'
+        +'<div class="section-block"><h3>三、主影像资料</h3><p class="section-note">先选择影像类别，再选择单眼或双眼；单眼只显示一个上传位置，双眼显示两个上传位置。</p><div class="info-grid">'
+        +'<div class="form-field"><label>影像类别</label><select class="select" id="f_primary_type" onchange="renderImageSlots()"><option'+optionSelected(pi.type||'眼底彩照','眼底彩照')+'>眼底彩照</option><option'+optionSelected(pi.type,'OCT')+'>OCT</option><option'+optionSelected(pi.type,'OCTA')+'>OCTA</option></select></div>'
+        +'<div class="form-field"><label>单眼 / 双眼</label><select class="select" id="f_eye_mode" onchange="renderImageSlots()"><option'+optionSelected(pi.eyeMode||'双眼','双眼')+'>双眼</option><option'+optionSelected(pi.eyeMode,'单眼')+'>单眼</option></select></div>'
+        +'<div class="form-field" id="singleEyeField"><label>单眼眼别</label><select class="select" id="f_single_eye" onchange="renderImageSlots()"><option'+optionSelected(pi.singleEye||'右眼','右眼')+'>右眼</option><option'+optionSelected(pi.singleEye,'左眼')+'>左眼</option></select></div>'
+        +'<div id="imageSlots" class="image-slot-list"></div></div></div>'
+        +'<div class="section-block"><h3>四、分配用户</h3><p class="section-note">选择该经典病例在学生端的可见用户。</p>'+assignedUserSelect(r.audience,'caseAudienceSelect')+'</div>';
+    }
+    function renderImageSlots(){
+      var typeEl=document.getElementById('f_primary_type'),modeEl=document.getElementById('f_eye_mode'),singleEl=document.getElementById('f_single_eye'),field=document.getElementById('singleEyeField'),wrap=document.getElementById('imageSlots');
+      if(!wrap)return;
+      var type=typeEl?typeEl.value:'眼底彩照',eyeMode=modeEl?modeEl.value:'双眼',singleEye=singleEl?singleEl.value:'右眼';
+      if(field)field.style.display=eyeMode==='单眼'?'grid':'none';
+      var sides=eyeMode==='双眼'?['右眼','左眼']:[singleEye];
+      wrap.innerHTML=sides.map(function(side){var key=side==='左眼'?'left':'right';return '<div class="image-slot"><strong>'+esc(type)+'（'+side+'）</strong><input type="file" id="f_'+key+'_file" accept="image/*,.dcm,.dicom"><div class="muted">支持 JPG、PNG 等影像文件</div></div>';}).join('');
+    }
+    function openModal(){
+      editing={code:'CASE-'+String(rows.length+1).padStart(3,'0'),difficulty:'基础',patient:{caseNo:'',name:'',gender:'女',age:'',chief:''},primaryImaging:{type:'眼底彩照',eyeMode:'双眼',singleEye:'右眼',files:{right:'',left:''}},audience:[]};
+      document.getElementById('modalTitle').textContent='新增经典病例';
+      document.getElementById('modalDesc').textContent='按前端病例信息、主影像资料录入病例，并分配可见用户。';
+      document.getElementById('modalBody').innerHTML=fields(editing);
+      renderImageSlots();
+      document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
     }
     function closeModal(){document.getElementById('mask').classList.remove('open');document.getElementById('modal').classList.remove('open');}
-    function fileName(id,oldValue){var el=document.getElementById(id);return el&&el.files&&el.files[0]?el.files[0].name:(oldValue||'');}
+    function value(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+    function fileName(id){var el=document.getElementById(id);return el&&el.files&&el.files[0]?el.files[0].name:'';}
+    function selectedValues(id){var el=document.getElementById(id);return el?Array.from(el.selectedOptions).map(function(option){return option.value;}):[];}
     function save(){
-      var oldPi=editing.primaryImaging||{},oldRight=oldPi.right||{},oldLeft=oldPi.left||{};
-      var item={code:document.getElementById('f_code').value.trim(),name:document.getElementById('f_name').value.trim(),disease:document.getElementById('f_disease').value.trim(),difficulty:document.getElementById('f_difficulty').value,status:'已发布',patient:{caseNo:document.getElementById('f_code').value.trim(),name:document.getElementById('f_patient_name').value.trim(),gender:document.getElementById('f_gender').value,age:document.getElementById('f_age').value.trim(),chief:document.getElementById('f_chief').value.trim()},primaryImaging:{type:document.getElementById('f_primary_type').value,right:{fileName:fileName('f_right_file',oldRight.fileName)},left:{fileName:fileName('f_left_file',oldLeft.fileName)}}};
-      if(!item.name||!item.code||!item.patient.name){showToast('请填写病例名称、病例号和患者姓名');return;}var idx=rows.findIndex(function(r){return r.code===editing.code;});if(mode==='edit'&&idx>-1)rows[idx]=item;else rows.unshift(item);closeModal();render();showToast('经典病例已保存');
+      var item={code:value('f_code'),difficulty:value('f_difficulty')||'基础',patient:{caseNo:value('f_code'),name:value('f_patient_name'),gender:document.getElementById('f_gender').value,age:value('f_age'),chief:value('f_chief')},primaryImaging:{type:value('f_primary_type')||'眼底彩照',eyeMode:value('f_eye_mode')||'双眼',singleEye:value('f_single_eye')||'右眼',files:{right:fileName('f_right_file'),left:fileName('f_left_file')}},audience:selectedValues('caseAudienceSelect')};
+      if(!item.code||!item.patient.name){showToast('请填写病例号和患者姓名');return;}
+      if(!item.audience.length){showToast('请至少分配1名用户');return;}
+      rows.unshift(item);closeModal();render();showToast('经典病例已保存');
     }
-    function removeRow(code){var r=rows.find(function(x){return x.code===code;});if(!r||!confirm('确定删除“'+r.name+'”吗？'))return;rows=rows.filter(function(x){return x.code!==code;});render();showToast('经典病例已删除');}
+    function openAudienceModal(code){
+      var r=rows.find(function(x){return x.code===code;});if(!r){showToast('未找到该经典病例');return;}
+      audienceEditingCode=code;document.getElementById('audienceTitle').textContent='分配用户 - '+code;document.getElementById('audienceDesc').textContent='只分配当前经典病例的可见用户，不修改病例内容。';
+      document.getElementById('audienceBody').innerHTML='<div class="section-block"><h3>分配用户</h3>'+assignedUserSelect(r.audience,'audienceSelect')+'</div>';
+      document.getElementById('audienceMask').classList.add('open');document.getElementById('audienceModal').classList.add('open');
+    }
+    function closeAudienceModal(){document.getElementById('audienceMask').classList.remove('open');document.getElementById('audienceModal').classList.remove('open');}
+    function saveAudience(){
+      var r=rows.find(function(x){return x.code===audienceEditingCode;});if(!r){showToast('未找到该经典病例');return;}
+      var selected=selectedValues('audienceSelect');if(!selected.length){showToast('请至少分配1名用户');return;}
+      r.audience=selected;closeAudienceModal();render();showToast('用户分配已保存');
+    }
     function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
     render();
   </script>
 </body>
 </html>
-

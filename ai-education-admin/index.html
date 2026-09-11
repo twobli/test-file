@@ -906,6 +906,158 @@
       text-align: center;
       background: #f8fbff;
     }
+    .case-timeline-builder {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid #cfe0f2;
+      border-radius: 8px;
+      background: #f7fbff;
+    }
+    .case-timeline-builder-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .case-timeline-builder-head strong { font-size: 14px; }
+    .case-timeline-builder-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .case-timeline-list {
+      display: grid;
+      gap: 14px;
+    }
+    .case-timeline-card {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      padding: 14px 14px 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .case-timeline-card::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 18px;
+      bottom: 18px;
+      width: 3px;
+      border-radius: 3px;
+      background: #7c4dff;
+    }
+    .case-timeline-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .case-timeline-card-head strong {
+      color: var(--primary);
+      font-size: 13px;
+    }
+    .case-timeline-date {
+      width: 160px;
+      min-width: 160px;
+    }
+    .case-timeline-date-field {
+      display: grid;
+      gap: 5px;
+      min-width: 160px;
+    }
+    .case-timeline-date-field label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .case-timeline-section {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid #dbe6f4;
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .case-timeline-section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .case-timeline-section-head strong {
+      color: #1b2838;
+      font-size: 13px;
+    }
+    .case-timeline-section-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .case-timeline-info-title { min-width: 210px; }
+    .case-timeline-info-content { min-height: 112px; }
+    .case-timeline-question-builder {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px dashed #b8c7d9;
+      border-radius: 8px;
+      background: #f8fbff;
+    }
+    .case-timeline-question-builder-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .case-timeline-question-builder-head strong { font-size: 13px; }
+    .case-timeline-question-builder-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .case-timeline-question-card {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .case-timeline-question-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    .case-timeline-question-card-head strong {
+      color: #1b2838;
+      font-size: 12px;
+    }
+    .case-timeline-question-card textarea { min-height: 72px; }
+    .case-timeline-option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .case-timeline-order-note {
+      padding: 9px 11px;
+      border-radius: 6px;
+      background: #f0eaff;
+      color: #5f35c7;
+      font-size: 12px;
+      line-height: 1.5;
+    }
     .answer-option {
       display: grid;
       grid-template-columns: 54px minmax(0, 1fr) 112px;
@@ -1303,30 +1455,27 @@
 
       <section class="section" id="cases">
         <div class="toolbar">
-          <div class="tabs" data-tab-group="caseTabs">
-            <button class="tab active" data-tab="caseReason">病例库发布与分发</button>
-          </div>
-          <button class="btn primary" onclick="openDrawer('发布病例', '维护难度等级、病例分层、多模态影像、结构化病历摘要和指定可见用户。推理流程由系统统一提供。', 'case')">发布病例</button>
+          <button class="btn primary" onclick="openDrawer('发布病例', '维护病例分层、多模态影像、结构化病历摘要、病例演变时间轴和分配用户。推理流程由系统统一提供。', 'case')">发布病例</button>
         </div>
         <div class="tab-pane active" id="caseReason">
           <div class="panel">
             <div class="panel-head"><div><h2 class="panel-title">标准病例库管理</h2><p class="panel-subtitle">病例发布后直接同步到学生端；后续新增员工时，可通过“配置人员”补充该病例的可见人员。</p></div></div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>病例</th><th>难度等级</th><th>病例分层</th><th>多模态医学影像</th><th>结构化病历摘要</th><th>可见用户</th><th>操作</th></tr></thead>
+                <thead><tr><th>病例</th><th>病例分层</th><th>多模态医学影像</th><th>结构化病历摘要</th><th>可见用户</th><th>操作</th></tr></thead>
                 <tbody>
-                  <tr><td>病例1</td><td><span class="status info">基础</span></td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、既往史、眼部检查</td><td>张医生、李医生等3人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例1', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例2</td><td><span class="status info">基础</span></td><td>基础病例</td><td>眼底彩照</td><td>患者信息、主诉、现病史、眼部检查</td><td>王医生、赵医生等5人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例2', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例3</td><td><span class="status info">基础</span></td><td>基础病例</td><td>OCTA</td><td>主诉、现病史、既往史、影像摘要</td><td>陈医生、周医生等2人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例3', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例4</td><td><span class="status info">基础</span></td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、眼部检查</td><td>刘医生、孙医生等4人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例4', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例5</td><td><span class="status info">基础</span></td><td>基础病例</td><td>OCT</td><td>主诉、现病史、既往史、治疗摘要</td><td>王医生、李医生等3人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例5', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例6</td><td><span class="status info">进阶</span></td><td>进阶病例</td><td>OCTA</td><td>病史、血糖控制、影像指标、诊疗摘要</td><td>刘医生、孙医生、赵医生等6人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例6', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例7</td><td><span class="status info">进阶</span></td><td>进阶病例</td><td>眼底彩照</td><td>主诉、眼部检查、鉴别诊断摘要</td><td>王医生、赵医生、孙医生等8人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例7', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例8</td><td><span class="status info">进阶</span></td><td>进阶病例</td><td>OCT</td><td>病史、影像指标、治疗与随访摘要</td><td>陈医生、周医生等2人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例8', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例9</td><td><span class="status info">进阶</span></td><td>进阶病例</td><td>OCTA</td><td>病史、影像指标、治疗决策摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例9', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例10</td><td><span class="status info">科研</span></td><td>科研病例</td><td>眼底彩照</td><td>全身表现、眼部检查、影像与治疗摘要</td><td>周医生、韩医生、陈医生等5人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例10', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例11</td><td><span class="status info">科研</span></td><td>科研病例</td><td>OCT</td><td>家族史、眼部检查、影像与遗传摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例11', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例12</td><td><span class="status info">科研</span></td><td>科研病例</td><td>OCTA</td><td>既往史、眼部检查、影像与鉴别诊断摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例12', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例1</td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、既往史、眼部检查</td><td>张医生、李医生等3人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例1', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例2</td><td>基础病例</td><td>眼底彩照</td><td>患者信息、主诉、现病史、眼部检查</td><td>王医生、赵医生等5人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例2', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例3</td><td>基础病例</td><td>OCTA</td><td>主诉、现病史、既往史、影像摘要</td><td>陈医生、周医生等2人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例3', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例4</td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、眼部检查</td><td>刘医生、孙医生等4人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例4', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例5</td><td>基础病例</td><td>OCT</td><td>主诉、现病史、既往史、治疗摘要</td><td>王医生、李医生等3人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例5', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例6</td><td>进阶病例</td><td>OCTA</td><td>病史、血糖控制、影像指标、诊疗摘要</td><td>刘医生、孙医生、赵医生等6人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例6', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例7</td><td>进阶病例</td><td>眼底彩照</td><td>主诉、眼部检查、鉴别诊断摘要</td><td>王医生、赵医生、孙医生等8人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例7', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例8</td><td>进阶病例</td><td>OCT</td><td>病史、影像指标、治疗与随访摘要</td><td>陈医生、周医生等2人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例8', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例9</td><td>进阶病例</td><td>OCTA</td><td>病史、影像指标、治疗决策摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例9', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例10</td><td>科研病例</td><td>眼底彩照</td><td>全身表现、眼部检查、影像与治疗摘要</td><td>周医生、韩医生、陈医生等5人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例10', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例11</td><td>科研病例</td><td>OCT</td><td>家族史、眼部检查、影像与遗传摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例11', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例12</td><td>科研病例</td><td>OCTA</td><td>既往史、眼部检查、影像与鉴别诊断摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例12', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
                 </tbody>
               </table>
             </div>
@@ -1502,7 +1651,7 @@
   <script>
     var sectionMeta = {
       courses: ['教师课程管理端', '作为基础课程管理后台，先维护知识点，再上传课程与章节资源，并在同一页面继续配置章节测验、学员管理与教学反馈。'],
-      cases: ['案例教学管理', '管理标准病例库与病例发布分发；标准病例库需维护难度等级、病例分层、多模态影像和结构化病历摘要。'],
+       cases: ['案例教学管理', '管理标准病例库与病例发布分发；标准病例库需维护病例分层、多模态影像和结构化病历摘要。'],
       practice: ['技能实践管理', '进入三个独立子后台：虚拟临床技能实训、经典病例诊断实训、读片与病例大赛系统。'],
       contest: ['读片/病例大赛管理', '管理比赛有效期、固定答题时长、报名、进度保存、剩余时间，以及完成、退赛、缺考三种结果。'],
       exams: ['考试中心管理', '先选阶段测评或综合考核，再定单课程/模块/全周期，随后逐题创建题目并绑定知识点、难度和分数。'],
@@ -2623,7 +2772,6 @@
 
       case: `<div class="split-form">
         <div class="form-field" style="grid-column:1/-1;"><label>前台同步逻辑</label><p class="form-hint">病例保存后同步到学生端“案例教学”左侧病例树；前台不展示病例名称和病种信息，病例按列表顺序展示。推理流程、AI对比和学习报告由系统统一提供。</p></div>
-        <div class="form-field"><label>难度等级</label><select class="select" data-case-difficulty><option selected>基础</option><option>进阶</option><option>高阶</option></select></div>
         <div class="form-field"><label>病例分层</label><select class="select" data-case-layer><option selected>基础病例</option><option>进阶病例</option><option>科研病例</option></select></div>
         <div class="case-modality-builder">
           <div class="case-modality-builder-head">
@@ -2632,7 +2780,15 @@
           <div class="case-modality-list" id="caseModalityList"></div>
         </div>
         <div class="form-field" style="grid-column:1/-1;"><label>结构化病历摘要</label><textarea data-case-summary placeholder="请输入结构化病历摘要，包括患者信息、主诉、现病史、既往史、眼部检查及辅助检查结果。"></textarea><p class="form-hint">该摘要同步到前台“结构化病例信息”区域；具体字段内容按病例实际资料填写。</p></div>
-        <div class="form-field" style="grid-column:1/-1;"><label>指定可见用户</label><select class="select knowledge-select" multiple size="7"><option selected>张医生（眼底病方向）</option><option selected>李医生（住院医师）</option><option>王医生（青光眼方向）</option><option>赵医生（眼底病方向）</option><option>陈医生（黄斑病方向）</option><option>周医生（科研组）</option><option>孙医生（规培医师）</option><option>刘医生（高级研修班）</option><option>韩医生（科研课题组）</option></select><p class="form-hint">必须至少选择1名具体用户；只有被选中的用户登录后才能看到该病例。这里不配置角色、班级或全员可见范围。</p></div>
+        <div class="case-timeline-builder">
+          <div class="case-timeline-builder-head">
+            <div><strong>病例演变时间轴</strong><p>按时间依次添加病例节点：先填写时间，再录入该时间轴下的病例信息和对应题目。后续时间必须晚于前一个时间轴。</p></div>
+            <button type="button" class="btn primary small" onclick="addCaseTimeline()">添加时间轴</button>
+          </div>
+          <div class="case-timeline-list" id="caseTimelineList"></div>
+          <div class="case-timeline-order-note">添加规则：完成当前时间轴的病例信息和对应题目后，才可添加下一个时间轴；时间轴按时间从早到晚排列。</div>
+        </div>
+        <div class="form-field" style="grid-column:1/-1;"><label>分配用户</label><select class="select knowledge-select" multiple size="7"><option selected>张医生（眼底病方向）</option><option selected>李医生（住院医师）</option><option>王医生（青光眼方向）</option><option>赵医生（眼底病方向）</option><option>陈医生（黄斑病方向）</option><option>周医生（科研组）</option><option>孙医生（规培医师）</option><option>刘医生（高级研修班）</option><option>韩医生（科研课题组）</option></select><p class="form-hint">必须至少选择1名具体用户；只有被分配的用户登录后才能看到该病例。这里不配置角色、班级或全员可见范围。</p></div>
       </div>`,
       'case-users': `<div class="split-form">
         <div class="form-field" style="grid-column:1/-1;"><label>配置说明</label><p class="form-hint">病例已经发布到学生端。本页面只用于维护可见人员，新增员工入职后可在这里补充；保存后立即生效。</p></div>
@@ -2656,7 +2812,7 @@
         <div class="form-field"><label>知识点编号</label><input class="input" value="KP-HR-001"></div>
         <div class="form-field" style="grid-column:1/-1;"><label>知识点简介</label><textarea>用于高血压视网膜病变分级判读。</textarea></div>
       </div>`,
-      'case-loop': '<div class="rules"><div class="rule-box"><b>系统固定的学习闭环</b><p>前台按代码执行：查看病例资料 → 提交病例推理 → 自动解锁AI诊断对比 → 生成学习报告 → 回写个人中心能力评估。后台不配置推理字段、答案、评分或解锁条件。</p></div><div class="rule-box"><b>后台可维护范围</b><p>病例发布弹框只维护难度等级、病例分层、多模态影像、结构化病历摘要和指定可见用户。</p></div><div class="rule-box"><b>当前状态</b><p>此处仅用于查看系统规则和病例运行状态，不提供保存按钮对应的推理配置。</p></div></div>',
+      'case-loop': '<div class="rules"><div class="rule-box"><b>系统固定的学习闭环</b><p>前台按代码执行：查看病例资料 → 提交病例推理 → 自动解锁AI诊断对比 → 生成学习报告 → 回写个人中心能力评估。后台不配置推理字段、答案、评分或解锁条件。</p></div><div class="rule-box"><b>后台可维护范围</b><p>病例发布弹框维护病例分层、多模态影像、结构化病历摘要、病例演变时间轴和分配用户。</p></div><div class="rule-box"><b>当前状态</b><p>此处仅用于查看系统规则和病例运行状态，不提供保存按钮对应的推理配置。</p></div></div>',
       'case-ai': '<div class="rules"><div class="rule-box"><b>AI诊断对比由系统生成</b><p>学生提交病例推理后，系统按照代码内置的AI诊断、证据对比和学习报告逻辑生成结果，后台不维护标准答案、置信度、证据库或对比字段。</p></div><div class="rule-box"><b>病例数据来源</b><p>AI对比读取已发布病例的结构化病历摘要和影像资料；病例资料由“发布病例”弹框维护。</p></div><div class="rule-box"><b>权限来源</b><p>只有病例发布时指定的用户可以进入该病例并产生对应的学习记录。</p></div></div>',
       'case-discussion': `<div class="split-form">
         <div class="form-field" style="grid-column:1/-1;"><label>讨论区管理逻辑</label><p class="form-hint">讨论区承接学生完成病例推理后的复盘，可管理发帖、回复、语音回复、风险词审核、专家置顶和前台精选展示。</p></div>
@@ -2841,11 +2997,112 @@
       return card;
     }
 
+    function caseTimelineQuestionHtml(values) {
+      values = values || {};
+      return '<div class="case-timeline-question-card" data-case-timeline-question>'
+        + '<div class="case-timeline-question-card-head"><strong>对应题目</strong></div>'
+        + '<div class="form-field"><label>题干</label><textarea data-case-question-stem placeholder="请输入该时间轴对应的题干">' + (values.stem || '') + '</textarea></div>'
+        + '<div class="case-timeline-option-grid">'
+        + '<div class="form-field"><label>A 选项</label><input class="input" data-case-option="A" placeholder="请输入A选项" value="' + (values.a || '') + '"></div>'
+        + '<div class="form-field"><label>B 选项</label><input class="input" data-case-option="B" placeholder="请输入B选项" value="' + (values.b || '') + '"></div>'
+        + '<div class="form-field"><label>C 选项</label><input class="input" data-case-option="C" placeholder="请输入C选项" value="' + (values.c || '') + '"></div>'
+        + '<div class="form-field"><label>D 选项</label><input class="input" data-case-option="D" placeholder="请输入D选项" value="' + (values.d || '') + '"></div>'
+        + '</div>'
+        + '<div class="split-form">'
+        + '<div class="form-field"><label>正确答案</label><select class="select" data-case-correct-answer><option value="">请选择正确答案</option><option value="A"' + (values.answer === 'A' ? ' selected' : '') + '>A</option><option value="B"' + (values.answer === 'B' ? ' selected' : '') + '>B</option><option value="C"' + (values.answer === 'C' ? ' selected' : '') + '>C</option><option value="D"' + (values.answer === 'D' ? ' selected' : '') + '>D</option></select></div>'
+        + '<div class="form-field"><label>解析</label><textarea data-case-question-analysis placeholder="请输入题目解析">' + (values.analysis || '') + '</textarea></div>'
+        + '</div>'
+        + '</div>';
+    }
+
+    function caseTimelineCardHtml(index, values) {
+      values = values || {};
+      return '<div class="case-timeline-card" data-case-timeline-card>'
+        + '<div class="case-timeline-card-head"><strong>时间轴 ' + index + '</strong><div class="case-timeline-date-field"><label>时间</label><input class="input case-timeline-date" type="date" data-case-timeline-date value="' + (values.date || '') + '"></div></div>'
+        + '<div class="case-timeline-section">'
+        + '<div class="case-timeline-section-head"><div><strong>病例信息</strong><p>填写该时间点对应的病史、症状、检查结果或其他病例进展信息。</p></div></div>'
+        + '<div class="form-field"><label>病例信息标题</label><input class="input case-timeline-info-title" data-case-timeline-info-title placeholder="例如：病史与初发症状" value="' + (values.title || '') + '"></div>'
+        + '<div class="form-field"><label>病例信息内容</label><textarea class="case-timeline-info-content" data-case-timeline-info-content placeholder="请输入该时间点的病例信息">' + (values.info || '') + '</textarea></div>'
+        + '<div class="case-timeline-question-builder">'
+        + '<div class="case-timeline-question-builder-head"><div><strong>对应题目</strong><p>每个时间轴固定对应1道题目，请填写题干、选项、正确答案和解析。</p></div></div>'
+        + caseTimelineQuestionHtml(values.question)
+        + '</div>'
+        + '</div>'
+        + '</div>';
+    }
+
+    function addCaseTimeline() {
+      var list = document.getElementById('caseTimelineList');
+      if (!list) return;
+      var cards = list.querySelectorAll('[data-case-timeline-card]');
+      if (cards.length > 0 && !validateCaseTimelineOrder(true)) return;
+      var previousDate = cards.length ? cards[cards.length - 1].querySelector('[data-case-timeline-date]').value : '';
+      var nextDate = '';
+      if (previousDate) {
+        var date = new Date(previousDate + 'T00:00:00');
+        date.setDate(date.getDate() + 1);
+        nextDate = date.toISOString().slice(0, 10);
+      }
+      list.insertAdjacentHTML('beforeend', caseTimelineCardHtml(cards.length + 1, { date: nextDate }));
+    }
+
+    function validateCaseTimelineCard(card, showMessage) {
+      if (!card) return false;
+      var date = card.querySelector('[data-case-timeline-date]');
+      var title = card.querySelector('[data-case-timeline-info-title]');
+      var info = card.querySelector('[data-case-timeline-info-content]');
+      var question = card.querySelector('[data-case-timeline-question]');
+      var stem = question && question.querySelector('[data-case-question-stem]');
+      var options = question ? question.querySelectorAll('[data-case-option]') : [];
+      var answer = question && question.querySelector('[data-case-correct-answer]');
+      var analysis = question && question.querySelector('[data-case-question-analysis]');
+      var valid = date && date.value && title && title.value.trim() && info && info.value.trim() && question
+        && stem && stem.value.trim() && answer && answer.value && analysis && analysis.value.trim();
+      for (var i = 0; i < options.length; i++) {
+        if (!options[i].value.trim()) valid = false;
+      }
+      if (!valid && showMessage) showToast('请完整填写当前时间轴的时间、病例信息和对应题目。');
+      return !!valid;
+    }
+
+    function validateCaseTimelineOrder(showMessage) {
+      var cards = document.querySelectorAll('#drawerBody [data-case-timeline-card]');
+      var previousDate = '';
+      for (var i = 0; i < cards.length; i++) {
+        if (!validateCaseTimelineCard(cards[i], showMessage)) return false;
+        var currentDate = cards[i].querySelector('[data-case-timeline-date]').value;
+        if (previousDate && currentDate <= previousDate) {
+          if (showMessage) showToast('后面的时间轴必须晚于前面的时间轴。');
+          return false;
+        }
+        previousDate = currentDate;
+      }
+      return cards.length > 0;
+    }
+
     function initCaseForm() {
       var list = document.getElementById('caseModalityList');
-      if (!list) return;
-      list.innerHTML = '';
-      addCaseModality('眼底彩照');
+      if (list) {
+        list.innerHTML = '';
+        addCaseModality('眼底彩照');
+      }
+      var timelineList = document.getElementById('caseTimelineList');
+      if (timelineList) {
+        timelineList.innerHTML = caseTimelineCardHtml(1, {
+          date: '2026-01-01',
+          title: '病史与初发症状',
+          info: '既往史：2型糖尿病15年。口服二甲双胍0.5g tid + 甘精胰岛素12U qn。近期HbA1c 8.5%；高血压5年，口服氨氯地平5mg qd，血压控制可（135/85mmHg）。否认心脏病、脑血管疾病、肝肾疾病史。否认药物过敏。吸烟20年，每日10支；偶饮酒。\\n主诉：双眼视力下降伴视物变形6个月，右眼为重。',
+          question: {
+            stem: '根据2026年1月1日初诊时的病史与主诉，最应优先考虑下列哪种疾病方向？',
+            a: '非动脉炎性前部缺血性视神经病变（NAION）',
+            b: '湿性年龄相关性黄斑变性（AMD）',
+            c: '糖尿病黄斑水肿（DME）',
+            d: '急性闭角型青光眼',
+            answer: 'C',
+            analysis: '回答正确：结合患者基础病史（糖尿病、高血压、近视等）与初发主诉，优先考虑与这些危险因素相关一致的疾病方向：糖尿病黄斑水肿（DME）。'
+          }
+        });
+      }
     }
 
     function validateCaseBeforeSave() {
@@ -2872,6 +3129,7 @@
           return false;
         }
       }
+      if (!validateCaseTimelineOrder(true)) return false;
       return true;
     }
 
