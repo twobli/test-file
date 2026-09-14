@@ -240,6 +240,17 @@
       <div class="card-grid" id="gridModule3"></div>
     </div>
 
+    <!-- ======== 模块四：眼病/慢病数据标准体系 ======== -->
+    <div class="module-section">
+      <div class="module-header">
+        <div class="module-icon" style="background:#FFF3E0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 3l7 3v5c0 4.5-2.9 8.6-7 10-4.1-1.4-7-5.5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/><path d="M8 17h8"/></svg>
+        </div>
+        <span class="module-title">眼病/慢病数据标准体系</span>
+      </div>
+      <div class="card-grid" id="gridModule4"></div>
+    </div>
+
   </section>
 
   <footer class="footer">&copy; 2026 生命医学主题库 版权所有 | 国科信生命医学智能平台</footer>
@@ -296,6 +307,7 @@
       user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
       settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.86l.05.05a2 2 0 1 1-2.83 2.83l-.05-.05a1.7 1.7 0 0 0-1.86-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.86.34l-.05.05a2 2 0 1 1-2.83-2.83l.05-.05a1.7 1.7 0 0 0 .34-1.86 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.86l-.05-.05a2 2 0 1 1 2.83-2.83l.05.05a1.7 1.7 0 0 0 1.86.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.86-.34l.05-.05a2 2 0 1 1 2.83 2.83l-.05.05a1.7 1.7 0 0 0-.34 1.86V9c.85 0 1.6.54 1.86 1.35.09.27.14.55.14.85s-.05.58-.14.85A1.98 1.98 0 0 1 19.4 15Z"/></svg>',
       network: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="7" r="3"/><circle cx="18" cy="7" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8.5 8.8l2 6.2M15.5 8.8l-2 6.2"/></svg>',
+      schema: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v5c0 4.5-2.9 8.6-7 10-4.1-1.4-7-5.5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/><path d="M8 17h8"/></svg>',
       refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 0 0-14-5"/><path d="M6 4v4h4"/><path d="M4 13a8 8 0 0 0 14 5"/><path d="M18 20v-4h-4"/></svg>',
     };
 
@@ -421,6 +433,20 @@
       }
     ];
     document.getElementById('gridModule3').innerHTML = module3.map(function(c) {
+      return makeSysCard(c.icon, c.title, c.desc, c.link, c.gradient, c.users);
+    }).join('');
+
+    /* ====== Module 4: 眼病/慢病数据标准体系 (1 system) ====== */
+    var module4 = [
+      {
+        icon: 'schema', title: '眼病/慢病知识图谱Schema标准',
+        desc: '覆盖数据采集规范、疾病分类与病灶数据集、图像质量评价及知识图谱Schema等标准建设',
+        link: '知识图谱Schema标准-管理版.html',
+        gradient: 'linear-gradient(to right, #F59E0B, #F97316)',
+        users: '86'
+      }
+    ];
+    document.getElementById('gridModule4').innerHTML = module4.map(function(c) {
       return makeSysCard(c.icon, c.title, c.desc, c.link, c.gradient, c.users);
     }).join('');
   </script>
