@@ -802,6 +802,7 @@
           <button class="btn small" type="button" onclick="addQuestionRow()" style="margin-top:6px;">+ 添加题目</button>
         </div>
         <div class="button-row">
+          <button class="btn" type="button" onclick="openEditAudienceModal()">配置人员</button>
           <button class="btn primary" type="button" onclick="saveScheme()">保存选择题集</button>
           <button class="btn" type="button" onclick="closeEditModal()">取消</button>
         </div>
@@ -1107,6 +1108,7 @@
       var rand = Math.floor(Math.random() * 36 * 36).toString(36).padStart(2, '0');
       return 'custom-' + ts + rand;
     }
+    var editingAudience = [];
     function openEditModal(taskKey) {
       var mask = document.getElementById('editMask');
       if (!mask) return;
@@ -1120,6 +1122,7 @@
       document.getElementById('schemeTitle').value = editing ? (editing.title || '') : '';
       document.getElementById('schemeCategory').value = editing ? (editing.category || 'classification') : 'classification';
       document.getElementById('schemeDifficulty').value = editing ? (editing.difficulty || '高阶') : '高阶';
+      editingAudience = editing && Array.isArray(editing.audience) ? editing.audience.slice() : [];
       if (editing && Array.isArray(editing.questions) && editing.questions.length) {
         editingQuestions = editing.questions.map(function (q) {
           var readingSide = String(q.eyeSide || q.eye || 'both');
@@ -1149,6 +1152,36 @@
       renderQuestionEditors();
       mask.classList.add('open');
       mask.setAttribute('aria-hidden', 'false');
+    }
+    function openEditAudienceModal() {
+      var mask = document.getElementById('audienceMask');
+      if (!mask) return;
+      var title = (val('schemeTitle') || '').trim() || '当前选择题集';
+      var selected = Array.isArray(editingAudience) ? editingAudience : [];
+      var html = '<div class="form-field full"><label>题集名称</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(title) + '</div></div>' +
+        '<div class="form-field full" style="margin-top:10px;"><label>可见人员</label><div class="personnel-grid">' +
+        audienceStaff.map(function (person) {
+          var checked = selected.indexOf(person.name) >= 0 ? ' checked' : '';
+          return '<label class="personnel-item"><input type="checkbox" class="edit-audience-check" value="' + escapeHtml(person.name) + '"' + checked + '>' +
+            '<span><strong>' + escapeHtml(person.name) + '</strong><em>' + escapeHtml(person.role) + '</em></span></label>';
+        }).join('') +
+        '</div><div class="hint">配置当前题集的可见人员；新题集将在保存后生效。</div></div>';
+      var body = document.getElementById('audienceBody');
+      if (body) body.innerHTML = html;
+      mask.classList.add('open');
+      mask.setAttribute('aria-hidden', 'false');
+      var saveButton = document.querySelector('#audienceMask button[onclick="saveAudience()"]');
+      if (saveButton) {
+        saveButton.textContent = '保存配置人员';
+        saveButton.setAttribute('onclick', 'saveEditAudience()');
+      }
+    }
+    function saveEditAudience() {
+      var checks = document.querySelectorAll('#audienceBody .edit-audience-check:checked');
+      editingAudience = [];
+      for (var i = 0; i < checks.length; i++) editingAudience.push(checks[i].value);
+      closeAudienceModal();
+      showToast('已暂存配置人员，请保存选择题集后生效。');
     }
     function closeEditModal(event) {
       var mask = document.getElementById('editMask');
@@ -1194,7 +1227,8 @@
         category: val('schemeCategory') === 'segmentation' ? 'segmentation' : 'classification',
         difficulty: val('schemeDifficulty') || '高阶',
         knowledge: '模型训练',
-        questions: questions
+        questions: questions,
+        audience: Array.isArray(editingAudience) ? editingAudience.slice() : []
       };
       var list = readSchemeBank().filter(function (e) { return e.taskKey !== key; });
       list.push(entry);
@@ -1268,6 +1302,11 @@
     function openAudienceModal(taskKey) {
       var mask = document.getElementById('audienceMask');
       if (!mask) return;
+      var saveButton = document.querySelector('#audienceMask button[onclick="saveEditAudience()"], #audienceMask button[onclick="saveAudience()"]');
+      if (saveButton) {
+        saveButton.textContent = '保存配置人员';
+        saveButton.setAttribute('onclick', 'saveAudience()');
+      }
       var list = readSchemeBank();
       var entry = null;
       for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { entry = list[i]; break; } }

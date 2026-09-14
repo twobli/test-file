@@ -1,1124 +1,206 @@
-﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>表单模板设置</title><style>
-:root {
-    --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe; --success: #34a853; --warning: #fbbc04; --danger: #ea4335;
-    --gray-50: #f8f9fa; --gray-100: #f5f7fa; --gray-200: #e8ecf0; --gray-300: #dadce0; --gray-400: #bdc1c6; --gray-500: #9aa0a6;
-    --gray-600: #80868b; --gray-700: #5f6368; --gray-800: #3c4043; --gray-900: #202124; --text: #333333; --text-secondary: #999999;
-    --bg: #ffffff; --sidebar-width: 220px; --header-height: 56px; --radius: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06); --shadow-lg: 0 4px 12px rgba(0,0,0,0.12); --transition: all 0.2s ease;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-serif; font-size: 14px; color: var(--text); background: var(--gray-50); min-height: 100vh; line-height: 1.6; }
-.header { height: var(--header-height); background: linear-gradient(135deg, #1a56db 0%, #2563eb 50%, #1d4ed8 100%); color: #fff; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.header .logo { font-size: 18px; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #fff; text-decoration: none; }
-.header .header-nav { display: flex; gap: 4px; margin-left: 40px; }
-.header .header-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: var(--transition); }
-.header .header-nav a:hover, .header .header-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
-.header .header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; }
-.header .header-right .user-info { cursor: pointer; padding: 4px 10px; border-radius: 6px; transition: var(--transition); color: #fff; }
-.header .header-right .user-info:hover { background: rgba(255,255,255,0.15); }
-.header .header-right .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: var(--transition); }
-.header .header-right .btn-logout:hover { background: rgba(255,255,255,0.35); }
-.sidebar { position: fixed; top: var(--header-height); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--header-height)); background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; z-index: 999; padding: 8px 0; }
-.sidebar .menu-group { margin-bottom: 4px; }
-.sidebar .menu-group-title { padding: 12px 20px 6px; font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.sidebar .menu-item { display: flex; align-items: center; padding: 10px 20px; color: var(--gray-700); text-decoration: none; font-size: 13px; transition: var(--transition); border-left: 3px solid transparent; cursor: pointer; }
-.sidebar .menu-item:hover { background: var(--gray-50); color: var(--primary); }
-.sidebar .menu-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-.sidebar .menu-item .menu-icon { width: 20px; margin-right: 10px; text-align: center; font-size: 14px; }
-.main-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 24px; min-height: calc(100vh - var(--header-height)); }
-.breadcrumb { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-.breadcrumb a { color: var(--primary); text-decoration: none; }
-.page-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 16px; }
-.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); }
-.btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); gap: 6px; white-space: nowrap; }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-dark); }
-.btn-outline { background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700); }
-.btn-outline:hover { background: var(--gray-50); }
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>眼病/慢病数据录入工具</title>
+  <style>
+    :root{--blue:#1890ff;--deep:#096dd9;--cyan:#13c2c2;--green:#52c41a;--orange:#fa8c16;--red:#ff4d4f;--ink:#262626;--text:#595959;--muted:#8c8c8c;--line:#e8e8e8;--bg:#f0f2f5;--panel:#fff;--head:56px;--side:220px}
+    *{box-sizing:border-box}html,body{margin:0;min-width:1180px;height:100%;font:14px/1.55 "PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg)}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{height:100%;overflow:hidden}.topbar{height:var(--head);display:flex;align-items:center;padding:0 26px;color:#fff;background:linear-gradient(100deg,#1557b7,#1976d2 48%,#0e7d80);box-shadow:0 2px 10px #102a4326;position:relative;z-index:5}.brand{font-size:19px;font-weight:600;letter-spacing:.5px}.topnav{height:100%;display:flex;margin-left:36px}.topnav span{display:flex;align-items:center;padding:0 18px;background:#ffffff1c;position:relative}.topnav span:after{content:"";height:3px;background:#fff;position:absolute;left:16px;right:16px;bottom:0}.user{margin-left:auto;display:flex;align-items:center;gap:10px}.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#d9efff;color:var(--deep);font-weight:700}.shell{display:flex;height:calc(100% - var(--head))}.sidebar{width:var(--side);flex:none;background:#fafafa;border-right:1px solid var(--line);padding:14px 10px;overflow:auto}.side-title{padding:9px 12px 13px;font-weight:600;font-size:15px}.side-section{height:33px;display:flex;align-items:center;padding:0 11px;color:var(--muted);font-size:12px;font-weight:600}.nav{height:38px;display:flex;align-items:center;gap:10px;padding:0 13px;border-left:3px solid transparent;border-radius:5px;color:var(--text);margin:2px 0;cursor:pointer;transition:.16s}.nav:hover{background:#f0f8ff;color:var(--blue)}.nav.active{background:#e6f7ff;color:var(--deep);font-weight:600;border-left-color:var(--blue)}.nav.sub{height:34px;padding-left:32px;font-size:13px}.nav-icon{width:18px;text-align:center}.main{flex:1;min-width:0;overflow:auto;padding:22px 27px 44px}.page{display:none}.page.active{display:block}.crumb{color:var(--muted);font-size:13px;margin-bottom:14px}.heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}.heading h1{font-size:24px;line-height:1.35;margin:0 0 3px;font-weight:600}.heading p{margin:0;color:var(--muted)}.actions,.filters{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.btn{border:1px solid #d9d9d9;background:#fff;color:var(--text);border-radius:4px;padding:8px 14px;display:inline-flex;gap:6px;align-items:center}.btn:hover{border-color:var(--blue);color:var(--blue)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.primary:hover{background:var(--deep)}.btn.danger{border-color:#ffccc7;color:var(--red)}.btn:disabled{opacity:.45;cursor:not-allowed}.card{background:#fff;border:1px solid #e6ebf1;border-radius:8px;box-shadow:0 1px 3px #00000008}.section{margin-bottom:18px;overflow:hidden}.section-head{min-height:53px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.section-head h2{font-size:16px;margin:0}.section-body{padding:18px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-bottom:18px}.kpi{padding:17px 18px;position:relative;overflow:hidden}.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--blue)}.kpi:nth-child(2):before{background:var(--cyan)}.kpi:nth-child(3):before{background:var(--orange)}.kpi:nth-child(4):before{background:var(--green)}.kpi label{display:block;color:var(--muted);font-size:12px}.kpi strong{font:30px/1.2 "DIN Alternate",sans-serif;display:inline-block;margin:7px 7px 2px 0}.kpi small{color:var(--muted)}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;padding:21px}.flow-step{position:relative;text-align:center}.flow-step:not(:last-child):after{content:"›";position:absolute;right:-15px;top:10px;color:#91d5ff;font-size:22px}.flow-step i{font-style:normal;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin:0 auto 7px;background:#e6f7ff;color:var(--deep);font-weight:700}.flow-step.done i{background:#f6ffed;color:#389e0d}.flow-step.warn i{background:#fff7e6;color:#d46b08}.flow-step span{font-size:12px;color:var(--text)}.filters{padding:15px 18px;border-bottom:1px solid var(--line)}.filters input,.filters select{border:1px solid #d9d9d9;border-radius:4px;background:#fff;padding:8px 10px;min-width:130px}.filters input{width:220px}.spacer{flex:1}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:840px}.table th,.table td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{background:#fafafa;color:var(--muted);font-size:12px;font-weight:500}.table tbody tr:hover{background:#f5fbff}.table tbody tr:last-child td{border-bottom:0}.link{border:0;background:transparent;color:var(--blue);padding:3px 5px}.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:12px;font-size:12px}.tag.blue{background:#e6f7ff;color:#096dd9}.tag.green{background:#f6ffed;color:#389e0d}.tag.orange{background:#fff7e6;color:#d46b08}.tag.red{background:#fff1f0;color:#cf1322}.tag.gray{background:#f5f5f5;color:#8c8c8c}.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 18px;gap:25px}.tab{border:0;background:transparent;padding:13px 2px 11px;color:var(--muted);border-bottom:2px solid transparent}.tab.active{color:var(--blue);font-weight:600;border-bottom-color:var(--blue)}.tabpane{display:none}.tabpane.active{display:block}.template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.template{border:1px solid var(--line);border-radius:7px;padding:16px}.template h3{font-size:14px;margin:0 0 7px}.template p{color:var(--muted);font-size:12px;margin:3px 0}.template .actions{margin-top:12px}.notice{border:1px solid #bae7ff;background:#f5fbff;color:#096dd9;border-radius:5px;padding:11px 13px;margin:14px 0}.notice.warn{border-color:#ffe7ba;background:#fffaf2;color:#ad6800}.notice.error{border-color:#ffccc7;background:#fff7f6;color:#cf1322}.progress{height:7px;background:#f0f2f5;border-radius:8px;overflow:hidden;min-width:120px}.progress i{display:block;height:100%;background:var(--blue);border-radius:8px}.steps{display:flex;gap:5px;margin-bottom:18px}.step{flex:1;padding:9px 6px;text-align:center;background:#f5f5f5;color:var(--muted);font-size:12px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%)}.step:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%)}.step.done{background:#f6ffed;color:#389e0d}.step.current{background:#e6f7ff;color:#096dd9;font-weight:600}.chart{height:220px;display:flex;align-items:flex-end;gap:18px;padding:30px 18px 25px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);margin:12px}.bar{flex:1;background:linear-gradient(#69c0ff,#1890ff);border-radius:4px 4px 0 0;position:relative;min-width:32px}.bar span{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-size:12px}.bar small{position:absolute;bottom:-23px;left:50%;transform:translateX(-50%);white-space:nowrap;color:var(--muted)}.modal{position:fixed;inset:0;background:#10182866;display:none;align-items:center;justify-content:center;z-index:50}.modal.open{display:flex}.modal-box{width:720px;max-height:86vh;overflow:hidden;background:#fff;border-radius:8px;box-shadow:0 14px 35px #10182833;display:flex;flex-direction:column}.modal-head,.modal-foot{padding:16px 21px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.modal-head h3{margin:0;font-size:17px}.modal-body{padding:20px 22px;overflow:auto}.modal-foot{border-top:1px solid var(--line);border-bottom:0;justify-content:space-between;gap:9px}.modal-primary-actions{display:flex;align-items:center;gap:9px}.close{border:0;background:transparent;font-size:22px;color:var(--muted)}.form{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}.field{display:grid;gap:6px;color:var(--text);font-size:12px}.field.full{grid-column:1/-1}.field input,.field select,.field textarea{width:100%;border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;color:var(--ink);background:#fff}.field textarea{min-height:70px;resize:vertical}.req{color:var(--red)}.drawer-mask{position:fixed;inset:0;background:#10182840;display:none;z-index:39}.drawer-mask.open{display:block}.drawer{position:fixed;right:-470px;top:0;bottom:0;width:470px;background:#fff;z-index:40;box-shadow:-8px 0 24px #102a4322;transition:.25s;display:flex;flex-direction:column}.drawer.open{right:0}.drawer-head{height:64px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.drawer-head h3{margin:0}.drawer-body{padding:20px;overflow:auto}.details{display:grid;grid-template-columns:125px 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}.details div{padding:11px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.details div:nth-child(odd){background:#fafafa;color:var(--muted)}.timeline{border-left:2px solid #d6eaff;margin:18px 0 0 7px;padding-left:18px}.timeline p{position:relative;margin:0 0 19px}.timeline p:before{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--blue);left:-24px;top:5px}.timeline small{color:var(--muted)}.toast{position:fixed;right:26px;top:76px;z-index:80;background:#fff;border:1px solid #b7eb8f;box-shadow:0 5px 18px #0002;border-radius:5px;padding:11px 15px;color:#389e0d;display:none}.toast.show{display:block}.empty{padding:38px;text-align:center;color:var(--muted)}
+    .global-search{margin-left:38px;width:300px}.global-search input{width:100%;border:1px solid #ffffff45;background:#ffffff18;color:#fff;border-radius:5px;padding:8px 12px}.global-search input::placeholder{color:#dceeff}.bell{border:0;background:transparent;color:#fff;font-size:18px;position:relative}.bell:after{content:"3";position:absolute;right:-6px;top:-5px;font-size:9px;background:var(--red);width:15px;height:15px;border-radius:50%;display:grid;place-items:center}.pager{display:flex;justify-content:flex-end;gap:6px;padding:14px 18px}.pager button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:4px}.pager button.active{background:var(--blue);color:#fff}.modal-box{width:800px;max-height:90vh}.drawer{right:-800px;width:800px}.form-section{grid-column:1/-1;border:1px solid var(--line);border-radius:6px;padding:14px;background:#fcfdff}.form-section h4{margin:0 0 12px;padding-left:9px;border-left:3px solid var(--blue)}.form-section .form{gap:12px}.image-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px}.image-file{border:1px solid var(--line);border-radius:7px;overflow:hidden;background:#fff}.image-thumb{height:105px;background:linear-gradient(135deg,#1f3050,#455b7e);display:grid;place-items:center;color:#fff;font-size:18px}.image-info{padding:10px}.two-col-review{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}.review-panel{border:1px solid var(--line);border-radius:7px;padding:16px}.mapping-row{display:grid;grid-template-columns:1fr 36px 1fr 150px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.upload-zone{border:2px dashed #91d5ff;background:#f5fbff;border-radius:8px;padding:38px;text-align:center}.method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.method{padding:22px;border:1px solid var(--line);border-radius:7px;text-align:center}.method h3{margin:0 0 7px}.api-code{background:#17233d;color:#d8e7ff;padding:14px;border-radius:5px;white-space:pre-wrap;font-family:monospace}
+    .h5-shell{width:390px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 28px #102a431f}.h5-head{padding:20px;color:#fff;background:linear-gradient(135deg,#1677ff,#13a8a8)}.h5-body{padding:20px}.question{padding:15px 0;border-bottom:1px solid var(--line)}.question h4{margin:0 0 10px}.question label{display:block;margin:7px 0}.error-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .question-editor{border:1px solid var(--line);border-radius:7px;margin:12px 0;background:#fff;overflow:hidden}.question-editor-head{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fafbfd;border-bottom:1px solid var(--line)}.question-editor-head b{margin-right:auto}.question-editor-body{padding:13px}.question-editor-body input,.question-editor-body select,.question-editor-body textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;width:100%}.question-editor-body textarea{min-height:58px}.question-editor-grid{display:grid;grid-template-columns:150px 1fr;gap:10px}.mini-btn{border:0;background:transparent;color:var(--blue);padding:3px 5px}.mini-btn.danger{color:var(--red)}.editor-toolbar{display:flex;align-items:center;gap:8px;padding:12px;background:#f5fbff;border:1px dashed #91d5ff;border-radius:6px}.preview-panel{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+    .case-wizard-steps{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 20px}.case-wizard-step{position:relative;text-align:center;color:var(--muted);font-size:13px}.case-wizard-step:not(:last-child):after{content:"";position:absolute;top:15px;left:58%;right:-42%;height:2px;background:#e8e8e8}.case-wizard-step.done:not(:last-child):after{background:#91d5ff}.case-wizard-step i{position:relative;z-index:1;display:grid;place-items:center;width:32px;height:32px;margin:0 auto 6px;border-radius:50%;background:#f5f5f5;border:1px solid #d9d9d9;font-style:normal}.case-wizard-step.current{color:var(--deep);font-weight:600}.case-wizard-step.current i{background:var(--blue);border-color:var(--blue);color:#fff}.case-wizard-step.done{color:var(--deep)}.case-wizard-step.done i{background:#e6f7ff;border-color:#69c0ff;color:var(--deep)}.case-panel{display:none}.case-panel.active{display:block}.wizard-actions{display:flex;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.upload-list{display:grid;gap:9px;margin-top:12px}.upload-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:#fafcff}.check-list{display:grid;gap:9px;margin-top:12px}.check-list label{display:flex;gap:8px;align-items:flex-start}
+    .form-engine{display:grid;grid-template-columns:176px minmax(300px,1fr) 244px;min-height:470px;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:#f5f7fa}.engine-palette,.engine-properties{background:#fff;padding:14px}.engine-palette{border-right:1px solid var(--line)}.engine-properties{border-left:1px solid var(--line)}.engine-title{margin:0 0 12px;font-size:14px}.component-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.component-item{display:grid;place-items:center;gap:4px;min-height:64px;border:1px solid #d9e5f2;border-radius:6px;background:#f8fbff;color:var(--text);font-size:12px;cursor:grab}.component-item:hover{border-color:var(--blue);color:var(--blue);background:#eaf6ff}.component-item b{font-size:18px;line-height:1}.engine-center{padding:14px;min-width:0}.engine-canvas-head{display:flex;align-items:center;margin-bottom:10px}.engine-canvas{min-height:405px;padding:12px;border:1px dashed #91d5ff;border-radius:7px;background:#fff}.engine-canvas.drag-over{background:#eaf6ff;border-color:var(--blue)}.canvas-empty{padding:80px 12px;text-align:center;color:var(--muted)}.question-editor{cursor:grab;transition:.15s}.question-editor.selected{border-color:var(--blue);box-shadow:0 0 0 2px #1890ff1f}.question-editor.dragging{opacity:.4}.question-editor-summary{display:grid;gap:7px}.question-editor-summary small{color:var(--muted)}.question-editor-preview{padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:#fafafa;color:var(--muted)}.question-model{display:none}.property-empty{padding:70px 4px;text-align:center;color:var(--muted);font-size:12px}.property-form{display:grid;gap:12px}.property-form label{display:grid;gap:5px;font-size:12px;color:var(--text)}.property-form input,.property-form select,.property-form textarea{width:100%;border:1px solid #d9d9d9;border-radius:4px;padding:8px}.property-form textarea{min-height:104px;resize:vertical}.engine-help{margin-top:12px;color:var(--muted);font-size:12px;line-height:1.6}@media(max-width:1250px){.form-engine{grid-template-columns:150px minmax(280px,1fr) 220px}.component-list{grid-template-columns:1fr}}
+    .patient-selector{margin-top:14px;border:1px solid var(--line);border-radius:7px;overflow:hidden}.patient-selector-head{display:flex;align-items:center;gap:8px;padding:12px;background:#fafcff;border-bottom:1px solid var(--line)}.patient-selector-head input{width:220px;border:1px solid #d9d9d9;border-radius:4px;padding:7px 9px}.patient-table{width:100%;border-collapse:collapse}.patient-table th,.patient-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}.patient-table th{background:#fafafa;color:var(--muted)}.patient-table tr:last-child td{border-bottom:0}.patient-table tr.disabled{color:var(--muted);background:#fafafa}.patient-summary{display:flex;align-items:center;gap:16px;padding:11px 12px;background:#f5fbff;border-top:1px solid #bae7ff}.patient-summary strong{color:var(--deep);font-size:18px}
+  </style>
+</head>
+<body>
+<div class="app" id="entryApp">
+  <header class="topbar"><div class="brand">眼病/慢病数据录入工具</div><div class="global-search"><input id="globalSearch" placeholder="搜索病历或医学影像文件"></div><div class="user"><div class="avatar">林</div><span>林医生 · 临床医生</span></div></header>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="side-title">眼病/慢病数据录入工具</div>
+      <div class="nav active" data-page="cases"><span class="nav-icon">▤</span>病历录入</div>
+      <div class="nav" data-page="followups"><span class="nav-icon">◷</span>病历随访</div>
+      <div class="nav" data-page="imports"><span class="nav-icon">⇧</span>历史数据录入</div>
+      <div class="nav" data-page="storage"><span class="nav-icon">▣</span>医学影像对象存储</div>
+      <div class="nav" data-page="transcode"><span class="nav-icon">⇄</span>医学影像转码服务</div>
+      <div class="nav" data-page="review"><span class="nav-icon">✓</span>专家审核</div>
+      <div class="nav" data-page="stats"><span class="nav-icon">▥</span>统计分析</div>
+    </aside>
+    <main class="main">
+      <section class="page active" id="page-cases"><div class="crumb">眼病/慢病数据录入工具 / 病历录入</div><div class="heading"><div><h1>病历录入工作台</h1><p>不同的数据采集中心面对不同病人，并加载对应库的标准化表单</p></div><button class="btn primary" data-open="case-start">＋ 新增病历</button></div><div class="card section"><div class="filters"><select><option>全部采集中心</option><option>北京同仁医院</option><option>清华大学玉泉医院</option><option>湘雅二医院</option></select><select><option>全部病人类型</option><option>白内障</option><option>慢病</option><option>糖尿病视网膜病变</option></select><select id="caseStatus"><option value="">全部录入状态</option><option>草稿</option><option>待审核</option><option>已通过</option><option>已退回</option></select><input type="date" value="2026-08-01"><input id="caseSearch" placeholder="病历ID / 患者"><button class="btn" id="caseFilter">搜索</button><button class="btn" id="caseReset">重置</button></div><div class="table-wrap"><table class="table"><thead><tr><th>□</th><th>病历ID</th><th>中心</th><th>病人类型</th><th>患者</th><th>录入人</th><th>状态</th><th>操作时间</th><th>操作</th></tr></thead><tbody id="caseBody"><tr data-state="待审核"><td>□</td><td><b>MR001</b></td><td>北京同仁医院</td><td>白内障</td><td>张*</td><td>李采集员</td><td><span class="tag orange">待审核</span></td><td>2026-08-30 09:20</td><td><button class="link" data-detail="case">查看</button><button class="link" data-go="review">审核进度</button></td></tr><tr data-state="草稿"><td>□</td><td><b>MR002</b></td><td>湘雅二医院</td><td>慢病</td><td>王*</td><td>陈采集员</td><td><span class="tag gray">草稿</span></td><td>2026-08-30 08:56</td><td><button class="link" data-open="case-edit" data-record-id="MR002">编辑</button><button class="link" data-action="delete-case">删除</button></td></tr><tr data-state="已退回"><td>□</td><td><b>MR003</b></td><td>北京同仁医院</td><td>糖尿病视网膜病变</td><td>赵*</td><td>王采集员</td><td><span class="tag red">已退回</span></td><td>2026-08-29 16:40</td><td><button class="link" data-open="case-fix">返回修改</button><button class="link" data-detail="case">审核意见</button></td></tr><tr data-state="已通过"><td>□</td><td><b>MR004</b></td><td>清华大学玉泉医院</td><td>白内障</td><td>刘*</td><td>赵采集员</td><td><span class="tag green">已通过</span></td><td>2026-08-29 15:18</td><td><button class="link" data-detail="case">查看</button><button class="link" data-open="follow">创建随访</button></td></tr></tbody></table></div><div class="pager"><span>共 96 条　1/10</span><button data-action="page-prev">‹</button><button class="active" data-action="page-number">1</button><button data-action="page-number">2</button><button data-action="page-number">3</button><button data-action="page-next">›</button></div></div></section>
 
-/* ====== 筛选栏 ====== */
-.filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.filter-row select { padding: 7px 28px 7px 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; color: var(--gray-700); background: #fff; outline: none; cursor: pointer; appearance: auto; }
-.filter-row select:focus { border-color: var(--primary); }
-.filter-row .search-input { flex: 1; min-width: 200px; padding: 7px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.filter-row .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+      <section class="page" id="page-followups"><div class="crumb">眼病/慢病数据录入工具 / 病历随访</div><div class="heading"><div><h1>随访工作台</h1><p>慢性病和手术患者的长期随访任务、问卷分发、回收与电话触达</p></div><button class="btn primary" data-open="follow-task">＋ 创建随访任务</button></div><div class="card section"><div class="tabs"><button class="tab active" data-pane="running">进行中</button><button class="tab" data-pane="finished">已完成</button><button class="tab" data-pane="expired">已过期</button><button class="tab" data-pane="questionnaires">问卷模板</button></div><div class="tabpane active" data-pane-content="running"><table class="table"><thead><tr><th>任务名</th><th>病种</th><th>回收数</th><th>分发渠道</th><th>状态</th><th>操作</th></tr></thead><tbody id="followBody"><tr><td>术后1月随访</td><td>白内障</td><td>23份</td><td>微信群链接 / 二维码</td><td><span class="tag blue">进行中</span></td><td><button class="link" data-detail="follow-task">任务详情</button><button class="link" data-open="send-link">生成链接/二维码</button></td></tr><tr><td>用药依从性随访</td><td>慢病</td><td>34份</td><td>微信群</td><td><span class="tag blue">进行中</span></td><td><button class="link" data-detail="follow-task">任务详情</button><button class="link" data-open="send-link">生成链接/二维码</button></td></tr></tbody></table></div><div class="tabpane" data-pane-content="finished"><table class="table"><tbody><tr><td>DR半年复诊</td><td>糖尿病视网膜病变</td><td>64份</td><td>微信群二维码</td><td><span class="tag green">已完成</span></td><td><button class="link" data-detail="follow-task">查看数据</button></td></tr></tbody></table></div><div class="tabpane" data-pane-content="expired"><div class="empty">暂无已过期任务</div></div><div class="tabpane" data-pane-content="questionnaires"><div class="section-body"><button class="btn primary" data-open="questionnaire-new">＋ 新建问卷模板</button><table class="table" style="margin-top:14px"><thead><tr><th>模板</th><th>题目数</th><th>引用任务</th><th>状态</th><th>操作</th></tr></thead><tbody id="questionnaireBody"><tr><td>白内障术后1月 V1.6</td><td>5</td><td>12</td><td><span class="tag green">已发布</span></td><td><button class="link" data-open="questionnaire-edit">编辑新版本</button><button class="link" data-open="questionnaire-preview">预览</button></td></tr></tbody></table><div class="notice">已发布模板不能直接覆盖。编辑时创建新草稿版本；已有随访任务继续使用原版本。</div></div></div></div></section>
 
-/* ====== 表格 ====== */
-.table-wrap { overflow-x: auto; }
-.table-wrap table { width: 100%; border-collapse: collapse; }
-.table-wrap thead th { background: #f8f9fb; font-weight: 600; font-size: 13px; color: var(--gray-700); padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
-.table-wrap tbody td { padding: 14px 14px; font-size: 13px; color: var(--gray-800); border-bottom: 1px solid #f0f0f0; }
-.table-wrap tbody tr:hover { background: #f8f9fb; }
-.table-wrap tbody tr:last-child td { border-bottom: none; }
+      <section class="page" id="page-imports"><div class="crumb">眼病/慢病数据录入工具 / 历史数据录入</div><div class="heading"><div><h1>历史数据录入</h1><p>历史病历数据批量导入</p></div><button class="btn primary" data-open="import-wizard">＋ 批量导入</button></div><div class="card section"><div class="tabs"><button class="tab active" data-pane="tasks">导入任务</button><button class="tab" data-pane="batches">批次管理</button></div><div class="tabpane active" data-pane-content="tasks"><table class="table"><thead><tr><th>批次号</th><th>文件名</th><th>来源中心</th><th>总条数</th><th>成功</th><th>失败</th><th>状态</th><th>操作</th></tr></thead><tbody id="importBody"><tr><td>B001</td><td>center_A_2020.csv</td><td>中心A</td><td>1,500</td><td>1,450</td><td>50</td><td><span class="tag orange">部分失败</span></td><td><button class="link" data-detail="import-batch">详情</button><button class="link" data-action="retry-import">重试失败行</button><button class="link" data-action="error-report">导出错误报告</button></td></tr><tr><td>B002</td><td>center_B_2021.xlsx</td><td>中心B</td><td>800</td><td>—</td><td>—</td><td><span class="tag blue">导入中 68%</span></td><td><button class="link" data-detail="import-batch">详情</button></td></tr></tbody></table></div><div class="tabpane" data-pane-content="batches"><table class="table"><thead><tr><th>批次</th><th>病种</th><th>创建人</th><th>创建时间</th><th>状态</th><th>耗时</th><th>操作</th></tr></thead><tbody><tr><td>B001</td><td>白内障</td><td>李采集员</td><td>2026-08-30</td><td><span class="tag orange">部分失败</span></td><td>28秒</td><td><button class="link" data-detail="import-batch">查看批次</button></td></tr></tbody></table></div></div></section>
 
-/* 状态点 */
-.status-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
-.status-dot .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.status-active .dot { background: #34a853; }
-.status-active { color: #34a853; }
-.status-inactive .dot { background: #9aa0a6; }
-.status-inactive { color: #9aa0a6; }
-.status-draft .dot { background: #e37400; }
-.status-draft { color: #e37400; }
+      <section class="page" id="page-storage"><div class="crumb">眼病/慢病数据录入工具 / 医学影像对象存储</div><div class="heading"><div><h1>医学影像对象存储</h1><p>医学影像与病历扫描件持久、稳固且高可用地存储，并通过简单 API 访问</p></div><div class="actions"><button class="btn" data-detail="api">API 文档</button><button class="btn primary" data-open="upload-object">＋ 上传文件</button></div></div><div class="kpis"><div class="card kpi"><label>总文件</label><strong id="storageTotal">12,500</strong></div><div class="card kpi"><label>总容量</label><strong>1.8</strong><small>TB</small></div><div class="card kpi"><label>本月上传</label><strong id="storageMonth">320</strong></div><div class="card kpi"><label>服务状态</label><strong style="color:var(--green)">可用</strong></div></div><div class="card section"><div class="filters"><select id="storageRelation"><option>全部病历关联</option><option>已关联</option><option>未关联</option></select><select id="storageUploader"><option>全部上传人</option><option>李采集员</option><option>陈采集员</option><option>当前用户</option></select><input id="storageDate" type="date"><select id="storageFormat"><option>全部文件类型</option><option>DICOM</option><option>JPG</option><option>TIFF</option></select><input id="storageSearch" placeholder="文件名 / 病历ID"><button class="btn" data-action="storage-search">查询</button><button class="btn" data-action="storage-reset">重置</button><span class="spacer"></span><button class="btn active" data-action="grid-view">网格</button><button class="btn" data-action="list-view">列表</button></div><div class="image-grid" id="objectBody"><div class="image-file" data-uploader="李采集员" data-date="2026-08-30" data-format="DICOM" data-linked="true"><div class="image-thumb">DICOM</div><div class="image-info"><b>cataract_001.dcm</b><br><small>OBJ-IMG-1298 · 关联 MR001 · 12.4MB</small><br><small>李采集员 · 2026-08-30</small><br><button class="link" data-detail="image">详情</button></div></div><div class="image-file" data-uploader="陈采集员" data-date="2026-08-30" data-format="JPG" data-linked="true"><div class="image-thumb" style="background:linear-gradient(135deg,#4b1e12,#b16a31)">Fundus</div><div class="image-info"><b>fundus_002.jpg</b><br><small>OBJ-IMG-1302 · 关联 MR003 · 2.1MB</small><br><small>陈采集员 · 2026-08-30</small><br><button class="link" data-detail="image">详情</button></div></div><div class="image-file" data-uploader="李采集员" data-date="2026-08-29" data-format="TIFF" data-linked="false"><div class="image-thumb">OCT TIFF</div><div class="image-info"><b>oct_003.tiff</b><br><small>OBJ-IMG-1310 · 未关联病历 · 8.7MB</small><br><small>李采集员 · 2026-08-29</small><br><button class="link" data-detail="image">详情</button></div></div></div><div class="pager"><span>共 12,500 个文件　1/50</span><button data-action="page-prev">‹</button><button class="active" data-action="page-number">1</button><button data-action="page-number">2</button><button data-action="page-next">›</button></div></div></section>
 
-/* 操作列 */
-.action-links { display: flex; align-items: center; gap: 0; white-space: nowrap; }
-.action-links a, .action-links span.action-link { text-decoration: none; font-size: 13px; cursor: pointer; }
-.action-links a:hover, .action-links span.action-link:hover { text-decoration: underline; }
-.action-sep { color: #d0d5dd; margin: 0 6px; user-select: none; }
+      <section class="page" id="page-transcode"><div class="crumb">眼病/慢病数据录入工具 / 医学影像转码服务</div><div class="heading"><div><h1>医学影像转码服务</h1><p>对 DICOM 或 TIFF 原始医学影像进行统一转码，原始数据不会删除</p></div><button class="btn primary" data-open="transcode">＋ 新建转码任务</button></div><div class="card section"><div class="tabs"><button class="tab active" data-pane="jobs">任务列表</button><button class="tab" data-pane="records">转码记录</button></div><div class="tabpane active" data-pane-content="jobs"><table class="table"><thead><tr><th>任务名</th><th>源格式</th><th>标准输出</th><th>文件数</th><th>进度/结果</th><th>状态</th><th>操作者</th><th>操作</th></tr></thead><tbody id="transcodeBody"><tr data-task-id="T001"><td>T001</td><td>DICOM</td><td>标准影像 + 元数据</td><td>120</td><td><div class="progress"><i style="width:85%"></i></div>约 2 分钟</td><td><span class="tag blue">进行中</span></td><td>李采集员</td><td><button class="link" data-detail="transcode">详情</button><button class="link" data-action="refresh-transcode">刷新状态</button></td></tr><tr data-task-id="T002"><td>T002</td><td>TIFF</td><td>标准预览影像</td><td>56</td><td>成功 56 / 失败 0</td><td><span class="tag green">已完成</span></td><td>陈医生</td><td><button class="link" data-detail="transcode">记录</button></td></tr><tr data-task-id="T003"><td>T003</td><td>DICOM</td><td>标准影像 + 元数据</td><td>80</td><td>成功 76 / 失败 4</td><td><span class="tag orange">部分失败</span></td><td>王采集员</td><td><button class="link" data-action="retry-transcode">重试失败文件</button><button class="link" data-action="skip-failed">结束任务并保留失败记录</button></td></tr></tbody></table></div><div class="tabpane" data-pane-content="records"><table class="table"><thead><tr><th>任务</th><th>源对象</th><th>原始格式</th><th>结果对象</th><th>状态</th><th>原始对象</th><th>说明</th></tr></thead><tbody id="transcodeRecords"><tr><td>T002</td><td>OBJ-IMG-1298</td><td>TIFF</td><td>OBJ-STD-2201</td><td><span class="tag green">成功</span></td><td><span class="tag green">完整保留</span></td><td>标准预览影像</td></tr><tr><td>T003</td><td>OBJ-IMG-1308</td><td>DICOM</td><td>—</td><td><span class="tag red">失败</span></td><td><span class="tag green">完整保留</span></td><td>源文件结构异常，可重试</td></tr></tbody></table></div></div></section>
 
-/* 标签 */
-.tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
-.tag-blue { background: #e8f0fe; color: var(--primary); }
-.tag-orange { background: #fef3e0; color: #e37400; }
+      <section class="page" id="page-review"><div class="crumb">眼病/慢病数据录入工具 / 专家审核</div><div class="heading"><div><h1>专家审核工作台</h1><p>由有一定经验的临床医生完成病历审核；人员按中心病历数量和表单复杂程度安排</p></div><div class="actions"><span class="tag orange" id="reviewPending">我的待审核：28</span><button class="btn" data-open="review-rules">审核规则</button></div></div><div class="card section"><div class="tabs"><button class="tab active" data-pane="mine">待我审核</button><button class="tab" data-pane="reviewed">我审核的</button><button class="tab" data-pane="all">全部</button><button class="tab" data-pane="rules">审核规则</button></div><div class="tabpane active" data-pane-content="mine"><div class="filters"><select><option>全部优先级</option><option>紧急</option><option>普通</option></select><select><option>全部病种</option><option>白内障</option><option>DR</option><option>慢病</option></select><select><option>全部中心</option><option>中心A</option><option>中心B</option></select><button class="btn" data-action="review-filter">筛选</button></div><table class="table"><thead><tr><th>病历ID</th><th>中心</th><th>病人类型</th><th>录入员</th><th>提交时间</th><th>优先级</th><th>操作</th></tr></thead><tbody id="reviewBody"><tr><td>MR001</td><td>中心A</td><td>白内障</td><td>李采集员</td><td>08-30 09:20</td><td><span class="tag gray">普通</span></td><td><button class="link" data-open="review-detail">审核</button></td></tr></tbody></table></div><div class="tabpane" data-pane-content="reviewed"><div class="empty">今日已审核 18 例，通过率 94.4%，平均耗时 4.8 分钟</div></div><div class="tabpane" data-pane-content="all"><div class="empty">仅管理员可查看全部审核任务</div></div><div class="tabpane" data-pane-content="rules"><div class="section-body"><button class="btn" data-open="review-rules">查看人员安排</button><p>当前安排：根据各中心病历数量和标准化表单复杂程度配置临床审核人员。</p></div></div></div></section>
 
-/* ====== 分页 ====== */
-.pagination-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-top: 1px solid var(--gray-200); }
-.pagination-info { font-size: 13px; color: var(--gray-500); }
-.pagination-nav { display: flex; align-items: center; gap: 6px; }
-.pagination-nav button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--gray-300); background: #fff; color: var(--gray-700); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); }
-.pagination-nav button:hover:not(:disabled):not(.active) { border-color: var(--primary); color: var(--primary); }
-.pagination-nav button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-.pagination-nav button:disabled { color: var(--gray-400); cursor: not-allowed; background: var(--gray-50); }
-.pagination-nav .ellipsis { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; color: var(--gray-500); user-select: none; }
-
-/* ====== Toast ====== */
-.toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; background: var(--gray-900); color: #fff; padding: 10px 24px; border-radius: 6px; font-size: 13px; box-shadow: var(--shadow-lg); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
-.toast.show { opacity: 1; }
-
-/* ====== 弹窗通用 ====== */
-.modal-overlay { position: fixed; inset: 0; z-index: 9990; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
-@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-.modal-box { background: #fff; border-radius: 10px; box-shadow: var(--shadow-lg); padding: 0; max-width: 420px; width: 90%; overflow: hidden; }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--gray-200); }
-.modal-header .modal-title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: var(--gray-900); }
-.modal-header .modal-title .modal-icon { color: var(--primary); font-size: 18px; }
-.modal-header .btn-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--gray-100); color: var(--gray-600); font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0; }
-.modal-header .btn-close:hover { background: var(--gray-200); color: var(--gray-800); }
-.modal-body { padding: 24px; max-height: 60vh; overflow-y: auto; }
-.modal-footer { padding: 16px 24px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; }
-
-/* 预览弹窗 */
-.preview-modal { max-width: 700px; }
-.preview-header-actions { display: flex; align-items: center; gap: 8px; }
-.preview-form-title { text-align: center; margin-bottom: 4px; font-size: 20px; font-weight: 700; color: var(--gray-900); }
-.preview-form-version { text-align: center; font-size: 12px; color: var(--gray-500); margin-bottom: 16px; }
-.preview-form-divider { border: none; border-top: 1px solid var(--gray-200); margin-bottom: 20px; }
-.preview-field { margin-bottom: 18px; }
-.preview-field .preview-label { font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-.preview-field .preview-label .required-star { color: var(--danger); }
-.preview-field input, .preview-field textarea, .preview-field select { width: 100%; padding: 9px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; background: var(--gray-50); color: var(--gray-600); pointer-events: none; }
-.preview-field textarea { resize: none; }
-.preview-field select { appearance: none; }
-.preview-radio-group { display: flex; gap: 24px; }
-.preview-radio-group label { font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
-.preview-radio-group input[type="radio"] { width: auto; accent-color: var(--primary); }
-.preview-checkbox-group { display: flex; flex-wrap: wrap; gap: 16px; }
-.preview-checkbox-group label { font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
-.preview-checkbox-group input[type="checkbox"] { width: auto; accent-color: var(--primary); }
-.preview-date-wrap { position: relative; }
-.preview-date-wrap .calendar-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 14px; pointer-events: none; }
-.preview-upload-area { border: 2px dashed var(--gray-300); border-radius: 6px; padding: 20px; text-align: center; color: var(--gray-400); font-size: 13px; }
-
-/* 发布/草稿弹窗 */
-.publish-modal { max-width: 600px; }
-.draft-modal { max-width: 500px; }
-.draft-modal .modal-body { text-align: center; }
-.draft-success-icon { width: 64px; height: 64px; border-radius: 50%; background: #F0FFF4; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; color: #34a853; margin-bottom: 16px; }
-.draft-info-card { background: #f8f9fb; border-radius: 8px; padding: 16px; text-align: left; margin: 16px 0; }
-.draft-info-card .info-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; }
-.draft-info-card .info-row .info-label { color: var(--gray-500); }
-.draft-info-card .info-row .info-value { color: var(--gray-800); }
-.draft-actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
-.draft-actions .btn { min-width: 120px; }
-
-/* 发布弹窗表单 */
-.publish-form-group { margin-bottom: 16px; }
-.publish-form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-.publish-form-group input, .publish-form-group select, .publish-form-group textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.publish-form-group input:focus, .publish-form-group select:focus, .publish-form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.publish-form-group textarea { resize: vertical; min-height: 70px; }
-
-/* ====== 设计器 ====== */
-.form-designer { display: grid; grid-template-columns: 240px 1fr 260px; gap: 16px; height: calc(100vh - var(--header-height) - 120px); }
-.designer-panel { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
-.panel-header { padding: 14px 16px; border-bottom: 1px solid var(--gray-200); font-weight: 600; font-size: 14px; color: var(--gray-800); background: var(--gray-50); display: flex; align-items: center; justify-content: space-between; }
-.panel-body { flex: 1; overflow-y: auto; padding: 12px; }
-.component-list { display: flex; flex-direction: column; gap: 6px; }
-.comp-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #fff; border: 1px solid var(--gray-200); border-radius: 6px; cursor: grab; font-size: 13px; color: var(--gray-700); transition: var(--transition); }
-.comp-item:hover { border-color: var(--primary); background: var(--primary-light); }
-.comp-item .comp-icon { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.comp-item .comp-info { flex: 1; }
-.comp-item .comp-name { font-weight: 500; font-size: 13px; }
-.comp-item .comp-desc { font-size: 11px; color: var(--gray-500); }
-.form-preview { padding: 20px; background: #fafcff; }
-.form-preview .form-title { font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; padding-bottom: 12px; border-bottom: 2px solid var(--primary); }
-.form-field { margin-bottom: 16px; padding: 12px; background: #fff; border: 1px dashed var(--gray-300); border-radius: 6px; cursor: pointer; transition: var(--transition); position: relative; }
-.form-field:hover { border-color: var(--primary); }
-.form-field.selected { border-color: var(--primary); border-style: solid; background: var(--primary-light); }
-.form-field .field-label { font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
-.form-field .field-label .required-star { color: var(--danger); margin-left: 2px; }
-.form-field .field-input { width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 4px; font-size: 13px; background: var(--gray-50); color: var(--gray-400); pointer-events: none; }
-.form-field .field-textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 4px; font-size: 13px; background: var(--gray-50); color: var(--gray-400); pointer-events: none; resize: none; }
-.form-field .field-select { width: 100%; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 4px; font-size: 13px; background: var(--gray-50); color: var(--gray-400); pointer-events: none; }
-.form-field .field-radio { display: flex; gap: 16px; }
-.form-field .field-radio label, .form-field .field-checkbox label { font-size: 13px; color: var(--gray-400); display: flex; align-items: center; gap: 4px; }
-.form-field .field-checkbox { display: flex; flex-wrap: wrap; gap: 12px; }
-.form-field .field-delete { position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; border-radius: 50%; background: var(--danger); color: #fff; border: none; cursor: pointer; font-size: 12px; display: none; align-items: center; justify-content: center; }
-.form-field:hover .field-delete { display: flex; }
-.prop-group { margin-bottom: 14px; }
-.prop-group label { display: block; font-size: 12px; font-weight: 500; color: var(--gray-600); margin-bottom: 6px; }
-.prop-group input, .prop-group select, .prop-group textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: var(--transition); }
-.prop-group input:focus, .prop-group select:focus, .prop-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
-.prop-group textarea { resize: vertical; min-height: 60px; }
-.action-bar { display: flex; gap: 10px; padding: 12px 0; }
-</style></head><body>
-<div class="header">
-  <a href="app-center.html" class="logo">生命医学智能平台</a>
-  <div class="header-nav">
-    <a href="眼病/慢病数据采集工具.html">眼病/慢病数据采集工具</a>
-    <a href="表单模板设置.html" class="active">眼病/慢病数据录入工具</a>
-    <a href="眼病/慢病影像脱敏工具.html">眼病/慢病影像脱敏工具</a>
-    <a href="影像标注工具.html">眼病/慢病影像标注工具</a>
+      <section class="page" id="page-stats"><div class="crumb">眼病/慢病数据录入工具 / 统计分析</div><div class="heading"><div><h1>统计分析</h1><p>系统统计实时展示数据与工作量；临床研究统计提供可重复的基础分析与报告</p></div></div><div class="card section"><div class="tabs"><button class="tab active" data-pane="system">系统统计</button><button class="tab" data-pane="research">临床研究统计</button></div><div class="tabpane active" data-pane-content="system"><div class="kpis" style="padding:18px;margin:0"><div class="card kpi"><label>白内障库</label><strong id="statCataract">3,200</strong></div><div class="card kpi"><label>慢病库</label><strong id="statChronic">5,600</strong></div><div class="card kpi"><label>DR库</label><strong id="statDR">2,100</strong></div><div class="card kpi"><label>数据总计</label><strong id="statTotal">10,900</strong></div></div><div class="grid2"><div class="section-body"><h3>按中心分布</h3><div class="chart"><div class="bar" style="height:82%"><span>3,200</span><small>中心A</small></div><div class="bar" style="height:62%"><span>2,400</span><small>中心B</small></div><div class="bar" style="height:46%"><span>1,800</span><small>中心C</small></div></div></div><div class="section-body"><h3>本月工作量概览</h3><p>数据采集人员：<strong id="statEntryWork">450</strong> 份</p><p>随访人员：<strong id="statFollowWork">320</strong> 人次</p><p>临床医生审核：<strong id="statReviewWork">380</strong> 份</p></div></div><div class="section-body"><h3>角色工作量</h3><table class="table"><thead><tr><th>角色</th><th>姓名</th><th>录入量</th><th>审核量</th><th>随访量</th><th>统计周期</th></tr></thead><tbody><tr><td>采集员</td><td>李采集员</td><td>450</td><td>—</td><td>120</td><td>本月</td></tr><tr><td>审核员</td><td>王医生</td><td>—</td><td>380</td><td>—</td><td>本月</td></tr></tbody></table></div></div><div class="tabpane" data-pane-content="research"><div class="section-body"><div class="filters" style="padding:0 0 15px"><select id="researchDisease"><option>全部病种</option><option>白内障</option><option>慢病</option><option>DR</option></select><select id="researchCenter"><option>全部中心</option><option>中心A</option></select><input id="researchDate" type="date" value="2026-01-01"><button class="btn" data-open="variable-picker">选择变量</button><span id="selectedVariables" class="tag blue">年龄、眼压、疾病分期</span></div><div class="method-grid"><div class="method"><h3>描述性统计</h3><p>均值、标准差、中位数、四分位数、频数及缺失值</p><button class="btn primary" data-open="analysis-descriptive">进入</button></div><div class="method"><h3>回归分析</h3><p>提供回归分析基础工具</p><button class="btn primary" data-open="analysis-regression">进入</button></div><div class="method"><h3>差异性分析</h3><p>提供差异性分析基础工具</p><button class="btn primary" data-open="analysis-difference">进入</button></div></div><div class="actions" style="margin-top:18px"><button class="btn primary" data-open="report">生成分析报告</button></div></div></div></div></section>
+    </main>
   </div>
-  <div class="header-right">
-    <span class="user-info" id="headerUserName">张教授</span>
-    <button class="btn-logout" onclick="logout()">退出登录</button>
-  </div>
+
+  <div class="modal" id="modal"><div class="modal-box"><div class="modal-head"><h3 id="modalTitle"></h3><button class="close" id="modalClose">×</button></div><div class="modal-body" id="modalBody"></div><div class="modal-foot"><button class="btn" id="modalCancel">取消</button><div class="modal-primary-actions"><button class="btn" id="modalDraft" style="display:none">保存草稿</button><button class="btn primary" id="modalConfirm">确认</button></div></div></div></div>
+  <div class="drawer-mask" id="drawerMask"></div><aside class="drawer" id="drawer"><div class="drawer-head"><h3 id="drawerTitle"></h3><button class="close" id="drawerClose">×</button></div><div class="drawer-body" id="drawerBody"></div></aside><div class="toast" id="toast"></div>
 </div>
-<div class="sidebar">
-  <div class="menu-group">
-    <div class="menu-group-title">数据采集功能</div>
-    <a class="menu-item active" href="表单模板设置.html">
-      <span class="menu-icon">&#x1F4CB;</span><span>表单模板设置</span>
-    </a>
-    <a class="menu-item" href="数据录入填写.html">
-      <span class="menu-icon">&#x1F4DD;</span><span>数据录入填写</span>
-    </a>
-    <a class="menu-item" href="病历随访.html">
-      <span class="menu-icon">&#x1F3E5;</span><span>病历随访</span>
-    </a>
-    <a class="menu-item" href="历史数据导入.html">
-      <span class="menu-icon">&#x1F4E4;</span><span>历史数据导入</span>
-    </a>
-    <a class="menu-item" href="医学影像存储与转码.html">
-      <span class="menu-icon">&#x1F4CA;</span><span>医学影像存储与转码</span>
-    </a>
-    <a class="menu-item" href="专家审核与统计分析.html">
-      <span class="menu-icon">&#x1F50D;</span><span>专家审核与统计分析</span>
-    </a>
-  </div>
-</div>
-<div class="main-content">
-  <div class="breadcrumb"><a href="app-center.html">首页</a><span>&gt;</span><a href="表单模板设置.html">眼病/慢病数据录入工具</a><span>&gt;</span><span>表单模板设置</span></div>
-
-  <!-- ====== Toast ====== -->
-  <div class="toast" id="toast"></div>
-
-  <!-- ====== 模板列表页 ====== -->
-  <div id="listSection">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <h1 class="page-title" style="margin-bottom:0;">表单模板设置</h1>
-      <button class="btn btn-primary" onclick="openNewDesigner()">+ 新建模板</button>
-    </div>
-
-    <!-- 筛选栏 -->
-    <div class="card" style="margin-bottom:16px;padding:14px 20px;">
-      <div class="filter-row">
-        <select id="filterType" onchange="applyFilters()">
-          <option value="">模板类型</option>
-          <option value="检查类">检查类</option>
-          <option value="记录类">记录类</option>
-          <option value="评估类">评估类</option>
-          <option value="登记类">登记类</option>
-          <option value="文书类">文书类</option>
-        </select>
-        <select id="filterStatus" onchange="applyFilters()">
-          <option value="">状态</option>
-          <option value="启用">启用</option>
-          <option value="停用">停用</option>
-          <option value="草稿">草稿</option>
-        </select>
-        <input id="filterSearch" class="search-input" placeholder="搜索模板名称" oninput="applyFilters()">
-        <button class="btn btn-outline" onclick="applyFilters()">搜索</button>
-        <button class="btn btn-outline" onclick="resetFilters()">重置</button>
-      </div>
-    </div>
-
-    <!-- 模板列表表格 -->
-    <div class="card" style="padding:0;">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>模板ID</th><th>模板名称</th><th>模板类型</th><th>适用场景</th><th>创建人</th><th>创建时间</th><th>修改时间</th><th>状态</th><th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="templateTableBody"></tbody>
-        </table>
-      </div>
-      <!-- 分页 -->
-      <div class="pagination-bar">
-        <span class="pagination-info" id="paginationInfo">显示 0 到 0 条，共 0 条记录</span>
-        <div class="pagination-nav" id="paginationNav"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====== 模板设计器 ====== -->
-  <div id="designerSection" style="display:none;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <h1 class="page-title" style="margin-bottom:0;">表单模板设置</h1>
-      <div class="action-bar" style="padding:0;">
-        <button class="btn btn-outline" onclick="showList()">返回模板列表</button>
-        <button class="btn btn-outline" onclick="openPreviewModal()">预览</button>
-        <button class="btn btn-outline" onclick="openSaveDraftModal()">保存草稿</button>
-        <button class="btn btn-primary" onclick="openPublishModal()">发布模板</button>
-      </div>
-    </div>
-    <div class="form-designer">
-      <div class="designer-panel">
-        <div class="panel-header">组件库</div>
-        <div class="panel-body">
-          <div class="component-list">
-            <div class="comp-item" draggable="true" data-type="text">
-              <div class="comp-icon" style="background:#e8f0fe;">Aa</div>
-              <div class="comp-info"><div class="comp-name">文本输入</div><div class="comp-desc">单行文本</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="textarea">
-              <div class="comp-icon" style="background:#e6f4ea;">T</div>
-              <div class="comp-info"><div class="comp-name">多行文本</div><div class="comp-desc">长文本输入</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="select">
-              <div class="comp-icon" style="background:#fef7e0;">&#x25BC;</div>
-              <div class="comp-info"><div class="comp-name">下拉选择</div><div class="comp-desc">单选/多选</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="radio">
-              <div class="comp-icon" style="background:#fce8e6;">&#x25C9;</div>
-              <div class="comp-info"><div class="comp-name">单选按钮</div><div class="comp-desc">单项选择</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="checkbox">
-              <div class="comp-icon" style="background:#f3e8fd;">&#x2611;</div>
-              <div class="comp-info"><div class="comp-name">复选框</div><div class="comp-desc">多项选择</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="date">
-              <div class="comp-icon" style="background:#e8f5e9;">&#x1F4C5;</div>
-              <div class="comp-info"><div class="comp-name">日期选择</div><div class="comp-desc">日期控件</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="number">
-              <div class="comp-icon" style="background:#e3f2fd;">#</div>
-              <div class="comp-info"><div class="comp-name">数字输入</div><div class="comp-desc">数值范围</div></div>
-            </div>
-            <div class="comp-item" draggable="true" data-type="upload">
-              <div class="comp-icon" style="background:#fff3e0;">&#x1F4C1;</div>
-              <div class="comp-info"><div class="comp-name">文件上传</div><div class="comp-desc">附件上传</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="designer-panel">
-        <div class="panel-header" id="designerHeader">表单编辑区 &mdash; 青光眼初诊评估表</div>
-        <div class="panel-body form-preview" id="formPreview">
-          <div class="form-title" id="formTitle">青光眼初诊评估表</div>
-          <div class="form-field" data-field-id="1" data-type="text" onclick="selectField(this)">
-            <div class="field-label">患者姓名</div>
-            <input class="field-input" value="请输入姓名" readonly>
-            <button class="field-delete" onclick="event.stopPropagation();deleteField(this)">&#x2715;</button>
-          </div>
-          <div class="form-field" data-field-id="2" data-type="select" onclick="selectField(this)">
-            <div class="field-label">性别</div>
-            <select class="field-select"><option>请选择性别</option></select>
-            <button class="field-delete" onclick="event.stopPropagation();deleteField(this)">&#x2715;</button>
-          </div>
-          <div class="form-field" data-field-id="3" data-type="date" onclick="selectField(this)">
-            <div class="field-label">就诊日期</div>
-            <input class="field-input" value="yyyy-MM-dd" readonly>
-            <button class="field-delete" onclick="event.stopPropagation();deleteField(this)">&#x2715;</button>
-          </div>
-          <div class="form-field" data-field-id="4" data-type="radio" onclick="selectField(this)">
-            <div class="field-label">眼别</div>
-            <div class="field-radio"><label><input type="radio" disabled>左眼</label><label><input type="radio" disabled>右眼</label><label><input type="radio" disabled>双眼</label></div>
-            <button class="field-delete" onclick="event.stopPropagation();deleteField(this)">&#x2715;</button>
-          </div>
-          <div class="form-field" data-field-id="5" data-type="textarea" onclick="selectField(this)">
-            <div class="field-label">主诉</div>
-            <textarea class="field-textarea" style="height:50px;" readonly>请输入主诉内容</textarea>
-            <button class="field-delete" onclick="event.stopPropagation();deleteField(this)">&#x2715;</button>
-          </div>
-        </div>
-      </div>
-      <div class="designer-panel">
-        <div class="panel-header">字段属性</div>
-        <div class="panel-body" id="propPanel">
-          <p style="color:var(--gray-500);font-size:13px;text-align:center;padding:40px 0;">请选择一个字段以编辑其属性</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-/* ====== 模板数据 ====== */
-var templateData = [
-  { id: 'TMP001', name: '眼科基础检查表单', type: '检查类', scene: '门诊初筛', creator: '张医生', createTime: '2026-06-15', updateTime: '2026-06-20', status: '启用' },
-  { id: 'TMP002', name: '眼底影像采集记录', type: '记录类', scene: '影像科', creator: '李主任', createTime: '2026-06-10', updateTime: '2026-06-18', status: '启用' },
-  { id: 'TMP003', name: '慢病随访评估表', type: '评估类', scene: '慢病管理', creator: '王医生', createTime: '2026-06-05', updateTime: '2026-06-22', status: '启用' },
-  { id: 'TMP004', name: '基因检测信息登记', type: '登记类', scene: '基因检测', creator: '赵研究员', createTime: '2026-05-28', updateTime: '2026-06-12', status: '启用' },
-  { id: 'TMP005', name: '手术知情同意书', type: '文书类', scene: '手术准备', creator: '陈医生', createTime: '2026-05-20', updateTime: '2026-06-01', status: '停用' },
-  { id: 'TMP006', name: '术后恢复评估表', type: '评估类', scene: '术后随访', creator: '刘主任', createTime: '2026-05-15', updateTime: '2026-06-08', status: '启用' },
-  { id: 'TMP007', name: '眼压监测记录表', type: '检查类', scene: '青光眼门诊', creator: '孙医生', createTime: '2026-05-10', updateTime: '2026-06-03', status: '启用' },
-  { id: 'TMP008', name: '视野检查报告单', type: '检查类', scene: '视神经评估', creator: '周主任', createTime: '2026-05-08', updateTime: '2026-05-25', status: '启用' },
-  { id: 'TMP009', name: '糖尿病视网膜病变筛查表', type: '评估类', scene: '内分泌科', creator: '吴医生', createTime: '2026-05-05', updateTime: '2026-05-20', status: '启用' },
-  { id: 'TMP010', name: '角膜地形图检查记录', type: '记录类', scene: '屈光手术', creator: '郑医生', createTime: '2026-04-28', updateTime: '2026-05-15', status: '停用' },
-  { id: 'TMP011', name: '白内障术前评估表', type: '评估类', scene: '白内障手术', creator: '冯主任', createTime: '2026-04-20', updateTime: '2026-05-10', status: '启用' },
-  { id: 'TMP012', name: '视神经纤维层分析记录', type: '记录类', scene: '青光眼随访', creator: '张医生', createTime: '2026-04-15', updateTime: '2026-05-01', status: '启用' }
-];
-
-var currentPage = 1;
-var pageSize = 5;
-var currentEditingRow = null;
-
-/* ====== 格式化日期 ====== */
-function formatDateTime() {
-  var d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' +
-         String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ':' + String(d.getSeconds()).padStart(2,'0');
-}
-function formatDate() {
-  var d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-
-/* ====== 用户/退出 ====== */
-function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
-
-/* ====== Toast ====== */
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timeout);
-  t._timeout = setTimeout(function(){ t.classList.remove('show'); }, 2000);
-}
-
-/* ====== 确认弹窗 ====== */
-function showConfirm(msg, onConfirm) {
-  var overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = '<div class="modal-box"><div class="modal-header"><span class="modal-title">操作确认</span><button class="btn-close" onclick="closeModal(this)">&#x2715;</button></div><div class="modal-body"><p style="color:var(--gray-600);line-height:1.6;">' + msg + '</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(this)">取消</button><button class="btn btn-primary" id="modalOk">确认</button></div></div>';
-  document.body.appendChild(overlay);
-  overlay.querySelector('#modalOk').onclick = function(){ closeModal(this); if (onConfirm) onConfirm(); };
-  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeModal(overlay); });
-}
-
-/* 关闭弹窗辅助 */
-function closeModal(el) {
-  var overlay = el.closest('.modal-overlay');
-  if (overlay) overlay.remove();
-}
-
-/* ====== 筛选/搜索 ====== */
-function getFilteredData() {
-  var typeFilter = document.getElementById('filterType').value;
-  var statusFilter = document.getElementById('filterStatus').value;
-  var searchKw = (document.getElementById('filterSearch').value || '').trim().toLowerCase();
-  return templateData.filter(function(row){
-    if (typeFilter && row.type !== typeFilter) return false;
-    if (statusFilter && row.status !== statusFilter) return false;
-    if (searchKw) {
-      var searchText = (row.name + ' ' + row.creator + ' ' + row.type + ' ' + row.scene).toLowerCase();
-      if (searchText.indexOf(searchKw) === -1) return false;
-    }
-    return true;
-  });
-}
-
-function applyFilters() {
-  currentPage = 1;
-  renderTable();
-}
-
-function resetFilters() {
-  document.getElementById('filterType').value = '';
-  document.getElementById('filterStatus').value = '';
-  document.getElementById('filterSearch').value = '';
-  currentPage = 1;
-  renderTable();
-}
-
-/* ====== 表格渲染 & 分页 ====== */
-function renderTable() {
-  var filtered = getFilteredData();
-  var totalPages = Math.ceil(filtered.length / pageSize) || 1;
-  if (currentPage > totalPages) currentPage = totalPages;
-  var start = (currentPage - 1) * pageSize;
-  var pageData = filtered.slice(start, start + pageSize);
-
-  var tbody = document.getElementById('templateTableBody');
-  var html = '';
-  for (var i = 0; i < pageData.length; i++) {
-    var row = pageData[i];
-    var typeTag = (row.type === '评估类') ? '<span class="tag tag-orange">' + row.type + '</span>' : '<span class="tag tag-blue">' + row.type + '</span>';
-    var statusHtml;
-    if (row.status === '启用') {
-      statusHtml = '<span class="status-dot status-active"><span class="dot"></span>启用</span>';
-    } else if (row.status === '停用') {
-      statusHtml = '<span class="status-dot status-inactive"><span class="dot"></span>停用</span>';
-    } else {
-      statusHtml = '<span class="status-dot status-draft"><span class="dot"></span>草稿</span>';
-    }
-
-    var actions = '<div class="action-links">'
-      + '<span class="action-link" style="color:var(--primary)" onclick="editTemplate(\'' + row.id + '\')">编辑</span>'
-      + '<span class="action-sep">|</span>'
-      + '<span class="action-link" style="color:var(--primary)" onclick="copyTemplate(\'' + row.id + '\')">复制</span>'
-      + '<span class="action-sep">|</span>'
-      + '<span class="action-link" style="color:var(--danger)" onclick="deleteTemplate(\'' + row.id + '\')">删除</span>';
-
-    if (row.status === '启用') {
-      actions += '<span class="action-sep">|</span><span class="action-link" style="color:var(--primary)" onclick="toggleStatus(\'' + row.id + '\')">停用</span>';
-    } else if (row.status === '停用') {
-      actions += '<span class="action-sep">|</span><span class="action-link" style="color:var(--primary)" onclick="toggleStatus(\'' + row.id + '\')">启用</span>';
-    }
-    actions += '</div>';
-
-    html += '<tr>'
-      + '<td>' + row.id + '</td>'
-      + '<td>' + row.name + '</td>'
-      + '<td>' + typeTag + '</td>'
-      + '<td>' + row.scene + '</td>'
-      + '<td>' + row.creator + '</td>'
-      + '<td>' + row.createTime + '</td>'
-      + '<td>' + row.updateTime + '</td>'
-      + '<td>' + statusHtml + '</td>'
-      + '<td>' + actions + '</td>'
-      + '</tr>';
-  }
-  tbody.innerHTML = html;
-
-  /* 分页信息 */
-  var infoStart = filtered.length === 0 ? 0 : start + 1;
-  var infoEnd = Math.min(start + pageSize, filtered.length);
-  document.getElementById('paginationInfo').textContent = '显示 ' + infoStart + ' 到 ' + infoEnd + ' 条，共 ' + filtered.length + ' 条记录';
-
-  /* 分页导航 */
-  var navHtml = '';
-  navHtml += '<button ' + (currentPage === 1 ? 'disabled' : 'onclick="goPage(' + (currentPage - 1) + ')"') + '>&lt;</button>';
-  for (var p = 1; p <= totalPages; p++) {
-    if (totalPages <= 7 || p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
-      navHtml += '<button class="' + (p === currentPage ? 'active' : '') + '" onclick="goPage(' + p + ')">' + p + '</button>';
-    } else if (p === 2 || p === totalPages - 1) {
-      navHtml += '<span class="ellipsis">...</span>';
-    }
-  }
-  navHtml += '<button ' + (currentPage === totalPages ? 'disabled' : 'onclick="goPage(' + (currentPage + 1) + ')"') + '>&gt;</button>';
-  document.getElementById('paginationNav').innerHTML = navHtml;
-}
-
-function goPage(p) {
-  currentPage = p;
-  renderTable();
-}
-
-/* ====== 编辑 ====== */
-function editTemplate(id) {
-  var row = null;
-  for (var i = 0; i < templateData.length; i++) {
-    if (templateData[i].id === id) { row = templateData[i]; break; }
-  }
-  if (!row) return;
-  currentEditingRow = row;
-  showDesigner(row);
-}
-
-/* ====== 复制 ====== */
-function copyTemplate(id) {
-  var source = null;
-  for (var i = 0; i < templateData.length; i++) {
-    if (templateData[i].id === id) { source = templateData[i]; break; }
-  }
-  if (!source) return;
-
-  var newRow = {};
-  for (var k in source) { if (source.hasOwnProperty(k)) newRow[k] = source[k]; }
-
-  var maxNum = 0;
-  for (var j = 0; j < templateData.length; j++) {
-    var num = parseInt(templateData[j].id.replace('TMP','').replace('DRAFT_',''), 10);
-    if (num > maxNum) maxNum = num;
-  }
-  newRow.id = 'TMP' + String(maxNum + 1).padStart(3, '0');
-  newRow.name = newRow.name + ' - 副本';
-  var dateStr = formatDate();
-  newRow.createTime = dateStr;
-  newRow.updateTime = dateStr;
-
-  templateData.push(newRow);
-  renderTable();
-  showToast('模板已复制');
-}
-
-/* ====== 删除 ====== */
-function deleteTemplate(id) {
-  var row = null;
-  for (var i = 0; i < templateData.length; i++) {
-    if (templateData[i].id === id) { row = templateData[i]; break; }
-  }
-  if (!row) return;
-  showConfirm('确定要删除模板 <b>' + row.name + '</b> 吗？', function(){
-    for (var j = 0; j < templateData.length; j++) {
-      if (templateData[j].id === id) { templateData.splice(j, 1); break; }
-    }
-    var filtered = getFilteredData();
-    var totalPages = Math.ceil(filtered.length / pageSize) || 1;
-    if (currentPage > totalPages) currentPage = totalPages;
-    renderTable();
-    showToast('模板已删除');
-  });
-}
-
-/* ====== 停用/启用 ====== */
-function toggleStatus(id) {
-  var row = null;
-  for (var i = 0; i < templateData.length; i++) {
-    if (templateData[i].id === id) { row = templateData[i]; break; }
-  }
-  if (!row) return;
-  var newStatus = row.status === '启用' ? '停用' : '启用';
-  row.status = newStatus;
-  row.updateTime = formatDate();
-  renderTable();
-  showToast(newStatus === '启用' ? '模板已启用' : '模板已停用');
-}
-
-/* ====== 生成新ID ====== */
-function generateNewId() {
-  var maxNum = 0;
-  for (var i = 0; i < templateData.length; i++) {
-    var num = parseInt(templateData[i].id.replace('TMP','').replace('DRAFT_',''), 10);
-    if (num > maxNum) maxNum = num;
-  }
-  return 'TMP' + String(maxNum + 1).padStart(3, '0');
-}
-
-function generateDraftId() {
-  var maxDraft = 0;
-  for (var i = 0; i < templateData.length; i++) {
-    if (templateData[i].id.indexOf('DRAFT_') === 0) {
-      var num = parseInt(templateData[i].id.replace('DRAFT_',''), 10);
-      if (num > maxDraft) maxDraft = num;
-    }
-  }
-  return 'DRAFT_' + String(maxDraft + 1).padStart(3, '0');
-}
-
-/* ====== 获取当前设计器表单标题 ====== */
-function getDesignerTitle() {
-  var editable = document.getElementById('editableFormName');
-  if (editable) return editable.textContent.trim();
-  return document.getElementById('formTitle').textContent.trim();
-}
-
-/* ====== 列表/设计器切换 ====== */
-function showDesigner(rowData) {
-  document.getElementById('listSection').style.display = 'none';
-  document.getElementById('designerSection').style.display = 'block';
-  if (rowData) {
-    document.getElementById('designerHeader').innerHTML = '表单编辑区 &mdash; <span contenteditable="true" id="editableFormName" style="border-bottom:1px dashed var(--primary);outline:none;min-width:120px;">' + rowData.name + '</span>';
-    document.getElementById('formTitle').textContent = rowData.name;
-  } else {
-    document.getElementById('designerHeader').innerHTML = '表单编辑区 &mdash; <span contenteditable="true" id="editableFormName" style="border-bottom:1px dashed var(--primary);outline:none;min-width:120px;">新建表单模板</span>';
-    document.getElementById('formTitle').textContent = '新建表单模板';
-    currentEditingRow = null;
-  }
-}
-
-function openNewDesigner() {
-  currentEditingRow = null;
-  document.getElementById('formPreview').querySelectorAll('.form-field').forEach(function(f){ f.remove(); });
-  showDesigner(null);
-}
-
-function showList() {
-  document.getElementById('designerSection').style.display = 'none';
-  document.getElementById('listSection').style.display = 'block';
-  if (currentEditingRow) {
-    var editableEl = document.getElementById('editableFormName');
-    if (editableEl) {
-      var newName = editableEl.textContent.trim();
-      if (newName && newName !== currentEditingRow.name) {
-        currentEditingRow.name = newName;
-        document.getElementById('formTitle').textContent = newName;
-        currentEditingRow.updateTime = formatDate();
-      }
-    }
-    renderTable();
-  }
-}
-
-/* ====== 预览弹窗 ====== */
-function openPreviewModal() {
-  var formTitle = getDesignerTitle();
-  var overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-
-  /* 渲染预览字段 */
-  var fieldsHtml = '';
-  var fields = document.getElementById('formPreview').querySelectorAll('.form-field');
-  fields.forEach(function(f){
-    var type = f.getAttribute('data-type');
-    var labelEl = f.querySelector('.field-label');
-    var labelText = labelEl ? labelEl.textContent : '未命名字段';
-    var hasStar = labelEl && labelEl.querySelector('.required-star') !== null;
-    var starMarkup = hasStar ? '<span class="required-star">*</span>' : '';
-
-    var inputHtml = '';
-    switch(type) {
-      case 'text':
-        var inputEl = f.querySelector('.field-input');
-        var ph = inputEl ? inputEl.getAttribute('placeholder') || inputEl.value : '请输入内容';
-        inputHtml = '<input value="" placeholder="' + ph + '" readonly>';
-        break;
-      case 'textarea':
-        var taEl = f.querySelector('.field-textarea');
-        var ph2 = taEl ? taEl.getAttribute('placeholder') || taEl.textContent : '请输入内容';
-        inputHtml = '<textarea rows="3" readonly placeholder="' + ph2 + '"></textarea>';
-        break;
-      case 'select':
-        var selEl = f.querySelector('.field-select');
-        var opts = '';
-        if (selEl) {
-          var optionEls = selEl.querySelectorAll('option');
-          optionEls.forEach(function(o){ opts += '<option>' + o.textContent + '</option>'; });
-        }
-        inputHtml = '<select disabled>' + opts + '</select>';
-        break;
-      case 'radio':
-        var radioLabels = f.querySelectorAll('.field-radio label');
-        var radiosHtml = '';
-        radioLabels.forEach(function(lbl){ radiosHtml += '<label><input type="radio" disabled>' + lbl.textContent + '</label>'; });
-        inputHtml = '<div class="preview-radio-group">' + radiosHtml + '</div>';
-        break;
-      case 'checkbox':
-        var cbLabels = f.querySelectorAll('.field-checkbox label');
-        var cbsHtml = '';
-        cbLabels.forEach(function(lbl){ cbsHtml += '<label><input type="checkbox" disabled>' + lbl.textContent + '</label>'; });
-        inputHtml = '<div class="preview-checkbox-group">' + (cbsHtml || '<label><input type="checkbox" disabled>选项1</label><label><input type="checkbox" disabled>选项2</label>') + '</div>';
-        break;
-      case 'date':
-        inputHtml = '<div class="preview-date-wrap"><input value="" placeholder="yyyy-MM-dd" readonly><span class="calendar-icon">&#x1F4C5;</span></div>';
-        break;
-      case 'number':
-        var numEl = f.querySelector('.field-input');
-        var numPh = numEl ? numEl.getAttribute('placeholder') || numEl.value : '请输入数字';
-        inputHtml = '<input type="number" placeholder="' + numPh + '" readonly>';
-        break;
-      case 'upload':
-        inputHtml = '<div class="preview-upload-area">点击或拖拽文件到此处上传</div>';
-        break;
-      default:
-        inputHtml = '<input value="" placeholder="请输入内容" readonly>';
-    }
-
-    fieldsHtml += '<div class="preview-field"><div class="preview-label">' + labelText + starMarkup + '</div>' + inputHtml + '</div>';
-  });
-
-  overlay.innerHTML = '<div class="modal-box preview-modal">'
-    + '<div class="modal-header">'
-    + '<span class="modal-title"><span class="modal-icon">&#x1F441;</span>预览表单</span>'
-    + '<div class="preview-header-actions">'
-    + '<button class="btn btn-outline" onclick="alert(\'打印功能\')" style="font-size:12px;padding:6px 12px;">打印</button>'
-    + '<button class="btn btn-outline" onclick="alert(\'导出PDF功能\')" style="font-size:12px;padding:6px 12px;">导出PDF</button>'
-    + '<button class="btn-close" onclick="closeModal(this)">&#x2715;</button>'
-    + '</div>'
-    + '</div>'
-    + '<div class="modal-body">'
-    + '<div class="preview-form-title">' + formTitle + '</div>'
-    + '<div class="preview-form-version">版本: v1.0.0</div>'
-    + '<hr class="preview-form-divider">'
-    + fieldsHtml
-    + '</div>'
-    + '<div class="modal-footer">'
-    + '<button class="btn btn-outline" onclick="closeModal(this)">取消</button>'
-    + '<button class="btn btn-primary" onclick="closeModal(this)">确认</button>'
-    + '</div></div>';
-
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeModal(overlay); });
-}
-
-/* ====== 发布弹窗 ====== */
-function openPublishModal() {
-  var formTitle = getDesignerTitle();
-  var overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-
-  overlay.innerHTML = '<div class="modal-box publish-modal">'
-    + '<div class="modal-header">'
-    + '<span class="modal-title"><span class="modal-icon" style="color:var(--primary);">&#x1F4E4;</span>发布模板</span>'
-    + '<button class="btn-close" onclick="closeModal(this)">&#x2715;</button>'
-    + '</div>'
-    + '<div class="modal-body">'
-    + '<div class="publish-form-group"><label>模板名称</label><input id="publishName" value="' + formTitle + '"></div>'
-    + '<div class="publish-form-group"><label>模板类型</label><select id="publishType"><option>检查类</option><option>记录类</option><option>评估类</option><option>登记类</option><option>文书类</option></select></div>'
-    + '<div class="publish-form-group"><label>适用场景</label><input id="publishScene" placeholder="如：青光眼门诊"></div>'
-    + '<div class="publish-form-group"><label>版本号</label><input id="publishVersion" value="v1.0.0"></div>'
-    + '<div class="publish-form-group"><label>发布说明</label><textarea id="publishDesc" placeholder="请描述本次发布的变更内容..."></textarea></div>'
-    + '<div class="publish-form-group"><label>可见范围</label><select id="publishScope"><option>全部用户</option><option>指定科室</option><option>仅自己</option></select></div>'
-    + '</div>'
-    + '<div class="modal-footer">'
-    + '<button class="btn btn-outline" onclick="closeModal(this)">取消</button>'
-    + '<button class="btn btn-primary" id="btnConfirmPublish">确认发布</button>'
-    + '</div></div>';
-
-  document.body.appendChild(overlay);
-
-  overlay.querySelector('#btnConfirmPublish').onclick = function(){
-    var name = document.getElementById('publishName').value.trim();
-    if (!name) { showToast('请输入模板名称'); return; }
-    var type = document.getElementById('publishType').value;
-    var scene = document.getElementById('publishScene').value.trim() || '未指定';
-    var version = document.getElementById('publishVersion').value.trim() || 'v1.0.0';
-    var now = formatDate();
-
-    /* 判断是新建还是更新 */
-    if (currentEditingRow && currentEditingRow.id.indexOf('DRAFT_') === 0) {
-      /* 草稿转正式模板 */
-      var newId = generateNewId();
-      currentEditingRow.id = newId;
-      currentEditingRow.name = name;
-      currentEditingRow.type = type;
-      currentEditingRow.scene = scene;
-      currentEditingRow.status = '启用';
-      currentEditingRow.updateTime = now;
-      currentEditingRow.createTime = now;
-    } else if (currentEditingRow) {
-      /* 更新已有模板 */
-      currentEditingRow.name = name;
-      currentEditingRow.type = type;
-      currentEditingRow.scene = scene;
-      currentEditingRow.status = '启用';
-      currentEditingRow.updateTime = now;
-    } else {
-      /* 完全新建 */
-      var newId2 = generateNewId();
-      templateData.push({
-        id: newId2, name: name, type: type, scene: scene,
-        creator: '张教授', createTime: now, updateTime: now, status: '启用'
-      });
-      currentEditingRow = templateData[templateData.length - 1];
-    }
-
-    closeModal(overlay);
-    showList();
-    renderTable();
-    showToast('模板发布成功');
-  };
-
-  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeModal(overlay); });
-}
-
-/* ====== 保存草稿弹窗 ====== */
-function openSaveDraftModal() {
-  var formTitle = getDesignerTitle();
-  var saveTime = formatDateTime();
-  var overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-
-  overlay.innerHTML = '<div class="modal-box draft-modal">'
-    + '<div class="modal-header">'
-    + '<span class="modal-title"></span>'
-    + '<button class="btn-close" onclick="closeModal(this)">&#x2715;</button>'
-    + '</div>'
-    + '<div class="modal-body">'
-    + '<div class="draft-success-icon">&#x2714;</div>'
-    + '<h3 style="margin-bottom:8px;">草稿保存成功</h3>'
-    + '<p style="color:var(--gray-500);font-size:13px;margin-bottom:16px;">"' + formTitle + '"已保存为草稿，您可以随时继续编辑</p>'
-    + '<div class="draft-info-card">'
-    + '<div class="info-row"><span class="info-label">模板名称</span><span class="info-value">' + formTitle + '</span></div>'
-    + '<div class="info-row"><span class="info-label">版本号</span><span class="info-value">v1.0.0（草稿）</span></div>'
-    + '<div class="info-row"><span class="info-label">保存时间</span><span class="info-value">' + saveTime + '</span></div>'
-    + '</div>'
-    + '<div class="draft-actions">'
-    + '<button class="btn btn-outline" id="btnGoToList">去模板列表</button>'
-    + '<button class="btn btn-primary" id="btnContinueEdit">继续编辑</button>'
-    + '</div>'
-    + '</div></div>';
-
-  document.body.appendChild(overlay);
-
-  /* 保存草稿到 templateData */
-  if (currentEditingRow && currentEditingRow.id.indexOf('DRAFT_') === 0) {
-    /* 更新已有草稿 */
-    currentEditingRow.name = formTitle;
-    currentEditingRow.updateTime = saveTime;
-  } else if (!currentEditingRow) {
-    /* 新建草稿 */
-    var draftId = generateDraftId();
-    templateData.push({
-      id: draftId, name: formTitle, type: '检查类', scene: '未指定',
-      creator: '张教授', createTime: formatDate(), updateTime: saveTime, status: '草稿'
-    });
-    currentEditingRow = templateData[templateData.length - 1];
-  } else {
-    /* 编辑已有模板，存为草稿 */
-    currentEditingRow.updateTime = saveTime;
-  }
-
-  overlay.querySelector('#btnGoToList').onclick = function(){
-    closeModal(overlay);
-    showList();
-    renderTable();
-  };
-  overlay.querySelector('#btnContinueEdit').onclick = function(){
-    closeModal(overlay);
-  };
-  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeModal(overlay); });
-}
-
-/* ====== 字段属性面板（根据组件类型动态渲染） ====== */
-function selectField(el) {
-  document.querySelectorAll('.form-field').forEach(function(f){ f.classList.remove('selected'); });
-  el.classList.add('selected');
-  var type = el.getAttribute('data-type');
-  var labelEl = el.querySelector('.field-label');
-  var labelText = labelEl ? labelEl.textContent.replace(/\*/g, '').trim() : '';
-  var hasRequired = labelEl && labelEl.querySelector('.required-star') !== null;
-  var inputEl = el.querySelector('.field-input');
-  var textareaEl = el.querySelector('.field-textarea');
-
-  var html = '';
-  html += '<div class="prop-group"><label>字段标签</label><input id="propLabel" value="' + labelText + '" oninput="updateFieldLabel(this.value)"></div>';
-
-  switch(type) {
-    case 'text':
-      html += '<div class="prop-group"><label>占位提示</label><input id="propPlaceholder" value="' + (inputEl ? inputEl.value : '') + '" oninput="updateFieldPlaceholder(this.value)"></div>';
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>最大长度</label><input id="propMaxLength" type="number" value="100" oninput="updateFieldMaxLength(this.value)"></div>';
-      html += '<div class="prop-group"><label>默认值</label><input id="propDefault" value="' + (inputEl ? inputEl.getAttribute('data-default') || '' : '') + '" oninput="updateFieldDefault(this.value)"></div>';
-      break;
-
-    case 'textarea':
-      html += '<div class="prop-group"><label>占位提示</label><input id="propPlaceholder" value="' + (textareaEl ? (textareaEl.placeholder || textareaEl.textContent) : '') + '" oninput="updateFieldPlaceholder(this.value)"></div>';
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>行数</label><input id="propRows" type="number" value="3" oninput="updateFieldRows(this.value)"></div>';
-      html += '<div class="prop-group"><label>默认值</label><textarea id="propDefault" oninput="updateFieldDefault(this.value)" style="min-height:60px;"></textarea></div>';
-      break;
-
-    case 'select':
-      var selEl = el.querySelector('.field-select');
-      var optsArr = [];
-      if (selEl) {
-        var opts = selEl.querySelectorAll('option');
-        opts.forEach(function(o){ optsArr.push(o.textContent); });
-      }
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>选项列表</label><textarea id="propOptions" oninput="updateFieldOptions()" placeholder="每行一个选项，如：\n选项1\n选项2\n选项3">' + optsArr.join('\n') + '</textarea></div>';
-      html += '<div class="prop-group"><label>是否多选</label><select id="propMultiple" onchange="updateFieldMultiple(this.value)"><option value="否">否</option><option value="是">是</option></select></div>';
-      break;
-
-    case 'radio':
-      var radioLabels = el.querySelectorAll('.field-radio label');
-      var radioOpts = [];
-      radioLabels.forEach(function(lbl){ radioOpts.push(lbl.textContent); });
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>选项列表</label><textarea id="propOptions" oninput="updateFieldOptions()" placeholder="每行一个选项，如：\n男\n女">' + radioOpts.join('\n') + '</textarea></div>';
-      html += '<div class="prop-group"><label>默认选中</label><input id="propDefaultChecked" placeholder="输入默认选中的选项名"></div>';
-      break;
-
-    case 'checkbox':
-      var cbLabels = el.querySelectorAll('.field-checkbox label');
-      var cbOpts = [];
-      cbLabels.forEach(function(lbl){ cbOpts.push(lbl.textContent); });
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>选项列表</label><textarea id="propOptions" oninput="updateFieldOptions()" placeholder="每行一个选项">' + (cbOpts.join('\n') || '选项1\n选项2') + '</textarea></div>';
-      break;
-
-    case 'date':
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>日期格式</label><select id="propDateFormat"><option>yyyy-MM-dd</option><option>yyyy/MM/dd</option><option>MM-dd-yyyy</option></select></div>';
-      html += '<div class="prop-group"><label>默认日期</label><input id="propDefaultDate" type="date"></div>';
-      break;
-
-    case 'number':
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>最小值</label><input id="propMin" type="number" value="0"></div>';
-      html += '<div class="prop-group"><label>最大值</label><input id="propMax" type="number" value="999"></div>';
-      html += '<div class="prop-group"><label>单位</label><input id="propUnit" placeholder="如：mmHg、mm" value="" oninput="updateFieldUnit(this.value)"></div>';
-      html += '<div class="prop-group"><label>默认值</label><input id="propDefault" type="number" value="' + (inputEl ? (inputEl.getAttribute('data-default')||'') : '') + '" oninput="updateFieldDefault(this.value)"></div>';
-      break;
-
-    case 'upload':
-      html += '<div class="prop-group"><label>是否必填</label><select id="propRequired" onchange="updateFieldRequired(this.value)"><option value="否"' + (hasRequired?'':' selected') + '>否</option><option value="是"' + (hasRequired?' selected':'') + '>是</option></select></div>';
-      html += '<div class="prop-group"><label>允许文件类型</label><input id="propFileTypes" placeholder="如：.pdf,.jpg,.png" value=".pdf,.jpg,.png"></div>';
-      html += '<div class="prop-group"><label>最大文件大小</label><input id="propMaxSize" placeholder="如：10MB" value="10MB"></div>';
-      html += '<div class="prop-group"><label>是否多文件</label><select id="propMultiFile"><option value="否">否</option><option value="是">是</option></select></div>';
-      break;
-  }
-
-  document.getElementById('propPanel').innerHTML = html;
-}
-
-/* ====== 属性实时更新 ====== */
-function getSelectedField() {
-  return document.querySelector('.form-field.selected');
-}
-
-function updateFieldLabel(val) {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var labelEl = sel.querySelector('.field-label');
-  if (!labelEl) return;
-  var hasStar = labelEl.querySelector('.required-star') !== null;
-  labelEl.innerHTML = val + (hasStar ? '<span class="required-star">*</span>' : '');
-}
-
-function updateFieldPlaceholder(val) {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var type = sel.getAttribute('data-type');
-  if (type === 'textarea') {
-    var ta = sel.querySelector('.field-textarea');
-    if (ta) { ta.placeholder = val; ta.textContent = val; }
-  } else {
-    var inp = sel.querySelector('.field-input');
-    if (inp) inp.value = val;
-  }
-}
-
-function updateFieldRequired(val) {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var labelEl = sel.querySelector('.field-label');
-  if (!labelEl) return;
-  var text = labelEl.textContent.replace(/\*/g, '').trim();
-  if (val === '是') {
-    labelEl.innerHTML = text + '<span class="required-star">*</span>';
-  } else {
-    labelEl.textContent = text;
-  }
-}
-
-function updateFieldDefault(val) {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var inp = sel.querySelector('.field-input');
-  if (inp) {
-    inp.setAttribute('data-default', val);
-    inp.value = val || inp.value;
-  }
-}
-
-function updateFieldMaxLength(val) {
-  /* 仅存储属性，预览不直接反映 */
-}
-
-function updateFieldRows(val) {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var ta = sel.querySelector('.field-textarea');
-  if (ta) ta.style.height = (parseInt(val) * 20) + 'px';
-}
-
-function updateFieldOptions() {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var type = sel.getAttribute('data-type');
-  var optsEl = document.getElementById('propOptions');
-  if (!optsEl) return;
-  var lines = optsEl.value.split('\n').filter(function(l){ return l.trim(); });
-
-  if (type === 'select') {
-    var selectEl = sel.querySelector('.field-select');
-    if (selectEl) {
-      var html = '';
-      lines.forEach(function(line){ html += '<option>' + line.trim() + '</option>'; });
-      selectEl.innerHTML = html || '<option>请选择</option>';
-    }
-  } else if (type === 'radio') {
-    var radioDiv = sel.querySelector('.field-radio');
-    if (radioDiv) {
-      var html = '';
-      lines.forEach(function(line){ html += '<label><input type="radio" disabled>' + line.trim() + '</label>'; });
-      radioDiv.innerHTML = html || '<label><input type="radio" disabled>选项1</label><label><input type="radio" disabled>选项2</label>';
-    }
-  } else if (type === 'checkbox') {
-    var cbDiv = sel.querySelector('.field-checkbox');
-    if (cbDiv) {
-      var html = '';
-      lines.forEach(function(line){ html += '<label><input type="checkbox" disabled>' + line.trim() + '</label>'; });
-      cbDiv.innerHTML = html || '<label><input type="checkbox" disabled>选项</label>';
-    }
-  }
-}
-
-function updateFieldMultiple(val) {
-  /* 仅标记多选属性 */
-}
-
-function updateFieldUnit(val) {
-  var sel = getSelectedField();
-  if (!sel) return;
-  var inp = sel.querySelector('.field-input');
-  if (inp && sel.getAttribute('data-type') === 'number') {
-    var defVal = inp.getAttribute('data-default') || '';
-    inp.value = defVal ? defVal + (val ? ' ' + val : '') : '请输入数字' + (val ? '（单位：' + val + '）' : '');
-  }
-}
-
-/* ====== 删除字段 ====== */
-function deleteField(el) {
-  var field = el.closest('.form-field');
-  if (field) {
-    if (field.classList.contains('selected')) {
-      document.getElementById('propPanel').innerHTML = '<p style="color:var(--gray-500);font-size:13px;text-align:center;padding:40px 0;">请选择一个字段以编辑其属性</p>';
-    }
-    field.remove();
-  }
-}
-
-/* ====== 初始化 ====== */
-document.addEventListener('DOMContentLoaded', function() {
-  try {
-    var user = JSON.parse(localStorage.getItem('life_med_user'));
-    if (!user) { window.location.href = 'login.html'; return; }
-    document.getElementById('headerUserName').textContent = user.name || '用户';
-  } catch(e) { window.location.href = 'login.html'; }
-
-  renderTable();
-
-  /* 组件点击添加 */
-  document.querySelectorAll('.comp-item').forEach(function(item) {
-    item.addEventListener('click', function() {
-      var type = this.getAttribute('data-type');
-      var name = this.querySelector('.comp-name').textContent;
-      var preview = document.getElementById('formPreview');
-      var div = document.createElement('div');
-      div.className = 'form-field';
-      div.setAttribute('data-field-id', Date.now());
-      div.setAttribute('data-type', type);
-      div.setAttribute('onclick', 'selectField(this)');
-      var inputHtml;
-      if (type === 'textarea') {
-        inputHtml = '<textarea class="field-textarea" style="resize:none;height:60px;" readonly placeholder="请输入' + name + '内容"></textarea>';
-      } else if (type === 'select') {
-        inputHtml = '<select class="field-select"><option>请选择</option></select>';
-      } else if (type === 'radio') {
-        inputHtml = '<div class="field-radio"><label><input type="radio" disabled>选项1</label><label><input type="radio" disabled>选项2</label></div>';
-      } else if (type === 'checkbox') {
-        inputHtml = '<div class="field-checkbox"><label><input type="checkbox" disabled>选项1</label><label><input type="checkbox" disabled>选项2</label></div>';
-      } else if (type === 'date') {
-        inputHtml = '<input class="field-input" value="yyyy-MM-dd" readonly>';
-      } else if (type === 'number') {
-        inputHtml = '<input class="field-input" value="请输入数字" readonly>';
-      } else if (type === 'upload') {
-        inputHtml = '<div class="field-input" style="border:2px dashed var(--gray-300);padding:12px;text-align:center;color:var(--gray-400);border-radius:4px;background:var(--gray-50);">点击或拖拽文件到此处上传</div>';
-      } else {
-        inputHtml = '<input class="field-input" value="请输入' + name + '" readonly>';
-      }
-      div.innerHTML = '<div class="field-label">' + name + '</div>' + inputHtml + '<button class="field-delete" onclick="event.stopPropagation();deleteField(this)">&#x2715;</button>';
-      preview.insertBefore(div, null);
-    });
-  });
-});
-</script></body></html>
+(()=>{const app=document.getElementById('entryApp'),pages=[...app.querySelectorAll('.page')],navs=[...app.querySelectorAll('.nav')],modal=document.getElementById('modal'),title=document.getElementById('modalTitle'),body=document.getElementById('modalBody'),confirm=document.getElementById('modalConfirm'),draft=document.getElementById('modalDraft'),drawer=document.getElementById('drawer'),mask=document.getElementById('drawerMask'),toast=document.getElementById('toast');let currentAction='',seq=8422,transcodeSeq=3,objectSeq=2203,batchSeq=4,currentImportBatchId='B004',currentTrigger=null,activeReviewId='',activeQuestionnaireRow=null,activeFollowRow=null,activeImportRow=null,activeFollowPatient=null,followLinked=false,phoneRevealed=false,editingCaseId='',draftQuestionnaireState=null,publishedQuestionnaireState=null,importMaxStep=1,lastAnalysis=null,selectedResearchVariables=['年龄','眼压','疾病分期'];const questionnaireStates=new Map(),reviewHistory=new Map();
+const tag=(s,c)=>`<span class="tag ${c}">${s}</span>`;const field=(l,c,full='')=>`<label class="field ${full}">${l}${c}</label>`;function showToast(s){if(!showToast.businessEvents)showToast.businessEvents=new Set();if(!showToast.businessEvents.has(s)){if(/MR\d+ 已提交专家审核/.test(s))syncBusinessStats('entry');if(s.includes('随访任务已创建'))syncBusinessStats('follow');if(s.includes('专家审核通过')){const c=[...document.querySelectorAll('#caseBody tr')].find(r=>r.cells[1]?.textContent.trim()===activeReviewId);syncBusinessStats('review',c?.cells[3]?.textContent)}if(s.includes('已形成结构化记录并进入专家审核')){const disease=document.querySelector('#reviewBody tr:first-child')?.cells[2]?.textContent;syncBusinessStats('import',disease,1500)}showToast.businessEvents.add(s)}toast.textContent=s;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),2600)}
+function go(id,source){pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+id));navs.forEach(n=>n.classList.toggle('active',n===source||(!source&&n.dataset.page===id)));document.querySelector('.main').scrollTop=0}
+function addStat(id,delta){const el=document.getElementById(id);if(!el)return;el.textContent=(Number(el.textContent.replace(/,/g,''))+delta).toLocaleString()}
+function updateLibraryStat(type,delta){addStat(type==='白内障'?'statCataract':type==='慢病'?'statChronic':'statDR',delta);addStat('statTotal',delta)}
+function syncBusinessStats(event,type,count=1){if(event==='entry')addStat('statEntryWork',count);if(event==='follow')addStat('statFollowWork',count);if(event==='review'){addStat('statReviewWork',count);if(type)updateLibraryStat(type,count)}if(event==='import'&&type)updateLibraryStat(type,count)}
+function selectPane(page,name){const host=document.getElementById('page-'+page);if(!host)return;host.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.pane===name));host.querySelectorAll('.tabpane').forEach(x=>x.classList.toggle('active',x.dataset.paneContent===name))}
+navs.forEach(n=>n.onclick=()=>{if(n.dataset.page)go(n.dataset.page,n);if(n.dataset.tab)selectPane(n.dataset.page,n.dataset.tab);if(n.dataset.action)open(n.dataset.action)});app.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));app.querySelectorAll('.tabs').forEach(t=>t.onclick=e=>{const x=e.target.closest('.tab');if(x&&x.dataset.pane){const page=x.closest('.page')?.id.replace('page-','');if(page)selectPane(page,x.dataset.pane)}});
+const contents={
+template:['配置采集中心标准化表单',`<div class="form">${field('采集中心 <span class="req">*</span>','<select><option>北京同仁医院</option><option>清华大学玉泉医院</option><option>湘雅二医院</option></select>')}${field('目标患者库 <span class="req">*</span>','<select><option>糖尿病视网膜病变库</option><option>白内障库</option><option>慢性病库</option></select>')}${field('标准化表单 <span class="req">*</span>','<select><option>DR 标准病历表单 V3.2</option><option>白内障标准病历表单 V2.8</option><option>慢性病基础表单 V1.4</option></select>')}${field('生效日期','<input type="date" value="2026-09-01">')}${field('配置说明','<textarea>说明该中心面对的患者类型和表单适用范围。</textarea>','full')}</div><div class="notice">配置确认后，该采集中心录入对应患者库病历时将自动加载此表单。</div>`,'保存配置'],
+'template-copy':['创建模板新版本',`<div class="form">${field('基于版本','<input value="V3.2" readonly>')}${field('新版本','<input value="V3.3" readonly>')}${field('变更内容 <span class="req">*</span>','<textarea id="templateChange" placeholder="说明字段及规则变更"></textarea>','full')}</div><div class="notice warn">已录入记录继续引用原版本；新版本发布后仅影响新建记录。</div>`,'提交模板审核'],
+'template-review':['审核模板',`<div class="details"><div>模板</div><div>慢性病基础病历表单 V1.4</div><div>规则校验</div><div>${tag('通过','green')} 68 个字段</div><div>影响范围</div><div>尚未被任何病历引用</div></div>${field('审核意见','<textarea id="reviewNote" placeholder="退回时必须填写原因"></textarea>','full')}<div class="actions" style="margin-top:14px"><label><input type="radio" name="decision" value="pass" checked> 通过并发布</label><label><input type="radio" name="decision" value="return"> 退回修改</label></div>`,'确认结论'],
+case:['新建病历 · 标准表单',`<div class="case-wizard-steps"><div class="case-wizard-step current" data-case-step-label="1"><i>1</i>患者与来源</div><div class="case-wizard-step" data-case-step-label="2"><i>2</i>专科数据录入</div><div class="case-wizard-step" data-case-step-label="3"><i>3</i>影像与提交确认</div></div><div class="notice" id="caseFormNotice">请先确认患者、采集中心和病人类型，系统将自动匹配标准表单。</div><div class="case-panel active" data-case-panel="1"><div class="form-section"><h4>患者与来源</h4><div class="form">${field('患者 <span class="req">*</span>','<select id="casePatient"><option>P000128 · 张*</option><option>P000129 · 王*</option></select>')}${field('性别/年龄','<input value="男 / 62" readonly>')}${field('采集中心 <span class="req">*</span>','<select id="caseCenter"><option>北京同仁医院</option><option>湘雅二医院</option></select>')}${field('病人类型 <span class="req">*</span>','<select id="caseLibrary"><option>白内障</option><option>慢病</option><option>糖尿病视网膜病变</option></select>')}${field('匹配的标准表单','<input id="caseFormVersion" value="白内障标准病历表单 V2.8" readonly>')}${field('就诊日期 <span class="req">*</span>','<input type="date" value="2026-08-30">')}</div></div></div><div class="case-panel" data-case-panel="2"><div class="form-section" id="specialtySection"></div></div><div class="case-panel" data-case-panel="3"><div class="form-section"><h4>医学影像与附件</h4><div class="form">${field('上传医学影像/检查报告','<input type="file" multiple accept=".dcm,.tif,.tiff,.jpg,.jpeg,.png,.pdf">','full')}${field('已存储对象关联','<select><option>暂不关联</option><option>OBJ-IMG-1298 · 裂隙灯 2张</option><option>OBJ-IMG-1302 · 眼底 1张</option></select>')}${field('资料说明','<textarea placeholder="说明影像侧别、检查日期或其他资料信息"></textarea>')}</div><div class="upload-list"><div class="upload-item"><span>裂隙灯_右眼.jpg · 2.4MB</span>${tag('校验通过','green')}</div><div class="upload-item"><span>IOL_Master_报告.pdf · 1.1MB</span>${tag('校验通过','green')}</div></div></div><div class="form-section" style="margin-top:14px"><h4>提交前确认</h4><div class="details"><div>患者/来源</div><div id="caseSummaryPatient">P000128 · 张* / 北京同仁医院</div><div>病人类型/表单</div><div id="caseSummaryForm">白内障 / 白内障标准病历表单 V2.8</div><div>资料完整性</div><div>${tag('待检查','orange')}</div></div><div class="check-list"><label><input type="checkbox" id="caseConfirmTruth"> 我确认录入内容来源于原始病历，信息真实完整</label><label><input type="checkbox" id="caseConfirmImage"> 我已核对医学影像、检查日期及患者对应关系</label></div><div class="notice warn">提交后病历进入专家审核，在被退回前不可继续修改；如暂未完成，请保存草稿。</div></div></div><div class="wizard-actions"><span class="spacer"></span><button type="button" class="btn" id="casePrev" data-action="case-prev" style="display:none">上一步</button><button type="button" class="btn primary" id="caseNext" data-action="case-next">下一步</button></div>`,'提交专家审核'],
+'case-edit':['继续填写病历 · MR002','','提交专家审核'],
+'case-fix':['修改退回病历并重新提交',`<div class="notice error">退回原因：右眼眼压单位缺失；检查日期早于就诊日期。当前编辑将生成 V1.3。</div><div class="form">${field('右眼眼压（mmHg） <span class="req">*</span>','<input value="22">')}${field('检查日期 <span class="req">*</span>','<input type="date" value="2026-08-28">')}${field('整改说明 <span class="req">*</span>','<textarea id="fixNote">已补充单位并修正检查日期。</textarea>','full')}</div>`,'重新提交审核'],
+'case-correct':['申请归档病历更正',`<div class="notice warn">归档记录不可直接覆盖。审核通过后生成更正版本，并保留原始归档版。</div><div class="form">${field('更正字段 <span class="req">*</span>','<input value="手术日期">')}${field('更正原因 <span class="req">*</span>','<textarea id="correctReason"></textarea>','full')}${field('证明材料','<input type="file">','full')}</div>`,'提交更正申请'],
+follow:['创建长期随访任务',`<div class="notice">先定义任务和问卷，再创建随访任务。系统不读取或判断患者微信状态。</div><div class="form">${field('任务名称 <span class="req">*</span>','<input id="followTaskName" value="白内障术后1月随访">')}${field('随访类型 <span class="req">*</span>','<select id="followType"><option>手术患者术后随访</option><option>慢病长期随访</option></select>')}${field('疾病/手术','<select id="followDisease"><option>白内障手术</option><option>糖尿病视网膜病变</option><option>慢病</option></select>')}${field('随访周期','<select><option>术后1个月</option><option>每3个月</option><option>每6个月</option></select>')}${field('问卷模板 <span class="req">*</span>','<select id="followQuestionnaire"><option>白内障术后随访问卷 V1.6（已发布）</option><option>DR 三个月随访问卷 V2.0（已发布）</option></select>')}${field('随访员','<select><option>王** · 已授权查看手机号</option><option>刘** · 已授权查看手机号</option></select>')}${field('计划开始日期','<input type="date" value="2026-09-05">')}</div>`,'创建任务'],
+'new-follow':['纳入长期随访',`<div class="form">${field('患者 <span class="req">*</span>','<input value="P-29****18">')}${field('随访类型','<select><option>慢性病长期随访</option><option>手术患者术后随访</option></select>')}${field('问卷模板','<select><option>DR 三个月随访问卷 V2.0</option><option>白内障术后随访问卷 V1.6</option></select>')}${field('随访员','<select><option>王** · 已授权查看手机号</option></select>')}</div>`,'纳入并生成待分发问卷'],
+plan:['创建随访计划',`<div class="form">${field('计划名称','<input value="DR 术后三个月随访">')}${field('疾病','<select><option>糖尿病视网膜病变</option></select>')}${field('患者范围','<select><option>审核通过且术后满 90 天</option></select>')}${field('预计对象','<input value="120 例" readonly>')}${field('问卷内容','<textarea>视力变化、用药依从性、复诊检查结果</textarea>','full')}</div>`,'创建并生成问卷'],
+'send-link':['生成问卷调查链接 / 二维码',`<div class="grid2"><div class="review-panel" style="text-align:center"><div style="width:180px;height:180px;margin:auto;background:repeating-linear-gradient(45deg,#111 0 8px,#fff 8px 16px);border:12px solid #fff;box-shadow:0 0 0 1px #ddd"></div><p>任务专属二维码</p><button class="btn" data-action="download-qr">下载二维码</button></div><div><div class="details"><div>唯一链接</div><div>https://h5.med/fu/tk_8a21...</div><div>有效期</div><div>2026-09-05 至 2026-09-12</div><div>分发渠道</div><div>微信群链接 / 二维码</div></div><div class="error-actions"><button class="btn" data-action="copy-link">复制链接</button><button class="btn" data-open="h5-questionnaire">预览患者问卷</button></div></div></div><div class="notice">链接Token已映射 patient_id、followup_id、questionnaire_id，患者无需输入后台编号。</div>`,'记录为已发送'],
+'phone-follow':['电话联系与补充随访',`<div class="notice warn">仅授权随访员可查看真实手机号，查看和拨打行为写入访问日志。</div><div class="form">${field('患者 / 病历','<input value="张* / MR001" readonly>')}${field('真实手机号','<input value="13800008888" readonly>')}${field('联系结果','<select><option>已接通并完成</option><option>无人接听</option><option>拒绝随访</option></select>')}${field('通话备注','<textarea>患者自述用药规律，无明显不适。</textarea>','full')}</div>`,'保存通话记录并关联病历'],
+'follow-status':['更新随访状态',`<div class="form">${field('当前状态','<input value="进行中" readonly>')}${field('变更为','<select><option>已完成</option><option>已延期</option><option>失访</option><option>已关闭</option></select>')}${field('状态说明 <span class="req">*</span>','<textarea id="statusNote"></textarea>','full')}</div>`,'确认状态'],
+import:['历史数据批量导入向导',`<div class="steps" id="importSteps"><button type="button" class="step current" data-action="import-goto" data-import-target="1">1 上传与校验</button><button type="button" class="step" data-action="import-goto" data-import-target="2">2 确认导入</button><button type="button" class="step" data-action="import-goto" data-import-target="3">3 查看结果</button></div><div class="case-panel active" data-import-panel="1"><div class="upload-zone"><b>拖拽上传 / 点击选择</b><p>Excel、CSV · 最大50MB · 建议≤10,000条/批</p><input id="importFile" type="file" accept=".xlsx,.xls,.csv"></div><div class="form" style="margin-top:14px">${field('来源中心 <span class="req">*</span>','<select id="importCenter"><option>北京同仁医院</option><option>清华大学玉泉医院</option><option>湘雅二医院</option></select>')}${field('目标患者库 <span class="req">*</span>','<select id="importDisease"><option>白内障库</option><option>慢病库</option><option>糖尿病视网膜病变库</option></select>')}</div><div class="notice">选择文件后系统执行格式、必填字段和数据类型校验。</div></div><div class="case-panel" data-import-panel="2"><div class="details"><div>文件</div><div id="importFileName">center_A_history.xlsx</div><div>来源中心 / 目标库</div><div id="importTargetSummary">北京同仁医院 / 白内障库</div><div>总记录</div><div>1,500</div><div>校验通过</div><div>1,450</div><div>校验异常</div><div>50</div></div><div class="notice warn">异常记录不会进入结构化病历，可导出错误报告修正后重试；本次仅导入校验通过的 1,450 条。</div><table class="table" style="margin-top:12px"><thead><tr><th>示例行</th><th>字段</th><th>异常</th></tr></thead><tbody><tr><td>23</td><td>年龄</td><td>不是有效数字</td></tr><tr><td>156</td><td>视力</td><td>超出允许范围</td></tr></tbody></table></div><div class="case-panel" data-import-panel="3"><div class="details"><div>批次号</div><div>B004</div><div>导入结果</div><div>成功 1,450 / 失败 50</div><div>当前状态</div><div>${tag('部分失败','orange')}</div><div>下一步</div><div>修正失败记录后重试；全部成功后确认形成结构化病历并送专家审核</div></div><div class="actions" style="margin-top:14px"><button type="button" class="btn" data-action="error-report">导出错误报告</button><input id="importCorrectionFile" type="file" accept=".xlsx,.xls,.csv" style="max-width:220px"><button type="button" class="btn" data-action="retry-import-wizard">校验修正文件并重试</button><button type="button" class="btn primary" id="importReviewBtn" data-action="import-submit-review" disabled>确认导入并送审</button></div></div><div class="wizard-actions"><button type="button" class="btn" id="importPrev" data-action="import-prev" style="display:none">上一步</button><span class="spacer"></span><button type="button" class="btn primary" id="importNext" data-action="import-next">校验文件并下一步</button></div>`,'完成'],
+'new-import':['导入历史病历',`<div class="form">${field('采集中心','<select><option>北京同仁医院</option><option>清华大学玉泉医院</option></select>')}${field('目标患者库','<select><option>糖尿病视网膜病变库</option><option>白内障库</option><option>慢性病库</option></select>')}${field('对应标准表单','<select><option>DR 标准病历表单 V3.2</option></select>')}${field('历史病历文件','<input type="file">','full')}</div>`,'解析历史病历'],
+'import-review':['确认历史病历导入',`<div class="details"><div>批次</div><div>IMP-20260829-011</div><div>采集中心</div><div>清华大学玉泉医院</div><div>目标库/表单</div><div>白内障库 / V2.8</div><div>可形成结构化病历</div><div>628例</div></div><div class="notice">确认后生成结构化病历，并按照疾病方向和医生负荷进入临床专家审核任务分配。</div>`,'确认导入并送审'],
+associate:['关联对象与结构化病历',`<div class="notice warn">对象内容不会被修改或覆盖，本操作只建立病历扫描件/医学影像与结构化病历之间的关联。</div><div class="form">${field('对象编号','<input value="OBJ-SCAN-1298" readonly>')}${field('对象类型','<input value="病历扫描件 / TIFF" readonly>')}${field('结构化病历','<select><option>SZE-2026-001920</option></select>')}${field('关联说明','<textarea>原始纸质病历扫描件，对应本次结构化录入。</textarea>','full')}</div>`,'确认关联'],
+"upload-object":['写入对象存储',`<div class="form">${field('对象分类 <span class="req">*</span>','<select id="objectCategory"><option>医学影像</option><option>病历扫描件</option><option>检查报告</option><option>科研附件</option><option>其他业务对象</option></select>')}${field('来源采集中心','<select><option>北京同仁医院</option><option>清华大学玉泉医院</option><option>其他来源</option></select>')}${field('上传对象 <span class="req">*</span>','<input type="file" multiple>')}${field('关联业务记录','<input id="objectRelation" value="MR001" placeholder="可关联病历ID，也可留空">')}${field('访问范围','<select><option>审核医生、授权应用</option><option>仅采集中心管理员</option></select>')}</div><div class="notice">对象存储支持任意业务对象。写入后生成对象编号并完成完整性校验；医学影像和病历扫描件按医疗数据权限安全访问。</div>`,'写入对象存储'],
+"link-patient":['人工关联患者问卷',`<div class="notice warn">问卷无法自动唯一匹配。请核对患者标识、手机号后四位和随访计划，禁止仅凭姓名关联。</div><div class="form">${field('问卷','<input value="Q-202609-021" readonly>')}${field('患者手机号后四位','<input value="2816" readonly>')}${field('候选患者','<select><option>P-35****26 · 白内障术后</option><option>P-35****82 · 白内障术后</option></select>')}${field('随访计划','<select><option>FU-202609-018 · 白内障术后</option></select>')}</div>`,'确认关联'],
+"assign-reviewer":['分配临床审核医生',`<div class="form">${field('采集中心','<input value="清华大学玉泉医院" readonly>')}${field('目标库','<input value="白内障库" readonly>')}${field('表单复杂度','<input value="中等 · 74字段" readonly>')}${field('合格审核医生 <span class="req">*</span>','<select><option>刘医生 · 白内障 · 当前待审 8例</option><option>孙医生 · 白内障 · 当前待审 12例</option></select>')}</div><div class="notice">仅列出具有对应疾病临床经验且非当前病历录入人的医生，并显示其当前负荷。</div>`,'确认分配'],
+transcode:['创建统一转码任务',`<div class="form">${field('上传原始影像文件 <span class="req">*</span>','<input id="transcodeFile" type="file" multiple accept=".dcm,.dicom,.tif,.tiff" onchange="const e=[...this.files].map(f=>f.name.toLowerCase().split(\'.\').pop());document.getElementById(\'transcodeFormat\').value=e.length?(e.every(x=>[\'tif\',\'tiff\'].includes(x))?\'TIFF\':\'DICOM\'):\'待识别\'">','full')}${field('原始格式','<input id="transcodeFormat" value="待识别" readonly>')}${field('标准输出','<select><option>标准预览影像</option><option>标准影像 + 元数据</option></select>')}${field('输出存储','<input value="生成新的标准对象并关联来源对象" readonly>')}</div><div class="notice warn">支持 DICOM、TIFF 影像，可一次选择多个文件。系统将完整保留原始文件，转码结果另存为新的标准对象。</div>`,'创建转码任务'],
+review:['审核：MR001 · 白内障病历',`<div class="two-col-review"><div class="review-panel"><h3>病历内容（只读）</h3><div class="details"><div>患者基本信息</div><div>张* · 男 · 62岁</div><div>知情同意</div><div>${tag('已核验','green')}</div><div>专科病史</div><div>年龄相关性白内障 · 病程18月</div><div>眼科检查</div><div>矫正视力0.5 · 眼压18mmHg · LOCS N3/C2/P1</div><div>影像数据</div><div>裂隙灯2张 · 眼底1张 · IOL Master报告</div><div>手术信息</div><div>超声乳化 + IOL植入</div></div></div><div class="review-panel"><h3>审核操作</h3><label><input type="checkbox" checked> 病史完整</label><br><label><input type="checkbox" checked> 检查数据合理</label><br><label><input type="checkbox" checked> 影像清晰可读</label><br><label><input type="checkbox"> 影像需补充</label><hr>${field('审核意见 <span class="req">*</span>','<textarea id="reviewNote">病历内容与影像一致。</textarea>','full')}<label><input type="checkbox"> 需复核</label>　<label><input type="checkbox"> 重要病例</label><div class="actions" style="margin-top:16px"><label><input type="radio" name="decision" value="pass" checked> 通过</label><label><input type="radio" name="decision" value="return"> 驳回</label></div></div></div>`,'确认审核动作'],
+analysis:['临床科研基础统计',`<div class="notice">请选择描述性统计、回归分析或差异性分析。</div>`,'关闭']};
+// 需求文档中的页面/弹窗别名：保证每个入口都进入对应业务，而不是落到默认弹窗。
+contents['case-start']=contents.case;
+contents['follow-task']=contents.follow;
+function questionCard(type='single',title='请输入题目',options='是\n否',required=true){const labels={single:'单选题',multiple:'多选题',text:'文本题',image:'图片上传',scale:'量表题'},preview=['single','multiple'].includes(type)?options.split('\n').filter(Boolean).map(x=>`○ ${x}`).join('　'):type==='text'?'患者填写文本内容':type==='image'?'患者上传图片或拍照':'1　2　3　4　5';return `<div class="question-editor" draggable="true"><div class="question-editor-head"><b><span class="question-number"></span>. ${title}</b><span class="tag gray">${labels[type]}</span><button type="button" class="mini-btn danger" data-action="question-delete">删除</button></div><div class="question-editor-body"><div class="question-editor-summary"><div class="question-editor-preview">${preview||'暂无选项'}</div><small>${required?'必填':'选填'} · 拖动卡片可调整顺序，点击后在右侧编辑属性</small></div><div class="question-model"><select class="question-type"><option value="single" ${type==='single'?'selected':''}>单选题</option><option value="multiple" ${type==='multiple'?'selected':''}>多选题</option><option value="text" ${type==='text'?'selected':''}>文本题</option><option value="image" ${type==='image'?'selected':''}>图片上传</option><option value="scale" ${type==='scale'?'selected':''}>量表题</option></select><input class="question-title" value="${title}"><textarea class="question-options">${options}</textarea><input class="question-required" type="checkbox" ${required?'checked':''}></div></div></div>`}
+const questionnaireEditor=(isNew=false)=>`<div class="notice">${isNew?'创建新的问卷模板草稿。':'已发布的 V1.6 保持不变，本次编辑将创建 V1.7 草稿。'}</div><div class="form">${field('模板名称 <span class="req">*</span>',`<input id="questionnaireName" value="${isNew?'新建随访问卷':'白内障术后1月'}">`)}${field('适用病种','<select id="questionnaireDisease"><option>白内障</option><option>慢病</option><option>糖尿病视网膜病变</option></select>')}${field('版本','<input id="questionnaireVersion" value="'+(isNew?'V1.0':'V1.7')+'" readonly>')}</div><h3>拖拽式问卷表单引擎</h3><div class="form-engine"><aside class="engine-palette"><h4 class="engine-title">字段组件</h4><div class="component-list"><div class="component-item" draggable="true" data-component-type="single"><b>◉</b>单选题</div><div class="component-item" draggable="true" data-component-type="multiple"><b>☑</b>多选题</div><div class="component-item" draggable="true" data-component-type="text"><b>▤</b>文本题</div><div class="component-item" draggable="true" data-component-type="image"><b>▧</b>图片上传</div><div class="component-item" draggable="true" data-component-type="scale"><b>↔</b>量表题</div></div><div class="engine-help">将组件拖到中间画布；也可点击组件快速添加。</div></aside><main class="engine-center"><div class="engine-canvas-head"><b>问卷画布</b><span class="spacer"></span><span id="questionCount" class="tag blue">3 个字段</span><button type="button" class="btn" data-action="question-preview">患者端预览</button></div><div class="engine-canvas" id="questionList">${questionCard('single','近期视力恢复情况','明显改善\n无明显变化\n有所下降')}${questionCard('single','是否按医嘱用药','是\n否')}${questionCard('text','请补充说明近期不适','',false)}</div></main><aside class="engine-properties"><h4 class="engine-title">字段属性</h4><div id="propertyPanel"><div class="property-empty">请选择画布中的字段<br>编辑题目、题型和校验规则</div></div></aside></div><div id="questionPreview" class="preview-panel" style="display:none"></div><div class="notice warn">保存草稿后可继续编辑；发布后才能被新随访任务选择，且不能覆盖已被任务引用的旧版本。</div><div class="actions"><button type="button" class="btn primary" data-action="question-publish">保存并发布</button></div>`;
+contents['questionnaire-new']=['新建问卷模板',questionnaireEditor(true),'保存草稿'];
+contents['questionnaire-edit']=['编辑问卷模板新版本',questionnaireEditor(false),'保存草稿'];
+contents['questionnaire-preview']=['预览患者问卷',`<div class="h5-shell"><div class="h5-head"><h2>白内障术后1月</h2><p>V1.6 · 患者填写预览</p></div><div class="h5-body"><div class="question"><h4>1. 近期视力恢复情况 <span class="req">*</span></h4><label><input type="radio"> 明显改善</label><label><input type="radio"> 无明显变化</label><label><input type="radio"> 有所下降</label></div><div class="question"><h4>2. 是否按医嘱用药 <span class="req">*</span></h4><label><input type="radio"> 是</label><label><input type="radio"> 否</label></div><div class="question"><h4>3. 请补充说明近期不适</h4><textarea style="width:100%"></textarea></div></div></div>`,'关闭'];
+contents['import-wizard']=contents.import;
+contents['mapping-editor']=['字段映射编辑器',`<div class="notice">支持自动推荐、类型转换、字典值映射和必填字段校验。</div><div class="mapping-row"><b>patientName</b><span>→</span><select><option>姓名</option></select><span>${tag('必填映射','orange')}</span></div><div class="mapping-row"><b>age</b><span>→</span><select><option>年龄</option></select><select><option>文本 → 数字</option></select></div><div class="mapping-row"><b>cataractType</b><span>→</span><select><option>专科：白内障类型</option></select><select><option>字典映射</option></select></div>`,'保存映射模板'];
+contents['review-detail']=contents.review;
+contents['review-rules']=['审核人员安排',`<div class="notice">人员配置依据各中心收集病历数量和标准化表单复杂程度确定，审核工作由具有相应临床经验的医生承担。</div><div class="form">${field('采集中心','<select><option>全部中心</option><option>北京同仁医院</option><option>清华大学玉泉医院</option><option>湘雅二医院</option></select>')}${field('表单复杂程度','<select><option>系统根据当前标准化表单评估</option><option>人工调整</option></select>')}${field('计划审核人员数','<input type="number" min="1" value="3">')}${field('人员安排说明','<textarea>根据当前病历数量和表单复杂程度安排具有相应临床经验的医生。</textarea>','full')}</div>`,'保存安排'];
+contents['variable-picker']=['选择研究变量',`<div class="form">${field('人口学','<label><input type="checkbox" checked> 年龄</label><label><input type="checkbox"> 性别</label>')}${field('临床检查','<label><input type="checkbox" checked> 眼压</label><label><input type="checkbox"> 视力</label>')}${field('疾病结局','<label><input type="checkbox" checked> 疾病分期</label><label><input type="checkbox"> 并发症</label>')}</div>`,'确认变量'];
+contents['analysis-descriptive']=['描述性统计分析',`<div class="form">${field('分析变量 <span class="req">*</span>','<input value="年龄、眼压、矫正视力">')}${field('样本范围','<input value="已审核通过；年龄≥18岁">')}${field('分层变量','<select><option>病种</option><option>采集中心</option><option>性别</option></select>')}</div><div class="notice">输出有效样本、缺失值、均值、标准差、中位数、四分位数及分类变量频数。</div>`,'运行描述性统计'];
+contents['analysis-regression']=['回归分析',`<div class="form">${field('因变量 <span class="req">*</span>','<select><option>术后视力改善</option><option>眼压</option><option>疾病结局</option></select>')}${field('自变量 <span class="req">*</span>','<input value="年龄、术前视力、疾病分期">')}${field('调整变量','<input value="性别、采集中心">')}</div><div class="notice">提供科研或临床研究所需的基础回归分析，并输出模型结果和显著性指标。</div>`,'运行回归分析'];
+contents['analysis-difference']=['差异性分析',`<div class="form">${field('分组变量 <span class="req">*</span>','<select><option>治疗方案</option><option>采集中心</option><option>疾病分期</option></select>')}${field('比较变量 <span class="req">*</span>','<select><option>术后矫正视力</option><option>眼压</option></select>')}</div><div class="notice">提供科研或临床研究所需的基础差异性分析，并输出各组统计结果。</div>`,'运行差异性分析'];
+contents['report']=['分析报告',`<div class="notice">报告已生成：包含样本范围、缺失值、描述性结果、图表和方法说明。</div><div class="actions"><button class="btn primary" data-action="download">导出 Word</button><button class="btn" data-action="download">导出 PDF</button><button class="btn" data-action="download">导出 Excel</button></div>`,'关闭'];
+contents['h5-questionnaire']=['患者填写问卷',`<div class="h5-shell"><div class="h5-head"><h2>术后1月随访问卷</h2><p>请根据实际情况填写</p></div><div class="h5-body"><div class="form">${field('患者姓名 <span class="req">*</span>','<input id="followPatientName" placeholder="请输入患者姓名">')}${field('性别 <span class="req">*</span>','<select id="followPatientGender"><option value="">请选择</option><option>男</option><option>女</option></select>')}${field('年龄 <span class="req">*</span>','<input id="followPatientAge" type="number" min="0" max="150" placeholder="请输入年龄">')}${field('手机号码 <span class="req">*</span>','<input id="followPatientPhone" type="tel" placeholder="请输入手机号码">')}</div><div class="question"><h4>1. 近期视力恢复情况</h4><label><input type="radio" name="vision" checked> 明显改善</label><label><input type="radio" name="vision"> 无明显变化</label></div><div class="question"><h4>2. 是否按医嘱用药</h4><label><input type="radio" name="medicine" checked> 是</label><label><input type="radio" name="medicine"> 否</label></div><div class="question"><h4>3. 补充说明</h4><textarea style="width:100%">无明显不适</textarea></div></div></div>`,'提交问卷'];
+const clinicalReviewMarkup=contents.review[1];
+function specialtyMarkup(type){if(type==='慢病')return `<h4>慢病专科模块 <span class="tag gray">示例标准表单</span></h4><div class="form">${field('主要慢病 <span class="req">*</span>','<select><option>高血压合并2型糖尿病</option></select>')}${field('血压（mmHg）','<input value="148 / 92">')}${field('BMI / 腰围','<input value="26.8 / 92cm">')}${field('空腹血糖 / HbA1c','<input value="7.2mmol/L / 7.1%">')}${field('心电图','<select><option>窦性心律</option></select>')}${field('肾功能 / CKD分期','<input value="eGFR 72 / G2">')}${field('心功能分级','<select><option>NYHA I级</option></select>')}${field('长期用药与依从性','<textarea>二甲双胍、氨氯地平；偶有漏服</textarea>','full')}</div>`;if(type==='糖尿病视网膜病变')return `<h4>糖尿病视网膜病变（DR）专科模块 <span class="tag gray">示例标准表单</span></h4><div class="form">${field('DR分级 <span class="req">*</span>','<select><option>中度NPDR</option><option>重度NPDR</option><option>PDR</option></select>')}${field('黄斑水肿（DME）','<select><option>有</option><option>无</option></select>')}${field('最佳矫正视力','<input value="OD 0.5 / OS 0.6">')}${field('眼底 / OCT','<input type="file" multiple>')}${field('FFA / OCTA','<select><option>已完成并关联影像</option></select>')}${field('既往治疗','<select id="drTreatment"><option>抗VEGF</option><option>激光</option><option>未治疗</option></select>')}${field('最近治疗日期','<input type="date" value="2026-08-20">')}${field('治疗次数与反应','<textarea>抗VEGF 3次，水肿减轻</textarea>','full')}</div>`;return `<h4>白内障专科模块 <span class="tag gray">示例标准表单</span></h4><div class="form">${field('白内障类型 <span class="req">*</span>','<select><option>年龄相关性白内障</option><option>并发性白内障</option></select>')}${field('病程（月）','<input type="number" value="18">')}${field('裸眼 / 矫正视力','<input value="0.2 / 0.5">')}${field('眼压（mmHg）','<input type="number" value="18">')}${field('裂隙灯 / LOCS III','<input value="晶状体混浊；N3/C2/P1">','full')}${field('是否接受手术','<select id="hasSurgery"><option value="yes">是</option><option value="no">否</option></select>')}${field('手术信息','<div id="surgeryFields"><input value="超声乳化 + IOL植入 / 右眼 / 林医生"><input type="date" value="2026-08-30" style="margin-top:6px"></div>','full')}${field('专科影像','<input type="file" multiple>')}</div>`}
+function caseWizardMarkup(edit=false,row=null){let html=contents.case[1];if(!edit)return html;const id=editingCaseId||'当前草稿',center=row?.cells[2]?.textContent.trim()||'北京同仁医院',type=row?.cells[3]?.textContent.trim()||'白内障',patient=row?.cells[4]?.textContent.trim()||'张*',profile=type==='慢病'?'女 / 58':type==='糖尿病视网膜病变'?'男 / 55':'男 / 62';html=html.replace('请先确认患者、采集中心和病人类型，系统将自动匹配标准表单。',`已恢复 ${id} 上次保存的草稿，当前完成至第 2 步。`).replace('P000128 · 张*',`当前患者 · ${patient}`).replace('value="男 / 62" readonly',`value="${profile}" readonly`);if(center!=='北京同仁医院')html=html.replace(`<option>北京同仁医院</option><option>${center}</option>`,`<option>${center}</option><option>北京同仁医院</option>`);if(type!=='白内障')html=html.replace(`<option>白内障</option><option>${type}</option>`,`<option>${type}</option><option>白内障</option>`);return html}
+function caseFixMarkup(row){const type=row?.cells[3]?.textContent.trim()||'白内障',id=row?.cells[1]?.textContent.trim()||editingCaseId;if(type==='慢病')return [`修改退回病历 · ${id}`,`<div class="notice error">退回原因：血压记录缺少测量日期，长期用药剂量不完整。</div><div class="form">${field('血压测量日期 <span class="req">*</span>','<input type="date" value="2026-08-28">')}${field('长期用药及剂量 <span class="req">*</span>','<textarea>二甲双胍 0.5g，每日2次；氨氯地平 5mg，每日1次</textarea>','full')}${field('整改说明 <span class="req">*</span>','<textarea id="fixNote">已补充测量日期和用药剂量。</textarea>','full')}</div>`,'重新提交审核'];if(type==='糖尿病视网膜病变')return [`修改退回病历 · ${id}`,`<div class="notice error">退回原因：DR分级与OCT检查结论不一致，需重新核对。</div><div class="form">${field('DR分级 <span class="req">*</span>','<select><option>中度NPDR</option><option>重度NPDR</option><option>PDR</option></select>')}${field('核对后的OCT结论 <span class="req">*</span>','<textarea>存在黄斑水肿，与中度NPDR分级一致。</textarea>','full')}${field('整改说明 <span class="req">*</span>','<textarea id="fixNote">已对照原始影像重新核对。</textarea>','full')}</div>`,'重新提交审核'];return [`修改退回病历 · ${id}`,contents['case-fix'][1],contents['case-fix'][2]]}
+function clinicalReviewFor(id,type,row){const profile=type==='慢病'?'王* · 女 · 58岁':type.includes('糖尿病')||type==='DR'?'赵* · 男 · 55岁':'张* · 男 · 62岁',summary=type==='慢病'?'高血压合并2型糖尿病；血压148/92mmHg；HbA1c 7.1%':type.includes('糖尿病')||type==='DR'?'中度NPDR；存在DME；OCT及眼底影像已关联':'年龄相关性白内障；矫正视力0.5；眼压18mmHg；LOCS N3/C2/P1',history=reviewHistory.get(id);return `<div class="two-col-review"><div class="review-panel"><h3>${type}病历（只读）</h3><div class="details"><div>患者基本信息</div><div>${profile}</div><div>中心</div><div>${row?.cells[1]?.textContent||'—'}</div><div>标准化表单摘要</div><div>${summary}</div><div>关联资料</div><div>结构化数据与医学影像</div>${history?`<div>上次退回意见</div><div>${history}</div><div>本次修订</div><div>${tag('已重新提交','blue')}</div>`:''}</div></div><div class="review-panel"><h3>审核操作</h3><label><input type="checkbox" checked> 病史和检查数据完整</label><br><label><input type="checkbox" checked> 数据逻辑合理</label><br><label><input type="checkbox" checked> 影像与患者一致</label><hr>${field('审核意见 <span class="req">*</span>','<textarea id="reviewNote">数据与原始资料一致。</textarea>','full')}<div class="actions" style="margin-top:16px"><label><input type="radio" name="decision" value="pass" checked> 通过</label><label><input type="radio" name="decision" value="return"> 退回修改</label></div></div></div>`}
+function prepareContextualModal(k,trigger,x){if(k==='case-fix')return caseFixMarkup(trigger?.closest('tr'));if(k==='review-detail'&&!activeReviewId.startsWith('IMP-')){const r=trigger?.closest('tr'),type=r?.cells[2]?.textContent||'病历';return [`审核：${activeReviewId} · ${type}`,clinicalReviewFor(activeReviewId,type,r),contents.review[2]]}if(k==='questionnaire-preview'){const state=stateForQuestionnaire(activeQuestionnaireRow)||publishedQuestionnaireState;return ['预览患者问卷',questionnairePreviewMarkup(state),'关闭']}return x}
+function renderCaseSpecialty(){const library=body.querySelector('#caseLibrary'),center=body.querySelector('#caseCenter'),host=body.querySelector('#specialtySection'),version=body.querySelector('#caseFormVersion'),notice=body.querySelector('#caseFormNotice');if(!library||!host)return;const type=library.value;host.innerHTML=specialtyMarkup(type);version.value=type==='白内障'?'白内障标准病历表单 V2.8':type==='慢病'?'慢病标准病历表单 V1.4':'DR 标准病历表单 V3.2';notice.textContent=`${center?.value||'当前中心'} / ${type}：已匹配 ${version.value}`;const surgery=host.querySelector('#hasSurgery'),fields=host.querySelector('#surgeryFields');if(surgery&&fields)surgery.onchange=()=>fields.parentElement.style.display=surgery.value==='yes'?'grid':'none';updateCaseSummary();bindDynamic()}
+function caseStep(){return Number(body.querySelector('.case-panel.active')?.dataset.casePanel||1)}
+function updateCaseSummary(){const patient=body.querySelector('#casePatient')?.value||'',center=body.querySelector('#caseCenter')?.value||'',type=body.querySelector('#caseLibrary')?.value||'',version=body.querySelector('#caseFormVersion')?.value||'';const p=body.querySelector('#caseSummaryPatient'),f=body.querySelector('#caseSummaryForm');if(p)p.textContent=`${patient} / ${center}`;if(f)f.textContent=`${type} / ${version}`}
+function showCaseStep(step){body.querySelectorAll('.case-panel').forEach(x=>x.classList.toggle('active',Number(x.dataset.casePanel)===step));body.querySelectorAll('[data-case-step-label]').forEach(x=>{const n=Number(x.dataset.caseStepLabel);x.classList.toggle('current',n===step);x.classList.toggle('done',n<step)});body.querySelector('#casePrev').style.display=step===1?'none':'';body.querySelector('#caseNext').style.display='none';confirm.style.display='';confirm.textContent=step===3?'提交专家审核':'下一步';const messages={1:'请先确认患者、采集中心和病人类型，系统将自动匹配标准表单。',2:'请按匹配的标准化表单完成专科数据录入。原型中的具体字段为示例，实际字段以项目确认的表单配置为准。',3:'请关联医学影像并完成提交确认。提交后病历将进入专家审核。'};body.querySelector('#caseFormNotice').textContent=messages[step];updateCaseSummary();body.scrollTop=0}
+function validateCaseStep(step){let ok=true,first;body.querySelector(`[data-case-panel="${step}"]`)?.querySelectorAll('.field').forEach(f=>{if(f.textContent.includes('*')){const c=f.querySelector('input,textarea,select');if(c&&!c.value.trim()){c.style.borderColor='var(--red)';first??=c;ok=false}else if(c)c.style.borderColor=''}});if(!ok){first?.focus();showToast('⚠ 请完成当前步骤的必填项')}return ok}
+function renumberQuestions(){const cards=body.querySelectorAll('.question-editor');cards.forEach((q,i)=>q.querySelector('.question-number').textContent=i+1);const count=body.querySelector('#questionCount');if(count)count.textContent=`${cards.length} 个字段`;const empty=body.querySelector('.canvas-empty');if(!cards.length&&!empty)body.querySelector('#questionList')?.insertAdjacentHTML('beforeend','<div class="canvas-empty">从左侧拖入字段组件开始设计问卷</div>');if(cards.length)empty?.remove()}
+function questionDefaults(type){return {single:['新的单选题','选项1\n选项2'],multiple:['新的多选题','选项1\n选项2'],text:['新的文本题',''],image:['请上传复查图片',''],scale:['请评价当前恢复情况','']}[type]}
+function addQuestion(type,before=null){const [title,options]=questionDefaults(type);const host=body.querySelector('#questionList');host.querySelector('.canvas-empty')?.remove();const box=document.createElement('div');box.innerHTML=questionCard(type,title,options);const card=box.firstElementChild;before?host.insertBefore(card,before):host.appendChild(card);renumberQuestions();bindDynamic();selectQuestion(card);showToast('✓ 字段已添加到问卷画布')}
+function refreshQuestionCard(card){const type=card.querySelector('.question-type').value,title=card.querySelector('.question-title').value||'未命名字段',options=card.querySelector('.question-options').value,required=card.querySelector('.question-required').checked,labels={single:'单选题',multiple:'多选题',text:'文本题',image:'图片上传',scale:'量表题'},preview=['single','multiple'].includes(type)?options.split('\n').filter(Boolean).map(x=>`○ ${x}`).join('　'):type==='text'?'患者填写文本内容':type==='image'?'患者上传图片或拍照':'1　2　3　4　5';card.querySelector('.question-editor-head b').innerHTML=`<span class="question-number"></span>. ${title}`;card.querySelector('.question-editor-head .tag').textContent=labels[type];card.querySelector('.question-editor-preview').textContent=preview||'暂无选项';card.querySelector('.question-editor-summary small').textContent=`${required?'必填':'选填'} · 拖动卡片可调整顺序，点击后在右侧编辑属性`;renumberQuestions()}
+function selectQuestion(card){body.querySelectorAll('.question-editor').forEach(x=>x.classList.toggle('selected',x===card));const panel=body.querySelector('#propertyPanel');if(!panel||!card)return;const type=card.querySelector('.question-type').value,title=card.querySelector('.question-title').value,options=card.querySelector('.question-options').value,required=card.querySelector('.question-required').checked;panel.innerHTML=`<div class="property-form"><label>题目名称<input id="propTitle" value="${title}"></label><label>字段类型<select id="propType"><option value="single" ${type==='single'?'selected':''}>单选题</option><option value="multiple" ${type==='multiple'?'selected':''}>多选题</option><option value="text" ${type==='text'?'selected':''}>文本题</option><option value="image" ${type==='image'?'selected':''}>图片上传</option><option value="scale" ${type==='scale'?'selected':''}>量表题</option></select></label><label id="propOptionsWrap" style="display:${['single','multiple'].includes(type)?'grid':'none'}">选项（每行一个）<textarea id="propOptions">${options}</textarea></label><label><span><input id="propRequired" type="checkbox" ${required?'checked':''}> 设为必填字段</span></label><button type="button" class="btn danger" data-action="question-delete-selected">删除此字段</button></div>`;const sync=()=>{card.querySelector('.question-title').value=panel.querySelector('#propTitle').value;card.querySelector('.question-type').value=panel.querySelector('#propType').value;card.querySelector('.question-options').value=panel.querySelector('#propOptions').value;card.querySelector('.question-required').checked=panel.querySelector('#propRequired').checked;panel.querySelector('#propOptionsWrap').style.display=['single','multiple'].includes(panel.querySelector('#propType').value)?'grid':'none';refreshQuestionCard(card);if(body.querySelector('#questionPreview')?.style.display==='block')renderQuestionPreview()};panel.querySelectorAll('input,textarea,select').forEach(x=>x.oninput=sync);bindDynamic()}
+function bindFormEngine(){const host=body.querySelector('#questionList');if(!host)return;body.querySelectorAll('[data-component-type]').forEach(item=>{item.onclick=()=>addQuestion(item.dataset.componentType);item.ondragstart=e=>{e.dataTransfer.setData('text/question-type',item.dataset.componentType);e.dataTransfer.effectAllowed='copy'}});host.ondragover=e=>{e.preventDefault();host.classList.add('drag-over')};host.ondragleave=e=>{if(!host.contains(e.relatedTarget))host.classList.remove('drag-over')};host.ondrop=e=>{e.preventDefault();host.classList.remove('drag-over');const type=e.dataTransfer.getData('text/question-type');if(type){const before=e.target.closest('.question-editor');addQuestion(type,before)}else{const dragging=host.querySelector('.dragging'),before=e.target.closest('.question-editor');if(dragging&&before&&dragging!==before)host.insertBefore(dragging,before);else if(dragging&&!before)host.appendChild(dragging);renumberQuestions()}};host.querySelectorAll('.question-editor').forEach(card=>{card.onclick=e=>{if(!e.target.closest('button'))selectQuestion(card)};card.ondragstart=e=>{card.classList.add('dragging');e.dataTransfer.setData('text/question-card','move');e.dataTransfer.effectAllowed='move'};card.ondragend=()=>card.classList.remove('dragging')});if(!host.querySelector('.selected')&&host.querySelector('.question-editor'))selectQuestion(host.querySelector('.question-editor'))}
+function validateQuestionnaire(){const name=body.querySelector('#questionnaireName')?.value.trim(),cards=[...body.querySelectorAll('.question-editor')];if(!name||!cards.length){showToast('⚠ 问卷名称和题目不能为空');return false}for(const card of cards){const title=card.querySelector('.question-title')?.value.trim(),type=card.querySelector('.question-type')?.value,opts=(card.querySelector('.question-options')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);if(!title){card.querySelector('.question-title')?.focus();showToast('⚠ 每道题都必须填写题目');return false}if(['single','multiple'].includes(type)&&opts.length<2){card.querySelector('.question-options')?.focus();showToast('⚠ 单选题和多选题至少需要两个选项');return false}}return true}
+function saveQuestionnaire(publish=false){if(!validateQuestionnaire())return false;const name=body.querySelector('#questionnaireName').value.trim(),version=body.querySelector('#questionnaireVersion').value,count=body.querySelectorAll('.question-editor').length,tbody=document.getElementById('questionnaireBody');let row=activeQuestionnaireRow;if(row&&row.textContent.includes('已发布'))row=null;if(!row){row=document.createElement('tr');tbody.prepend(row);activeQuestionnaireRow=row}row.dataset.templateId=`${name}-${version}`;row.innerHTML=`<td>${name} ${version}</td><td>${count}</td><td>0</td><td>${publish?tag('已发布','green'):tag('草稿','gray')}</td><td>${publish?'<button class="link" data-open="questionnaire-edit">编辑新版本</button><button class="link" data-open="questionnaire-preview">预览</button>':'<button class="link" data-open="questionnaire-edit">继续编辑</button><button class="link" data-action="publish-draft">发布</button><button class="link" data-action="delete-question-draft">删除草稿</button>'}</td>`;bindDynamic();return true}
+function captureQuestionnaireState(){return {name:body.querySelector('#questionnaireName')?.value||'',disease:body.querySelector('#questionnaireDisease')?.value||'',version:body.querySelector('#questionnaireVersion')?.value||'',questions:[...body.querySelectorAll('.question-editor')].map(q=>({type:q.querySelector('.question-type').value,title:q.querySelector('.question-title').value,options:q.querySelector('.question-options').value,required:q.querySelector('.question-required').checked}))}}
+function questionnaireKey(row=activeQuestionnaireRow){return row?.dataset.templateId||row?.cells?.[0]?.textContent.trim()||''}
+function bumpVersion(v){const m=String(v||'V1.0').match(/V?(\d+)\.(\d+)/);return m?`V${m[1]}.${Number(m[2])+1}`:'V1.1'}
+function storeQuestionnaireState(row,state,status){if(!row||!state)return;const key=questionnaireKey(row)||`${state.name}-${state.version}`;row.dataset.templateId=key;questionnaireStates.set(key,{state:JSON.parse(JSON.stringify(state)),status})}
+function stateForQuestionnaire(row){return questionnaireStates.get(questionnaireKey(row))?.state||null}
+function restoreQuestionnaireState(state){if(!state)return;body.querySelector('#questionnaireName').value=state.name;body.querySelector('#questionnaireDisease').value=state.disease;body.querySelector('#questionnaireVersion').value=state.version;body.querySelector('#questionList').innerHTML=state.questions.map(q=>questionCard(q.type,q.title,q.options,q.required)).join('');renumberQuestions();bindDynamic()}
+function questionnairePreviewMarkup(state){if(!state)return contents['questionnaire-preview'][1];return `<div class="h5-shell"><div class="h5-head"><h2>${state.name}</h2><p>${state.version} · 患者填写预览</p></div><div class="h5-body">${state.questions.map((q,i)=>{let control='';if(['single','multiple'].includes(q.type)){const input=q.type==='single'?'radio':'checkbox';control=q.options.split('\n').filter(Boolean).map(o=>`<label><input type="${input}" name="published-${i}"> ${o}</label>`).join('')}else if(q.type==='text')control='<textarea style="width:100%"></textarea>';else if(q.type==='image')control='<input type="file" accept="image/*">';else control='<input type="range" min="1" max="5" style="width:100%">';return `<div class="question"><h4>${i+1}. ${q.title}${q.required?' <span class="req">*</span>':''}</h4>${control}</div>`}).join('')}</div></div>`}
+const initialQuestionnaireRow=document.querySelector('#questionnaireBody tr');if(initialQuestionnaireRow){initialQuestionnaireRow.dataset.templateId='白内障术后1月-V1.6';questionnaireStates.set(initialQuestionnaireRow.dataset.templateId,{status:'已发布',state:{name:'白内障术后1月',disease:'白内障',version:'V1.6',questions:[{type:'single',title:'近期视力恢复情况',options:'明显改善\n无明显变化\n有所下降',required:true},{type:'single',title:'是否按医嘱用药',options:'是\n否',required:true},{type:'multiple',title:'近期不适症状',options:'眼红\n眼痛\n视物模糊\n无明显不适',required:false},{type:'text',title:'请补充说明近期情况',options:'',required:false},{type:'image',title:'上传复查报告或眼部图片',options:'',required:false}]}})}
+function updateFollowPatients(){const mode=body.querySelector('#followScope')?.value,rule=body.querySelector('#followRule')?.value,center=body.querySelector('#followCenter')?.value,q=(body.querySelector('#followPatientSearch')?.value||'').trim().toLowerCase();let available=0,selected=0;body.querySelectorAll('#followPatientBody tr').forEach(r=>{const matchesMode=mode==='manual'||r.dataset.rule===rule,matchesCenter=!center||center==='全部中心'||r.dataset.center===center,matchesQuery=!q||r.textContent.toLowerCase().includes(q),visible=matchesMode&&matchesCenter&&matchesQuery;r.style.display=visible?'':'none';if(visible){available++;if(r.querySelector('.follow-patient-check')?.checked)selected++}});const count=body.querySelector('#followPatientCount'),all=body.querySelector('#followSelectAll');if(count)count.textContent=selected;if(all){all.checked=available>0&&selected===available;all.indeterminate=selected>0&&selected<available}const confirmBox=body.querySelector('#followScopeConfirm');if(confirmBox)confirmBox.checked=false}
+function bindFollowPatientSelector(){const scope=body.querySelector('#followScope');if(!scope)return;const ruleBox=body.querySelector('#followRuleBox'),rule=body.querySelector('#followRule'),center=body.querySelector('#followCenter'),all=body.querySelector('#followSelectAll');scope.onchange=()=>{ruleBox.style.display=scope.value==='rule'?'grid':'none';updateFollowPatients()};rule.onchange=center.onchange=updateFollowPatients;all.onchange=()=>{body.querySelectorAll('#followPatientBody tr').forEach(r=>{if(r.style.display!=='none'){const c=r.querySelector('.follow-patient-check');if(c)c.checked=all.checked}});updateFollowPatients()};body.querySelectorAll('.follow-patient-check').forEach(c=>c.onchange=updateFollowPatients);updateFollowPatients()}
+function importStep(){return Number(body.querySelector('[data-import-panel].active')?.dataset.importPanel||1)}
+function showImportStep(step){body.querySelectorAll('[data-import-panel]').forEach(x=>x.classList.toggle('active',Number(x.dataset.importPanel)===step));body.querySelectorAll('[data-import-target]').forEach(x=>{const n=Number(x.dataset.importTarget);x.classList.toggle('current',n===step);x.classList.toggle('done',n<step);x.disabled=n>importMaxStep;x.title=n>importMaxStep?'请先完成前一步':''});body.querySelector('#importPrev').style.display=step===1?'none':'';body.querySelector('#importNext').style.display=step===3?'none':'';confirm.style.display='none';body.scrollTop=0}
+function validateImportUpload(){const file=body.querySelector('#importFile');if(!file?.files?.length){showToast('⚠ 请先选择需要导入的 Excel 或 CSV 文件');file?.focus();return false}const name=file.files[0].name.toLowerCase();if(!/\.(xlsx?|csv)$/.test(name)){showToast('⚠ 文件格式不支持，请选择 Excel 或 CSV');return false}body.querySelector('#importFileName').textContent=file.files[0].name;body.querySelector('#importTargetSummary').textContent=`${body.querySelector('#importCenter').value} / ${body.querySelector('#importDisease').value}`;return true}
+function renderQuestionPreview(){const host=body.querySelector('#questionPreview');if(!host)return;const name=body.querySelector('#questionnaireName')?.value||'随访问卷';const questions=[...body.querySelectorAll('.question-editor')];host.style.display='block';host.innerHTML=`<div class="h5-shell"><div class="h5-head"><h2>${name}</h2><p>患者填写预览 · 共 ${questions.length} 题</p></div><div class="h5-body">${questions.map((q,i)=>{const type=q.querySelector('.question-type').value,t=q.querySelector('.question-title').value||'未填写题目',required=q.querySelector('.question-required').checked?'<span class="req">*</span>':'';let control='';if(['single','multiple'].includes(type)){const inputType=type==='single'?'radio':'checkbox';control=(q.querySelector('.question-options')?.value||'选项1').split('\n').filter(Boolean).map(o=>`<label><input type="${inputType}" name="preview-${i}"> ${o}</label>`).join('')}else if(type==='text')control='<textarea style="width:100%" placeholder="请输入"></textarea>';else if(type==='image')control='<input type="file" accept="image/*">';else control='<input type="range" min="1" max="5" style="width:100%"><small>1分　　　　　　　　　5分</small>';return `<div class="question"><h4>${i+1}. ${t} ${required}</h4>${control}</div>`}).join('')}</div></div>`}
+function rememberFollowRow(trigger){const row=trigger?.closest('#followBody tr')||trigger?.closest('[data-pane-content] table tr');if(row&&row.cells.length>=6)activeFollowRow=row}
+function open(k,trigger=null){currentTrigger=trigger;if(k==='report'&&!lastAnalysis){showToast('⚠ 请先运行一种临床研究统计分析，再生成报告');return}const aliases={'case-start':'case','follow-task':'follow','import-wizard':'import','review-detail':'review'};currentAction=aliases[k]||k;editingCaseId=['case-edit','case-fix'].includes(k)?(trigger?.dataset.recordId||trigger?.closest('tr')?.cells[1]?.textContent.trim()||'MR003'):'';activeQuestionnaireRow=trigger?.closest('#questionnaireBody tr')||null;activeImportRow=trigger?.closest('#importBody tr')||activeImportRow;if(k==='review-detail'){activeReviewId=trigger?.closest('tr')?.cells[0]?.textContent.trim()||'';const row=trigger?.closest('tr'),type=row?.cells[2]?.textContent||'病历';contents.review[0]=`审核：${activeReviewId} · ${type}`;if(activeReviewId.startsWith('IMP-'))contents.review[1]=`<div class="notice">历史数据批次审核：核验来源中心、目标患者库、字段映射、异常处理结果和抽样病历后给出结论。</div><div class="details"><div>审核对象</div><div>${activeReviewId}</div><div>来源中心</div><div>${row?.cells[1]?.textContent||'—'}</div><div>目标库</div><div>${type}</div><div>导入方式</div><div>历史数据批量录入</div></div>${field('审核意见','<textarea id="reviewNote" placeholder="退回时必须填写具体问题和修正要求"></textarea>','full')}<div class="actions" style="margin-top:14px"><label><input type="radio" name="decision" value="pass" checked> 通过</label><label><input type="radio" name="decision" value="return"> 退回修正</label></div>`}if(k.startsWith('analysis-'))currentAction=k;let x=contents[k]||contents[currentAction]||contents.case;if(k==='questionnaire-preview'&&publishedQuestionnaireState)x=['预览患者问卷',questionnairePreviewMarkup(publishedQuestionnaireState),'关闭'];if(k==='case-edit'){const row=trigger?.closest('tr');x=[`继续填写病历 · ${editingCaseId}`,caseWizardMarkup(true,row),contents['case-edit'][2]]}if(k==='import-review'&&activeImportRow){const id=activeImportRow.cells[0].textContent.trim();x=[`确认历史病历导入 · ${id}`,`<div class="details"><div>批次</div><div>${id}</div><div>来源中心</div><div>${activeImportRow.cells[2].textContent}</div><div>可形成结构化病历</div><div>${activeImportRow.cells[4].textContent} 例</div></div><div class="notice">确认后重新形成审核任务；原退回意见和本次修正记录将一并保留。</div>`,'确认导入并送审']}if(k==='report'&&lastAnalysis)x=['分析报告',`<div class="notice">报告基于最近一次分析结果生成，包含样本范围、缺失值、方法与结果。</div>${details.analysis[1]}<div class="actions" style="margin-top:14px"><button class="btn primary" data-action="download">导出 Word</button><button class="btn" data-action="download">导出 PDF</button><button class="btn" data-action="download">导出 Excel</button></div>`,'关闭'];x=prepareContextualModal(k,trigger,x);title.textContent=x[0];body.innerHTML=x[1];confirm.textContent=x[2];confirm.style.display='';draft.style.display=['case','case-edit'].includes(currentAction)?'':'none';modal.classList.add('open');if(currentAction==='case'||currentAction==='case-edit'){renderCaseSpecialty();const library=body.querySelector('#caseLibrary'),center=body.querySelector('#caseCenter'),patient=body.querySelector('#casePatient');library.onchange=renderCaseSpecialty;center.onchange=renderCaseSpecialty;patient.onchange=updateCaseSummary;showCaseStep(currentAction==='case-edit'?2:1)}if(currentAction==='import'){importMaxStep=1;showImportStep(1)}if(currentAction==='transcode'){const selects=body.querySelectorAll('select'),format=body.querySelector('input[readonly]');selects[0].onchange=()=>format.value=selects[0].value.includes('TIFF')?'TIFF':'DICOM'}if(currentAction.startsWith('questionnaire-')){renumberQuestions();const saved=stateForQuestionnaire(activeQuestionnaireRow);if(saved){const copy=JSON.parse(JSON.stringify(saved));if(currentAction==='questionnaire-edit'&&activeQuestionnaireRow?.textContent.includes('已发布'))copy.version=bumpVersion(copy.version);restoreQuestionnaireState(copy)}else if(activeQuestionnaireRow?.textContent.includes('草稿')&&draftQuestionnaireState)restoreQuestionnaireState(draftQuestionnaireState)}if(currentAction==='phone-follow'){phoneRevealed=false;const patient=trigger?.dataset.patient||'张*',record=trigger?.dataset.record||'MR001',phone=trigger?.dataset.phone||'13800008888',inputs=body.querySelectorAll('input[readonly]');if(inputs[0])inputs[0].value=`${patient} / ${record}`;if(inputs[1]){inputs[1].dataset.realPhone=phone;inputs[1].value=phone.replace(/^(\d{3})\d{4}(\d{4})$/,'$1****$2');inputs[1].parentElement.insertAdjacentHTML('beforeend','<button type="button" class="btn" data-action="reveal-phone">查看真实手机号</button>')}}bindDynamic()}
+app.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open,b));document.getElementById('modalClose').onclick=document.getElementById('modalCancel').onclick=()=>{modal.classList.remove('open');contents.review[1]=clinicalReviewMarkup};draft.onclick=()=>handleAction('save-case-draft',draft);
+function requiredOk(){let ok=true,first;body.querySelectorAll('.field').forEach(f=>{if(f.textContent.includes('*')){const c=f.querySelector('input,textarea,select');if(c&&!c.value.trim()){c.style.borderColor='var(--red)';first??=c;ok=false}else if(c)c.style.borderColor=''}});if(!ok){first?.focus();showToast('⚠ 请完成所有必填项')}return ok}
+confirm.onclick=()=>{if(currentAction==='case'||currentAction==='case-edit'){const step=caseStep();if(step!==3){if(validateCaseStep(step))showCaseStep(Math.min(3,step+1));return}if(!body.querySelector('#caseConfirmTruth')?.checked||!body.querySelector('#caseConfirmImage')?.checked){showToast('⚠ 请完成两项提交前确认');return}}if(currentAction==='follow'){}if(!requiredOk())return;const decision=body.querySelector('input[name=decision]:checked')?.value;if(['review','template-review','import-review'].includes(currentAction)&&decision&&decision!=='pass'&&!document.getElementById('reviewNote')?.value.trim()&&currentAction!=='import-review'){showToast('⚠ 非通过结论必须填写审核意见');document.getElementById('reviewNote')?.focus();return}modal.classList.remove('open');
+if(['questionnaire-new','questionnaire-edit'].includes(currentAction)){modal.classList.add('open');if(!validateQuestionnaire())return;draftQuestionnaireState=captureQuestionnaireState();if(!saveQuestionnaire(false))return;storeQuestionnaireState(activeQuestionnaireRow,draftQuestionnaireState,'草稿');modal.classList.remove('open');selectPane('followups','questionnaires');go('followups');showToast('✓ 当前问卷草稿及画布内容已独立保存，可继续编辑');return}
+if(currentAction==='case'){const type=body.querySelector('#caseLibrary')?.value||'白内障',center=body.querySelector('#caseCenter')?.value||'当前中心',patient=(body.querySelector('#casePatient')?.value||'新患者').split('·').pop().trim();seq++;const id=`MR${String(seq).slice(-3)}`;document.getElementById('caseBody').insertAdjacentHTML('afterbegin',`<tr data-state="待审核"><td>□</td><td><b>${id}</b></td><td>${center}</td><td>${type}</td><td>${patient}</td><td>当前采集员</td><td>${tag('待审核','orange')}</td><td>刚刚</td><td><button class="link" data-detail="case">查看</button><button class="link" data-go="review">审核进度</button></td></tr>`);document.getElementById('reviewBody').insertAdjacentHTML('afterbegin',`<tr><td>${id}</td><td>${center}</td><td>${type}</td><td>当前采集员</td><td>刚刚</td><td>${tag('普通','gray')}</td><td><button class="link" data-open="review-detail">审核</button></td></tr>`);bindDynamic();go('cases');showToast(`✓ ${id} 已提交专家审核`)}
+else if(currentAction==='case-fix'){const id=editingCaseId||'MR003',row=[...document.querySelectorAll('#caseBody tr')].find(r=>r.cells[1]?.textContent.trim()===id);if(row){row.dataset.state='待审核';row.cells[6].innerHTML=tag('待审核','orange');row.cells[7].textContent='刚刚';row.cells[8].innerHTML='<button class="link" data-detail="case">查看</button><button class="link" data-go="review">审核进度</button>';document.getElementById('reviewBody').insertAdjacentHTML('afterbegin',`<tr><td>${id}</td><td>${row.cells[2].textContent}</td><td>${row.cells[3].textContent}</td><td>${row.cells[5].textContent}</td><td>刚刚</td><td>${tag('普通','gray')}</td><td><button class="link" data-open="review-detail">审核</button></td></tr>`)}bindDynamic();showToast(`✓ ${id} 已修改并重新进入专家审核`)}
+else if(currentAction==='case-edit'){const id=editingCaseId,c=[...document.querySelectorAll('#caseBody tr')].find(x=>x.cells[1]?.textContent.trim()===id);if(c){c.dataset.state='待审核';c.cells[6].innerHTML=tag('待审核','orange');c.cells[7].textContent='刚刚';c.cells[8].innerHTML='<button class="link" data-detail="case">查看</button><button class="link" data-go="review">审核进度</button>';if(![...document.querySelectorAll('#reviewBody tr')].some(x=>x.cells[0]?.textContent.trim()===id))document.getElementById('reviewBody').insertAdjacentHTML('afterbegin',`<tr><td>${id}</td><td>${c.cells[2].textContent}</td><td>${c.cells[3].textContent}</td><td>${c.cells[5].textContent}</td><td>刚刚</td><td>${tag('普通','gray')}</td><td><button class="link" data-open="review-detail">审核</button></td></tr>`)}bindDynamic();showToast(`✓ ${id} 已提交专家审核`)}
+else if(currentAction==='case-correct'){showToast('✓ 更正申请已提交审核；归档原版本保持只读')}
+else if(currentAction==='template'){document.getElementById('templateGrid').insertAdjacentHTML('beforeend',`<div class="template card"><h3>北京同仁医院 · 糖尿病视网膜病变库</h3><p>DR 标准病历表单 V3.2 · 待生效</p><p>${tag('已配置','blue')}　刚刚保存</p><div class="actions"><button class="link" data-detail="template">查看配置</button><button class="link" data-open="template-review">临床确认</button></div></div>`);bindDynamic();showToast('✓ 采集中心与患者库的标准化表单配置已保存')}
+else if(currentAction==='template-copy'){showToast('✓ 新版本草稿已创建，原发布版本和引用关系不变')}
+else if(currentAction==='template-review'){showToast(decision==='pass'?'✓ 模板审核通过并发布，可供新建病历引用':'✓ 模板已退回配置人员修改')}
+else if(currentAction==='review-rules'){const text=body.querySelector('select')?.value||'中心 + 病种匹配，按工作量均衡',people=body.querySelector('input')?.value||'3';const host=document.querySelector('[data-pane-content="rules"] p');if(host)host.textContent=`当前规则：${text}；配置审核医生 ${people} 人。新提交记录将按中心数据量和表单复杂度分配。`;showToast('✓ 审核人员安排已保存并应用于后续任务')}
+else if(['follow','new-follow'].includes(currentAction)){const tbody=document.getElementById('followBody'),name=body.querySelector('#followTaskName')?.value||'新建长期随访任务',disease=body.querySelector('#followDisease')?.value.replace('手术','')||'慢病',count='0';tbody.insertAdjacentHTML('afterbegin',`<tr><td>${name}</td><td>${disease}</td><td>${count}份</td><td>待生成</td><td>${tag('待分发','orange')}</td><td>0%</td><td><button class="link" data-detail="follow-task">任务详情</button><button class="link" data-open="send-link">生成链接/二维码</button></td></tr>`);bindDynamic();go('followups');showToast('✓ 随访任务已创建，请继续生成微信群链接或二维码')}
+else if(currentAction==='plan'){selectPane('followups','plans');go('followups');showToast('✓ 随访计划已创建并生成患者清单，待分发问卷')}
+else if(currentAction==='send-link'){if(activeFollowRow){activeFollowRow.cells[3].textContent='微信群链接 / 二维码';activeFollowRow.cells[4].innerHTML=tag('进行中','blue');activeFollowRow.cells[5].innerHTML='<button class="link" data-detail="follow-task">任务详情</button><button class="link" data-open="send-link">生成链接/二维码</button>'}bindDynamic();showToast('✓ 问卷链接和二维码已生成，任务已进入进行中')}
+else if(currentAction==='h5-questionnaire'){if(activeFollowRow){const current=Number(activeFollowRow.dataset.received||activeFollowRow.cells[2].textContent.replace(/\D/g,''))||0;const received=current+1;activeFollowRow.dataset.received=received;activeFollowRow.cells[2].textContent=`${received}份`}showToast('✓ 问卷已提交，回收数已更新')}
+else if(currentAction==='phone-follow'){if(!phoneRevealed){modal.classList.add('open');showToast('⚠ 请先按权限查看真实手机号，再记录电话随访');return}if(activeFollowRow){const total=Number(activeFollowRow.cells[2].textContent.replace(/\D/g,''))||1,current=Math.min(total,Number(activeFollowRow.dataset.received||Math.round(total*(Number(activeFollowRow.cells[5].textContent.replace(/\D/g,''))||0)/100))+1);activeFollowRow.dataset.received=current;activeFollowRow.cells[5].textContent=`${Math.round(current/total*100)}%`}showToast('✓ 电话补录已关联患者与任务，回收统计已更新')}
+else if(currentAction==='link-patient'){followLinked=true;drawer.classList.remove('open');mask.classList.remove('open');bindDynamic();showToast('✓ 问卷已手动关联患者和随访计划，重新打开任务详情可查看')}
+else if(currentAction==='follow-status'){const next=body.querySelector('select')?.value||'已完成';if(activeFollowRow){activeFollowRow.cells[4].innerHTML=tag(next,next==='已完成'?'green':next==='已延期'?'orange':'gray');activeFollowRow.dataset.statusNote=body.querySelector('#statusNote')?.value||'';if(next==='已完成'){const target=document.querySelector('[data-pane-content="finished"] tbody');if(target)target.appendChild(activeFollowRow)}else if(next==='失访'||next==='已关闭'){activeFollowRow.cells[5].innerHTML='<button class="link" data-detail="follow-task">查看记录</button>'}}bindDynamic();showToast(`✓ 随访任务已更新为“${next}”，变更原因已留痕`)}
+else if(currentAction==='review'){const r=[...document.querySelectorAll('#reviewBody tr')].find(x=>x.cells[0]?.textContent.trim()===activeReviewId),c=[...document.querySelectorAll('#caseBody tr')].find(x=>x.cells[1]?.textContent.trim()===activeReviewId),batchId=activeReviewId.startsWith('IMP-')?activeReviewId.replace('IMP-',''):'';r?.remove();const pending=document.getElementById('reviewPending'),n=Math.max(0,Number(pending?.textContent.match(/\d+/)?.[0]||0)-1);if(pending)pending.textContent=`我的待审核：${n}`;if(decision==='pass'){if(c){c.dataset.state='已通过';c.cells[6].innerHTML=tag('已通过','green');c.cells[8].innerHTML='<button class="link" data-detail="case">查看</button><button class="link" data-open="follow">创建随访</button>'}if(batchId){const br=[...document.querySelectorAll('#importBody tr')].find(x=>x.cells[0]?.textContent.trim()===batchId);if(br){br.cells[6].innerHTML=tag('审核通过','green');br.cells[7].innerHTML='<button class="link" data-detail="import-batch">查看批次</button>'}}showToast(`✓ ${activeReviewId} 专家审核通过`)}else{const note=document.getElementById('reviewNote')?.value.trim()||'请按审核意见修改后重新提交';reviewHistory.set(activeReviewId,note);if(c){c.dataset.reviewNote=note;c.dataset.state='已退回';c.cells[6].innerHTML=tag('已退回','red');c.cells[8].innerHTML=`<button class="link" data-open="case-fix" data-record-id="${activeReviewId}">返回修改</button><button class="link" data-detail="case">审核意见</button>`}if(batchId){const br=[...document.querySelectorAll('#importBody tr')].find(x=>x.cells[0]?.textContent.trim()===batchId);if(br){br.cells[6].innerHTML=tag('审核退回','red');br.cells[7].innerHTML='<button class="link" data-action="retry-import">修正后重试</button>'}}showToast(`✓ ${activeReviewId} 已退回修改`)}bindDynamic()}
+else if(currentAction==='assign-reviewer'){showToast('✓ 已按疾病资质、中心工作量和表单复杂度分配审核医生')}
+else if(currentAction==='import'){document.getElementById('importBody').insertAdjacentHTML('afterbegin',`<tr><td>B004</td><td>new_history.xlsx</td><td>北京同仁医院</td><td>860</td><td>842</td><td>12</td><td>${tag('部分失败','orange')}</td><td><button class="link" data-detail="import-batch">详情</button><button class="link" data-action="retry-import">重试失败行</button></td></tr>`);bindDynamic();go('imports');showToast('✓ 历史病历已批量解析：成功病历待确认，失败病历可单独修正重试')}
+else if(currentAction==='import-review'){const r=activeImportRow,id=r?.cells[0]?.textContent.trim()||'B001',center=r?.cells[2]?.textContent||'中心A';if(r){r.cells[6].innerHTML=tag('待专家审核','orange');r.cells[7].innerHTML='<button class="link" data-detail="import-batch">详情</button>'}if(![...document.querySelectorAll('#reviewBody tr')].some(x=>x.cells[0]?.textContent.trim()===`IMP-${id}`))document.getElementById('reviewBody').insertAdjacentHTML('afterbegin',`<tr><td>IMP-${id}</td><td>${center}</td><td>历史病历批次</td><td>历史导入</td><td>刚刚</td><td>${tag('普通','gray')}</td><td><button class="link" data-open="review-detail">审核批次</button></td></tr>`);bindDynamic();showToast(`✓ ${id} 已重新形成审核任务，修正记录已保留`)}
+else if(currentAction==='associate'){const r=[...document.querySelectorAll('#page-storage tbody tr')].find(x=>x.textContent.includes('OBJ-SCAN-1298'));if(r){r.cells[3].textContent='SZE-2026-001920';r.cells[6].innerHTML='<button class="link" data-detail="object">对象信息</button><button class="link" data-detail="access">访问记录</button>'}bindDynamic();showToast('✓ 病历扫描件已关联结构化病历，对象本身保持不变')}
+else if(currentAction==='upload-object'){objectSeq++;const category=body.querySelector('#objectCategory')?.value||'业务对象',id=`OBJ-${category==='医学影像'?'IMG':category==='病历扫描件'?'SCAN':'FILE'}-${objectSeq}`,file=body.querySelector('input[type="file"]')?.files?.[0]?.name||'new_object.bin',record=body.querySelector('#objectRelation')?.value.trim()||'未关联',format=file.includes('.')?file.split('.').pop().toUpperCase():'FILE';document.getElementById('objectBody').insertAdjacentHTML('afterbegin',`<div class="image-file" data-uploader="当前用户" data-date="2026-08-31" data-format="${format}" data-linked="${record!=='未关联'}" data-object-id="${id}" data-file="${file}" data-record="${record}" data-size="216MB"><div class="image-thumb">${format}</div><div class="image-info"><b>${file}</b><br><small>${id} · ${record==='未关联'?'未关联病历':`关联 ${record}`} · 216MB</small><br><small>当前用户 · 2026-08-31</small><br><button class="link" data-detail="image">详情</button></div></div>`);const total=document.getElementById('storageTotal'),month=document.getElementById('storageMonth');total.textContent=(Number(total.textContent.replace(',',''))+1).toLocaleString();month.textContent=Number(month.textContent)+1;bindDynamic();go('storage');showDetail('image',document.querySelector('#objectBody .image-file:first-child [data-detail="image"]'));showToast(`✓ ${id} 写入成功，完整性校验通过`)}
+else if(currentAction==='transcode'){const fileInput=body.querySelector('#transcodeFile'),files=[...(fileInput?.files||[])],names=files.map(file=>file.name),extensions=files.map(file=>file.name.toLowerCase().split('.').pop()),validExtensions=['dcm','dicom','tif','tiff'];if(!files.length){showToast('⚠ 请先选择需要转码的 DICOM 或 TIFF 文件');fileInput?.focus();return}if(extensions.some(extension=>!validExtensions.includes(extension))){showToast('⚠ 文件格式不支持，请选择 DICOM 或 TIFF 文件');return}const format=extensions.every(extension=>['tif','tiff'].includes(extension))?'TIFF':'DICOM',target=body.querySelector('select')?.value||'标准预览影像',count=files.length,id=`T${String(++transcodeSeq).padStart(3,'0')}`;document.getElementById('transcodeBody').insertAdjacentHTML('afterbegin',`<tr data-task-id="${id}" data-files="${names.join('、')}"><td>${id}</td><td>${format}</td><td>${target}</td><td>${count}</td><td><div class="progress"><i style="width:8%"></i></div>正在处理</td><td>${tag('进行中','blue')}</td><td>当前用户</td><td><button class="link" data-detail="transcode">详情</button><button class="link" data-action="refresh-transcode">刷新状态</button></td></tr>`);bindDynamic();go('transcode');showToast(`✓ ${id} 已启动，已加入 ${count} 个文件，原始对象完整保留`)}
+else if(currentAction==='variable-picker'){selectedResearchVariables=[...body.querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.parentElement.textContent.trim());const el=document.getElementById('selectedVariables');if(el)el.textContent=selectedResearchVariables.join('、')||'未选择变量';showToast('✓ 研究变量已保存，将带入后续分析')}
+else if(currentAction.startsWith('analysis-')){const disease=document.getElementById('researchDisease')?.value||'全部病种',center=document.getElementById('researchCenter')?.value||'全部中心',date=document.getElementById('researchDate')?.value||'不限日期',vars=selectedResearchVariables.join('、')||'未选择',sample=Math.max(168,1238-(disease==='全部病种'?0:210)-(center==='全部中心'?0:145)),missing=Math.max(3,Math.round(sample*.021)),method=currentAction==='analysis-descriptive'?`描述性统计（${vars}）：均值、中位数、四分位数及频数已生成`:currentAction==='analysis-regression'?`回归分析（变量：${vars}）：模型系数、95%CI 与 p 值已生成`:`差异性分析（变量：${vars}）：组间统计量与 p 值已生成`;lastAnalysis={method,time:'刚刚',disease,center,date,vars};details.analysis=['分析结果',`<div class="details"><div>样本范围</div><div>${disease} / ${center} / ${date}起</div><div>有效样本</div><div>${sample}</div><div>缺失值</div><div>${missing}</div><div>纳入变量</div><div>${vars}</div><div>方法结果</div><div>${method}</div></div>`];modal.classList.remove('open');showDetail('analysis');showToast('✓ 已按当前筛选条件和变量完成统计，可生成报告')}
+else showToast('✓ 操作已完成')};
+const details={"source-object":["原始对象详情",`<div class="details"><div>对象类型</div><div>DICOM / TIFF 原始医学影像</div><div>保存状态</div><div>完整保留</div><div>转码关系</div><div>结果对象独立保存并关联源对象</div></div><div class="notice">原始对象不会因转码、重试或结束任务而删除。</div>`],case:['病历详情与审核进度',`<div class="details"><div>病历ID</div><div>MR001</div><div>病人类型</div><div>白内障</div><div>当前状态</div><div>待审核</div><div>关联影像</div><div>裂隙灯、眼底、A/B超、IOL Master</div></div>`],"follow-task":['随访任务 · 术后1月随访',`<div class="details"><div>任务状态</div><div>进行中</div><div>回收数</div><div>23份</div></div><div class="notice">任务创建后可生成专属链接或二维码，用于后续分发与回收。</div><div class="actions" style="margin-top:14px"><button class="btn" data-open="follow-status">更新任务状态</button></div>`],follow:['随访任务详情',`<div class="details"><div>任务</div><div>术后1月随访</div><div>回收数</div><div>23份</div></div>`],"import-batch":['批次 B001 详情',`<div class="details"><div>文件</div><div>center_A_2020.csv</div><div>总条数</div><div>1,500</div><div>成功/失败</div><div>1,450 / 50</div></div><table class="table"><thead><tr><th>行号</th><th>字段</th><th>错误类型</th><th>错误值</th></tr></thead><tbody><tr><td>23</td><td>年龄</td><td>非数字</td><td>六十</td></tr><tr><td>156</td><td>视力</td><td>超出范围</td><td>1.5</td></tr></tbody></table>`],image:['医学影像对象详情',`<div class="details"><div>对象编号</div><div>OBJ-IMG-1298</div><div>文件</div><div>cataract_001.dcm</div><div>对象类型</div><div>医学影像 / DICOM</div><div>关联病历</div><div>MR001</div><div>文件大小</div><div>12.4 MB</div><div>完整性校验</div><div>${tag('通过','green')}</div><div>存储状态</div><div>${tag('存储成功','green')}</div></div>`],api:['对象存储 API 文档',`<div class="notice">授权应用和用户可通过简单 API 写入对象、读取元信息和访问对象内容。</div><div class="api-code">POST /api/v1/objects            上传对象\nGET  /api/v1/objects/{id}       获取对象元信息\nGET  /api/v1/objects/{id}/data  访问对象内容\nAuthorization: Bearer &lt;token&gt;\n\n成功：200 / 201　无权限：403　对象不存在：404</div><div class="notice warn">API 访问受权限控制；医学影像和病历扫描件存储在服务器端对象存储中。</div>`],transcode:['转码任务详情',`<div class="details"><div>任务</div><div>T001</div><div>源格式</div><div>DICOM</div><div>标准输出</div><div>标准影像 + 元数据</div><div>原始对象</div><div>${tag('完整保留','green')}</div></div>`],analysis:['分析报告',`<div class="details"><div>有效样本</div><div>12,738</div><div>缺失值</div><div>126</div><div>方法</div><div>基础统计分析</div></div>`]};
+function showDetail(k,trigger=null){let x=details[k]||details.case;if(k==='case'&&trigger){const r=trigger.closest('tr'),id=r?.cells[1]?.textContent.trim()||'病历',type=r?.cells[3]?.textContent||'—',state=r?.dataset.state||'—';x=[`${id} · 病历详情`, `<div class="details"><div>病历ID</div><div>${id}</div><div>病人类型</div><div>${type}</div><div>当前状态</div><div>${state}</div><div>关联资料</div><div>结构化表单与医学影像</div></div>`]}if(k==='transcode'&&trigger){const r=trigger.closest('tr'),id=r?.cells[0]?.textContent||'任务',source=r?.cells[1]?.textContent||'—',target=r?.cells[2]?.textContent||'—',result=r?.cells[4]?.innerText||'—',state=r?.cells[5]?.innerText||'—';x=[`${id} · 转码任务详情`,`<div class="details"><div>任务</div><div>${id}</div><div>源格式</div><div>${source}</div><div>标准输出</div><div>${target}</div><div>处理结果</div><div>${result}</div><div>任务状态</div><div>${state}</div><div>原始对象</div><div>${tag('完整保留','green')}</div></div><div class="notice warn">结果对象独立保存并关联源对象，原始 DICOM/TIFF 不会删除。</div>`]}if(k==='follow-task'){const r=trigger?.closest('tr')||activeFollowRow;activeFollowRow=r||activeFollowRow;const name=r?.cells[0]?.textContent||'随访任务',received=r?.cells[2]?.textContent||'0份',status=r?.cells[4]?.innerText||'进行中';x=[`随访任务 · ${name}`,`<div class="details"><div>任务状态</div><div>${status}</div><div>回收数</div><div>${received}</div></div><div class="notice">通过链接或二维码提交问卷后，系统自动记录回收份数。</div><div class="actions" style="margin-top:14px"><button class="btn" data-open="follow-status">更新任务状态</button></div>`]}if(k==='import-batch'&&trigger){const r=trigger.closest('tr');activeImportRow=r||activeImportRow;const id=r?.cells[0]?.textContent||'批次',file=r?.cells[1]?.textContent||'—',total=r?.cells[3]?.textContent||'—',success=r?.cells[4]?.textContent||'—',failed=r?.cells[5]?.textContent||'—',state=r?.cells[6]?.innerText||'—';x=[`批次 ${id} 详情`,`<div class="details"><div>文件</div><div>${file}</div><div>总条数</div><div>${total}</div><div>成功 / 失败</div><div>${success} / ${failed}</div><div>状态</div><div>${state}</div></div>${Number(String(failed).replace(/,/g,''))>0?'<table class="table"><thead><tr><th>示例行</th><th>字段</th><th>错误类型</th></tr></thead><tbody><tr><td>23</td><td>年龄</td><td>不是有效数字</td></tr></tbody></table>':'<div class="notice">当前批次无校验失败记录；审核记录和来源文件可追溯。</div>'}`]}if(k==='image'&&trigger){const card=trigger.closest('.image-file'),info=card?.querySelector('.image-info'),meta=info?.querySelector('small')?.textContent.split('·').map(s=>s.trim())||[],id=card?.dataset.objectId||meta[0]||'—',file=card?.dataset.file||info?.querySelector('b')?.textContent||'—',record=card?.dataset.record||meta[1]?.replace('关联 ','')||'未关联',size=card?.dataset.size||meta[2]||'—',format=card?.dataset.format||'—';x=[`${id} · 对象详情`,`<div class="details"><div>对象编号</div><div>${id}</div><div>文件</div><div>${file}</div><div>对象类型</div><div>医学影像 / ${format}</div><div>关联病历</div><div>${record}</div><div>文件大小</div><div>${size}</div><div>完整性校验</div><div>${tag('通过','green')}</div><div>存储状态</div><div>${tag('存储成功','green')}</div></div>`]}document.getElementById('drawerTitle').textContent=x[0];document.getElementById('drawerBody').innerHTML=x[1];drawer.classList.add('open');mask.classList.add('open');bindDynamic()}document.getElementById('drawerClose').onclick=mask.onclick=()=>{drawer.classList.remove('open');mask.classList.remove('open')};
+function bindDynamic(){app.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{rememberFollowRow(b);open(b.dataset.open,b)});app.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));app.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>{rememberFollowRow(b);showDetail(b.dataset.detail,b)});app.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>handleAction(b.dataset.action,b));if(body.querySelector('.form-engine'))bindFormEngine();if(body.querySelector('#followPatientBody'))bindFollowPatientSelector()}
+function handleAction(a,b){if(a==='case-next'){const step=caseStep();if(validateCaseStep(step))showCaseStep(Math.min(3,step+1))}
+else if(a==='case-prev'){showCaseStep(Math.max(1,caseStep()-1))}
+else if(a==='import-next'){const step=importStep();if(step===1&&!validateImportUpload())return;importMaxStep=Math.max(importMaxStep,Math.min(3,step+1));showImportStep(Math.min(3,step+1));if(step===1)showToast('✓ 文件校验完成，请核对导入范围和异常记录');else showToast('✓ 已确认导入校验通过的记录，请处理异常后送审')}
+else if(a==='import-prev'){showImportStep(Math.max(1,importStep()-1))}
+else if(a==='import-goto'){const target=Number(b.dataset.importTarget);if(target<=importMaxStep)showImportStep(target);else showToast('⚠ 请先完成前一步，不能直接跳过')}
+else if(a==='retry-import-wizard'){const correction=body.querySelector('#importCorrectionFile');if(!correction?.files?.length){showToast('⚠ 请先选择修正后的 Excel 或 CSV 文件');correction?.focus();return}if(!/\.(xlsx?|csv)$/i.test(correction.files[0].name)){showToast('⚠ 修正文件格式不支持');return}if(!currentImportBatchId)currentImportBatchId=`B${String(++batchSeq).padStart(3,'0')}`;body.querySelector('[data-import-panel="3"] .details').innerHTML=`<div>批次号</div><div>${currentImportBatchId}</div><div>修正文件</div><div>${correction.files[0].name}</div><div>导入结果</div><div>成功 1,500 / 失败 0</div><div>当前状态</div><div>${tag('待确认送审','orange')}</div><div>下一步</div><div>确认形成结构化病历并进入专家审核</div>`;body.querySelector('#importReviewBtn').disabled=false;showToast('✓ 修正文件校验通过，异常记录重试成功')}
+else if(a==='import-submit-review'){const id=currentImportBatchId||`B${String(++batchSeq).padStart(3,'0')}`,file=body.querySelector('#importFileName').textContent,center=body.querySelector('#importCenter').value,disease=body.querySelector('#importDisease').value.replace('库','');document.getElementById('importBody').insertAdjacentHTML('afterbegin',`<tr><td>${id}</td><td>${file}</td><td>${center}</td><td>1,500</td><td>1,500</td><td>0</td><td>${tag('待专家审核','orange')}</td><td><button class="link" data-detail="import-batch">详情</button></td></tr>`);document.getElementById('reviewBody').insertAdjacentHTML('afterbegin',`<tr><td>IMP-${id}</td><td>${center}</td><td>${disease}</td><td>历史导入</td><td>刚刚</td><td>${tag('普通','gray')}</td><td><button class="link" data-open="review-detail">审核批次</button></td></tr>`);currentImportBatchId='';modal.classList.remove('open');bindDynamic();go('imports');showToast(`✓ ${id} 已形成结构化记录并进入专家审核`)}
+else if(a==='save-case-draft'){const step=body.querySelector('.case-panel')?caseStep():2;if(currentAction==='case'){const type=body.querySelector('#caseLibrary')?.value||'白内障',center=body.querySelector('#caseCenter')?.value||'当前中心',patient=(body.querySelector('#casePatient')?.value||'新患者').split('·').pop().trim();seq++;const id=`MR${String(seq).slice(-3)}`;document.getElementById('caseBody').insertAdjacentHTML('afterbegin',`<tr data-state="草稿"><td>□</td><td><b>${id}</b></td><td>${center}</td><td>${type}</td><td>${patient}</td><td>当前采集员</td><td>${tag('草稿','gray')}</td><td>刚刚</td><td><button class="link" data-open="case-edit" data-record-id="${id}">继续编辑</button><button class="link" data-action="delete-case">删除</button></td></tr>`);bindDynamic();modal.classList.remove('open');showToast(`✓ ${id} 草稿已保存（完成至第 ${step} 步）`)}else{modal.classList.remove('open');showToast(`✓ ${editingCaseId} 草稿已保存（完成至第 ${step} 步）`)}}
+else if(a==='question-add'){addQuestion(body.querySelector('#newQuestionType')?.value||'single')}
+else if(a==='question-delete'){b.closest('.question-editor')?.remove();body.querySelector('#propertyPanel').innerHTML='<div class="property-empty">请选择画布中的字段<br>编辑题目、题型和校验规则</div>';renumberQuestions();showToast('✓ 字段已删除')}
+else if(a==='question-delete-selected'){body.querySelector('.question-editor.selected')?.remove();body.querySelector('#propertyPanel').innerHTML='<div class="property-empty">请选择画布中的字段<br>编辑题目、题型和校验规则</div>';renumberQuestions();showToast('✓ 字段已删除')}
+else if(a==='question-up'||a==='question-down'){const card=b.closest('.question-editor'),other=a==='question-up'?card.previousElementSibling:card.nextElementSibling;if(!other){showToast('已到达当前位置边界');return}if(a==='question-up')card.parentElement.insertBefore(card,other);else card.parentElement.insertBefore(other,card);renumberQuestions()}
+else if(a==='question-preview'){renderQuestionPreview();showToast('✓ 已更新患者填写预览')}
+else if(a==='question-publish'){if(!validateQuestionnaire())return;publishedQuestionnaireState=captureQuestionnaireState();if(!saveQuestionnaire(true))return;storeQuestionnaireState(activeQuestionnaireRow,publishedQuestionnaireState,'已发布');draftQuestionnaireState=null;modal.classList.remove('open');selectPane('followups','questionnaires');go('followups');showToast('✓ 当前问卷版本已发布，可被新随访任务选择')}
+else if(a==='publish-draft'){const r=b.closest('tr'),saved=stateForQuestionnaire(r)||draftQuestionnaireState;if(!saved){showToast('⚠ 未找到该问卷草稿内容');return}publishedQuestionnaireState=saved;storeQuestionnaireState(r,saved,'已发布');r.cells[3].innerHTML=tag('已发布','green');r.cells[4].innerHTML='<button class="link" data-open="questionnaire-edit">编辑新版本</button><button class="link" data-open="questionnaire-preview">预览</button>';draftQuestionnaireState=null;bindDynamic();showToast('✓ 当前问卷草稿已发布，可被新随访任务选择')}
+else if(a==='delete-question-draft'){if(window.confirm('确认删除该问卷草稿？')){b.closest('tr').remove();showToast('✓ 问卷草稿已删除')}}
+else if(a==='download-qr'){showToast('✓ 专属二维码已下载，有效期和分发人已记录')}
+else if(a==='copy-link'){navigator.clipboard?.writeText('https://h5.med/fu/tk_8a21');showToast('✓ 唯一问卷链接已复制')}
+else if(a==='reveal-phone'){const input=b.parentElement.querySelector('input');if(input)input.value=input.dataset.realPhone||'13800008888';phoneRevealed=true;b.remove();showToast('✓ 已按权限显示真实手机号，本次查看已记录')}
+else if(a==='retry-import'){const r=b.closest('tr'),state=r.cells[6].innerText;if(state.includes('审核退回')){activeImportRow=r;r.cells[6].innerHTML=tag('修正中','blue');r.cells[7].innerHTML='<button class="link" data-open="import-review">完成修正并重新送审</button>';showToast('✓ 已进入批次修正，完成字段修正后可重新送审')}else{const success=Number(r.cells[4].textContent.replace(/,/g,'')),failed=Number(r.cells[5].textContent.replace(/,/g,''));if(!Number.isFinite(success)||!Number.isFinite(failed)||failed<=0){showToast('⚠ 当前批次没有可重试的失败记录');return}r.cells[4].textContent=(success+failed).toLocaleString();r.cells[5].textContent='0';r.cells[6].innerHTML=tag('待导入确认','orange');r.cells[7].innerHTML='<button class="link" data-open="import-review">确认导入</button>';showToast('✓ 失败记录已重试成功，等待确认形成结构化病历')}bindDynamic()}
+else if(a==='retry-transcode'){const r=b.closest('tr'),id=r?.cells[0].textContent,total=Number(r?.cells[3].textContent)||0,failed=Number(r?.cells[4].textContent.match(/失败\s*(\d+)/)?.[1]||0),sourceId=r?.dataset.sourceId||`OBJ-IMG-${1300+Number(id.replace(/\D/g,''))}`,resultId=`OBJ-STD-${++objectSeq}`;if(r&&failed>0){r.cells[4].textContent=`成功 ${total} / 失败 0`;r.cells[5].innerHTML=tag('已完成','green');r.cells[7].innerHTML='<button class="link" data-detail="transcode">查看记录</button>';document.getElementById('transcodeRecords').insertAdjacentHTML('afterbegin',`<tr data-source-id="${sourceId}"><td>${id}</td><td><button class="link" data-detail="source-object">${sourceId}</button></td><td>${r.cells[1].textContent}</td><td>${resultId}</td><td>${tag(`重试成功 ${failed} 个`,'green')}</td><td>${tag('完整保留','green')}</td><td>${r.cells[2].textContent}</td></tr>`)}bindDynamic();showToast(`✓ ${failed} 个失败文件重试成功，结果对象已关联原始对象`)}
+else if(a==='finish-transcode'||a==='refresh-transcode'){const r=b.closest('tr'),id=r.cells[0].textContent,source=r.cells[1].textContent,target=r.cells[2].textContent,count=r.cells[3].textContent,sourceId=r.dataset.sourceId||`OBJ-IMG-${1300+Number(id.replace(/\D/g,''))}`,resultId=`OBJ-STD-${++objectSeq}`;r.dataset.sourceId=sourceId;r.cells[4].textContent=`成功 ${count} / 失败 0`;r.cells[5].innerHTML=tag('已完成','green');r.cells[7].innerHTML='<button class="link" data-detail="transcode">查看记录</button>';document.getElementById('transcodeRecords').insertAdjacentHTML('afterbegin',`<tr data-source-id="${sourceId}"><td>${id}</td><td><button class="link" data-detail="source-object">${sourceId}</button></td><td>${source}</td><td>${resultId}</td><td>${tag('成功','green')}</td><td>${tag('完整保留','green')}</td><td>${target}</td></tr>`);bindDynamic();showToast('✓ 已获取最新状态：转码完成，结果对象已关联原始对象')}
+else if(a==='delete-case'){if(window.confirm('确认删除该草稿？')){b.closest('tr').remove();showToast('✓ 草稿已删除')}}
+else if(a==='error-report')showToast('✓ 错误报告已生成，可下载 Excel')
+else if(a==='reuse-map')showToast('✓ 映射模板已复用到新的导入任务')
+else if(a==='storage-search'){filterStorage();showToast('✓ 已按对象条件查询')}
+else if(a==='storage-reset'){document.getElementById('storageRelation').selectedIndex=0;document.getElementById('storageUploader').selectedIndex=0;document.getElementById('storageDate').value='';document.getElementById('storageFormat').selectedIndex=0;document.getElementById('storageSearch').value='';filterStorage();showToast('✓ 查询条件已重置')}
+else if(a==='grid-view'||a==='list-view'){const host=document.getElementById('objectBody'),buttons=b.parentElement.querySelectorAll('[data-action="grid-view"],[data-action="list-view"]');host.classList.toggle('image-grid',a==='grid-view');host.style.display=a==='list-view'?'grid':'';host.style.gridTemplateColumns=a==='list-view'?'1fr':'';buttons.forEach(x=>x.classList.toggle('active',x===b));showToast(a==='grid-view'?'✓ 已切换网格视图':'✓ 已切换列表视图')}
+else if(a==='page-prev'||a==='page-next'||a==='page-number'){const pager=b.closest('.pager'),nums=[...pager.querySelectorAll('[data-action="page-number"]')],active=nums.findIndex(x=>x.classList.contains('active'));let next=a==='page-number'?nums.indexOf(b):a==='page-next'?Math.min(nums.length-1,active+1):Math.max(0,active-1);nums.forEach((x,i)=>x.classList.toggle('active',i===next));const label=pager.querySelector('span');label.textContent=label.textContent.replace(/\d+\/\d+/,`${next+1}/${label.textContent.match(/\/(\d+)/)?.[1]||nums.length}`);showToast(`✓ 已切换到第 ${next+1} 页`)}
+else if(a==='review-filter'){const selects=b.parentElement.querySelectorAll('select'),priority=selects[0].value,disease=selects[1].value,center=selects[2].value;document.querySelectorAll('#reviewBody tr').forEach(r=>r.style.display=(priority.startsWith('全部')||r.cells[5].textContent.includes(priority))&&(disease.startsWith('全部')||r.cells[2].textContent.includes(disease))&&(center.startsWith('全部')||r.cells[1].textContent.includes(center))?'':'none');showToast('✓ 已按审核条件筛选')}
+else if(a==='download'){showToast('✓ 分析报告已导出')}
+else if(a==='skip-failed'){const r=b.closest('tr');r.cells[5].innerHTML=tag('已结束（失败4）','orange');r.cells[7].innerHTML='<button class="link" data-action="retry-transcode">重试失败文件</button><button class="link" data-detail="transcode">查看记录</button>';bindDynamic();showToast('✓ 任务已结束并保留失败记录，原始文件未删除')}}
+bindDynamic();document.querySelectorAll('#page-cases .filters select')[0].id='caseCenterFilter';document.querySelectorAll('#page-cases .filters select')[1].id='caseTypeFilter';document.getElementById('caseFilter').onclick=()=>{const q=document.getElementById('caseSearch').value.trim(),s=document.getElementById('caseStatus').value,center=document.getElementById('caseCenterFilter').value,type=document.getElementById('caseTypeFilter').value;document.querySelectorAll('#caseBody tr').forEach(r=>r.style.display=(!q||r.textContent.includes(q))&&(!s||r.dataset.state===s)&&(center.startsWith('全部')||r.cells[2].textContent===center)&&(type.startsWith('全部')||r.cells[3].textContent===type)?'':'none')};document.getElementById('caseReset').onclick=()=>{document.getElementById('caseSearch').value='';document.getElementById('caseStatus').value='';document.getElementById('caseCenterFilter').selectedIndex=0;document.getElementById('caseTypeFilter').selectedIndex=0;document.getElementById('caseFilter').click()};function filterStorage(){const relation=document.getElementById('storageRelation').value,uploader=document.getElementById('storageUploader').value,date=document.getElementById('storageDate').value,format=document.getElementById('storageFormat').value,q=document.getElementById('storageSearch').value.trim().toLowerCase();document.querySelectorAll('#objectBody .image-file').forEach(x=>{const t=x.textContent.toLowerCase(),linked=x.dataset.linked==='true';x.style.display=(!q||t.includes(q))&&(relation.startsWith('全部')||(relation==='已关联'?linked:!linked))&&(uploader.startsWith('全部')||x.dataset.uploader===uploader)&&(!date||x.dataset.date===date)&&(format.startsWith('全部')||x.dataset.format===format)?'':'none'})}document.getElementById('storageSearch').onkeydown=e=>{if(e.key==='Enter')filterStorage()};document.getElementById('globalSearch').onkeydown=e=>{if(e.key==='Enter'){go('cases');document.getElementById('caseSearch').value=e.target.value;document.getElementById('caseFilter').click();showToast('✓ 已在病历列表中执行全局搜索')}};
+})();
+</script>
+</body>
+</html>

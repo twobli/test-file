@@ -760,6 +760,31 @@
     .exam-question-card .wide { grid-column: 1 / -1; }
     .exam-question-card textarea { min-height: 76px; }
     .exam-question-card .code-answer { min-height: 150px; font-family: Consolas, Monaco, "Courier New", monospace; }
+    .exam-option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .exam-option-field {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+    .exam-option-letter {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      color: var(--primary);
+      background: #eaf3ff;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .exam-answer-field {
+      grid-column: span 2;
+    }
     .exam-question-total {
       display: inline-flex;
       align-items: center;
@@ -1339,6 +1364,8 @@
       .grid.kpi { grid-template-columns: 1fr; }
       .split-form { grid-template-columns: 1fr; }
       .exam-question-card .question-grid { grid-template-columns: 1fr; }
+      .exam-option-grid { grid-template-columns: 1fr; }
+      .exam-answer-field { grid-column: 1; }
       .image-upload-grid { grid-template-columns: 1fr; }
       .answer-option { grid-template-columns: 1fr; }
       .preview-cover { grid-template-columns: 1fr; }
@@ -2272,8 +2299,15 @@
         + '<div class="form-field"><label>题目难度</label><select class="select" data-question-difficulty><option>基础</option><option>进阶</option><option>高阶</option></select></div>'
         + '<div class="form-field"><label>关联知识点</label><select class="select knowledge-select" data-question-knowledge required>' + getExamKnowledgeOptions() + '</select></div>'
         + '<div class="form-field wide"><label>题干</label><textarea data-question-stem placeholder="请输入本题题干"></textarea></div>'
-        + '<div class="form-field wide exam-question-choice"><label data-question-choice-label>单选题选项</label><textarea data-question-options placeholder="请按 A、B、C、D 分行填写选项"></textarea></div>'
-        + '<div class="form-field wide"><label data-question-answer-label>正确答案与解析</label><textarea data-question-answer placeholder="填写正确答案、解析或评分标准"></textarea></div>'
+        + '<div class="form-field wide exam-question-choice"><label data-question-choice-label>选项（A-D）</label><div class="exam-option-grid">'
+        + '<div class="exam-option-field"><span class="exam-option-letter">A</span><input class="input" data-question-option="A" placeholder="请输入A选项"></div>'
+        + '<div class="exam-option-field"><span class="exam-option-letter">B</span><input class="input" data-question-option="B" placeholder="请输入B选项"></div>'
+        + '<div class="exam-option-field"><span class="exam-option-letter">C</span><input class="input" data-question-option="C" placeholder="请输入C选项"></div>'
+        + '<div class="exam-option-field"><span class="exam-option-letter">D</span><input class="input" data-question-option="D" placeholder="请输入D选项"></div>'
+        + '</div></div>'
+        + '<div class="form-field exam-question-choice exam-answer-field"><label>正确答案</label><select class="select" data-question-correct-answer><option value="">请选择正确答案</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><p class="form-hint" data-question-answer-hint>单选题只能选择1项</p></div>'
+        + '<div class="form-field exam-question-choice exam-answer-field"><label>题目解析</label><textarea data-question-analysis placeholder="请输入提交后展示给学员的题目解析"></textarea></div>'
+        + '<div class="form-field wide exam-question-general-answer"><label data-question-answer-label>正确答案与解析</label><textarea data-question-answer placeholder="填写正确答案、解析或评分标准"></textarea></div>'
         + '</div>'
         + '</div>';
     }
@@ -2288,15 +2322,49 @@
     function syncExamQuestionCard(card) {
       if (!card) return;
       var typeSelect = card.querySelector('[data-question-type]');
-      var choiceField = card.querySelector('.exam-question-choice');
+      var choiceFields = card.querySelectorAll('.exam-question-choice');
+      var generalAnswerField = card.querySelector('.exam-question-general-answer');
       var choiceLabel = card.querySelector('[data-question-choice-label]');
       var answerLabel = card.querySelector('[data-question-answer-label]');
       var answerField = card.querySelector('[data-question-answer]');
+      var correctAnswer = card.querySelector('[data-question-correct-answer]');
+      var answerHint = card.querySelector('[data-question-answer-hint]');
       if (!typeSelect) return;
       var type = typeSelect.value;
       var isChoice = type === '单选题' || type === '多选题';
-      if (choiceField) choiceField.style.display = isChoice ? '' : 'none';
-      if (choiceLabel) choiceLabel.textContent = type === '多选题' ? '多选题选项' : '单选题选项';
+      choiceFields.forEach(function(field) { field.style.display = isChoice ? '' : 'none'; });
+      if (generalAnswerField) generalAnswerField.style.display = isChoice ? 'none' : '';
+      if (choiceLabel) choiceLabel.textContent = type === '多选题' ? '多选题选项' : '选项（A-D）';
+      if (correctAnswer) {
+        var isMultiple = type === '多选题';
+        correctAnswer.multiple = isMultiple;
+        correctAnswer.size = isMultiple ? 5 : 1;
+        var selectedAnswerValues = Array.prototype.map.call(
+          Array.prototype.filter.call(correctAnswer.options, function(option) {
+            return option.selected && option.value;
+          }),
+          function(option) { return option.value; }
+        );
+        var placeholderOption = correctAnswer.querySelector('option[value=""]');
+        if (placeholderOption) {
+          placeholderOption.disabled = isMultiple;
+          placeholderOption.hidden = isMultiple;
+          placeholderOption.selected = !isMultiple && !selectedAnswerValues.length;
+        }
+        if (!isMultiple) {
+          var firstSelectedValue = selectedAnswerValues[0] || '';
+          Array.prototype.forEach.call(correctAnswer.options, function(option) {
+            option.selected = firstSelectedValue ? option.value === firstSelectedValue : !option.value;
+          });
+        } else if (!selectedAnswerValues.length) {
+          correctAnswer.selectedIndex = -1;
+        }
+      }
+      if (answerHint) {
+        answerHint.textContent = type === '多选题'
+          ? '多选题至少选择2项，可选择2至4项'
+          : '单选题只能选择1项';
+      }
       if (answerLabel) {
         answerLabel.textContent = type === '代码题' ? '参考代码与判分说明'
           : (type === '病例分析题' ? '参考答案、评分点与解析' : '正确答案与解析');
@@ -2334,9 +2402,12 @@
       window.setTimeout(function() {
         var type = ctx.type;
         var stemEl = card.querySelector('[data-question-stem]');
-        var optionsEl = card.querySelector('[data-question-options]');
+        var optionEls = card.querySelectorAll('[data-question-option]');
+        var correctAnswerEl = card.querySelector('[data-question-correct-answer]');
+        var analysisEl = card.querySelector('[data-question-analysis]');
         var answerEl = card.querySelector('[data-question-answer]');
-        var choiceField = card.querySelector('.exam-question-choice');
+        var choiceFields = card.querySelectorAll('.exam-question-choice');
+        var generalAnswerField = card.querySelector('.exam-question-general-answer');
         var choiceLabel = card.querySelector('[data-question-choice-label]');
         var answerLabel = card.querySelector('[data-question-answer-label]');
         if (stemEl) {
@@ -2345,27 +2416,48 @@
             : '根据所选知识点，选择最符合题意的答案。';
         }
         if (type === '单选题') {
-          if (choiceField) choiceField.style.display = '';
-          if (choiceLabel) choiceLabel.textContent = '单选题选项';
-          if (optionsEl) optionsEl.value = 'A. 相关错误认知\nB. 正确诊断或处理\nC. 常见干扰项\nD. 近似但不正确的结论';
-          if (answerLabel) answerLabel.textContent = '正确答案与解析';
-          if (answerEl) answerEl.value = '正确答案：B。AI已按所选知识点自动生成题干、选项和解析，请继续人工微调。';
+          choiceFields.forEach(function(field) { field.style.display = ''; });
+          if (generalAnswerField) generalAnswerField.style.display = 'none';
+          if (choiceLabel) choiceLabel.textContent = '选项（A-D）';
+          ['相关错误认知', '正确诊断或处理', '常见干扰项', '近似但不正确的结论'].forEach(function(value, index) {
+            if (optionEls[index]) optionEls[index].value = value;
+          });
+          if (correctAnswerEl) {
+            correctAnswerEl.multiple = false;
+            correctAnswerEl.size = 1;
+            Array.prototype.forEach.call(correctAnswerEl.options, function(option) {
+              option.selected = option.value === 'B';
+            });
+          }
+          if (analysisEl) analysisEl.value = 'AI已按所选知识点自动生成题干、选项和解析，请继续人工微调。';
         } else if (type === '多选题') {
-          if (choiceField) choiceField.style.display = '';
+          choiceFields.forEach(function(field) { field.style.display = ''; });
+          if (generalAnswerField) generalAnswerField.style.display = 'none';
           if (choiceLabel) choiceLabel.textContent = '多选题选项';
-          if (optionsEl) optionsEl.value = 'A. 关键表现之一\nB. 关键表现之二\nC. 非典型表现\nD. 需要排除的干扰项';
-          if (answerLabel) answerLabel.textContent = '正确答案与解析';
-          if (answerEl) answerEl.value = '正确答案：A、B。请人工检查多选项是否与知识点一致。';
+          ['关键表现之一', '关键表现之二', '非典型表现', '需要排除的干扰项'].forEach(function(value, index) {
+            if (optionEls[index]) optionEls[index].value = value;
+          });
+          if (correctAnswerEl) {
+            correctAnswerEl.multiple = true;
+            correctAnswerEl.size = 5;
+            Array.prototype.forEach.call(correctAnswerEl.options, function(option) {
+              option.selected = option.value === 'A' || option.value === 'B';
+            });
+          }
+          if (analysisEl) analysisEl.value = '请人工检查多选项是否与知识点一致。';
         } else if (type === '简答题') {
-          if (choiceField) choiceField.style.display = 'none';
+          choiceFields.forEach(function(field) { field.style.display = 'none'; });
+          if (generalAnswerField) generalAnswerField.style.display = '';
           if (answerLabel) answerLabel.textContent = '参考答案、评分点与解析';
           if (answerEl) answerEl.value = '评分点：1. 描述核心概念；2. 说明临床意义；3. 结合所选知识点给出简明结论。';
         } else if (type === '病例分析题') {
-          if (choiceField) choiceField.style.display = 'none';
+          choiceFields.forEach(function(field) { field.style.display = 'none'; });
+          if (generalAnswerField) generalAnswerField.style.display = '';
           if (answerLabel) answerLabel.textContent = '参考答案、评分点与解析';
           if (answerEl) answerEl.value = '标准答案：结合病例资料、关键影像和知识点完成诊断。评分点包括病因判断、鉴别诊断和处理建议。';
         } else if (type === '代码题') {
-          if (choiceField) choiceField.style.display = 'none';
+          choiceFields.forEach(function(field) { field.style.display = 'none'; });
+          if (generalAnswerField) generalAnswerField.style.display = '';
           if (answerLabel) answerLabel.textContent = '参考代码与判分说明';
           if (answerEl) answerEl.value = '参考代码：根据输入数据完成核心指标计算。判分说明：按功能正确性、边界处理和输出格式评分。';
         }
@@ -2443,10 +2535,8 @@
         var card = cards[i];
         var stem = card.querySelector('[data-question-stem]');
         var score = card.querySelector('[data-question-score]');
-        var answer = card.querySelector('[data-question-answer]');
         var knowledge = card.querySelector('[data-question-knowledge]');
         var type = card.querySelector('[data-question-type]');
-        var options = card.querySelector('[data-question-options]');
         var selectedKnowledge = knowledge ? knowledge.value : '';
         if (!stem || !stem.value.trim()) {
           showToast('第' + (i + 1) + '题还没有填写题干。');
@@ -2460,13 +2550,36 @@
           showToast('第' + (i + 1) + '题请选择关联知识点。');
           return false;
         }
-        if (type && (type.value === '单选题' || type.value === '多选题') && (!options || !options.value.trim())) {
-          showToast('第' + (i + 1) + '题请填写选项。');
-          return false;
-        }
-        if (!answer || !answer.value.trim()) {
-          showToast('第' + (i + 1) + '题还没有填写答案或评分说明。');
-          return false;
+        if (type && (type.value === '单选题' || type.value === '多选题')) {
+          var options = card.querySelectorAll('[data-question-option]');
+          var correctAnswer = card.querySelector('[data-question-correct-answer]');
+          var analysis = card.querySelector('[data-question-analysis]');
+          for (var j = 0; j < options.length; j++) {
+            if (!options[j].value.trim()) {
+              showToast('第' + (i + 1) + '题请分别填写A、B、C、D选项。');
+              return false;
+            }
+          }
+          var selectedAnswers = correctAnswer ? Array.prototype.filter.call(correctAnswer.options, function(option) { return option.selected && option.value; }) : [];
+          if (type.value === '多选题') {
+            if (selectedAnswers.length < 2) {
+              showToast('第' + (i + 1) + '题多选题至少选择2个正确答案。');
+              return false;
+            }
+          } else if (selectedAnswers.length !== 1) {
+            showToast('第' + (i + 1) + '题单选题只能选择1个正确答案。');
+            return false;
+          }
+          if (!analysis || !analysis.value.trim()) {
+            showToast('第' + (i + 1) + '题请填写题目解析。');
+            return false;
+          }
+        } else {
+          var answer = card.querySelector('[data-question-answer]');
+          if (!answer || !answer.value.trim()) {
+            showToast('第' + (i + 1) + '题还没有填写答案或评分说明。');
+            return false;
+          }
         }
       }
       return true;
@@ -2841,7 +2954,7 @@
         <div class="form-field"><label>考试类型</label><select class="select" data-exam-type onchange="syncExamFrameworkOptions()"><option selected data-exam-stage="阶段测评">单课程测评</option><option data-exam-stage="阶段测评">模块考核</option><option data-exam-stage="综合考核">全周期综合考试</option></select></div>
         <div class="exam-question-builder">
           <div class="exam-question-builder-head">
-            <div><strong>试题配置</strong><p>试题直接在当前试卷内逐题创建，不从题库抽取。每题必须配置题型、题干、分数、基础课程知识点和难度。</p></div>
+            <div><strong>试题配置</strong><p>试题直接在当前试卷内逐题创建，不从题库抽取。单选题只能配置1个正确答案，多选题需配置2至4个正确答案；每题还需填写题干、分数、难度、关联知识点、A-D选项和题目解析。</p></div>
             <button type="button" class="btn primary small" onclick="addExamQuestionCard()">添加题目</button>
           </div>
           <div class="exam-question-list" id="examQuestionList"></div>
