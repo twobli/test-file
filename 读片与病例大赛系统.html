@@ -71,6 +71,7 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
 .tag-blue { background:#e8f0fe; color:#1557b0; }
 .tag-purple { background:#f3e8ff; color:#7c3aed; }
 .tag-red-soft { background:#fce8e6; color:#c5221f; }
+.tag-timeout { background:#fff4dd; color:#b45309; }
 .progress-stack { min-width:180px; }
 .progress-top { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:12px; color:var(--gray-700); margin-bottom:6px; }
 .progress-bar { height:6px; background:var(--gray-200); border-radius:999px; overflow:hidden; }
@@ -148,6 +149,7 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
 .result-header { display: flex; align-items: center; padding: 16px 24px; background: #fff; border-bottom: 1px solid #e8ecf0; gap: 12px; }
 .result-title { font-size: 16px; font-weight: 600; color: #202124; flex: 1; margin: 0; }
 .tag-result-status { background: #fce8e6; color: #c5221f; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+.tag-result-status.tag-timeout { background: #fff4dd; color: #b45309; }
 .result-close { font-size: 18px; color: #9aa0a6; cursor: pointer; background: none; border: none; padding: 4px; }
 .result-close:hover { color: #3c4043; }
 .result-body { padding: 24px; overflow-y: auto; flex: 1; min-height: 0; }
@@ -238,7 +240,7 @@ table tbody tr.active-row { background: var(--primary-light); border-left: 3px s
 
 <div class="logic-tip">
     <span>📌</span>
-    <div>比赛在有效期内可多次进入，但每场比赛的总时长固定；进入后中途退出会保留已答题目和剩余时间。比赛结束后，已报名用户会归入三种结果：已完成作答、中途退赛、缺考，且三种结果都可查看系统评分。</div>
+    <div>比赛在有效期内可多次进入，但每场比赛的总时长固定；进入后中途退出会保留已答题目和剩余时间。时间用完时系统会自动交卷，只按已作答题目计分，不归入退赛。比赛结束后，已报名用户会归入四种结果：已完成作答、超时自动交卷、中途退赛、缺考，且均可查看系统评分。</div>
 </div>
 
 <div class="summary-strip" id="summaryStrip"></div>
@@ -604,6 +606,29 @@ var competitions = [
             answered: 0,
             details: []
         }
+    },
+    {
+        name: 'OCT视网膜结构限时挑战赛',
+        desc: '答题过程中达到固定时长，系统自动提交已作答题目，未作答题目不计入得分。',
+        start: '2026-05-05',
+        end: '2026-06-05',
+        durationMin: 45,
+        totalQ: 20,
+        participants: 1142,
+        phase: 'ended',
+        registered: true,
+        attempt: { state: 'timeout', answered: 11, currentQ: 12, remainingSeconds: 0, submittedAt: '2026-06-04 15:45', answers: {} },
+        result: {
+            type: 'timeout',
+            score: 46,
+            accuracy: 82,
+            rank: 624,
+            totalParticipants: 1142,
+            beatPct: 45,
+            timeUsed: '45:00',
+            answered: 11,
+            details: []
+        }
     }
 ];
 
@@ -666,6 +691,7 @@ function getAttemptTagHtml(item) {
     if (!item.registered) return '<span class="tag tag-gray">未报名</span>';
     if (item.attempt.state === 'in-progress') return '<span class="tag tag-blue">已入场</span>';
     if (item.attempt.state === 'submitted') return '<span class="tag tag-purple">已完成作答</span>';
+    if (item.attempt.state === 'timeout') return '<span class="tag tag-timeout">超时自动交卷</span>';
     if (item.attempt.state === 'quit') return '<span class="tag tag-red-soft">中途退赛</span>';
     if (item.attempt.state === 'absent') return '<span class="tag tag-red-soft">缺考</span>';
     return '<span class="tag tag-blue">已报名</span>';
@@ -681,6 +707,8 @@ function getProgressHtml(item) {
         note = '已答 ' + item.attempt.answered + '/' + item.totalQ + ' 题，剩余作答时间 ' + formatSeconds(item.attempt.remainingSeconds) + '。';
     } else if (item.attempt.state === 'submitted') {
         note = item.phase === 'ended' ? '已完成全部题目，比赛截止后生成正式结果。' : '已完成全部题目，等待比赛截止后锁定最终排名。';
+    } else if (item.attempt.state === 'timeout') {
+        note = '作答时间用完，系统自动交卷；已答 ' + item.attempt.answered + '/' + item.totalQ + ' 题，未作答题目不计入得分。';
     } else if (item.attempt.state === 'quit') {
         note = '比赛结束前退出，系统按已作答 ' + item.attempt.answered + ' 题计算成绩。';
     } else if (item.attempt.state === 'absent') {
@@ -696,13 +724,13 @@ function getResultHtml(item) {
         return '<div class="result-text"><strong>未生成结果</strong><span>未报名，不产生比赛结果。</span></div>';
     }
     if (item.result) {
-        var typeText = item.result.type === 'completed' ? '已完成作答' : (item.result.type === 'quit' ? '中途退赛' : '缺考');
+        var typeText = item.result.type === 'completed' ? '已完成作答' : (item.result.type === 'timeout' ? '超时自动交卷' : (item.result.type === 'quit' ? '中途退赛' : '缺考'));
         return '<div class="result-text"><strong>' + typeText + '</strong><span>得分 ' + item.result.score + ' 分，正确率 ' + item.result.accuracy + '%。</span></div>';
     }
     if (item.phase !== 'ended') {
         if (item.phase === 'upcoming') return '<div class="result-text"><strong>已报名待开赛</strong><span>比赛开始后可进入作答，当前不产生结果。</span></div>';
         if (item.attempt.state === 'submitted') return '<div class="result-text"><strong>等待比赛截止</strong><span>赛事结束后可查看正式结果与排名。</span></div>';
-        return '<div class="result-text"><strong>暂未生成结果</strong><span>比赛结束后，系统会根据完赛、退赛或缺考生成对应结果。</span></div>';
+        return '<div class="result-text"><strong>暂未生成结果</strong><span>比赛结束后，系统会根据完赛、超时自动交卷、退赛或缺考生成对应结果。</span></div>';
     }
     if (!item.result) return '<div class="result-text"><strong>结果待生成</strong><span>系统暂未回传成绩。</span></div>';
 }
@@ -719,7 +747,7 @@ function getActionHtml(item) {
         } else {
             btnHtml = '<button class="btn btn-outline btn-sm" onclick="showCompetitionResult(\'' + item.name + '\')">查看结果</button>';
         }
-        hint = item.result.type === 'quit' ? '系统按已作答题目计分。' : (item.result.type === 'absent' ? '缺考结果同样可回看。' : '可查看最终成绩与题目详情。');
+        hint = item.result.type === 'timeout' ? '时间用完后系统自动交卷，按已作答题目计分。' : (item.result.type === 'quit' ? '系统按已作答题目计分。' : (item.result.type === 'absent' ? '缺考结果同样可回看。' : '可查看最终成绩与题目详情。'));
     } else if (item.phase === 'upcoming') {
         if (item.registered) {
             btnHtml = '<button class="btn btn-outline btn-sm" style="cursor:not-allowed;color:var(--gray-400);" disabled>已报名</button>';
@@ -755,6 +783,7 @@ function renderSummaryStrip() {
     var submittedCount = competitions.filter(function(item) { return item.phase === 'ongoing' && item.attempt.state === 'submitted'; }).length;
     var endedResults = competitions.filter(function(item) { return item.phase === 'ended' && item.registered; });
     var doneCount = endedResults.filter(function(item) { return item.result && item.result.type === 'completed'; }).length;
+    var timeoutCount = endedResults.filter(function(item) { return item.result && item.result.type === 'timeout'; }).length;
     var quitCount = endedResults.filter(function(item) { return item.result && item.result.type === 'quit'; }).length;
     var absentCount = endedResults.filter(function(item) { return item.result && item.result.type === 'absent'; }).length;
 
@@ -762,7 +791,7 @@ function renderSummaryStrip() {
         '<div class="summary-card"><b>' + registeredCount + '</b><span>已报名比赛</span><em>包括进行中、即将开始和已结束赛事</em></div>',
         '<div class="summary-card"><b>' + resumeCount + '</b><span>待继续作答</span><em>中途退出后保留进度与剩余时间</em></div>',
         '<div class="summary-card"><b>' + submittedCount + '</b><span>已完成待截止</span><em>交卷后锁定答案，等待比赛结束</em></div>',
-        '<div class="summary-card"><b>' + doneCount + ' / ' + quitCount + ' / ' + absentCount + '</b><span>完赛 / 退赛 / 缺考</span><em>赛后结果一并可查看</em></div>'
+        '<div class="summary-card"><b>' + doneCount + ' / ' + timeoutCount + ' / ' + quitCount + ' / ' + absentCount + '</b><span>完赛 / 超时 / 退赛 / 缺考</span><em>赛后结果一并可查看</em></div>'
     ].join('');
 }
 
@@ -830,7 +859,7 @@ function enterExam(name) {
         showCompetitionResult(name);
         return;
     }
-    if (item.attempt.state === 'submitted') {
+    if (item.attempt.state === 'submitted' || item.attempt.state === 'timeout') {
         showCompetitionResult(name);
         return;
     }
@@ -940,14 +969,29 @@ function closeAnalysisModal() {
     closeModal('analysisModal');
 }
 
-function buildResultDetails(item, resultType, answeredCount, accuracy) {
+function getAnswerSnapshot(item, answeredCount, answers) {
+    var recordedAnswers = answers && typeof answers === 'object' ? answers : {};
+    var recordedKeys = Object.keys(recordedAnswers).filter(function(key) {
+        return recordedAnswers[key] !== undefined && recordedAnswers[key] !== null && recordedAnswers[key] !== '';
+    });
+    if (recordedKeys.length) {
+        return { answers: recordedAnswers, hasRecordedAnswers: true };
+    }
+    var fallbackAnswers = {};
+    for (var i = 1; i <= item.totalQ && i <= answeredCount; i++) fallbackAnswers[i] = true;
+    return { answers: fallbackAnswers, hasRecordedAnswers: false };
+}
+
+function buildResultDetails(item, resultType, answeredCount, accuracy, answers) {
     var rows = [];
     var scorePerQ = Math.floor(100 / item.totalQ);
     var correctTarget = Math.round(answeredCount * accuracy / 100);
+    var answerSnapshot = getAnswerSnapshot(item, answeredCount, answers);
     for (var i = 1; i <= item.totalQ; i++) {
         var qData = mockQuestions[(i - 1) % mockQuestions.length];
-        var answered = i <= answeredCount;
-        var isCorrect = answered && i <= correctTarget;
+        var userAnswer = answerSnapshot.answers[i] || answerSnapshot.answers[String(i)];
+        var answered = answerSnapshot.hasRecordedAnswers ? !!userAnswer : i <= answeredCount;
+        var isCorrect = answered && (answerSnapshot.hasRecordedAnswers ? userAnswer === qData.answer : i <= correctTarget);
         var score = isCorrect ? scorePerQ : 0;
         var timeText = answered ? Math.floor((35 + (i * 13) % 75) / 60) + ':' + (((35 + (i * 13) % 75) % 60 < 10 ? '0' : '') + ((35 + (i * 13) % 75) % 60)) : '--';
         var resultHtml = answered ? (isCorrect ? '<span class="td-correct">✅ 正确</span>' : '<span class="td-wrong">❌ 错误</span>') : '<span style="color:#f59e0b;">未作答</span>';
@@ -960,11 +1004,14 @@ function buildResultDetails(item, resultType, answeredCount, accuracy) {
 function buildQuestionAnalysisHtml(item, result) {
     var answeredCount = result.answered || 0;
     var correctTarget = result.type === 'absent' ? 0 : Math.round(answeredCount * (result.accuracy || 0) / 100);
+    var storedAnswers = result.answers && Object.keys(result.answers).length ? result.answers : (item.attempt && item.attempt.answers ? item.attempt.answers : {});
+    var answerSnapshot = getAnswerSnapshot(item, answeredCount, storedAnswers);
     var html = '';
     for (var i = 1; i <= item.totalQ; i++) {
         var qData = mockQuestions[(i - 1) % mockQuestions.length];
-        var answered = i <= answeredCount;
-        var isCorrect = result.type !== 'absent' && answered && i <= correctTarget;
+        var userAnswer = answerSnapshot.answers[i] || answerSnapshot.answers[String(i)];
+        var answered = answerSnapshot.hasRecordedAnswers ? !!userAnswer : i <= answeredCount;
+        var isCorrect = result.type !== 'absent' && answered && (answerSnapshot.hasRecordedAnswers ? userAnswer === qData.answer : i <= correctTarget);
         var statusText = result.type === 'absent' ? '缺考' : (answered ? (isCorrect ? '答对' : '错题') : '未作答');
         var cardClass = isCorrect ? 'analysis-card' : 'analysis-card wrong';
         var optionsHtml = (qData.options || []).map(function(opt) { return '<div>' + opt + '</div>'; }).join('');
@@ -999,11 +1046,14 @@ function appendAiDiagnosisConclusion(item, result) {
     }
     var answeredCount = result.answered || 0;
     var correctTarget = result.type === 'absent' ? 0 : Math.round(answeredCount * (result.accuracy || 0) / 100);
+    var storedAnswers = result.answers && Object.keys(result.answers).length ? result.answers : (item.attempt && item.attempt.answers ? item.attempt.answers : {});
+    var answerSnapshot = getAnswerSnapshot(item, answeredCount, storedAnswers);
     var wrong = [];
     for (var i = 1; i <= item.totalQ; i++) {
         var qData = mockQuestions[(i - 1) % mockQuestions.length];
-        var answered = i <= answeredCount;
-        var isCorrect = result.type !== 'absent' && answered && i <= correctTarget;
+        var userAnswer = answerSnapshot.answers[i] || answerSnapshot.answers[String(i)];
+        var answered = answerSnapshot.hasRecordedAnswers ? !!userAnswer : i <= answeredCount;
+        var isCorrect = result.type !== 'absent' && answered && (answerSnapshot.hasRecordedAnswers ? userAnswer === qData.answer : i <= correctTarget);
         if (answered && !isCorrect) wrong.push({ num: i, qData: qData });
     }
     var topicTips = {
@@ -1039,7 +1089,8 @@ function appendAiDiagnosisConclusion(item, result) {
     container.style.display = 'block';
 }
 function createSubmittedPreviewResult(item) {
-    var answered = item.attempt.answered || item.totalQ || 0;
+    var isTimeout = item.attempt.state === 'timeout';
+    var answered = typeof item.attempt.answered === 'number' ? item.attempt.answered : item.totalQ;
     var answerRatio = item.totalQ ? answered / item.totalQ : 0;
     var accuracy = Math.max(0, Math.min(95, Math.round(answerRatio * 100) - 8));
     var score = Math.max(0, accuracy);
@@ -1047,7 +1098,7 @@ function createSubmittedPreviewResult(item) {
     var beatPct = item.participants ? Math.max(0, Math.min(99, Math.round((item.participants - rank) / item.participants * 100))) : 0;
     var usedSeconds = Math.max(0, item.durationMin * 60 - (item.attempt.remainingSeconds || 0));
     return {
-        type: 'completed',
+        type: isTimeout ? 'timeout' : 'completed',
         score: score,
         accuracy: accuracy,
         rank: rank,
@@ -1055,7 +1106,8 @@ function createSubmittedPreviewResult(item) {
         beatPct: beatPct,
         timeUsed: formatSeconds(usedSeconds),
         answered: answered,
-        details: buildResultDetails(item, 'completed', answered, accuracy)
+        answers: clone(item.attempt.answers || {}),
+        details: buildResultDetails(item, isTimeout ? 'timeout' : 'completed', answered, accuracy, item.attempt.answers)
     };
 }
 
@@ -1065,7 +1117,7 @@ function showCompetitionResult(competitionName) {
         showToast('未找到对应比赛。', 'info');
         return;
     }
-    if (!item.result && item.registered && item.attempt.state === 'submitted') {
+    if (!item.result && item.registered && (item.attempt.state === 'submitted' || item.attempt.state === 'timeout')) {
         item.result = createSubmittedPreviewResult(item);
         showToast('已生成当前作答结果预览。', 'info');
         renderSummaryStrip();
@@ -1077,11 +1129,13 @@ function showCompetitionResult(competitionName) {
     }
     var result = item.result;
     lastViewedCompetitionName = item.name;
-    var details = result.details && result.details.length ? result.details : buildResultDetails(item, result.type, result.answered || 0, result.accuracy || 0);
-    var statusText = result.type === 'completed' ? '已完成作答' : (result.type === 'quit' ? '中途退赛' : '缺考');
+    var details = result.details && result.details.length ? result.details : buildResultDetails(item, result.type, result.answered || 0, result.accuracy || 0, result.answers);
+    var statusText = result.type === 'completed' ? '已完成作答' : (result.type === 'timeout' ? '超时自动交卷' : (result.type === 'quit' ? '中途退赛' : '缺考'));
 
     document.getElementById('resultExamName').textContent = item.name;
-    document.getElementById('resultStatusTag').textContent = statusText;
+    var resultStatusTag = document.getElementById('resultStatusTag');
+    resultStatusTag.textContent = statusText;
+    resultStatusTag.className = 'tag tag-result-status' + (result.type === 'timeout' ? ' tag-timeout' : '');
     document.getElementById('rScore').textContent = result.score;
     document.getElementById('rRank').innerHTML = result.rank + '<span class="rsub">/' + result.totalParticipants + '</span>';
     document.getElementById('rAccuracy').textContent = result.accuracy + '%';
@@ -1100,7 +1154,7 @@ function showCompetitionAnalysis(competitionName, focusWrong) {
         showToast('未找到对应比赛。', 'info');
         return;
     }
-    if (!item.result && item.registered && item.attempt.state === 'submitted') {
+    if (!item.result && item.registered && (item.attempt.state === 'submitted' || item.attempt.state === 'timeout')) {
         item.result = createSubmittedPreviewResult(item);
     }
     if (!item.result) {
@@ -1112,14 +1166,18 @@ function showCompetitionAnalysis(competitionName, focusWrong) {
     var wrongCount = 0;
     var answeredCount = result.answered || 0;
     var correctTarget = result.type === 'absent' ? 0 : Math.round(answeredCount * (result.accuracy || 0) / 100);
+    var storedAnswers = result.answers && Object.keys(result.answers).length ? result.answers : (item.attempt && item.attempt.answers ? item.attempt.answers : {});
+    var answerSnapshot = getAnswerSnapshot(item, answeredCount, storedAnswers);
     for (var i = 1; i <= item.totalQ; i++) {
-        var answered = i <= answeredCount;
-        var isCorrect = result.type !== 'absent' && answered && i <= correctTarget;
+        var userAnswer = answerSnapshot.answers[i] || answerSnapshot.answers[String(i)];
+        var answered = answerSnapshot.hasRecordedAnswers ? !!userAnswer : i <= answeredCount;
+        var isCorrect = result.type !== 'absent' && answered && (answerSnapshot.hasRecordedAnswers ? userAnswer === mockQuestions[(i - 1) % mockQuestions.length].answer : i <= correctTarget);
         if (!isCorrect) wrongCount++;
     }
 
     document.getElementById('analysisExamName').textContent = item.name;
     document.getElementById('analysisStatusTag').textContent = wrongCount ? ('错题 ' + wrongCount + ' 题') : '全部题目已标注';
+    document.getElementById('analysisStatusTag').className = 'tag tag-result-status' + (result.type === 'timeout' ? ' tag-timeout' : '');
     document.getElementById('analysisModalList').innerHTML = buildQuestionAnalysisHtml(item, result);
     appendAiDiagnosisConclusion(item, result);
     openModal('analysisModal');
@@ -1208,26 +1266,27 @@ function finalizeSubmission(autoSubmitted) {
 
     var elapsed = examDuration - examSecondsRemaining;
     var timeStr = formatSeconds(elapsed);
-    var accuracy = totalQ > 0 ? Math.round(correctCount / totalQ * 100) : 0;
+    var accuracy = answeredCount > 0 ? Math.round(correctCount / answeredCount * 100) : 0;
     var rank = Math.max(1, Math.round(item.participants * (1 - accuracy / 120)));
     var beatPct = Math.max(0, Math.min(99, Math.round((item.participants - rank) / item.participants * 100)));
 
-    item.attempt.state = 'submitted';
-    item.attempt.answered = totalQ;
+    item.attempt.state = autoSubmitted ? 'timeout' : 'submitted';
+    item.attempt.answered = answeredCount;
     item.attempt.answers = clone(userAnswers);
-    item.attempt.currentQ = totalQ;
+    item.attempt.currentQ = currentQ;
     item.attempt.remainingSeconds = 0;
     item.attempt.submittedAt = '2026-07-16 12:00';
     item.result = {
-        type: 'completed',
+        type: autoSubmitted ? 'timeout' : 'completed',
         score: totalScore,
         accuracy: accuracy,
         rank: rank,
         totalParticipants: item.participants,
         beatPct: beatPct,
         timeUsed: timeStr,
-        answered: totalQ,
-        details: buildResultDetails(item, 'completed', totalQ, accuracy)
+        answered: answeredCount,
+        answers: clone(userAnswers),
+        details: buildResultDetails(item, autoSubmitted ? 'timeout' : 'completed', answeredCount, accuracy, userAnswers)
     };
 
     closeModal('examModal');
