@@ -28,7 +28,7 @@
       <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
       <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理</a>
       <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
-      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
+      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">◈</span>模型训练题集管理</a>
     </aside>
     <main class="main">
       <header class="topbar">
@@ -51,7 +51,7 @@
   </section>
   <div class="modal-mask" id="audienceMask" onclick="closeAudienceModal()"></div>
   <section class="modal" id="audienceModal" role="dialog" aria-modal="true">
-    <div class="modal-head"><h2 id="audienceTitle">分配用户</h2><p id="audienceDesc">只分配当前虚拟病例的可见用户。</p></div>
+    <div class="modal-head"><h2 id="audienceTitle">配置人员</h2><p id="audienceDesc">只配置当前虚拟病例的可见人员。</p></div>
     <div class="modal-body" id="audienceBody"></div>
     <div class="modal-foot"><button class="btn" onclick="closeAudienceModal()">取消</button><button class="btn primary" onclick="saveAudience()">保存</button></div>
   </section>
@@ -113,7 +113,7 @@
           +'<td>'+esc(r.patient.name)+' / '+esc(r.patient.gender)+' / '+esc(r.patient.age)+'岁</td>'
           +'<td>'+esc(r.patient.chiefComplaint).slice(0,32)+(r.patient.chiefComplaint.length>32?'…':'')+'</td>'
           +'<td>'+imageSummary(r)+'</td>'
-          +'<td><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">分配用户</button></td></tr>';
+          +'<td><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">配置人员</button></td></tr>';
       }).join(''):'<tr><td colspan="5"><div class="empty-note">没有匹配的虚拟病例。</div></td></tr>';
     }
     function imageSummary(r){
@@ -134,7 +134,7 @@
       return '<select class="select assign-user-select" id="'+id+'" multiple size="6">'+audienceStaff.map(function(person){
         var selectedText=selected.indexOf(person.name)>-1?' selected':'';
         return '<option value="'+esc(person.name)+'"'+selectedText+'>'+esc(person.name+'（'+person.role+'）')+'</option>';
-      }).join('')+'</select><p class="assign-user-note">必须至少选择1名具体用户；只有被分配的用户登录后才能看到该病例。</p>';
+      }).join('')+'</select><p class="assign-user-note">必须至少选择1名具体人员；只有已配置的人员登录后才能看到该病例。</p>';
     }
     function fields(r){
       var p=r.patient||{}, v=r.vitals||[], im=r.imaging||{};
@@ -150,7 +150,7 @@
         '<div class="form-field"><label>单眼 / 双眼</label><select class="select" id="f_eye_mode" onchange="renderUploadSlots()"><option'+optionSelected(im.eyeMode||'双眼','双眼')+'>双眼</option><option'+optionSelected(im.eyeMode,'单眼')+'>单眼</option></select></div>'+
         '<div class="form-field" id="singleEyeField"><label>单眼眼别</label><select class="select" id="f_single_eye" onchange="renderUploadSlots()"><option'+optionSelected(im.singleEye||'右眼','右眼')+'>右眼</option><option'+optionSelected(im.singleEye,'左眼')+'>左眼</option></select></div>'+
         '<div id="uploadSlots" class="upload-slot-list"></div></div></div>'+
-        '<div class="section-block"><h3>四、分配用户</h3><p class="section-note">选择该虚拟病例在学生端的可见用户。</p>'+assignedUserSelect(r.audience,'caseAudienceSelect')+'</div>';
+        '<div class="section-block"><h3>四、配置人员</h3><p class="section-note">选择该虚拟病例在学生端的可见人员。</p>'+assignedUserSelect(r.audience,'caseAudienceSelect')+'</div>';
     }
     function renderUploadSlots(){
       var typeEl=document.getElementById('f_image_type'),modeEl=document.getElementById('f_eye_mode'),singleEl=document.getElementById('f_single_eye'),field=document.getElementById('singleEyeField'),wrap=document.getElementById('uploadSlots');
@@ -190,7 +190,7 @@
         audience:selectedValues('caseAudienceSelect')
       };
       if(!item.code||!item.patient.name){showToast('请至少填写病例号和患者姓名');return;}
-      if(!item.audience.length){showToast('请至少分配1名用户');return;}
+      if(!item.audience.length){showToast('请至少配置1名人员');return;}
       rows.unshift(item);
       closeModal();render();showToast('虚拟病例已保存');
     }
@@ -198,9 +198,9 @@
       var r=rows.find(function(x){return x.code===code;});
       if(!r){showToast('未找到该虚拟病例');return;}
       audienceEditingCode=code;
-      document.getElementById('audienceTitle').textContent='分配用户 - '+code;
-      document.getElementById('audienceDesc').textContent='只分配当前虚拟病例的可见用户，不修改病例内容。';
-      document.getElementById('audienceBody').innerHTML='<div class="section-block"><h3>分配用户</h3>'+assignedUserSelect(r.audience,'audienceSelect')+'</div>';
+      document.getElementById('audienceTitle').textContent='配置人员 - '+code;
+      document.getElementById('audienceDesc').textContent='只配置当前虚拟病例的可见人员，不修改病例内容。';
+      document.getElementById('audienceBody').innerHTML='<div class="section-block"><h3>配置人员</h3>'+assignedUserSelect(r.audience,'audienceSelect')+'</div>';
       document.getElementById('audienceMask').classList.add('open');document.getElementById('audienceModal').classList.add('open');
     }
     function closeAudienceModal(){document.getElementById('audienceMask').classList.remove('open');document.getElementById('audienceModal').classList.remove('open');}
@@ -208,9 +208,9 @@
       var r=rows.find(function(x){return x.code===audienceEditingCode;});
       if(!r){showToast('未找到该虚拟病例');return;}
       var selected=selectedValues('audienceSelect');
-      if(!selected.length){showToast('请至少分配1名用户');return;}
+      if(!selected.length){showToast('请至少配置1名人员');return;}
       r.audience=selected;
-      closeAudienceModal();render();showToast('用户分配已保存');
+      closeAudienceModal();render();showToast('配置人员已保存');
     }
     function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
     render();

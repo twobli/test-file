@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>方案题目管理</title>
+  <title>模型训练题集管理</title>
   <style>
     :root {
       --bg: #f4f7fb;
@@ -722,23 +722,23 @@
       <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
       <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理</a>
       <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
-      <a class="nav-item active" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
+      <a class="nav-item active" href="方案题目管理.html"><span class="nav-icon">◈</span>模型训练题集管理</a>
     </aside>
     <main class="content">
       <div class="page-head">
         <div class="page-copy">
           <p class="eyebrow">LIFE MEDICINE AI EDUCATION ADMIN</p>
-          <h1>方案题目管理</h1>
-          <p class="page-desc">维护「模型训练实训」中使用的选择题集：每套题对应一种疾病（医学图像分类 / 医学图像分割），包含若干道单选题（题干、4 个选项、正确答案、解析）。支持新增和配置人员，学员端实时同步。</p>
+          <h1>模型训练题集管理</h1>
+          <p class="page-desc">维护「模型训练实训」中使用的训练题集：每套题对应一种疾病（医学图像分类 / 医学图像分割），包含若干道单选题（题干、4 个选项、正确答案、解析）。支持新增和配置人员，学员端实时同步。</p>
         </div>
       </div>
-      <div class="section-actionbar"><button class="btn primary" type="button" onclick="openEditModal()">新增选择题集</button></div>
+      <div class="section-actionbar"><button class="btn primary" type="button" onclick="openEditModal()">新增训练题集</button></div>
 
       <section class="panel">
         <div class="panel-head">
           <div>
-            <h2 class="panel-title">选择题集列表</h2>
-            <p class="panel-subtitle">共 <strong id="schemeCount">0</strong> 套选择题集。</p>
+            <h2 class="panel-title">模型训练题集列表</h2>
+            <p class="panel-subtitle">共 <strong id="schemeCount">0</strong> 套训练题集。</p>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
             <div class="form-field" style="margin:0;min-width:220px;"><label for="schemeSearch"
@@ -778,7 +778,7 @@
       onclick="event.stopPropagation()">
       <div class="modal-head">
         <div>
-          <h2 id="editTitle">新增选择题集</h2>
+          <h2 id="editTitle">新增训练题集</h2>
           <p class="panel-subtitle">每套题对应一种疾病，建议 10 道单选题，围绕该疾病的模型训练展开。</p>
         </div><button class="modal-close" type="button" aria-label="关闭" onclick="closeEditModal()">×</button>
       </div>
@@ -803,7 +803,7 @@
         </div>
         <div class="button-row">
           <button class="btn" type="button" onclick="openEditAudienceModal()">配置人员</button>
-          <button class="btn primary" type="button" onclick="saveScheme()">保存选择题集</button>
+          <button class="btn primary" type="button" onclick="saveScheme()">保存训练题集</button>
           <button class="btn" type="button" onclick="closeEditModal()">取消</button>
         </div>
       </div>
@@ -816,7 +816,7 @@
       onclick="event.stopPropagation()">
       <div class="modal-head">
         <div>
-          <h2 id="previewTitle">选择题集预览</h2>
+          <h2 id="previewTitle">训练题集预览</h2>
         </div><button class="modal-close" type="button" aria-label="关闭" onclick="closePreviewModal()">×</button>
       </div>
       <div class="modal-body" id="previewBody"></div>
@@ -847,35 +847,35 @@
 
   <script>
     var SCHEME_BANK_KEY = 'life_med_admin_scheme_bank';
-    // 后台示例选择题集：只保留当前两套基础题
+    // 后台示例训练题集：只保留当前两套基础题
     var SEED_SCHEMES = [
       {
         taskKey: 'medical-classification-basics', title: '医学图像分类基础', category: 'classification', difficulty: '基础', knowledge: '模型训练基础',
         questions: [
-          { id: 'medical-classification-basics-q1', kind: 'reading', reading: '请观察一张眼底彩照：黄斑区见出血和渗出，医生需要先判断整幅图像属于哪一类疾病状态。', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
+          { id: 'medical-classification-basics-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], reading: '请观察一张眼底彩照：黄斑区见出血和渗出，医生需要先判断整幅图像属于哪一类疾病状态。', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
           { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
           { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
           { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
-          { id: 'medical-classification-basics-q5', kind: 'reading', reading: '阅片时医生已经确认图像来源，但还需要判断该图像与哪种疾病标签对应。', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
+          { id: 'medical-classification-basics-q5', kind: 'reading', imageType: 'oct', eyeSide: 'right', images: [{ name: '' }], reading: '阅片时医生已经确认图像来源，但还需要判断该图像与哪种疾病标签对应。', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
           { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
           { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
           { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
-          { id: 'medical-classification-basics-q9', kind: 'reading', reading: '在一组糖网筛查图像里，模型需要尽量把真正的阳性病例找出来，不漏掉高风险患者。', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', explain: '灵敏度反映模型发现阳性病例的能力。' },
+          { id: 'medical-classification-basics-q9', kind: 'reading', imageType: 'octa', eyeSide: 'both', images: [{ name: '' }, { name: '' }], reading: '在一组糖网筛查图像里，模型需要尽量把真正的阳性病例找出来，不漏掉高风险患者。', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', explain: '灵敏度反映模型发现阳性病例的能力。' },
           { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
         ]
       },
       {
         taskKey: 'medical-segmentation-basics', title: '医学图像分割基础', category: 'segmentation', difficulty: '基础', knowledge: '模型训练基础',
         questions: [
-          { id: 'medical-segmentation-basics-q1', kind: 'reading', reading: '请观察一张胸部 CT：医生希望在图像上勾出肺结节的轮廓，而不是只判断整张图像属于哪一类。', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', explain: '分割任务重点是定位目标区域并描述其范围。' },
+          { id: 'medical-segmentation-basics-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], reading: '请观察一张眼底彩照：医生希望在图像上勾出病灶的轮廓，而不是只判断整张图像属于哪一类。', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', explain: '分割任务重点是定位目标区域并描述其范围。' },
           { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', explain: '分割结果一般是每个像素属于目标或背景的标记。' },
           { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', explain: '分割需要明确目标结构的具体轮廓和边界。' },
           { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
-          { id: 'medical-segmentation-basics-q5', kind: 'reading', reading: '如果图像被翻转或旋转，对应的掩码必须保持与目标边界一一对应。', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
+          { id: 'medical-segmentation-basics-q5', kind: 'reading', imageType: 'oct', eyeSide: 'left', images: [{ name: '' }], reading: '如果OCT图像被翻转或旋转，对应的掩码必须保持与目标边界一一对应。', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
           { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', explain: '分割掩码必须与图像保持一致的空间变换。' },
           { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
           { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
-          { id: 'medical-segmentation-basics-q9', kind: 'reading', reading: '当分割目标很小、背景很多时，模型更容易漏掉前景区域。', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', explain: '小目标前景稀少，模型更容易忽略。' },
+          { id: 'medical-segmentation-basics-q9', kind: 'reading', imageType: 'octa', eyeSide: 'right', images: [{ name: '' }], reading: '当OCTA分割目标很小、背景很多时，模型更容易漏掉前景区域。', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', explain: '小目标前景稀少，模型更容易忽略。' },
           { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
         ]
       }
@@ -948,7 +948,7 @@
       var tbody = document.getElementById('schemeTable');
       document.getElementById('schemeCount').textContent = readSchemeBank().length;
       if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无选择题集，点击右上角「新增选择题集」创建。</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无训练题集，点击右上角「新增训练题集」创建。</td></tr>';
         return;
       }
       tbody.innerHTML = list.map(function (e) {
@@ -961,6 +961,7 @@
           '<td><span class="diff-tag ' + diffCls + '">' + escapeHtml(e.difficulty || '高阶') + '</span></td>' +
           '<td>' + cnt + ' 题</td>' +
           '<td><div class="table-actions" style="display:flex;gap:8px;">' +
+          '<button class="btn small" type="button" onclick="openPreviewModal(\'' + escapeHtml(e.taskKey) + '\')">预览</button>' +
           '<button class="btn small" type="button" onclick="openAudienceModal(\'' + escapeHtml(e.taskKey) + '\')">配置人员</button>' +
           '</div></td>' +
           '</tr>';
@@ -972,12 +973,28 @@
     function blankQuestion() {
       return { id: '', kind: 'choice', q: '', options: ['', '', '', ''], answer: 'A', explain: '', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }] };
     }
+    function readingImageTypeValue(value) {
+      var raw = String(value == null ? '' : value).trim();
+      var key = raw.toLowerCase();
+      if (key === 'oct') return 'oct';
+      if (key === 'octa') return 'octa';
+      return 'fundus';
+    }
     function readingImageTypeLabel(value) {
+      value = readingImageTypeValue(value);
       if (value === 'oct') return 'OCT';
       if (value === 'octa') return 'OCTA';
       return '眼底彩照';
     }
+    function readingEyeSideValue(value) {
+      var raw = String(value == null ? '' : value).trim();
+      var key = raw.toLowerCase();
+      if (key === 'left' || raw === '左眼') return 'left';
+      if (key === 'right' || raw === '右眼') return 'right';
+      return 'both';
+    }
     function readingEyeSideLabel(value) {
+      value = readingEyeSideValue(value);
       if (value === 'left') return '左眼';
       if (value === 'right') return '右眼';
       return '双眼';
@@ -1007,11 +1024,13 @@
         var isReading = (q.kind || 'choice') === 'reading';
         var kindOpts = '<option value="choice"' + (!isReading ? ' selected' : '') + '>普通单选题</option>' +
           '<option value="reading"' + (isReading ? ' selected' : '') + '>阅片单选题</option>';
+        var currentImageType = readingImageTypeValue(q.imageType || q.readingType || 'fundus');
+        var currentEyeSide = readingEyeSideValue(q.eyeSide || q.eye || 'both');
         var imageTypeOpts = ['fundus', 'oct', 'octa'].map(function (value) {
-          return '<option value="' + value + '"' + (String(q.imageType || 'fundus') === value ? ' selected' : '') + '>' + readingImageTypeLabel(value) + '</option>';
+          return '<option value="' + value + '"' + (currentImageType === value ? ' selected' : '') + '>' + readingImageTypeLabel(value) + '</option>';
         }).join('');
         var eyeSideOpts = ['both', 'left', 'right'].map(function (value) {
-          return '<option value="' + value + '"' + (String(q.eyeSide || 'both') === value ? ' selected' : '') + '>' + readingEyeSideLabel(value) + '</option>';
+          return '<option value="' + value + '"' + (currentEyeSide === value ? ' selected' : '') + '>' + readingEyeSideLabel(value) + '</option>';
         }).join('');
         var readingField = isReading ? (
           '<div class="reading-block">' +
@@ -1021,9 +1040,9 @@
           '<div class="form-field"><label>眼别</label><select class="select" id="q_eyeSide_' + i + '" onchange="toggleReadingEyeSide(' + i + ')">' + eyeSideOpts + '</select></div>' +
           '</div>' +
           '<div class="image-slot-grid" style="margin-top:12px;">' +
-          Array.from({ length: readingEyeSideCount(String(q.eyeSide || 'both')) }).map(function (_, slotIndex) {
+          Array.from({ length: readingEyeSideCount(currentEyeSide) }).map(function (_, slotIndex) {
             return '<div class="image-slot">' +
-              '<div class="slot-name">' + escapeHtml(readingSlotLabel(String(q.eyeSide || 'both'), slotIndex)) + '</div>' +
+              '<div class="slot-name">' + escapeHtml(readingSlotLabel(currentEyeSide, slotIndex)) + '</div>' +
               '<input class="input" type="file" accept="image/*" id="q_image_' + i + '_' + slotIndex + '">' +
               '<div class="slot-file">已选择：' + escapeHtml(readingFileName(q, slotIndex) || '暂无文件') + '</div>' +
               '</div>';
@@ -1117,7 +1136,7 @@
         var list = readSchemeBank();
         for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { editing = list[i]; break; } }
       }
-      document.getElementById('editTitle').textContent = editing ? '编辑选择题集' : '新增选择题集';
+      document.getElementById('editTitle').textContent = editing ? '编辑训练题集' : '新增训练题集';
       document.getElementById('editOriginalKey').value = editing ? editing.taskKey : '';
       document.getElementById('schemeTitle').value = editing ? (editing.title || '') : '';
       document.getElementById('schemeCategory').value = editing ? (editing.category || 'classification') : 'classification';
@@ -1125,8 +1144,7 @@
       editingAudience = editing && Array.isArray(editing.audience) ? editing.audience.slice() : [];
       if (editing && Array.isArray(editing.questions) && editing.questions.length) {
         editingQuestions = editing.questions.map(function (q) {
-          var readingSide = String(q.eyeSide || q.eye || 'both');
-          if (readingSide !== 'left' && readingSide !== 'right') readingSide = 'both';
+          var readingSide = readingEyeSideValue(q.eyeSide || q.eye || 'both');
           var readingCount = readingEyeSideCount(readingSide);
           var imageList = Array.isArray(q.images) ? q.images : [];
           var images = [];
@@ -1140,7 +1158,7 @@
             options: (Array.isArray(q.options) ? q.options.slice(0, 4) : ['', '', '', '']),
             answer: String(q.answer || 'A').toUpperCase(),
             explain: q.explain || '',
-            imageType: String(q.imageType || q.image || 'fundus'),
+            imageType: readingImageTypeValue(q.imageType || q.image || q.readingType || 'fundus'),
             eyeSide: readingSide,
             images: images
           };
@@ -1156,7 +1174,7 @@
     function openEditAudienceModal() {
       var mask = document.getElementById('audienceMask');
       if (!mask) return;
-      var title = (val('schemeTitle') || '').trim() || '当前选择题集';
+      var title = (val('schemeTitle') || '').trim() || '当前训练题集';
       var selected = Array.isArray(editingAudience) ? editingAudience : [];
       var html = '<div class="form-field full"><label>题集名称</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(title) + '</div></div>' +
         '<div class="form-field full" style="margin-top:10px;"><label>可见人员</label><div class="personnel-grid">' +
@@ -1181,7 +1199,7 @@
       editingAudience = [];
       for (var i = 0; i < checks.length; i++) editingAudience.push(checks[i].value);
       closeAudienceModal();
-      showToast('已暂存配置人员，请保存选择题集后生效。');
+      showToast('已暂存配置人员，请保存训练题集后生效。');
     }
     function closeEditModal(event) {
       var mask = document.getElementById('editMask');
@@ -1235,7 +1253,7 @@
       writeSchemeBank(list);
       renderSchemeTable();
       closeEditModal();
-      showToast((editingKey ? '已更新' : '已新增') + '选择题集：' + title + '（' + questions.length + ' 题）');
+      showToast((editingKey ? '已更新' : '已新增') + '训练题集：' + title + '（' + questions.length + ' 题）');
     }
 
     /* ---- 预览 ---- */
@@ -1245,7 +1263,7 @@
       var list = readSchemeBank();
       var e = null;
       for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { e = list[i]; break; } }
-      if (!e) { showToast('未找到该选择题集'); return; }
+      if (!e) { showToast('未找到该训练题集'); return; }
       var body = document.getElementById('previewBody');
       var html = '<div class="form-field full"><label>题集名称</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(e.title) + '</div></div>';
       html += '<div class="grid" style="margin-top:6px;">' +
@@ -1310,7 +1328,7 @@
       var list = readSchemeBank();
       var entry = null;
       for (var i = 0; i < list.length; i++) { if (list[i].taskKey === taskKey) { entry = list[i]; break; } }
-      if (!entry) { showToast('未找到该选择题集'); return; }
+      if (!entry) { showToast('未找到该训练题集'); return; }
       audienceEditingKey = taskKey;
       var selected = Array.isArray(entry.audience) ? entry.audience : [];
       var html = '<div class="form-field full"><label>题集名称</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(entry.title) + '</div></div>' +
@@ -1337,7 +1355,7 @@
       var list = readSchemeBank();
       var entry = null;
       for (var i = 0; i < list.length; i++) { if (list[i].taskKey === audienceEditingKey) { entry = list[i]; break; } }
-      if (!entry) { showToast('未找到该选择题集'); return; }
+      if (!entry) { showToast('未找到该训练题集'); return; }
       var checks = document.querySelectorAll('#audienceBody .audience-check:checked');
       var selected = [];
       for (var j = 0; j < checks.length; j++) selected.push(checks[j].value);

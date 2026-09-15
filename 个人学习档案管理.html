@@ -905,20 +905,18 @@ function buildModelArchiveCard(row) {
         "<div class='model-archive-head'>" +
         "<div style='min-width:0;flex:1;'>" +
         "<div class='model-archive-title'>" + escapeArchiveHtml(row.taskTitle || '-') + "</div>" +
-        "<div class='model-archive-subtitle'>" + escapeArchiveHtml(getModelCategoryLabel(row.category) + ' · ' + (row.questionCount || 0) + ' 题 · 阅片题 ' + (row.readingCount || 0) + ' 题') + "</div>" +
+        "<div class='model-archive-subtitle'>" + escapeArchiveHtml(getModelCategoryLabel(row.category) + ' · ' + (row.questionCount || 0) + ' 题') + "</div>" +
         "</div>" +
         "<span class='status done'>已答完</span>" +
         "</div>" +
         "<div class='model-archive-tags'>" +
         "<span class='tag blue'>" + escapeArchiveHtml(getModelCategoryLabel(row.category)) + "</span>" +
         "<span class='tag'>" + escapeArchiveHtml('提交时间：' + formatArchiveDateTime(finishedAt)) + "</span>" +
-        "<span class='tag'>" + escapeArchiveHtml('题集档次：' + band.label) + "</span>" +
         "</div>" +
         "<div class='model-archive-meta'>" +
         "<div>准确率<strong>" + escapeArchiveHtml(formatArchiveAccuracy(pct)) + "</strong></div>" +
         "<div>题集类型<strong>" + escapeArchiveHtml(getModelCategoryLabel(row.category)) + "</strong></div>" +
         "<div>题量<strong>" + escapeArchiveHtml((row.questionCount || 0) + ' 题') + "</strong></div>" +
-        "<div>阅片题<strong>" + escapeArchiveHtml((row.readingCount || 0) + ' 题') + "</strong></div>" +
         "</div>" +
         "<div class='model-archive-footer'>" +
         "<div class='model-archive-score'><b>" + escapeArchiveHtml(formatArchiveAccuracy(pct)) + "</b><span>准确率</span></div>" +

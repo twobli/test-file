@@ -1,0 +1,207 @@
+﻿Diagnose log at 2026-09-14T03:47:01Z
+
+AppPath: D:\应用软件\Git\Git\mingw64\bin\git-credential-manager.exe
+InstallDir: D:\应用软件\Git\Git\mingw64\bin\
+Version: 2.8.0+d5e8a3442d48cc5efe7014e093e44242c0bd395f
+
+------------
+Diagnostic: Environment
+Skipped: False
+Success: True
+Exception: None
+Log:
+OSType: Windows
+OSVersion: 10.0 (build 26200)
+Reading environment variables... OK
+ Variables:
+OneDriveConsumer=C:\Users\Windows\OneDrive
+ProgramFiles(x86)=C:\Program Files (x86)
+MSYSTEM=MINGW64
+ProgramW6432=C:\Program Files
+PAGER=cat
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 154 Stepping 4, GenuineIntel
+ZES_ENABLE_SYSMAN=1
+TMP=C:\Users\Windows\AppData\Local\Temp
+CODEX_INTERNAL_ORIGINATOR_OVERRIDE=Codex Desktop
+Path=D:/应用软件/Git/Git/mingw64/libexec/git-core;D:\应用软件\Git\Git\mingw64\bin;D:\应用软件\Git\Git\usr\bin;C:\Users\Windows\bin;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\Windows\.codex\tmp\arg0\codex-arg0IDtABf;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\libheif\libheif\bin;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\jxrlib\jxrlib\bin;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\poppler\Library\bin;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\override;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell;C:\Users\Windows\AppData\Local\Microsoft\WindowsApps;C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;D:\应用软件\Git\Git\cmd;D:\应用软件\vs code\Microsoft VS Code\bin;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\fallback;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin;C:\Users\Windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd;C:\Users\Windows\AppData\Local\OpenAI\Codex\bin\6fdec9b372c2c0fd;C:\Users\Windows\AppData\Local\OpenAI\Codex\bin\7ac07f4ce733f89a
+HOMEPATH=\Users\Windows
+RUST_LOG=warn
+PROCESSOR_REVISION=9a04
+TMPDIR=C:\Users\Windows\AppData\Local\Temp
+TEMP=C:\Users\Windows\AppData\Local\Temp
+USERPROFILE=C:\Users\Windows
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+LOGONSERVER=\\DESKTOP-VM1GUU5
+TERM=dumb
+NO_COLOR=1
+PUBLIC=C:\Users\Public
+ZSH_TMUX_AUTOSTARTED=true
+CODEX_THREAD_ID=01a07fc0-c2a4-7913-9a63-e36df6d1d9c3
+CODEX_MCP_NODE_PATH=C:\Users\Windows\AppData\Local\OpenAI\Codex\runtimes\cua_node\e7fe122ad3cbcd58\bin\node.exe
+GH_PAGER=cat
+OneDrive=C:\Users\Windows\OneDrive
+PROCESSOR_ARCHITECTURE=AMD64
+CommonProgramFiles=C:\Program Files\Common Files
+windir=C:\Windows
+SystemRoot=C:\Windows
+CODEX_APP_TOOLS_PIPE_PATH=\\.\pipe\codex-browser-use-7b5fd51a-d824-4617-9d6a-c787eb6c58b7
+CODEX_SHELL=1
+ProgramData=C:\ProgramData
+LC_CTYPE=C.UTF-8
+ZSH_TMUX_AUTOSTART=false
+PLINK_PROTOCOL=ssh
+ALLUSERSPROFILE=C:\ProgramData
+CommonProgramW6432=C:\Program Files\Common Files
+USERNAME=Windows
+GIT_EXEC_PATH=D:/应用软件/Git/Git/mingw64/libexec/git-core
+DISABLE_AUTO_UPDATE=true
+DriverData=C:\Windows\System32\Drivers\DriverData
+HOMEDRIVE=C:
+CODEX_SAGE_BACKFILL_TRACKER_TAB_REUSE=1
+GIT_TRACE2_PARENT_SID=e60bfd14-2230-4088-b5dd-5473f83a7b43
+SystemDrive=C:
+NUMBER_OF_PROCESSORS=12
+OS=Windows_NT
+CODEX_SESSION_ID=01a07fc0-c2a4-7913-9a63-e36df6d1d9c3
+CODEX_PERMISSION_PROFILE=:danger-full-access
+LANG=C.UTF-8
+ComSpec=C:\Windows\system32\cmd.exe
+USERDOMAIN_ROAMINGPROFILE=DESKTOP-VM1GUU5
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL
+HOME=C:\Users\Windows
+PSModulePath=C:\Users\Windows\Documents\PowerShell\Modules;C:\Program Files\PowerShell\Modules;c:\users\windows\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\Modules;C:\Users\Windows\Documents\WindowsPowerShell\Modules;C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+ProgramFiles=C:\Program Files
+CODEX_CI=1
+LC_ALL=C.UTF-8
+APPDATA=C:\Users\Windows\AppData\Roaming
+USERDOMAIN=DESKTOP-VM1GUU5
+COMPUTERNAME=DESKTOP-VM1GUU5
+LOCALAPPDATA=C:\Users\Windows\AppData\Local
+SHELL=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+GIT_PAGER=cat
+COLORTERM=
+PROCESSOR_LEVEL=6
+LOG_FORMAT=json
+
+
+------------
+Diagnostic: File system
+Skipped: False
+Success: True
+Exception: None
+Log:
+Temporary directory is 'C:\Users\Windows\AppData\Local\Temp\'...
+Checking basic file I/O...
+Writing to temporary file 'C:\Users\Windows\AppData\Local\Temp\a50c4d70a80a3b08420a3ceb'... OK
+Reading from temporary file 'C:\Users\Windows\AppData\Local\Temp\a50c4d70a80a3b08420a3ceb'... OK
+Deleting temporary file 'C:\Users\Windows\AppData\Local\Temp\a50c4d70a80a3b08420a3ceb'... OK
+Testing IFileSystem instance...
+UserHomePath: C:\Users\Windows
+UserDataDirectoryPath: C:\Users\Windows\.gcm
+GetCurrentDirectory(): C:\Users\Windows\Desktop\生命医学原型图-HTML
+
+------------
+Diagnostic: Networking
+Skipped: False
+Success: True
+Exception: None
+Log:
+Checking networking and HTTP stack...
+Creating HTTP client... OK
+IsNetworkAvailable: True
+Sending HEAD request to http://example.com... OK
+Sending HEAD request to https://example.com... OK
+Acquiring free TCP port... OK
+Testing local HTTP loopback connections...
+Creating new HTTP listener for http://localhost:55813/... OK
+Waiting for loopback connection... OK
+Writing response... OK
+Waiting for response data... OK
+Loopback connection data OK
+
+------------
+Diagnostic: Git
+Skipped: False
+Success: True
+Exception: None
+Log:
+Getting Git version... OK
+Git version is '2.55.0.windows.2'
+Locating current repository...Git repository at 'C:/Users/Windows/Desktop/生命医学原型图-HTML/.git'
+ OK
+Listing all Git configuration... OK
+Git configuration:
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	diff.astextplain.textconv=astextplain
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	http.sslbackend=schannel
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	core.autocrlf=true
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	core.fscache=true
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	core.symlinks=false
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	pull.rebase=false
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	credential.helper=manager
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	credential.https://dev.azure.com.usehttppath=true
+file:"D:/\345\272\224\347\224\250\350\275\257\344\273\266/Git/Git/etc/gitconfig"	init.defaultbranch=master
+file:C:/Users/Windows/.gitconfig	user.name=twobli
+file:C:/Users/Windows/.gitconfig	user.email=727385927@qq.com
+file:C:/Users/Windows/.gitconfig	safe.directory=*
+file:.git/config	core.repositoryformatversion=0
+file:.git/config	core.filemode=false
+file:.git/config	core.bare=false
+file:.git/config	core.logallrefupdates=true
+file:.git/config	core.symlinks=false
+file:.git/config	core.ignorecase=true
+file:.git/config	remote.origin.url=https://github.com/LIAOyykycg/Life_Medicine_Theme_Library.git
+file:.git/config	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+file:.git/config	branch.main.remote=origin
+file:.git/config	branch.main.vscode-merge-base=origin/main
+file:.git/config	branch.main.merge=refs/heads/main
+file:.git/config	remote.test-file.url=https://github.com/twobli/test-file.git
+file:.git/config	remote.test-file.fetch=+refs/heads/*:refs/remotes/test-file/*
+file:.git/config	user.name=twobli
+file:.git/config	user.email=727385927@qq.com
+
+
+------------
+Diagnostic: Credential storage
+Skipped: False
+Success: True
+Exception: None
+Log:
+ICredentialStore instance is of type: CredentialStore
+Writing test credential... OK
+Reading test credential... OK
+Deleting test credential... OK
+
+------------
+Diagnostic: Microsoft authentication (AAD/MSA)
+Skipped: False
+Success: True
+Exception: None
+Log:
+Broker is not enabled.
+Flow type is: Auto
+Gathering MSAL token cache data... OK
+CacheDirectory: C:\Users\Windows\AppData\Local\.IdentityService
+CacheFileName: msal.cache
+CacheFilePath: C:\Users\Windows\AppData\Local\.IdentityService\msal.cache
+Creating cache helper... OK
+Verifying MSAL token cache persistence... OK
+
+------------
+Diagnostic: GitHub API
+Skipped: False
+Success: False
+Exception:
+System.Net.Http.HttpRequestException: 响应状态代码不指示成功: 403 (rate limit exceeded)。
+   在 System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   在 GitHub.GitHubRestApi.<GetMetaInfoAsync>d__5.MoveNext()
+--- 引发异常的上一位置中堆栈跟踪的末尾 ---
+   在 System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   在 System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   在 GitHub.Diagnostics.GitHubApiDiagnostic.<RunInternalAsync>d__2.MoveNext()
+--- 引发异常的上一位置中堆栈跟踪的末尾 ---
+   在 System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   在 System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   在 GitCredentialManager.Diagnostics.Diagnostic.<RunAsync>d__6.MoveNext()
+Log:
+Using 'https://github.com/' as API target.
+Querying '/meta' endpoint...
