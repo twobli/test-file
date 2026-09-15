@@ -134,7 +134,7 @@
                 <input id="credentialSearchInput" type="search" placeholder="输入关键词查询学习成果" onkeydown="handleCredentialSearchKey(event)">
                 <button type="button" onclick="applyCredentialSearch()">搜索</button>
             </div>
-            <button class="btn btn-primary" onclick="alert('学习成果生成任务已提交')">生成学习成果</button>
+            <button class="btn btn-primary" onclick="refreshCredentialPage()">刷新页面</button>
         </div>
     </div>
     <section class="card">
@@ -725,6 +725,12 @@ function switchCredentialTab(type, button) {
     if (type === 'experiment') renderExperimentCerts();
     if (type === 'badge') renderBadgePanel();
     filterActiveCredentialPanel();
+}
+function refreshCredentialPage() {
+    var message = '刷新页面之后，系统将根据你最新的课程学习成果、实验成果、考试成果等，更新你的学分、证书、认证以及徽章。';
+    if (confirm(message + '\n\n是否现在刷新页面？')) {
+        window.location.reload();
+    }
 }
 function toggleSubmenu(el) { el.classList.toggle('expanded'); var submenu = el.nextElementSibling; if (submenu) submenu.classList.toggle('open'); }
 function logout() { if (confirm('确定要退出登录吗？')) { localStorage.removeItem('life_med_user'); window.location.href = 'login.html'; } }
