@@ -845,11 +845,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                     <div class="ai-qa-subtitle" id="aiQaSubtitle">基于当前医学课程范围进行自然语言问答</div>
                 </div>
                 <div class="ai-qa-actions">
-                    <select class="ai-model-select" aria-label="模型选择">
-                        <option>医学课程专科模型</option>
-                        <option>眼底图像分析模型</option>
-                        <option>通用医学语言模型</option>
-                    </select>
                     <button class="btn btn-outline btn-sm" onclick="returnFromAiQa()">返回课程</button>
                     <button class="btn btn-outline btn-sm" onclick="resetCurrentAiDialog()">重置当前问答</button>
                 </div>
@@ -875,13 +870,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                 </div>
             </div>
             <div class="ai-qa-footer">
-                <div class="chat-quick-questions" id="aiQuickQuestions">
-                    <button class="quick-btn" onclick="askQuickQuestion('糖尿病视网膜病变怎么分级？')">DR分级</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('高血压视网膜病变KWB分级怎么理解？')">KWB分级</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('OCT和FFA有什么区别？')">OCT/FFA区别</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('青光眼视野检查怎么看？')">青光眼视野</button>
-                    <button class="quick-btn" onclick="askQuickQuestion('抗VEGF治疗有什么作用？')">抗VEGF治疗</button>
-                </div>
                 <div class="chat-input-area">
                     <input type="text" id="aiChatInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')sendAiMessage()">
                     <button class="send-btn" onclick="sendAiMessage()">➤</button>

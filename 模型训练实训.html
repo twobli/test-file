@@ -1321,20 +1321,20 @@
                 <li><strong
                         style="color:var(--primary);">内置题库</strong>：医学图像分类基础、医学图像分割基础两套单选题，覆盖训练集、验证集、测试集、标注、过拟合、数据泄漏、Accuracy、Sensitivity、Specificity、Dice
                     与 IoU 等核心概念。</li>
-                <li><strong style="color:var(--primary);">后台「方案题目管理」</strong>：管理员维护的选择题集（每 taskKey
+                <li><strong style="color:var(--primary);">后台「模型训练题集管理」</strong>：管理员维护的训练题集（每 taskKey
                     一套题），学员切题时实时同步最新题库，已存在的 taskKey 覆盖、缺失的追加。</li>
                 <li><strong style="color:var(--primary);">「标注平台」</strong>：从标注平台导入数据集后，按数据集派生题型，与题集联动。</li>
             </ul>
             <div
                 style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px;margin:10px 0;font-size:11px;">
                 <strong>数据流：</strong><br>
-                方案题目管理（题库主入口）⇄ 标注平台 → 任务审核通过 → 导入为新数据集 → 题集（自动纳入）→ 模型训练实训（单选题作答）
+                模型训练题集管理（题库主入口）⇄ 标注平台 → 任务审核通过 → 导入为新数据集 → 题集（自动纳入）→ 模型训练实训（单选题作答）
             </div>
             <div class="form-actions">
                 <button class="btn" onclick="closeModal('dataSourceModal')">关闭</button>
                 <button class="btn"
                     onclick="closeModal('dataSourceModal');location.href='ai-education-admin/方案题目管理.html'"
-                    style="border:1px solid var(--primary);color:var(--primary);background:#fff;">前往方案题目管理</button>
+                    style="border:1px solid var(--primary);color:var(--primary);background:#fff;">前往模型训练题集管理</button>
                 <button class="btn btn-primary"
                     onclick="closeModal('dataSourceModal');location.href='数据标注与AI实训.html'">前往标注模块</button>
             </div>
@@ -1437,7 +1437,7 @@
                     { id: 'medical-classification-retina-grade-q1', kind: 'reading', readingType: '眼底彩照', eyeSide: '双眼', reading: '请观察一张眼底照：视网膜可见多处微动脉瘤和点状出血，医生需要判断病变分级。', q: '该题最符合的任务类型是：', options: ['整幅图像分类', '病灶轮廓分割', '文本病历生成', '设备质控检测'], answer: 'A', score: 10, explain: '分级判断仍属于分类任务。' },
                     { id: 'medical-classification-retina-grade-q2', kind: 'choice', q: '在视网膜病变分级中，模型输出通常是：', options: ['疾病等级或风险类别', '病灶的精确边界', '患者的体温', '图像的压缩格式'], answer: 'A', score: 10, explain: '分级任务输出通常是类别或等级。' },
                     { id: 'medical-classification-retina-grade-q3', kind: 'choice', q: '如果高阶筛查任务特别关注漏诊，应优先参考：', options: ['Sensitivity', '文件名长度', '图像宽高比', '采集日期'], answer: 'A', score: 10, explain: '漏诊控制和灵敏度密切相关。' },
-                    { id: 'medical-classification-retina-grade-q4', kind: 'reading', readingType: 'OCT', eyeSide: '左右眼', reading: '同一患者左右眼图像差异较大，模型要分别给出判断。', q: '这说明训练时应注意：', options: ['样本多样性和左右眼独立标注', '只保留一侧眼图像', '把所有标签统一成无病', '不需要验证集'], answer: 'A', score: 10, explain: '多样数据和独立标注有助于提升模型稳定性。' },
+                    { id: 'medical-classification-retina-grade-q4', kind: 'reading', readingType: 'OCT', eyeSide: '双眼', reading: '同一患者左右眼图像差异较大，模型要分别给出判断。', q: '这说明训练时应注意：', options: ['样本多样性和左右眼独立标注', '只保留一侧眼图像', '把所有标签统一成无病', '不需要验证集'], answer: 'A', score: 10, explain: '多样数据和独立标注有助于提升模型稳定性。' },
                     { id: 'medical-classification-retina-grade-q5', kind: 'choice', q: '如果病变分级标签之间边界模糊，说明：', options: ['类别间存在较强主观性', '模型一定不能训练', '图像必须删除', '分级不需要专家参与'], answer: 'A', score: 10, explain: '部分分级任务本身具有一定主观性和边界模糊性。' },
                     { id: 'medical-classification-retina-grade-q6', kind: 'choice', q: '分类模型常见的输入组织方式是：', options: ['整幅图像与其类别标签', '图像与像素掩码', '患者姓名与电话', '只输入一个边框'], answer: 'A', score: 10, explain: '分类任务以整幅图像对应类别标签训练。' },
                     { id: 'medical-classification-retina-grade-q7', kind: 'reading', readingType: 'OCTA', eyeSide: '右眼', reading: '医生在阅片时先识别图像是否有明显渗出，再决定病变分级。', q: '这类任务更依赖哪种信息？', options: ['图像整体特征', '像素级轮廓', '病史编号', '检查设备型号'], answer: 'A', score: 10, explain: '分类更依赖整体视觉特征。' },
@@ -1463,9 +1463,9 @@
             }
         };
 
-        /* =============== 题库与后台「方案题目管理」合并（选择题格式） ===============
+        /* =============== 题库与后台「方案题目管理」合并 ===============
            后台 ai-education-admin/方案题目管理.html 维护 life_med_admin_scheme_bank，
-           新 schema：{ taskKey, title, category, difficulty, knowledge, questions:[{id,q,options,answer,score,explain}] }
+           schema：{ taskKey, title, category, difficulty, knowledge, questions:[{id,kind,q,options,answer,score,explain,imageType,eyeSide,images}] }
            已存在的 taskKey 会被后台最新版本覆盖，缺失的 taskKey 会被追加。
         */
         var ADMIN_SCHEME_BANK_KEY = 'life_med_admin_scheme_bank';
@@ -1520,12 +1520,20 @@
                 if (!key) return;
                 var realQs = e.questions.map(function (q, i) {
                     var kind = String(q.kind || q.type || 'choice').toLowerCase();
-                    if (kind !== 'reading') kind = 'choice';
+                    var isReading = kind === 'reading' || q.imageType || q.eyeSide || q.eye || Array.isArray(q.images);
+                    if (!isReading) kind = 'choice';
+                    else kind = 'reading';
                     return {
                         id: q.id || (key + '-q' + (i + 1)),
                         q: q.q || '',
                         kind: kind,
                         reading: q.reading || q.readingPrompt || '',
+                        readingType: q.readingType || '',
+                        imageType: normalizeReadingImageType(q.imageType || q.image || q.readingType) || '眼底彩照',
+                        eyeSide: normalizeReadingEyeSide(q.eyeSide || q.eye || q.laterality) || '双眼',
+                        images: Array.isArray(q.images) ? q.images.map(function (item) {
+                            return { name: item && item.name ? item.name : '' };
+                        }) : [],
                         options: Array.isArray(q.options) ? q.options.slice(0, 4) : [],
                         answer: String(q.answer || 'A').toUpperCase(),
                         score: Number(q.score) || 10,
@@ -1861,25 +1869,43 @@
             toast('本套阅卷完成：准确率 ' + (att.maxScore > 0 ? Math.round(total / att.maxScore * 100) : 0) + '%', 'success');
         }
 
+        function normalizeReadingImageType(value) {
+            var raw = String(value == null ? '' : value).trim();
+            var key = raw.toLowerCase();
+            if (key === 'octa') return 'OCTA';
+            if (key === 'oct' || key === 'oct scan' || /光学相干断层|^oct$/i.test(raw)) return 'OCT';
+            if (key === 'fundus' || key === 'fundus photo' || key === 'fundus photography' || /眼底彩照|眼底照|眼底照片|彩色眼底/.test(raw)) return '眼底彩照';
+            return '';
+        }
+
+        function normalizeReadingEyeSide(value) {
+            var raw = String(value == null ? '' : value).trim();
+            var key = raw.toLowerCase();
+            if (key === 'both' || raw === '左右眼') return '双眼';
+            if (key === 'left') return '左眼';
+            if (key === 'right') return '右眼';
+            if (raw === '双眼' || raw === '左眼' || raw === '右眼') return raw;
+            return '';
+        }
+
         function getReadingMeta(q) {
             var text = String(q && q.reading ? q.reading : '');
-            var type = String(q && (q.readingType || q.imageType || q.modality) ? (q.readingType || q.imageType || q.modality) : '').trim();
-            var eye = String(q && (q.eyeSide || q.eye || q.laterality) ? (q.eyeSide || q.eye || q.laterality) : '').trim();
+            var type = normalizeReadingImageType(q && (q.imageType || q.readingType || q.modality));
+            var eye = normalizeReadingEyeSide(q && (q.eyeSide || q.eye || q.laterality));
             if (!type) {
                 if (/OCTA/i.test(text)) type = 'OCTA';
                 else if (/OCT/i.test(text)) type = 'OCT';
                 else if (/眼底彩照|眼底照|眼底照片/.test(text)) type = '眼底彩照';
-                else if (/CT/.test(text)) type = 'CT';
-                else if (/MRI/.test(text)) type = 'MRI';
-                else type = '影像阅片';
+                else type = '眼底彩照';
             }
             if (!eye) {
                 if (/左眼/.test(text)) eye = '左眼';
                 else if (/右眼/.test(text)) eye = '右眼';
                 else if (/双眼|左右眼/.test(text)) eye = '双眼';
-                else if (/眼底|视网膜|糖网|黄斑|视盘/.test(text)) eye = '双眼';
-                else eye = '未注明';
+                else eye = '双眼';
             }
+            if (type !== '眼底彩照' && type !== 'OCT' && type !== 'OCTA') type = '眼底彩照';
+            if (eye !== '双眼' && eye !== '左眼' && eye !== '右眼') eye = '双眼';
             return { type: type, eye: eye };
         }
 
@@ -2066,14 +2092,10 @@
                 var answered = !!best && !isRedoing;
                 var scoreHtml = answered
                     ? '<span class="task-score-percent">' + Math.round((best.pct || 0) * 100) + '%</span><span class="task-score-label">准确率</span>'
-                    : '<span class="task-score-empty">暂无提交</span>';
+                    : '';
                 var answeredClass = answered ? 'answered' : '';
                 var difficultyClass = (t.difficulty === '基础') ? 'difficulty-basic'
                     : ((t.difficulty === '进阶') ? 'difficulty-medium' : 'difficulty-advanced');
-                var readingCount = 0;
-                (t.questions || []).forEach(function (q) {
-                    if (q && String(q.kind || 'choice').toLowerCase() === 'reading') readingCount++;
-                });
                 var statusClass = answered ? 'status-done' : 'status-undone';
                 var statusLabel = answered ? '已答完' : '未作答';
                 html += '<div class="task-card ' + active + ' ' + answeredClass + '" onclick="selectTask(\'' + escapeHtml(key) + '\')">'
@@ -2081,9 +2103,9 @@
                     + '<div class="task-heading"><div class="task-title">' + escapeHtml(t.disease) + '</div>'
                     + '<span class="task-tag ' + statusClass + '">' + statusLabel + '</span>'
                     + '<span class="task-tag ' + difficultyClass + '">' + escapeHtml(t.difficulty || '高阶') + '</span></div>'
-                    + '<div class="task-subtitle">' + escapeHtml(CATEGORY_LABELS[t.category || 'classification'] + ' · 共 ' + (t.questions || []).length + ' 题 · ' + readingCount + ' 道阅片题') + '</div>'
+                    + '<div class="task-subtitle">' + escapeHtml(CATEGORY_LABELS[t.category || 'classification'] + ' · 共 ' + (t.questions || []).length + ' 题') + '</div>'
                     + '</div>'
-                    + '<div class="task-score">' + scoreHtml + '</div>'
+                    + (scoreHtml ? '<div class="task-score">' + scoreHtml + '</div>' : '')
                     + '</div>';
             });
             list.innerHTML = html;

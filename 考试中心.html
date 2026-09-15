@@ -1569,7 +1569,7 @@ function buildSyntheticDetailRows(item, attemptIndex, accuracy) {
         var isCorrect = !wrongMap[j];
         var userText;
         if (isCorrect) {
-            userText = correctText;
+            userText = getUserAnswerText(q, q.answer);
         } else if (q.type === '单选题') {
             var wrongOpt = getWrongOptionIndex(q.answer, (q.options || []).length, attemptIndex + j + 1);
             userText = getOptionLabel(wrongOpt);
@@ -1581,6 +1581,8 @@ function buildSyntheticDetailRows(item, attemptIndex, accuracy) {
             } else {
                 userText = '未完整作答';
             }
+        } else if (q.type === '判断题') {
+            userText = getOptionLabel(q.answer === 0 ? 1 : 0, q);
         } else {
             userText = '答题要点不完整';
         }
@@ -1836,7 +1838,114 @@ function setupMixedExamQuestions() {
         knowledge: '角膜病病例分析',
         difficulty: '高阶'
     };
+    examQuestions[5] = {
+        q: '糖尿病视网膜病变筛查应结合患者病程和全身危险因素定期进行眼底检查。',
+        options: ['正确', '错误'],
+        answer: 0,
+        type: '判断题',
+        score: 2,
+        knowledge: 'DR分期与筛查',
+        difficulty: '基础'
+    };
+    examQuestions[9] = {
+        q: '糖尿病视网膜病变患者出现突发视力下降时，可以先观察数周再决定是否就医。',
+        options: ['正确', '错误'],
+        answer: 1,
+        type: '判断题',
+        score: 2,
+        knowledge: 'DR分期与处置',
+        difficulty: '基础'
+    };
+    examQuestions[14] = {
+        q: 'IRMA位于视网膜内，通常不突破内界膜，因此与视网膜新生血管不是同一概念。',
+        options: ['正确', '错误'],
+        answer: 0,
+        type: '判断题',
+        score: 2,
+        knowledge: 'DR分期与筛查',
+        difficulty: '基础'
+    };
+    examQuestions[20] = {
+        q: '正常眼压性青光眼患者的眼压可以始终高于21 mmHg。',
+        options: ['正确', '错误'],
+        answer: 1,
+        type: '判断题',
+        score: 3,
+        knowledge: '青光眼诊断技术',
+        difficulty: '进阶'
+    };
+    examQuestions[26] = {
+        q: 'Goldmann压平眼压计的测量原理与Imbert-Fick定律有关。',
+        options: ['正确', '错误'],
+        answer: 0,
+        type: '判断题',
+        score: 3,
+        knowledge: '青光眼诊断技术',
+        difficulty: '进阶'
+    };
+    examQuestions[32] = {
+        q: 'OCT可以用于评估黄斑结构和治疗后的变化，但不能替代所有眼底检查。',
+        options: ['正确', '错误'],
+        answer: 0,
+        type: '判断题',
+        score: 2,
+        knowledge: 'OCT / FFA / OCTA影像判读',
+        difficulty: '进阶'
+    };
+    examQuestions[38] = {
+        q: '干性AMD的典型改变包括玻璃膜疣和地图状萎缩，通常不以活动性脉络膜新生血管为主要表现。',
+        options: ['正确', '错误'],
+        answer: 0,
+        type: '判断题',
+        score: 2,
+        knowledge: 'AMD诊疗规范',
+        difficulty: '高阶'
+    };
+    examQuestions[47] = {
+        q: '儿童弱视的治疗越晚越好，早期进行屈光矫正和遮盖治疗没有明显意义。',
+        options: ['正确', '错误'],
+        answer: 1,
+        type: '判断题',
+        score: 1,
+        knowledge: '眼科解剖与生理',
+        difficulty: '高阶'
+    };
+    normalizeExamChoiceOptions();
     examQuestions._mixedReady = true;
+}
+
+function normalizeExamChoiceOptions() {
+    for (var i = 0; i < examQuestions.length; i++) {
+        var question = examQuestions[i];
+        if (!question || (question.type !== '单选题' && question.type !== '多选题') || !Array.isArray(question.options)) continue;
+        if (question.options.length <= 4) continue;
+
+        var answers = Array.isArray(question.answer) ? question.answer.slice() : [question.answer];
+        var correctIndexes = answers.map(function(value) { return Number(value); }).filter(function(value, index, list) {
+            return Number.isInteger(value) && value >= 0 && value < question.options.length && list.indexOf(value) === index;
+        });
+        var removeIndexes = [];
+        for (var optionIndex = question.options.length - 1; optionIndex >= 0 && question.options.length - removeIndexes.length > 4; optionIndex--) {
+            if (correctIndexes.indexOf(optionIndex) === -1) removeIndexes.push(optionIndex);
+        }
+        for (var fallbackIndex = question.options.length - 1; fallbackIndex >= 0 && question.options.length - removeIndexes.length > 4; fallbackIndex--) {
+            if (removeIndexes.indexOf(fallbackIndex) === -1) removeIndexes.push(fallbackIndex);
+        }
+
+        var keptIndexes = [];
+        var keptOptions = [];
+        for (var keepIndex = 0; keepIndex < question.options.length; keepIndex++) {
+            if (removeIndexes.indexOf(keepIndex) === -1) {
+                keptIndexes.push(keepIndex);
+                keptOptions.push(question.options[keepIndex]);
+            }
+        }
+        var remappedAnswers = correctIndexes.map(function(value) { return keptIndexes.indexOf(value); }).filter(function(value) { return value >= 0; });
+        question.options = keptOptions;
+        question.answer = Array.isArray(question.answer)
+            ? remappedAnswers
+            : (remappedAnswers.length ? remappedAnswers[0] : 0);
+    }
 }
 
 // ===== 渲染阶段测评表格（带分页） =====
@@ -2182,7 +2291,7 @@ function startExam(id, resetProgress) {
 function renderQuestion() {
     var q = examQuestions[currentQuestion];
     var area = document.getElementById('examQuestionArea');
-    var labels = ['A', 'B', 'C', 'D', 'E'];
+    var labels = q.type === '判断题' ? ['✓', '✕'] : ['A', 'B', 'C', 'D'];
     var difficultyClass = q.difficulty === '基础' ? 'easy' : (q.difficulty === '进阶' ? 'medium' : 'hard');
     var html = '<div class="exam-question-card">';
     html += '<div class="question-meta-row">';
@@ -2194,7 +2303,7 @@ function renderQuestion() {
         html += '<div class="case-material">' + q.caseText + '</div>';
     }
     html += '<div class="question-stem">' + (currentQuestion + 1) + '. ' + q.q + '</div>';
-    if (q.type === '单选题' || q.type === '多选题') {
+    if (q.type === '单选题' || q.type === '多选题' || q.type === '判断题') {
         html += '<div class="option-list">';
         for (var i = 0; i < q.options.length; i++) {
             var selected = q.type === '多选题'
@@ -2208,6 +2317,7 @@ function renderQuestion() {
         }
         html += '</div>';
         if (q.type === '多选题') html += '<div class="answer-tip">多选题可选择多个选项，再次点击可取消选择。</div>';
+        if (q.type === '判断题') html += '<div class="answer-tip">请选择“正确”或“错误”。</div>';
     } else if (q.type === '代码题') {
         html += '<textarea class="code-answer-box" oninput="setTextAnswer(this.value)" spellcheck="false" placeholder="在此输入代码答案">' + escapeTextareaValue(userAnswers[currentQuestion]) + '</textarea>';
     } else {
@@ -2359,8 +2469,8 @@ function arraysEqual(a, b) {
     return true;
 }
 
-function getOptionLabel(value) {
-    var labels = ['A','B','C','D','E'];
+function getOptionLabel(value, question) {
+    var labels = question && question.type === '判断题' ? ['正确', '错误'] : ['A','B','C','D'];
     if (Array.isArray(value)) {
         return value.slice().sort().map(function(v) { return labels[v]; }).join('、') || '未作答';
     }
@@ -2380,7 +2490,7 @@ function scoreTextByKeywords(answer, keywords, maxScore) {
 }
 
 function scoreQuestion(q, answer) {
-    if (q.type === '单选题') {
+    if (q.type === '单选题' || q.type === '判断题') {
         return { score: answer === q.answer ? q.score : 0, correct: answer === q.answer };
     }
     if (q.type === '多选题') {
@@ -2392,12 +2502,12 @@ function scoreQuestion(q, answer) {
 }
 
 function getCorrectAnswerText(q) {
-    if (q.type === '单选题' || q.type === '多选题') return getOptionLabel(q.answer);
+    if (q.type === '单选题' || q.type === '多选题' || q.type === '判断题') return getOptionLabel(q.answer, q);
     return q.answer || '参考答案见解析';
 }
 
 function getUserAnswerText(q, answer) {
-    if (q.type === '单选题' || q.type === '多选题') return getOptionLabel(answer);
+    if (q.type === '单选题' || q.type === '多选题' || q.type === '判断题') return getOptionLabel(answer, q);
     return answer && answer.toString().trim() ? answer.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '未作答';
 }
 
@@ -3003,6 +3113,7 @@ function logout() {
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', function() {
     hydrateExamResults();
+    setupMixedExamQuestions();
     prepareAllAttemptSnapshots();
     renderTable(examData, 1);
     applyComprehensiveFilters();

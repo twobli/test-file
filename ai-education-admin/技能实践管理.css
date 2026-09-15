@@ -316,6 +316,31 @@ textarea { min-height: 84px; border: 1px solid var(--line); border-radius: 8px; 
   line-height: 1.6;
   text-align: center;
 }
+.question-preview-images {
+  display: grid;
+  gap: 9px;
+  padding-top: 2px;
+}
+.question-preview-images-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #435066;
+  font-size: 12px;
+}
+.question-preview-images .question-image-slot {
+  padding: 10px;
+}
+.question-preview-images .question-image-slot-preview {
+  min-height: 210px;
+}
+.question-preview-image-name {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
 .question-editor-actions {
   display: flex;
   flex-wrap: wrap;

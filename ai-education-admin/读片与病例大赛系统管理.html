@@ -20,7 +20,7 @@
       <a class="nav-item" href="index.html#exams"><span class="nav-icon">✎</span>考试中心管理</a>
       <a class="nav-item" href="index.html#knowledge"><span class="nav-icon">教</span>智能教学服务管理</a>
       <a class="nav-item" href="index.html#literature"><span class="nav-icon">文</span>科技文献检索管理</a>
-      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">✎</span>方案题目管理</a>
+      <a class="nav-item" href="方案题目管理.html"><span class="nav-icon">◈</span>模型训练题集管理</a>
     </aside>
 
     <main class="main">
@@ -93,12 +93,19 @@
       html += '</div>';
       wrap.innerHTML = html;
     }
+    function demoMedicalImage(type, index, eye) {
+      var palette = type === 'OCT' ? ['#47b9e8', '#d7f5ff'] : type === 'OCTA' ? ['#4b8cff', '#8ce7ff'] : ['#ff647c', '#ffc27d'];
+      var lines = type === 'OCT'
+        ? '<path d="M0 138 C45 110 70 150 112 126 S175 112 215 137 S282 154 330 120 S390 105 440 132 S505 152 560 118" stroke="' + palette[0] + '" stroke-width="4" fill="none"/><path d="M0 158 C60 142 90 174 145 154 S230 147 280 163 S365 174 425 149 S510 142 560 159" stroke="' + palette[1] + '" stroke-width="3" fill="none"/>'
+        : '<path d="M280 52 C230 88 210 126 158 142 M280 52 C334 87 355 122 405 142 M280 53 C280 101 278 140 280 198 M280 100 C236 110 207 132 181 174 M280 101 C324 112 355 137 380 177" stroke="' + palette[0] + '" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="280" cy="128" r="88" stroke="' + palette[1] + '" stroke-width="2" fill="none" opacity=".75"/>'
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320" viewBox="0 0 560 320"><defs><radialGradient id="g"><stop stop-color="#152943"/><stop offset="1" stop-color="#050b16"/></radialGradient></defs><rect width="560" height="320" fill="#071321"/><rect x="18" y="18" width="524" height="284" rx="14" fill="url(#g)" stroke="#365d82"/><g opacity=".18" stroke="#9cc8e8">' + Array.from({length: 8}, function(_, row) { return '<path d="M35 ' + (52 + row * 30) + 'H525"/>'; }).join('') + '</g>' + (type === 'OCT' ? '<rect x="42" y="48" width="476" height="214" rx="8" fill="#0a1c2c"/>' : '<circle cx="280" cy="150" r="112" fill="#1b0d18" stroke="#6e3d4e" stroke-width="4"/>') + lines + '<text x="38" y="40" fill="#d9edf8" font-size="14" font-family="Arial">' + type + ' DEMO · ' + eye + ' · Q' + (index + 1) + '</text></svg>');
+    }
     var baseQuestions = [
-      {desc:'根据上述眼底图像表现，该患者糖尿病视网膜病变的分级应为？',type:'单选',options:['A. 无明显DR改变','B. 轻度非增殖期DR','C. 中度非增殖期DR','D. 重度非增殖期DR'],answer:'C',analysis:'散在微血管瘤与点状出血已超过轻度改变范围，但尚未达到重度非增殖期标准，因此判断为中度非增殖期DR。',image:''},
-      {desc:'OCT显示黄斑区可见视网膜下液，最可能的诊断是？',type:'单选',options:['A. 黄斑裂孔','B. 中心性浆液性脉络膜视网膜病变','C. 年龄相关性黄斑变性','D. 黄斑前膜'],answer:'B',analysis:'视网膜下液伴黄斑区局灶性浆液性脱离更符合中心性浆液性脉络膜视网膜病变的影像特征。',image:''},
-      {desc:'FFA早晚期图像显示荧光渗漏，病变位于？',type:'单选',options:['A. 视网膜内层','B. 视网膜外层','C. 脉络膜层','D. 玻璃体腔'],answer:'B',analysis:'荧光从早期局灶染色到晚期渗漏，提示血管屏障受损，常见于视网膜外层相关病变。',image:''},
-      {desc:'患者视野检查显示鼻侧阶梯，最可能的诊断？',type:'单选',options:['A. 白内障','B. 青光眼','C. 视神经炎','D. 视网膜脱离'],answer:'B',analysis:'鼻侧阶梯属于青光眼典型视野缺损表现，结合视神经结构改变更支持青光眼。',image:''},
-      {desc:'该OCT图像中，椭圆体带的完整性如何？',type:'单选',options:['A. 完全正常','B. 局部中断','C. 弥漫性消失','D. 增厚'],answer:'C',analysis:'椭圆体带连续性缺失且范围较广，提示光感受器结构受损明显，因此选择弥漫性消失。',image:''}
+      {desc:'根据上述眼底图像表现，该患者糖尿病视网膜病变的分级应为？',type:'单选',imageType:'眼底彩照',eyeSide:'右眼',images:[demoMedicalImage('眼底彩照',0,'右眼')],imageNames:['示例眼底彩照_右眼.svg'],options:['A. 无明显DR改变','B. 轻度非增殖期DR','C. 中度非增殖期DR','D. 重度非增殖期DR'],answer:'C',analysis:'散在微血管瘤与点状出血已超过轻度改变范围，但尚未达到重度非增殖期标准，因此判断为中度非增殖期DR。'},
+      {desc:'OCT显示黄斑区可见视网膜下液，最可能的诊断是？',type:'单选',imageType:'OCT',eyeSide:'右眼',images:[demoMedicalImage('OCT',1,'右眼')],imageNames:['示例OCT_右眼.svg'],options:['A. 黄斑裂孔','B. 中心性浆液性脉络膜视网膜病变','C. 年龄相关性黄斑变性','D. 黄斑前膜'],answer:'B',analysis:'视网膜下液伴黄斑区局灶性浆液性脱离更符合中心性浆液性脉络膜视网膜病变的影像特征。'},
+      {desc:'OCTA图像显示黄斑区血流密度改变，最可能的表现是？',type:'单选',imageType:'OCTA',eyeSide:'双眼',images:[demoMedicalImage('OCTA',2,'左眼'),demoMedicalImage('OCTA',2,'右眼')],imageNames:['示例OCTA_左眼.svg','示例OCTA_右眼.svg'],options:['A. 血流密度完全正常','B. 黄斑区血流密度改变','C. 仅玻璃体混浊','D. 单纯角膜水肿'],answer:'B',analysis:'结合OCTA血流网络的密度和连续性改变，提示黄斑区存在需要进一步判读的血流异常。'},
+      {desc:'患者眼底彩照显示鼻侧阶梯，最可能的诊断？',type:'单选',imageType:'眼底彩照',eyeSide:'左眼',images:[demoMedicalImage('眼底彩照',3,'左眼')],imageNames:['示例眼底彩照_左眼.svg'],options:['A. 白内障','B. 青光眼','C. 视神经炎','D. 视网膜脱离'],answer:'B',analysis:'鼻侧阶梯属于青光眼典型视野缺损表现，结合视神经结构改变更支持青光眼。'},
+      {desc:'该OCT图像中，椭圆体带的完整性如何？',type:'单选',imageType:'OCT',eyeSide:'双眼',images:[demoMedicalImage('OCT',4,'左眼'),demoMedicalImage('OCT',4,'右眼')],imageNames:['示例OCT_左眼.svg','示例OCT_右眼.svg'],options:['A. 完全正常','B. 局部中断','C. 弥漫性消失','D. 增厚'],answer:'C',analysis:'椭圆体带连续性缺失且范围较广，提示光感受器结构受损明显，因此选择弥漫性消失。'}
     ];
     var rows = [
       {name:'OCT黄斑病变读片挑战赛',desc:'OCT影像黄斑区病变识别与分类。',start:'2026-07-10',end:'2026-08-01',durationMin:60,questions:cloneQuestions(baseQuestions)},
@@ -114,7 +121,7 @@
       var q=(document.getElementById('search').value||'').toLowerCase();
       var list=rows.filter(function(r){return(!q||r.name.toLowerCase().indexOf(q)>-1);});
       document.getElementById('tableBody').innerHTML=list.length?list.map(function(r){
-        return '<tr><td><strong>'+esc(r.name)+'</strong><div class="muted">'+esc(r.desc)+'</div></td><td>'+esc(r.start)+' 至 '+esc(r.end)+'</td><td>'+esc(r.durationMin)+'分钟</td><td>'+r.questions.length+'题</td><td><div class="table-actions"><button class="btn small" onclick="openModal(\'view\',\''+encodeURIComponent(r.name)+'\')">查看</button></div></td></tr>';
+        return '<tr><td><strong>'+esc(r.name)+'</strong><div class="muted">'+esc(r.desc)+'</div></td><td>'+esc(r.start)+' 至 '+esc(r.end)+'</td><td>'+esc(r.durationMin)+'分钟</td><td>'+r.questions.length+'题</td><td><div class="table-actions"><button class="btn small" onclick="openModal(\'preview\',\''+encodeURIComponent(r.name)+'\')">预览</button></div></td></tr>';
       }).join(''):'<tr><td colspan="5"><div class="empty-note">没有匹配的比赛。</div></td></tr>';
     }
     function textValue(id){var el=document.getElementById(id);return el?el.value.trim():'';}
@@ -139,7 +146,16 @@
         var imageList = Array.isArray(q.images) ? q.images.filter(Boolean) : (q.image ? [q.image] : []);
         var imageType = q.imageType || '眼底彩照';
         var eyeSide = q.eyeSide || (imageList.length > 1 ? '双眼' : '右眼');
-        return '<div class="question-item"><div class="question-item-head"><strong>第'+(index+1)+'题：'+esc(q.desc)+'</strong><div class="table-actions">'+(read?'':'<button class="btn small" onclick="editQuestion('+index+')">编辑</button><button class="btn small danger" onclick="deleteQuestion('+index+')">删除</button>')+'</div></div><div class="question-meta"><span class="status info">'+esc(q.type||'单选')+'</span><span>'+esc(imageType)+'</span><span>'+esc(eyeSide)+'</span><span>'+(imageList.length||0)+'张影像</span><span>正确答案：'+esc(q.answer||'未设置')+'</span></div><div class="question-options">'+(q.options||[]).map(function(opt){return '<div class="question-option '+(String(opt).charAt(0)===String(q.answer)?'correct':'')+'">'+esc(opt)+'</div>';}).join('')+'</div><div class="muted">解析：'+esc(q.analysis||'未填写')+'</div></div>';
+        var imageLabels = getQuestionEyeLabels(eyeSide);
+        var imageMarkup = '<div class="question-preview-images"><div class="question-preview-images-head"><strong>题目影像</strong><span class="muted">'+esc(imageType)+' · '+esc(eyeSide)+'</span></div><div class="question-image-grid">'
+          + imageLabels.map(function(label, imageIndex) {
+            var src = imageList[imageIndex] || '';
+            var imageName = Array.isArray(q.imageNames) ? (q.imageNames[imageIndex] || '') : '';
+            return '<div class="question-image-slot"><div class="question-image-slot-title">'+esc(imageType)+' · '+esc(label)+'</div><div class="question-image-slot-preview">'
+              + (src ? '<img src="'+esc(src)+'" alt="'+esc(imageType)+' '+esc(label)+'">' : '<div class="question-image-slot-placeholder">未上传影像</div>')
+              + '</div>' + (imageName ? '<span class="question-preview-image-name">'+esc(imageName)+'</span>' : '') + '</div>';
+          }).join('') + '</div></div>';
+        return '<div class="question-item"><div class="question-item-head"><strong>第'+(index+1)+'题：'+esc(q.desc)+'</strong><div class="table-actions">'+(read?'':'<button class="btn small" onclick="editQuestion('+index+')">编辑</button><button class="btn small danger" onclick="deleteQuestion('+index+')">删除</button>')+'</div></div><div class="question-meta"><span class="status info">'+esc(q.type||'单选')+'</span><span>'+esc(imageType)+'</span><span>'+esc(eyeSide)+'</span><span>'+(imageList.length||0)+'张影像</span><span>正确答案：'+esc(q.answer||'未设置')+'</span></div>'+imageMarkup+'<div class="question-options">'+(q.options||[]).map(function(opt){return '<div class="question-option '+(String(opt).charAt(0)===String(q.answer)?'correct':'')+'">'+esc(opt)+'</div>';}).join('')+'</div><div class="muted">解析：'+esc(q.analysis||'未填写')+'</div></div>';
       }).join(''):'<div class="empty-note">暂未添加题目，请逐题新增。</div>';
       document.getElementById('questionList').innerHTML=html;
       var counter=document.getElementById('questionCounter');if(counter)counter.textContent=workingQuestions.length+'题';
@@ -155,9 +171,9 @@
     function openModal(m,key){
       mode=m;var name=decodeURIComponent(key||'');editing=rows.find(function(r){return r.name===name;})||{name:'',desc:'',start:'',end:'',durationMin:90,questions:[]};
       workingQuestions=cloneQuestions(editing.questions||[]);editingQuestionIndex=-1;
-      var read=m==='view';
-      document.getElementById('modalTitle').textContent=m==='add'?'创建比赛':m==='edit'?'编辑比赛':'查看比赛';
-      document.getElementById('modalDesc').textContent=read?'查看比赛基本信息和已配置题库。':'配置比赛有效期、固定答题时长和题库内容。';
+      var read=m==='view'||m==='preview';
+      document.getElementById('modalTitle').textContent=m==='add'?'创建比赛':m==='edit'?'编辑比赛':'预览比赛';
+      document.getElementById('modalDesc').textContent=read?'只读查看比赛基本信息、有效期、固定答题时长和已配置题库。':'配置比赛有效期、固定答题时长和题库内容。';
       document.getElementById('modalBody').innerHTML=fields(editing,read);
       document.getElementById('saveBtn').style.display=read?'none':'inline-flex';
       document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
@@ -184,6 +200,8 @@
       var images=questionImageFiles.slice(0,expectedCount);
       var q={desc:textValue('q_desc'),type:'单选',imageType:questionImageType,eyeSide:questionEyeSide,images:images,image:images[0]||'',options:letters.map(function(letter,index){return letter+'. '+textValue('q_option_'+index);}),answer:document.getElementById('q_answer').value,analysis:textValue('q_analysis')};
       if(!q.desc||q.options.some(function(opt){return opt.length<3;})||!q.analysis){showToast('请填写题干、4个选项和题目解析');return;}
+      if(images.length<expectedCount||images.some(function(image){return !image;})){showToast('请上传'+questionEyeSide+'对应的全部影像');return;}
+      q.imageNames=questionImageNames.slice(0,expectedCount);
       if(editingQuestionIndex>-1)workingQuestions[editingQuestionIndex]=q;else workingQuestions.push(q);
       resetQuestionEditor();renderQuestionList(false);showToast('题目已添加，可继续新增下一题');
       var descEl=document.getElementById('q_desc');if(descEl)descEl.focus();
@@ -202,6 +220,14 @@
       if(!item.name||!item.start||!item.end||!item.durationMin){showToast('请填写比赛名称、有效期和答题时长');return;}
       if(item.start>item.end){showToast('结束日期不能早于开始日期');return;}
       if(!item.questions.length){showToast('请至少配置1道比赛题目');return;}
+      for(var i=0;i<item.questions.length;i++){
+        var question=item.questions[i];
+        var expected=getQuestionEyeLabels(question.eyeSide||'右眼').length;
+        var images=Array.isArray(question.images)?question.images.filter(Boolean):[];
+        if(images.length<expected){
+          showToast('第'+(i+1)+'题请上传'+(question.eyeSide||'右眼')+'对应的全部影像');return;
+        }
+      }
       var idx=rows.findIndex(function(r){return r.name===editing.name;});if(mode==='edit'&&idx>-1)rows[idx]=item;else rows.unshift(item);
       closeModal();render();showToast('比赛和题库已保存');
     }
