@@ -202,7 +202,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .chapter-quiz-panel .chapter-quiz-entry.secondary:hover { background: var(--primary-light); border-color: var(--primary); }
 .chapter-quiz-panel .chapter-quiz-entry.locked { background: var(--gray-50); border-color: var(--gray-200); color: var(--gray-500); cursor: not-allowed; }
 .chapter-quiz-panel .chapter-quiz-entry.locked:hover { background: var(--gray-50); border-color: var(--gray-200); }
-.chapter-quiz-panel .quiz-note { margin-top: 6px; font-size: 11px; color: var(--gray-500); text-align: center; line-height: 1.4; }
 .learning-main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
 .learning-toolbar { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
 .learning-toolbar .toolbar-title { font-size: 16px; font-weight: 600; color: var(--gray-900); display: flex; align-items: center; gap: 12px; }
@@ -330,7 +329,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .course-feedback .cf-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .course-feedback .cf-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
 .course-feedback .cf-subtitle { color: var(--gray-600); font-size: 12px; line-height: 1.6; }
-.course-feedback .cf-context { flex-shrink: 0; max-width: 320px; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .course-feedback .cf-form { display: grid; grid-template-columns: 220px minmax(0, 1fr) 144px; gap: 12px; align-items: start; }
 .course-feedback label { display: block; color: var(--gray-700); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
 .course-feedback select, .course-feedback textarea { width: 100%; border: 1px solid var(--gray-200); border-radius: 8px; background: #fff; color: var(--gray-800); font-family: inherit; font-size: 13px; outline: none; transition: var(--transition); }
@@ -352,7 +350,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .course-feedback .cf-record-meta { margin-top: 6px; color: var(--gray-600); font-size: 12px; }
 @media (max-width: 900px) {
     .course-feedback .cf-head { flex-direction: column; }
-    .course-feedback .cf-context { max-width: 100%; }
     .course-feedback .cf-form { grid-template-columns: 1fr; }
     .course-feedback .cf-submit-field label { display: none; }
 }
@@ -362,7 +359,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
 .question-review .qr-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
 .question-review .qr-title { font-size: 16px; color: var(--gray-900); font-weight: 700; margin-bottom: 4px; }
 .question-review .qr-subtitle { color: var(--gray-600); font-size: 12px; line-height: 1.6; }
-.question-review .qr-summary { flex-shrink: 0; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 600; }
 .question-review .qr-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .question-review .qr-filter { height: 30px; padding: 0 12px; border: 1px solid var(--gray-200); border-radius: 999px; background: #fff; color: var(--gray-700); font-size: 12px; font-weight: 700; cursor: pointer; }
 .question-review .qr-filter.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
@@ -778,7 +774,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                 <div class="km-title">知识点掌握情况</div>
                 <div class="km-subtitle">根据本次测验结果判断知识点掌握程度，学习进度仍以课程内容完成情况为准。</div>
             </div>
-            <div class="km-summary" id="knowledgeMasterySummary">已掌握 0 项</div>
         </div>
         <div class="km-grid" id="knowledgeMasteryGrid"></div>
     </div>
@@ -797,7 +792,6 @@ body.ai-qa-page-open #page-ai-qa.active { height: 100%; }
                 <div class="cf-title">课程反馈</div>
                 <div class="cf-subtitle">针对当前章节课程内容、章节测验或学习体验提交反馈；每次测验只能提交一次，提交后会在本页形成记录并进入教师课程管理端。</div>
             </div>
-            <div class="cf-context" id="courseFeedbackContext">当前章节</div>
         </div>
         <div class="cf-form">
             <div>
@@ -1872,21 +1866,18 @@ function renderChapterQuizEntry(course) {
             <button class="chapter-quiz-entry secondary" type="button" onclick="viewChapterResult(${course.id}, ${currentChapterIndex})">
                 <span>📊</span><span>查看测验结果</span>
             </button>
-            <div class="quiz-note">本章学习进度 ${quizRecord ? quizRecord.learningProgress : 100}% · 最近正确率 ${quizRecord ? quizRecord.latestAccuracy : '--'}%</div>
         `;
     } else if (hasQuiz) {
         panel.innerHTML = `
             <button class="chapter-quiz-entry" type="button" onclick="startChapterQuiz()">
                 <span>📝</span><span>去进行章节测验</span>
             </button>
-            <div class="quiz-note">${ch.title} 可直接进入测验</div>
         `;
     } else {
         panel.innerHTML = `
             <button class="chapter-quiz-entry locked" type="button" onclick="showQuizLockedTip()">
                 <span>📝</span><span>章节测验</span>
             </button>
-            <div class="quiz-note">${ch ? ch.title : '当前章节'} 暂无测验数据</div>
         `;
     }
 }
@@ -2268,9 +2259,6 @@ function closeModal(id) {
 
 function renderKnowledgeMastery(mastery) {
     const items = mastery || [];
-    const mastered = items.filter(item => item.state.cls === 'mastered').length;
-    const weak = items.filter(item => item.state.cls === 'weak').length;
-    document.getElementById('knowledgeMasterySummary').textContent = '已掌握 ' + mastered + ' 项 · 需强化 ' + weak + ' 项';
     document.getElementById('knowledgeMasteryGrid').innerHTML = items.length ? items.map(item => `
         <div class="km-item">
             <div class="km-item-head">
@@ -2442,7 +2430,6 @@ function renderQuestionReview(items, filter, activeQuestionNo) {
                 <div class="qr-title">答题明细与解析</div>
                 <div class="qr-subtitle">提交前必须完成全部题目；提交后通过题号快速查看每道题对错，再点击题号查看完整解析。正确题也保留解析，便于复盘干扰选项和相关知识点。</div>
             </div>
-            <div class="qr-summary">答对 ${counts.correct} 题 · 答错 ${counts.wrong} 题</div>
         </div>
         <div class="qr-filters">
             ${filterItems.map(item => `<button class="qr-filter ${item.key === currentFilter ? 'active' : ''}" type="button" onclick="filterQuestionReview('${item.key}')">${item.text}</button>`).join('')}
@@ -2503,17 +2490,7 @@ function buildQuestionReviewDetail(question) {
     `;
 }
 
-function renderCourseFeedbackContext(course, chapter) {
-    const contextEl = document.getElementById('courseFeedbackContext');
-    const tipEl = document.getElementById('courseFeedbackTip');
-    if (!contextEl) return;
-    const courseName = course ? course.name : '基础课程';
-    const chapterName = chapter ? getQuizDisplayTitle(chapter.title) : '当前章节';
-    const contextParts = [courseName, chapterName];
-    if (currentResultContext && currentResultContext.attemptNo) {
-        contextParts.push('第' + currentResultContext.attemptNo + '次测验');
-    }
-    contextEl.textContent = contextParts.join('｜');
+function renderCourseFeedbackContext() {
     renderCourseFeedbackState();
 }
 
