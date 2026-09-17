@@ -1,0 +1,15 @@
+# WorkBuddy 会话数据（内部工具目录，不属于项目内容）
+.workbuddy/
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 临时文件
+push_check.txt
+push_stdout.txt
+push_stderr.txt

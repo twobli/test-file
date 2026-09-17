@@ -206,7 +206,7 @@ button{cursor:pointer}
 </style>
 </head>
 <body>
-<header class="top"><a class="brand brand-link" href="app-center.html">基于基因的眼病/慢病诊断应用</a><div class="brand-sub">支持糖尿病视网膜病变（DR）与脉络膜黑色素瘤（UM）两种疾病的基因—影像联合分析</div></header>
+<header class="top"><a class="brand brand-link" href="app-center.html">基于基因的眼病/慢病诊断应用</a></header>
 <div class="wrap">
   <div class="stepper" id="stepper">
     <div class="step active" data-step="input"><span class="num">1</span><span class="st-title">输入信息</span></div>
@@ -542,7 +542,7 @@ function renderUploadPanel(){
       const img=images[slot.id]||{src:null,type:null,hint:null};
       const filled=!!img.type;
       return '<div class="upload-slot">'+
-        '<div class="upload-slot-head"><h4>'+slot.eye+' · '+imageCaption(slot.type)+'</h4><span class="eye-badge">'+(slot.eye==='单眼'?'1 张':'2 张')+'</span></div>'+
+        '<div class="upload-slot-head"><h4>'+slot.eye+' · '+imageCaption(slot.type)+'</h4></div>'+
         '<div class="upload-preview" id="prev-'+slot.id+'"></div>'+
         '<div class="upload-actions">'+
           '<label class="btn sm">上传本地图像<input type="file" accept="image/*" style="display:none" onchange="handleUpload(event,\''+slot.id+'\')"></label>'+
