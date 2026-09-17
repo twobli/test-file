@@ -147,6 +147,9 @@ body.advice-open { overflow: hidden; }
     .advice-summary-card.primary { grid-column: 1 / -1; }
     .advice-drawer-head, .advice-drawer-body, .advice-drawer-foot { padding-left: 16px; padding-right: 16px; }
 }
+.head-actions { display: flex; gap: 28px; align-items: flex-start; }
+.head-action-item { display: flex; flex-direction: column; gap: 8px; max-width: 300px; }
+.head-action-tip { font-size: 12px; color: #94a3b8; line-height: 1.6; margin: 0; }
 </style>
 </head>
 <body class="learning-track-page">
@@ -188,11 +191,20 @@ body.advice-open { overflow: hidden; }
     <div class="breadcrumb"><a href="基础课程.html">AI教育平台</a><span class="sep">></span><a href="个人中心与能力评估.html">个人中心与能力评估</a><span class="sep">></span><span>AI能力雷达图</span></div>
     <div class="page-head">
         <div><h1 class="page-title">AI能力雷达图</h1><p class="page-desc">可视化展示用户在知识掌握、诊断能力、模型构建、科研创新、病例分析和知识应用等维度的能力水平。</p></div>
-        <div class="head-actions"><button class="btn btn-primary" onclick="refreshRadar()">重新生成能力画像</button></div>
+        <div class="head-actions">
+            <div class="head-action-item">
+                <button class="btn btn-primary" onclick="refreshRadar()">更新能力画像</button>
+                <p class="head-action-tip">若您在AI教育平台中学习的课程、诊断的案例、参与的比赛与考试等有新的进展，可点击该按钮更新能力雷达。</p>
+            </div>
+            <div class="head-action-item">
+                <button class="btn btn-primary" onclick="openAdviceDrawer()">查看智能反馈与学习建议</button>
+                <p class="head-action-tip">可根据当前页面上的能力画像，查看系统给出的反馈和建议。</p>
+            </div>
+        </div>
     </div>
     <section class="card">
         <div class="card-header">
-            <div style="display:flex;align-items:center;gap:12px"><div class="card-title">AI能力雷达图</div><button type="button" class="btn btn-primary btn-sm" onclick="openAdviceDrawer()">查看智能反馈与学习建议</button></div>
+            <div class="card-title">AI能力雷达图</div>
             <div class="radar-card-actions">
                 <span class="tag blue">更新时间：2026-07-16</span>
             </div>
@@ -580,7 +592,7 @@ function selectAbility(key) {
     });
     renderAbilityDetail(key);
 }
-function refreshRadar() { alert('已根据最新学习记录重新生成能力画像。'); }
+function refreshRadar() { alert('已根据最新学习记录更新能力画像。'); }
 function openAdviceDrawer(focusKey) {
     var drawer = document.getElementById('adviceDrawer');
     var backdrop = document.getElementById('adviceBackdrop');
