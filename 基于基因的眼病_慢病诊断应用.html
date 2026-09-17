@@ -159,6 +159,39 @@ button{cursor:pointer}
 .risk-badge.low{background:var(--green-soft);color:var(--green)}
 .risk-badge.mid{background:var(--orange-soft);color:var(--orange)}
 .risk-badge.high{background:var(--red-soft);color:var(--red)}
+.risk-badge.pending{background:#f4f4f5;color:#71717a}
+.genetic-score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.genetic-score-item{padding:12px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe}
+.genetic-score-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.genetic-score-name{font-size:13.5px;font-weight:700}
+.genetic-score-value{font-size:20px;font-weight:700;color:var(--deep);white-space:nowrap}
+.genetic-score-value.pending{font-size:13px;color:#71717a}
+.genetic-score-track{height:7px;border-radius:999px;background:#e9edf4;overflow:hidden}
+.genetic-score-fill{height:100%;border-radius:inherit;background:var(--blue)}
+.genetic-score-fill.low{background:var(--green)}
+.genetic-score-fill.mid{background:var(--orange)}
+.genetic-score-fill.high{background:var(--red)}
+.genetic-score-fill.pending{width:0;background:#cbd5e1}
+.genetic-score-note{margin-top:8px;color:var(--muted);font-size:11.5px;line-height:1.55}
+@media(max-width:760px){.genetic-score-grid{grid-template-columns:1fr}}
+.disease-risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.disease-risk-item{padding:14px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe}
+.disease-risk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.disease-risk-name{font-size:14px;font-weight:700}
+.disease-risk-level{display:inline-flex;padding:4px 10px;border-radius:14px;font-size:12px;font-weight:700;white-space:nowrap}
+.disease-risk-level.low{background:var(--green-soft);color:var(--green)}
+.disease-risk-level.mid{background:var(--orange-soft);color:var(--orange)}
+.disease-risk-level.high{background:var(--red-soft);color:var(--red)}
+.disease-risk-score{font-size:22px;font-weight:700;color:var(--deep);margin-bottom:8px}
+.disease-risk-score small{font-size:12px;font-weight:500;color:var(--muted)}
+.disease-risk-bar{height:7px;border-radius:999px;background:#e9edf4;overflow:hidden;margin-bottom:10px}
+.disease-risk-fill{height:100%;border-radius:inherit}
+.disease-risk-fill.low{background:var(--green)}
+.disease-risk-fill.mid{background:var(--orange)}
+.disease-risk-fill.high{background:var(--red)}
+.disease-risk-evidence{display:grid;gap:5px;color:var(--muted);font-size:11.5px;line-height:1.55}
+.disease-risk-evidence strong{color:var(--text);font-weight:600}
+@media(max-width:760px){.disease-risk-grid{grid-template-columns:1fr}}
 .suggest-list{display:grid;gap:8px}
 .suggest-item{display:flex;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe;font-size:13px;line-height:1.6}
 .suggest-item .bullet{flex:none;width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:7px}
@@ -208,12 +241,6 @@ button{cursor:pointer}
       <div class="card-body" id="upload-panel"></div>
     </div>
 
-    <div class="card">
-      <div class="card-head"><h2>多模态特征提示</h2></div>
-      <div class="card-body">
-        <div class="alert" style="margin:0">多模态特征融合：支持将患者的一维基因序列与二维眼底医学影像（彩照、OCT、OCTA）进行联合分析，通过深度学习和统计模型提取关键疾病相关特征，实现基因与表型的交互映射。</div>
-      </div>
-    </div>
 
     <div class="actions-row">
       <button class="btn primary" id="run-btn" onclick="startAnalysis()">🧬 开始一键分析</button>
@@ -235,17 +262,10 @@ button{cursor:pointer}
 
   <!-- ========== STEP 3: 综合评估报告 ========== -->
   <section class="panel" id="panel-report">
-    <div class="disclaimer">
-      <b>免责声明：</b>本报告中的基因分型信息由用户按患者实际基因检测结果录入；眼底影像的疾病判别与风险评分为原型阶段的规则化模拟（本原型暂未接入真实部署的影像分类模型及临床验证的评分体系），结果均为<b>方向性参考</b>，不构成医学诊断或治疗方案，不能替代执业医师的临床判断。如实际用于诊疗决策，请以执业医师结合完整病理/分子检测结果的意见为准。
-    </div>
-
     <div class="report-head">
       <div>
         <h1 class="h1" id="report-title">综合评估报告</h1>
         <div class="report-meta" id="report-meta">—</div>
-      </div>
-      <div style="text-align:right">
-        <div class="risk-badge" id="report-risk-badge">—</div>
       </div>
     </div>
 
@@ -254,32 +274,34 @@ button{cursor:pointer}
       <div class="card-body"><div class="info-grid" id="patient-info-grid"></div></div>
     </div>
 
-    <div class="card">
-      <div class="card-head"><h2>眼底影像与潜在病灶标注</h2><span class="sub">标注位置为演示性示意，非真实AI检测结果</span></div>
+    <div class="card" id="genetic-susceptibility-card">
+      <div class="card-head"><h2>关键疾病基因易感性评分</h2></div>
       <div class="card-body">
-        <div class="alert" id="report-classify-note" style="margin-bottom:12px"></div>
+        <div class="alert" style="margin:0 0 12px">根据当前基因分型结果，对关键疾病的遗传易感倾向进行横向展示。该评分用于提示风险方向，不代表实际发病概率，也不能替代临床诊断。</div>
+        <div class="genetic-score-grid" id="genetic-susceptibility-grid"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>影像异常提示</h2></div>
+      <div class="card-body">
+        <div class="alert" style="margin-bottom:12px">影像异常提示用于展示眼底影像中的潜在病灶区域标注：视神经（视盘 / 视杯）、黄斑、视网膜血管、视网膜神经层、脉络膜、出血、渗出、裂孔等。</div>
         <div class="upload-grid" id="report-image-grid"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-head"><h2>基因分型解读</h2><span class="sub">证据强度标注供参考</span></div>
+      <div class="card-head"><h2>基因变异解读及影像特征说明</h2><span class="sub">证据强度标注供参考</span></div>
       <div class="card-body" id="report-gene-list"></div>
+      <div class="card-body" id="report-narrative" style="line-height:1.85;font-size:13.5px;border-top:1px solid var(--line)"></div>
     </div>
 
     <div class="card">
-      <div class="card-head"><h2>疾病风险等级评估</h2><span class="sub">示意性规则算法，非经临床验证的诊断工具</span></div>
+      <div class="card-head"><h2>影像与基因综合疾病风险评估</h2><span class="sub">结合眼底影像异常提示与基因变异证据，分别评估不同疾病风险</span></div>
       <div class="card-body">
-        <div class="gauge-wrap">
-          <div class="gauge" id="report-gauge"><div class="gauge-inner"><strong id="report-score">0</strong><span>综合风险指数</span></div></div>
-          <div id="report-gauge-note" style="color:var(--muted);font-size:12px"></div>
-        </div>
+        <div class="alert" style="margin-bottom:12px">以下结果按疾病分别展示影像与基因综合风险等级。评分为原型示意，不代表实际发病概率，也不能替代临床诊断。</div>
+        <div class="disease-risk-grid" id="disease-risk-grid"></div>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head"><h2>基因—影像关联解读</h2></div>
-      <div class="card-body" id="report-narrative" style="line-height:1.85;font-size:13.5px"></div>
     </div>
 
     <div class="card">
@@ -289,16 +311,16 @@ button{cursor:pointer}
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-body footnote" id="report-footnote">
-        本报告支持通过算法接口调用、可用于多学科联合会诊参考及科研数据分析（数据脱敏后），具体对接方式请联系系统管理员。
-      </div>
-    </div>
-
     <div class="actions-row">
       <button class="btn" onclick="restart()">↺ 重新分析</button>
       <button class="btn" onclick="toast('原型演示：已生成 PDF（示意）')">导出 PDF</button>
       <button class="btn primary" onclick="toast('原型演示：已生成 Word（示意）')">导出 Word</button>
+    </div>
+
+    <div class="card">
+      <div class="card-body footnote" id="report-footnote">
+        本报告支持通过算法接口调用、可用于多学科联合会诊参考及科研数据分析（数据脱敏后），具体对接方式请联系系统管理员。
+      </div>
     </div>
   </section>
 </div>
@@ -524,8 +546,6 @@ function renderUploadPanel(){
         '<div class="upload-preview" id="prev-'+slot.id+'"></div>'+
         '<div class="upload-actions">'+
           '<label class="btn sm">上传本地图像<input type="file" accept="image/*" style="display:none" onchange="handleUpload(event,\''+slot.id+'\')"></label>'+
-          '<button class="btn sm" onclick="useDemoImage(\''+slot.id+'\',\'dr\')">示例影像·DR</button>'+
-          '<button class="btn sm" onclick="useDemoImage(\''+slot.id+'\',\'um\')">示例影像·UM</button>'+
           '<button class="btn sm ghost" style="'+(filled?'':'display:none')+'" onclick="clearImage(\''+slot.id+'\')">清除</button>'+
         '</div>'+
       '</div>';
@@ -581,10 +601,10 @@ function classifyImage(){
 
 /* ============ 分析动画 ============ */
 const ANALYZE_STEPS=[
-  {title:'眼底影像疾病分类',desc:'调用眼底影像分类模型，判别糖尿病视网膜病变 / UM 等疾病类型'},
-  {title:'基因型证据匹配',desc:'根据影像判别结果，匹配对应疾病的基因型证据'},
-  {title:'风险分层计算',desc:'结合影像特征与基因证据计算综合风险分层'},
-  {title:'生成结构化报告',desc:'汇总病灶标注、基因解读与方向性建议'}
+  {title:'基因与影像联合分析',desc:'联合一维基因序列与二维眼底医学影像（彩照、OCT、OCTA），建立多模态分析输入'},
+  {title:'关键疾病特征提取',desc:'通过深度学习和统计模型提取关键疾病相关特征，实现基因与表型的交互映射'},
+  {title:'基因与病例证据关联',desc:'分析基因突变位点、影像表型特征及历史病例数据库，匹配相关疾病证据'},
+  {title:'综合风险评估与报告',desc:'融合影像、基因及历史病例证据，完成风险分层并生成结构化评估报告'}
 ];
 function startAnalysis(){
   if(!Object.values(images).some(img=>img&&img.type)){toast('请至少提供一种眼底影像');return;}
@@ -604,11 +624,7 @@ function startAnalysis(){
       return;
     }
     $('#a-step-'+i).classList.add('active');
-    if(i===1){
-      $('#analyze-hint').textContent='影像判别结果：'+(disease==='dr'?'糖尿病视网膜病变特征':'脉络膜黑色素瘤(UM)特征')+(isSimulated?'（占位演示，未接入真实分类模型）':'')+' → '+ANALYZE_STEPS[1].title+'…';
-    }else{
-      $('#analyze-hint').textContent=ANALYZE_STEPS[i].title+'…';
-    }
+    $('#analyze-hint').textContent=ANALYZE_STEPS[i].desc+'…';
     $('#analyze-bar').style.width=Math.round(((i+1)/ANALYZE_STEPS.length)*100)+'%';
     i++;
     setTimeout(nextStep,950);
@@ -634,12 +650,63 @@ const LESIONS={
   um_octa:[{label:'肿瘤灌注异质性',cls:'purple',top:'40%',left:'50%'},{label:'血管异常网络',cls:'blue',top:'62%',left:'40%'}]
 };
 
+/* ============ 关键疾病基因易感性评分（原型示意） ============ */
+function geneticRiskClass(score){
+  if(score<30)return 'low';
+  if(score<60)return 'mid';
+  return 'high';
+}
+function geneticScoreItem(name, score, note){
+  if(score===null)return '';
+  const risk=geneticRiskClass(score);
+  return '<div class="genetic-score-item">'+
+    '<div class="genetic-score-head"><span class="genetic-score-name">'+name+'</span></div>'+
+    '<div class="genetic-score-value">'+score+'%</div>'+
+    '<div class="genetic-score-track"><div class="genetic-score-fill '+risk+'" style="width:'+score+'%"></div></div>'+
+    '</div>';
+}
+function renderGeneticSusceptibility(){
+  const grid=$('#genetic-susceptibility-grid');
+  if(!grid)return;
+  const t2dSel=DISEASE.dr.t2dGenes.filter(g=>selFindings.has(g.key));
+  const drSel=DISEASE.dr.drGenes.filter(g=>selFindings.has(g.key));
+  const t2dScore=t2dSel.length?Math.min(85,Math.max(8,18+t2dSel.reduce((sum,g)=>sum+(g.t2dEvid==='strong'?11:g.t2dEvid==='moderate'?7:3),0))):null;
+  const drScore=(drSel.length||t2dSel.length)?Math.min(80,Math.max(8,10+drSel.reduce((sum,g)=>sum+(g.evid==='moderate'?14:5),0)+Math.min(12,t2dSel.length*3))):null;
+  const t2dNote=t2dSel.length?'已纳入 '+t2dSel.map(g=>g.label).join('、')+' 等已选择位点；分值按证据强度进行原型化换算。':'当前未选择2型糖尿病相关位点，显示基础示意值。';
+  const drNote=drSel.length?'已纳入 '+drSel.map(g=>g.label).join('、')+' 等DR候选位点，并结合糖尿病相关位点作方向性展示。':'当前未选择DR候选位点，显示基础示意值。';
+  grid.innerHTML=[
+    geneticScoreItem('2型糖尿病',t2dScore,t2dNote),
+    geneticScoreItem('糖尿病视网膜病变（DR）',drScore,drNote)
+  ].filter(Boolean).join('');
+}
+
 /* ============ 风险评分（示意性规则算法） ============ */
+function computeDiseaseImageScore(targetDisease){
+  const imageEntries=Object.entries(images).filter(([,img])=>img&&img.type);
+  if(!imageEntries.length||targetDisease!==disease)return 0;
+  const lesionCount=imageEntries.reduce((total,[slot])=>{
+    const baseType=slot.split('_')[0];
+    return total+(LESIONS[targetDisease+'_'+baseType]||[]).length;
+  },0);
+  return Math.min(100,20+imageEntries.length*12+lesionCount*8);
+}
+function computeImageScore(){return computeDiseaseImageScore(disease);}
+function computeT2dGeneScore(){
+  let score=0;
+  DISEASE.dr.t2dGenes.forEach(g=>{
+    if(selFindings.has(g.key))score+=g.t2dEvid==='strong'?11:g.t2dEvid==='moderate'?7:3;
+  });
+  return Math.min(100,score);
+}
+function computeDrGeneScore(){
+  let score=0;
+  DISEASE.dr.drGenes.forEach(g=>{if(selFindings.has(g.key)&&g.evid==='moderate')score+=14});
+  DISEASE.dr.t2dGenes.forEach(g=>{if(selFindings.has(g.key)&&g.drEvid==='moderate')score+=5});
+  return Math.min(100,score);
+}
 function computeDrScore(){
   // 仅计入证据强度为moderate及以上的位点，weak证据位点不计入分数(仅在报告中作说明性展示)——见「DR映射规则」
-  let score=0;
-  DISEASE.dr.t2dGenes.forEach(g=>{if(selFindings.has(g.key))score+=5});
-  DISEASE.dr.drGenes.forEach(g=>{if(selFindings.has(g.key)&&g.evid==='moderate')score+=14});
+  let score=computeDrGeneScore();
   const age=Number($('#in-age').value)||0;
   if(age>=60)score+=4;
   return Math.min(100,score);
@@ -668,6 +735,50 @@ function riskLevel(score){
   if(score<60)return {level:'中风险',cls:'mid'};
   return {level:'高风险',cls:'high'};
 }
+function diseaseRiskItem(name,score,imageEvidence,geneEvidence){
+  const risk=riskLevel(score);
+  return '<div class="disease-risk-item">'+
+    '<div class="disease-risk-head"><span class="disease-risk-name">'+name+'</span><span class="disease-risk-level '+risk.cls+'">'+risk.level+'</span></div>'+
+    '<div class="disease-risk-score">'+score+'<small> 分</small></div>'+
+    '<div class="disease-risk-bar"><div class="disease-risk-fill '+risk.cls+'" style="width:'+score+'%"></div></div>'+
+  '</div>';
+}
+function computeDiseaseRiskResults(){
+  const drImageScore=computeDiseaseImageScore('dr');
+  const umImageScore=computeDiseaseImageScore('um');
+  const t2dGeneScore=computeT2dGeneScore();
+  const drGeneScore=computeDrScore();
+  const umGeneScore=computeUmScore();
+  const t2dScore=Math.min(100,Math.round(t2dGeneScore*0.65+drImageScore*0.35));
+  const drScore=Math.min(100,Math.round(drGeneScore*0.6+drImageScore*0.4));
+  const umScore=Math.min(100,Math.round(umGeneScore*0.6+umImageScore*0.4));
+  const imageCount=Object.values(images).filter(img=>img&&img.type).length;
+  const drLesions=disease==='dr'?Object.entries(images).reduce((total,[slot,img])=>{
+    if(!img||!img.type)return total;
+    return total+(LESIONS['dr_'+slot.split('_')[0]]||[]).length;
+  },0):0;
+  const umLesions=disease==='um'?Object.entries(images).reduce((total,[slot,img])=>{
+    if(!img||!img.type)return total;
+    return total+(LESIONS['um_'+slot.split('_')[0]]||[]).length;
+  },0):0;
+  return [
+    {
+      name:'2型糖尿病',score:t2dScore,
+      imageEvidence:imageCount?(disease==='dr'?'已纳入DR方向眼底影像作为相关眼部表型参考，不能单独确认糖尿病状态':'当前影像未显示2型糖尿病相关眼部表型，不能单独确认糖尿病状态'):'未提供眼底影像',
+      geneEvidence:t2dGeneScore?'已纳入当前选择的2型糖尿病相关基因位点':'当前未选择2型糖尿病相关基因位点'
+    },
+    {
+      name:'糖尿病视网膜病变（DR）',score:drScore,
+      imageEvidence:drLesions?'检测到 '+drLesions+' 处DR方向影像异常提示':'当前未标注DR方向影像异常',
+      geneEvidence:drGeneScore?'已纳入DR候选基因及相关糖尿病基因证据':'当前未选择可计入DR评估的基因位点'
+    },
+    {
+      name:'脉络膜黑色素瘤（UM）',score:umScore,
+      imageEvidence:umLesions?'检测到 '+umLesions+' 处UM方向影像异常提示':'当前未标注UM方向影像异常',
+      geneEvidence:umGeneScore?'已纳入BAP1、SF3B1、EIF1AX及染色体3状态等基因证据':'当前未提供可计入UM评估的基因证据'
+    }
+  ];
+}
 function gepClassFor(score){
   if(score<20)return 'Class 1A（示意对应）';
   if(score<50)return 'Class 1B（示意对应）';
@@ -683,7 +794,6 @@ function buildReport(isSimulated){
 
   $('#report-title').textContent=(disease==='dr'?'糖尿病视网膜病变':'脉络膜黑色素瘤（UM）')+' · 多模态融合评估报告';
   $('#report-meta').textContent='报告编号：'+reportId+' | 生成时间：'+dateStr;
-  $('#report-classify-note').textContent='眼底影像疾病判别结果：'+(disease==='dr'?'糖尿病视网膜病变（DR）特征':'脉络膜黑色素瘤（UM）特征')+(isSimulated?'——本次为真实上传影像，原型暂未接入真实的影像分类模型，该判别结果为占位演示；实际系统中由已部署的影像分类模型输出。':'——基于所选示例影像的预设判别方向（原型演示）。')+'以下基因证据解读与风险分层均围绕该判别结果展开。';
 
   // 患者信息
   const name=$('#in-name').value.trim(),age=$('#in-age').value,gender=$('#in-gender').value,history=$('#in-history').value.trim();
@@ -700,6 +810,9 @@ function buildReport(isSimulated){
     if(history)cells+='<div class="info-cell" style="grid-column:span 2"><label>既往病史</label><strong style="font-size:13px">'+history+'</strong></div>';
     grid.innerHTML=cells;
   }
+
+  // 关键疾病基因易感性评分
+  renderGeneticSusceptibility();
 
   // 影像 + 病灶标注
   const imgGrid=$('#report-image-grid');
@@ -775,16 +888,14 @@ function buildReport(isSimulated){
   }
   geneList.innerHTML=geneHtml;
 
-  // 风险评分
-  const score=disease==='dr'?computeDrScore():computeUmScore();
-  const risk=riskLevel(score);
-  const gaugeColor=risk.cls==='low'?'#15803d':risk.cls==='mid'?'#b45309':'#b91c1c';
-  $('#report-gauge').style.background='conic-gradient('+gaugeColor+' '+(score*3.6)+'deg,#eef1f6 0deg)';
-  $('#report-score').textContent=score;
-  $('#report-score').style.color=gaugeColor;
-  $('#report-risk-badge').textContent=risk.level;
-  $('#report-risk-badge').className='risk-badge '+risk.cls;
-  $('#report-gauge-note').textContent=disease==='um'?('示意性对应基因表达谱分型：'+gepClassFor(score)+'（非真实检测结果）'):'基于证据强度分层的提示性评分（仅计入moderate及以上证据位点，非临床验证的多基因风险评分/PRS工具）';
+  // 按疾病分别展示影像与基因综合风险等级
+  const riskResults=computeDiseaseRiskResults();
+  $('#disease-risk-grid').innerHTML=riskResults.map(r=>diseaseRiskItem(r.name,r.score,r.imageEvidence,r.geneEvidence)).join('');
+  const currentResult=riskResults.find(r=>
+    (disease==='dr'&&r.name==='糖尿病视网膜病变（DR）')||
+    (disease==='um'&&r.name==='脉络膜黑色素瘤（UM）')
+  )||riskResults[0];
+  const currentRisk=riskLevel(currentResult.score);
 
   // 叙述
   const narrative=$('#report-narrative');
@@ -832,10 +943,10 @@ function buildReport(isSimulated){
   if(disease==='dr'){
     const drGenesSelForSuggest=DISEASE.dr.drGenes.filter(g=>selFindings.has(g.key));
     suggestions.push('建议结合血糖、血压等全身情况综合管理，具体治疗方案请由内分泌科/眼科医师共同评估。');
-    suggestions.push(risk.cls==='high'?'风险分层提示较高，建议适当缩短眼底随访间隔（如3-6个月一次），具体以主治医师意见为准。':risk.cls==='mid'?'风险分层为中等，建议按常规随访周期（如6-12个月）复查眼底。':'风险分层较低，建议维持常规年度眼底筛查。');
+    suggestions.push(currentRisk.cls==='high'?'风险分层提示较高，建议适当缩短眼底随访间隔（如3-6个月一次），具体以主治医师意见为准。':currentRisk.cls==='mid'?'风险分层为中等，建议按常规随访周期（如6-12个月）复查眼底。':'风险分层较低，建议维持常规年度眼底筛查。');
     if(drGenesSelForSuggest.length)suggestions.push('本次选择为阳性的候选基因中，若证据强度标注为"较弱·研究阶段"，建议仅作为参考背景，不单独作为临床决策依据。');
   }else{
-    suggestions.push(risk.cls==='high'?'风险分层提示较高，建议加强全身转移监测频率（如定期肝脏影像/全身评估），具体方案请由眼肿瘤专科医师制定。':risk.cls==='mid'?'风险分层为中等，建议保持规律随访并关注远期转移监测。':'风险分层相对较低，建议维持常规随访节奏。');
+    suggestions.push(currentRisk.cls==='high'?'风险分层提示较高，建议加强全身转移监测频率（如定期肝脏影像/全身评估），具体方案请由眼肿瘤专科医师制定。':currentRisk.cls==='mid'?'风险分层为中等，建议保持规律随访并关注远期转移监测。':'风险分层相对较低，建议维持常规随访节奏。');
     suggestions.push('BAP1、SF3B1、EIF1AX 等分子分型信息建议在多学科会诊或转诊时一并提供，供专科医师参考。');
     suggestions.push('本报告风险分层为基于基因分型的简化示意，不能替代基因表达谱（GEP）等真实分子病理检测。');
   }

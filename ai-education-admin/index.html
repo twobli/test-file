@@ -267,6 +267,19 @@
       line-height: 1.6;
       font-size: 13px;
     }
+    .course-preview-cover {
+      min-height: 156px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f8fbff;
+    }
+    .course-preview-cover img {
+      display: block;
+      width: 100%;
+      height: 156px;
+      object-fit: cover;
+    }
     .course-chapter-list { display: grid; gap: 14px; }
     .chapter-card {
       border: 1px solid var(--line);
@@ -1168,6 +1181,27 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 12px;
     }
+    .case-preview-image-card {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid #dbe6f4;
+      border-radius: 8px;
+      background: #f8fbff;
+    }
+    .case-preview-image-card strong {
+      color: #1b2838;
+      font-size: 13px;
+    }
+    .case-preview-image {
+      display: block;
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+    }
     .preview-image-box {
       min-height: 190px;
       border-radius: 8px;
@@ -1510,18 +1544,18 @@
               <table>
                 <thead><tr><th>病例</th><th>病例分层</th><th>多模态医学影像</th><th>结构化病历摘要</th><th>可见人员</th><th>操作</th></tr></thead>
                 <tbody>
-                  <tr><td>病例1</td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、既往史、眼部检查</td><td>张医生、李医生等3人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例1', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例2</td><td>基础病例</td><td>眼底彩照</td><td>患者信息、主诉、现病史、眼部检查</td><td>王医生、赵医生等5人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例2', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例3</td><td>基础病例</td><td>OCTA</td><td>主诉、现病史、既往史、影像摘要</td><td>陈医生、周医生等2人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例3', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例4</td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、眼部检查</td><td>刘医生、孙医生等4人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例4', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例5</td><td>基础病例</td><td>OCT</td><td>主诉、现病史、既往史、治疗摘要</td><td>王医生、李医生等3人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例5', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例6</td><td>进阶病例</td><td>OCTA</td><td>病史、血糖控制、影像指标、诊疗摘要</td><td>刘医生、孙医生、赵医生等6人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例6', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例7</td><td>进阶病例</td><td>眼底彩照</td><td>主诉、眼部检查、鉴别诊断摘要</td><td>王医生、赵医生、孙医生等8人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例7', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例8</td><td>进阶病例</td><td>OCT</td><td>病史、影像指标、治疗与随访摘要</td><td>陈医生、周医生等2人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例8', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例9</td><td>进阶病例</td><td>OCTA</td><td>病史、影像指标、治疗决策摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例9', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例10</td><td>科研病例</td><td>眼底彩照</td><td>全身表现、眼部检查、影像与治疗摘要</td><td>周医生、韩医生、陈医生等5人</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例10', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例11</td><td>科研病例</td><td>OCT</td><td>家族史、眼部检查、影像与遗传摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例11', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
-                  <tr><td>病例12</td><td>科研病例</td><td>OCTA</td><td>既往史、眼部检查、影像与鉴别诊断摘要</td><td>待选择用户</td><td><button class="btn small" onclick="openDrawer('配置人员 - 病例12', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button></td></tr>
+                  <tr><td>病例1</td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、既往史、眼部检查</td><td>张医生、李医生等3人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例1', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例1')">预览</button></div></td></tr>
+                  <tr><td>病例2</td><td>基础病例</td><td>眼底彩照</td><td>患者信息、主诉、现病史、眼部检查</td><td>王医生、赵医生等5人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例2', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例2')">预览</button></div></td></tr>
+                  <tr><td>病例3</td><td>基础病例</td><td>OCTA</td><td>主诉、现病史、既往史、影像摘要</td><td>陈医生、周医生等2人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例3', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例3')">预览</button></div></td></tr>
+                  <tr><td>病例4</td><td>基础病例</td><td>眼底彩照</td><td>主诉、现病史、眼部检查</td><td>刘医生、孙医生等4人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例4', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例4')">预览</button></div></td></tr>
+                  <tr><td>病例5</td><td>基础病例</td><td>OCT</td><td>主诉、现病史、既往史、治疗摘要</td><td>王医生、李医生等3人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例5', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例5')">预览</button></div></td></tr>
+                  <tr><td>病例6</td><td>进阶病例</td><td>OCTA</td><td>病史、血糖控制、影像指标、诊疗摘要</td><td>刘医生、孙医生、赵医生等6人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例6', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例6')">预览</button></div></td></tr>
+                  <tr><td>病例7</td><td>进阶病例</td><td>眼底彩照</td><td>主诉、眼部检查、鉴别诊断摘要</td><td>王医生、赵医生、孙医生等8人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例7', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例7')">预览</button></div></td></tr>
+                  <tr><td>病例8</td><td>进阶病例</td><td>OCT</td><td>病史、影像指标、治疗与随访摘要</td><td>陈医生、周医生等2人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例8', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例8')">预览</button></div></td></tr>
+                  <tr><td>病例9</td><td>进阶病例</td><td>OCTA</td><td>病史、影像指标、治疗决策摘要</td><td>待选择用户</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例9', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例9')">预览</button></div></td></tr>
+                  <tr><td>病例10</td><td>科研病例</td><td>眼底彩照</td><td>全身表现、眼部检查、影像与治疗摘要</td><td>周医生、韩医生、陈医生等5人</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例10', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例10')">预览</button></div></td></tr>
+                  <tr><td>病例11</td><td>科研病例</td><td>OCT</td><td>家族史、眼部检查、影像与遗传摘要</td><td>待选择用户</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例11', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例11')">预览</button></div></td></tr>
+                  <tr><td>病例12</td><td>科研病例</td><td>OCTA</td><td>既往史、眼部检查、影像与鉴别诊断摘要</td><td>待选择用户</td><td><div class="table-actions"><button class="btn small" onclick="openDrawer('配置人员 - 病例12', '为已发布病例配置可见人员，新增员工可在此补充。', 'case-users')">配置人员</button><button class="btn small" onclick="openCasePreview('病例12')">预览</button></div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -1711,6 +1745,58 @@
       { name: '高血压视网膜病变', category: '解剖学', difficulty: '初级', chapters: '8章 / 16节', resources: '视频16节', knowledgeScope: 'Keith-Wagener-Barker分级、Scheie分级、动静脉交叉压迫征', completeRule: '已学完；测验结果可回看和重测', quizBinding: '已绑定 8/8 章测验｜支持再次测验', quizStatus: '已完成', progress: 100, front: '再次学习｜再次测验｜查看学习测验结果', status: '已发布' },
       { name: '眼底血管造影判读', category: '医学AI基础', difficulty: '中级', chapters: '11章 / 24节', resources: '视频24节', knowledgeScope: 'FFA渗漏判断、OCTA与FFA鉴别、无灌注区识别', completeRule: '视频完成进度追踪；本章未学完锁测验', quizBinding: '已绑定 7/11 章测验｜4章待配置', quizStatus: '待补齐', progress: 45, front: '继续学习｜未学完章节测验锁定', status: '已发布' }
     ];
+
+    var coursePreviewData = {
+      '糖尿病视网膜病变基础': {
+        cover: '../img/db_5_retina.png',
+        audience: '张医生（眼底病方向）、李医生（住院医师）',
+        chapters: [
+          {
+            title: '糖尿病视网膜病变基础',
+            sections: [
+              { name: '糖尿病视网膜病变分期基础', code: '1.1', video: '1.1_DR分期基础.mp4', knowledge: ['ETDRS分级', '国际临床DR分级'] },
+              { name: '微血管瘤与出血识别', code: '1.2', video: '1.2_微血管瘤与出血.mp4', knowledge: ['4-2-1规则', '高血压眼底'] }
+            ]
+          },
+          {
+            title: '临床分级与影像判读',
+            sections: [
+              { name: 'OCTA与FFA联合判读', code: '2.1', video: '2.1_OCTA与FFA联合判读.mp4', knowledge: ['OCTA与FFA鉴别', '国际临床DR分级'] }
+            ]
+          }
+        ],
+        quizzes: [
+          {
+            title: 'DR国际临床分级判断',
+            knowledge: 'ETDRS分级',
+            stem: '下列哪项最符合增殖期糖尿病视网膜病变的影像学表现？',
+            options: { A: '仅见少量微血管瘤', B: '出现新生血管及玻璃体积血', C: '仅见动静脉交叉压迫征', D: '仅见视盘边界清晰' },
+            answer: 'B',
+            analysis: '出现新生血管或其相关出血是增殖期糖尿病视网膜病变的重要判定依据。'
+          },
+          {
+            title: '糖尿病视网膜病变影像鉴别',
+            knowledge: 'OCTA与FFA鉴别',
+            stem: 'OCTA与FFA联合使用时，主要用于辅助判断哪一类病变？',
+            options: { A: '视网膜无灌注区及新生血管', B: '角膜曲率变化', C: '晶状体混浊程度', D: '眼睑炎症范围' },
+            answer: 'A',
+            analysis: 'OCTA可观察血流和血管网，FFA可显示渗漏与灌注情况，二者可互相补充。'
+          }
+        ]
+      },
+      '青光眼诊疗基础': {
+        cover: '../img/db_4_knowledge_graph.png',
+        audience: '王医生（青光眼方向）、赵医生（眼底病方向）'
+      },
+      '高血压视网膜病变': {
+        cover: '../img/db_1_eye_clinic.png',
+        audience: '张医生（眼底病方向）、李医生（住院医师）'
+      },
+      '眼底血管造影判读': {
+        cover: '../img/db_2_imaging.png',
+        audience: '陈医生（黄斑病方向）、周医生（科研组）'
+      }
+    };
 
     var assignments = [
       { course: '高血压视网膜病变', chapter: '第2章｜高血压视网膜病变分级', condition: '本章全部小节视频播放100%', courseKnowledge: '小节范围：KWB分级、Scheie分级、动静脉交叉压迫征', knowledge: '本次测验：KWB分级、动静脉交叉压迫征', retake: '不限次数；概览只统计首测', result: '学完本章后显示“再次测验/查看学习测验结果”', status: '已发布' },
@@ -1911,7 +1997,7 @@
       var target = document.getElementById('courseRows');
       if (!target) return;
       target.innerHTML = courses.map(function(item) {
-        var courseName = JSON.stringify(item.name);
+        var courseName = escapeHtml(JSON.stringify(item.name));
         return '<tr>'
           + '<td><strong>' + escapeHtml(item.name) + '</strong><div class="muted">' + escapeHtml(item.chapters) + '</div></td>'
           + '<td>' + escapeHtml(item.category) + '<br><span class="muted">难度等级 ' + escapeHtml(item.difficulty) + '</span></td>'
@@ -2279,21 +2365,150 @@
       setDrawerPrimary('保存配置人员', saveDrawer);
     }
 
+    function examPreviewKnowledge(item, index) {
+      var knowledge = String(item.meta || '眼科基础').split(/[、，；;／/]/).filter(Boolean);
+      return knowledge[index % knowledge.length] || '眼科基础';
+    }
+
+    function buildExamPreviewQuestion(item, index, type, score, difficulty) {
+      var knowledge = examPreviewKnowledge(item, index);
+      var base = {
+        type: type,
+        score: score,
+        difficulty: difficulty || (String(item.difficulty || '基础').split(/[、，；/]/)[0] || '基础'),
+        knowledge: knowledge,
+        stem: '结合' + item.name + '中的' + knowledge + '相关内容，选择最符合题意的答案。',
+        options: {
+          A: '仅凭单一表现即可完成判断',
+          B: '结合临床表现、检查结果和影像资料综合判断',
+          C: '不需要参考本章节知识点',
+          D: '无法根据现有资料进行判断'
+        },
+        answer: 'B',
+        analysis: '应围绕' + knowledge + '，结合题干给出的临床表现、检查结果和影像资料进行综合判断。'
+      };
+      if (type === '判断题') {
+        base.stem = '在' + item.name + '中，' + knowledge + '是进行临床判断时需要重点关注的内容。';
+        base.options = { A: '正确', B: '错误' };
+        base.answer = 'A';
+        base.analysis = '该表述符合' + knowledge + '的基本判断要求。';
+      } else if (type === '多选题') {
+        base.stem = '关于' + knowledge + '，下列哪些描述正确？';
+        base.options = {
+          A: '需要结合相关临床表现',
+          B: '需要参考对应检查或影像结果',
+          C: '可以完全脱离病史进行判断',
+          D: '应关注疾病分期或严重程度'
+        };
+        base.answer = ['A', 'B', 'D'];
+        base.analysis = '判断' + knowledge + '时，应结合临床表现、检查或影像结果，并关注疾病分期或严重程度。';
+      } else if (type === '简答题') {
+        base.stem = '请简述' + knowledge + '的核心概念、临床意义及判读要点。';
+        base.answer = '参考答案：围绕' + knowledge + '说明核心概念、临床意义、关键判读指标及常见鉴别点。评分点包括概念准确、要点完整、临床表述清晰。';
+        delete base.options;
+        delete base.analysis;
+      } else if (type === '病例分析题') {
+        base.stem = '患者出现与' + knowledge + '相关的临床表现，请结合病史、检查数据和影像资料完成诊断分析，并提出下一步处理建议。';
+        base.answer = '参考答案：结合病例资料判断主要疾病或分期，说明支持该判断的关键病史、检查和影像依据，并给出合理的鉴别诊断及处理建议。';
+        delete base.options;
+        delete base.analysis;
+      } else if (type === '代码题') {
+        base.stem = '请编写程序，对给定的' + knowledge + '数据进行整理和基础指标计算，并输出结构化结果。';
+        base.answer = '参考代码与判分说明：完成输入数据读取、核心指标计算、异常数据处理和结构化输出。按功能正确性、边界处理和输出格式评分。';
+        delete base.options;
+        delete base.analysis;
+      }
+      return base;
+    }
+
+    function getExamPreviewQuestions(item) {
+      if (Array.isArray(item.questions) && item.questions.length) return item.questions;
+      var isSingleCourse = item.examType === '单课程测评';
+      var questionCount = parseInt(String(item.questionCount || '').replace(/[^\d]/g, ''), 10) || (isSingleCourse ? 8 : 10);
+      var types = [];
+      if (isSingleCourse) {
+        for (var i = 0; i < questionCount; i++) types.push(i < questionCount - 2 ? '单选题' : '判断题');
+      } else {
+        var structure = String(item.questionStructure || '');
+        var typeOrder = [
+          { key: '单选', type: '单选题' },
+          { key: '判断', type: '判断题' },
+          { key: '多选', type: '多选题' },
+          { key: '简答', type: '简答题' },
+          { key: '病例', type: '病例分析题' },
+          { key: '代码', type: '代码题' }
+        ];
+        typeOrder.forEach(function(entry) {
+          if (structure.indexOf(entry.key) >= 0) types.push(entry.type);
+        });
+        while (types.length < questionCount) types.push(types[types.length % Math.max(typeOrder.length, 1)] || '单选题');
+        types = types.slice(0, questionCount);
+      }
+      var baseScore = Math.floor(100 / Math.max(questionCount, 1));
+      var remainder = 100 - baseScore * questionCount;
+      return types.map(function(type, index) {
+        return buildExamPreviewQuestion(item, index, type, baseScore + (index < remainder ? 1 : 0), index % 3 === 2 ? '高阶' : (index % 2 ? '进阶' : '基础'));
+      });
+    }
+
+    function renderExamPreviewQuestion(question, index) {
+      var options = question.options || {};
+      var answer = Array.isArray(question.answer) ? question.answer.join('、') : (question.answer || '');
+      var choiceMarkup = '';
+      if (question.type === '单选题' || question.type === '判断题' || question.type === '多选题') {
+        var optionKeys = question.type === '判断题' ? ['A', 'B'] : ['A', 'B', 'C', 'D'];
+        choiceMarkup = '<div class="form-field wide exam-question-choice"><label>' + (question.type === '判断题' ? '选项（正确 / 错误）' : (question.type === '多选题' ? '多选题选项' : '选项（A-D）')) + '</label><div class="exam-option-grid">'
+          + optionKeys.map(function(key) {
+            return '<div class="exam-option-field"><span class="exam-option-letter">' + key + '</span><input class="input" value="' + escapeHtml(options[key] || '') + '" readonly></div>';
+          }).join('')
+          + '</div></div>'
+          + '<div class="form-field exam-question-choice exam-answer-field"><label>正确答案</label><select class="select" disabled>'
+          + optionKeys.map(function(key) {
+            var label = question.type === '判断题' ? (key === 'A' ? '正确' : '错误') : key;
+            var selected = (Array.isArray(question.answer) ? question.answer.indexOf(key) >= 0 : question.answer === key) ? ' selected' : '';
+            return '<option value="' + key + '"' + selected + '>' + label + '</option>';
+          }).join('')
+          + '</select><p class="form-hint">' + (question.type === '多选题' ? '多选题可配置2至4个正确答案' : '只读展示正确答案') + '</p></div>'
+          + '<div class="form-field exam-question-choice exam-answer-field"><label>题目解析</label><textarea readonly>' + escapeHtml(question.analysis || '') + '</textarea></div>';
+      } else {
+        choiceMarkup = '<div class="form-field wide exam-question-general-answer"><label>' + (question.type === '代码题' ? '参考代码与判分说明' : '参考答案、评分点与解析') + '</label><textarea readonly>' + escapeHtml(question.answer || '') + '</textarea></div>';
+      }
+      return '<div class="exam-question-card">'
+        + '<div class="exam-question-card-head"><strong>第' + index + '题</strong></div>'
+        + '<div class="question-grid">'
+        + '<div class="form-field"><label>题型</label><select class="select" disabled><option selected>' + escapeHtml(question.type || '单选题') + '</option></select></div>'
+        + '<div class="form-field"><label>题目分数</label><input class="input" value="' + escapeHtml(question.score || '') + '" readonly></div>'
+        + '<div class="form-field"><label>题目难度</label><select class="select" disabled><option selected>' + escapeHtml(question.difficulty || '') + '</option></select></div>'
+        + '<div class="form-field"><label>关联知识点</label><select class="select" disabled><option selected>' + escapeHtml(question.knowledge || '') + '</option></select></div>'
+        + '<div class="form-field wide"><label>题干</label><textarea readonly>' + escapeHtml(question.stem || '') + '</textarea></div>'
+        + choiceMarkup
+        + '</div>'
+        + '</div>';
+    }
+
     function openExamPreview(id) {
       var item = getExamAdminItem(id);
       if (!item) return;
-      var body = '<div class="rules">'
-        + '<div class="rule-box"><b>考试名称</b><p>' + escapeHtml(item.name) + '</p></div>'
-        + '<div class="rule-box"><b>考试层级 / 类型</b><p>' + escapeHtml(item.stageType) + ' · ' + escapeHtml(item.examType) + '</p></div>'
-        + '<div class="rule-box"><b>试卷信息</b><p>' + escapeHtml(item.totalScore) + ' · ' + escapeHtml(item.duration) + ' · ' + escapeHtml(item.questionCount) + ' · 最大重复 ' + escapeHtml(getExamAttemptLimit(item)) + '</p></div>'
-        + '</div>'
-        + '<div class="section-block"><h3>题型结构</h3><div class="preview-answer"><p>' + escapeHtml(item.questionStructure || item.types || '暂未配置') + '</p></div></div>'
-        + '<div class="section-block"><h3>考试范围与难度</h3><div class="split-form">'
+      var questions = getExamPreviewQuestions(item);
+      var questionMarkup = questions.map(function(question, index) {
+        return renderExamPreviewQuestion(question, index + 1);
+      }).join('');
+      var body = '<div class="section-block"><h3>一、试卷基本信息</h3><div class="split-form">'
+        + '<div class="form-field wide"><label>考试名称</label><div class="answer-box">' + escapeHtml(item.name) + '</div></div>'
+        + '<div class="form-field"><label>考试层级</label><div class="answer-box">' + escapeHtml(item.stageType) + '</div></div>'
+        + '<div class="form-field"><label>考试类型</label><div class="answer-box">' + escapeHtml(item.examType) + '</div></div>'
+        + '<div class="form-field wide"><label>试卷信息</label><div class="answer-box">' + escapeHtml(item.totalScore) + ' · ' + escapeHtml(item.duration) + ' · ' + escapeHtml(item.questionCount) + ' · 最大重复 ' + escapeHtml(getExamAttemptLimit(item)) + '</div></div>'
+        + '</div></div>'
+        + '<div class="section-block"><h3>二、考试范围与难度</h3><div class="split-form">'
         + '<div class="form-field"><label>关联内容</label><div class="answer-box">' + escapeHtml(item.meta) + '</div></div>'
         + '<div class="form-field"><label>题目难度</label><div class="answer-box">' + escapeHtml(item.difficulty) + '</div></div>'
         + '</div></div>'
-        + '<div class="section-block"><h3>配置人员</h3><div class="answer-box">' + escapeHtml(item.audience) + '</div></div>';
-      openTeachingModal('预览试卷 - ' + item.name, '只读查看试卷名称、考试范围、题型结构、考试规则和配置人员。', body, '关闭', closeDrawer);
+        + '<div class="section-block"><h3>三、试题配置</h3><div class="exam-question-builder">'
+        + '<div class="exam-question-builder-head"><div><strong>试题配置</strong><p>以下内容与创建试卷页面逐题对应展示，预览页为只读状态，不提供编辑、删除或AI自动出题操作。</p></div></div>'
+        + '<div class="exam-question-list">' + questionMarkup + '</div>'
+        + '</div></div>'
+        + '<div class="section-block"><h3>四、配置人员</h3><div class="answer-box">' + escapeHtml(item.audience) + '</div></div>';
+      openTeachingModal('预览试卷 - ' + item.name, '只读查看试卷基础信息、考试范围、逐题配置内容和配置人员。', body, '关闭', closeDrawer);
     }
 
     function syncExamFrameworkOptions() {
@@ -3028,7 +3243,6 @@
           <option>刘医生（高级研修班）</option>
           <option>韩医生（科研课题组）</option>
         </select><p class="form-hint">按住 Ctrl 或 Command 可多选人员；只有已选人员登录后才能看到该病例。</p></div>
-        <div class="form-field"><label>配置生效时间</label><select class="select"><option>保存后立即生效</option></select></div>
       </div>`,
       knowledge: `<div class="split-form">
         <div class="form-field" style="grid-column:1/-1;"><label>知识点说明</label><p class="form-hint">这里只维护知识点本身，不绑定课程、不配置AI讲解、不配置题目范围。</p></div>
@@ -3466,9 +3680,177 @@
       openTeachingModal('预览阅片题 - ' + code, '模拟该阅片题在前台医护人员端的展示内容。', body, '关闭', closeDrawer);
     }
 
+    var casePreviewData = {
+      '病例1': { layer: '基础病例', type: '眼底彩照', eyeMode: '双眼', summary: '患者存在糖尿病和高血压基础病史，主诉双眼视力下降，需结合眼部检查和眼底影像进行综合判断。', audience: '张医生、李医生等3人', timeline: [{ date: '2026-01-01', title: '主诉与初步检查', info: '患者主诉视力下降，既往史、现病史和眼部检查结果已录入。' }] },
+      '病例2': { layer: '基础病例', type: '眼底彩照', eyeMode: '双眼', summary: '患者信息、主诉、现病史和眼部检查资料已结构化维护，用于基础病例推理训练。', audience: '王医生、赵医生等5人', timeline: [{ date: '2026-01-03', title: '患者信息与病史', info: '完成患者基本信息、主诉、现病史和眼部检查资料录入。' }] },
+      '病例3': { layer: '基础病例', type: 'OCTA', eyeMode: '双眼', summary: '病例包含主诉、现病史、既往史及OCTA影像摘要，适用于基础影像推理训练。', audience: '陈医生、周医生等2人', timeline: [{ date: '2026-01-05', title: '影像摘要', info: '补充既往史和OCTA影像摘要，形成初始病例节点。' }] },
+      '病例4': { layer: '基础病例', type: '眼底彩照', eyeMode: '双眼', summary: '病例以主诉、现病史和眼部检查为核心内容，发布后同步到学生端病例列表。', audience: '刘医生、孙医生等4人', timeline: [{ date: '2026-01-07', title: '眼部检查', info: '完成主诉、现病史和眼部检查资料维护。' }] },
+      '病例5': { layer: '基础病例', type: 'OCT', eyeMode: '双眼', summary: '病例包含主诉、既往史、眼部检查及治疗摘要，支持结合OCT进行病例分析。', audience: '王医生、李医生等3人', timeline: [{ date: '2026-01-09', title: '治疗摘要', info: '整理既往史、眼部检查和治疗摘要，形成基础病例资料。' }] },
+      '病例6': { layer: '进阶病例', type: 'OCTA', eyeMode: '双眼', summary: '病例重点维护病史、血糖控制、影像指标和诊疗摘要，适用于进阶病例推理。', audience: '刘医生、孙医生、赵医生等6人', timeline: [{ date: '2026-01-11', title: '病史与血糖控制', info: '录入长期病史、血糖控制情况和相关影像指标。' }] },
+      '病例7': { layer: '进阶病例', type: '眼底彩照', eyeMode: '双眼', summary: '病例聚焦主诉、眼部检查及鉴别诊断摘要，支持学生完成临床鉴别训练。', audience: '王医生、赵医生、孙医生等8人', timeline: [{ date: '2026-01-13', title: '鉴别诊断摘要', info: '根据主诉和眼部检查结果维护鉴别诊断摘要。' }] },
+      '病例8': { layer: '进阶病例', type: 'OCT', eyeMode: '双眼', summary: '病例以病史、影像指标和治疗随访摘要为主要结构化内容。', audience: '陈医生、周医生等2人', timeline: [{ date: '2026-01-15', title: '治疗与随访', info: '补充影像指标、治疗方案和随访节点。' }] },
+      '病例9': { layer: '进阶病例', type: 'OCTA', eyeMode: '双眼', summary: '病例包含病史、影像指标和治疗决策摘要，目前仍待选择具体可见人员。', audience: '待选择用户', timeline: [{ date: '2026-01-17', title: '治疗决策', info: '围绕病史和影像指标整理治疗决策摘要。' }] },
+      '病例10': { layer: '科研病例', type: '眼底彩照', eyeMode: '双眼', summary: '病例维护全身表现、眼部检查、影像资料及治疗摘要，适用于科研病例讨论。', audience: '周医生、韩医生、陈医生等5人', timeline: [{ date: '2026-01-19', title: '全身表现与眼部检查', info: '完成全身表现、眼部检查和影像资料的结构化维护。' }] },
+      '病例11': { layer: '科研病例', type: 'OCT', eyeMode: '双眼', summary: '病例包含家族史、眼部检查、影像与遗传摘要，目前仍待选择具体可见人员。', audience: '待选择用户', timeline: [{ date: '2026-01-21', title: '家族史与遗传摘要', info: '录入家族史、眼部检查和遗传相关摘要信息。' }] },
+      '病例12': { layer: '科研病例', type: 'OCTA', eyeMode: '双眼', summary: '病例维护既往史、眼部检查、影像及鉴别诊断摘要，目前仍待选择具体可见人员。', audience: '待选择用户', timeline: [{ date: '2026-01-23', title: '影像与鉴别诊断', info: '根据既往史和眼部检查结果完善影像与鉴别诊断摘要。' }] }
+    };
+
+    function casePreviewImageForType(type) {
+      if (type === 'OCT') return '../img/db_2_imaging.png';
+      if (type === 'OCTA') return '../img/db_4_knowledge_graph.png';
+      return '../img/db_5_retina.png';
+    }
+
+    function renderCasePreviewImages(item) {
+      var sides = item.eyeMode === '双眼' ? ['右眼', '左眼'] : [item.eyeSide || '右眼'];
+      var imageSource = item.image || casePreviewImageForType(item.type);
+      return sides.map(function(side) {
+        return '<div class="case-preview-image-card">'
+          + '<strong>' + escapeHtml(item.type) + '（' + escapeHtml(side) + '）</strong>'
+          + '<img class="case-preview-image" src="' + escapeHtml(imageSource) + '" alt="' + escapeHtml(item.type + side + '影像') + '">'
+          + '</div>';
+      }).join('');
+    }
+
+    function renderCasePreviewTimeline(timeline) {
+      return (Array.isArray(timeline) ? timeline : []).map(function(node, index) {
+        var question = node.question || {};
+        var options = question.options || {};
+        var correctAnswer = question.answer || 'A';
+        var answerOptions = ['A', 'B', 'C', 'D'].map(function(option) {
+          return '<option value="' + option + '"' + (option === correctAnswer ? ' selected' : '') + '>' + option + '</option>';
+        }).join('');
+        return '<div class="case-timeline-card" data-case-timeline-card>'
+          + '<div class="case-timeline-card-head"><strong>时间轴 ' + (index + 1) + '</strong><div class="case-timeline-date-field"><label>时间</label><input class="input case-timeline-date" type="date" value="' + escapeHtml(node.date || '') + '" readonly></div></div>'
+          + '<div class="case-timeline-section">'
+          + '<div class="case-timeline-section-head"><div><strong>病例信息</strong><p>填写该时间点对应的病史、症状、检查结果或其他病例进展信息。</p></div></div>'
+          + '<div class="form-field"><label>病例信息标题</label><input class="input case-timeline-info-title" value="' + escapeHtml(node.title || '') + '" readonly></div>'
+          + '<div class="form-field"><label>病例信息内容</label><textarea class="case-timeline-info-content" readonly>' + escapeHtml(node.info || '') + '</textarea></div>'
+          + '<div class="case-timeline-question-builder">'
+          + '<div class="case-timeline-question-builder-head"><div><strong>对应题目</strong><p>每个时间轴固定对应1道题目，请填写题干、选项、正确答案和解析。</p></div></div>'
+          + '<div class="case-timeline-question-card" data-case-timeline-question>'
+          + '<div class="case-timeline-question-card-head"><strong>对应题目</strong></div>'
+          + '<div class="form-field"><label>题干</label><textarea readonly>' + escapeHtml(question.stem || '根据该时间点的病例信息，最可能的临床判断是？') + '</textarea></div>'
+          + '<div class="case-timeline-option-grid">'
+          + '<div class="form-field"><label>A 选项</label><input class="input" value="' + escapeHtml(options.A || '结合病例信息进行综合判断') + '" readonly></div>'
+          + '<div class="form-field"><label>B 选项</label><input class="input" value="' + escapeHtml(options.B || '仅根据单一症状判断') + '" readonly></div>'
+          + '<div class="form-field"><label>C 选项</label><input class="input" value="' + escapeHtml(options.C || '暂不需要结合检查结果') + '" readonly></div>'
+          + '<div class="form-field"><label>D 选项</label><input class="input" value="' + escapeHtml(options.D || '无法形成任何判断') + '" readonly></div>'
+          + '</div>'
+          + '<div class="split-form">'
+          + '<div class="form-field"><label>正确答案</label><select class="select" disabled>' + answerOptions + '</select></div>'
+          + '<div class="form-field"><label>解析</label><textarea readonly>' + escapeHtml(question.analysis || '应结合该时间点的病例信息、检查结果和影像表现进行综合判断。') + '</textarea></div>'
+          + '</div>'
+          + '</div>'
+          + '</div>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    function openCasePreview(name) {
+      var item = casePreviewData[name];
+      if (!item) return;
+      var imageMarkup = renderCasePreviewImages(item);
+      var timelineMarkup = renderCasePreviewTimeline(item.timeline);
+      var body = '<div class="section-block"><h3>一、病例分层与影像配置</h3><div class="split-form">'
+        + '<div class="form-field"><label>病例分层</label><div class="answer-box">' + escapeHtml(item.layer) + '</div></div>'
+        + '<div class="form-field"><label>眼底影像类型</label><div class="answer-box">' + escapeHtml(item.type) + '</div></div>'
+        + '<div class="form-field"><label>单双眼</label><div class="answer-box">' + escapeHtml(item.eyeMode) + '</div></div>'
+        + '</div><div class="preview-cover" style="margin-top:12px;">' + imageMarkup + '</div></div>'
+        + '<div class="section-block"><h3>二、结构化病历摘要</h3><div class="answer-box">' + escapeHtml(item.summary) + '</div></div>'
+        + '<div class="section-block"><h3>三、病例演变时间轴</h3>' + timelineMarkup + '</div>'
+        + '<div class="section-block"><h3>四、配置人员</h3><div class="answer-box">' + escapeHtml(item.audience) + '</div></div>';
+      openTeachingModal('预览病例 - ' + name, '只读查看发布病例页面中的病例分层、影像资料、结构化病历摘要、病例演变时间轴和配置人员。', body, '关闭', closeDrawer);
+    }
+
     function openCourseAudience(name) {
       openDrawer('配置人员 - ' + name, '只选择该课程的可见人员，不修改课程章节、知识点或测验内容。', 'course-audience');
       setDrawerPrimary('保存配置人员', saveDrawer);
+    }
+
+    function getCoursePreviewConfig(course) {
+      var config = coursePreviewData[course.name] || {};
+      var firstKnowledge = String(course.knowledgeScope || '课程知识点').split('、')[0] || '课程知识点';
+      var secondKnowledge = String(course.knowledgeScope || '课程知识点').split('、')[1] || firstKnowledge;
+      return {
+        cover: config.cover || '../img/db_1_eye_clinic.png',
+        audience: config.audience || '张医生（眼底病方向）、李医生（住院医师）',
+        chapters: config.chapters || [
+          {
+            title: course.name + '基础',
+            sections: [
+              { name: firstKnowledge + '基础讲解', code: '1.1', video: '1.1_' + firstKnowledge + '.mp4', knowledge: [firstKnowledge, secondKnowledge] },
+              { name: secondKnowledge + '临床应用', code: '1.2', video: '1.2_' + secondKnowledge + '.mp4', knowledge: [secondKnowledge, firstKnowledge] }
+            ]
+          },
+          {
+            title: '临床分级与实践',
+            sections: [
+              { name: '典型病例判读', code: '2.1', video: '2.1_典型病例判读.mp4', knowledge: [firstKnowledge, secondKnowledge] }
+            ]
+          }
+        ],
+        quizzes: config.quizzes || [
+          {
+            title: course.name + '章节测验题',
+            knowledge: firstKnowledge,
+            stem: '以下哪项最符合本章节知识点的临床判读要求？',
+            options: { A: firstKnowledge + '表现', B: secondKnowledge + '表现', C: '与本章节无关的表现', D: '无法根据资料判断' },
+            answer: 'A',
+            analysis: '本题用于检验学员对' + firstKnowledge + '的掌握情况，需结合课程视频中的判读标准作答。'
+          }
+        ]
+      };
+    }
+
+    function renderCoursePreviewChapter(chapter, chapterIndex) {
+      var sections = Array.isArray(chapter.sections) ? chapter.sections : [];
+      var sectionMarkup = sections.map(function(section, sectionIndex) {
+        var knowledge = Array.isArray(section.knowledge) ? section.knowledge : String(section.knowledge || '').split('、').filter(Boolean);
+        var knowledgeOptions = knowledge.length
+          ? knowledge.map(function(item) { return '<option selected>' + escapeHtml(item) + '</option>'; }).join('')
+          : '<option selected>待绑定知识点</option>';
+        return '<div class="section-card">'
+          + '<div class="section-head"><strong>' + escapeHtml(section.code || (chapterIndex + '.' + (sectionIndex + 1))) + ' 小节</strong></div>'
+          + '<div class="split-form section-grid">'
+          + '<div class="form-field"><label>小节名称</label><input class="input" value="' + escapeHtml(section.name || '') + '" readonly></div>'
+          + '<div class="form-field"><label>小节编号</label><input class="input" value="' + escapeHtml(section.code || (chapterIndex + '.' + (sectionIndex + 1))) + '" readonly></div>'
+          + '<div class="form-field"><label>视频上传</label><input class="input" value="' + escapeHtml(section.video || '待上传视频') + '" readonly></div>'
+          + '<div class="form-field"><label>绑定知识点</label><select class="select knowledge-select" multiple size="5" disabled>' + knowledgeOptions + '</select></div>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+      return '<div class="chapter-card" data-chapter="' + chapterIndex + '">'
+        + '<div class="chapter-head"><div class="chapter-title-row"><span class="chapter-tag">第' + chapterIndex + '章</span><input class="input chapter-name" value="' + escapeHtml(chapter.title || '') + '" readonly></div></div>'
+        + '<div class="section-list">' + (sectionMarkup || '<div class="course-builder-note">本章待继续添加小节资源。</div>') + '</div>'
+        + '</div>';
+    }
+
+    function renderCoursePreviewQuiz(question, index) {
+      var options = question.options || {};
+      var knowledgePool = ['Keith-Wagener-Barker分级', 'Scheie分级', '动静脉交叉压迫征', '高血压眼底', 'RNFL厚度评估', 'OCTA与FFA鉴别', 'ETDRS分级', '4-2-1规则'];
+      if (question.knowledge && knowledgePool.indexOf(question.knowledge) === -1) knowledgePool.unshift(question.knowledge);
+      var knowledgeOptions = knowledgePool.map(function(item) {
+        return '<option' + (item === question.knowledge ? ' selected' : '') + '>' + escapeHtml(item) + '</option>';
+      }).join('');
+      var answerOptions = ['A', 'B', 'C', 'D'].map(function(item) {
+        return '<option value="' + item + '"' + (item === question.answer ? ' selected' : '') + '>' + item + '</option>';
+      }).join('');
+      return '<div class="exam-question-card">'
+        + '<div class="exam-question-card-head"><strong>第' + index + '题</strong></div>'
+        + '<div class="question-grid">'
+        + '<div class="form-field"><label>题目标题</label><input class="input" value="' + escapeHtml(question.title || '') + '" readonly></div>'
+        + '<div class="form-field"><label>绑定知识点</label><select class="select" disabled>' + knowledgeOptions + '</select></div>'
+        + '<div class="form-field wide"><label>题干</label><textarea readonly>' + escapeHtml(question.stem || '') + '</textarea></div>'
+        + '<div class="form-field"><label>A 选项</label><input class="input" value="' + escapeHtml(options.A || '') + '" readonly></div>'
+        + '<div class="form-field"><label>B 选项</label><input class="input" value="' + escapeHtml(options.B || '') + '" readonly></div>'
+        + '<div class="form-field"><label>C 选项</label><input class="input" value="' + escapeHtml(options.C || '') + '" readonly></div>'
+        + '<div class="form-field"><label>D 选项</label><input class="input" value="' + escapeHtml(options.D || '') + '" readonly></div>'
+        + '<div class="form-field"><label>正确答案</label><select class="select" disabled>' + answerOptions + '</select></div>'
+        + '<div class="form-field wide"><label>解析说明</label><textarea readonly>' + escapeHtml(question.analysis || '') + '</textarea></div>'
+        + '</div>'
+        + '</div>';
     }
 
     function openCoursePreview(name) {
@@ -3476,34 +3858,25 @@
       var chapterParts = String(course.chapters || '').split('/');
       var chapterCount = (chapterParts[0] || '').trim();
       var sectionCount = (chapterParts[1] || '').trim();
-      var chapterDetails = course.chapterDetails || [
-        { title: '第1章｜' + course.name + '基础', sections: sectionCount || '若干小节', video: course.resources, knowledge: course.knowledgeScope },
-        { title: '第2章｜临床分级与实践', sections: '待继续配置', video: '待上传', knowledge: '待绑定课程知识点' }
-      ];
-      var chapterMarkup = chapterDetails.map(function(chapter, index) {
-        return '<div class="answer-box" style="margin-top:' + (index ? '10px' : '0') + ';background:#f7fbff;">'
-          + '<strong>' + escapeHtml(chapter.title) + '</strong>'
-          + '<div style="margin-top:6px;line-height:1.8;">小节：' + escapeHtml(chapter.sections)
-          + '<br>视频资源：' + escapeHtml(chapter.video)
-          + '<br>绑定知识点：' + escapeHtml(chapter.knowledge) + '</div></div>';
+      var preview = getCoursePreviewConfig(course);
+      var chapterMarkup = preview.chapters.map(function(chapter, index) {
+        return renderCoursePreviewChapter(chapter, index + 1);
+      }).join('');
+      var quizMarkup = preview.quizzes.map(function(question, index) {
+        return renderCoursePreviewQuiz(question, index + 1);
       }).join('');
       var body = '<div class="section-block"><h3>一、课程基本信息</h3><div class="split-form">'
         + '<div class="form-field"><label>课程名称</label><div class="answer-box">' + escapeHtml(course.name) + '</div></div>'
         + '<div class="form-field"><label>知识体系</label><div class="answer-box">' + escapeHtml(course.category) + '</div></div>'
         + '<div class="form-field"><label>难度等级</label><div class="answer-box">' + escapeHtml(course.difficulty) + '</div></div>'
-        + '<div class="form-field"><label>课程封面</label><div class="answer-box">未单独配置封面</div></div>'
+        + '<div class="form-field"><label>课程封面</label><div class="course-preview-cover"><img src="' + escapeHtml(preview.cover) + '" alt="' + escapeHtml(course.name) + '课程封面"></div></div>'
         + '</div></div>'
-        + '<div class="section-block"><h3>二、章节与小节资源</h3><div class="preview-answer"><p>共 ' + escapeHtml(chapterCount || '若干') + '，包含 ' + escapeHtml(sectionCount || '若干') + '。</p></div>' + chapterMarkup + '</div>'
-        + '<div class="section-block"><h3>三、章节测验</h3><div class="split-form">'
-        + '<div class="form-field"><label>测验绑定</label><div class="answer-box">' + escapeHtml(course.quizBinding) + '</div></div>'
-        + '<div class="form-field"><label>测验状态</label><div class="answer-box">' + escapeHtml(course.quizStatus) + '</div></div>'
-        + '<div class="form-field wide"><label>完成规则</label><div class="answer-box">' + escapeHtml(course.completeRule) + '</div></div>'
+        + '<div class="section-block"><h3>二、章节与小节资源</h3><div class="course-builder-note">共 ' + escapeHtml(chapterCount || '若干章') + '，包含 ' + escapeHtml(sectionCount || '若干节') + '。以下按上传课程页面的章节、小节、视频和知识点结构展示。</div><div class="course-chapter-list" style="margin-top:12px;">' + chapterMarkup + '</div></div>'
+        + '<div class="section-block"><h3>三、章节测验</h3><div class="exam-question-builder">'
+        + '<div class="exam-question-builder-head"><div><strong>章节单选题</strong><p>每道题按题目标题、题干、A/B/C/D 选项、正确答案、解析和绑定知识点维护。</p></div></div>'
+        + '<div class="exam-question-list">' + quizMarkup + '</div>'
         + '</div></div>'
-        + '<div class="section-block"><h3>四、课程展示与配置人员</h3><div class="split-form">'
-        + '<div class="form-field"><label>学生端展示</label><div class="answer-box">' + escapeHtml(course.front) + '</div></div>'
-        + '<div class="form-field"><label>当前状态</label><div class="answer-box">' + escapeHtml(course.status) + '</div></div>'
-        + '<div class="form-field wide"><label>可见人员</label><div class="answer-box">张医生、李医生（示例配置）</div></div>'
-        + '</div></div>';
+        + '<div class="section-block"><h3>四、配置人员</h3><div class="answer-box">' + escapeHtml(preview.audience) + '</div></div>';
       openTeachingModal('预览课程 - ' + course.name, '只读查看上传课程页面中的课程信息、章节资源、章节测验和配置人员。', body, '关闭', closeDrawer);
     }
 

@@ -13,6 +13,12 @@
     .assign-user-select option { padding: 5px 8px; }
     .assign-user-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
     .assigned-users { color: var(--muted); line-height: 1.6; }
+    .preview-image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .preview-image-card { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .preview-image-card strong { color: #435066; font-size: 12px; }
+    .preview-image-placeholder { display: grid; place-items: center; min-height: 108px; border: 1px dashed #b8c7d9; border-radius: 8px; background: #f8fbff; color: var(--muted); font-size: 12px; text-align: center; padding: 10px; overflow: hidden; }
+    .preview-image-placeholder img { display: block; width: 100%; height: 190px; object-fit: cover; border-radius: 6px; }
+    @media (max-width: 760px) { .preview-image-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -114,7 +120,7 @@
           +'<td>'+esc(r.patient.chief).slice(0,34)+(r.patient.chief.length>34?'…':'')+'</td>'
           +'<td><span class="status '+dClass+'">'+esc(r.difficulty)+'</span></td><td>'+imageSummary(r)+'</td>'
           +'<td><div class="assigned-users">'+assignedSummary(r.audience)+'</div></td>'
-          +'<td><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">配置人员</button></td></tr>';
+          +'<td><div class="table-actions"><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">配置人员</button><button class="btn small" onclick="openPreviewModal(\''+r.code+'\')">预览</button></div></td></tr>';
       }).join(''):'<tr><td colspan="7"><div class="empty-note">没有匹配的经典病例。</div></td></tr>';
     }
     function imageSummary(r){var im=r.primaryImaging||{},side=im.eyeMode==='单眼'?(im.singleEye||'右眼')+' 1份':'右眼、左眼 2份';return esc(im.type||'未配置')+'<div class="muted">'+esc(side)+'</div>';}
@@ -156,6 +162,7 @@
       document.getElementById('modalTitle').textContent='新增经典病例';
       document.getElementById('modalDesc').textContent='按前端病例信息、主影像资料录入病例，并配置可见人员。';
       document.getElementById('modalBody').innerHTML=fields(editing);
+      document.getElementById('saveBtn').style.display='inline-flex';
       renderImageSlots();
       document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
     }
@@ -180,6 +187,48 @@
       var r=rows.find(function(x){return x.code===audienceEditingCode;});if(!r){showToast('未找到该经典病例');return;}
       var selected=selectedValues('audienceSelect');if(!selected.length){showToast('请至少配置1名人员');return;}
       r.audience=selected;closeAudienceModal();render();showToast('配置人员已保存');
+    }
+    function previewImageSource(type, side){
+      if(type==='OCT') return '../img/db_2_imaging.png';
+      if(type==='OCTA') return '../img/db_4_knowledge_graph.png';
+      return side==='左眼'?'../img/db_1_eye_clinic.png':'../img/db_5_retina.png';
+    }
+    function previewImageSlots(r){
+      var im=r.primaryImaging||{}, type=im.type||'眼底彩照', sides=im.eyeMode==='双眼'?['右眼','左眼']:[im.singleEye||'右眼'];
+      return '<div class="preview-image-grid">'+sides.map(function(side){
+        var key=side==='左眼'?'left':'right', file=im.files&&im.files[key];
+        var source=previewImageSource(type,side);
+        return '<div class="preview-image-card"><strong>'+esc(type)+'（'+esc(side)+'）</strong><div class="preview-image-placeholder">'
+          +'<img src="'+source+'" alt="'+esc(type+side+'影像')+'">'
+          +(file?'<span>上传文件：'+esc(file)+'</span>':'')
+          +'</div></div>';
+      }).join('')+'</div>';
+    }
+    function openPreviewModal(code){
+      var r=rows.find(function(item){return item.code===code;});
+      if(!r){showToast('未找到该经典病例');return;}
+      var p=r.patient||{}, im=r.primaryImaging||{};
+      var body='<div class="section-block"><h3>一、病例基本信息</h3><div class="view-grid">'
+        +'<div class="view-item"><b>病例号</b><span>'+esc(r.code)+'</span></div>'
+        +'<div class="view-item"><b>难度等级</b><span>'+esc(r.difficulty||'未配置')+'</span></div>'
+        +'</div></div>'
+        +'<div class="section-block"><h3>二、患者信息与病史</h3><div class="view-grid">'
+        +'<div class="view-item"><b>患者姓名</b><span>'+esc(p.name||'未填写')+'</span></div>'
+        +'<div class="view-item"><b>性别</b><span>'+esc(p.gender||'未填写')+'</span></div>'
+        +'<div class="view-item"><b>年龄</b><span>'+esc(p.age?p.age+'岁':'未填写')+'</span></div>'
+        +'<div class="view-item" style="grid-column:1/-1"><b>主诉 / 病史</b><span>'+esc(p.chief||'未填写')+'</span></div>'
+        +'</div></div>'
+        +'<div class="section-block"><h3>三、主影像资料</h3><div class="view-grid">'
+        +'<div class="view-item"><b>影像类别</b><span>'+esc(im.type||'未配置')+'</span></div>'
+        +'<div class="view-item"><b>单眼 / 双眼</b><span>'+esc(im.eyeMode||'未配置')+'</span></div>'
+        +(im.eyeMode==='单眼'?'<div class="view-item"><b>单眼眼别</b><span>'+esc(im.singleEye||'右眼')+'</span></div>':'')
+        +'</div>'+previewImageSlots(r)+'</div>'
+        +'<div class="section-block"><h3>四、配置人员</h3><div class="view-item"><b>可见人员</b><span>'+esc((r.audience||[]).join('、')||'待配置人员')+'</span></div></div>';
+      document.getElementById('modalTitle').textContent='预览经典病例 - '+r.code;
+      document.getElementById('modalDesc').textContent='只读查看新增经典病例页面中维护的病例信息、主影像资料和配置人员。';
+      document.getElementById('modalBody').innerHTML=body;
+      document.getElementById('saveBtn').style.display='none';
+      document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
     }
     function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
     render();

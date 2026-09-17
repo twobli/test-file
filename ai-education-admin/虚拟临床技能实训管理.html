@@ -12,6 +12,12 @@
     .assign-user-select { width: 100%; min-height: 148px; padding: 8px 10px; line-height: 1.7; }
     .assign-user-select option { padding: 5px 8px; }
     .assign-user-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .preview-image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .preview-image-card { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .preview-image-card strong { color: #435066; font-size: 12px; }
+    .preview-image-placeholder { display: grid; place-items: center; min-height: 108px; border: 1px dashed #b8c7d9; border-radius: 8px; background: #f8fbff; color: var(--muted); font-size: 12px; text-align: center; padding: 10px; overflow: hidden; }
+    .preview-image-placeholder img { display: block; width: 100%; height: 190px; object-fit: cover; border-radius: 6px; }
+    @media (max-width: 760px) { .preview-image-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -113,7 +119,7 @@
           +'<td>'+esc(r.patient.name)+' / '+esc(r.patient.gender)+' / '+esc(r.patient.age)+'岁</td>'
           +'<td>'+esc(r.patient.chiefComplaint).slice(0,32)+(r.patient.chiefComplaint.length>32?'…':'')+'</td>'
           +'<td>'+imageSummary(r)+'</td>'
-          +'<td><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">配置人员</button></td></tr>';
+          +'<td><div class="table-actions"><button class="btn small" onclick="openAudienceModal(\''+r.code+'\')">配置人员</button><button class="btn small" onclick="openPreviewModal(\''+r.code+'\')">预览</button></div></td></tr>';
       }).join(''):'<tr><td colspan="5"><div class="empty-note">没有匹配的虚拟病例。</div></td></tr>';
     }
     function imageSummary(r){
@@ -172,6 +178,7 @@
       document.getElementById('modalTitle').textContent='新建虚拟病例';
       document.getElementById('modalDesc').textContent='录入学生端展示的病例基本信息、生命体征与患者影像资料，并配置可见人员。';
       document.getElementById('modalBody').innerHTML=fields(editing);
+      document.getElementById('saveBtn').style.display='inline-flex';
       renderUploadSlots();
       document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
     }
@@ -179,6 +186,11 @@
     function value(id){var el=document.getElementById(id);return el?el.value.trim():'';}
     function fileName(id){var el=document.getElementById(id);return el&&el.files&&el.files[0]?el.files[0].name:'';}
     function selectedValues(id){var el=document.getElementById(id);return el?Array.from(el.selectedOptions).map(function(option){return option.value;}):[];}
+    function previewImageSource(type, side){
+      if(type==='OCT') return '../img/db_2_imaging.png';
+      if(type==='OCTA') return '../img/db_4_knowledge_graph.png';
+      return side==='左眼'?'../img/db_1_eye_clinic.png':'../img/db_5_retina.png';
+    }
     function save(){
       var imageType=value('f_image_type')||'眼底彩照', eyeMode=value('f_eye_mode')||'双眼', singleEye=value('f_single_eye')||'右眼';
       var item={
@@ -211,6 +223,45 @@
       if(!selected.length){showToast('请至少配置1名人员');return;}
       r.audience=selected;
       closeAudienceModal();render();showToast('配置人员已保存');
+    }
+    function previewImageSlots(r){
+      var im=r.imaging||{}, type=im.type||'眼底彩照', sides=im.eyeMode==='双眼'?['右眼','左眼']:[im.singleEye||'右眼'];
+      return '<div class="preview-image-grid">'+sides.map(function(side){
+        var key=side==='左眼'?'left':'right', file=im.files&&im.files[key];
+        var source=previewImageSource(type,side);
+        return '<div class="preview-image-card"><strong>'+esc(type)+'（'+esc(side)+'）</strong><div class="preview-image-placeholder">'
+          +'<img src="'+source+'" alt="'+esc(type+side+'影像')+'">'
+          +(file?'<span>上传文件：'+esc(file)+'</span>':'')
+          +'</div></div>';
+      }).join('')+'</div>';
+    }
+    function openPreviewModal(code){
+      var r=rows.find(function(item){return item.code===code;});
+      if(!r){showToast('未找到该虚拟病例');return;}
+      var p=r.patient||{}, im=r.imaging||{}, vitalHtml=(r.vitals||[]).map(function(pair){
+        return '<div class="view-item"><b>'+esc(pair[0])+'</b><span>'+esc(pair[1]||'未填写')+'</span></div>';
+      }).join('');
+      var body='<div class="section-block"><h3>一、病例基本信息</h3><div class="view-grid">'
+        +'<div class="view-item"><b>病例号</b><span>'+esc(r.code)+'</span></div>'
+        +'<div class="view-item"><b>患者姓名</b><span>'+esc(p.name||'未填写')+'</span></div>'
+        +'<div class="view-item"><b>性别</b><span>'+esc(p.gender||'未填写')+'</span></div>'
+        +'<div class="view-item"><b>年龄</b><span>'+esc(p.age? p.age+'岁':'未填写')+'</span></div>'
+        +'<div class="view-item" style="grid-column:1/-1"><b>既往史</b><span>'+esc(p.history||'未填写')+'</span></div>'
+        +'<div class="view-item" style="grid-column:1/-1"><b>主诉</b><span>'+esc(p.chiefComplaint||'未填写')+'</span></div>'
+        +'<div class="view-item" style="grid-column:1/-1"><b>结构化病历摘要</b><span>'+esc(r.summary||'未填写')+'</span></div>'
+        +'</div></div>'
+        +'<div class="section-block"><h3>二、生命体征与检查数据</h3><div class="view-grid">'+vitalHtml+'</div></div>'
+        +'<div class="section-block"><h3>三、患者影像资料</h3><div class="view-grid">'
+        +'<div class="view-item"><b>影像类别</b><span>'+esc(im.type||'未配置')+'</span></div>'
+        +'<div class="view-item"><b>单眼 / 双眼</b><span>'+esc(im.eyeMode||'未配置')+'</span></div>'
+        +(im.eyeMode==='单眼'?'<div class="view-item"><b>单眼眼别</b><span>'+esc(im.singleEye||'右眼')+'</span></div>':'')
+        +'</div>'+previewImageSlots(r)+'</div>'
+        +'<div class="section-block"><h3>四、配置人员</h3><div class="view-item"><b>可见人员</b><span>'+esc((r.audience||[]).join('、')||'待配置人员')+'</span></div></div>';
+      document.getElementById('modalTitle').textContent='预览虚拟病例 - '+r.code;
+      document.getElementById('modalDesc').textContent='只读查看新建虚拟病例页面中维护的病例信息、检查数据、患者影像资料和配置人员。';
+      document.getElementById('modalBody').innerHTML=body;
+      document.getElementById('saveBtn').style.display='none';
+      document.getElementById('mask').classList.add('open');document.getElementById('modal').classList.add('open');
     }
     function showToast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
     render();

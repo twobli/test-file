@@ -624,6 +624,53 @@
       word-break: break-all;
     }
 
+    .preview-reading-block {
+      margin-top: 10px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #d8e3ef;
+      border-radius: 10px;
+    }
+
+    .preview-reading-block-title {
+      margin-bottom: 8px;
+      color: #1d4e89;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .preview-reading-images {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .preview-reading-image {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid #d8e3ef;
+      border-radius: 8px;
+      background: #f8fbff;
+    }
+
+    .preview-reading-image strong {
+      color: #41556d;
+      font-size: 12px;
+    }
+
+    .preview-reading-image img {
+      display: block;
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #d8e3ef;
+      background: #fff;
+    }
+
     .personnel-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -702,6 +749,10 @@
         grid-template-columns: 1fr;
       }
 
+      .preview-reading-images {
+        grid-template-columns: 1fr;
+      }
+
       h1 {
         font-size: 28px;
       }
@@ -729,7 +780,7 @@
         <div class="page-copy">
           <p class="eyebrow">LIFE MEDICINE AI EDUCATION ADMIN</p>
           <h1>模型训练题集管理</h1>
-          <p class="page-desc">维护「模型训练实训」中使用的训练题集：每套题对应一种疾病（医学图像分类 / 医学图像分割），包含若干道单选题（题干、4 个选项、正确答案、解析）。支持新增和配置人员，学员端实时同步。</p>
+          <p class="page-desc">维护「模型训练实训」中使用的训练题集：每套题对应一种疾病（医学图像分类 / 医学图像分割），包含普通单选题和阅片单选题（题干、影像、4 个选项、正确答案、解析）。支持新增和配置人员，学员端实时同步。</p>
         </div>
       </div>
       <div class="section-actionbar"><button class="btn primary" type="button" onclick="openEditModal()">新增训练题集</button></div>
@@ -850,33 +901,63 @@
     // 后台示例训练题集：只保留当前两套基础题
     var SEED_SCHEMES = [
       {
-        taskKey: 'medical-classification-basics', title: '医学图像分类基础', category: 'classification', difficulty: '基础', knowledge: '模型训练基础',
+        taskKey: 'medical-classification-basics', title: '医学图像分类基础', category: 'classification', difficulty: '基础', knowledge: '模型训练基础', audience: ['张医生', '李医生'],
         questions: [
-          { id: 'medical-classification-basics-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], reading: '请观察一张眼底彩照：黄斑区见出血和渗出，医生需要先判断整幅图像属于哪一类疾病状态。', q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
+          { id: 'medical-classification-basics-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], q: '医学图像分类任务的主要输出通常是：', options: ['整幅图像所属的类别', '病灶的精确边界', '患者的住院天数', '图像的拍摄设备型号'], answer: 'A', explain: '分类任务主要判断整幅图像属于哪一类或哪种疾病状态。' },
           { id: 'medical-classification-basics-q2', q: '在模型训练流程中，训练集的主要作用是：', options: ['让模型学习图像特征与标签之间的关系', '用于最终评价模型性能', '只保存患者基本信息', '只用于人工修改标签'], answer: 'A', explain: '训练集用于模型学习，模型通过带标签样本建立图像与类别的对应关系。' },
           { id: 'medical-classification-basics-q3', q: '验证集最常用于：', options: ['模型选择和参数调整', '最终公布模型成绩', '代替训练集学习', '存放未标注图像'], answer: 'A', explain: '验证集用于观察模型在训练过程中的表现，并帮助选择模型和参数。' },
           { id: 'medical-classification-basics-q4', q: '测试集的主要作用是：', options: ['评价模型对独立新数据的泛化能力', '帮助模型反复调参', '增加训练样本数量', '修正人工标注'], answer: 'A', explain: '测试集应独立于训练过程，用于最终评价模型性能。' },
-          { id: 'medical-classification-basics-q5', kind: 'reading', imageType: 'oct', eyeSide: 'right', images: [{ name: '' }], reading: '阅片时医生已经确认图像来源，但还需要判断该图像与哪种疾病标签对应。', q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
+          { id: 'medical-classification-basics-q5', kind: 'reading', imageType: 'oct', eyeSide: 'right', images: [{ name: '' }], q: '为什么应尽量避免同一患者的数据同时出现在训练集和测试集？', options: ['可能造成数据泄漏，使评估结果虚高', '可以提高标签准确率', '会让测试集更大', '不会影响模型表现'], answer: 'A', explain: '同一患者的图像往往相似，混入不同数据集会导致数据泄漏。' },
           { id: 'medical-classification-basics-q6', q: '下列哪项属于医学图像的常见预处理？', options: ['图像尺寸调整和标准化', '直接删除所有异常病例', '把测试集并入训练集', '只保留一张图像'], answer: 'A', explain: '尺寸调整、标准化等操作有助于统一输入格式。' },
           { id: 'medical-classification-basics-q7', q: '数据增强的主要目的通常是：', options: ['增加训练样本多样性，提高泛化能力', '把标签全部改成一样', '减少数据量', '替代模型训练'], answer: 'A', explain: '翻转、旋转等增强可扩充训练样本的变化形式。' },
           { id: 'medical-classification-basics-q8', q: '下列哪种情况最符合“过拟合”？', options: ['训练集表现很好，但新数据表现较差', '训练集和测试集都很差', '测试集表现优于训练集很多', '模型完全没有输出'], answer: 'A', explain: '过拟合是模型过于贴合训练数据，导致泛化能力下降。' },
-          { id: 'medical-classification-basics-q9', kind: 'reading', imageType: 'octa', eyeSide: 'both', images: [{ name: '' }, { name: '' }], reading: '在一组糖网筛查图像里，模型需要尽量把真正的阳性病例找出来，不漏掉高风险患者。', q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', explain: '灵敏度反映模型发现阳性病例的能力。' },
+          { id: 'medical-classification-basics-q9', kind: 'reading', imageType: 'octa', eyeSide: 'both', images: [{ name: '' }, { name: '' }], q: '在医学图像分类中，灵敏度（Sensitivity）更关注：', options: ['真实阳性被正确识别的能力', '真实阴性被正确排除的能力', '所有类别是否完全相同', '图像分辨率是否足够高'], answer: 'A', explain: '灵敏度反映模型发现阳性病例的能力。' },
           { id: 'medical-classification-basics-q10', q: '关于医学AI模型的临床定位，最恰当的是：', options: ['作为辅助工具，仍需独立验证和医师复核', '完全取代医生诊断', '无需测试即可直接应用', '只要训练集高分就可直接上线'], answer: 'A', explain: '医学AI应以辅助为主，需经过独立验证和临床评价。' }
         ]
       },
       {
-        taskKey: 'medical-segmentation-basics', title: '医学图像分割基础', category: 'segmentation', difficulty: '基础', knowledge: '模型训练基础',
+        taskKey: 'medical-segmentation-basics', title: '医学图像分割基础', category: 'segmentation', difficulty: '基础', knowledge: '模型训练基础', audience: ['王医生', '赵医生'],
         questions: [
-          { id: 'medical-segmentation-basics-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], reading: '请观察一张眼底彩照：医生希望在图像上勾出病灶的轮廓，而不是只判断整张图像属于哪一类。', q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', explain: '分割任务重点是定位目标区域并描述其范围。' },
+          { id: 'medical-segmentation-basics-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], q: '医学图像分割任务最主要回答的是：', options: ['目标具体在哪里、范围有多大', '图像属于哪一类', '患者是否住院', '设备是否正常'], answer: 'A', explain: '分割任务重点是定位目标区域并描述其范围。' },
           { id: 'medical-segmentation-basics-q2', q: '分割模型通常输出的是：', options: ['像素级掩码（mask）', '患者姓名', '检查时间', '医生职称'], answer: 'A', explain: '分割结果一般是每个像素属于目标或背景的标记。' },
           { id: 'medical-segmentation-basics-q3', q: '与分类任务相比，分割任务更强调：', options: ['目标边界和位置', '整幅图像的单一类别', '患者年龄', '设备序列号'], answer: 'A', explain: '分割需要明确目标结构的具体轮廓和边界。' },
           { id: 'medical-segmentation-basics-q4', q: '分割标注通常比分类标签更耗时，主要原因是：', options: ['需要医生进行轮廓或像素级标注', '只要写一个疾病名称即可', '不需要任何专业知识', '只需自动复制图像'], answer: 'A', explain: '分割标注要逐像素勾画目标区域，因此更费时。' },
-          { id: 'medical-segmentation-basics-q5', kind: 'reading', imageType: 'oct', eyeSide: 'left', images: [{ name: '' }], reading: '如果OCT图像被翻转或旋转，对应的掩码必须保持与目标边界一一对应。', q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
+          { id: 'medical-segmentation-basics-q5', kind: 'reading', imageType: 'oct', eyeSide: 'left', images: [{ name: '' }], q: '在分割任务的数据增强中，最重要的原则是：', options: ['图像和对应掩码要同步做相同的空间变换', '只变换图像，不变换掩码', '只变换掩码，不变换图像', '两者分别随机变换'], answer: 'A', explain: '图像与掩码必须保持空间对应关系，才能继续对齐。' },
           { id: 'medical-segmentation-basics-q6', q: '如果把图像旋转了 15 度，对应的分割掩码应当：', options: ['同步旋转 15 度', '保持不动', '改成分类标签', '直接删除'], answer: 'A', explain: '分割掩码必须与图像保持一致的空间变换。' },
           { id: 'medical-segmentation-basics-q7', q: '训练分割模型时，模型学习的核心目标是：', options: ['区分目标区域与背景', '记住患者身份证号', '预测拍摄时间', '判断医生是否熟练'], answer: 'A', explain: '分割模型通过学习像素层面的差异来识别目标区域。' },
           { id: 'medical-segmentation-basics-q8', q: 'Dice 系数和 IoU 主要用于衡量：', options: ['预测区域与真实标注区域的重叠程度', '图像亮度是否一致', '患者是否需要住院', '模型训练速度'], answer: 'A', explain: '二者都是分割常用评价指标，数值越高通常越接近人工标注。' },
-          { id: 'medical-segmentation-basics-q9', kind: 'reading', imageType: 'octa', eyeSide: 'right', images: [{ name: '' }], reading: '当OCTA分割目标很小、背景很多时，模型更容易漏掉前景区域。', q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', explain: '小目标前景稀少，模型更容易忽略。' },
+          { id: 'medical-segmentation-basics-q9', kind: 'reading', imageType: 'octa', eyeSide: 'right', images: [{ name: '' }], q: '当分割目标区域很小、背景很多时，常见困难之一是：', options: ['前景像素少，容易漏分割', '图像太大所以一定无法训练', '掩码不需要人工标注', '分类标签会自动替代掩码'], answer: 'A', explain: '小目标前景稀少，模型更容易忽略。' },
           { id: 'medical-segmentation-basics-q10', q: '医学图像分割的临床价值通常是：', options: ['帮助量化病灶范围或结构边界，供医师参考', '完全替代临床判断', '只用于美观展示', '不需要临床验证'], answer: 'A', explain: '分割可辅助量化范围、体积或边界，但仍需医师复核。' }
+        ]
+      },
+      {
+        taskKey: 'diabetic-retinopathy-reading', title: '糖尿病视网膜病变识别训练', category: 'classification', difficulty: '进阶', knowledge: '眼底病智能识别', audience: ['陈医生', '周医生'],
+        questions: [
+          { id: 'diabetic-retinopathy-reading-q1', kind: 'reading', imageType: 'fundus', eyeSide: 'both', images: [{ name: '' }, { name: '' }], q: '阅片时判断糖尿病视网膜病变分级，首先应重点识别的是：', options: ['视网膜出血、渗出和微动脉瘤等病灶', '患者是否佩戴眼镜', '图像文件名是否规范', '拍摄设备品牌'], answer: 'A', explain: '糖网分级主要依据眼底病灶类型、数量和分布范围。' },
+          { id: 'diabetic-retinopathy-reading-q2', q: '训练糖网分类模型时，标签的一致性主要影响：', options: ['模型学习到的类别边界是否稳定', '浏览器页面配色', '文件下载速度', '医生登录方式'], answer: 'A', explain: '标签不一致会让模型难以建立稳定的类别判别边界。' },
+          { id: 'diabetic-retinopathy-reading-q3', q: '糖网筛查模型通常更需要关注漏诊风险，因此应重点观察：', options: ['灵敏度和阴性预测表现', '页面按钮数量', '训练集文件夹名称', '图片是否全部横向排列'], answer: 'A', explain: '筛查场景应尽量减少漏掉阳性病例。' },
+          { id: 'diabetic-retinopathy-reading-q4', q: '如果训练数据中轻症样本明显不足，可能导致：', options: ['模型对轻症识别能力下降', '模型自动增加医生数量', '测试集不再需要标注', '所有结果都变成正常'], answer: 'A', explain: '类别不均衡会影响模型对少数类别的学习。' },
+          { id: 'diabetic-retinopathy-reading-q5', kind: 'reading', imageType: 'oct', eyeSide: 'right', images: [{ name: '' }], q: 'OCT阅片中提示黄斑水肿风险的常见表现是：', options: ['视网膜层间液性暗区或增厚', '结膜充血', '角膜透明度下降', '眼睑皮肤红肿'], answer: 'A', explain: 'OCT可显示黄斑区结构改变，层间液和增厚常用于辅助判断水肿。' },
+          { id: 'diabetic-retinopathy-reading-q6', q: '医学图像进入模型训练前，通常需要先完成：', options: ['脱敏、质控和标注核对', '删除全部异常图像', '只保留文件名', '把所有图片改为同一诊断'], answer: 'A', explain: '数据脱敏、质量控制和标注核对是训练前的重要准备。' },
+          { id: 'diabetic-retinopathy-reading-q7', q: '下列哪项更适合作为糖网分类模型的输入标签？', options: ['无糖网、轻度、中度、重度、增殖期等分级', '拍摄人员姓名', '门诊楼层', '文件压缩比例'], answer: 'A', explain: '分类标签应反映疾病状态或分级。' },
+          { id: 'diabetic-retinopathy-reading-q8', q: '当模型在训练集表现很好但验证集表现明显下降，通常提示：', options: ['可能存在过拟合', '一定没有学到任何信息', '验证集无需使用', '应删除所有阳性样本'], answer: 'A', explain: '训练集好、验证集差是过拟合的典型信号。' },
+          { id: 'diabetic-retinopathy-reading-q9', kind: 'reading', imageType: 'octa', eyeSide: 'both', images: [{ name: '' }, { name: '' }], q: 'OCTA在糖网相关分析中更适合辅助观察：', options: ['视网膜微血管灌注和血流异常', '角膜曲率', '晶状体透明度', '眼压波动曲线'], answer: 'A', explain: 'OCTA可用于观察微血管灌注状态和血流异常。' },
+          { id: 'diabetic-retinopathy-reading-q10', q: '糖网AI筛查结果用于临床时，最合理的定位是：', options: ['辅助初筛和风险提示，最终需医生确认', '完全替代眼科医生', '无需任何验证即可部署', '只用于装饰展示'], answer: 'A', explain: '医学AI结果应作为辅助参考，仍需医生复核和临床验证。' }
+        ]
+      },
+      {
+        taskKey: 'macular-edema-segmentation', title: '黄斑水肿分割训练', category: 'segmentation', difficulty: '进阶', knowledge: 'OCT病灶分割', audience: ['孙医生', '刘医生'],
+        questions: [
+          { id: 'macular-edema-segmentation-q1', kind: 'reading', imageType: 'oct', eyeSide: 'left', images: [{ name: '' }], q: '黄斑水肿分割任务中，模型主要需要输出的是：', options: ['水肿区域的像素级范围', '患者挂号科室', '检查室编号', '报告打印次数'], answer: 'A', explain: '分割任务需要给出目标区域的位置和边界。' },
+          { id: 'macular-edema-segmentation-q2', q: '像素级标注质量直接影响：', options: ['模型学习到的病灶边界准确性', '登录页面标题', '图片文件大小是否固定', '按钮是否可点击'], answer: 'A', explain: '分割模型依赖准确的像素级标注学习边界。' },
+          { id: 'macular-edema-segmentation-q3', q: '进行OCT分割数据增强时，必须同步变换的是：', options: ['原图和对应掩码', '医生姓名和手机号', '菜单和按钮颜色', '标题和副标题'], answer: 'A', explain: '原图与掩码必须保持空间对应关系。' },
+          { id: 'macular-edema-segmentation-q4', q: 'Dice系数越高通常表示：', options: ['预测区域与人工标注越接近', '图片越亮', '患者年龄越大', '模型参数越少'], answer: 'A', explain: 'Dice用于衡量预测分割与真实标注的重叠程度。' },
+          { id: 'macular-edema-segmentation-q5', kind: 'reading', imageType: 'fundus', eyeSide: 'right', images: [{ name: '' }], q: '眼底彩照中黄斑区硬性渗出增多时，通常需要警惕：', options: ['黄斑区受累或水肿风险', '眼睑闭合不全', '角膜异物', '视野计结果异常'], answer: 'A', explain: '黄斑区硬性渗出可提示黄斑受累风险，需要结合OCT进一步评估。' },
+          { id: 'macular-edema-segmentation-q6', q: '如果分割目标很小且背景占比很大，训练时常见问题是：', options: ['模型容易忽略小目标', '模型无法读取任何图片', '标签会自动纠正', '训练一定不需要验证集'], answer: 'A', explain: '小目标样本占比低，容易被背景淹没。' },
+          { id: 'macular-edema-segmentation-q7', q: '分割结果用于临床辅助时，更应关注：', options: ['边界是否合理以及量化指标是否可信', '页面是否有动画', '文件夹是否置顶', '按钮文字是否很长'], answer: 'A', explain: '临床辅助需要关注分割边界和量化结果的可靠性。' },
+          { id: 'macular-edema-segmentation-q8', q: '对同一病灶多名医生标注差异较大时，应优先：', options: ['进行标注规则统一和专家复核', '直接随机选择一个标签', '删除全部训练集', '不再训练模型'], answer: 'A', explain: '统一规则和复核有助于提高标注一致性。' },
+          { id: 'macular-edema-segmentation-q9', kind: 'reading', imageType: 'octa', eyeSide: 'both', images: [{ name: '' }, { name: '' }], q: 'OCTA与OCT联合用于黄斑病变分析时，可以辅助补充的信息是：', options: ['微血管灌注状态', '患者身份证号码', '病房床号', '处方药价格'], answer: 'A', explain: 'OCTA提供血流和灌注信息，可与OCT结构信息互补。' },
+          { id: 'macular-edema-segmentation-q10', q: '黄斑水肿分割模型上线前，最需要完成的是：', options: ['独立测试集验证和临床专家复核', '只看训练集准确率', '删除失败案例', '关闭所有提示信息'], answer: 'A', explain: '医学模型上线前需要充分验证，并由临床专家评估可靠性。' }
         ]
       }
     ];
@@ -920,11 +1001,25 @@
       SEED_SCHEMES.forEach(function (seed) {
         if (!seed || !seed.taskKey) return;
         seen[seed.taskKey] = true;
+        normalizeSeedSchemeAnswers(seed);
         if (!map[seed.taskKey]) {
           merged.push(seed);
           changed = true;
         } else {
-          merged.push(map[seed.taskKey]);
+          var existing = Object.assign({}, seed, map[seed.taskKey]);
+          if (!existing.audience && seed.audience) {
+            existing.audience = seed.audience.slice();
+            changed = true;
+          }
+          if (syncSeedReadingQuestions(existing, seed)) {
+            changed = true;
+          }
+          if (map[seed.taskKey].answerDistributionVersion !== 1) {
+            existing.answerDistributionVersion = map[seed.taskKey].answerDistributionVersion || 0;
+            normalizeSeedSchemeAnswers(existing);
+            changed = true;
+          }
+          merged.push(existing);
         }
       });
       list.forEach(function (item) {
@@ -934,6 +1029,48 @@
       if (changed || merged.length !== list.length) writeSchemeBank(merged);
     }
     function categoryLabel(cat) { return cat === 'segmentation' ? '医学图像分割' : '医学图像分类'; }
+    function syncSeedReadingQuestions(existing, seed) {
+      if (!existing || !seed || !Array.isArray(existing.questions) || !Array.isArray(seed.questions)) return false;
+      var changed = false;
+      var seedById = {};
+      seed.questions.forEach(function (question) {
+        if (question && question.id) seedById[question.id] = question;
+      });
+      existing.questions = existing.questions.map(function (question) {
+        if (!question || !question.id || !seedById[question.id]) return question;
+        var seedQuestion = seedById[question.id];
+        if (String(seedQuestion.kind || '').toLowerCase() !== 'reading') return question;
+        var next = Object.assign({}, question);
+        ['kind', 'imageType', 'eyeSide', 'images'].forEach(function (field) {
+          var seedValue = Array.isArray(seedQuestion[field]) ? seedQuestion[field].slice() : seedQuestion[field];
+          if (JSON.stringify(next[field]) !== JSON.stringify(seedValue)) {
+            next[field] = seedValue;
+            changed = true;
+          }
+        });
+        return next;
+      });
+      return changed;
+    }
+    function normalizeSeedSchemeAnswers(entry) {
+      if (!entry || entry.answerDistributionVersion === 1 || !Array.isArray(entry.questions)) return;
+      var letters = ['A', 'B', 'C', 'D'];
+      entry.questions = entry.questions.map(function (question, index) {
+        var options = Array.isArray(question.options) ? question.options.slice(0, 4) : ['', '', '', ''];
+        while (options.length < 4) options.push('');
+        var oldIndex = letters.indexOf(String(question.answer || 'A').toUpperCase());
+        if (oldIndex < 0) oldIndex = 0;
+        var targetIndex = (index + 1) % letters.length;
+        var correctOption = options[oldIndex];
+        options.splice(oldIndex, 1);
+        options.splice(targetIndex, 0, correctOption);
+        return Object.assign({}, question, {
+          options: options,
+          answer: letters[targetIndex]
+        });
+      });
+      entry.answerDistributionVersion = 1;
+    }
 
     function renderSchemeTable() {
       var list = readSchemeBank();
@@ -961,8 +1098,8 @@
           '<td><span class="diff-tag ' + diffCls + '">' + escapeHtml(e.difficulty || '高阶') + '</span></td>' +
           '<td>' + cnt + ' 题</td>' +
           '<td><div class="table-actions" style="display:flex;gap:8px;">' +
-          '<button class="btn small" type="button" onclick="openPreviewModal(\'' + escapeHtml(e.taskKey) + '\')">预览</button>' +
           '<button class="btn small" type="button" onclick="openAudienceModal(\'' + escapeHtml(e.taskKey) + '\')">配置人员</button>' +
+          '<button class="btn small" type="button" onclick="openPreviewModal(\'' + escapeHtml(e.taskKey) + '\')">预览</button>' +
           '</div></td>' +
           '</tr>';
       }).join('');
@@ -1257,6 +1394,49 @@
     }
 
     /* ---- 预览 ---- */
+    function previewReadingImageSource(imageType, side) {
+      var type = readingImageTypeValue(imageType);
+      if (type === 'oct') return '../img/db_2_imaging.png';
+      if (type === 'octa') return '../img/db_4_knowledge_graph.png';
+      return side === '左眼' ? '../img/db_1_eye_clinic.png' : '../img/db_5_retina.png';
+    }
+
+    function renderReadingPreview(q) {
+      var eyeSide = readingEyeSideValue(q.eyeSide || q.eye || 'both');
+      var sides = eyeSide === 'both' ? ['左眼', '右眼'] : [readingEyeSideLabel(eyeSide)];
+      var images = sides.map(function (side, index) {
+        var file = readingFileName(q, index);
+        return '<div class="preview-reading-image">'
+          + '<strong>' + escapeHtml(readingImageTypeLabel(q.imageType || 'fundus')) + '（' + escapeHtml(side) + '）</strong>'
+          + '<img src="' + previewReadingImageSource(q.imageType || 'fundus', side) + '" alt="' + escapeHtml(readingImageTypeLabel(q.imageType || 'fundus') + side + '影像') + '">'
+          + '<span class="hint">' + (file ? '上传文件：' + escapeHtml(file) : '示例影像：预览使用项目医学影像素材') + '</span>'
+          + '</div>';
+      }).join('');
+      return '<div class="preview-reading-block">'
+        + '<div class="preview-reading-block-title">阅片设置</div>'
+        + '<div>影像类型：' + escapeHtml(readingImageTypeLabel(q.imageType || 'fundus')) + '</div>'
+        + '<div>眼别：' + escapeHtml(readingEyeSideLabel(eyeSide)) + '</div>'
+        + '<div class="preview-reading-images">' + images + '</div>'
+        + '</div>';
+    }
+
+    function renderSchemePreviewQuestion(q, index) {
+      var letters = ['A', 'B', 'C', 'D'];
+      var answer = String(q.answer || 'A').toUpperCase();
+      var kindLabel = String(q.kind || q.type || 'choice').toLowerCase() === 'reading' ? '阅片单选题' : '普通单选题';
+      var options = letters.map(function (letter, optionIndex) {
+        var mark = letter === answer ? ' <strong style="color:#1a7f37;">[正确答案]</strong>' : '';
+        return '<div style="margin-top:6px;">' + letter + '. ' + escapeHtml((q.options && q.options[optionIndex]) || '') + mark + '</div>';
+      }).join('');
+      return '<div class="answer-box" style="margin-top:12px;background:#f3f8ff;">'
+        + '<strong>第 ' + (index + 1) + ' 题 · ' + escapeHtml(kindLabel) + '</strong>'
+        + '<div style="margin-top:8px;font-weight:700;line-height:1.7;">题干：' + escapeHtml(q.q || '') + '</div>'
+        + (kindLabel === '阅片单选题' ? renderReadingPreview(q) : '')
+        + '<div style="margin-top:8px;line-height:1.9;">' + options + '</div>'
+        + '<div style="margin-top:8px;color:#1a4f8a;">解析：' + escapeHtml(q.explain || '') + '</div>'
+        + '</div>';
+    }
+
     function openPreviewModal(taskKey) {
       var mask = document.getElementById('previewMask');
       if (!mask) return;
@@ -1270,28 +1450,15 @@
         '<div class="form-field"><label>类型</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(categoryLabel(e.category)) + '</div></div>' +
         '<div class="form-field"><label>难度</label><div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(e.difficulty || '高阶') + '</div></div>' +
         '</div>';
-      (e.questions || []).forEach(function (q, i) {
-        var letters = ['A', 'B', 'C', 'D'];
-        var kindLabel = String(q.kind || q.type || 'choice').toLowerCase() === 'reading' ? '阅片单选题' : '普通单选题';
-        var opts = letters.map(function (L, oi) {
-          var mark = (L === q.answer) ? ' <strong style="color:#1a7f37;">[正确答案]</strong>' : '';
-          return '<div>' + L + '. ' + escapeHtml((q.options && q.options[oi]) || '') + mark + '</div>';
-        }).join('');
-        html += '<div class="answer-box" style="margin-top:12px;background:#f3f8ff;">' +
-          '<strong>第 ' + (i + 1) + ' 题 · ' + escapeHtml(q.q) + '（' + escapeHtml(kindLabel) + '）</strong>' +
-          (kindLabel === '阅片单选题' ? (
-            '<div style="margin-top:8px;padding:10px 12px;background:#fff;border:1px solid #dbe5f0;border-radius:8px;color:#4b5b6b;line-height:1.7;">' +
-            '<div>影像类型：' + escapeHtml(readingImageTypeLabel(q.imageType || 'fundus')) + '</div>' +
-            '<div>眼别：' + escapeHtml(readingEyeSideLabel(q.eyeSide || 'both')) + '</div>' +
-            '<div style="margin-top:6px;">影像文件：' + (Array.isArray(q.images) && q.images.length ? q.images.map(function (item, idx) {
-              return escapeHtml(readingSlotLabel(q.eyeSide || 'both', idx)) + ' · ' + escapeHtml((item && item.name) ? item.name : '暂无文件');
-            }).join(' / ') : '暂无文件') + '</div>' +
-            '</div>'
-          ) : '') +
-          '<div style="margin-top:6px;line-height:1.9;">' + opts + '</div>' +
-          (q.explain ? '<div style="margin-top:6px;color:#1a4f8a;">解析：' + escapeHtml(q.explain) + '</div>' : '') +
-          '</div>';
-      });
+      var questions = Array.isArray(e.questions) ? e.questions : [];
+      html += '<div style="margin-top:18px;">' +
+        (questions.length ? questions.map(function (q, questionIndex) {
+          return renderSchemePreviewQuestion(q, questionIndex);
+        }).join('') : '<div class="empty">暂无题目</div>') +
+        '</div>';
+      var audience = Array.isArray(e.audience) && e.audience.length ? e.audience.join('、') : '待配置人员';
+      html += '<div class="section-block" style="margin-top:18px;"><h3>配置人员</h3>' +
+        '<div class="answer-box" style="background:#fff;border-color:#dbe5f0;">' + escapeHtml(audience) + '</div></div>';
       body.innerHTML = html;
       mask.classList.add('open');
       mask.setAttribute('aria-hidden', 'false');
