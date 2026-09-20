@@ -426,15 +426,14 @@
         <section class="medicine-shell">
           <div class="medicine-main">
             <div class="medicine-panel">
-              <div class="panel-title-row"><div><h2>描述用药需求</h2><p>输入症状、已知疾病或当前用药情况，查看相关药品说明书信息和安全提示。</p></div><span class="mode-pill active">药物知识库匹配</span></div>
-              <div class="medicine-prompts">
-                <button class="prompt-chip" data-text="感冒发热，鼻塞流涕两天">感冒发热</button>
-              </div>
+              <div class="panel-title-row"><div><h2>描述用药需求</h2><p>输入症状、已知疾病或当前用药情况，查看相关药品说明书信息和安全提示。</p></div><span class="mode-pill active">系统通过智能算法匹配药物知识库</span></div>
+
+
               <textarea id="medicineInput" class="medicine-input" placeholder="请输入症状或用药需求，例如：咳嗽三天，想了解用药注意事项"></textarea>
               <div class="medicine-actions"><span class="small-note">仅展示药品说明书要点，不替代医生诊断或处方</span><button id="recommendBtn" class="medicine-btn">查看指导</button></div>
             </div>
             <div class="medicine-panel" id="recommendationPanel">
-              <div class="panel-title-row"><div><h2>说明书信息</h2><p>根据症状描述匹配，仅展示相关药品说明书内容。</p></div><span class="result-count">待查看</span></div>
+              <div class="panel-title-row"><div><h2>个体化用药方案</h2><p>根据症状描述匹配，仅展示相关药品说明书内容。</p></div><span class="result-count">待查看</span></div>
               <div id="recommendationResult" class="recommendation-result"><div class="empty-result">输入症状或用药需求后，系统将在这里展示相关说明书信息与用药提醒。</div></div>
             </div>
           </div>
@@ -500,7 +499,6 @@
         '<div class="result-section"><h3>常用药品说明书信息</h3><div class="drug-list">' + drugMarkup + '</div></div>' +
         '<div class="result-risk"><strong>风险提示</strong><br>以上为常用药品说明书信息示例，不表示这些药物适合当前患者。请重点关注过敏史、基础疾病、儿童或老年情况、妊娠哺乳期，以及是否正在使用其他药物；如出现高热持续不退、呼吸困难、胸痛、精神状态明显变差或症状持续加重，应及时就医。</div>' +
         '<div class="result-note"><strong>用药提醒</strong><span>请按医嘱设定的服药时间和剂量规律用药，避免漏服、自行增减或叠加多种药物；需复诊、续药或调整方案应提前与医生/药师确认。具体安排以医生处方与药师现场指导为准。</span></div>' +
-        '<div class="result-confirm"><strong>最后确认</strong><span>药品信息仅供参考，最终以医生诊断、处方和药师指导为准。</span></div>' +
       '</div>';
     }
   </script>

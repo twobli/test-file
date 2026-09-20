@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据资产管理和服务平台 · 元数据目录 · 眼病/慢病数据库</title>
+<style>
+:root{
+  --primary:#1459fa; --primary-h:#4080ff; --primary-bg:#e5effe; --primary-bg2:#f2f7ff;
+  --t1:#1d2129; --t2:#4e5969; --t3:#86909c; --t4:#c9cdd4;
+  --bd:#e5e6eb; --bd2:#f2f3f5; --bg:#f7f8fa;
+  --ok:#00b42a; --ok-bg:#e8ffea; --warn:#ff7d00; --warn-bg:#fff7e8;
+  --danger:#f53f3f; --danger-bg:#ffece8; --purple:#722ed1; --purple-bg:#f5e8ff;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font:Inter,-apple-system,BlinkMacSystemFont,"system-ui","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--t1);font:14px/1.5715 var(--font);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+h1,h2,h3,h4,p{margin:0}
+input,select{font:inherit;outline:none}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#d7d9de;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#c2c5cc}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ============ 顶部平台导航 ============ */
+.topbar{height:52px;display:flex;align-items:center;background:#fff;border-bottom:1px solid var(--bd);position:relative;z-index:60}
+.brand{display:flex;align-items:center;gap:9px;padding:0 16px;flex:0 0 auto;min-width:206px}
+.logo{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#1459fa,#4080ff);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700;flex:0 0 26px;letter-spacing:.5px}
+.brand b{font-size:15px;font-weight:600;white-space:nowrap;letter-spacing:.2px}
+.topnav{display:flex;gap:4px;align-items:center;margin-left:8px}
+.topnav a{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;font-size:14px;color:var(--t2);
+  cursor:pointer;white-space:nowrap;transition:.15s}
+.topnav a svg{width:15px;height:15px;fill:currentColor}
+.topnav a:hover{background:var(--bd2)}
+.topnav a.active{color:var(--primary);background:var(--primary-bg);font-weight:500}
+.vsep{width:1px;height:20px;background:var(--bd);margin:0 10px}
+.viewsw{display:flex;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-left:4px}
+.viewsw button{padding:5px 11px;font-size:13px;color:var(--t2);border-right:1px solid var(--bd);transition:.15s}
+.viewsw button:last-child{border-right:0}
+.viewsw button:hover{background:var(--bd2);color:var(--primary)}
+.viewsw button.on{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.topright{margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:16px;color:var(--t2)}
+.ticon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--t2)}
+.ticon:hover{background:var(--bd2)}
+.ticon svg{width:16px;height:16px;fill:currentColor}
+.tuser{display:flex;align-items:center;gap:7px;padding:4px 8px;border-radius:6px;font-size:13px;cursor:pointer}
+.tuser:hover{background:var(--bd2)}
+.tuser .av{width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
+
+/* ============ 三栏骨架 ============ */
+.app{display:flex;height:calc(100vh - 52px);overflow:hidden}
+.rail{width:206px;flex:0 0 206px;background:#fff;border-right:1px solid var(--bd);display:flex;flex-direction:column}
+.rail-h{height:44px;display:flex;align-items:center;padding:0 12px 0 16px;font-size:14px;font-weight:500;color:var(--t1)}
+.rail-h .fold{margin-left:auto;color:var(--t3);display:grid;place-items:center;width:22px;height:22px;border-radius:4px}
+.rail-h .fold:hover{background:var(--bd2)}
+.rail-h .fold svg{width:15px;height:15px;fill:currentColor}
+.rail nav{padding:2px 8px 12px;overflow:auto;flex:1}
+.rail nav a{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:13.5px;color:var(--t2);
+  cursor:pointer;margin-bottom:2px;white-space:nowrap}
+.rail nav a svg{width:15px;height:15px;fill:currentColor;opacity:.85;flex:0 0 15px}
+.rail nav a:hover{background:var(--bd2)}
+.rail nav a.active{background:var(--primary-bg);color:var(--primary);font-weight:600}
+.rail-foot{padding:10px 16px;border-top:1px solid var(--bd2);color:var(--t3);display:flex;align-items:center;gap:8px;font-size:12px}
+.rail-foot svg{width:15px;height:15px;fill:currentColor}
+
+.treepane{width:304px;flex:0 0 304px;background:#fff;border-right:1px solid var(--bd);display:flex;flex-direction:column;min-width:0}
+.tp-h{height:44px;display:flex;align-items:center;padding:0 10px 0 16px;font-size:14px;font-weight:500;color:var(--t1);gap:8px}
+.tp-h .acts{margin-left:auto;display:flex;gap:2px}
+.tp-h .acts button{width:24px;height:24px;border-radius:4px;display:grid;place-items:center;color:var(--t3)}
+.tp-h .acts button:hover{background:var(--bd2);color:var(--t2)}
+.tp-h .acts svg{width:15px;height:15px;fill:currentColor}
+.tp-search{position:relative;padding:2px 12px 10px}
+.tp-search input{width:100%;height:32px;border:1px solid var(--bd);border-radius:6px;padding:0 32px 0 11px;font-size:13px;
+  background:#fff;color:var(--t1);transition:.15s}
+.tp-search input::placeholder{color:var(--t4)}
+.tp-search input:focus{border-color:var(--primary-h);box-shadow:0 0 0 2px rgba(20,89,250,.08)}
+.tp-search svg{position:absolute;right:21px;top:11px;width:14px;height:14px;fill:var(--t3)}
+.tree{flex:1;overflow:auto;padding:0 8px 20px}
+.tn{display:flex;align-items:center;gap:6px;height:30px;border-radius:4px;padding:0 8px;font-size:13.5px;color:var(--t2);
+  cursor:pointer;white-space:nowrap;transition:background .12s}
+.tn:hover{background:var(--bd2)}
+.tn.sel{background:var(--primary-bg);color:var(--primary);font-weight:500}
+.tn .caret{width:12px;flex:0 0 12px;display:grid;place-items:center;color:var(--t3);font-size:9px;transition:transform .16s}
+.tn .caret.open{transform:rotate(90deg)}
+.tn .caret.leaf{visibility:hidden}
+.tn .fi{width:15px;height:15px;flex:0 0 15px;fill:currentColor;opacity:.7}
+.tn .lb{overflow:hidden;text-overflow:ellipsis}
+.tn .cnt{margin-left:auto;font-size:11.5px;color:var(--t4);padding-left:8px;font-variant-numeric:tabular-nums}
+.tn.sel .cnt{color:var(--primary)}
+.tn.dis{color:var(--t3);cursor:default}
+.tn.rem{color:#a9b0bb}
+.tn.rem .lb{text-decoration:line-through;text-decoration-color:#e0bcbc}
+.tree-sep{height:1px;background:var(--bd2);margin:8px 10px}
+
+.detail{flex:1;min-width:0;background:#fff;display:flex;flex-direction:column;overflow:hidden}
+.dscroll{flex:1;overflow:auto;display:flex;flex-direction:column}
+.dh{display:flex;align-items:center;gap:9px;padding:14px 20px 12px}
+.dh>svg{width:20px;height:20px;flex:0 0 20px;fill:var(--primary);opacity:.9}
+.dh h2{font-size:15px;font-weight:600;color:var(--t1);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dh .tag{font-size:12px;color:var(--t3);background:var(--bd2);border-radius:4px;padding:1px 7px}
+.dh .tag.blue{background:var(--primary-bg);color:var(--primary)}
+.dh .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.tabs2{display:flex;gap:22px;padding:0 20px;border-bottom:1px solid var(--bd)}
+.tabs2 button{padding:9px 0 10px;font-size:14px;color:var(--t2);position:relative;transition:.15s}
+.tabs2 button:hover{color:var(--primary)}
+.tabs2 button.active{color:var(--primary);font-weight:500}
+.tabs2 button.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--primary);border-radius:2px}
+.dbody{padding:16px 20px 40px;flex:1}
+
+/* ============ 统计条 ============ */
+.strip{display:flex;border:1px solid var(--bd);border-radius:6px;overflow:hidden;background:#fcfcfd;margin-bottom:16px}
+.cell{flex:1 1 0;padding:10px 15px;border-right:1px solid var(--bd);min-width:0}
+.cell:last-child{border-right:0}
+.cell .k{font-size:12.5px;color:var(--t2);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden}
+.cell .k svg{width:13px;height:13px;fill:var(--primary-h);flex:0 0 13px}
+.cell .v{font-size:23px;font-weight:600;color:var(--t1);line-height:1.35;margin-top:3px;font-variant-numeric:tabular-nums}
+.cell .v small{font-size:12px;font-weight:400;color:var(--t3);margin-left:2px}
+
+/* ============ 表格 ============ */
+.tabletools{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.tabletools .sbox{position:relative;width:320px}
+.tabletools .sbox input{width:100%;height:32px;border:1px solid var(--bd);border-radius:6px;padding:0 32px 0 11px;font-size:13px}
+.tabletools .sbox input::placeholder{color:var(--t4)}
+.tabletools .sbox input:focus{border-color:var(--primary-h);box-shadow:0 0 0 2px rgba(20,89,250,.08)}
+.tabletools .sbox svg{position:absolute;right:10px;top:9px;width:14px;height:14px;fill:var(--t3)}
+.tb{border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+thead th{background:var(--bg);color:var(--t2);font-weight:500;text-align:left;padding:9px 12px;border-bottom:1px solid var(--bd);
+  white-space:nowrap;font-size:12.5px}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--bd2);color:var(--t2);vertical-align:middle;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--primary-bg2);cursor:pointer}
+td.link{color:var(--primary)}
+td.mono{font-family:var(--mono);font-size:12.5px}
+td.num{font-variant-numeric:tabular-nums}
+.pager{display:flex;align-items:center;gap:12px;justify-content:flex-end;padding:12px 2px 0;font-size:13px;color:var(--t2)}
+.pager .pgs{display:flex;gap:4px}
+.pager .pgs button{min-width:28px;height:28px;border-radius:4px;border:1px solid transparent;color:var(--t2);font-size:13px;
+  display:grid;place-items:center;padding:0 6px}
+.pager .pgs button:hover:not(:disabled){background:var(--bd2)}
+.pager .pgs button.on{border-color:var(--primary);color:var(--primary);font-weight:500}
+.pager .pgs button:disabled{color:var(--t4);cursor:not-allowed}
+.pager select{height:28px;border:1px solid var(--bd);border-radius:4px;background:#fff;padding:0 6px;font-size:13px;color:var(--t2)}
+
+/* ============ 标签 ============ */
+.tag{display:inline-block;font-size:12px;line-height:18px;padding:0 7px;border-radius:4px;background:var(--bd2);color:var(--t2);white-space:nowrap}
+.tag.blue{background:var(--primary-bg);color:var(--primary)}
+.tag.green{background:var(--ok-bg);color:#009a29}
+.tag.orange{background:var(--warn-bg);color:#d25f00}
+.tag.red{background:var(--danger-bg);color:#cb2634}
+.tag.purple{background:var(--purple-bg);color:var(--purple)}
+.tag.grey{background:#f2f3f5;color:var(--t3)}
+.rdot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:1px}
+.rdot.y{background:#ff9a2e}.rdot.r{background:#f76560}.rdot.g{background:#00b42a}
+
+/* ============ 描述列表 ============ */
+.dl{border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+.dl .row{display:flex;border-bottom:1px solid var(--bd2)}
+.dl .row:last-child{border-bottom:0}
+.dl dt{flex:0 0 136px;background:#fcfcfd;padding:10px 14px;font-size:13px;color:var(--t3);font-weight:400}
+.dl dd{margin:0;padding:10px 14px;font-size:13px;color:var(--t1);flex:1;min-width:0;word-break:break-word}
+.sec-t{font-size:12.5px;font-weight:600;color:var(--t2);margin:18px 0 9px;display:flex;align-items:center;gap:8px}
+.sec-t:first-child{margin-top:0}
+.sec-t::after{content:"";flex:1;height:1px;background:var(--bd2)}
+.p-desc{font-size:13.5px;color:var(--t2);line-height:1.9;white-space:pre-wrap;word-break:break-word;
+  background:#fcfcfd;border:1px solid var(--bd);border-radius:6px;padding:14px 16px}
+.banner{display:flex;gap:10px;align-items:flex-start;border-radius:6px;padding:11px 14px;font-size:13px;line-height:1.75;margin-bottom:16px}
+.banner.warn{background:var(--warn-bg);border:1px solid #ffe4ba;color:#8a5200}
+.banner.danger{background:var(--danger-bg);border:1px solid #ffd3c9;color:#9c2b20}
+.banner b{font-weight:600}
+.banner .bi{font-weight:700;flex:0 0 auto}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--t3);font-size:13.5px}
+.empty svg{width:44px;height:44px;fill:#d7dbe3}
+
+/* ============ 内容页 ============ */
+.page{flex:1;overflow:auto;background:#fff;padding:0 20px 50px;min-width:0}
+.page .dh{padding-left:0;padding-right:0}
+.panel{border:1px solid var(--bd);border-radius:6px;margin-bottom:14px;overflow:hidden}
+.panel>.ph{padding:12px 16px;border-bottom:1px solid var(--bd2);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.panel>.ph .sub{margin-left:auto;font-size:12.5px;font-weight:400;color:var(--t3)}
+.panel>.pb{padding:14px 16px}
+.grp td{background:#fcfcfd;border-top:1px solid var(--bd);white-space:normal}
+tr.is-removed td{color:#a9b0bb;background:#fcfcfd}
+tr.is-removed td.link{color:#b7a3a3;text-decoration:line-through;text-decoration-color:#dcb9b9}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.remcard{border:1px solid #ffd3c9;border-radius:6px;overflow:hidden}
+.remcard h4{font-size:13.5px;font-weight:600;padding:9px 13px;background:var(--danger-bg);color:#9c2b20;display:flex;align-items:center;gap:8px}
+.remcard h4 .cnt{margin-left:auto;font-size:12px;font-weight:400;color:#c1746a}
+.remcard ul{margin:0;padding:6px 13px 10px;list-style:none}
+.remcard li{font-size:12.5px;color:#8d7a78;padding:3px 0 3px 14px;position:relative;
+  text-decoration:line-through;text-decoration-color:#e5c4c0}
+.remcard li::before{content:"";position:absolute;left:1px;top:11px;width:5px;height:5px;border-radius:50%;background:#e0b0aa}
+.remcard li .no{font-family:var(--mono);font-size:11px;color:#bb9c98;text-decoration:none;margin-right:6px}
+.checklist{margin:0;padding:0;list-style:none;font-size:13px;color:var(--t2)}
+.checklist li{padding:7px 0 7px 22px;position:relative;border-bottom:1px dashed var(--bd2);line-height:1.7}
+.checklist li:last-child{border-bottom:0}
+.checklist li::before{content:"✓";position:absolute;left:2px;top:7px;color:var(--ok);font-weight:700;font-size:12px}
+.checklist li.todo::before{content:"○";color:var(--t4)}
+
+/* ============ 弹窗 ============ */
+.mask{position:fixed;inset:0;background:rgba(29,33,41,.4);opacity:0;pointer-events:none;transition:.2s;z-index:80}
+.mask.on{opacity:1;pointer-events:auto}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.98);width:min(1000px,94vw);max-height:86vh;
+  background:#fff;border-radius:8px;z-index:95;opacity:0;pointer-events:none;transition:.2s;display:flex;flex-direction:column;
+  box-shadow:0 8px 40px rgba(0,0,0,.16)}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.modal-h{padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:9px}
+.modal-h h3{font-size:15px;font-weight:600;flex:1}
+.modal-b{padding:16px 20px 24px;overflow:auto}
+.modal-f{padding:11px 20px;border-top:1px solid var(--bd);display:flex;gap:9px;justify-content:flex-end;background:#fcfcfd}
+.xb{width:28px;height:28px;border-radius:4px;color:var(--t3);display:grid;place-items:center;font-size:17px;line-height:1}
+.xb:hover{background:var(--bd2);color:var(--t1)}
+.btn{height:32px;padding:0 14px;border-radius:6px;border:1px solid var(--bd);background:#fff;color:var(--t2);font-size:13.5px;
+  display:inline-flex;align-items:center;gap:6px;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--primary-h);color:var(--primary);background:var(--primary-bg2)}
+.btn.pri{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.pri:hover{background:var(--primary-h);border-color:var(--primary-h);color:#fff}
+.btn.sm{height:28px;padding:0 10px;font-size:12.5px}
+.asm{font-size:13.2px;color:var(--t2);counter-reset:a}
+.asm .item{padding:11px 0 11px 32px;border-bottom:1px dashed var(--bd2);position:relative;line-height:1.8}
+.asm .item:last-child{border-bottom:0}
+.asm .item::before{counter-increment:a;content:counter(a);position:absolute;left:0;top:12px;width:20px;height:20px;border-radius:50%;
+  background:var(--primary-bg);color:var(--primary);font-size:11.5px;font-weight:700;display:grid;place-items:center}
+.asm .item b{color:var(--t1);font-weight:600}
+.asm code{font-family:var(--mono);background:var(--bd2);padding:1px 5px;border-radius:3px;font-size:12px;color:#44506b}
+.toast{position:fixed;left:50%;bottom:40px;transform:translate(-50%,12px);background:rgba(29,33,41,.88);color:#fff;
+  padding:9px 16px;border-radius:6px;font-size:13px;opacity:0;pointer-events:none;transition:.22s;z-index:120;max-width:80vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media print{
+  .topbar,.rail,.treepane,.mask,.modal,.toast,.tabletools,.pager,.dh .right,.viewsw{display:none!important}
+  .app{display:block;height:auto}.page{padding:0;overflow:visible}
+  .panel,.tb,.strip{break-inside:avoid}
+}
+@media (max-width:1280px){.rail{display:none}.two{grid-template-columns:1fr}}
+
+/* ============ 元数据管理专用 ============ */
+.hint{font-size:12.5px;color:var(--t3);line-height:1.6}
+th sup{color:#c47a00;font-size:9.5px;font-weight:400;margin-left:2px}
+.grp-box{border:1px solid var(--bd);border-radius:6px;margin-bottom:14px;overflow:hidden}
+.grp-h{display:flex;align-items:center;padding:10px 16px;font-size:13.5px;font-weight:600;color:var(--t1);background:#fcfcfd}
+.grp-h a{margin-left:auto;font-size:12.5px;font-weight:400;cursor:pointer}
+.grp-grid{display:grid;grid-template-columns:1fr 1fr}
+.grp-grid.one{grid-template-columns:1fr}
+.gi{display:flex;gap:10px;padding:10px 16px;border-top:1px solid var(--bd2);font-size:13px;min-width:0}
+.gl{flex:0 0 112px;color:var(--t3)}
+.gv{color:var(--t1);min-width:0;word-break:break-word}
+.ck{color:var(--ok);font-weight:700}
+.tb-scroll{overflow-x:auto}
+.tb-scroll table{table-layout:auto;width:auto;min-width:100%}
+.tb-scroll thead th{white-space:nowrap}
+th.hl{background:#e9f1ff}
+td.hl{background:var(--primary-bg2)}
+tbody tr:hover td.hl{background:#e9f1ff}
+.jump{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--t2)}
+.jump input{width:46px;height:28px;border:1px solid var(--bd);border-radius:4px;text-align:center;font-size:13px;padding:0 4px}
+.jump input:focus{border-color:var(--primary-h)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand" onclick="location.href='app-center.html'" style="cursor:pointer" title="返回应用中心"><div class="logo">国科</div><b>数据资产管理和服务平台</b></div>
+  <nav class="topnav">
+    <a data-toast="「工作台」为参照站点的导航占位"><svg viewBox="0 0 24 24"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg>工作台</a>
+    <a data-toast="「数据开发」为参照站点的导航占位"><svg viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6z"/></svg>数据开发</a>
+    <a data-toast="「数据共享」为参照站点的导航占位"><svg viewBox="0 0 24 24"><path d="M18 16.1c-.8 0-1.5.3-2 .8l-7.1-4.1c.1-.2.1-.5.1-.8s0-.6-.1-.8L16 7.1c.5.5 1.2.8 2 .8 1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3c0 .3 0 .6.1.8L8 9.8C7.5 9.3 6.8 9 6 9c-1.7 0-3 1.3-3 3s1.3 3 3 3c.8 0 1.5-.3 2-.8l7.1 4.2c0 .1-.1.5-.1.7 0 1.6 1.3 3 3 3s3-1.3 3-3-1.4-3-3-3z"/></svg>数据共享</a>
+    <a class="active" data-toast="当前模块：数据管理"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 3.8 3 6v12c0 2.2 4 4 9 4s9-1.8 9-4V6c0-2.2-4-4-9-4zm0 2c4.4 0 7 1.3 7 2s-2.6 2-7 2-7-1.3-7-2 2.6-2 7-2zm7 14c0 .7-2.6 2-7 2s-7-1.3-7-2v-2.4c1.6.9 4.2 1.4 7 1.4s5.4-.5 7-1.4V18zm0-5c0 .7-2.6 2-7 2s-7-1.3-7-2v-2.4c1.6.9 4.2 1.4 7 1.4s5.4-.5 7-1.4V13z"/></svg>数据管理</a>
+  </nav>
+  <span class="vsep"></span>
+  <div class="viewsw" id="viewsw"></div>
+  <div class="topright">
+    <button class="ticon" data-toast="帮助中心：本原型为交互演示"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm1.8-7.1-.9.9c-.7.7-1.1 1.3-1.1 2.2h-2v-.5c0-.9.4-1.7 1.1-2.4l1.2-1.2c.4-.3.6-.8.6-1.4a2 2 0 1 0-4 0H8a4 4 0 1 1 8 0c0 .9-.4 1.7-1.2 2.4z"/></svg></button>
+    <button class="ticon" data-toast="通知：暂无新消息"><svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6v-5a7 7 0 0 0-5.5-6.8V3a1.5 1.5 0 0 0-3 0v1.2A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2z"/></svg></button>
+    <div class="tuser" data-toast="当前登录用户（原型演示）"><span class="av">需</span>需求管理员</div>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="rail">
+    <div class="rail-h">数据管理<button class="fold" data-toast="菜单收起为原型演示占位"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button></div>
+    <nav id="railNav"></nav>
+    <div class="rail-foot"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>收起菜单</div>
+  </aside>
+
+  <aside class="treepane" id="treepane">
+    <div class="tp-h">元数据目录
+      <span class="acts">
+        <button data-toast="刷新目录（原型演示）" title="刷新"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A8 8 0 1 0 19.73 14h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+        <button data-toast="复制目录（原型演示）" title="复制"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button>
+        <button data-toast="新建目录（原型演示）" title="新建"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
+      </span>
+    </div>
+    <div class="tp-search">
+      <input id="treeQ" placeholder="搜索数据库 / 数据表">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+    </div>
+    <div class="tree" id="tree"></div>
+  </aside>
+
+  <main class="detail" id="detail"></main>
+</div>
+
+<div class="mask" id="mask"></div>
+<div class="modal" id="modal">
+  <div class="modal-h"><h3>已剔除：知识图谱相关数据库及数据表</h3><button class="xb" data-close>×</button></div>
+  <div class="modal-b"><div class="two" id="modalCards"></div></div>
+  <div class="modal-f"><button class="btn" id="btnCopyRemoved2">复制剔除清单</button><button class="btn pri" data-close>关闭</button></div>
+</div>
+<div class="modal" id="modalAsm" style="width:min(820px,94vw)">
+  <div class="modal-h"><h3>原型假设与口径说明</h3><button class="xb" data-close>×</button></div>
+  <div class="modal-b"><div class="asm">
+    <div class="item"><b>数据来源</b>：数据库名、数据表名、需规编号、功能描述均取自 <code>《国际科技信息中心项目_生命医学&amp;工程细胞&amp;低维材料_3系统进度监控.xlsx》—「生命医学主题库」</code>，未改写原文。</div>
+    <div class="item"><b>界面参照</b>：按参考平台 <code>106.52.33.112:8090/#/zhongguanghe0915/data-assets/catalog</code>（数据管理 → 元数据管理 → 元数据目录）复刻：左树「数据库 → 表」，点数据库右侧为「库表清单 / 信息概览」，点表右侧为「字段信息 / 示例数据 / 信息概览」。主色 <code>#1459FA</code>、选中底色 <code>#E5EFFE</code> 取自该站实测值。</div>
+    <div class="item"><b>字段信息</b>：字段英文名 / 中文名 / 类型 / 非空 / 标准名称 / 数据分类 / 数据分级为<b>按数据集类型生成的示例元数据</b>，用于演示表级详情形态，需以真实库表结构替换。</div>
+    <div class="item"><b>示例数据</b>：表格中的取值为<b>程序生成的演示数据</b>，姓名、身份证号、电话、住址等已做脱敏化处理，不代表真实患者数据。</div>
+    <div class="item"><b>剔除口径</b>：四级功能点「眼病/慢病数据库」下，数据库名称含「知识图谱」的 5 组整组剔除，共 35 张表（数据集）；已核对保留项名称与描述中不含「知识图谱」字样。</div>
+    <div class="item"><b>占位模块</b>：顶部「工作台 / 数据开发 / 数据共享」与左侧菜单其他项为参照站点的导航占位，点击仅给出提示。</div>
+  </div></div>
+  <div class="modal-f"><button class="btn pri" data-close>我知道了</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>window.__DATA__ = {"project":{"system":"数据融合中枢","subsystem":"科学数据中心","l3":"生命医学主题库","l4":"眼病/慢病数据库"},"groups":[{"l5":"眼病/慢病临床数据库","items":[{"no":33,"l6":"基本人口学数据及临床信息","desc":"(1)患者基本信息：姓名、性别、联系方式、出生年月、家庭住址\n(2)患者背景信息：教育水平、收入水平、父母收入水平、子女信息、从事行业\n(3)慢病史：高血压、糖尿病、冠心病、高脂血症、脑梗塞、全身免疫类疾病、其他以及用药、手术或其他治疗情况\n(4)肿瘤病史：肺癌、肝癌、淋巴癌、乳腺癌或其他以及手术、放疗、化疗、靶向药以及其他用药和治疗情况\n(5)生活习惯：饮酒、吸烟\n(6)眼科病史：青光眼、白内障、糖尿病视网膜病变、玻璃体视网膜病变、其他以及用药、手术或其他治疗情况\n(7)患者主诉临床症状","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化"],"diseases":["通用"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"153 万条","rows":79,"freq":"每日增量"}},{"no":34,"l6":"常规眼部检查信息","desc":"（1）视力检查；\n（2）裂隙灯检查：了解并记录眼睑、结膜、角膜、虹膜、前房、瞳孔和晶状体等情况；\n（3）眼压检查：统一采用非接触眼压计测量眼压，连测3次，每次测量的间隔时间为1-2分钟，记录，再计算3次测量的平均值，作为最终的眼压值；\n（4）验光：非睫状肌麻痹状态下电脑自动验光，采用自动验光使用电脑验光仪，每只眼至少测量三次，最后电脑验光仪自动给出1个平均值。对任何一眼裸眼视力低于1.0的患者进行主觉验光，并记录最佳矫正视力。以等效球镜度代表该儿童的屈光度，等效球镜度(SphericalEquivalent,SE)=球镜(Sphere)+1/2柱镜(Cylinder)。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化"],"diseases":["通用"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"394 万条","rows":70,"freq":"每周增量"}},{"no":35,"l6":"全身检查信息","desc":"根据不同科室情况包括但不限于：血糖、Hb1C糖化血红蛋白、收缩压、舒张压、胆固醇、高密度脂蛋白、低密度脂蛋白、尿酸。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化"],"diseases":["通用"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"635 万条","rows":61,"freq":"每月增量"}}],"modalities":["结构化"]},{"l5":"全身慢病数据库","items":[{"no":36,"l6":"高血压数据集","desc":"现阶段患有高血压的病人逐渐增多，据统计在我国每3位成人就有1例高血压眼病患者，而高血压是一种需要终身治疗的疾病，如不加以治疗将会导致脑出血等严重后果，所以必须及时发现和治疗。研究表明患有高血压的病人会出现视网膜病变，也即高血压型视网膜病变，在视网膜上会出现相应的症状，在眼底彩照上表现为出现大量的病变病灶信息。轻度高血压视网膜病变对应的症状表现为小动脉普遍狭窄、动静脉交叉压迫和小动脉中央光反射变宽和增强；中度病变在轻度的基础上出现了微动脉瘤、视网膜出血、硬性渗出液和棉絮斑状渗出等症状；而重度病变则出现了视盘水肿症状；因此可以基于眼底彩照和OCT等眼科影像信息进行高血压的诊断分类。\n建立高血压数据集，包含患者的眼底彩照和OCT等眼科医学影像信息，根据高血压患病程度进行分级，从而能够基于眼部医学信息进行高血压的诊断分类。为基于眼科医学信息研究高血压病提供了数据信息，为临床上诊断高血压，判断高血压病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["高血压"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["SBP","收缩压","INT(4)",1,"收缩压","健康信息","L3"],["DBP","舒张压","INT(4)",1,"舒张压","健康信息","L3"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"876 万张","rows":52,"freq":"实时/按次同步"}},{"no":37,"l6":"慢性肾病数据集","desc":"慢性肾病是由各种原因导致的肾脏损伤或肾功能下降。慢性肾病的病因主要有原发性肾小球肾炎、高血压肾小动脉硬化、糖尿病肾病、继发性肾小球肾炎、肾小管间质病变。慢性肾病对眼睛会有很大影响，研究表明慢性肾病患者眼底可能会出现视网膜水肿、视神经乳头充血，严重者甚至可继发视网膜脱离和视网膜棉絮状渗出物。基于眼底彩照对慢性肾病进行分类诊断，能够有效筛查慢性肾病患者，总结慢性肾病患者的通用性眼底特征，对于医学上慢性肾病患者的眼底表现有重要的研究价值。\n建立慢性肾病数据集，包含患者眼底彩照和OCT等眼科医学影像信息，根据慢性肾病的分级标准进行分级。为基于眼科医学信息研究慢性肾病提供了数据信息，为建立慢性肾病诊断分类算法模型提供了数据基础，为临床上诊断慢性肾病，判断慢性肾病病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["慢性肾病"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["SCR","血肌酐(μmol/L)","DECIMAL(8,2)",0,"血肌酐","健康信息","L3"],["EGFR","估算肾小球滤过率","DECIMAL(6,2)",0,"eGFR","健康信息","L3"],["CKD_STAGE","CKD分期","VARCHAR(8)",0,"CKD分期","健康信息","L2"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"237 万张","rows":43,"freq":"每日增量"}},{"no":38,"l6":"糖尿病数据集","desc":"糖尿病会导致糖尿病视网膜病变的发生，所以基于眼科医学影像信息能够实现糖尿病的诊断分类。建立糖尿病数据集，包含患者眼底彩照和OCT等眼科医学影像信息，并按照糖尿病分级标准进行标注。为基于眼科医学信息研究糖尿病提供了数据信息，为建立糖尿病诊断分类算法模型提供了数据基础，为临床上诊断糖尿病，判断糖尿病病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["糖尿病"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["FPG","空腹血糖","DECIMAL(6,2)",0,"空腹血糖","健康信息","L3"],["HBA1C","糖化血红蛋白","DECIMAL(5,2)",0,"糖化血红蛋白","健康信息","L3"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"478 万张","rows":34,"freq":"每周增量"}},{"no":39,"l6":"冠心病数据集","desc":"研究表明，冠心病患者的颞上支动脉、颞下支动脉的直径大于非冠心病患者。以受试者Gensini积分为因变量，以眼底中央动脉不同分支平均直径为自变量进行Pearson相关性分析，结果显示，眼底中央动脉不同分支平均直径与冠状动脉粥样硬化的程度呈负相关。即冠心病与眼底动脉的形态有密切关系，所以基于眼底彩照能够进行冠心病的分类检测，有助于冠心病的筛查工作。\n建立冠心病数据集，包含患者眼底彩照的眼部医学影像信息，以及冠心病的分级标签。为基于眼科医学信息研究冠心病提供了数据信息，为建立冠心病诊断分类算法模型提供了数据基础，为临床上诊断冠心病，判断冠心病病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["冠心病"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["GENSINI","Gensini积分","DECIMAL(6,2)",0,"Gensini积分","健康信息","L2"],["CRAE","视网膜中央动脉管径","DECIMAL(6,2)",0,"CRAE","健康信息","L2"],["CRVE","视网膜中央静脉管径","DECIMAL(6,2)",0,"CRVE","健康信息","L2"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"719 万张","rows":95,"freq":"每月增量"}},{"no":40,"l6":"脑出血数据集","desc":"视网膜中央动脉管径CRAE变小，视网膜中央静脉管径CRVE变大，小动脉分形维数变小与多发性脑出血的发生相关。因而基于视网膜眼底图像能够检测脑出血疾病。建立脑出血数据集，包含患者的眼底彩照和OCT等眼部医学影像信息，以及是否患有脑出血的分类标签。为基于眼科医学信息研究脑出血提供了数据信息，为建立脑出血诊断分类算法模型提供了数据基础，为临床上诊断脑出血，判断脑出血病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["脑出血"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["NIHSS","NIHSS评分","INT(3)",0,"NIHSS评分","健康信息","L2"],["HEMATOMA_VOL","血肿体积(mL)","DECIMAL(8,2)",0,"血肿体积","健康信息","L2"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"960 万张","rows":86,"freq":"实时/按次同步"}},{"no":41,"l6":"脑卒中数据集","desc":"视网膜血管口径能够预测长期脑血管疾病的预后，最新的meta分析显示视网膜小动脉直径较小和视网膜小静脉直径较大的人群10年随访脑卒中的发病率较高。此外，ARIC研究发现动静脉交叉征与脑卒中亚型腔隙性脑梗死的发生相关而与其它卒中亚型无关，有动静脉交叉征的患者腔隙性脑梗死的发病率较无动静脉交叉征的患者高2.82倍。另外，腔隙性脑梗死与其它多种视网膜动静脉改变有关，腔隙性脑梗死的患者会出现视网膜小动脉狭窄、视网膜小静脉增宽、视网膜血管弯曲度的改变。基于这些特征，通过眼底彩照对脑卒中进行预测和分类，能够有效预防和延缓疾病的发展。\n建立脑卒中数据集，包含患者的眼底彩照的眼部医学影像信息，以及是否患有脑卒中的分类标签。为基于眼科医学信息研究脑卒中提供了数据信息，为建立脑卒中诊断分类算法模型提供了数据基础，为临床上诊断脑卒中，判断脑卒中病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["脑卒中"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["NIHSS","NIHSS评分","INT(3)",0,"NIHSS评分","健康信息","L2"],["STROKE_TYPE","卒中类型","VARCHAR(16)",0,"卒中分型","健康信息","L2"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"321 万张","rows":77,"freq":"每日增量"}},{"no":42,"l6":"脑小血管病数据集","desc":"脑小血管病是由于各种各样的原因，影响脑内的小动脉、毛细血管、小静脉等所导致的一种疾病。其中脑白质病变是最常见的脑小血管病的亚型，目前普遍认为严重的脑室旁脑白质病变预示了认知功能障碍和血管性痴呆的发生。视网膜静脉弯曲度增加、视网膜动静脉分形维度增加与深部白质高信号体积增大有关，视网膜静脉直径的增加与脑室周围白质高信号的体积增加有关，且眼底动静脉直径的改变可能先于脑白质病变的发展。即从眼底彩照中能够观察到与脑小血管病有关的特征，所以基于眼底彩照可以对脑小血管病进行诊断和分类，可以在患者进行眼部疾病诊断时有效筛查出脑小血管病。\n建立脑小血管病数据集，包含患者的眼底彩照的眼部医学影像信息，以及是否患有脑小血管病的分类标签。为基于眼科医学信息研究脑小血管病提供了数据信息，为建立脑小血管病诊断分类算法模型提供了数据基础，为临床上诊断脑小血管病，判断脑小血管病病情进展提供了新的思路。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","影像"],"diseases":["脑小血管病"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["DISEASE_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["ITEM_NAME","指标名称","VARCHAR(64)",1,"检验指标","健康信息","L2"],["ITEM_CODE","指标编码","VARCHAR(32)",0,"指标编码","健康信息","L1"],["ITEM_VALUE","指标值","DECIMAL(10,2)",1,"检验结果","健康信息","L3"],["UNIT","计量单位","VARCHAR(16)",0,"单位","健康信息","L1"],["FAZEKAS","Fazekas分级","VARCHAR(8)",0,"Fazekas分级","标注信息","L2"],["WMH_VOLUME","白质高信号体积(mL)","DECIMAL(8,2)",0,"WMH体积","标注信息","L2"],["REF_RANGE","参考范围","VARCHAR(64)",0,"参考区间","健康信息","L1"],["ABNORMAL_FLAG","异常标识","VARCHAR(4)",0,"异常标志","健康信息","L2"],["MEASURE_DATE","检测日期","DATETIME(19)",1,"检测时间","健康信息","L3"],["SOURCE_HOSPITAL","来源医院","VARCHAR(128)",0,"医疗机构","机构信息","L2"],["DEVICE_NAME","检测设备","VARCHAR(64)",0,"设备名称","机构信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"562 万张","rows":68,"freq":"每周增量"}}],"modalities":["结构化","影像"]},{"l5":"眼病/慢病病例数据库","items":[{"no":43,"l6":"糖尿病视网膜病变病例数据集","desc":"针对糖尿病视网膜病变的患者建立糖尿病视网膜病变病例数据集，包括患者的多次就诊所记录的病例信息和在医院历次所做检查的医学影像信息。能够帮助研究者根据历次检查的病例信息和医学影像信息开展糖尿病视网膜病变的疾病进展预测工作，从而帮助医生预测疾病进展，评估治疗效果和进行针对性治疗。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","文本","影像"],"diseases":["糖尿病视网膜病变"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"803 万张","rows":59,"freq":"每月增量"}},{"no":44,"l6":"青光眼病例数据集","desc":"针对青光眼患者建立青光眼病例数据集，包括患者的多次就诊所记录的病例信息和在医院历次所做检查的医学影像信息。能够帮助研究者根据历次检查的病例信息和医学影像信息开展青光眼的疾病进展预测工作，从而帮助医生预测疾病进展和进行针对性治疗。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","文本","影像"],"diseases":["青光眼"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"164 万张","rows":50,"freq":"实时/按次同步"}},{"no":45,"l6":"老年黄斑变性病例数据集","desc":"针对老年黄斑变性的患者建立老年黄斑变性病例数据集，包括患者的多次就诊所记录的病例信息和在医院历次所做检查的医学影像信息。能够帮助研究者根据历次检查的病例信息和医学影像信息开展糖尿病视网膜病变的疾病进展预测工作，从而帮助医生预测疾病进展和进行针对性治疗。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","文本","影像"],"diseases":["老年黄斑变性"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"405 万张","rows":41,"freq":"每日增量"}},{"no":46,"l6":"白内障病例数据集","desc":"针对白内障的患者建立白内障病例数据集，包括患者的多次就诊所记录的病例信息和在医院历次所做检查的医学影像信息。能够帮助研究者根据历次检查的病例信息和医学影像信息开展糖尿病视网膜病变的疾病进展预测工作，从而帮助医生预测疾病进展和进行针对性治疗。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","文本","影像"],"diseases":["白内障"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"646 万张","rows":32,"freq":"每周增量"}},{"no":47,"l6":"病理性近视病例数据集","desc":"针对病理性近视的患者建立病理性近视病例数据集，包括患者的多次就诊所记录的病例信息和在医院历次所做检查的医学影像信息。能够帮助研究者根据历次检查的病例信息和医学影像信息开展糖尿病视网膜病变的疾病进展预测工作，从而帮助医生预测疾病进展和进行针对性治疗。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","文本","影像"],"diseases":["病理性近视"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"887 万张","rows":93,"freq":"每月增量"}},{"no":48,"l6":"眼病罕见病病例数据集","desc":"针对罕见病的患者建立罕见病病例数据集，包括患者的多次就诊所记录的病例信息和在医院历次所做检查的医学影像信息。能够帮助研究者根据历次检查的病例信息和医学影像信息开展罕见病的疾病进展预测工作，从而帮助医生预测疾病进展和进行针对性治疗。罕见病病例数据集是十分珍贵的数据资源，帮助医生记录罕见病的治疗效果和方案，从而给予罕见病患者治疗意见和参考。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["结构化","文本","影像"],"diseases":["罕见病"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"248 万张","rows":84,"freq":"实时/按次同步"}}],"modalities":["结构化","文本","影像"]},{"l5":"眼病/慢病医学影像基础数据库","items":[{"no":49,"l6":"彩色眼底照相","desc":"采用45°彩色眼底照相机(CR-DGI,Canon,USA)，每眼以视盘和黄斑为中心各照一张。所有眼底照片均以电子形式存档保存。经过视神经图像分析系统，可以得到视盘面积、直径、萎缩弧面积、宽度等相关参数。\n图像清晰度的调节：在适当调整照相机屈光度后，交叉准线和视网膜能同时聚焦，此时，当聚焦于视网膜血管时，应时刻注意保持照相机镜头中交叉准线的清晰。在拍摄过程中根据需要调整闪光灯，以避免曝光过度或曝光不足。建议使用能保证照明均与你的最低闪光灯设置，以保证受试者的舒适度，并避免过度曝光。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["EXAM_TYPE","检查类型","VARCHAR(32)",1,"检查类型","影像信息","L2"],["EXAM_DATE","检查日期","DATETIME(19)",1,"检查时间","影像信息","L3"],["DEVICE_MODEL","设备型号","VARCHAR(64)",0,"设备型号","机构信息","L1"],["LATERALITY","眼别","VARCHAR(8)",0,"检查部位","影像信息","L2"],["IMAGE_PATH","影像存储路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["IMAGE_FORMAT","影像格式","VARCHAR(16)",0,"文件格式","影像信息","L1"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["FILE_SIZE","文件大小(KB)","INT(10)",0,"文件大小","影像信息","L1"],["CAPTURE_OPERATOR","采集医师","VARCHAR(32)",0,"操作人","机构信息","L2"],["UPLOAD_TIME","入库时间","DATETIME(19)",0,"入库时间","影像信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"489 万张","rows":75,"freq":"每日增量"}},{"no":50,"l6":"光学相干断层扫描（OpticalCoherenceTopography,OCT）","desc":"建议采用Spectraldomain以上的OCT数据，目前可接受的设备为HeidelbergSpectralis，ZeissCirrus，Topcon2000。黄斑区扫描采用黄斑矩阵模式，视盘扫描采用交叉扫描模式，以观察黄斑区、视盘周围视网膜、脉络膜的断层结构，可测量各部位各层结构的平均厚度。\n（1）选择黄斑中心凹单线（Macularmode）扫描：\n扫描长度（ScanLength）：6.0mmx6.6mm\n扫描分辨率（ScanResolution）：512x128\n（2）视盘扫描采用星扫+RNF厚度模式：\n扫描长度（ScanLength）：6.0mm\n扫描分辨率（ScanResolution）：1024\n平均计数（AveragingCount）：4\n在采集过程中，通过扫描窗口的上1/3部分进行扫描，以获得最佳的图像质量。采集后检查质量分数。建议ART10-12，但若因屈光间质不清或受试者固视不佳而难以完成扫描，可将ART降至5。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["EXAM_TYPE","检查类型","VARCHAR(32)",1,"检查类型","影像信息","L2"],["EXAM_DATE","检查日期","DATETIME(19)",1,"检查时间","影像信息","L3"],["DEVICE_MODEL","设备型号","VARCHAR(64)",0,"设备型号","机构信息","L1"],["LATERALITY","眼别","VARCHAR(8)",0,"检查部位","影像信息","L2"],["IMAGE_PATH","影像存储路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["IMAGE_FORMAT","影像格式","VARCHAR(16)",0,"文件格式","影像信息","L1"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["FILE_SIZE","文件大小(KB)","INT(10)",0,"文件大小","影像信息","L1"],["CAPTURE_OPERATOR","采集医师","VARCHAR(32)",0,"操作人","机构信息","L2"],["UPLOAD_TIME","入库时间","DATETIME(19)",0,"入库时间","影像信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"730 万张","rows":66,"freq":"每周增量"}},{"no":51,"l6":"眼部生物测量","desc":"建议采用光学测量数据，目前可接收ZEISSIOLmaster500/700，Haag-StreitLensStar。测量白到白距离、角膜曲率、前房深度、晶体厚度、眼轴长度等参数。采集需完成5个完整的流程并取平均值。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["EXAM_TYPE","检查类型","VARCHAR(32)",1,"检查类型","影像信息","L2"],["EXAM_DATE","检查日期","DATETIME(19)",1,"检查时间","影像信息","L3"],["DEVICE_MODEL","设备型号","VARCHAR(64)",0,"设备型号","机构信息","L1"],["LATERALITY","眼别","VARCHAR(8)",0,"检查部位","影像信息","L2"],["IMAGE_PATH","影像存储路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["IMAGE_FORMAT","影像格式","VARCHAR(16)",0,"文件格式","影像信息","L1"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["FILE_SIZE","文件大小(KB)","INT(10)",0,"文件大小","影像信息","L1"],["CAPTURE_OPERATOR","采集医师","VARCHAR(32)",0,"操作人","机构信息","L2"],["UPLOAD_TIME","入库时间","DATETIME(19)",0,"入库时间","影像信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"971 万张","rows":57,"freq":"每月增量"}},{"no":52,"l6":"验光","desc":"非睫状肌麻痹状态下电脑自动验光，采用自动验光使用Topcon电脑验光仪(KR-8900,Topcon,Japan)，每只眼至少测量三次，最后电脑验光仪自动给出1个平均值。对任何一眼裸眼视力低于1.0的儿童进行主觉验光，并记录最佳矫正视力。以等效球镜度代表该儿童的屈光度，等效球镜度(SphericalEquivalent,SE)=球镜(Sphere)+1/2柱镜(Cylinder)。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["EXAM_TYPE","检查类型","VARCHAR(32)",1,"检查类型","影像信息","L2"],["EXAM_DATE","检查日期","DATETIME(19)",1,"检查时间","影像信息","L3"],["DEVICE_MODEL","设备型号","VARCHAR(64)",0,"设备型号","机构信息","L1"],["LATERALITY","眼别","VARCHAR(8)",0,"检查部位","影像信息","L2"],["IMAGE_PATH","影像存储路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["IMAGE_FORMAT","影像格式","VARCHAR(16)",0,"文件格式","影像信息","L1"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["FILE_SIZE","文件大小(KB)","INT(10)",0,"文件大小","影像信息","L1"],["CAPTURE_OPERATOR","采集医师","VARCHAR(32)",0,"操作人","机构信息","L2"],["UPLOAD_TIME","入库时间","DATETIME(19)",0,"入库时间","影像信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"332 万张","rows":48,"freq":"实时/按次同步"}},{"no":53,"l6":"彩色多普勒超声检测（CDI）","desc":"被检查者平卧位，轻闭双眼，将探头轻触上睑，不对眼球施加压力，进行水平扫查。观察病灶大小、位置、性质及内部血流情况，测量瘤体基底直径和高度。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["EXAM_TYPE","检查类型","VARCHAR(32)",1,"检查类型","影像信息","L2"],["EXAM_DATE","检查日期","DATETIME(19)",1,"检查时间","影像信息","L3"],["DEVICE_MODEL","设备型号","VARCHAR(64)",0,"设备型号","机构信息","L1"],["LATERALITY","眼别","VARCHAR(8)",0,"检查部位","影像信息","L2"],["IMAGE_PATH","影像存储路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["IMAGE_FORMAT","影像格式","VARCHAR(16)",0,"文件格式","影像信息","L1"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["FILE_SIZE","文件大小(KB)","INT(10)",0,"文件大小","影像信息","L1"],["CAPTURE_OPERATOR","采集医师","VARCHAR(32)",0,"操作人","机构信息","L2"],["UPLOAD_TIME","入库时间","DATETIME(19)",0,"入库时间","影像信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"573 万张","rows":39,"freq":"每日增量"}},{"no":54,"l6":"核磁检测（MRI）","desc":"扫描序列包括T1WI、T2WI、T2脂肪抑制序列T1WI增强扫描。进行平扫横轴面、冠状面扫描、部分斜矢状面扫描。测量瘤体基底直径和高度。\n其他肺部、脑部医学影像将视科室患者情况进行收集和采集。注意，如上医学影像采集标准是针对目前已经开展工作的数据采集中心。然而不同的医院，不同的科室，其可采集仪器均有所不同，其采集标准需要做具体制定。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["EXAM_TYPE","检查类型","VARCHAR(32)",1,"检查类型","影像信息","L2"],["EXAM_DATE","检查日期","DATETIME(19)",1,"检查时间","影像信息","L3"],["DEVICE_MODEL","设备型号","VARCHAR(64)",0,"设备型号","机构信息","L1"],["LATERALITY","眼别","VARCHAR(8)",0,"检查部位","影像信息","L2"],["IMAGE_PATH","影像存储路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["IMAGE_FORMAT","影像格式","VARCHAR(16)",0,"文件格式","影像信息","L1"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["FILE_SIZE","文件大小(KB)","INT(10)",0,"文件大小","影像信息","L1"],["CAPTURE_OPERATOR","采集医师","VARCHAR(32)",0,"操作人","机构信息","L2"],["UPLOAD_TIME","入库时间","DATETIME(19)",0,"入库时间","影像信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"814 万张","rows":30,"freq":"每周增量"}}],"modalities":["影像"]},{"l5":"视网膜疾病分类数据库","items":[{"no":55,"l6":"糖尿病视网膜病变分类数据集","desc":"糖尿病视网膜病变是由糖尿病导致的视网膜微血管损害，极大地影响了患者的视力甚至可能会导致失明，是工作年龄人群视力障碍的首要原因之一。因此及时地诊断分类糖尿病视网膜病变，对于疾病的治疗有很重要的作用，可以有效防止疾病的进一步发展。糖尿病视网膜病变按照严重程度可以分为轻度非增殖性、中度非增殖性、重度非增殖性和增殖性四种。\n基于数据库收集和标准化后的眼病/慢病数据，该数据集包含眼底彩照等医学影像信息，并具有糖尿病视网膜病变分级的标签，即将数据集分为无疾病、轻度非增殖性、中度非增殖性、重度非增殖性和增殖性5类。从而能够基于此数据集建立糖尿病视网膜病变分类诊断的算法模型，为糖尿病视网膜病变相关方向的研究人员提供糖尿病视网膜病变诊断的特征信息，以及建立糖尿病视网膜病变的临床辅助诊断模型，实现辅助临床诊断的目的。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["糖尿病视网膜病变"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"175 万张","rows":91,"freq":"每月增量"}},{"no":56,"l6":"青光眼分类数据集","desc":"青光眼是一种由于眼压升高导致的进行性视神经损害和视野缺损，是全球导致失明的第二大病因，及时地诊断和治疗青光眼能够有效阻止病情进展、延缓视力丧失。\n基于数据库收集和标准化后的眼病/慢病数据，该数据集包含患者和非患病者（无青光眼）的眼底彩照等医学影像信息，并对上述数据进行分类标注。数据集中包含青光眼诊断所依据的杯盘比等关键信息，从而能够基于此数据集建立青光眼分类诊断的算法模型，实现辅助诊断，为青光眼相关方向的研究人员提供青光眼诊断的更加准确的特征信息。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["青光眼"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"416 万张","rows":82,"freq":"实时/按次同步"}},{"no":57,"l6":"老年黄斑变性分类数据集","desc":"老年黄斑变性是和年龄增长有关的多因素复合作用的眼底病，年龄越大，患病率越高，是老年人失明的主要原因。其在临床上分为干性和湿性两种，其中干性AMD可以通过及时的治疗延缓发展成为湿性的速度，湿性AMD也能够通过玻璃体腔注射药物延缓疾病的发展，因而及时诊断和治疗AMD能够有效延缓疾病进展。\n该数据集包括不少于6000例患者和非患病者（无老年黄斑变性）眼底彩照等医学影像信息，并对上述数据进行分类标注。能够为老年黄斑变性相关方向的研究人员提供老年黄斑变性诊断的标准和特征信息，为老年黄斑变性的分类诊断算法模型提供数据基础。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["老年黄斑变性"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"657 万张","rows":73,"freq":"每日增量"}},{"no":58,"l6":"白内障分类数据集","desc":"白内障是由于各种原因导致的晶状体蛋白质变性而发生的浑浊，随着年龄的增长而发病率增多。进行手术是有效治疗白内障的手段，但在手术之前需要对白内障的种类进行诊断分类，才能做到针对性治疗，提高治疗效果。\n该数据集包括眼底彩照，并将数据集分为多种亚型，能够为白内障相关方向的研究人员提供基于眼底彩照进行白内障诊断的标准和特征信息，为白内障的分类诊断算法模型提供数据基础。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["白内障"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"898 万张","rows":64,"freq":"每周增量"}},{"no":59,"l6":"病理性近视分类数据集","desc":"病理性近视是一种视网膜变性疾病，其主要特征是眼轴长度在26.5mm以上，同时伴有后巩膜葡萄肿和眼底病变，在40岁以上人群中患病率可以高达3%，是致盲的第二大原因，已成为近视防控的重点和难点。早期筛查和识别是病理性近视预防的基本措施，使用人工智能方法进行筛查能够有效提升筛查和诊断效率，有效克服传统筛查诊断模式效率低、难以普及的缺点。\n从标准化数据库中收集健康的眼底彩照和病理性近视患者的眼底彩照建立数据集，该数据集包括眼底彩照，按照病理性近视分级标准进行标注。能够为病理性近视相关方向的研究人员提供病理性近视诊断的标准和特征信息，为病理性近视的分类诊断算法模型提供数据基础。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["病理性近视"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"259 万张","rows":55,"freq":"每月增量"}},{"no":60,"l6":"普通近视分类数据集","desc":"随着电子产品的普及和发展，近视人数激增，且逐渐年轻化。近视尤其是高度近视会逐渐演变成病理性近视，严重的会致盲。因此，针对近视的早筛和预防尤为重要，使用人工智能进行近视的早筛和预防可以提升筛查效率。\n从标准化数据库中收集不同近视程度的患者的眼底彩照建立数据集，该数据集包括眼底彩照，按照近视程度进行分级标注。该数据集能够为普通近视相关方向的研究人员提供特征信息，为近视的分类诊断算法模型提供数据基础。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["普通近视"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",1,"等效球镜","健康信息","L2"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",0,"眼轴长度","健康信息","L3"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"500 万张","rows":46,"freq":"实时/按次同步"}},{"no":61,"l6":"罕见病分类数据集","desc":"眼科罕见病包含Stargardt病、视网膜色素变性和视网膜母细胞瘤等多种类型，它们在临床上非常少见，所以对罕见病的诊断和治疗也非常困难，需要大量知识和经验的积累。所以建立罕见病分类数据库，在此基础上研究罕见病分类算法，可以辅助医生对罕见病的诊断，有效提高治疗效率，保证罕见病患者的健康。\n从标准化数据库中收集各种类型罕见病的眼底彩照，该数据集包括眼底彩照，按照不同的罕见病类型进行分类，能够为罕见病相关方向的研究人员提供罕见病诊断的标准和特征信息，为罕见病的分类诊断算法模型提供数据基础。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","标注"],"diseases":["罕见病"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["DISEASE_TYPE","疾病类型","VARCHAR(32)",1,"疾病分类","健康信息","L3"],["GRADE_LABEL","分级标签","VARCHAR(32)",1,"分级结果","标注信息","L3"],["GRADE_STANDARD","分级标准","VARCHAR(64)",0,"标准依据","标注信息","L2"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["LABELER","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["LABEL_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["REVIEWER","复核人","VARCHAR(32)",0,"复核人","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"741 万张","rows":37,"freq":"每日增量"}}],"modalities":["影像","标注"]},{"l5":"视网膜疾病病灶分割数据库","items":[{"no":62,"l6":"糖尿病视网膜病变病灶分割数据集","desc":"糖尿病视网膜病变会引起视网膜微血管损伤，造成视网膜病变。在早期阶段，也即非增殖性糖尿病视网膜病变阶段，视网膜会出现微血管瘤，渗出以及黄斑水肿等病灶。而在晚期阶段，也即增殖性糖尿病视网膜病变阶段，会形成视网膜新生血管等病灶。因而准确检测和分割糖尿病视网膜病变的病灶，对于医生判断糖尿病视网膜病变所处的阶段和严重程度，选择适合的治疗方案和跟踪治疗效果方面有着重要的意义。\n建立一个糖尿病视网膜病变病灶分割数据集，包含患者的眼底彩照等信息，由资深医生进行眼底彩照中病灶的分割标注。病灶类型分为微动脉瘤、硬渗出、软渗出、出血。从而能够在此数据集基础上研究糖尿病视网膜病变病灶分割算法，为研究者提供病灶相关信息，辅助医生诊断。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","分割掩膜"],"diseases":["糖尿病视网膜病变"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["LESION_TYPE","病灶类型","VARCHAR(32)",1,"病灶分类","标注信息","L3"],["MASK_PATH","掩膜路径","VARCHAR(512)",1,"标注文件路径","标注信息","L2"],["LESION_AREA","病灶面积(像素)","INT(10)",0,"病灶面积","标注信息","L2"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["LESION_COUNT","病灶数量","INT(6)",0,"病灶数量","标注信息","L1"],["ANNOTATOR","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["ANNOTATE_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"982 万张","rows":28,"freq":"每周增量"}},{"no":63,"l6":"老年黄斑变性病灶分割数据集","desc":"老年黄斑变性会导致脉络膜新生血管、地图状萎缩、玻璃膜疣的多种视网膜病灶的发生，其中地图状萎缩和玻璃膜疣通常发生在干性AMD阶段，脉络膜新生血管通常发生在湿性AMD阶段，准确判断AMD所处阶段，对于AMD的治疗有着重要意义，当AMD处于湿性阶段时就必须实施玻璃体腔注药治疗的手术，否则将造成严重后果。所以准确分割老年黄斑变性造成的视网膜病变病灶，能够帮助医生准确判断AMD所处阶段，从而制定正确的疾病治疗方案和跟踪治疗的效果。\n建立一个老年黄斑变性病灶分割数据集，包含患者的眼底彩照，由资深医生进行眼底彩照中病灶的分割标注。病灶类型如玻璃膜疣、脉络膜新生血管、萎缩。该数据集为研究老年黄斑变性病灶分割算法建立了数据基础，为研究者提供病灶相关信息。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","分割掩膜"],"diseases":["老年黄斑变性"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["LESION_TYPE","病灶类型","VARCHAR(32)",1,"病灶分类","标注信息","L3"],["MASK_PATH","掩膜路径","VARCHAR(512)",1,"标注文件路径","标注信息","L2"],["LESION_AREA","病灶面积(像素)","INT(10)",0,"病灶面积","标注信息","L2"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["LESION_COUNT","病灶数量","INT(6)",0,"病灶数量","标注信息","L1"],["ANNOTATOR","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["ANNOTATE_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"343 万张","rows":89,"freq":"每月增量"}},{"no":64,"l6":"病理性近视病灶分割数据集","desc":"病理性近视是一种视网膜变性疾病，会出现多种病变，对多种病变病灶进行分割，可以帮助医生判断病理性近视的病情，从而进行针对性治疗。\n建立一个病理性近视病灶分割数据集，包含患者的眼底彩照和OCT图像，由资深医生进行眼底彩照等影像中病灶的分割标注。病灶类型如漆裂纹、Fuchs斑、脉络膜视网膜萎缩、黄斑劈裂。该数据集为研究病理性近视病灶分割算法建立了数据基础，为研究者提供病灶相关信息。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","分割掩膜"],"diseases":["病理性近视"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["LESION_TYPE","病灶类型","VARCHAR(32)",1,"病灶分类","标注信息","L3"],["MASK_PATH","掩膜路径","VARCHAR(512)",1,"标注文件路径","标注信息","L2"],["LESION_AREA","病灶面积(像素)","INT(10)",0,"病灶面积","标注信息","L2"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["LESION_COUNT","病灶数量","INT(6)",0,"病灶数量","标注信息","L1"],["ANNOTATOR","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["ANNOTATE_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"584 万张","rows":80,"freq":"实时/按次同步"}},{"no":65,"l6":"罕见病病灶分割数据集","desc":"准确检测和分割罕见病病灶是准确诊断罕见病的基础，建立罕见病病灶分割数据集，并建立分割算法模型，自动准确分割罕见病病灶，能够有效辅助经验不足的医生对病灶进行定位分割，从而做出准确判断。\n建立一个罕见病病灶分割数据集，包含患者的眼底彩照，以及由资深医生完成的眼底彩照中病灶的分割标注信息。该数据集为研究罕见病病灶分割算法建立了数据基础，为研究者提供病灶相关信息。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","分割掩膜"],"diseases":["罕见病"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["LESION_TYPE","病灶类型","VARCHAR(32)",1,"病灶分类","标注信息","L3"],["MASK_PATH","掩膜路径","VARCHAR(512)",1,"标注文件路径","标注信息","L2"],["LESION_AREA","病灶面积(像素)","INT(10)",0,"病灶面积","标注信息","L2"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["LESION_COUNT","病灶数量","INT(6)",0,"病灶数量","标注信息","L1"],["ANNOTATOR","标注医师","VARCHAR(32)",0,"标注人","标注信息","L2"],["ANNOTATE_TIME","标注时间","DATETIME(19)",0,"标注时间","标注信息","L2"],["REVIEW_STATUS","复核状态","VARCHAR(16)",0,"复核状态","标注信息","L2"],["DATASET_SPLIT","数据集划分","VARCHAR(16)",0,"数据划分","标注信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"825 万张","rows":71,"freq":"每日增量"}}],"modalities":["影像","分割掩膜"]},{"l5":"图像质量评价数据库","items":[{"no":66,"l6":"眼底图像质量评价数据集","desc":"在眼底图像临床采集的过程中，由于眼底照相机的质量不佳、患者不配合以及采集医师的熟练度不足等问题，会产生大量图像质量不佳的眼底图像，这些质量不佳的图像参差不齐，给数据的入库和存储带来了困难。\n按照眼底彩照图像质量评价标准，对眼底图像的质量进行量化打分，形成包含眼底图像及其对应图像质量分数的数据集，该眼底图像质量评价数据集中包含不同图像质量分数的眼底图像。该数据集是基于人工智能开发自动图像质量评价算法的基础，为人工智能提供了训练数据，并且可以助力医护人员的继续教育培训，帮助医护人员更好地了解和认识不同图像质量的眼底图像。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","质量评分"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["BLUR_SCORE","模糊度评分","DECIMAL(5,2)",0,"质量评分","质量信息","L2"],["ARTIFACT_SCORE","伪影评分","DECIMAL(5,2)",0,"质量评分","质量信息","L2"],["ILLUMINATION_SCORE","光照评分","DECIMAL(5,2)",0,"质量评分","质量信息","L2"],["OVERALL_SCORE","综合质量分","DECIMAL(5,2)",1,"综合质量评分","质量信息","L3"],["QUALITY_LEVEL","质量等级","VARCHAR(8)",1,"质量等级","质量信息","L2"],["EVALUATOR","评价人","VARCHAR(32)",0,"评价人","标注信息","L2"],["EVAL_TIME","评价时间","DATETIME(19)",0,"评价时间","标注信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"186 万张","rows":62,"freq":"每周增量"}},{"no":67,"l6":"OCT图像质量评价数据集","desc":"按照OCT图像质量评价标准，对OCT图像的质量进行量化打分，形成包含OCT图像及其对应图像质量分数的数据集，该OCT图像质量评价数据集中包含不同图像质量分数的OCT图像。该数据集是基于人工智能开发自动图像质量评价算法的基础，为人工智能提供了训练数据，并且可以助力医护人员的继续教育培训，帮助医护人员更好地了解和认识不同图像质量的OCT图像。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","质量评分"],"diseases":["通用"],"fields":[["IMAGE_ID","影像ID","VARCHAR(64)",1,"影像标识","影像信息","L2"],["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["BLUR_SCORE","模糊度评分","DECIMAL(5,2)",0,"质量评分","质量信息","L2"],["ARTIFACT_SCORE","伪影评分","DECIMAL(5,2)",0,"质量评分","质量信息","L2"],["ILLUMINATION_SCORE","光照评分","DECIMAL(5,2)",0,"质量评分","质量信息","L2"],["OVERALL_SCORE","综合质量分","DECIMAL(5,2)",1,"综合质量评分","质量信息","L3"],["QUALITY_LEVEL","质量等级","VARCHAR(8)",1,"质量等级","质量信息","L2"],["EVALUATOR","评价人","VARCHAR(32)",0,"评价人","标注信息","L2"],["EVAL_TIME","评价时间","DATETIME(19)",0,"评价时间","标注信息","L2"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"427 万张","rows":53,"freq":"每月增量"}}],"modalities":["影像","质量评分"]},{"l5":"图像复原数据库","items":[{"no":68,"l6":"眼底图像复原数据集","desc":"眼底图像常见的退化类型分为虚焦模糊、伪影、周边雾化、过曝及过暗，按照不同的退化类型将眼底图像复原数据集进一步细化。数据集包含低质量-高质量眼底图像数据对。该数据集可用于眼底图像复原算法的训练，通过训练得到的复原算法来提升低质量眼底图像数据的利用率。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","图像对"],"diseases":["通用"],"fields":[["PAIR_ID","图像对ID","VARCHAR(64)",1,"图像对标识","影像信息","L2"],["LR_IMAGE_PATH","低质量影像路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["HR_IMAGE_PATH","高质量影像路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["DEGRADE_TYPE","退化类型","VARCHAR(32)",1,"退化分类","影像信息","L2"],["DEGRADE_PARAM","退化参数","VARCHAR(64)",0,"退化参数","影像信息","L1"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["PAIR_STATUS","配对状态","VARCHAR(16)",0,"配对状态","影像信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"668 万张","rows":44,"freq":"实时/按次同步"}},{"no":69,"l6":"OCT图像复原数据集","desc":"OCT常见的退化类型分为虚焦模糊、伪影、高斯噪声，按照不同的退化类型将OCT图像复原数据集进一步细化。数据集包含约低质量-高质量OCT图像数据对。该数据集可用于OCT图像复原算法的训练，通过训练得到的复原算法来提升低质量OCT图像数据的利用率。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","modalities":["影像","图像对"],"diseases":["通用"],"fields":[["PAIR_ID","图像对ID","VARCHAR(64)",1,"图像对标识","影像信息","L2"],["LR_IMAGE_PATH","低质量影像路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["HR_IMAGE_PATH","高质量影像路径","VARCHAR(512)",1,"存储路径","影像信息","L2"],["DEGRADE_TYPE","退化类型","VARCHAR(32)",1,"退化分类","影像信息","L2"],["DEGRADE_PARAM","退化参数","VARCHAR(64)",0,"退化参数","影像信息","L1"],["MODALITY","影像模态","VARCHAR(16)",1,"影像模态","影像信息","L2"],["RESOLUTION","分辨率","VARCHAR(32)",0,"图像分辨率","影像信息","L1"],["PAIR_STATUS","配对状态","VARCHAR(16)",0,"配对状态","影像信息","L1"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]],"demo":{"volume":"909 万张","rows":35,"freq":"每日增量"}}],"modalities":["影像","图像对"]}],"removed":[{"l5":"眼病/慢病疾病知识图谱","items":[{"no":70,"l6":"糖尿病视网膜病变知识图谱","desc":"糖尿病视网膜病变（diabeticretinopathy，DR）是常见的糖尿病慢性并发症之一，是指糖尿病导致的视网膜微血管损害所引起的一系列典型病变，是一种影响视力甚至致盲的慢性进行性疾病。\n糖尿病在全球的患病率很高，且处于快速增长阶段。据国际糖尿病联盟（InternationalDiabetesFederation，IDF）统计，2013年全球有3.82亿例糖尿病患者，中国是全球20~79岁糖尿病患者最多的国家，达9800万糖尿病患者。糖尿病视网膜病变按严重程度可划分为非增生型糖尿病视网膜病变（non-proliferativediabeticretinopathy，NPDR）与增生型糖尿病视网膜病变（proliferativediabeticretinopathy，PDR），来自我国的研究显示，中国糖尿病人群糖尿病视网膜病变患病率为23%，增生型糖尿病视网膜病患病率为2.8%，非增生性糖尿病视网膜病患病率为19.1%；农村高于城市，北方高于南方和东部。\n基于人民卫生出版社的《糖尿病视网膜病变》、《中国糖尿病视网膜病变防治指南（基层版）》、《常见眼底外科疾病知识问答系列——糖尿病视网膜病变》、《糖尿病视网膜病变筛查手册：诊断和处理》、《糖尿病性视网膜病变临床手册》及开放的医学知识资源，将糖尿病视网膜病变的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑糖尿病视网膜病变的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["糖尿病视网膜病变"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":71,"l6":"青光眼知识图谱","desc":"青光眼是一组进行性视神经损害、最终损伤视力的疾病的统称，主要与病理性的眼压升高有关。\n青光眼是全球导致失明的第二大病因，仅次于白内障，却是第一位不可逆致盲眼病。预计到2020年，我国全人群青光眼患者将达到2182万（占全球27.4%），40岁以上人群患病率将达到3.05%，居世界首位。原发性青光眼是最常见的类型，在我国约占86.7%，发生于18岁以上人群；其中原发性闭角型青光眼更多见，好发于亚裔、女性、40岁以上人群。\n基于人民卫生出版社的《青光眼学》、《世界青光眼学会联合会共识系列青光眼筛查》、《临床青光眼（第3版）》、《青光眼治疗学》、《图解青光眼眼前节影像学检查及诊断》及开放的医学知识资源，将青光眼的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑青光眼的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["青光眼"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":72,"l6":"老年黄斑变性知识图谱","desc":"黄斑，是视网膜的一个重要区域，位于眼球后极部，外界物体光线进入眼球投影在黄斑区中心凹处，可形成清晰精确的像。一旦黄斑区出现病变，可出现视力下降、眼前黑影、视物扭曲变形、色觉异常。\n老年性黄斑变性（senilemaculardegeneration，SMD），又称年龄相关性黄斑变性（age-relatedmaculardegeneration，AMD）、增龄性黄斑变性，是一种随着年龄增加而发病率上升并可导致中心视力下降、视物变形的疾病，多发生于50岁以上老年人，双眼先后发病或同时发病，且视力损害逐渐加重。\n老年性黄斑变性是最常见的能造成永久视力损害的疾病之一，且随患者年龄增加，发病率逐渐升高。美、英学者统计75岁以上患病率达40%以上。我国目前暂无大样本流行病学数据统计。AMD患者一般年龄在50岁以上，发病在性别上无明显差异，然而却与种族有关，一般认为白人患病率明显高于有色人种。\n基于人民卫生出版社的《常见眼底外科疾病知识问答系列——年龄相关性黄斑变性》及开放的医学知识资源，将老年黄斑变性的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑老年黄斑变性的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["老年黄斑变性"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":73,"l6":"白内障知识图谱","desc":"凡是各种原因如老化，遗传、局部营养障碍、免疫与代谢异常，外伤、中毒、辐射，都能引起晶状体代谢紊乱，导致晶状体蛋白质变性而发生混浊，称为白内障，此时光线被混浊晶状体阻扰无法投射在视网膜上，导致视物模糊。多见于40岁以上，且随年龄增长而发病率增多。\n基于人民卫生出版社的《白内障》、《职业性白内障诊断标准GBZ35-2010》、《职业性三硝基甲苯白内障诊断标准GBZ45-2010（代替GBZ45-2002）》、《现代白内障治疗》、《白内障与人工晶状体》、《白内障的诊断与治疗》、《儿童白内障学》、《屈光性白内障手术学》、《超声乳化白内障摘除术》、《尖峰白内障手术技术》、《小切口白内障手术》、《飞秒激光辅助白内障手术》、《白内障手术及并发症》及开放的医学知识资源，将白内障的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑白内障的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["白内障"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":74,"l6":"病理性近视知识图谱","desc":"病理性近视又称变性性近视，是一种视网膜变性疾病。患者屈光度数常大于-6D且有眼轴进行性变长，眼底可见视网膜色素上皮和脉络膜变薄，可伴有视网膜色素上皮萎缩、脉络膜新生血管和视网膜下出血。不同种族间存在差异，以女性多见。\n基于人民卫生出版社的《近视眼学》、《实用近视眼学》、《近视手术治疗学》、《近视矫治相关并发症病例图解与诊疗思维》、《近视眼的成因与防治进展》、《准分子激光治疗近视》、《常见眼底外科疾病知识问答系列——高度近视眼底病变》、《高度近视》及开放的医学知识资源，将病理性近视的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑病理性近视的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["病理性近视"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":75,"l6":"眼病罕见病知识图谱","desc":"罕见病是指那些发病率极低的疾病。罕见疾病又称“孤儿病”，在中国没有明确的定义。根据世界卫生组织（WHO）的定义，罕见病为患病人数占总人口的0.65‰～1‰的疾病。世界各国根据自己国家的具体情况，对罕见病的认定标准存在一定的差异。\n在眼病中，存在如眼内肿瘤、视网膜色素变性等罕见病类型，由于患病人数稀少，相关资讯、教材往往匮乏，这对于临床诊断和治疗来说是很大的挑战。\n基于人民卫生出版社的《罕见病概论》、《罕见病诊疗指南（2019年版）》、《罕见病药物卫生技术评估专家共识（2019版）》、《罕见病少见病的诊断与治疗》及开放的医学知识资源，将眼病罕见病的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑眼病罕见病的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["罕见病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":76,"l6":"慢病知识图谱","desc":"慢性病是慢性非传染性疾病（NCDs）的简称，不是特指某种疾病，而是对一组起病时间长、一旦发病即病情迁延不愈的非传染性疾病的概括性总称。\n常见的慢性病有冠心病、脑卒中、高血压病、恶性肿瘤、糖尿病、慢性呼吸系统疾病。该类疾病具有发病率高、知晓率低和控制率低的共同特点，目前已成为严重威胁世界人民健康、影响国家经济社会发展的重大公共卫生问题。\n基于人民卫生出版社的《全科常见慢性病诊疗手册》、《高血压》、《高血压治疗学》、《高血压合理用药指南》、《糖尿病》、《高血压高血脂患者生活指导》、《脑梗死（第2版）》、《脑梗死（第2版）》、《脑梗死治疗学》等书籍，及开放的医学知识资源，将慢病的基本病因、病理过程、高危因素、典型症状、伴随症状、就医就诊、相关检查、相关治疗、疾病预后等相关知识构建成知识图谱，支撑慢病的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["慢病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["NCD_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["NCD_GRADE","病情分级","VARCHAR(16)",0,"病情分级","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]}]},{"l5":"眼病/慢病药物知识图谱","items":[{"no":77,"l6":"糖尿病视网膜病变药物知识图谱","desc":"基于人民卫生出版社的《糖尿病视网膜病变》、《糖尿病性视网膜病变临床手册》、药物说明书及开放的医学知识资源，将糖尿病视网膜病变相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑糖尿病视网膜病变药物的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["糖尿病视网膜病变"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":78,"l6":"青光眼药物知识图谱","desc":"基于人民卫生出版社的《青光眼学》、《临床青光眼（第3版）》、《青光眼治疗学》、药物说明书及开放的医学知识资源，将青光眼相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑青光眼药物的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["青光眼"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":79,"l6":"老年黄斑变性药物知识图谱","desc":"基于人民卫生出版社的《常见眼底外科疾病知识问答系列——年龄相关性黄斑变性》、药物说明书及开放的医学知识资源，将老年黄斑变性相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑老年黄斑变性药物的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["老年黄斑变性"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":80,"l6":"白内障药物知识图谱","desc":"基于人民卫生出版社的《白内障》、《现代白内障治疗》、《白内障的诊断与治疗》、药物说明书及开放的医学知识资源，将白内障相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑白内障的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["白内障"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":81,"l6":"病理性近视药物知识图谱","desc":"基于人民卫生出版社的《近视眼学》、《实用近视眼学》、《近视手术治疗学》、《高度近视》、药物说明书及开放的医学知识资源，将病理性近视相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑病理性近视药物的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["病理性近视"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":82,"l6":"眼病罕见病药物知识图谱","desc":"基于人民卫生出版社的《罕见病概论》、《罕见病诊疗指南（2019年版）》、《罕见病药物卫生技术评估专家共识（2019版）》、《罕见病少见病的诊断与治疗》、药物说明书及开放的医学知识资源，将眼病罕见病相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑眼病罕见病药物的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["罕见病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":83,"l6":"慢病药物知识图谱","desc":"基于人民卫生出版社的《全科常见慢性病诊疗手册》、《高血压》、《高血压治疗学》、《高血压合理用药指南》、《糖尿病》、《高血压高血脂患者生活指导》、《脑梗死（第2版）》、《脑梗死（第2版）》、《脑梗死治疗学》等书籍，及开放的医学知识资源，将慢病相关药物的生产厂家、药物作用、药物成分、用法用量、适用人群、禁忌人群、药物毒理、不良反应等知识构建成知识图谱，支撑慢病药物的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["慢病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["NCD_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["NCD_GRADE","病情分级","VARCHAR(16)",0,"病情分级","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]}]},{"l5":"眼病/慢病检验检查知识图谱","items":[{"no":84,"l6":"糖尿病视网膜病变检验检查知识图谱","desc":"基于人民卫生出版社的《糖尿病视网膜病变》、《糖尿病视网膜病变筛查手册：诊断和处理》、《糖尿病性视网膜病变临床手册》及开放的医学知识资源，糖尿病视网膜病变检验检查知识图谱将检查方法、检查流程、结果指标、检查原理、检查仪器等糖尿病视网膜病变相关检验检查的知识构建成知识图谱，支撑糖尿病视网膜病变检验检查的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["糖尿病视网膜病变"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":85,"l6":"青光眼检验检查知识图谱","desc":"基于人民卫生出版社的《青光眼学》、《世界青光眼学会联合会共识系列青光眼筛查》、《临床青光眼（第3版）》、《图解青光眼眼前节影像学检查及诊断》及开放的医学知识资源，将青光眼相关检验检查的检查方法、检查流程、结果指标、检查原理、检查仪器等知识构建成知识图谱，支撑青光眼检验检查的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["青光眼"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":86,"l6":"老年黄斑变性检验检查知识图谱","desc":"基于人民卫生出版社的《常见眼底外科疾病知识问答系列——年龄相关性黄斑变性》及开放的医学知识资源，将老年黄斑变性相关检验检查的检查方法、检查流程、结果指标、检查原理、检查仪器等知识构建成知识图谱，支撑老年黄斑变性检验检查的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["老年黄斑变性"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":87,"l6":"白内障检验检查知识图谱","desc":"基于人民卫生出版社的《白内障》、《职业性白内障诊断标准GBZ35-2010》、《白内障的诊断与治疗》及开放的医学知识资源，将白内障相关检验检查的检查方法、检查流程、结果指标、检查原理、检查仪器等知识构建成知识图谱，支撑白内障的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["白内障"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":88,"l6":"病理性近视检验检查知识图谱","desc":"基于人民卫生出版社的《近视眼学》、《实用近视眼学》、《常见眼底外科疾病知识问答系列——高度近视眼底病变》、《职业性三硝基甲苯白内障诊断标准GBZ45-2010（代替GBZ45-2002）》、《高度近视》及开放的医学知识资源，将病理性近视相关检验检查的检查方法、检查流程、结果指标、检查原理、检查仪器等知识构建成知识图谱，支撑病理性近视检验检查的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["病理性近视"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":89,"l6":"眼病罕见病检验检查知识图谱","desc":"基于人民卫生出版社的《罕见病概论》、《罕见病诊疗指南（2019年版）》、《罕见病少见病的诊断与治疗》及开放的医学知识资源，将眼病罕见病相关检验检查的检查方法、检查流程、结果指标、检查原理、检查仪器等知识构建成知识图谱，支撑眼病罕见病检验检查的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["罕见病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":90,"l6":"慢病检验检查知识图谱","desc":"基于人民卫生出版社的《全科常见慢性病诊疗手册》、《高血压》、《高血压治疗学》、《糖尿病》、《脑梗死（第2版）》、《脑梗死（第2版）》、《脑梗死治疗学》等书籍，及开放的医学知识资源，将慢病检验检查的检查方法、检查流程、结果指标、检查原理、检查仪器等慢病相关检验检查的知识构建成知识图谱，支撑知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["慢病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["NCD_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["NCD_GRADE","病情分级","VARCHAR(16)",0,"病情分级","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]}]},{"l5":"眼病/慢病手术操作知识图谱","items":[{"no":91,"l6":"糖尿病视网膜病变手术操作知识图谱","desc":"基于人民卫生出版社的《糖尿病视网膜病变》、《糖尿病性视网膜病变临床手册》及开放的医学知识资源，将糖尿病视网膜病变相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑糖尿病视网膜病变手术操作的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["糖尿病视网膜病变"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":92,"l6":"青光眼手术操作知识图谱","desc":"基于人民卫生出版社的《临床青光眼（第3版）》及开放的医学知识资源，将青光眼相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑青光眼手术操作的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["青光眼"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":93,"l6":"老年黄斑变性手术操作知识图谱","desc":"基于人民卫生出版社的《常见眼底外科疾病知识问答系列——年龄相关性黄斑变性》及开放的医学知识资源，将老年黄斑变性相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑老年黄斑变性手术操作的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["老年黄斑变性"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":94,"l6":"白内障手术操作知识图谱","desc":"基于人民卫生出版社的《屈光性白内障手术学》、《超声乳化白内障摘除术》、《尖峰白内障手术技术》、《小切口白内障手术》、《飞秒激光辅助白内障手术》、《白内障手术及并发症》及开放的医学知识资源，将白内障相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑白内障的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["白内障"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":95,"l6":"病理性近视手术操作知识图谱","desc":"基于人民卫生出版社的《近视眼学》、《实用近视眼学》、《近视手术治疗学》、《近视矫治相关并发症病例图解与诊疗思维》、《准分子激光治疗近视》、《高度近视》及开放的医学知识资源，将病理性近视相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑病理性近视手术操作的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["病理性近视"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":96,"l6":"眼病罕见病手术操作知识图谱","desc":"基于人民卫生出版社的《罕见病概论》、《罕见病诊疗指南（2019年版）》、《罕见病少见病的诊断与治疗》及开放的医学知识资源，将眼病罕见病相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑眼病罕见病手术操作的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["罕见病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":97,"l6":"慢病手术操作知识图谱","desc":"基于人民卫生出版社的《全科常见慢性病诊疗手册》、《高血压》、《高血压治疗学》、《糖尿病》、《脑梗死（第2版）》、《脑梗死（第2版）》、《脑梗死治疗学》等书籍，及开放的医学知识资源，将慢病相关手术操作的使用器材、麻醉方式、给药途径、注意事项、术前检查、术中操作、护理操作等知识构建成知识图谱，支撑慢病手术操作的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["慢病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["NCD_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["NCD_GRADE","病情分级","VARCHAR(16)",0,"病情分级","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]}]},{"l5":"眼病/慢病病历知识图谱","items":[{"no":98,"l6":"糖尿病视网膜病变病历知识图谱","desc":"对接医院的糖尿病视网膜病变病历数据库，将糖尿病视网膜病变相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑糖尿病视网膜病变病历的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["糖尿病视网膜病变"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["DR_GRADE","DR分级","VARCHAR(16)",1,"DR分级","标注信息","L3"],["DME_FLAG","DME标识","VARCHAR(4)",0,"黄斑水肿","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":99,"l6":"青光眼病历知识图谱","desc":"结合《青光眼患者必读》，对接医院的青光眼病历数据库，将青光眼相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑青光眼病历的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["青光眼"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["IOP","眼压","DECIMAL(6,2)",1,"眼压","健康信息","L3"],["CUP_DISC","杯盘比","DECIMAL(5,2)",0,"杯盘比","健康信息","L2"],["MD_VALUE","平均缺损MD","DECIMAL(6,2)",0,"视野平均缺损","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":100,"l6":"老年黄斑变性病历知识图谱","desc":"对接医院的老年黄斑变性病历数据库，将老年黄斑变性相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑老年黄斑变性病历的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["老年黄斑变性"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AMD_TYPE","AMD分型","VARCHAR(16)",1,"AMD分型","标注信息","L3"],["CNV_FLAG","脉络膜新生血管","VARCHAR(4)",0,"CNV","标注信息","L2"],["DRUSEN_AREA","玻璃膜疣面积","INT(10)",0,"玻璃膜疣","标注信息","L1"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":101,"l6":"白内障病历知识图谱","desc":"对接医院的白内障病历数据库，将白内障相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑白内障的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["白内障"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["LOCS_GRADE","晶状体混浊分级","VARCHAR(16)",1,"LOCS分级","标注信息","L3"],["NUCLEAR_OPACITY","核混浊度","DECIMAL(5,2)",0,"核混浊度","标注信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":102,"l6":"病理性近视病历知识图谱","desc":"对接医院的病理性近视病历数据库，将病理性近视相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑病理性近视病历的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["病理性近视"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["AXIAL_LENGTH","眼轴长度(mm)","DECIMAL(6,2)",1,"眼轴长度","健康信息","L3"],["SPHERICAL_EQUIV","等效球镜(D)","DECIMAL(6,2)",0,"等效球镜","健康信息","L2"],["PSM_FLAG","后巩膜葡萄肿","VARCHAR(4)",0,"后巩膜葡萄肿","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":103,"l6":"眼病罕见病病历知识图谱","desc":"结合《北京协和医院罕见病多学科合作诊疗病例集（2021年版）》、《2020中国罕见病综合社会调研》，对接医院的眼病罕见病病历数据库，将眼病罕见病相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑眼病罕见病病历的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["罕见病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["GENE_NAME","致病基因","VARCHAR(64)",0,"致病基因","健康信息","L3"],["VARIANT","变异位点","VARCHAR(128)",0,"变异位点","健康信息","L3"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]},{"no":104,"l6":"慢病病历知识图谱","desc":"对接医院的高血压、高血脂、脑梗死等慢病病历数据库，将慢病相关病历的人口统计信息、全身病史、眼病史、检验检查结果、主诉症状、手术方式、用药用量、医学影像等知识构建成知识图谱，支撑慢病病历的知识存储、知识检索、知识应用和专家系统的构建。","status":"待开发","risk":"黄","days":55,"ver":"2026-10-26","diseases":["慢病"],"modalities":["结构化"],"fields":[["PATIENT_ID","患者ID","VARCHAR(64)",1,"患者标识","个人信息","L3"],["PATIENT_NAME","患者姓名","VARCHAR(64)",1,"姓名","个人信息","L4"],["GENDER","性别","VARCHAR(8)",1,"性别","个人信息","L2"],["BIRTH_DATE","出生日期","DATE",1,"出生日期","个人信息","L3"],["AGE","年龄","INT(3)",0,"年龄","个人信息","L2"],["ID_CARD","身份证号","VARCHAR(32)",0,"身份证号","个人信息","L4"],["NCD_TYPE","慢病类型","VARCHAR(32)",1,"慢病分类","健康信息","L2"],["NCD_GRADE","病情分级","VARCHAR(16)",0,"病情分级","健康信息","L2"],["PHONE","联系电话","VARCHAR(20)",0,"联系电话","个人信息","L4"],["ADDRESS","家庭住址","VARCHAR(255)",0,"住址","个人信息","L4"],["EDUCATION","教育水平","VARCHAR(32)",0,"学历","个人信息","L2"],["OCCUPATION","从事行业","VARCHAR(64)",0,"职业","个人信息","L2"],["HYPERTENSION_HX","高血压史","VARCHAR(8)",0,"既往史","健康信息","L3"],["DIABETES_HX","糖尿病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["CHD_HX","冠心病史","VARCHAR(8)",0,"既往史","健康信息","L3"],["HYPERLIPIDEMIA_HX","高脂血症史","VARCHAR(8)",0,"既往史","健康信息","L3"],["VISIT_DATE","就诊日期","DATETIME(19)",1,"就诊时间","诊疗信息","L3"],["VISIT_TYPE","就诊类型","VARCHAR(16)",0,"就诊类型","诊疗信息","L2"],["CHIEF_COMPLAINT","主诉","VARCHAR(500)",0,"主诉","诊疗信息","L3"],["DIAGNOSIS","诊断名称","VARCHAR(255)",0,"诊断","诊疗信息","L4"],["ICD_CODE","ICD编码","VARCHAR(32)",0,"ICD编码","诊疗信息","L2"],["MEDICATION","用药名称","VARCHAR(255)",0,"用药","诊疗信息","L3"],["DOSAGE","用药剂量","VARCHAR(64)",0,"剂量","诊疗信息","L2"],["COMORBIDITY","并发症","VARCHAR(255)",0,"并发症","诊疗信息","L3"],["CREATE_TIME","创建时间","DATETIME(19)",1,"创建时间","管理信息","L1"],["UPDATE_TIME","更新时间","DATETIME(19)",0,"更新时间","管理信息","L1"]]}]}],"facets":{"diseases":["通用","高血压","慢性肾病","糖尿病","冠心病","脑出血","脑卒中","脑小血管病","糖尿病视网膜病变","青光眼","老年黄斑变性","白内障","病理性近视","罕见病","普通近视"],"modalities":["结构化","影像","文本","标注","分割掩膜","质量评分","图像对"]},"stats":{"l5Keep":8,"l6Keep":37,"l5Removed":5,"l6Removed":35,"l5Total":13,"l6Total":72},"source":"《国际科技信息中心项目_生命医学&工程细胞&低维材料_3系统进度监控.xlsx》—「生命医学主题库」工作表"};</script>
+<script>
+(function(){
+  "use strict";
+  var D = window.__DATA__, P = D.project, S = D.stats;
+  var ALL = [], byNo = {}, REM = [], remByNo = {};
+  D.groups.forEach(function(g){ g.items.forEach(function(it){ var o = Object.assign({}, it, {l5:g.l5}); ALL.push(o); byNo[it.no] = o; }); });
+  D.removed.forEach(function(g){ g.items.forEach(function(it){ var o = Object.assign({}, it, {l5:g.l5}); REM.push(o); remByNo[it.no] = o; }); });
+  var pct = Math.round(S.l6Keep / S.l6Total * 1000) / 10;
+  var DB_OF = {}; D.groups.forEach(function(g){ DB_OF[g.l5] = g; });
+
+  var $  = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return [].slice.call((r||document).querySelectorAll(s)); };
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var ttm; function toast(m){ var t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(ttm); ttm=setTimeout(function(){t.classList.remove('on');},2200); }
+  function copyText(text, ok){
+    function fb(){ var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); toast(ok); }catch(e){ toast('复制失败，请手动选择'); } document.body.removeChild(ta); }
+    if(navigator.clipboard && window.isSecureContext !== false){ navigator.clipboard.writeText(text).then(function(){toast(ok);}, fb); } else fb();
+  }
+
+  var ICON = {
+    db:'<svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 3.8 3 6v12c0 2.2 4 4 9 4s9-1.8 9-4V6c0-2.2-4-4-9-4zm0 2c4.4 0 7 1.3 7 2s-2.6 2-7 2-7-1.3-7-2 2.6-2 7-2zm7 14c0 .7-2.6 2-7 2s-7-1.3-7-2v-2.4c1.6.9 4.2 1.4 7 1.4s5.4-.5 7-1.4V18zm0-5c0 .7-2.6 2-7 2s-7-1.3-7-2v-2.4c1.6.9 4.2 1.4 7 1.4s5.4-.5 7-1.4V13z"/></svg>',
+    folder:'<svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>',
+    table:'<svg viewBox="0 0 24 24"><path d="M3 4h18v4H3zm0 6h8v10H3zm10 0h8v4h-8zm0 6h8v4h-8z"/></svg>',
+    col:'<svg viewBox="0 0 24 24"><path d="M3 5h18v3H3zm0 5.5h18v3H3zM3 16h18v3H3z"/></svg>',
+    rows:'<svg viewBox="0 0 24 24"><path d="M4 4h16v3H4zm0 6.5h16v3H4zM4 17h16v3H4z"/></svg>',
+    score:'<svg viewBox="0 0 24 24"><path d="M12 2 9.2 8.6 2 9.2l5.5 4.7L5.8 21 12 17.3 18.2 21l-1.7-7.1L22 9.2l-7.2-.6z"/></svg>',
+    size:'<svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg>',
+    info:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+    empty:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm1.8-7.1-.9.9c-.7.7-1.1 1.3-1.1 2.2h-2v-.5c0-.9.4-1.7 1.1-2.4l1.2-1.2c.4-.3.6-.8.6-1.4a2 2 0 1 0-4 0H8a4 4 0 1 1 8 0c0 .9-.4 1.7-1.2 2.4z"/></svg>'
+  };
+
+  /* ================= 左侧平台菜单（占位） ================= */
+  var MENU = ['数据认责管理','数据源管理','元数据管理','数据资产目录管理','数据标准管理','数据模型管理','数据质量管理','数据安全管理','数据产品与服务目录'];
+  $('#railNav').innerHTML = MENU.map(function(m){
+    return '<a data-toast="「' + m + '」为参照站点的菜单占位，本原型聚焦元数据目录"' + (m==='元数据管理'?' class="active"':'') + '>' + ICON.folder + m + '</a>';
+  }).join('');
+
+  /* ================= 视图切换 ================= */
+  var VIEWS = [['catalog','元数据目录'],['func','功能点清单'],['change','范围调整说明']];
+  $('#viewsw').innerHTML = VIEWS.map(function(v){
+    return '<button data-view="' + v[0] + '"' + (v[0]==='catalog'?' class="on"':'') + '>' + v[1] + '</button>';
+  }).join('');
+
+  var state = { view:'catalog', sel:'l4', tab:{}, pg:{db:1, fld:1, smp:1}, sz:{db:10, smp:10},
+                q:{db:'', fld:''}, treeQ:'', showRemoved:false, open:{root:true, rem:true} };
+
+  function switchView(v){
+    state.view = v;
+    $$('#viewsw button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-view')===v); });
+    $('#treepane').style.display = (v === 'catalog') ? '' : 'none';
+    renderDetail();
+  }
+
+  /* ================= 示例元数据 / 示例数据生成（演示用） ================= */
+  var NAMES = ['张*华','李*明','王*芳','刘*洋','陈*静','赵*军','孙*丽','周*涛','吴*敏','郑*伟','冯*杰','何*婷'];
+  var HOSP  = ['北京协和医院','复旦大学附属眼耳鼻喉科医院','中山大学中山眼科中心','温州医科大学附属眼视光医院','四川大学华西医院','上海市第一人民医院'];
+  var DOC   = ['王*医生','李*医生','张*医生','刘*医生','陈*医生'];
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function h32(s){ var h = 2166136261; for(var i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function pick(a, s){ return a[s % a.length]; }
+  function num(s, lo, hi, dec){ dec = dec || 0; var span = Math.round((hi - lo) * Math.pow(10, dec)); return (lo + (s % Math.max(1, span + 1)) / Math.pow(10, dec)).toFixed(dec); }
+
+  function sampleVal(f, i, no){
+    var en = f[0], ty = f[2], s = h32(en + '#' + i + '#' + no);
+    var yr = 2024 + (s % 3), mo = 1 + ((s >>> 4) % 12), dy = 1 + ((s >>> 8) % 28);
+    var dt = yr + '-' + pad(mo) + '-' + pad(dy) + ' ' + pad((s>>>11)%24) + ':' + pad((s>>>14)%60) + ':' + pad((s>>>17)%60);
+    if(en === 'PATIENT_ID') return 'P' + yr + pad(mo) + String(100000 + (s % 899999));
+    if(en === 'IMAGE_ID')   return 'IMG' + yr + pad(mo) + String(10000 + (s % 89999));
+    if(en === 'PAIR_ID')    return 'PAIR' + String(100000 + (s % 899999));
+    if(en === 'PATIENT_NAME') return pick(NAMES, s);
+    if(en === 'GENDER')     return (s % 2) ? '男' : '女';
+    if(en === 'BIRTH_DATE') return (1935 + (s % 60)) + '-' + pad(1 + (s % 12)) + '-' + pad(1 + (s % 28));
+    if(en === 'AGE')        return String(18 + (s % 72));
+    if(en === 'ID_CARD')    return pick(['1101','3201','4401','5101','4201'], s) + '**********' + String(1000 + (s % 8999));
+    if(en === 'PHONE')      return '1' + pick(['3','5','7','8','9'], s) + String(s % 10) + '****' + String(1000 + (s % 8999));
+    if(en === 'ADDRESS')    return pick(['北京市海淀区','上海市徐汇区','广东省广州市越秀区','四川省成都市武侯区','湖北省武汉市江汉区'], s) + '（脱敏）';
+    if(en === 'EDUCATION')  return pick(['小学','初中','高中/中专','大专','本科','硕士及以上'], s);
+    if(en === 'OCCUPATION') return pick(['教师','公务员','企业职员','自由职业','退休','农业'], s);
+    if(/_HX$/.test(en))     return (s % 2) ? '有' : '无';
+    if(/_FLAG$/.test(en))   return (s % 3) ? '否' : '是';
+    if(en === 'VISIT_TYPE') return pick(['门诊','住院','复查','急诊'], s);
+    if(en === 'CHIEF_COMPLAINT') return pick(['视力下降伴视物模糊','眼前黑影飘动','眼胀痛伴头痛','视物变形','渐进性视力下降','双眼干涩'], s);
+    if(en === 'DIAGNOSIS')  return pick(['2型糖尿病','原发性高血压','糖尿病视网膜病变','原发性开角型青光眼','年龄相关性黄斑变性','老年性白内障','病理性近视'], s);
+    if(en === 'ICD_CODE')   return pick(['H36.0','I10','H40.1','H35.3','H25.9','H44.2'], s);
+    if(en === 'MEDICATION') return pick(['雷珠单抗注射液','拉坦前列素滴眼液','二甲双胍片','缬沙坦胶囊','阿托伐他汀钙片','康柏西普眼用注射液'], s);
+    if(en === 'DOSAGE')     return pick(['0.5 mg/次','1 滴/次','0.5 g/次','80 mg/次','20 mg/次'], s);
+    if(en === 'COMORBIDITY') return pick(['无','黄斑水肿','视网膜新生血管','玻璃体积血','白内障术后'], s);
+    if(en === 'DISEASE_TYPE') return pick(['高血压','糖尿病','慢性肾病','冠心病','脑卒中','脑小血管病'], s);
+    if(en === 'NCD_TYPE')   return pick(['高血压','糖尿病','冠心病','脑卒中'], s);
+    if(en === 'ITEM_NAME')  return pick(['收缩压','舒张压','空腹血糖','糖化血红蛋白','血清肌酐','低密度脂蛋白'], s);
+    if(en === 'ITEM_CODE')  return pick(['SBP','DBP','FPG','HBA1C','SCR','LDL-C'], s);
+    if(en === 'ITEM_VALUE') return num(s, 3.5, 180, 1);
+    if(en === 'UNIT')       return pick(['mmHg','mmol/L','%','μmol/L','mg/dL'], s);
+    if(en === 'REF_RANGE')  return pick(['90-140','60-90','3.9-6.1','4.0-6.0','44-106','< 3.4'], s);
+    if(en === 'ABNORMAL_FLAG') return pick(['正常','偏高','偏低'], s);
+    if(en === 'SOURCE_HOSPITAL') return pick(HOSP, s);
+    if(en === 'DEVICE_NAME') return pick(['全自动生化分析仪','电子血压计','糖化血红蛋白分析仪'], s);
+    if(en === 'EXAM_TYPE' || en === 'MODALITY') return pick(['彩色眼底照相','OCT','眼部生物测量','验光','CDI','MRI'], s);
+    if(en === 'DEVICE_MODEL') return pick(['Canon CR-DGI','Heidelberg Spectralis','Zeiss Cirrus','Topcon 2000','ZEISS IOLMaster 700'], s);
+    if(en === 'LATERALITY') return pick(['左眼','右眼','双眼'], s);
+    if(/_PATH$/.test(en))   return 'oss://eye-dataset/' + pick(['fundus','oct','mask','pair'], s) + '/' + yr + '/' + String(10000 + (s % 89999)) + '.' + pick(['png','jpg','tiff','npy'], s);
+    if(en === 'IMAGE_FORMAT') return pick(['PNG','JPG','TIFF','DICOM'], s);
+    if(en === 'RESOLUTION') return pick(['2048×2048','1500×1152','512×512','2992×2992'], s);
+    if(en === 'FILE_SIZE')  return String(800 + (s % 9200));
+    if(en === 'CAPTURE_OPERATOR' || en === 'LABELER' || en === 'ANNOTATOR' || en === 'EVALUATOR' || en === 'REVIEWER') return pick(DOC, s);
+    if(en === 'GRADE_LABEL' || en === 'DR_GRADE') return pick(['0级（无DR）','1级（轻度NPDR）','2级（中度NPDR）','3级（重度NPDR）','4级（PDR）'], s);
+    if(en === 'GRADE_STANDARD') return pick(['国际DR分级标准','UKPDS分级','ETDRS分级'], s);
+    if(en === 'REVIEW_STATUS') return pick(['已复核','待复核','复核通过'], s);
+    if(en === 'PAIR_STATUS') return pick(['已配对','待配对'], s);
+    if(en === 'DATASET_SPLIT') return pick(['训练集','验证集','测试集'], s);
+    if(en === 'LESION_TYPE') return pick(['微血管瘤','硬性渗出','软性渗出','出血','黄斑水肿','脉络膜新生血管'], s);
+    if(en === 'LESION_AREA') return String(200 + (s % 90000));
+    if(en === 'LESION_COUNT') return String(1 + (s % 40));
+    if(en === 'DEGRADE_TYPE') return pick(['虚焦模糊','伪影','周边雾化','过曝','过暗','高斯噪声'], s);
+    if(en === 'DEGRADE_PARAM') return pick(['σ=1.5','σ=2.0','intensity=0.8','noise=0.05'], s);
+    if(en === 'QUALITY_LEVEL') return pick(['优','良','中','差'], s);
+    if(en === 'SBP') return num(s, 95, 185, 0);
+    if(en === 'DBP') return num(s, 55, 112, 0);
+    if(en === 'FPG') return num(s, 3.6, 12.5, 2);
+    if(en === 'HBA1C') return num(s, 4.8, 11.0, 1);
+    if(en === 'SCR') return num(s, 45, 190, 1);
+    if(en === 'EGFR') return num(s, 25, 125, 1);
+    if(en === 'IOP') return num(s, 9, 30, 1);
+    if(en === 'CUP_DISC') return num(s, 0.2, 0.9, 2);
+    if(en === 'MD_VALUE') return num(s, -30, 0, 2);
+    if(en === 'AXIAL_LENGTH') return num(s, 21.5, 31.0, 2);
+    if(en === 'SPHERICAL_EQUIV') return num(s, -14, 3, 2);
+    if(en === 'GENSINI') return num(s, 0, 92, 1);
+    if(en === 'CRAE') return num(s, 100, 180, 1);
+    if(en === 'CRVE') return num(s, 180, 265, 1);
+    if(en === 'NIHSS') return num(s, 0, 32, 0);
+    if(en === 'NCD_GRADE' || en === 'CKD_STAGE' || en === 'FAZEKAS') return pick(['1级','2级','3级','4级'], s);
+    if(en === 'AMD_TYPE') return pick(['干性（早期）','干性（中期）','湿性'], s);
+    if(en === 'LOCS_GRADE') return pick(['LOCS Ⅱ','LOCS Ⅲ','LOCS Ⅳ'], s);
+    if(en === 'STROKE_TYPE') return pick(['缺血性','出血性','短暂性脑缺血发作'], s);
+    if(en === 'GENE_NAME') return pick(['ABCA4','RPGR','BEST1','RS1','CHM'], s);
+    if(en === 'VARIANT') return pick(['c.5882G>A','c.2965G>A','c.423G>T','c.1138C>T'], s);
+    if(en === 'CREATE_TIME') return '2026-05-' + pad(1 + (s % 28)) + ' 09:' + pad(s % 60) + ':12';
+    if(en === 'UPDATE_TIME') return '2026-09-' + pad(1 + (s % 15)) + ' 18:' + pad(s % 60) + ':30';
+    if(/_TIME$/.test(en) || /_DATE$/.test(en)) return dt;
+    if(/SCORE$/.test(en) || /OPACITY$/.test(en)) return num(s, 60, 99, 2);
+    if(/AREA$|VOLUME$|VOL$/.test(en)) return num(s, 12, 980, 2);
+    if(/^INT|^BIGINT/.test(ty)) return String(1 + (s % 999));
+    if(/^DECIMAL|^FLOAT|^DOUBLE/.test(ty)) return num(s, 1, 900, 2);
+    if(/^DATE/.test(ty)) return dt;
+    return '--';
+  }
+  function fmtSize(kb){ return kb < 1024 ? kb.toFixed(2) + ' KB' : (kb / 1024).toFixed(2) + ' MB'; }
+  function metaOf(it){
+    if(!it.__m){ var s = h32('meta#' + it.no);
+      it.__m = { score: num(s, 86, 99.9, 1), size: fmtSize(((it.demo ? it.demo.rows : 40) * it.fields.length) * 0.72) }; }
+    return it.__m;
+  }
+  function bytesNum(it){ var t = metaOf(it).size.split(' '); return parseFloat(t[0]) * (t[1] === 'MB' ? 1024 : 1); }
+  function dbFields(g){ return g.items.reduce(function(a, b){ return a + b.fields.length; }, 0); }
+  function dbRows(g){ return g.items.reduce(function(a, b){ return a + b.demo.rows; }, 0); }
+  function dbSize(g){ return fmtSize(g.items.reduce(function(a, b){ return a + bytesNum(b); }, 0)); }
+
+  function cells(list){
+    return '<div class="strip">' + list.map(function(c){
+      return '<div class="cell"><div class="k">' + c[0] + '</div><div class="v">' + c[1] + (c[2] ? '<small>' + c[2] + '</small>' : '') + '</div></div>';
+    }).join('') + '</div>';
+  }
+  function tabs(key, list, active){
+    return '<div class="tabs2">' + list.map(function(t){
+      return '<button data-tab="' + key + '|' + t + '"' + (t === active ? ' class="active"' : '') + '>' + t + '</button>';
+    }).join('') + '</div>';
+  }
+  function curTab(k, d){ return state.tab[k] || d; }
+  function dlg(title, rows, extra){
+    return '<div class="grp-box"><div class="grp-h">' + title + '<a data-toast="编辑（原型演示）">编辑</a></div>' +
+      '<div class="grp-grid">' + rows.map(function(r){
+        return '<div class="gi"><span class="gl">' + r[0] + '</span><span class="gv">' + r[1] + '</span></div>';
+      }).join('') + '</div></div>' + (extra || '');
+  }
+  function pagerHtml(ctx, total, sizes){
+    sizes = sizes || [10, 20, 50];
+    var size = state.sz[ctx] || 10, pages = Math.max(1, Math.ceil(total / size));
+    if(state.pg[ctx] > pages) state.pg[ctx] = pages;
+    var btns = '';
+    for(var p = 1; p <= pages; p++){
+      if(p === 1 || p === pages || Math.abs(p - state.pg[ctx]) <= 1)
+        btns += '<button data-pg="' + ctx + ':' + p + '"' + (p === state.pg[ctx] ? ' class="on"' : '') + '>' + p + '</button>';
+      else if(Math.abs(p - state.pg[ctx]) === 2) btns += '<button disabled>…</button>';
+    }
+    return '<div class="pager"><span>共 ' + total + ' 条</span><span class="pgs">' +
+      '<button data-pg="' + ctx + ':' + (state.pg[ctx] - 1) + '"' + (state.pg[ctx] <= 1 ? ' disabled' : '') + '>‹</button>' + btns +
+      '<button data-pg="' + ctx + ':' + (state.pg[ctx] + 1) + '"' + (state.pg[ctx] >= pages ? ' disabled' : '') + '>›</button></span>' +
+      '<select data-sz="' + ctx + '">' + sizes.map(function(s){ return '<option value="' + s + '"' + (s === size ? ' selected' : '') + '>' + s + ' 条/页</option>'; }).join('') + '</select>' +
+      '<span class="jump">前往<input data-jump="' + ctx + '" value="' + state.pg[ctx] + '">页</span></div>';
+  }
+
+  /* ================= 资源树：数据库 → 表 ================= */
+  function openOf(id, def){ if(state.treeQ) return true; return (id in state.open) ? state.open[id] : def; }
+  function tnode(o){
+    var isOpen = openOf(o.id, !!o.defOpen);
+    var caret = o.caret ? '<span class="caret' + (isOpen ? ' open' : '') + '">▶</span>' : '<span class="caret leaf">▶</span>';
+    return '<div class="tn' + (state.sel === o.id ? ' sel' : '') + (o.cls ? ' ' + o.cls : '') +
+      '" data-id="' + esc(o.id) + '" data-type="' + o.type + '" style="padding-left:' + (8 + o.lv * 15) + 'px">' + caret +
+      '<span class="fi">' + ICON[o.icon || 'table'] + '</span><span class="lb">' + esc(o.name) + '</span>' +
+      (o.count != null ? '<span class="cnt">' + o.count + '</span>' : '') + '</div>';
+  }
+  function renderTree(){
+    var q = state.treeQ.toLowerCase();
+    function hit(a, b){ return !q || (a + ' ' + (b || '')).toLowerCase().indexOf(q) >= 0; }
+    var h = tnode({lv:0, type:'l4', id:'l4', name:P.l4, count:S.l6Keep, caret:true, icon:'folder', defOpen:true});
+    if(!openOf('l4', true)){ $('#tree').innerHTML = h; return; }
+    D.groups.forEach(function(g){
+      var sub = g.items.filter(function(it){ return hit(it.l6, it.desc); });
+      if(q && !sub.length && !hit(g.l5)) return;
+      h += tnode({lv:1, type:'l5', id:'g:'+g.l5, name:g.l5, count:g.items.length, caret:true, icon:'db', defOpen:true});
+      if(!openOf('g:'+g.l5, true)) return;
+      (q ? sub : g.items).forEach(function(it){ h += tnode({lv:2, type:'l6', id:'t:'+it.no, name:it.l6, icon:'table'}); });
+    });
+    if(q){ $('#tree').innerHTML = h; return; }
+    h += '<div class="tree-sep"></div>';
+    h += tnode({lv:1, type:'remhead', id:'remhead', name:'已剔除 · 知识图谱', count:S.l6Removed, caret:true, icon:'folder', cls:'rem', defOpen:true});
+    if(openOf('remhead', true)){
+      D.removed.forEach(function(g){
+        h += tnode({lv:2, type:'reml5', id:'r:'+g.l5, name:g.l5, count:g.items.length, caret:true, icon:'db', cls:'rem', defOpen:false});
+        if(!openOf('r:'+g.l5, false)) return;
+        g.items.forEach(function(it){ h += tnode({lv:3, type:'reml6', id:'rt:'+it.no, name:it.l6, icon:'table', cls:'rem'}); });
+      });
+    }
+    $('#tree').innerHTML = h;
+    var se = $('#tree .tn.sel'); if(se && se.scrollIntoView) se.scrollIntoView({ block:'nearest' });
+  }
+  $('#tree').addEventListener('click', function(e){
+    var el = e.target.closest('.tn'); if(!el) return;
+    var id = el.getAttribute('data-id'), type = el.getAttribute('data-type');
+    if(type === 'l4'){ state.open.l4 = !openOf('l4', true); renderTree(); return; }
+    var container = (type === 'l5' || type === 'remhead' || type === 'reml5');
+    if(container && e.target.closest('.caret')){ state.open[id] = !openOf(id, type !== 'reml5'); renderTree(); return; }
+    state.sel = id;
+    if(container) state.open[id] = true;
+    if(type === 'l5'){ state.tab.d5 = '库表清单'; state.pg.db = 1; }
+    if(type === 'l6'){ state.tab.d6 = '字段信息'; state.pg.fld = 1; state.q.fld = ''; }
+    renderTree(); renderDetail();
+  });
+
+  /* ================= 详情：数据库 ================= */
+  function dbSearchIt(g){
+    var q = state.q.db.toLowerCase();
+    return q ? g.items.filter(function(it){ return (it.l6 + ' #' + it.no + ' ' + it.l5).toLowerCase().indexOf(q) >= 0; }) : g.items;
+  }
+  function dbTableHtml(g){
+    var items = dbSearchIt(g), size = state.sz.db, pages = Math.max(1, Math.ceil(items.length / size));
+    if(state.pg.db > pages) state.pg.db = pages;
+    var slice = items.slice((state.pg.db - 1) * size, (state.pg.db - 1) * size + size);
+    return '<div class="tb"><table><colgroup><col style="width:28%"><col style="width:11%"><col style="width:15%"><col style="width:12%"><col style="width:11%"><col style="width:12%"><col style="width:11%"></colgroup>' +
+      '<thead><tr><th>数据表名称</th><th>需规编号</th><th>疾病</th><th>数据量(条)</th><th>字段数(个)</th><th>存储大小<sup>示例</sup></th><th>质检分数<sup>示例</sup></th></tr></thead><tbody>' +
+      (slice.length ? slice.map(function(it){
+        return '<tr data-no="' + it.no + '"><td class="link">' + esc(it.l6) + '</td><td class="mono">#' + it.no + '</td>' +
+          '<td>' + it.diseases.map(function(x){ return '<span class="tag purple">' + esc(x) + '</span>'; }).join(' ') + '</td>' +
+          '<td class="num">' + it.demo.rows + '</td><td class="num">' + it.fields.length + '</td>' +
+          '<td class="num">' + metaOf(it).size + '</td><td class="num">' + metaOf(it).score + '</td></tr>';
+      }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:34px 0">没有匹配的数据表</td></tr>') +
+      '</tbody></table></div>' + pagerHtml('db', items.length);
+  }
+  function dbView(name){
+    var g = DB_OF[name]; if(!g) return '';
+    var dis = g.items.reduce(function(a, c){ return a.concat(c.diseases); }, []).filter(function(v, i, a){ return a.indexOf(v) === i; });
+    var strip = cells([
+      [ICON.table + '表数量(张)', g.items.length, ''],
+      [ICON.col + '字段数(个)', dbFields(g), ''],
+      [ICON.rows + '数据量(条)', dbRows(g), ''],
+      [ICON.size + '存储大小', dbSize(g), ''],
+      [ICON.score + '质检均分', (g.items.reduce(function(a, b){ return a + parseFloat(metaOf(b).score); }, 0) / g.items.length).toFixed(1), ''],
+      [ICON.info + '覆盖疾病', dis.length, '类']
+    ]);
+    var t = curTab('d5', '库表清单');
+    return '<div class="dscroll"><div class="dh">' + ICON.db + '<h2>' + esc(g.l5) + '</h2>' +
+      '<span class="tag blue">数据库</span>' +
+      '<span class="right"><button class="btn sm" data-open-modal>查看剔除明细</button>' +
+      '<button class="btn sm" data-asm>原型假设</button></span></div>' +
+      tabs('d5', ['库表清单', '信息概览'], t) + '<div class="dbody">' + strip +
+      (t === '库表清单'
+        ? '<div class="tabletools"><div class="sbox"><input id="qdb" placeholder="请输入数据表名称 / 需规编号搜索" value="' + esc(state.q.db) + '">' +
+          '<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg></div>' +
+          '<span class="hint">数据量 / 存储大小 / 质检分数为示例值，待数据接入后回填</span></div><div id="dbTbl">' + dbTableHtml(g) + '</div>'
+        : dlg('基本信息', [
+            ['数据库名称', esc(g.l5)], ['所属四级功能点', esc(P.l4)], ['表数量', g.items.length + ' 张'],
+            ['字段数合计', dbFields(g) + ' 个'], ['数据量合计', dbRows(g) + ' 条'], ['存储大小', dbSize(g) + ' <span class="tag grey">示例</span>'],
+            ['创建人', '马兴'], ['创建组织', '数智工程中心'], ['更新时间', '2026-09-15 18:20:07']
+          ])) + '</div></div>';
+  }
+
+  /* ================= 详情：数据表 ================= */
+  function fldTableHtml(it){
+    var q = state.q.fld.toLowerCase();
+    var fs = it.fields.filter(function(f){ return !q || (f[0] + ' ' + f[1]).toLowerCase().indexOf(q) >= 0; });
+    return '<div class="tb"><table><colgroup><col style="width:18%"><col style="width:16%"><col style="width:13%"><col style="width:7%"><col style="width:13%"><col style="width:11%"><col style="width:10%"><col style="width:12%"></colgroup>' +
+      '<thead><tr><th>字段英文名</th><th>字段中文名</th><th>类型</th><th>非空</th><th>标准名称</th><th>数据分类</th><th>数据分级</th><th>操作</th></tr></thead><tbody>' +
+      (fs.length ? fs.map(function(f){
+        return '<tr><td class="mono">' + esc(f[0]) + '</td><td>' + esc(f[1]) + '</td><td class="mono">' + esc(f[2]) + '</td>' +
+          '<td>' + (f[3] ? '<span class="ck">✓</span>' : '') + '</td><td>' + esc(f[4]) + '</td>' +
+          '<td>' + esc(f[5]) + '</td><td>' + esc(f[6]) + '</td><td><a data-toast="字段编辑（原型演示）">编辑</a></td></tr>';
+      }).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--t3);padding:34px 0">没有匹配的字段</td></tr>') +
+      '</tbody></table></div>';
+  }
+  function smpTableHtml(it){
+    var size = state.sz.smp, total = it.demo.rows, pages = Math.max(1, Math.ceil(total / size));
+    if(state.pg.smp > pages) state.pg.smp = pages;
+    var start = (state.pg.smp - 1) * size, rows = '';
+    for(var r = 0; r < size && start + r < total; r++){
+      rows += '<tr>' + it.fields.map(function(f, ci){
+        return '<td class="' + (ci === 0 ? 'hl mono' : (f[2].indexOf('INT') === 0 || f[2].indexOf('DECIMAL') === 0 ? 'num' : '')) + '">' +
+          esc(sampleVal(f, start + r, it.no)) + '</td>';
+      }).join('') + '</tr>';
+    }
+    return '<div class="tb tb-scroll"><table><colgroup>' + it.fields.map(function(){ return '<col style="width:150px">'; }).join('') + '</colgroup>' +
+      '<thead><tr>' + it.fields.map(function(f, ci){ return '<th' + (ci === 0 ? ' class="hl"' : '') + ' title="' + esc(f[1]) + '">' + esc(f[0]) + '</th>'; }).join('') + '</tr></thead>' +
+      '<tbody>' + rows + '</tbody></table></div>' + pagerHtml('smp', total);
+  }
+  function t6View(no){
+    var it = byNo[no]; if(!it) return '';
+    var m = metaOf(it), t = curTab('d6', '字段信息');
+    var head = '<div class="dh">' + ICON.table + '<h2>' + esc(it.l6) + '</h2>' +
+      '<span class="tag blue">数据表</span>' +
+      '<span class="right"><button class="btn sm" data-copy-info="' + it.no + '">复制表信息</button></span></div>';
+    var body = '';
+    if(t === '字段信息'){
+      body = '<div class="tabletools"><div class="sbox"><input id="qfld" placeholder="请输入字段英文名/字段中文名搜索" value="' + esc(state.q.fld) + '">' +
+        '<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg></div>' +
+        '<span class="hint" id="fldCnt"></span></div><div id="fldTbl">' + fldTableHtml(it) + '</div>';
+    } else if(t === '示例数据'){
+      body = '<div class="tabletools"><span class="hint">下表为演示用示例数据，姓名 / 身份证号 / 电话 / 住址等已脱敏，非真实患者数据</span></div><div id="smpTbl">' + smpTableHtml(it) + '</div>';
+    } else {
+      body = dlg('基本信息', [
+          ['表中文名', esc(it.l6)], ['所属数据库', esc(it.l5)],
+          ['数据量', it.demo.rows + ' 条'], ['字段数', it.fields.length + ' 个'],
+          ['存储大小', m.size + ' <span class="tag grey">示例</span>'],
+          ['创建时间', '2026-05-28 18:00:59'], ['更新时间', '2026-09-15 18:20:07'],
+          ['数据更新频率', esc(it.demo.freq)], ['创建人', '马兴'], ['创建组织', '数智工程中心']
+        ]);
+    }
+    return '<div class="dscroll">' + head + tabs('d6', ['字段信息', '示例数据', '信息概览'], t) + '<div class="dbody">' + body + '</div></div>';
+  }
+
+  /* ================= 详情：四级功能点（总览） ================= */
+  function l4View(){
+    var strip = cells([
+      [ICON.db + '数据库(个)', D.groups.length, ''],
+      [ICON.table + '数据表(张)', S.l6Keep, ''],
+      [ICON.col + '字段数(个)', ALL.reduce(function(a, b){ return a + b.fields.length; }, 0), ''],
+      [ICON.rows + '数据量(条)', ALL.reduce(function(a, b){ return a + b.demo.rows; }, 0), ''],
+      [ICON.score + '覆盖疾病', D.facets.diseases.length, '类'],
+      [ICON.info + '已剔除(知识图谱)', S.l6Removed, '张']
+    ]);
+    var t = curTab('d4', '数据库清单');
+    return '<div class="dscroll"><div class="dh">' + ICON.folder + '<h2>' + esc(P.l4) + '</h2>' +
+      '<span class="tag blue">四级功能点</span>' +
+      '<span class="right"><button class="btn sm" data-open-modal>查看剔除明细</button>' +
+      '<button class="btn sm" data-asm>原型假设</button></span></div>' +
+      tabs('d4', ['数据库清单', '信息概览'], t) + '<div class="dbody">' + strip +
+      (t === '数据库清单'
+        ? '<div class="tb"><table><colgroup><col style="width:30%"><col style="width:14%"><col style="width:10%"><col style="width:11%"><col style="width:13%"><col style="width:11%"><col style="width:11%"></colgroup>' +
+          '<thead><tr><th>数据库名称</th><th>需规编号</th><th>表数量</th><th>字段数</th><th>数据量(条)</th><th>覆盖疾病</th><th>是否含知识图谱</th></tr></thead><tbody>' +
+          D.groups.map(function(g){
+            return '<tr data-l5="' + esc(g.l5) + '"><td class="link">' + esc(g.l5) + '</td>' +
+              '<td class="mono">#' + g.items[0].no + ' – #' + g.items[g.items.length - 1].no + '</td>' +
+              '<td class="num">' + g.items.length + '</td><td class="num">' + dbFields(g) + '</td><td class="num">' + dbRows(g) + '</td>' +
+              '<td class="num">' + g.items.reduce(function(a, c){ return a.concat(c.diseases); }, []).filter(function(v, i, a){ return a.indexOf(v) === i; }).length + ' 类</td>' +
+              '<td><span class="tag green">否</span></td></tr>';
+          }).join('') + '</tbody></table></div>'
+        : dlg('基本信息', [
+            ['四级功能点', esc(P.l4)], ['数据库数量', D.groups.length + ' 个'], ['数据表数量', S.l6Keep + ' 张'],
+            ['字段数合计', ALL.reduce(function(a, b){ return a + b.fields.length; }, 0) + ' 个'],
+            ['覆盖疾病', D.facets.diseases.join('、')], ['数据模态', D.facets.modalities.join('、')],
+            ['数据来源', esc(D.source)]
+          ])) + '</div></div>';
+  }
+
+  /* ================= 详情：已剔除 ================= */
+  function removedView(sel){
+    var isT = sel.indexOf('rt:') === 0;
+    var it = isT ? remByNo[parseInt(sel.slice(3), 10)] : null;
+    var name = isT ? it.l5 : sel.slice(2);
+    var g = D.removed.filter(function(x){ return x.l5 === name; })[0];
+    if(!g) return '';
+    var h = '<div class="dscroll"><div class="dh">' + ICON.db + '<h2>' + esc(isT ? it.l6 : g.l5) + '</h2>' +
+      '<span class="tag red">已剔除</span><span class="tag grey">' + (isT ? '数据表' : '数据库') + '</span>' +
+      '<span class="right"><button class="btn sm" data-goview="change">查看范围调整说明</button></span></div>' +
+      '<div class="dbody"><div class="banner danger"><span class="bi">!</span><div>该' + (isT ? '数据表' : '数据库') +
+      '属于 <b>知识图谱</b> 相关内容，已在本次需规范围调整中<b>从四级功能点「' + esc(P.l4) + '」中剔除</b>，不在元数据目录中挂载。</div></div>' +
+      '<div class="sec-t">剔除信息</div>' + dlg('剔除对照', [
+        ['所属四级功能点', esc(P.l4)], ['所属数据库', esc(g.l5)],
+        ['需规编号', isT ? ('#' + it.no) : ('#' + g.items[0].no + ' – #' + g.items[g.items.length - 1].no)],
+        ['剔除原因', '知识图谱相关，不在本次需规范围内'],
+        ['处理方式', '整组剔除（含其下全部数据表）'],
+        ['涉及数据表数量', g.items.length + ' 张']
+      ]);
+    if(isT){ h += '<div class="sec-t">需规功能描述</div><div class="p-desc" style="color:#a9b0bb">' + esc(it.desc) + '</div>'; }
+    else { h += '<div class="sec-t">该库下被剔除的数据表（' + g.items.length + ' 张）</div><div class="grp-box"><div class="grp-grid one">' +
+      g.items.map(function(x){ return '<div class="gi"><span class="gl mono">#' + x.no + '</span><span class="gv" style="text-decoration:line-through;text-decoration-color:#dcb9b9;color:#a9b0bb">' + esc(x.l6) + '</span></div>'; }).join('') +
+      '</div></div>'; }
+    return h + '</div></div>';
+  }
+
+  /* ================= 功能点清单 / 范围调整 ================= */
+  function funcView(){
+    return '<div class="page"><div class="dh">' + ICON.table + '<h2>需规功能点清单</h2>' +
+      '<span class="right"><button class="btn sm" id="btnCopyList">复制保留清单</button>' +
+      '<label class="btn sm" style="cursor:pointer"><input type="checkbox" id="chkRemoved" style="margin:0 6px 0 0" ' + (state.showRemoved ? 'checked' : '') + '>显示已剔除项（' + S.l6Removed + '）</label></span></div>' +
+      cells([[ICON.db + '数据库', S.l5Keep, '个'], [ICON.table + '数据表', S.l6Keep, '张'],
+             [ICON.info + '已剔除数据库', S.l5Removed, '个'], [ICON.rows + '已剔除数据表', S.l6Removed, '张'],
+             [ICON.score + '保留占比', pct, '%']]) +
+      '<div class="tabletools"><div class="sbox"><input id="q2" placeholder="在名称与功能描述中检索" value="' + esc(state.q2 || '') + '">' +
+      '<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg></div>' +
+      '<span class="hint" id="funcCount"></span></div>' +
+      '<div class="tb"><table><colgroup><col style="width:7%"><col style="width:16%"><col style="width:16%"><col style="width:18%"><col style="width:20%"><col style="width:23%"></colgroup>' +
+      '<thead><tr><th>编号</th><th>三级功能</th><th>四级功能</th><th>数据库</th><th>数据表</th><th>需规功能描述</th></tr></thead>' +
+      '<tbody id="funcBody"></tbody></table></div></div>';
+  }
+  function paintFunc(){
+    var q = (state.q2 || '').toLowerCase(), rows = '', shown = 0;
+    D.groups.forEach(function(g){
+      var sub = g.items.filter(function(it){ return !q || (it.l6 + ' ' + it.desc + ' #' + it.no).toLowerCase().indexOf(q) >= 0; });
+      if(!sub.length) return;
+      rows += '<tr class="grp"><td colspan="6" style="font-weight:600;color:var(--t1)">' + esc(g.l5) +
+        ' <span style="color:var(--t3);font-weight:400">· 数据库 · ' + g.items.length + ' 张表</span><span class="tag green" style="float:right">保留</span></td></tr>';
+      sub.forEach(function(it){ shown++;
+        rows += '<tr data-no="' + it.no + '"><td class="mono">#' + it.no + '</td><td>' + esc(P.l3) + '</td><td>' + esc(P.l4) + '</td>' +
+          '<td>' + esc(g.l5) + '</td><td class="link">' + esc(it.l6) + '</td><td style="white-space:normal;color:var(--t3)">' + esc(it.desc) + '</td></tr>';
+      });
+    });
+    if(state.showRemoved){
+      D.removed.forEach(function(g){
+        var sub = g.items.filter(function(it){ return !q || (it.l6 + ' ' + it.desc + ' #' + it.no).toLowerCase().indexOf(q) >= 0; });
+        if(!sub.length) return;
+        rows += '<tr class="grp is-removed"><td colspan="6" style="font-weight:600">' + esc(g.l5) +
+          ' <span style="font-weight:400">· 数据库 · ' + g.items.length + ' 张表</span><span class="tag red" style="float:right">已剔除</span></td></tr>';
+        sub.forEach(function(it){
+          rows += '<tr class="is-removed" data-no="' + it.no + '"><td class="mono">#' + it.no + '</td><td>' + esc(P.l3) + '</td><td>' + esc(P.l4) + '</td>' +
+            '<td>' + esc(g.l5) + '</td><td class="link">' + esc(it.l6) + '</td><td style="white-space:normal">' + esc(it.desc) + '</td></tr>';
+        });
+      });
+    }
+    $('#funcBody').innerHTML = rows;
+    $('#funcCount').textContent = '当前显示 ' + shown + ' 张保留数据表' + (state.showRemoved ? '，并叠加显示 ' + S.l6Removed + ' 张已剔除表' : '（已隐藏 ' + S.l6Removed + ' 张已剔除表）');
+  }
+  function changeView(){
+    var kn = ALL.map(function(x){ return x.no; }), rn = REM.map(function(x){ return x.no; });
+    return '<div class="page"><div class="dh">' + ICON.info + '<h2>知识图谱相关内容剔除说明</h2>' +
+      '<span class="tag red">需规范围调整</span>' +
+      '<span class="right"><button class="btn sm" id="btnCopyRemoved">复制剔除清单</button>' +
+      '<button class="btn sm" id="btnPrint">打印 / 导出 PDF</button></span></div>' +
+      cells([[ICON.db + '数据库（保留）', D.groups.length, '个'], [ICON.table + '数据表（保留）', S.l6Keep, '张'],
+             [ICON.info + '数据库（剔除）', D.removed.length, '个'], [ICON.rows + '数据表（剔除）', S.l6Removed, '张'],
+             [ICON.score + '剔除比例', (100 - pct).toFixed(1), '%']]) +
+      '<div class="banner danger"><span class="bi">!</span><div>剔除口径：四级功能点「' + esc(P.l4) + '」下，<b>数据库名称包含「知识图谱」的整组剔除</b>，其下数据表一并移除。' +
+      '保留段需规编号 #' + Math.min.apply(null, kn) + ' – #' + Math.max.apply(null, kn) + '，剔除段 #' + Math.min.apply(null, rn) + ' – #' + Math.max.apply(null, rn) + '，两段连续无缝、无重复无遗漏。</div></div>' +
+      '<div class="panel"><div class="ph">数据库对照<span class="sub">单位：个 / 张</span></div>' + l5Table() + '</div>' +
+      '<div class="panel"><div class="ph">剔除明细（' + D.removed.length + ' 个数据库 / ' + S.l6Removed + ' 张表）<span class="sub">删除线表示已从需规范围移除</span></div>' +
+      '<div class="pb"><div class="two">' + D.removed.map(remCard).join('') + '</div></div></div>' +
+      '<div class="panel"><div class="ph">影响评估与后续动作</div><div class="pb"><div class="two">' +
+      '<div><div class="sec-t">影响评估（假设，待确认）</div><ul class="checklist">' +
+      '<li>需规文档：删除 5 个数据库、35 张数据表条目及其功能描述。</li>' +
+      '<li>进度监控表：生命医学主题库待开发数量由 146 项同步下调 35 项（→ 111 项）。</li>' +
+      '<li>元数据目录：不再挂载知识图谱类库表，图谱构建 / 推理 / 可视化工作量同步释放。</li>' +
+      '<li>下游依赖：若图谱曾作为疾病分类、病灶分割等算法的知识来源，需确认替代方案。</li></ul></div>' +
+      '<div><div class="sec-t">后续动作</div><ul class="checklist">' +
+      '<li class="todo">确认剔除范围仅限本四级功能点，其他四级功能点内的图谱内容是否同样处理。</li>' +
+      '<li class="todo">确认剔除后是否影响验收口径与「系统功能与需规符合性」审查。</li>' +
+      '<li class="todo">在需规 V+1 版本登记本次变更，并同步更新进度监控表。</li>' +
+      '<li class="todo">确认知识图谱资产是否转入二期或独立课题，避免需求无归属。</li></ul></div>' +
+      '</div></div></div></div>';
+  }
+  function l5Table(){
+    var rows = '';
+    D.groups.forEach(function(g){ rows += '<tr data-l5="' + esc(g.l5) + '"><td class="link">' + esc(g.l5) + '</td>' +
+      '<td class="num">' + g.items.length + ' 张</td><td>#' + g.items[0].no + ' – #' + g.items[g.items.length - 1].no + '</td>' +
+      '<td><span class="tag green">保留</span></td></tr>'; });
+    D.removed.forEach(function(g){ rows += '<tr class="is-removed" data-l5r="' + esc(g.l5) + '"><td class="link">' + esc(g.l5) + '</td>' +
+      '<td class="num">' + g.items.length + ' 张</td><td>#' + g.items[0].no + ' – #' + g.items[g.items.length - 1].no + '</td>' +
+      '<td><span class="tag red">剔除</span></td></tr>'; });
+    return '<div class="tb" style="border:0;border-radius:0"><table><colgroup><col style="width:34%"><col style="width:16%"><col style="width:26%"><col style="width:24%"></colgroup>' +
+      '<thead><tr><th>数据库名称</th><th>数据表数量</th><th>需规编号</th><th>处理</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+  function remCard(g){
+    return '<div class="remcard"><h4>' + esc(g.l5) + '<span class="cnt">' + g.items.length + ' 张表</span></h4><ul>' +
+      g.items.map(function(it){ return '<li><span class="no">#' + it.no + '</span>' + esc(it.l6) + '</li>'; }).join('') + '</ul></div>';
+  }
+
+  /* ================= 分发 ================= */
+  function renderDetail(){
+    var d = $('#detail');
+    if(state.view === 'func'){ d.innerHTML = funcView(); paintFunc(); return; }
+    if(state.view === 'change'){ d.innerHTML = changeView(); return; }
+    var sel = state.sel || 'l4';
+    if(sel === 'l4'){ d.innerHTML = l4View(); return; }
+    if(sel.indexOf('g:') === 0){ d.innerHTML = dbView(sel.slice(2)); return; }
+    if(sel.indexOf('t:') === 0){ d.innerHTML = t6View(parseInt(sel.slice(2), 10)); return; }
+    if(sel.indexOf('r:') === 0 || sel.indexOf('rt:') === 0){ d.innerHTML = removedView(sel); return; }
+    d.innerHTML = '<div class="empty">' + ICON.empty + '<div>请选择左侧资源查看详情</div></div>';
+  }
+
+  /* ================= 事件 ================= */
+  function rowClick(tr){
+    var no = parseInt(tr.getAttribute('data-no'), 10);
+    var kept = byNo[no], rem = remByNo[no];
+    if(state.view !== 'catalog') switchView('catalog');
+    state.sel = kept ? ('t:' + no) : ('rt:' + no);
+    state.tab.d6 = '字段信息'; state.pg.fld = 1; state.q.fld = '';
+    renderTree(); renderDetail();
+    toast(kept ? ('已定位到数据表「' + kept.l6 + '」') : ('该表已剔除：' + rem.l6));
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    var tb = t.closest('[data-tab]');
+    if(tb){ var pr = tb.getAttribute('data-tab').split('|'); state.tab[pr[0]] = pr[1]; renderDetail(); return; }
+    if(t.closest('[data-close]')){ closeAll(); return; }
+    if(t.closest('[data-open-modal]')){ $('#modalCards').innerHTML = D.removed.map(remCard).join(''); openLayer('#modal'); return; }
+    if(t.closest('[data-asm]')){ openLayer('#modalAsm'); return; }
+    var ci = t.closest('[data-copy-info]');
+    if(ci){ var it = byNo[parseInt(ci.getAttribute('data-copy-info'), 10)];
+      if(it) copyText('#' + it.no + ' ' + P.l4 + ' / ' + it.l5 + ' / ' + it.l6 + '\n字段数：' + it.fields.length + '\n' + it.desc, '表信息已复制'); return; }
+    var gv = t.closest('[data-goview]');
+    if(gv){ switchView(gv.getAttribute('data-goview')); return; }
+    var sw = t.closest('#viewsw button');
+    if(sw){ switchView(sw.getAttribute('data-view')); return; }
+    if(t.closest('#btnCopyList')){ copyText(keptText(), '保留清单已复制'); return; }
+    if(t.closest('#btnCopyRemoved')){ copyText(removedText(), '剔除清单已复制'); return; }
+    if(t.closest('#btnPrint')){ window.print(); return; }
+    var pg = t.closest('[data-pg]');
+    if(pg && !pg.disabled){
+      var a = pg.getAttribute('data-pg').split(':'), ctx = a[0], p = parseInt(a[1], 10);
+      var total = ctx === 'db' ? dbSearchIt(DB_OF[state.sel.slice(2)]).length : byNo[parseInt(state.sel.slice(2), 10)].demo.rows;
+      var pages = Math.max(1, Math.ceil(total / (state.sz[ctx] || 10)));
+      if(p >= 1 && p <= pages){ state.pg[ctx] = p; repaint(ctx); }
+      return;
+    }
+    var l5r = t.closest('#detail tr[data-l5r]');
+    if(l5r){ state.sel = 'r:' + l5r.getAttribute('data-l5r'); state.open['r:' + l5r.getAttribute('data-l5r')] = true; switchView('catalog'); renderTree(); renderDetail(); return; }
+    var l5k = t.closest('#detail tr[data-l5]');
+    if(l5k){ state.sel = 'g:' + l5k.getAttribute('data-l5'); state.tab.d5 = '库表清单'; state.pg.db = 1; state.q.db = ''; switchView('catalog'); renderTree(); renderDetail(); return; }
+    var tr = t.closest('#detail tbody tr[data-no]');
+    if(tr){ rowClick(tr); return; }
+    var ts = t.closest('[data-toast]');
+    if(ts){ toast(ts.getAttribute('data-toast')); return; }
+  });
+  function repaint(ctx){
+    if(ctx === 'db'){ var g = DB_OF[state.sel.slice(2)]; if(g) $('#dbTbl').innerHTML = dbTableHtml(g); }
+    if(ctx === 'smp'){ var it = byNo[parseInt(state.sel.slice(2), 10)]; if(it) $('#smpTbl').innerHTML = smpTableHtml(it); }
+  }
+  $('#detail').addEventListener('input', function(e){
+    if(e.target.id === 'qdb'){ state.q.db = e.target.value; state.pg.db = 1; var g = DB_OF[state.sel.slice(2)]; if(g) $('#dbTbl').innerHTML = dbTableHtml(g); }
+    else if(e.target.id === 'qfld'){ state.q.fld = e.target.value; var it = byNo[parseInt(state.sel.slice(2), 10)]; if(it) $('#fldTbl').innerHTML = fldTableHtml(it); }
+    else if(e.target.id === 'q2'){ state.q2 = e.target.value; paintFunc(); }
+  });
+  $('#detail').addEventListener('change', function(e){
+    if(e.target.id === 'chkRemoved'){ state.showRemoved = e.target.checked; paintFunc(); }
+    var sz = e.target.getAttribute && e.target.getAttribute('data-sz');
+    if(sz){ state.sz[sz] = parseInt(e.target.value, 10); state.pg[sz] = 1; repaint(sz); }
+    var jp = e.target.getAttribute && e.target.getAttribute('data-jump');
+    if(jp){
+      var it = byNo[parseInt(state.sel.slice(2), 10)] || {};
+      var total = jp === 'db' ? dbSearchIt(DB_OF[state.sel.slice(2)]).length : it.demo.rows;
+      var pages = Math.max(1, Math.ceil(total / (state.sz[jp] || 10)));
+      var v = Math.min(pages, Math.max(1, parseInt(e.target.value, 10) || 1));
+      state.pg[jp] = v; repaint(jp);
+    }
+  });
+  function openLayer(s){ $('#mask').classList.add('on'); $(s).classList.add('on'); }
+  function closeAll(){ $('#mask').classList.remove('on'); $('#modal').classList.remove('on'); $('#modalAsm').classList.remove('on'); }
+  $('#mask').onclick = closeAll;
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(); });
+  $('#btnCopyRemoved2').onclick = function(){ copyText(removedText(), '剔除清单已复制'); };
+
+  function keptText(){
+    var l = ['四级功能点：' + P.l4 + '（剔除知识图谱相关内容后）', '保留：' + D.groups.length + ' 个数据库 / ' + S.l6Keep + ' 张数据表', ''];
+    D.groups.forEach(function(g){ l.push('【数据库】' + g.l5 + '（' + g.items.length + ' 张表）');
+      g.items.forEach(function(it){ l.push('  #' + it.no + ' ' + it.l6 + '（' + it.fields.length + ' 字段）'); }); l.push(''); });
+    return l.join('\n');
+  }
+  function removedText(){
+    var l = ['四级功能点：' + P.l4 + ' —— 剔除清单（知识图谱相关）',
+             '共 ' + D.removed.length + ' 个数据库 / ' + S.l6Removed + ' 张数据表', ''];
+    D.removed.forEach(function(g){ l.push('【剔除·数据库】' + g.l5 + '（' + g.items.length + ' 张表）');
+      g.items.forEach(function(it){ l.push('  #' + it.no + ' ' + it.l6); }); l.push(''); });
+    return l.join('\n');
+  }
+
+  var tq;
+  $('#treeQ').oninput = function(e){
+    clearTimeout(tq); var v = e.target.value;
+    tq = setTimeout(function(){ state.treeQ = v; renderTree(); }, 160);
+  };
+
+  /* ================= 初始化 ================= */
+  switchView('catalog');
+  renderTree();
+  renderDetail();
+})();
+
+</script>
+</body>
+</html>

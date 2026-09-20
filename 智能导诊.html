@@ -668,7 +668,7 @@
       state.analyzing = true;
       inputHint.textContent = '正在语义分析，请稍候…';
       inputHint.className = 'input-hint';
-      addMessage('🔍 正在对您的主诉进行语义分析，提取关键症状、持续时间与风险信号…', 'analyzing');
+      addMessage('🔍 正在分析您的主诉，提取关键症状、持续时间与风险信号，为您匹配合适的就诊科室，帮助减少因医学知识不足、院内咨询不便造成的就诊资源错配…', 'analyzing');
       setTimeout(() => {
         // 语义分析完成：科室分配结论直接以对话回复给出，不再需要二次确认
         addMessage(state.script.response, 'bot');

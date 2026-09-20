@@ -123,21 +123,45 @@ button{cursor:pointer}
 .disclaimer b{color:#7f1d1d}
 .actions-row{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
 /* analyze */
-.analyze-wrap{max-width:640px;margin:40px auto;text-align:center}
-.analyze-stage{position:relative;height:220px;border-radius:14px;overflow:hidden;margin-bottom:26px;background:linear-gradient(135deg,#0b1220,#132844)}
-.scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#5eead4,transparent);box-shadow:0 0 14px 2px #5eead4aa;animation:scanmove 1.8s linear infinite}
-@keyframes scanmove{0%{top:6%}100%{top:94%}}
-.gene-stream{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:13px;color:#7dd3fc55;letter-spacing:3px;overflow:hidden;white-space:nowrap}
-.analyze-steps{display:grid;gap:10px;text-align:left;margin-bottom:22px}
-.a-step{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--line);border-radius:8px;background:#fff}
-.a-step .dot{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid #d7deea;display:grid;place-items:center;font-size:11px;color:#fff}
-.a-step.active .dot{border-color:var(--blue);background:var(--blue)}
-.a-step.done .dot{border-color:var(--green);background:var(--green)}
-.a-step .txt{flex:1}
-.a-step .tt{font-weight:600;font-size:13px}
-.a-step .td{font-size:11.5px;color:var(--muted)}
-.a-progress{height:8px;border-radius:6px;background:#eef1f6;overflow:hidden}
-.a-progress i{display:block;height:100%;background:linear-gradient(90deg,#1a56db,#0e7d80);width:0%;transition:width .35s}
+.analyze-wrap{max-width:760px;margin:34px auto;text-align:center}
+.analyze-stage{position:relative;height:270px;border-radius:18px;overflow:hidden;margin-bottom:18px;background:radial-gradient(circle at 50% 48%,#183b61 0%,#0d2038 34%,#071321 75%);border:1px solid #2d6a91;box-shadow:0 18px 42px #07132136,inset 0 0 42px #00d9ff14}
+.analyze-stage:before,.analyze-stage:after{content:"";position:absolute;inset:18px;border:1px solid #52d7f433;border-radius:12px;pointer-events:none}
+.analyze-stage:after{inset:30px;border-color:#9be7ff1f;border-style:dashed}
+.scan-line{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent 0%,#4de1ff 18%,#b7fff6 50%,#4de1ff 82%,transparent 100%);box-shadow:0 0 10px 3px #4de1ffbb,0 0 32px 6px #00a7d455;animation:scanmove 2.2s ease-in-out infinite;z-index:3}
+@keyframes scanmove{0%{top:8%;opacity:.55}50%{opacity:1}100%{top:92%;opacity:.55}}
+.gene-stream{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px;color:#a7e8ff9c;letter-spacing:4px;overflow:hidden;white-space:nowrap;text-shadow:0 0 8px #4de1ff99;animation:genePulse 2.8s ease-in-out infinite}
+.gene-stream:before,.gene-stream:after{content:"";position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,#5eead488,transparent);animation:streamShift 2.4s linear infinite}
+.gene-stream:before{top:37%}.gene-stream:after{top:63%;animation-delay:-1.2s}
+@keyframes genePulse{0%,100%{opacity:.5;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
+@keyframes streamShift{0%{transform:translateX(-12%);opacity:.15}50%{opacity:.75}100%{transform:translateX(12%);opacity:.15}}
+.analyze-stage-copy{position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);width:88%;padding:18px 22px;border:1px solid #86efff55;border-radius:12px;background:linear-gradient(180deg,#071321c7,#0d2947c2);backdrop-filter:blur(3px);box-shadow:0 8px 24px #00142355}
+.analyze-stage-copy .eyebrow{font-size:11px;letter-spacing:3px;color:#8be9ff;font-weight:700;margin-bottom:6px}
+.analyze-stage-copy .main{font-size:20px;line-height:1.35;color:#f1fcff;font-weight:700;letter-spacing:1px;text-shadow:0 0 12px #44ddff55}
+.analyze-stage-copy .sub{font-size:12px;color:#c4e6f2;margin-top:7px}
+.analyze-steps{display:grid;gap:9px;text-align:left;margin-bottom:17px}
+.a-step{position:relative;display:flex;align-items:center;gap:12px;padding:12px 15px;border:1px solid var(--line);border-radius:10px;background:#fff;transition:border-color .25s,box-shadow .25s,transform .25s}
+.a-step.active{border-color:#76a7ff;box-shadow:0 0 0 3px #eaf1ff,0 8px 20px #1a56db18;transform:translateY(-1px)}
+.a-step.done{border-color:#b8e3ca;background:#fbfffc}
+.a-step .dot{width:23px;height:23px;flex:none;border-radius:50%;border:2px solid #d7deea;display:grid;place-items:center;font-size:11px;color:#fff;transition:.25s}
+.a-step .dot:after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0}
+.a-step.active .dot{border-color:var(--blue);background:var(--blue);box-shadow:0 0 0 4px #dbe7ff,0 0 16px #1a56db77}
+.a-step.active .dot:after{opacity:1;animation:dotBlink 1s ease-in-out infinite}
+.a-step.done .dot{border-color:var(--green);background:var(--green);box-shadow:0 0 0 3px #dcfce7;color:#fff}
+.a-step.done .dot:after{opacity:1;background:#fff}
+.a-step .txt{flex:1;min-width:0}
+.a-step .tt{font-weight:700;font-size:14px;color:#172554}
+.a-step .td{font-size:12px;color:#6b7b90;margin-top:2px;line-height:1.5}
+.a-step .status{font-size:11px;color:#8a94a6;white-space:nowrap}
+.a-step.active .status{color:var(--blue);font-weight:700}
+.a-step.done .status{color:var(--green);font-weight:700}
+@keyframes dotBlink{0%,100%{transform:scale(.75);opacity:.55}50%{transform:scale(1.35);opacity:1}}
+.a-progress-wrap{margin-top:2px}
+.a-progress{height:10px;border-radius:999px;background:#e6ebf3;overflow:hidden;box-shadow:inset 0 1px 2px #10182818}
+.a-progress i{position:relative;display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#1a56db 0%,#28a9e8 55%,#0e9b86 100%);width:0%;transition:width .5s ease;box-shadow:0 0 12px #28c7dc99}
+.a-progress i:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,#ffffffaa 45%,transparent 65%);transform:translateX(-100%);animation:barShine 1.35s linear infinite}
+@keyframes barShine{to{transform:translateX(100%)}}
+.analyze-hint{margin-top:9px;color:#52677e;font-size:12.5px;line-height:1.55;min-height:22px}
+@media(prefers-reduced-motion:reduce){.scan-line,.gene-stream,.gene-stream:before,.gene-stream:after,.a-progress i:after,.a-step.active .dot:after{animation:none}}
 /* report */
 .report-head{display:flex;justify-content:center;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;text-align:center}
 .report-meta{color:var(--muted);font-size:12px;margin-top:6px}
@@ -204,11 +228,10 @@ button{cursor:pointer}
 .info-cell{padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe}
 .info-cell label{display:block;color:var(--muted);font-size:11px}
 .info-cell strong{font-size:14px}
-.footnote{font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px;margin-top:6px}
 .toast{display:none;position:fixed;right:24px;top:74px;z-index:50;padding:11px 15px;border:1px solid #bbf7d0;border-radius:7px;background:#fff;color:#15803d;box-shadow:0 4px 14px #00000014;max-width:340px;font-size:13px}
 .toast.show{display:block}
-@media(max-width:760px){.upload-grid,.form-row,.info-grid,.geno-select-grid{grid-template-columns:1fr}.report-head{display:block}.image-narrative-row{flex-direction:column}.image-narrative-row .upload-grid{flex:1 1 auto}}
-</style>
+@media(max-width:760px){.upload-grid,.form-row,.info-grid,.geno-select-grid{grid-template-columns:1fr}.report-head{display:block}.image-narrative-row{flex-direction:column}.image-narrative-row .upload-grid{flex:1 1 auto}}</style>
+  <script src="assets/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 <header class="top"><a class="brand brand-link" href="app-center.html">基于基因的眼病/慢病诊断应用</a></header>
@@ -246,7 +269,6 @@ button{cursor:pointer}
       <div class="card-body" id="upload-panel"></div>
     </div>
 
-
     <div class="actions-row">
       <button class="btn primary" id="run-btn" onclick="startAnalysis()">🧬 开始一键分析</button>
     </div>
@@ -258,10 +280,17 @@ button{cursor:pointer}
       <div class="analyze-stage">
         <div class="scan-line"></div>
         <div class="gene-stream" id="gene-stream">ATCGGCTAAGCTGATCCGATCGGTACGATTCGATCGGCATTAGCTAGCTAGGCTAGCATCGATCGTAGCTAGCATCG</div>
+        <div class="analyze-stage-copy">
+          <div class="eyebrow">MULTIMODAL ANALYSIS PIPELINE</div>
+          <div class="main" id="analyze-stage-title">正在启动多模态智能分析</div>
+          <div class="sub" id="analyze-stage-sub">基因序列 · 眼底影像 · 临床证据</div>
+        </div>
       </div>
       <div class="analyze-steps" id="analyze-steps"></div>
-      <div class="a-progress"><i id="analyze-bar"></i></div>
-      <div style="margin-top:10px;color:var(--muted);font-size:12.5px" id="analyze-hint">正在初始化多模态分析流水线…</div>
+      <div class="a-progress-wrap">
+        <div class="a-progress"><i id="analyze-bar"></i></div>
+        <div class="analyze-hint" id="analyze-hint">正在初始化多模态分析流水线…</div>
+      </div>
     </div>
   </section>
 
@@ -320,16 +349,8 @@ button{cursor:pointer}
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-body footnote" id="report-footnote">
-        本报告支持通过算法接口调用、可用于多学科联合会诊参考及科研数据分析（数据脱敏后），具体对接方式请联系系统管理员。
-      </div>
-    </div>
-
     <div class="actions-row">
-      <button class="btn" onclick="restart()">↺ 重新分析</button>
-      <button class="btn" onclick="toast('原型演示：已生成 PDF（示意）')">导出 PDF</button>
-      <button class="btn primary" onclick="toast('原型演示：已生成 Word（示意）')">导出 Word</button>
+      <button class="btn" onclick="exportReportPdf()">导出 PDF</button>
     </div>
   </section>
 </div>
@@ -340,6 +361,50 @@ const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(
 let toastTimer;
 function toast(msg){let t=$('#toast');t.textContent=msg;t.className='toast show';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='toast',2600)}
 
+/* 直接在浏览器中生成并下载 PDF，不调用打印预览。 */
+async function exportReportPdf(){
+  const report=document.querySelector('#panel-report');
+  const button=document.querySelector('#panel-report .actions-row .btn');
+  const reportActions=report ? report.querySelector('.actions-row') : null;
+  if(!report){
+    toast('未找到多模态融合综合评估报告');
+    return;
+  }
+  if(!report.classList.contains('active')){
+    toast('请先生成多模态融合综合评估报告');
+    return;
+  }
+  if(typeof html2pdf!=='function'){
+    toast('PDF 导出组件未加载，请刷新页面后重试');
+    return;
+  }
+  if(button){
+    button.disabled=true;
+    button.textContent='正在生成 PDF…';
+  }
+  const previousDisplay=reportActions ? reportActions.style.display : '';
+  try{
+    if(reportActions) reportActions.style.display='none';
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    await html2pdf().set({
+      margin:[10,10,12,10],
+      filename:'多模态融合综合评估报告.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+      pagebreak:{mode:['css','legacy']}
+    }).from(report).save();
+  }catch(error){
+    console.error('PDF 导出失败',error);
+    toast('PDF 生成失败，请稍后重试');
+  }finally{
+    if(reportActions) reportActions.style.display=previousDisplay;
+    if(button){
+      button.disabled=false;
+      button.textContent='导出 PDF';
+    }
+  }
+}
 /* ============ 疾病与基因数据模型（内容来自文献调研，见对话说明） ============ */
 const DISEASE = {
   dr:{
@@ -621,22 +686,32 @@ function startAnalysis(){
   const isSimulated=!Object.values(images).some(img=>img&&img.hint);
   goStep('analyze');
   $('#analyze-steps').innerHTML=ANALYZE_STEPS.map((s,i)=>
-    '<div class="a-step" id="a-step-'+i+'"><span class="dot">'+(i+1)+'</span><span class="txt"><div class="tt">'+s.title+'</div><div class="td">'+s.desc+'</div></span></div>'
+    '<div class="a-step" id="a-step-'+i+'"><span class="dot">'+(i+1)+'</span><span class="txt"><div class="tt">'+s.title+'</div><div class="td">'+s.desc+'</div></span><span class="status">等待分析</span></div>'
   ).join('');
   $('#analyze-bar').style.width='0%';
+  $('#analyze-stage-title').textContent='正在启动多模态智能分析';
+  $('#analyze-stage-sub').textContent='基因序列 · 眼底影像 · 临床证据';
   let i=0;
   function nextStep(){
-    if(i>0)$('#a-step-'+(i-1)).classList.replace('active','done');
+    if(i>0){
+      $('#a-step-'+(i-1)).classList.replace('active','done');
+      $('#a-step-'+(i-1)+' .status').textContent='已完成';
+    }
     if(i>=ANALYZE_STEPS.length){
+      $('#analyze-stage-title').textContent='多模态分析已完成';
+      $('#analyze-stage-sub').textContent='正在整理融合证据并生成结构化评估报告';
       $('#analyze-hint').textContent='分析完成，正在跳转至评估报告…';
       setTimeout(()=>{buildReport(isSimulated);goStep('report');},600);
       return;
     }
     $('#a-step-'+i).classList.add('active');
-    $('#analyze-hint').textContent=ANALYZE_STEPS[i].desc+'…';
+    $('#a-step-'+i+' .status').textContent='分析中';
+    $('#analyze-stage-title').textContent=ANALYZE_STEPS[i].title;
+    $('#analyze-stage-sub').textContent=ANALYZE_STEPS[i].desc;
+    $('#analyze-hint').textContent='当前阶段：'+ANALYZE_STEPS[i].desc+'…';
     $('#analyze-bar').style.width=Math.round(((i+1)/ANALYZE_STEPS.length)*100)+'%';
     i++;
-    setTimeout(nextStep,950);
+    setTimeout(nextStep,1100);
   }
   nextStep();
 }
@@ -1001,3 +1076,5 @@ function buildReport(isSimulated){
 renderGenePanel();
 </script>
 </body></html>
+
+

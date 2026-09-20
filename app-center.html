@@ -447,7 +447,7 @@
       return makeSysCard(c.icon, c.title, c.desc, c.link, c.gradient, c.users);
     }).join('');
 
-    /* ====== Module 4: 眼病/慢病数据标准体系 (1 system) ====== */
+    /* ====== Module 4: 眼病/慢病数据标准体系 (3 systems) ====== */
     var module4 = [
       {
         icon: 'schema', title: '眼病/慢病知识图谱Schema标准',
@@ -455,6 +455,20 @@
         link: '知识图谱Schema标准-管理版.html',
         gradient: 'linear-gradient(to right, #F59E0B, #F97316)',
         users: '86'
+      },
+      {
+        icon: 'database', title: '眼病慢病数据库',
+        desc: '汇聚眼病与慢病多源数据资源，提供数据检索、预览、筛选与下载服务，支持按疾病类型、数据模态、采集时间等多维度查询',
+        link: '眼病慢病数据库.html',
+        gradient: 'linear-gradient(to right, #11998e, #38ef7d)',
+        users: '64'
+      },
+      {
+        icon: 'refresh', title: '眼病慢病数据标准化',
+        desc: '提供数据清洗、字段映射、术语对齐、质量校验等标准化处理能力，统一数据格式与编码规范，保障数据一致性与可用性',
+        link: '眼病慢病数据标准化.html',
+        gradient: 'linear-gradient(to right, #30cfd0, #330867)',
+        users: '52'
       }
     ];
     document.getElementById('gridModule4').innerHTML = module4.map(function(c) {
