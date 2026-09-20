@@ -75,6 +75,10 @@ button{cursor:pointer}
 .gene-block{border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:10px;background:#fbfcfe}
 .gene-block-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:2px}
 .upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.image-narrative-row{display:flex;gap:20px;align-items:flex-start}
+.image-narrative-row .upload-grid{flex:0 0 52%}
+.image-narrative-row #report-narrative{flex:1;min-width:0}
+.image-narrative-row #report-narrative p{margin:0 0 10px}
 .upload-slot{border:1.5px dashed #c7d2e6;border-radius:10px;padding:14px;text-align:center;background:#fbfcfe}
 .upload-slot h4{margin:0 0 8px;font-size:13px;color:var(--text)}
 .upload-preview{position:relative;height:170px;border-radius:8px;overflow:hidden;margin-bottom:10px;background:#0b1220}
@@ -135,8 +139,9 @@ button{cursor:pointer}
 .a-progress{height:8px;border-radius:6px;background:#eef1f6;overflow:hidden}
 .a-progress i{display:block;height:100%;background:linear-gradient(90deg,#1a56db,#0e7d80);width:0%;transition:width .35s}
 /* report */
-.report-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px;flex-wrap:wrap}
-.report-meta{color:var(--muted);font-size:12px}
+.report-head{display:flex;justify-content:center;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;text-align:center}
+.report-meta{color:var(--muted);font-size:12px;margin-top:6px}
+.report-tip{color:var(--muted);font-size:12.5px;line-height:1.7;margin-top:10px;max-width:720px}
 .img-panel{position:relative;border-radius:9px;overflow:hidden;height:230px;background:#0b1220}
 .img-panel img{width:100%;height:100%;object-fit:cover}
 .lesion-tag{position:absolute;z-index:3;padding:3px 7px;border-radius:5px;font-size:10.5px;font-weight:600;color:#fff;transform:translate(-50%,-50%);white-space:nowrap;box-shadow:0 1px 4px #0006}
@@ -202,7 +207,7 @@ button{cursor:pointer}
 .footnote{font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px;margin-top:6px}
 .toast{display:none;position:fixed;right:24px;top:74px;z-index:50;padding:11px 15px;border:1px solid #bbf7d0;border-radius:7px;background:#fff;color:#15803d;box-shadow:0 4px 14px #00000014;max-width:340px;font-size:13px}
 .toast.show{display:block}
-@media(max-width:760px){.upload-grid,.form-row,.info-grid,.geno-select-grid{grid-template-columns:1fr}.report-head{display:block}}
+@media(max-width:760px){.upload-grid,.form-row,.info-grid,.geno-select-grid{grid-template-columns:1fr}.report-head{display:block}.image-narrative-row{flex-direction:column}.image-narrative-row .upload-grid{flex:1 1 auto}}
 </style>
 </head>
 <body>
@@ -264,8 +269,9 @@ button{cursor:pointer}
   <section class="panel" id="panel-report">
     <div class="report-head">
       <div>
-        <h1 class="h1" id="report-title">综合评估报告</h1>
+        <h1 class="h1" id="report-title">多模态融合综合评估报告</h1>
         <div class="report-meta" id="report-meta">—</div>
+        <div class="report-tip">本报告可以帮助医护人员进行临床辅助与决策支持，为多学科联合会诊、科研分析及个体化治疗提供数据支撑；同时支持通过算法接口调用，具体对接方式请联系系统管理员。</div>
       </div>
     </div>
 
@@ -283,17 +289,20 @@ button{cursor:pointer}
     </div>
 
     <div class="card">
-      <div class="card-head"><h2>影像异常提示</h2></div>
+      <div class="card-head"><h2>影像异常提示与影像特征说明</h2></div>
       <div class="card-body">
         <div class="alert" style="margin-bottom:12px">影像异常提示用于展示眼底影像中的潜在病灶区域标注：视神经（视盘 / 视杯）、黄斑、视网膜血管、视网膜神经层、脉络膜、出血、渗出、裂孔等。</div>
-        <div class="upload-grid" id="report-image-grid"></div>
+        <div class="image-narrative-row">
+          <div class="upload-grid" id="report-image-grid"></div>
+          <div id="report-narrative" style="line-height:1.85;font-size:13.5px"></div>
+        </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-head"><h2>基因变异解读及影像特征说明</h2><span class="sub">证据强度标注供参考</span></div>
+      <div class="card-head"><h2>基因变异解读</h2><span class="sub">证据强度标注供参考</span></div>
       <div class="card-body" id="report-gene-list"></div>
-      <div class="card-body" id="report-narrative" style="line-height:1.85;font-size:13.5px;border-top:1px solid var(--line)"></div>
+      <div class="card-body" id="report-gene-summary" style="line-height:1.85;font-size:13.5px;border-top:1px solid var(--line)"></div>
     </div>
 
     <div class="card">
@@ -792,7 +801,7 @@ function buildReport(isSimulated){
   const dateStr=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
   const reportId='DG-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+String(Math.floor(1000+Math.random()*9000));
 
-  $('#report-title').textContent=(disease==='dr'?'糖尿病视网膜病变':'脉络膜黑色素瘤（UM）')+' · 多模态融合评估报告';
+  $('#report-title').textContent='多模态融合综合评估报告';
   $('#report-meta').textContent='报告编号：'+reportId+' | 生成时间：'+dateStr;
 
   // 患者信息
@@ -824,7 +833,7 @@ function buildReport(isSimulated){
     const lesions=LESIONS[lesionKey]||[];
     const tagsHtml=lesions.map(l=>'<span class="lesion-tag '+l.cls+'" style="top:'+l.top+';left:'+l.left+'"><i></i>'+l.label+'</span>').join('');
     const bg=img.type==='upload'?'<img src="'+img.src+'">':'<div class="'+typeDemoClass(baseType,img.hint)+'" style="width:100%;height:100%"></div>';
-    imgHtml+='<div><div class="img-panel">'+bg+tagsHtml+'</div><div class="img-caption">'+imageCaption(baseType)+(slot.includes('_')?' · '+(slot.endsWith('_od')?'右眼':'左眼'):'')+' · 标注 '+lesions.length+' 处潜在病灶（演示性示意）</div></div>';
+    imgHtml+='<div><div class="img-panel">'+bg+tagsHtml+'</div><div class="img-caption">'+imageCaption(baseType)+(slot.includes('_')?' · '+(slot.endsWith('_od')?'右眼':'左眼'):'')+' · 标注 '+lesions.length+' 处潜在病灶</div></div>';
   });
   imgGrid.innerHTML=imgHtml||'<div class="opt-hint">未提供影像</div>';
 
@@ -887,6 +896,41 @@ function buildReport(isSimulated){
     if(conflict.rareCoOccur)geneHtml+='<div class="alert warn">检测到BAP1阴性同时伴随SF3B1或EIF1AX突变的少见共存组合。病例系列证据(Am J Ophthalmol Case Rep, 2025, n=10)及机制研究(Molecular Oncology, 2022)均提示此类冲突组合不应简单判定为最高风险，建议结合基因表达谱(GEP)或PRAME等检测复核，本报告已相应下调该情形下的风险提示强度。</div>';
   }
   geneList.innerHTML=geneHtml;
+
+  // 基因变异解读小结
+  const geneSummary=$('#report-gene-summary');
+  let sumHtml='';
+  if(disease==='dr'){
+    const t2dSel2=DISEASE.dr.t2dGenes.filter(g=>selFindings.has(g.key));
+    const drSel2=DISEASE.dr.drGenes.filter(g=>selFindings.has(g.key));
+    if(t2dSel2.length||drSel2.length){
+      const strongNames=t2dSel2.filter(g=>g.t2dEvid==='strong').map(g=>g.label);
+      const drModerateNames=drSel2.filter(g=>g.evid==='moderate').map(g=>g.label);
+      const drWeakNames=drSel2.filter(g=>g.evid!=='moderate').map(g=>g.label);
+      let s1='本次报告共纳入 '+t2dSel2.length+' 个2型糖尿病遗传易感性位点'+(t2dSel2.length?('（'+t2dSel2.map(g=>g.label).join('、')+'）'):'')+'，以及 '+drSel2.length+' 个糖尿病视网膜病变候选基因位点'+(drSel2.length?('（'+drSel2.map(g=>g.label).join('、')+'）'):'')+'。';
+      let s2Parts=[];
+      if(strongNames.length)s2Parts.push(strongNames.join('、')+' 与2型糖尿病的关联具有强证据支持，跨族群复现较为一致');
+      if(drModerateNames.length)s2Parts.push(drModerateNames.join('、')+' 在中等强度证据下被报道与糖尿病视网膜病变风险相关，已计入本次风险提示');
+      if(drWeakNames.length)s2Parts.push(drWeakNames.join('、')+' 的证据强度较弱或不同研究结论不一致，仅作参考展示，未计入风险提示');
+      let s2=s2Parts.length?('从证据强度看，'+s2Parts.join('；')+'。'):'';
+      let s3='综合而言，上述位点均属于常见变异，单个位点的效应量相对有限，其风险贡献以多基因叠加的方式体现；携带多个风险等位基因提示遗传易感性升高，但并不等同于必然发病。';
+      let s4='需要说明的是，以上解读基于已公开发表文献的证据强度分层，不同人群（尤其是东亚人群）中的可重复性仍存在差异，结果仅供参考，不能替代临床诊断与专业遗传咨询。';
+      sumHtml='<p>'+s1+'</p>'+(s2?('<p>'+s2+'</p>'):'')+'<p>'+s3+'</p><p>'+s4+'</p>';
+    }else{
+      sumHtml='<p>本次未选择任何基因风险位点，暂无基因变异解读内容。如需获得基因层面的解读，请在输入页勾选相关位点后重新分析。</p>';
+    }
+  }else{
+    const d2=DISEASE.um.drivers.find(x=>x.value===umDriver());
+    let u1='本次检测的驱动突变为 '+d2.label+'，属于肿瘤起始事件；预后相关标志物结果为：BAP1 '+umBap1()+'、SF3B1 '+umSf3b1()+'、EIF1AX '+umEif1ax()+'、染色体3状态为 '+umChr3()+'。';
+    let u2;
+    if(umBap1()==='阴性（表达缺失）')u2='综合解读：BAP1 表达缺失（常与染色体3异常共线）在既往文献中与较高的转移风险相关，本例分型组合提示预后需重点关注，建议缩短随访间隔并考虑补充基因表达谱（GEP）等检测进一步分层。';
+    else if(umSf3b1()==='突变型')u2='综合解读：SF3B1 突变型在文献中多被描述为中等风险、可能伴随较晚发转移的亚型，建议保持长期规律随访。';
+    else if(umEif1ax()==='突变型')u2='综合解读：EIF1AX 突变在多项队列研究中与良好预后相关，本例分型组合总体提示相对较低的转移风险。';
+    else u2='综合解读：当前标志物组合未提示明确的高危信号，总体倾向相对良好的预后特征，仍建议按临床常规进行随访。';
+    let u3='需要说明的是，驱动突变本身不改变预后判断；以上解读基于已公开发表的队列研究与综述证据，个体化风险仍需结合肿瘤大小、位置、组织学特征及基因表达谱（GEP/PRAME）等检查综合评估，结果仅供参考，不能替代临床诊断与专业遗传咨询。';
+    sumHtml='<p>'+u1+'</p><p>'+u2+'</p><p>'+u3+'</p>';
+  }
+  geneSummary.innerHTML=sumHtml;
 
   // 按疾病分别展示影像与基因综合风险等级
   const riskResults=computeDiseaseRiskResults();

@@ -442,12 +442,6 @@ table tbody tr:hover { background: var(--gray-50); }
 }
 .report-top-row .report-back-btn:hover { color: #fff; }
 .report-top-row .report-actions { display: flex; gap: 10px; align-items: center; }
-.report-actions .btn-download {
-    background: rgba(255,255,255,0.2); color: #fff; border: none;
-    padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;
-    font-family: inherit; transition: var(--transition); display: flex; align-items: center; gap: 4px;
-}
-.report-actions .btn-download:hover { background: rgba(255,255,255,0.35); }
 .report-actions .btn-back-center {
     background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);
     padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;
@@ -1313,7 +1307,6 @@ table tbody tr:hover { background: var(--gray-50); }
             <div class="report-top-row">
                 <span class="report-back-btn" onclick="closeModal('reportModal')">← 关闭报告</span>
                 <div class="report-actions">
-                    <button class="btn-download" onclick="alert('报告下载功能')">⬇ 下载报告</button>
                     <button class="btn-back-center" onclick="closeModal('reportModal');switchToListView();">返回考试中心</button>
                     <div class="report-user-avatar">张</div>
                 </div>

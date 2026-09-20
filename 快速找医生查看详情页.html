@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>医生详情</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .breadcrumb{color:var(--muted);font-size:11px}
+    .breadcrumb-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+    .breadcrumb-row .breadcrumb{margin-bottom:0}
+    .detail-shell{display:block}
+    .profile-card{padding:16px;background:#fff;border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow)}
+    .profile-head{display:grid;grid-template-columns:82px minmax(0,1fr);gap:14px;align-items:center}
+    .doctor-photo{width:82px;height:82px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(135deg,var(--accent),#60a5fa);color:#fff;font-size:30px;font-weight:700}
+    .profile-head h1{margin:0 0 8px;font-size:22px}
+    .profile-meta{margin:0;color:var(--muted);font-size:13px}
+    .profile-divider{margin:16px 0 12px;border:0;border-top:1px solid var(--rule)}
+    .profile-summary{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.9fr) minmax(280px,1fr);gap:20px;align-items:start}
+    .profile-section{min-width:0}
+    .profile-section-title{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--ink)}
+    .profile-section p{margin:0;color:#51657d;font-size:13px;line-height:1.75}
+    .specialty-groups{display:grid;gap:8px}
+    .specialty-group{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);align-items:start}
+    .specialty-group:last-child{border-bottom:0;padding-bottom:0}
+    .specialty-group b{color:var(--accent);font-size:12px;line-height:1.7}
+    .specialty-group span{color:#51657d;font-size:13px;line-height:1.7}
+    .info-list{display:grid;gap:8px}
+    .info-line{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding-bottom:8px;border-bottom:1px solid var(--rule);color:var(--muted);font-size:12px}
+    .info-line strong{color:var(--ink);text-align:right;line-height:1.55}
+    .book-btn,.outline-btn{min-height:36px;display:inline-flex;align-items:center;justify-content:center;padding:0 14px;border-radius:7px;font-weight:700;font-size:12px;text-decoration:none}
+    .book-btn{width:100%;margin-top:12px;border:1px solid var(--accent);background:var(--accent);color:#fff}
+    .outline-btn{border:1px solid var(--rule);background:#fff;color:var(--ink)}
+    .booking-note,.emergency-note{margin-top:12px;padding:10px;border-radius:8px;font-size:12px;line-height:1.65}
+    .booking-note{background:#fff7ed;color:#9a3412}
+    .emergency-note{border:1px solid #fecaca;background:#fef2f2;color:#b91c1c}
+    .booking-section{min-width:0}
+    @media(max-width:1080px){.profile-summary{grid-template-columns:minmax(0,1fr) minmax(250px,.9fr)}}
+    @media(max-width:720px){
+      .profile-head{grid-template-columns:1fr}
+      .profile-summary{grid-template-columns:1fr;gap:14px}
+      .info-line{grid-template-columns:1fr;gap:4px}
+      .info-line strong{text-align:left}
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="brand" href="app-center.html" aria-label="返回系统与应用中心">
+        <div class="brand-mark">医</div>
+        <div><p class="brand-title">患者咨询 / 导诊机器人</p></div>
+      </a>
+      <nav class="nav">
+        <a href="就诊流程指引.html">就诊流程指引</a>
+        <a href="智能导诊.html">智能导诊</a>
+        <a href="健康咨询.html">健康咨询</a>
+        <a class="active" href="快速找医生.html">快速找医生</a>
+        <a href="病情咨询.html">病情咨询</a>
+        <a href="用药指导.html">用药指导</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="top-title"><strong>快速找医生</strong><span>医生资源检索 · 医生资料 · 预约路径</span></div>
+      </header>
+      <div class="content">
+            <div class="breadcrumb-row"><div class="breadcrumb"><a href="快速找医生.html">快速找医生</a> / 医生详情</div><a class="outline-btn" href="快速找医生.html">← 返回医生列表</a></div>
+        <section class="detail-shell">
+          <div class="profile-card">
+            <div class="profile-head">
+              <div class="doctor-photo" id="doctorInitial">医</div>
+              <div><h1 id="doctorName">医生详情</h1><p class="profile-meta" id="doctorMeta">加载中</p></div>
+            </div>
+            <hr class="profile-divider">
+            <div class="profile-summary">
+              <div class="profile-section">
+                <h3 class="profile-section-title">医生简介</h3>
+                <p id="doctorDesc">-</p>
+              </div>
+              <div class="profile-section">
+                <h3 class="profile-section-title">擅长方向</h3>
+                <div class="specialty-groups" id="doctorGoodAt"></div>
+              </div>
+              <div class="booking-section">
+                <div class="info-list">
+                  <div class="info-line"><span>医院</span><strong id="bookHospital">-</strong></div>
+                  <div class="info-line"><span>科室</span><strong id="bookDept">-</strong></div>
+                  <div class="info-line"><span>院区/地址</span><strong id="bookAddress">-</strong></div>
+                </div>
+                <a class="book-btn" id="bookLink" href="#" target="_blank" rel="noopener">前往医院官方入口预约</a>
+                <div class="booking-note">本页面仅展示医生资料和预约路径。实际号源、出诊时间、院区变更、挂号费用以医院官方平台为准。</div>
+                <div class="emergency-note">如出现胸痛、呼吸困难、意识障碍、大出血、持续高热抽搐等急危重症表现，请优先前往急诊或拨打 120，不建议等待普通门诊号源。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="doctors-data.js"></script>
+  <script>
+    const curId = new URLSearchParams(location.search).get('id');
+    const doctor = DOCTORS_BY_ID[curId] || DOCTORS_BY_ID['li-ming'];
+    document.title = `${doctor.name} - 医生详情`;
+    document.getElementById('doctorInitial').textContent = doctor.name[0];
+    document.getElementById('doctorName').textContent = doctor.name;
+    document.getElementById('doctorMeta').textContent = `${doctor.hospital} · ${doctor.dept} · ${doctor.title} · ${doctor.level}`;
+    document.getElementById('doctorDesc').textContent = doctor.desc;
+    document.getElementById('bookHospital').textContent = doctor.hospital;
+    document.getElementById('bookDept').textContent = doctor.dept;
+    document.getElementById('bookAddress').textContent = doctor.address;
+    document.getElementById('bookLink').href = doctor.site;
+    document.getElementById('doctorGoodAt').innerHTML = `
+      <div class="specialty-group"><b>疾病</b><span>${doctor.disease.join('、')}</span></div>
+      <div class="specialty-group"><b>症状</b><span>${doctor.symptom.join('、')}</span></div>
+    `;
+
+  </script>
+</body>
+</html>

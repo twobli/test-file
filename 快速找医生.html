@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>快速找医生</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .doctor-search-page { display: grid; gap: 12px; }
+    .hero-search, .filter-panel { padding: 14px; background: #fff; border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
+    .doctor-hero {
+      padding: 18px 20px;
+      background:
+        linear-gradient(135deg, rgba(37,99,235,.08), rgba(255,255,255,1) 52%),
+        #fff;
+      border-radius: 12px;
+    }
+    .doctor-hero .page-title {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .doctor-hero h1 {
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+    .doctor-hero p {
+      max-width: 980px;
+      line-height: 1.7;
+    }
+    .breadcrumb { margin-bottom: 10px; color: var(--muted); font-size: 11px; }
+    .search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+    .main-search { height: 42px; padding: 0 14px; border: 1px solid var(--rule); border-radius: 8px; background: #f8fbff; color: var(--ink); font: inherit; outline: none; }
+    .main-search:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .1); }
+    .search-btn, .clear-btn, .detail-btn { height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; border: 1px solid var(--rule); border-radius: 7px; background: #fff; color: var(--ink); font-weight: 700; font-size: 12px; cursor: pointer; text-decoration: none; }
+    .search-btn { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .filter-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px dashed var(--rule); }
+    .filter-row:last-child { border-bottom: 0; }
+    .filter-label { padding-top: 5px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .filter-options { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-chip { min-height: 28px; padding: 5px 10px; border: 1px solid var(--rule); border-radius: 7px; background: #f8fbff; color: #51657d; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .filter-chip.active, .filter-chip:hover { border-color: var(--accent); background: #eff6ff; color: var(--accent); }
+
+    .filter-body { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    @keyframes flashGlow {
+      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); border-color: var(--rule); }
+      25% { box-shadow: 0 0 0 6px rgba(37, 99, 235, .3); border-color: var(--accent); background: #fff; }
+      60% { box-shadow: 0 0 0 6px rgba(37, 99, 235, .3); border-color: var(--accent); background: #fff; }
+      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); border-color: var(--rule); }
+    }
+    .main-search.flash-glow { animation: flashGlow 1.4s ease-in-out 1; }
+    .search-hint { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 7px 13px; border-radius: 999px; background: #eff6ff; color: var(--accent); font-size: 12px; font-weight: 700; box-shadow: 0 3px 10px rgba(37, 99, 235, .18); animation: hintPop .35s ease; }
+    .search-hint[hidden] { display: none; }
+    @keyframes hintPop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .result-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 2px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
+    .result-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .result-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .doctor-list2 { display: grid; gap: 10px; }
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 4px 0 2px; }
+    .pagination[hidden] { display: none; }
+    .page-btn { min-width: 32px; height: 32px; padding: 0 9px; border: 1px solid var(--rule); border-radius: 7px; background: #fff; color: var(--ink); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: #eff6ff; }
+    .page-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .page-btn:disabled { cursor: default; opacity: .45; }
+    .page-ellipsis { padding: 0 3px; color: var(--muted); font-size: 12px; }
+    .doctor-row { display: grid; grid-template-columns: 118px minmax(0, 1fr) 104px; gap: 18px; align-items: start; padding: 18px; background: #fff; border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
+    .hospital-thumb { height: 104px; border-radius: 9px; overflow: hidden; background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.12)), linear-gradient(160deg, #e6f0ff 0%, #fff 45%, #dbeafe 100%); position: relative; }
+    .hospital-thumb:before { content: ""; position: absolute; inset: auto 10px 10px; height: 28px; border-radius: 6px 6px 2px 2px; background: #fff; box-shadow: 0 -16px 0 #d7e7ff, 0 -31px 0 #eef5ff; }
+    .hospital-thumb:after { content: "H"; position: absolute; left: 16px; top: 15px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 700; }
+    .doctor-main { min-width: 0; display: grid; gap: 8px; }
+    .doctor-name-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .doctor-name-line h2 { margin: 0; font-size: 16px; line-height: 1.2; }
+    .label { display: inline-flex; align-items: center; min-height: 20px; padding: 2px 7px; border-radius: 999px; background: #eff6ff; color: var(--accent); font-size: 10px; font-weight: 700; }
+    .label.green { background: #ecfdf5; color: var(--green); }
+    .label.purple { background: #f4f0ff; color: #7c3aed; }
+    .doctor-info-grid { display: grid; grid-template-columns: minmax(150px, .32fr) minmax(0, 1fr); gap: 8px; }
+    .doctor-info-item { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; padding: 7px 9px; border: 1px solid #e5edf9; border-radius: 8px; background: #f8fbff; color: #51657d; font-size: 12px; line-height: 1.55; }
+    .doctor-info-item.wide { display: block; grid-column: 1 / -1; }
+    .doctor-info-item span { color: var(--muted); font-weight: 700; white-space: nowrap; }
+    .doctor-info-item strong { color: #334b68; font-weight: 700; }
+    .doctor-info-item.wide > span { display: block; margin-bottom: 6px; color: var(--ink); }
+    .specialty-content { display: grid; gap: 5px; min-width: 0; margin-left: 14px; padding-left: 12px; border-left: 2px solid #dbeafe; }
+    .specialty-line { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 8px; align-items: start; }
+    .specialty-line b { color: var(--muted); font-weight: 700; }
+    .specialty-line strong { color: #334b68; font-weight: 700; }
+    .recommend-reason { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; margin-top: 8px; font-size: 11px; line-height: 1.5; }
+    .recommend-prefix { color: var(--muted); font-weight: 700; white-space: nowrap; }
+    .recommend-text { color: var(--accent); font-weight: 700; }
+    .doctor-actions { display: grid; gap: 8px; min-width: 96px; align-self: center; }
+    .empty-state { display: none; padding: 34px; text-align: center; background: #fff; border: 1px dashed var(--rule); border-radius: 10px; color: var(--muted); }
+    @media (max-width: 1080px) { .doctor-row { grid-template-columns: 96px minmax(0, 1fr); } .doctor-actions { grid-column: 1 / -1; display: flex; padding-top: 0; } .doctor-info-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .search-row, .filter-row, .doctor-row { grid-template-columns: 1fr; } .hospital-thumb { height: 110px; } .filter-label { padding-top: 0; } .doctor-actions { display: grid; } }
+
+    /* 个性化智能推荐横幅（从智能导诊带入） */
+    .personal-banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; margin-bottom: 12px; background: linear-gradient(135deg, #eff6ff, #f7fbff); border: 1px solid #bfdbfe; border-radius: 12px; }
+    .personal-banner[hidden] { display: none; }
+    .pb-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 9px; background: var(--accent); color: #fff; font-size: 17px; flex: 0 0 auto; }
+    .pb-text { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+    .pb-text strong { font-size: 13px; color: var(--ink); }
+    .pb-text span { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .pb-clear { flex: 0 0 auto; border: 1px solid #bfdbfe; background: #fff; color: var(--accent); font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+    .pb-clear:hover { background: #eff6ff; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="brand" href="app-center.html" aria-label="返回系统与应用中心">
+        <div class="brand-mark">医</div>
+        <div>
+          <p class="brand-title">患者咨询 / 导诊机器人</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="就诊流程指引.html">就诊流程指引</a>
+        <a href="智能导诊.html">智能导诊</a>
+        <a href="健康咨询.html">健康咨询</a>
+        <a class="active" href="快速找医生.html">快速找医生</a>
+        <a href="病情咨询.html">病情咨询</a>
+        <a href="用药指导.html">用药指导</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="top-title">
+          <strong>快速找医生</strong>
+          <span>医生资源检索 · 医院科室职称筛选 · 预约入口</span>
+        </div>
+      </header>
+
+      <div class="content doctor-search-page">
+        <section class="page-head card doctor-hero">
+          <div class="page-title">
+            <div>
+              <h1>快速找医生</h1>
+              <p>支持按医院、科室、职称筛选，也可用医生姓名、疾病或症状进行关键词检索，并根据匹配度与医院等级给出可解释推荐。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="hero-search">
+          <div class="breadcrumb">首页 / 患者咨询 / 快速找医生</div>
+          <div class="search-row">
+            <input id="doctorSearch" class="main-search" type="search" placeholder="除搜索医生姓名外，您还可以输入疾病、症状或职称进行综合检索，系统将为您推荐合适的医生">
+            <button id="searchBtn" class="search-btn">搜索</button>
+          </div>
+          <div class="search-hint" id="searchHint" hidden></div>
+        </section>
+
+        <section class="personal-banner" id="personalBanner" hidden>
+          <div class="pb-icon">🎯</div>
+          <div class="pb-text">
+            <strong id="pbTitle">根据您的症状智能推荐</strong>
+            <span id="pbSub">已为您优先展示相关科室医生，可继续按其他条件筛选。</span>
+          </div>
+          <button class="pb-clear" id="pbClear" type="button">查看全部医生 ✕</button>
+        </section>
+
+        <section class="filter-panel" id="filterPanel"></section>
+
+        <div class="result-toolbar">
+          <div class="result-left">
+            <span id="resultCount">共找到 30 位医生</span>
+          </div>
+          <div class="result-actions">
+            <button id="clearBtn" class="clear-btn">重置筛选</button>
+          </div>
+        </div>
+
+        <section class="doctor-list2" id="doctorList"></section>
+        <div class="empty-state" id="emptyState">暂无匹配医生，请调整医院、科室、职称或关键词后重新搜索。</div>
+        <nav class="pagination" id="pagination" aria-label="医生列表分页" hidden></nav>
+      </div>
+    </main>
+  </div>
+
+  <script src="doctors-data.js"></script>
+  <script>
+    const filters = {
+      hospital: ['全部', ...new Set(DOCTORS.map(d => d.hospital))],
+      dept:['全部','心血管内科','呼吸内科','消化内科','神经内科','儿科','妇科'],
+      title:['全部','主任医师','副主任医师','主治医师','住院医师']
+    };
+
+    const filterKeys = ['hospital', 'dept', 'title'];
+    const selected = { hospital: '全部', dept: '全部', title: '全部' };
+    const state = { page: 1 };
+    const pageSize = 5;
+    const SEARCH_ALIASES = {
+      '头疼': '头痛',
+      '头痛': '头痛',
+      '发烧': '发热',
+      '发热': '发热',
+      '肚子疼': '腹痛',
+      '肚疼': '腹痛',
+      '腹疼': '腹痛',
+      '腹痛': '腹痛',
+      '胃疼': '胃痛',
+      '胃痛': '胃痛',
+      '心慌': '心悸',
+      '心悸': '心悸',
+      '睡不着': '失眠',
+      '失眠': '失眠',
+      '喘不上气': '气短',
+      '呼吸困难': '气短',
+      '气短': '气短',
+      '拉肚子': '腹泻',
+      '腹泻': '腹泻'
+    };
+    const SEARCH_ALIAS_KEYS = Object.keys(SEARCH_ALIASES).sort((a, b) => b.length - a.length);
+    const CLINICAL_FIELDS = new Set(['疾病', '症状', '专长']);
+    const searchInput = document.getElementById('doctorSearch');
+    const list = document.getElementById('doctorList');
+    const resultCount = document.getElementById('resultCount');
+    const emptyState = document.getElementById('emptyState');
+    const pagination = document.getElementById('pagination');
+
+    function labelOf(key) {
+      return { hospital: '医院', dept: '科室', title: '职称' }[key];
+    }
+
+    function normalizeSearchTerm(value) {
+      let term = String(value || '').trim().toLowerCase();
+      SEARCH_ALIAS_KEYS.forEach(alias => {
+        term = term.split(alias).join(SEARCH_ALIASES[alias]);
+      });
+      return term;
+    }
+
+    function searchVocabulary() {
+      return [...new Set([
+        ...filters.hospital,
+        ...filters.dept,
+        ...filters.title,
+        ...DOCTORS.flatMap(doctor => [
+          doctor.name,
+          doctor.hospital,
+          doctor.dept,
+          doctor.title,
+          ...doctor.disease,
+          ...doctor.symptom,
+          ...doctor.specialty
+        ]),
+        ...Object.keys(SEARCH_ALIASES)
+      ])]
+        .filter(value => value && value !== '全部')
+        .map(normalizeSearchTerm)
+        .filter(Boolean)
+        .sort((a, b) => b.length - a.length);
+    }
+
+    function tokenizeSearchQuery(query) {
+      const normalizedQuery = normalizeSearchTerm(query).replace(/[：:]/g, '');
+      const separated = normalizedQuery.split(/[\s,，、;；/|]+/).filter(Boolean);
+      if (separated.length > 1) return separated;
+      if (!normalizedQuery) return [];
+
+      const vocabulary = searchVocabulary();
+      if (vocabulary.includes(normalizedQuery)) return [normalizedQuery];
+
+      const found = [];
+      vocabulary.forEach(term => {
+        let fromIndex = 0;
+        while (fromIndex < normalizedQuery.length) {
+          const index = normalizedQuery.indexOf(term, fromIndex);
+          if (index < 0) break;
+          found.push({ term, index });
+          fromIndex = index + term.length;
+        }
+      });
+      found.sort((a, b) => a.index - b.index || b.term.length - a.term.length);
+
+      const tokens = [];
+      let cursor = 0;
+      found.forEach(item => {
+        if (item.index < cursor) return;
+        tokens.push(item.term);
+        cursor = item.index + item.term.length;
+      });
+      return tokens.length ? tokens : [normalizedQuery];
+    }
+
+    function levenshteinDistance(left, right) {
+      const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+      for (let row = 1; row <= left.length; row += 1) {
+        const current = [row];
+        for (let column = 1; column <= right.length; column += 1) {
+          const cost = left[row - 1] === right[column - 1] ? 0 : 1;
+          current[column] = Math.min(
+            current[column - 1] + 1,
+            previous[column] + 1,
+            previous[column - 1] + cost
+          );
+        }
+        for (let column = 0; column <= right.length; column += 1) previous[column] = current[column];
+      }
+      return previous[right.length];
+    }
+
+    function doctorSearchFields(doctor) {
+      return [
+        { label: '姓名', values: [doctor.name] },
+        { label: '医院', values: [doctor.hospital] },
+        { label: '科室', values: [doctor.dept] },
+        { label: '职称', values: [doctor.title] },
+        { label: '疾病', values: doctor.disease },
+        { label: '症状', values: doctor.symptom },
+        { label: '专长', values: doctor.specialty }
+      ];
+    }
+
+    function matchValue(term, value) {
+      const normalizedTerm = normalizeSearchTerm(term);
+      const normalizedValue = normalizeSearchTerm(value);
+      if (!normalizedTerm || !normalizedValue) return 0;
+      if (normalizedValue === normalizedTerm) return 100;
+      if (normalizedValue.includes(normalizedTerm) || normalizedTerm.includes(normalizedValue)) return 92;
+      if (normalizedTerm.length >= 2 && levenshteinDistance(normalizedTerm, normalizedValue) <= 1) return 90;
+      return 0;
+    }
+
+    function matchSearchTerm(doctor, term) {
+      let best = null;
+      doctorSearchFields(doctor).forEach(field => {
+        field.values.forEach(value => {
+          const score = matchValue(term, value);
+          if (!best || score > best.score) {
+            best = { score, field: field.label, value };
+          }
+        });
+      });
+      return best && best.score > 0 ? best : null;
+    }
+
+    function queryTermHasField(term, fieldName) {
+      return DOCTORS.some(doctor => doctorSearchFields(doctor)
+        .filter(field => field.label === fieldName)
+        .some(field => field.values.some(value => matchValue(term, value) > 0)));
+    }
+
+    function getSearchMatch(doctor, keyword) {
+      const tokens = tokenizeSearchQuery(keyword);
+      if (!tokens.length) return null;
+      const matches = tokens.map(term => ({ term, match: matchSearchTerm(doctor, term) }));
+      const matched = matches.filter(item => item.match);
+      if (!matched.length) return null;
+      const hasClinicalQuery = tokens.some(term => [...CLINICAL_FIELDS].some(field => queryTermHasField(term, field)));
+      const hasClinicalMatch = matched.some(item => CLINICAL_FIELDS.has(item.match.field));
+      if (hasClinicalQuery && !hasClinicalMatch) return null;
+
+      const missingPenalty = (matches.length - matched.length) * 10;
+      const hasFuzzyMatch = matched.some(item => item.match.score < 100);
+      const fuzzyPenalty = hasFuzzyMatch ? 10 : 0;
+      const score = Math.max(1, Math.min(100, 100 - missingPenalty - fuzzyPenalty));
+      return {
+        score,
+        matches,
+        matchedValues: matched.map(item => item.match.value)
+      };
+    }
+
+    function renderFilterPanel() {
+      const html = filterKeys.map(key => {
+        const optionsHtml = filters[key].map(value => `<button class="filter-chip${selected[key] === value ? ' active' : ''}" data-value="${value}">${value}</button>`).join('');
+        return `<div class="filter-row">
+          <div class="filter-label">${labelOf(key)}</div>
+          <div class="filter-body">
+            <div class="filter-options" data-filter="${key}">${optionsHtml}</div>
+          </div>
+        </div>`;
+      }).join('');
+      document.getElementById('filterPanel').innerHTML = html;
+    }
+
+    document.getElementById('filterPanel').addEventListener('click', event => {
+      const chip = event.target.closest('.filter-chip');
+      if (chip) {
+        const key = chip.closest('.filter-options').dataset.filter;
+        selected[key] = chip.dataset.value;
+        renderFilterPanel();
+        renderDoctors(true);
+        return;
+      }
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', () => renderDoctors(true));
+    searchInput.addEventListener('input', () => renderDoctors(true));
+    searchInput.addEventListener('keydown', event => { if (event.key === 'Enter') renderDoctors(true); });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      searchInput.value = '';
+      personalBanner.hidden = true;
+      personalFromUrl = false;
+      Object.keys(selected).forEach(key => selected[key] = '全部');
+      state.page = 1;
+      renderFilterPanel();
+      renderDoctors(true);
+    });
+
+    function getRecommendation(doctor, keyword) {
+      const hasCriteria = Boolean(keyword.trim()) || Object.values(selected).some(value => value !== '全部') || personalFromUrl;
+      if (!hasCriteria) return [];
+      const reasons = [];
+      const searchMatch = keyword ? getSearchMatch(doctor, keyword) : null;
+      if (keyword && !searchMatch) return [];
+      if (searchMatch) {
+        reasons.push(`推荐度：${searchMatch.score}%`);
+        const matchedValues = [...new Set(searchMatch.matchedValues)];
+        if (matchedValues.length) reasons.push(`匹配${matchedValues.join('、')}`);
+      }
+      if (selected.hospital !== '全部' && selected.hospital === doctor.hospital) reasons.push(`${doctor.hospital}匹配`);
+      if (selected.dept !== '全部' && selected.dept === doctor.dept) reasons.push(`${doctor.dept}匹配`);
+      if (selected.title !== '全部' && selected.title === doctor.title) reasons.push(`${doctor.title}匹配`);
+      if (!reasons.length) return [];
+      if (doctor.level) reasons.push(doctor.level);
+      return reasons.slice(0, 4);
+    }
+
+    function isVisible(doctor, keyword) {
+      return (!keyword || Boolean(getSearchMatch(doctor, keyword)))
+        && (selected.hospital === '全部' || selected.hospital === doctor.hospital)
+        && (selected.dept === '全部' || selected.dept === doctor.dept)
+        && (selected.title === '全部' || selected.title === doctor.title);
+    }
+
+    function scoreDoctor(doctor, keyword) {
+      const searchMatch = keyword ? getSearchMatch(doctor, keyword) : null;
+      const keywordScore = searchMatch ? searchMatch.score * 10 : 0;
+      const hospitalHit = selected.hospital !== '全部' && selected.hospital === doctor.hospital ? 4 : 0;
+      const deptHit = selected.dept !== '全部' && selected.dept === doctor.dept ? 3 : 0;
+      const levelScore = doctor.level === '三甲' ? 1 : 0;
+      return keywordScore + hospitalHit + deptHit + levelScore;
+    }
+
+    function sortDoctors(items) {
+      return [...items].sort((a, b) => b.score - a.score);
+    }
+
+    function renderDoctors(resetPage = false) {
+      if (resetPage) state.page = 1;
+      const keyword = searchInput.value.trim();
+      const keywordLower = keyword.toLowerCase();
+
+      // 搜索只负责匹配和排序，医院、科室、职称筛选由用户主动选择
+      if (keywordLower) {
+        const matched = DOCTORS.filter(d => getSearchMatch(d, keywordLower));
+        if (matched.length) {
+          pbTitle.textContent = '根据您「' + keyword + '」的关键词智能推荐';
+          pbSub.textContent = '已根据关键词完成匹配，可继续使用科室和职称筛选进行精准定位。';
+          personalBanner.hidden = false;
+          personalFromUrl = false;
+        } else {
+          personalBanner.hidden = true;
+          personalFromUrl = false;
+        }
+      } else if (!personalFromUrl) {
+        personalBanner.hidden = true;
+      }
+
+      const ranked = DOCTORS
+        .map(doctor => ({ doctor, visible: isVisible(doctor, keyword), score: scoreDoctor(doctor, keyword) }))
+        .filter(item => item.visible);
+      const sorted = sortDoctors(ranked);
+      const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
+      if (state.page > totalPages) state.page = totalPages;
+      const start = (state.page - 1) * pageSize;
+      const pageItems = sorted.slice(start, start + pageSize);
+
+      list.innerHTML = pageItems.map(({ doctor }) => {
+        const reasons = getRecommendation(doctor, keyword);
+        return `
+        <article class="doctor-row">
+          <div class="hospital-thumb" aria-hidden="true"></div>
+          <div class="doctor-main">
+            <div class="doctor-name-line">
+              <h2>${doctor.name}</h2>
+              <span class="label">${doctor.title}</span>
+              <span class="label green">${doctor.level}</span>
+            </div>
+            <div class="doctor-info-grid">
+              <div class="doctor-info-item"><span>医院</span><strong>${doctor.hospital}</strong></div>
+              <div class="doctor-info-item"><span>科室</span><strong>${doctor.dept}</strong></div>
+              <div class="doctor-info-item wide">
+                <span>专长</span>
+                <div class="specialty-content">
+                  <div class="specialty-line"><b>疾病</b><strong>${doctor.disease.join('、')}</strong></div>
+                  <div class="specialty-line"><b>症状</b><strong>${doctor.symptom.join('、')}</strong></div>
+                </div>
+              </div>
+            </div>
+            ${reasons.length ? `<div class="recommend-reason">
+              <span class="recommend-prefix">推荐理由：</span>
+              <span class="recommend-text">${reasons.join(' / ')}</span>
+            </div>` : ''}
+          </div>
+          <div class="doctor-actions">
+            <a class="detail-btn" href="快速找医生查看详情页.html?id=${doctor.id}">查看详情</a>
+          </div>
+        </article>
+      `;
+      }).join('');
+
+      resultCount.textContent = `共找到 ${sorted.length} 位医生`;
+      emptyState.style.display = sorted.length ? 'none' : 'block';
+      renderPagination(sorted.length, totalPages);
+    }
+
+    function renderPagination(totalItems, totalPages) {
+      if (totalItems <= pageSize) {
+        pagination.hidden = true;
+        pagination.innerHTML = '';
+        return;
+      }
+      const pageButtons = Array.from({ length: totalPages }, (_, index) => {
+        const page = index + 1;
+        return `<button class="page-btn${page === state.page ? ' active' : ''}" type="button" data-page="${page}" aria-label="第${page}页" aria-current="${page === state.page ? 'page' : 'false'}">${page}</button>`;
+      }).join('');
+      pagination.innerHTML = `
+        <button class="page-btn" type="button" data-page="${state.page - 1}" aria-label="上一页" ${state.page === 1 ? 'disabled' : ''}>上一页</button>
+        ${pageButtons}
+        <button class="page-btn" type="button" data-page="${state.page + 1}" aria-label="下一页" ${state.page === totalPages ? 'disabled' : ''}>下一页</button>
+      `;
+      pagination.hidden = false;
+    }
+
+    pagination.addEventListener('click', event => {
+      const button = event.target.closest('.page-btn');
+      if (!button || button.disabled) return;
+      state.page = Number(button.dataset.page);
+      renderDoctors();
+      pagination.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    const personalBanner = document.getElementById('personalBanner');
+    const pbTitle = document.getElementById('pbTitle');
+    const pbSub = document.getElementById('pbSub');
+    const pbClear = document.getElementById('pbClear');
+    let personalFromUrl = false;
+
+    function clearPersonalBanner() {
+      personalBanner.hidden = true;
+      personalFromUrl = false;
+      Object.keys(selected).forEach(key => selected[key] = '全部');
+      searchInput.value = '';
+      renderFilterPanel();
+      renderDoctors(true);
+    }
+
+    function applyPersonalLink() {
+      const params = new URLSearchParams(location.search);
+      const fromDept = params.get('dept');
+      const fromSymptom = params.get('symptom');
+      if (!fromDept && !fromSymptom) return;
+      const knownDept = fromDept && filters.dept.includes(fromDept);
+      if (knownDept) selected.dept = fromDept;
+      renderFilterPanel();
+      pbTitle.textContent = '根据您' + (fromSymptom ? '「' + fromSymptom + '」' : '') + '的症状智能推荐';
+      pbSub.textContent = knownDept
+        ? '已为您优先展示「' + fromDept + '」相关医生，可继续按其他条件筛选。'
+        : '已为您优先展示相关科室医生，可继续按其他条件筛选。';
+      personalBanner.hidden = false;
+      personalFromUrl = true;
+    }
+
+    pbClear.addEventListener('click', clearPersonalBanner);
+
+    renderFilterPanel();
+    applyPersonalLink();
+    renderDoctors();
+  </script>
+</body>
+</html>
