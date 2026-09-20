@@ -230,6 +230,8 @@ button{cursor:pointer}
 .info-cell strong{font-size:14px}
 .toast{display:none;position:fixed;right:24px;top:74px;z-index:50;padding:11px 15px;border:1px solid #bbf7d0;border-radius:7px;background:#fff;color:#15803d;box-shadow:0 4px 14px #00000014;max-width:340px;font-size:13px}
 .toast.show{display:block}
+.pdf-exporting .card{break-inside:avoid;page-break-inside:avoid}
+.pdf-exporting .report-head{break-after:avoid;page-break-after:avoid}
 @media(max-width:760px){.upload-grid,.form-row,.info-grid,.geno-select-grid{grid-template-columns:1fr}.report-head{display:block}.image-narrative-row{flex-direction:column}.image-narrative-row .upload-grid{flex:1 1 auto}}</style>
   <script src="assets/html2pdf.bundle.min.js"></script>
 </head>
@@ -384,6 +386,7 @@ async function exportReportPdf(){
   }
   const previousDisplay=reportActions ? reportActions.style.display : '';
   try{
+    document.body.classList.add('pdf-exporting');
     if(reportActions) reportActions.style.display='none';
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     await html2pdf().set({
@@ -398,6 +401,7 @@ async function exportReportPdf(){
     console.error('PDF 导出失败',error);
     toast('PDF 生成失败，请稍后重试');
   }finally{
+    document.body.classList.remove('pdf-exporting');
     if(reportActions) reportActions.style.display=previousDisplay;
     if(button){
       button.disabled=false;
@@ -1076,5 +1080,7 @@ function buildReport(isSimulated){
 renderGenePanel();
 </script>
 </body></html>
+
+
 
 

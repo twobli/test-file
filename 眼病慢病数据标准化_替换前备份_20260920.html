@@ -1404,7 +1404,7 @@
 <body>
   <header class="topbar">
     <button id="mobileMenuButton" class="mobile-menu" type="button" aria-label="打开菜单" aria-expanded="false">☰</button>
-    <div class="brand"><span class="brand-mark">标</span><span>眼病慢病数据标准化</span></div>
+    <div class="brand" onclick="location.href='app-center.html'" style="cursor:pointer" title="返回应用中心"><span class="brand-mark">标</span><span>眼病慢病数据标准化</span></div>
     <div class="top-context">数据管理 / <strong>数据标准管理</strong></div>
     <div class="account"><label for="roleSwitcher">当前角色</label><select id="roleSwitcher" aria-label="切换当前角色"><option value="manager">标准管理员</option><option value="approver">审批人</option></select></div>
   </header>
@@ -1563,6 +1563,7 @@
           <span class="state-chip published" id="drawerStatus">已发布</span>
         </div>
         <h2 id="drawerTitle">标准详情</h2>
+        <div class="tag-list" id="drawerChips"></div>
       </div>
       <button class="btn text" type="button" onclick="closeStandardDetail()">✕ 关闭</button>
     </div>
@@ -3898,6 +3899,12 @@
         drawerDocButton.title = published ? '生成供开发人员参考的标准文档' : '标准发布后才能生成标准文档';
       }
 
+      document.getElementById('drawerChips').innerHTML = `
+        <span class="domain-chip ${domainClass(item.domain)}">${item.domain}</span>
+        <span class="tag">${item.system}</span>
+        <span class="tag">${item.group}</span>
+      `;
+
       function getClauseTypeTag(type) {
         if (type === '人口学信息') {
           return `<span class="state-chip published" style="font-size:11px; padding:2px 8px;">👤 人口学信息</span>`;
@@ -3952,32 +3959,190 @@
         `;
       }).join('');
 
-                  const focusPalette = [
-        { bg: '#eff6ff', border: '#bfdbfe', text: '#1e40af', body: '#3b82f6' },
-        { bg: '#f0fdf4', border: '#bbf7d0', text: '#166534', body: '#15803d' },
-        { bg: '#faf5ff', border: '#e9d5ff', text: '#6b21a8', body: '#7e22ce' },
-        { bg: '#fffbeb', border: '#fde68a', text: '#92400e', body: '#b45309' },
-        { bg: '#f0f9ff', border: '#bae6fd', text: '#075985', body: '#0369a1' },
-        { bg: '#fef2f2', border: '#fecaca', text: '#991b1b', body: '#b91c1c' }
-      ];
-      const focusClauses = (item.clauses || []).filter(Boolean);
-      const standardFocusCards = focusClauses.length ? `
+                  let standardFocusCards = '';
+      if (item.id === 'STD-MED-01') {
+        standardFocusCards = `
         <div style="margin-bottom:16px;">
           <div style="font-size:12px; font-weight:700; color:#1e40af; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-            <span>📋 ${item.title} · 核心条款（共 ${focusClauses.length} 项）：</span>
+            <span>📋 数据采集规范体系（四大核心采集范畴）：</span>
           </div>
           <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
-            ${focusClauses.map((clause, index) => {
-              const clauseCfg = getTypeConfig(clause.type) || {};
-              const palette = focusPalette[index % focusPalette.length];
-              return `
-              <div style="background:${palette.bg}; border:1px solid ${palette.border}; border-radius:8px; padding:10px 12px;">
-                <div style="font-weight:700; font-size:13px; color:${palette.text}; margin-bottom:4px;">${clauseCfg.icon || '•'} ${index + 1}. ${clause.type}</div>
-                <div style="font-size:12px; color:${palette.body}; line-height:1.5;">${clause.content || clause.parameter || '—'}</div>
-              </div>`;
-            }).join('')}
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#1e40af; margin-bottom:4px;">👤 1. 人口学信息采集标准</div>
+              <div style="font-size:12px; color:#3b82f6; line-height:1.5;">明确人口学采集规范，统一患者标识、性别、年龄等基础字段格式、数据类型与命名规则。</div>
+            </div>
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#166534; margin-bottom:4px;">🩺 2. 临床信息采集标准</div>
+              <div style="font-size:12px; color:#15803d; line-height:1.5;">明确临床信息采集规范，统一病历基础、诊断编码及关键临床指标字段格式与数据类型。</div>
+            </div>
+            <div style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#6b21a8; margin-bottom:4px;">📷 3. 影像信息采集标准</div>
+              <div style="font-size:12px; color:#7e22ce; line-height:1.5;">规范眼底照相、OCT等多设备、多模态图像采集格式与设备参数命名规则。</div>
+            </div>
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#92400e; margin-bottom:4px;">📅 4. 随访信息采集标准</div>
+              <div style="font-size:12px; color:#b45309; line-height:1.5;">制定统一随访记录周期与时间节点时序规范，确保多机构跨设备数据一致性。</div>
+            </div>
           </div>
-        </div>` : '';
+        </div>
+        `;
+      } else if (item.id === 'STD-MED-03') {
+        standardFocusCards = `
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; color:#1e40af; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>🔌 数据采集流程与接口规范（四大流转与对接要素）：</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#1e40af; margin-bottom:4px;">🔄 1. 数据采集与传输流程</div>
+              <div style="font-size:12px; color:#3b82f6; line-height:1.5;">设计端到端采集传输全流程，规范医院采集端至数据中心各节点操作规程。</div>
+            </div>
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#166534; margin-bottom:4px;">🔌 2. API 接口标准定义</div>
+              <div style="font-size:12px; color:#15803d; line-height:1.5;">定义标准化 API 接口规范，统一请求参数、数据结构与自动化采集对接规约。</div>
+            </div>
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#991b1b; margin-bottom:4px;">🔐 3. 传输加密协议标准</div>
+              <div style="font-size:12px; color:#b91c1c; line-height:1.5;">定义通信信道加密保护与抗重放机制，落实传输加密协议，保障数据安全传输。</div>
+            </div>
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#92400e; margin-bottom:4px;">🛡️ 4. 数据前置校验机制</div>
+              <div style="font-size:12px; color:#b45309; line-height:1.5;">定义前置数据校验机制与完整性校验规则，实现自动化采集校验与高效入库。</div>
+            </div>
+          </div>
+        </div>
+        `;
+      } else if (item.id === 'STD-MED-06') {
+        standardFocusCards = `
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; color:#b45309; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>👁️ 视网膜疾病分类标准（各疾病诊断与判读体系分别展示）：</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#b45309; margin-bottom:4px;">👁️ 1. 糖尿病视网膜病变分级</div>
+              <div style="font-size:12px; color:#92400e; line-height:1.5;">统一划分无病变、轻度NPDR、中度NPDR、重度NPDR、PDR等诊断等级代码。</div>
+            </div>
+            <div style="background:#fefce8; border:1px solid #fef08a; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#854d0e; margin-bottom:4px;">🔍 2. 老年黄斑变性判读标签</div>
+              <div style="font-size:12px; color:#713f12; line-height:1.5;">统一AMD干性/湿性诊断等级、玻璃膜疣与脉络膜新生血管影像判读标签。</div>
+            </div>
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#166534; margin-bottom:4px;">📊 3. 青光眼诊断分级指标</div>
+              <div style="font-size:12px; color:#15803d; line-height:1.5;">统一垂直杯盘比(C/D)、盘沿边界等关键指标量化标准与诊断标签。</div>
+            </div>
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#1e40af; margin-bottom:4px;">⚖️ 4. 多中心模型性能可比性</div>
+              <div style="font-size:12px; color:#3b82f6; line-height:1.5;">建立多中心研究与算法模型性能可比性基准，确保跨机构诊断标签一致性。</div>
+            </div>
+          </div>
+        </div>
+        `;
+      } else if (item.id === 'STD-MED-07') {
+        standardFocusCards = `
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; color:#991b1b; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>🩸 视网膜病灶分割标准（各类病灶形态与分割格式分别展示）：</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#991b1b; margin-bottom:4px;">🔴 1. 微血管瘤病灶定义</div>
+              <div style="font-size:12px; color:#b91c1c; line-height:1.5;">界定微动脉瘤形态学特征，规范≤125μm微小点状病灶闭合多边形勾画标准。</div>
+            </div>
+            <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#9f1239; margin-bottom:4px;">🩸 2. 视网膜出血分割规范</div>
+              <div style="font-size:12px; color:#be123c; line-height:1.5;">规范点状出血与浅深层片状出血轮廓分割边界，实现出血病灶精细化标注。</div>
+            </div>
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#92400e; margin-bottom:4px;">🟡 3. 渗出病灶标注规则</div>
+              <div style="font-size:12px; color:#b45309; line-height:1.5;">规范硬性渗出(高亮黄色)与软性棉絮斑分类标注，严格图层逻辑隔离。</div>
+            </div>
+            <div style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#6b21a8; margin-bottom:4px;">📐 4. 分割层级与存储格式</div>
+              <div style="font-size:12px; color:#7e22ce; line-height:1.5;">规范多边形顶点亚像素精度，统一采用JSON掩膜或RLE二值图存储格式。</div>
+            </div>
+          </div>
+        </div>
+        `;
+      } else if (item.id === 'STD-MED-08') {
+        standardFocusCards = `
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; color:#166534; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>📈 图像质量评价标准（质控客观/主观与分级体系分别展示）：</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#166534; margin-bottom:4px;">📈 1. 客观质量指标项</div>
+              <div style="font-size:12px; color:#15803d; line-height:1.5;">建立图像信噪比(SNR≥20dB)、空间梯度清晰度等自动化量化评测指标。</div>
+            </div>
+            <div style="background:#f0fdfa; border:1px solid #99f6e4; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#0f766e; margin-bottom:4px;">👁️ 2. 主观病灶可见度指标</div>
+              <div style="font-size:12px; color:#115e59; line-height:1.5;">重点评定视盘与黄斑中心凹解剖结构清晰度，确保微细病灶清晰可辨。</div>
+            </div>
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#1e40af; margin-bottom:4px;">🏷️ 3. A/B/C 质量等级体系</div>
+              <div style="font-size:12px; color:#3b82f6; line-height:1.5;">形成A级(优良)、B级(合格)、C级(不合格)分级体系，设定复合判定边界。</div>
+            </div>
+            <div style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#6b21a8; margin-bottom:4px;">🚦 4. 分级入库准入准则</div>
+              <div style="font-size:12px; color:#7e22ce; line-height:1.5;">明确A级AI研发、B级普通科研准入；C级低质图像自动拦截并进入复原流程。</div>
+            </div>
+          </div>
+        </div>
+        `;
+      } else if (item.id === 'STD-MED-09') {
+        standardFocusCards = `
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; color:#c2410c; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>⚙️ 图像复原数据标准（退化类型与算法合规复核分别展示）：</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+            <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#c2410c; margin-bottom:4px;">⚠️ 1. 退化类型分类界定</div>
+              <div style="font-size:12px; color:#ea580c; line-height:1.5;">界定虚焦模糊、伪影、周边雾化、过曝及过暗5大退化类型特征判别标准。</div>
+            </div>
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#1e40af; margin-bottom:4px;">⚙️ 2. 复原算法操作规程</div>
+              <div style="font-size:12px; color:#3b82f6; line-height:1.5;">规范去模糊、去伪影等复原算法模型操作标准，控制模型适用边界与参数。</div>
+            </div>
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#991b1b; margin-bottom:4px;">🧬 3. 医学真实性保真基准</div>
+              <div style="font-size:12px; color:#b91c1c; line-height:1.5;">严格保真真实解剖结构与病灶纹理，严禁平滑消除或虚构生成病灶(SSIM≥0.88)。</div>
+            </div>
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#166534; margin-bottom:4px;">📋 4. 人工审核机制与留痕</div>
+              <div style="font-size:12px; color:#15803d; line-height:1.5;">复原后影像100%执行医师人工复核，全流程记录算法模型版本与参数流水。</div>
+            </div>
+          </div>
+        </div>
+        `;
+      } else if (item.id === 'STD-MED-04') {
+        standardFocusCards = `
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; font-weight:700; color:#0369a1; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span>📋 临床病历结构标准（四大结构化范畴分别展示）：</span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+            <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#0369a1; margin-bottom:4px;">👤 1. 患者基础信息结构</div>
+              <div style="font-size:12px; color:#0284c7; line-height:1.5;">规范人口学基础与现病史结构，制定统一病历字段分类与跨机构对齐标准。</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#334155; margin-bottom:4px;">⏱️ 2. 病程时序时间线</div>
+              <div style="font-size:12px; color:#475569; line-height:1.5;">规范历次就诊记录时序结构与数据类型，支持病程演进与时序分析。</div>
+            </div>
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#166534; margin-bottom:4px;">💊 3. 临床处方用药规范</div>
+              <div style="font-size:12px; color:#15803d; line-height:1.5;">规范处方用药结构，统一通用名、剂型剂量与给药途径语义表达。</div>
+            </div>
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 12px;">
+              <div style="font-weight:700; font-size:13px; color:#92400e; margin-bottom:4px;">⚠️ 4. 慢病并发症关联结构</div>
+              <div style="font-size:12px; color:#b45309; line-height:1.5;">规范慢病与眼部并发症关联结构与分类对齐规则，为AI建模提供统一语义基础。</div>
+            </div>
+          </div>
+        </div>
+        `;
+      }
       document.getElementById('drawerBody').innerHTML = `
         ${standardFocusCards}
         <section class="detail-section">
@@ -4010,17 +4175,14 @@
         <section class="detail-section">
           <h3>标准属性与工程落地信息</h3>
           <dl class="kv">
-              <dt>状态</dt><dd>${item.status}</dd>
-              <dt>标准唯一编码</dt><dd>${item.code}</dd>
-              <dt>标准名称</dt><dd>${item.title}</dd>
-              <dt>所属科学主题库</dt><dd>${item.domain}</dd>
-              <dt>所属标准体系</dt><dd>${item.system}</dd>
-              <dt>所属分类</dt><dd>${item.group}</dd>
-              <dt>责任人 / 编制团队</dt><dd>${item.owner}</dd>
-              <dt>标准版本</dt><dd>${item.version}${item.status === '已发布' ? '（正式基线）' : ''}</dd>
-              <dt>适用场景与范围</dt><dd>${item.scope || '科学数据中心科研与产业应用'}</dd>
-              <dt>输出物</dt><dd>${item.output || '形成可执行、可检验的标准技术资产与质控规则'}</dd>
-            </dl>
+            <dt>标准编号</dt><dd>${item.code}</dd>
+            <dt>所属主题库</dt><dd>${item.domain}</dd>
+            <dt>标准体系</dt><dd>${item.system}</dd>
+            <dt>专业分类</dt><dd>${item.group}</dd>
+            <dt>标准条目</dt><dd>${item.title}</dd>
+            <dt>标准责任人</dt><dd>${item.owner}</dd>
+            <dt>当前版本</dt><dd>${item.version}（正式基线）</dd>
+          </dl>
         </section>
 
         <section class="detail-section">
