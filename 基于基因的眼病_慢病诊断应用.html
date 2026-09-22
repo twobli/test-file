@@ -232,6 +232,31 @@ button{cursor:pointer}
 .toast.show{display:block}
 .pdf-exporting .card{break-inside:avoid;page-break-inside:avoid}
 .pdf-exporting .report-head{break-after:avoid;page-break-after:avoid}
+/* ===== PDF 导出专用纵向打印视图 ===== */
+#pdf-print-root{position:absolute;left:0;top:0;z-index:-1;width:760px;background:#ffffff;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.8}
+#pdf-print-root .pdf-report{padding:6px 2px}
+#pdf-print-root .report-head{display:block;text-align:left;margin:0 0 14px;padding-bottom:12px;border-bottom:2px solid #2563eb}
+#pdf-print-root .report-head .h1{font-size:21px;margin:0 0 8px;letter-spacing:0}
+#pdf-print-root .report-meta{margin-bottom:8px}
+#pdf-print-root .report-tip{font-size:11.5px;color:#6b7280;line-height:1.7}
+#pdf-print-root .card{border:1px solid #e5e7eb;border-radius:10px;background:#fff;margin:0 0 14px;overflow:hidden}
+#pdf-print-root .card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e5e7eb;break-after:avoid;page-break-after:avoid}
+#pdf-print-root .geno-card,#pdf-print-root .alert,#pdf-print-root .info-cell,#pdf-print-root .img-panel,#pdf-print-root .genetic-score-item,#pdf-print-root .disease-risk-item{break-inside:avoid;page-break-inside:avoid}
+#pdf-print-root .card-head h2{font-size:15px;margin:0}
+#pdf-print-root .card-head .sub{font-size:11px;color:#9ca3af;white-space:normal}
+#pdf-print-root .card-body{padding:12px 14px}
+#pdf-print-root .info-grid{grid-template-columns:1fr 1fr;gap:8px}
+#pdf-print-root .genetic-score-grid{grid-template-columns:1fr;gap:10px}
+#pdf-print-root .disease-risk-grid{grid-template-columns:1fr;gap:10px}
+#pdf-print-root .image-narrative-row{display:block}
+#pdf-print-root .image-narrative-row .upload-grid{flex:1 1 auto;margin-bottom:10px}
+#pdf-print-root .upload-grid{grid-template-columns:1fr 1fr;gap:10px}
+#pdf-print-root .form-row{grid-template-columns:1fr 1fr;gap:8px}
+#pdf-print-root .alert{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7}
+#pdf-print-root .actions-row{display:none!important}
+#pdf-print-root img{max-width:100%;height:auto;page-break-inside:avoid}
+#pdf-print-root table{width:100%;border-collapse:collapse;font-size:12px}
+#pdf-print-root *{box-sizing:border-box}
 @media(max-width:760px){.upload-grid,.form-row,.info-grid,.geno-select-grid{grid-template-columns:1fr}.report-head{display:block}.image-narrative-row{flex-direction:column}.image-narrative-row .upload-grid{flex:1 1 auto}}</style>
   <script src="assets/html2pdf.bundle.min.js"></script>
 </head>
@@ -302,7 +327,6 @@ button{cursor:pointer}
       <div>
         <h1 class="h1" id="report-title">多模态融合综合评估报告</h1>
         <div class="report-meta" id="report-meta">—</div>
-        <div class="report-tip">本报告可以帮助医护人员进行临床辅助与决策支持，为多学科联合会诊、科研分析及个体化治疗提供数据支撑；同时支持通过算法接口调用，具体对接方式请联系系统管理员。</div>
       </div>
     </div>
 
@@ -352,7 +376,8 @@ button{cursor:pointer}
     </div>
 
     <div class="actions-row">
-      <button class="btn" onclick="exportReportPdf()">导出 PDF</button>
+      <button class="btn" onclick="exportApiDoc()">导出算法接口文档</button>
+      <button class="btn" onclick="exportReportPdf()">导出综合评估报告</button>
     </div>
   </section>
 </div>
@@ -363,11 +388,12 @@ const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(
 let toastTimer;
 function toast(msg){let t=$('#toast');t.textContent=msg;t.className='toast show';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='toast',2600)}
 
-/* 直接在浏览器中生成并下载 PDF，不调用打印预览。 */
+/* 直接在浏览器中生成并下载 PDF。
+   做法：克隆报告区块到一个专用的 760px 纵向打印视图（单栏、从上往下、卡片不跨页），
+   再交给 html2pdf 渲染，避免宽屏多列布局塞进 A4 后排版错乱。 */
 async function exportReportPdf(){
   const report=document.querySelector('#panel-report');
-  const button=document.querySelector('#panel-report .actions-row .btn');
-  const reportActions=report ? report.querySelector('.actions-row') : null;
+  const button=document.querySelector('#panel-report .actions-row button[onclick*="exportReportPdf"]');
   if(!report){
     toast('未找到多模态融合综合评估报告');
     return;
@@ -384,30 +410,105 @@ async function exportReportPdf(){
     button.disabled=true;
     button.textContent='正在生成 PDF…';
   }
-  const previousDisplay=reportActions ? reportActions.style.display : '';
+  let printRoot=null;
   try{
-    document.body.classList.add('pdf-exporting');
-    if(reportActions) reportActions.style.display='none';
+    /* 构建打印视图：仅包含报告内容，严格按页面从上往下的顺序 */
+    printRoot=document.createElement('div');
+    printRoot.id='pdf-print-root';
+    const clone=report.cloneNode(true);
+    clone.classList.remove('panel','active');
+    clone.classList.add('pdf-report');
+    /* 移除交互元素，只保留报告本体 */
+    clone.querySelectorAll('.actions-row').forEach(el=>el.remove());
+    clone.querySelectorAll('button').forEach(el=>el.remove());
+    printRoot.appendChild(clone);
+    document.body.appendChild(printRoot);
+    /* 滚动归零，避免 html2canvas 取景偏移；等待图片全部加载完成再渲染 */
+    window.scrollTo(0,0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    await Promise.all(Array.from(clone.querySelectorAll('img')).map(img=>(
+      img.complete&&img.naturalWidth>0)?Promise.resolve():new Promise(res=>{img.onload=res;img.onerror=res;setTimeout(res,3000)})
+    ));
     await html2pdf().set({
-      margin:[10,10,12,10],
+      margin:[10,8,12,8],
       filename:'多模态融合综合评估报告.pdf',
       image:{type:'jpeg',quality:0.98},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy']}
-    }).from(report).save();
+      /* 只对小型内容单元防跨页；大卡片允许自然分页，否则会产生大片留白并被裁切 */
+      pagebreak:{mode:['css','legacy'],avoid:['.report-head','.card-head','.geno-card','.alert','.info-cell','.genetic-score-item','.disease-risk-item','.img-panel','.img-caption','img']}
+    }).from(clone).save();
   }catch(error){
     console.error('PDF 导出失败',error);
     toast('PDF 生成失败，请稍后重试');
   }finally{
-    document.body.classList.remove('pdf-exporting');
-    if(reportActions) reportActions.style.display=previousDisplay;
+    if(printRoot) printRoot.remove();
     if(button){
       button.disabled=false;
-      button.textContent='导出 PDF';
+      button.textContent='导出综合评估报告';
     }
   }
+}
+/* 导出算法接口文档：基于页面真实算法模型生成 Word(.doc) 文档，离线可用 */
+function exportApiDoc(){
+  const rows=(arr)=>arr.map(r=>'<tr><td>'+r.join('</td><td>')+'</td></tr>').join('');
+  const html='<html xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8">'+
+    '<style>body{font-family:"Microsoft YaHei",sans-serif;font-size:12pt;line-height:1.7;color:#111827}'+
+    'h1{font-size:18pt;border-bottom:2px solid #2563eb;padding-bottom:8px}h2{font-size:14pt;color:#1d4ed8;margin:18px 0 6px}'+
+    'table{border-collapse:collapse;width:100%;font-size:10.5pt;margin:8px 0}'+
+    'th,td{border:1px solid #9ca3af;padding:5px 8px;text-align:left}th{background:#eff6ff}'+
+    'pre{background:#f3f4f6;border:1px solid #e5e7eb;padding:10px;font-family:Consolas,monospace;font-size:9.5pt;white-space:pre-wrap}'+
+    '.tip{color:#6b7280;font-size:10pt}'+
+    '.banner{background:#2563eb;color:#ffffff;font-size:13pt;font-weight:700;padding:14px 16px;border-radius:6px;margin:14px 0}</style></head><body>'+
+    '<h1>多模态融合综合评估算法 · 接口文档</h1>'+
+    '<p class="banner">该接口文档主要用于支撑提供算法调用API，帮助医疗服务提供者进行临床辅助与决策支持，为多学科联合会诊、科研分析及个体化治疗提供数据支撑。</p>'+
+    '<h2>1. 接口概述</h2>'+
+    '<p>接收患者背景信息、基因分型结果与眼底影像标注，返回关键疾病遗传易感性评分、影像与基因综合疾病风险评估及方向性建议。</p>'+
+    '<table><tr><th>项目</th><th>说明</th></tr>'+
+    rows([['请求地址','POST /api/v1/multimodal/eye-assess（原型示意）'],
+          ['请求格式','application/json'],
+          ['同步/异步','同步（建议超时 30s）'],
+          ['鉴权方式','Authorization: Bearer &lt;token&gt;（对接时由系统管理员分配）']])+
+    '</table>'+
+    '<h2>2. 请求参数</h2>'+
+    '<table><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>'+
+    rows([['disease','string','是','评估目标：dr=糖尿病视网膜病变 / um=脉络膜黑色素瘤'],
+          ['patient','object','否','患者背景：{ age, gender, history }，缺省时不参与加权'],
+          ['genotype.findings','string[]','是','阳性基因/标志物集合，如 ["TCF7L2","PPARG","VEGFA","BAP1_neg","chr3_mono"]'],
+          ['images[].type','string','是','影像类型：cfp=眼底彩照 / oct / octa'],
+          ['images[].eye','string','是','眼别：od=右眼 / os=左眼'],
+          ['images[].lesions','string[]','否','影像标注的潜在病灶列表（视盘、黄斑、出血、渗出等）']])+
+    '</table>'+
+    '<h2>3. 返回参数</h2>'+
+    '<table><tr><th>字段</th><th>类型</th><th>说明</th></tr>'+
+    rows([['t2dSusceptibility','int|null','2型糖尿病遗传易感性评分（0-100），未选位点时为 null'],
+          ['drSusceptibility','int|null','DR 遗传易感性评分（0-100）'],
+          ['imageScore','int','影像异常评分：min(100, 20+影像数×12+病灶数×8)'],
+          ['diseaseRisk[]','object[]','各疾病综合风险：{ name, score, level }，level ∈ 低/中/高风险'],
+          ['suggestions[]','string[]','方向性建议列表（仅供临床参考）']])+
+    '</table>'+
+    '<h2>4. 评分规则（与页面算法一致，原型示意）</h2>'+
+    '<p>基因易感性：基础分 18，按证据强度累加（强=11 / 中=7 / 弱=3），上限 85；DR 评分另纳入候选位点（中=14 / 弱=5）与糖尿病位点数×3（上限+12），基础分 10，上限 80。</p>'+
+    '<p>综合风险 = 影像评分与基因评分按疾病加权融合；风险分层：&lt;30 低风险，30-59 中风险，≥60 高风险（阈值随疾病调整）。</p>'+
+    '<h2>5. 请求示例</h2>'+
+    '<pre>{\n  "disease": "dr",\n  "patient": { "age": 56, "gender": "男", "history": "2型糖尿病 8 年" },\n  "genotype": { "findings": ["TCF7L2", "SLC30A8", "VEGFA"] },\n  "images": [\n    { "type": "cfp", "eye": "od", "lesions": ["微血管瘤", "硬性渗出"] },\n    { "type": "oct", "eye": "od", "lesions": ["黄斑水肿"] }\n  ]\n}</pre>'+
+    '<h2>6. 返回示例</h2>'+
+    '<pre>{\n  "code": 0,\n  "data": {\n    "t2dSusceptibility": 40,\n    "drSusceptibility": 33,\n    "imageScore": 52,\n    "diseaseRisk": [\n      { "name": "2型糖尿病", "score": 34, "level": "中风险" },\n      { "name": "糖尿病视网膜病变（DR）", "score": 34, "level": "中风险" }\n    ],\n    "suggestions": [\n      "建议结合血糖、血脂等全身情况进行管理，具体治疗方案由内分泌科/眼科医师共同评估。"\n    ]\n  }\n}</pre>'+
+    '<h2>7. 错误码</h2>'+
+    '<table><tr><th>code</th><th>含义</th></tr>'+
+    rows([['0','成功'],['40001','参数缺失或格式错误'],['40002','disease 取值不合法'],['40101','鉴权失败或 token 过期'],['50001','模型推理异常，请重试']])+
+    '</table>'+
+    '<p class="tip">注：本接口与评分为原型示意，不代表实际发病概率，不能替代临床诊断。</p>'+
+    '</body></html>';
+  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='多模态融合综合评估算法接口文档.doc';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  toast('算法接口文档已导出');
 }
 /* ============ 疾病与基因数据模型（内容来自文献调研，见对话说明） ============ */
 const DISEASE = {
