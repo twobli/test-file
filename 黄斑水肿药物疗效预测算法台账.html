@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>算法台账｜生命医学数据平台</title>
+  <style>
+    :root{--blue:#1890ff;--blue-deep:#096dd9;--blue-soft:#e6f7ff;--green:#52c41a;--orange:#faad14;--red:#ff4d4f;--ink:#262626;--text:#595959;--muted:#8c8c8c;--line:#e8e8e8;--bg:#f0f2f5;--panel:#fff;--header:60px}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.55}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+
+    .app{min-height:100vh}
+    .topbar{height:var(--header);background:linear-gradient(100deg,#1557b7 0%,#1976d2 46%,#0e7d80 100%);color:#fff;display:flex;align-items:center;padding:0 28px;gap:36px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px #102a4326}
+    .brand{font-size:19px;font-weight:600;letter-spacing:.5px;white-space:nowrap}
+    .top-nav{display:flex;align-items:stretch;height:100%;gap:4px}
+    .top-nav-item{display:flex;align-items:center;padding:0 15px;color:#fff;font-size:14px;font-weight:600;position:relative}
+    .top-nav-item.active:after{content:"";position:absolute;bottom:0;left:14px;right:14px;height:3px;background:#fff;border-radius:3px 3px 0 0}
+    .top-actions{margin-left:auto;display:flex;align-items:center;gap:14px}
+    .user{display:flex;align-items:center;gap:9px}
+    .avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#d9efff;color:var(--blue-deep);font-weight:700;font-size:12px}
+    .user-name{font-size:13px}
+    .shell{display:flex;min-height:calc(100vh - var(--header))}
+    .main{flex:1;min-width:0;padding:23px 28px 42px;overflow:auto}
+    .breadcrumb{display:flex;gap:9px;color:var(--muted);font-size:13px;margin-bottom:17px}
+    .breadcrumb span:last-child{color:var(--ink)}
+    .page-heading{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+    .page-heading h1{font-size:24px;line-height:32px;margin:0 0 4px;font-weight:600}
+    .page-heading p{margin:0;color:var(--muted)}
+
+    .type-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;border-bottom:1px solid var(--line)}
+    .type-tab{border:0;background:transparent;color:var(--text);padding:9px 13px;border-bottom:2px solid transparent;display:inline-flex;align-items:center;gap:7px;margin-bottom:-1px;font-size:13px}
+    .type-tab:hover{color:var(--blue);background:#f5faff}
+    .type-tab.active{color:var(--blue-deep);font-weight:600;border-bottom-color:var(--blue)}
+    .type-tab em{font-style:normal;font-size:11px;color:var(--muted);background:#f0f0f0;border-radius:9px;padding:1px 7px}
+    .type-tab.active em{background:var(--blue-soft);color:var(--blue-deep)}
+
+    .filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+    .search{position:relative}
+    .search input{width:310px;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:4px;background:#fff;outline:none}
+    .search input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 2px #1890ff1a}
+    .search span{position:absolute;left:12px;top:8px;color:var(--muted);font-size:17px}
+    select{min-width:130px;padding:9px 12px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--text);outline:none}
+    .filter-spacer{flex:1}
+    .btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:4px;padding:8px 14px;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+    .btn:hover{border-color:var(--blue);color:var(--blue)}
+    .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+    .btn-primary:hover{background:var(--blue-deep);color:#fff}
+    .btn:disabled{cursor:not-allowed;color:#bfbfbf;background:#f5f5f5;border-color:#e8e8e8}
+    .btn:disabled:hover{border-color:#e8e8e8;color:#bfbfbf}
+
+    .card{background:var(--panel);border:1px solid #e6ebf1;border-radius:8px;box-shadow:0 1px 2px #00000008}
+    .section-card{padding:0;overflow:hidden}
+    .section-head{min-height:53px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+    .section-head h2{font-size:16px;margin:0;font-weight:600}
+    .section-head .sub{font-size:12px;color:var(--muted)}
+    .section-body{padding:18px}
+    .table-wrap{overflow:auto}
+    .data-table{width:100%;border-collapse:collapse;min-width:1810px}
+    .data-table th,.data-table td{padding:13px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+    .data-table th{background:#fafafa;color:var(--muted);font-weight:500;font-size:12px;white-space:nowrap}
+    .data-table tbody tr:nth-child(even){background:#fcfdfe}
+    .data-table tbody tr:hover{background:var(--blue-soft)}
+    .algorithm-name{min-width:190px}
+    .algorithm-name b{display:block;margin-bottom:3px}
+    .algorithm-name small,.muted{color:var(--muted);font-size:11px}
+    .cell-copy{max-width:200px;white-space:normal;line-height:20px;color:var(--text)}
+    .cell-copy.short{max-width:160px}
+    .cell-copy.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:12px;white-space:nowrap}
+    .tag.green{background:#f6ffed;color:#389e0d}
+    .tag.blue{background:#e6f7ff;color:#096dd9}
+    .tag.purple{background:#f9f0ff;color:#722ed1}
+    .tag.gray{background:#f5f5f5;color:#8c8c8c}
+    .tag.orange{background:#fff7e6;color:#d48806}
+    .tag.red{background:#fff2f0;color:#cf1322}
+    .tag.cyan{background:#e6fffb;color:#08979c}
+    .link-btn{border:0;background:transparent;color:var(--blue);font-size:12px;padding:3px 0;margin-right:10px}
+    .link-btn:hover{text-decoration:underline;color:var(--blue-deep)}
+    /* 行内操作栏：两按钮形态（代码包下载 / 查看详情）；「使用手册下载」与使用手册弹窗已按第六轮要求整体移除 */
+    .row-actions{display:flex;justify-content:flex-end;gap:8px;white-space:nowrap}
+    .row-actions .btn,.row-actions .btn-primary{min-width:76px;min-height:30px;padding:4px 9px;font-size:12px;font-weight:500}
+    .pager{display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:15px 4px 2px;color:var(--muted);font-size:12px;flex-wrap:wrap}
+    .pager-left{margin-right:auto;display:flex;align-items:center;gap:8px}
+    .pager select{min-width:74px;padding:5px 8px}
+    .page-no{display:flex;gap:5px}
+    .page-no button{min-width:28px;height:28px;padding:0 7px;border:1px solid var(--line);background:#fff;border-radius:4px;color:var(--text)}
+    .page-no button:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+    .page-no button.active{background:var(--blue);border-color:var(--blue);color:#fff}
+    .page-no button:disabled{cursor:not-allowed;color:#c8c8c8}
+    .jump{display:flex;align-items:center;gap:6px}
+    .jump input{width:50px;padding:5px 7px;border:1px solid var(--line);border-radius:4px;text-align:center;outline:none}
+    .jump input:focus{border-color:var(--blue);box-shadow:0 0 0 2px #1890ff1a}
+    .empty{padding:42px 20px;text-align:center;color:var(--muted);display:none}
+    .empty.show{display:block}
+    .result-count{color:var(--muted);font-size:12px;margin-left:4px}
+
+    /* 弹窗 */
+    .modal-overlay{display:none;position:fixed;inset:0;background:#10182859;z-index:50}
+    .modal-overlay.open{display:block}
+    .modal{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:920px;max-width:calc(100vw - 32px);max-height:calc(100vh - 64px);background:#fff;border-radius:8px;z-index:60;box-shadow:0 14px 44px #102a4333;flex-direction:column;overflow:hidden}
+    .modal.open{display:flex}
+    .modal.modal-sm{width:560px}
+    .modal-head{min-height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex:none;gap:12px}
+    .modal-head h3{margin:0;font-size:16px;font-weight:600}
+    .modal-body{padding:20px;overflow:auto}
+    .modal-foot{border-top:1px solid var(--line);padding:12px 20px;display:flex;justify-content:flex-end;gap:10px;background:#fafafa;flex:none;flex-wrap:wrap}
+    .close{border:0;background:transparent;font-size:23px;color:var(--muted);line-height:1}
+    .close:hover{color:var(--ink)}
+
+    /* 详情弹窗内部 */
+    .detail-eyebrow{color:var(--blue-deep);font-size:12px;margin-bottom:6px}
+    .detail-title{font-size:21px;margin:0;font-weight:600}
+    .detail-meta-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:11px}
+    .detail-para{margin:0 0 10px;color:var(--text);font-size:13px;line-height:23px}
+    .detail-para:last-child{margin-bottom:0}
+    .m-section{border-top:1px solid var(--line);margin-top:20px;padding-top:17px}
+    .m-section > h4{font-size:14px;margin:0 0 12px;padding-left:9px;border-left:3px solid var(--blue);display:flex;align-items:center;gap:9px;min-height:20px}
+    .m-section > h4 .h4-actions{margin-left:auto}
+    .m-section > h4 .btn{padding:4px 10px;font-size:12px}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+    .info-item{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:12px}
+    .info-item.full{grid-column:1/-1}
+    .info-item label{color:var(--muted)}
+    .info-item span{color:var(--text);line-height:20px;min-width:0;word-break:break-word}
+    .ph{color:#bfbfbf;border-bottom:1px dashed #d9d9d9;cursor:help}
+    .alert{display:flex;gap:9px;padding:11px 13px;border-radius:5px;font-size:12px;align-items:flex-start;line-height:20px}
+    .alert.info{background:#f5faff;border:1px solid #d6eaff;color:#5b7a99}
+    .alert.warn{background:#fff7e6;border:1px solid #ffe0a3;color:#ad6800}
+    .alert b{font-weight:600}
+    .param-table{width:100%;border-collapse:collapse;font-size:12px}
+    .param-table th,.param-table td{padding:9px 11px;border:1px solid var(--line);text-align:left}
+    .param-table th{background:#fafafa;color:var(--muted);font-weight:500}
+    .param-table td.ph-cell{color:var(--muted);text-align:center;background:#fcfcfc;padding:22px 11px}
+    /* 详情 · 算法说明表 */
+    .cmp-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+    .cmp-table th,.cmp-table td{padding:9px 11px;border:1px solid var(--line);text-align:left;vertical-align:top}
+    .cmp-table th{background:#fafafa;color:var(--muted);font-weight:500}
+    .cmp-table td.cmp-label{color:var(--muted);background:#fcfcfc}
+    .cmp-table p.cmp-p{margin:0 0 8px;color:var(--text);line-height:20px;word-break:break-word}
+    .cmp-table p.cmp-p:last-child{margin-bottom:0}
+    /* 数据集绑定 */
+    .bind-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .bind-row label{color:var(--muted);font-size:12px;white-space:nowrap}
+    .bind-row select{flex:1;min-width:320px;max-width:100%}
+    .bind-state{margin-top:11px;font-size:12px;color:var(--muted)}
+    .bind-state b{color:var(--ink);font-weight:500}
+    .bind-state b.bound{color:#389e0d}
+    /* 教学视频占位面板 */
+    .video-frame{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#eef4fb,#e2edf9);border:1px dashed #b9d4f0;border-radius:6px;display:grid;place-items:center;text-align:center;padding:16px}
+    .video-frame .play{width:52px;height:52px;border-radius:50%;background:#fff;border:1px solid #b9d4f0;display:grid;place-items:center;color:var(--blue);font-size:19px;margin:0 auto 10px}
+    .video-frame p{margin:0 0 3px;font-size:12px;color:#7a93ad;line-height:19px}
+    .video-frame p:last-child{margin-bottom:0}
+    .code-wrap{border:1px solid #e6ebf1;border-radius:6px;background:#fafcff;overflow:hidden}
+    .code-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #e6ebf1;background:#f5faff;font-size:12px;color:var(--blue-deep);gap:10px}
+    .code-block{margin:0;padding:14px;overflow:auto;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px;line-height:20px;color:var(--ink);white-space:pre;max-height:300px}
+    .file-card{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:6px;padding:14px;background:#fafafa}
+    .file-icon{width:42px;height:42px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:19px;flex:none}
+    .file-card h4{margin:0 0 4px;font-size:14px}
+    .file-card p{margin:0;color:var(--muted);font-size:12px}
+    .upload-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px dashed #b7d8f5;border-radius:6px;background:#f7fbff;padding:24px 16px;color:var(--muted);font-size:13px;text-align:center;cursor:pointer}
+    .upload-zone:hover,.upload-zone:focus-visible{border-color:var(--blue);background:#f0f8ff;color:var(--blue-deep);outline:none}
+    .upload-zone strong{color:var(--blue-deep);font-weight:600}
+    .upload-hint{font-size:12px;color:var(--muted)}
+    .upload-preview{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:6px;padding:12px;background:#fafafa}
+    .upload-preview img{width:96px;height:96px;object-fit:cover;border-radius:5px;border:1px solid var(--line);background:#fff;flex:none}
+    .upload-preview h4{margin:0 0 4px;font-size:14px;word-break:break-all}
+    .upload-preview p{margin:0;color:var(--muted);font-size:12px}
+    .test-empty{border:1px dashed var(--line);border-radius:6px;padding:24px 16px;text-align:center;color:var(--muted);font-size:13px;background:#fafafa}
+    .test-status{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .test-status .test-meta{color:var(--muted);font-size:12px}
+    .test-fail-toggle{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;font-weight:400;cursor:pointer;margin-left:auto}
+    .test-spinner{display:inline-block;width:11px;height:11px;border:2px solid #ffffff66;border-top-color:#fff;border-radius:50%;animation:test-spin .7s linear infinite;vertical-align:-1px;margin-right:7px}
+    @keyframes test-spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;right:28px;top:78px;background:#fff;border:1px solid #d6eaff;box-shadow:0 4px 14px #00000014;border-radius:5px;padding:11px 15px;color:var(--blue-deep);z-index:90;display:none;max-width:360px}
+    .toast.show{display:block}
+
+    @media(max-width:1100px){
+      .topbar{gap:18px;padding:0 18px}
+      .top-nav-item{padding:0 9px}
+      .main{padding:20px}
+      .search input{width:250px}
+      .info-grid{grid-template-columns:1fr}
+      .info-item.full{grid-column:auto}
+    }
+    @media(max-width:700px){
+      .brand{font-size:16px}
+      .user-name{display:none}
+      .main{padding:17px 12px 30px}
+      .page-heading{gap:12px}
+      .page-heading h1{font-size:20px}
+      .filter-bar{align-items:stretch}
+      .search{width:100%}
+      .search input{width:100%}
+      .filter-bar select,.filter-bar .btn{flex:1;min-width:0}
+      .section-body{padding:14px}
+      .modal{width:100%;max-width:100vw;max-height:100vh;height:100%;border-radius:0;top:0;left:0;transform:none}
+      .pager{justify-content:flex-start}
+      .pager-left{margin-right:0;width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" onclick="location.href='app-center.html'" style="cursor:pointer" title="返回应用中心">生命医学数据平台</div>
+      <nav class="top-nav" aria-label="主导航"><span class="top-nav-item active">算法台账</span></nav>
+      <div class="top-actions"><div class="user"><div class="avatar">产</div><span class="user-name">产品实习生</span></div></div>
+    </header>
+    <div class="shell">
+      <main class="main">
+        <div class="breadcrumb"><span>算法台账</span></div>
+        <div class="page-heading">
+          <div><h1>算法台账</h1><p>集中展示已登记算法的输入、输出、应用场景及通用信息</p></div>
+        </div>
+
+        <div class="type-tabs" id="typeTabs" role="tablist" aria-label="算法类型"></div>
+
+        <div class="filter-bar">
+          <div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="搜索算法名称、疾病或关键词" /></div>
+          <select id="diseaseFilter" aria-label="适用疾病"><option value="">全部适用疾病</option></select>
+          <select id="statusFilter" aria-label="状态"><option value="">全部状态</option></select>
+          <button type="button" class="btn btn-primary" id="searchButton">查询</button><button type="button" class="btn" id="resetButton">重置</button>
+        </div>
+
+        <section class="card section-card">
+          <div class="section-head"><div><h2>算法列表</h2><span class="sub">算法信息台账 <span id="resultCount" class="result-count">共 35 条</span></span></div></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr>
+                <th>算法名称</th><th>适用疾病</th>
+                <th>算法输入</th><th>算法输出</th><th>算法功能</th><th>应用场景</th><th>版本</th><th>状态</th><th>操作</th>
+              </tr></thead>
+              <tbody id="algorithmBody"></tbody>
+            </table>
+            <div id="emptyState" class="empty">暂无符合条件的算法记录</div>
+          </div>
+          <div class="section-body" style="padding-top:0">
+            <div class="pager">
+              <div class="pager-left">
+                <span>共 <b id="pagerCount">35</b> 条</span>
+                <span>每页</span>
+                <select id="pageSize" aria-label="每页条数"><option value="10" selected>10</option><option value="20">20</option><option value="50">50</option></select>
+                <span>条</span>
+              </div>
+              <div class="page-no" id="pageNumbers"></div>
+              <div class="jump">跳至 <input id="jumpInput" type="number" min="1" value="1" aria-label="跳至页码" /> 页</div>
+            </div>
+          </div>
+        </section>
+
+    </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay"></div>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+    <div class="modal-head"><h3 id="detailModalTitle">算法详情</h3><button type="button" class="close" data-close="detailModal" aria-label="关闭">×</button></div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" data-close="detailModal">关闭</button>
+      <button type="button" class="btn" id="videoBtn">查看教学视频</button>
+      <button type="button" class="btn" id="codeBtn">代码包下载</button>
+      <button type="button" class="btn btn-primary" id="testBtn">算法测试</button>
+    </div>
+  </div>
+
+  <div class="modal" id="testModal" role="dialog" aria-modal="true" aria-labelledby="testModalTitle">
+    <div class="modal-head"><h3 id="testModalTitle">算法测试</h3><button type="button" class="close" data-close="testModal" aria-label="关闭">×</button></div>
+    <div class="modal-body" id="testBody"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" data-close="testModal">关闭</button>
+      <button type="button" class="btn btn-primary" id="testRunBtn" disabled>开始测试</button>
+    </div>
+  </div>
+
+  <div class="modal modal-sm" id="codeModal" role="dialog" aria-modal="true" aria-labelledby="codeModalTitle">
+    <div class="modal-head"><h3 id="codeModalTitle">代码包下载</h3><button type="button" class="close" data-close="codeModal" aria-label="关闭">×</button></div>
+    <div class="modal-body" id="codeBody"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" data-close="codeModal">取消</button>
+      <button type="button" class="btn btn-primary" id="codeConfirmBtn">确认下载</button>
+    </div>
+  </div>
+
+  <div class="modal modal-sm" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoModalTitle">
+    <div class="modal-head"><h3 id="videoModalTitle">教学视频</h3><button type="button" class="close" data-close="videoModal" aria-label="关闭">×</button></div>
+    <div class="modal-body" id="videoBody"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" data-close="videoModal">关闭</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const ALGORITHMS = [
+  {"no": "105", "l5": "眼病/慢病疾病分类算法", "name": "青光眼分类算法", "code": "ALGO-GL-006", "disease": "青光眼", "version": "v1.2", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "该眼底图像对应患者是否患青光眼以及患青光眼的严重程度。", "scene": "青光眼分类算法可用于获取眼底图像的青光眼诊断信息，辅助青光眼分类数据集标注和辅助相关疾病诊断。", "feature": "青光眼分类算法利用公开及私有数据作为初始数据集，利用先进的基线模型，如SwinTransformer模型，作为基本网络架构，SwinTransformer网络结构图如下图所示，将对SwinTransformer进行改进并利用视杯视盘分割模型获取视杯视盘区域，联同利用完整眼底图像和视杯视盘区域信息进行多模态分类。", "sceneShort": "辅助青光眼分类数据集标注、辅助相关疾病诊断", "protoType": "图像分类", "protoInput": "彩色眼底图像、OCT图像", "protoOutput": "青光眼分类结果及置信度", "protoScene": "辅助医生进行青光眼筛查", "protoFeature": "提取视盘视杯特征并完成青光眼风险分类", "groupNote": null, "id": 0},
+  {"no": "106", "l5": "眼病/慢病疾病分类算法", "name": "病理性近视分类算法", "code": "ALGO-PM-007", "disease": "病理性近视", "version": "v1.1", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "该眼底图像对应患者是否患病理性近视以及患病理性近视的严重程度。", "scene": "病理性近视分类算法可用于获取眼底图像的病理性近视诊断信息，辅助病理性近视分类数据集标注和辅助相关疾病诊断。", "feature": "病理性近视分类算法利用公开及私有数据作为初始数据集，利用先进的基线模型，如ConvNext模型，作为基本网络架构。后续将对ConvNext模型进行改进，提高模型对关键信息的提取，同时考虑加入视网膜脱离和萎缩等病灶的位置信息或者以热力图形式呈现。\n首先眼底图像通过病理性近视病灶分割算法获取萎缩和脱离的掩码信息，然后获取高斯热力图并与原图像形成四通道的输入信息，后经改进的ConvNext进行特征提取、损失计算和模型优化。\n推断阶段输入眼底图像便可获取分类结果。", "sceneShort": "辅助病理性近视分类数据集标注、辅助相关疾病诊断", "protoType": "图像分类", "protoInput": "彩色眼底图像、患者基本信息", "protoOutput": "病理性近视分类与风险等级", "protoScene": "辅助医生进行近视分型", "protoFeature": "分析眼底结构与病变特征，完成病理性近视分型", "groupNote": null, "id": 1},
+  {"no": "107", "l5": "眼病/慢病疾病分类算法", "name": "糖尿病视网膜病变分类算法", "code": "ALGO-DR-008", "disease": "糖尿病视网膜病变", "version": "v2.0", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "该眼底图像对应患者是否患糖尿病以及患糖尿病的严重程度。", "scene": "糖尿病视网膜病变分类算法可用于获取眼底图像的糖尿病诊断信息，辅助糖尿病视网膜病变分类数据集标注和辅助相关疾病诊断。", "feature": "糖尿病视网膜病变分类算法利用公开及私有数据作为初始数据集，利用先进的基线模型，如ConvNext模型作为基本网络架构，将对ConvNext模型进行改进，同时增加糖尿病视网膜病变病灶相关信息，以提高模型对于多分类数据的利用效率和分类性能。\n训练阶段利用糖尿病视网膜病变病灶分割算法获取眼底图像中的病灶信息，然后将眼底图像和病灶掩码信息通过两个改进的ConvNext模型进行特征提取，接着进行模态融合、损失计算和模型参数更新。\n推断阶段输入眼底图像便可获取分类结果。", "sceneShort": "辅助糖尿病视网膜病变数据集标注、辅助相关疾病诊断", "protoType": "图像分类", "protoInput": "彩色眼底图像、患者病历信息", "protoOutput": "糖尿病视网膜病变分级结果", "protoScene": "辅助医生进行DR筛查与分级", "protoFeature": "识别糖网病变征象并输出疾病严重程度分级", "groupNote": null, "id": 2},
+  {"no": "108", "l5": "眼病/慢病疾病分类算法", "name": "罕见病分类算法", "code": "ALGO-RD-009", "disease": "罕见病", "version": "v0.7", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "该眼底图像对应患者是否患罕见病和所患罕见病的类型。", "scene": "罕见病分类算法可用于获取眼底图像的罕见病诊断信息，辅助罕见病分类数据集标注和辅助相关疾病诊断。", "feature": "罕见病分类算法将利用眼底图像和病灶信息，通过深度学习进行建模。此外针对罕见病数据集特有的数据量较少的特点，利用自动数据增强搜索策略获取针对性的数据增强组合策略，从而提高罕见病分类算法的分类性能。", "sceneShort": "辅助罕见病分类数据集标注、辅助相关疾病诊断", "protoType": "图像分类", "protoInput": "眼底图像、OCT图像和病历信息", "protoOutput": "罕见病候选分类及风险提示", "protoScene": "辅助医生进行罕见病识别", "protoFeature": "融合多模态影像和病历特征，识别罕见病候选类型", "groupNote": null, "id": 3},
+  {"no": "109", "l5": "眼病/慢病疾病分类算法", "name": "年龄相关性黄斑病变分类算法", "code": "ALGO-AMD-010", "disease": "年龄相关性黄斑病变", "version": "v1.4", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "该眼底图像对应患者是否患年龄相关性黄斑病变。", "scene": "年龄相关性黄斑病变是一大类致盲的眼科疾病，目前受到广大医学科研者的关注。如何快速筛查诊断该疾病已成为眼科领域关注的重点问题。\n通过年龄相关性黄斑病变分类算法可以帮助医生快速筛查出眼底图像相关患者是否患有该眼疾，辅助医生进行疾病诊断，减轻医生的工作压力。同时，年龄相关性黄斑病变分类算法可以应用于AI辅助标注，帮助标注人员在标注此类眼科疾病分类数据集时提供先验标签信息，从而提高标注人员标注效率，减少标注时间和成本。", "feature": "年龄相关性黄斑病变分类算法训练阶段采用目前已公开的AMD分类数据进行训练。算法模型采用如SwinTransformerBase等进行特征提取和分类。算法模型会针对年龄相关性黄斑病变的核心区域是黄斑区域的先验信息，提高模型在黄斑区域的注意力，从而进一步提高模型的性能。\n年龄相关性黄斑病变分类算法推断阶段时输入一张眼底图像，即可获取该眼底图像对应患者是否患该疾病。", "sceneShort": "辅助AMD数据集标注、辅助医生筛查诊断", "protoType": "图像分类", "protoInput": "眼底图像、OCT图像", "protoOutput": "年龄相关性黄斑病变分类结果", "protoScene": "辅助医生进行AMD筛查", "protoFeature": "识别AMD相关影像特征并完成疾病分类", "groupNote": null, "id": 4},
+  {"no": "110", "l5": "眼病/慢病疾病分类算法", "name": "白内障分类算法", "code": "ALGO-CA-011", "disease": "白内障", "version": "v1.0", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像对应患者是否患白内障以及所患白内障的严重程度。", "scene": "目前中国有大量的老年人患有白内障，导致他们看不清眼前事物。白内障是一种可以手术治疗的眼科疾病，如果能及时发现并手术治疗，老年人将可以恢复视力。因此，及时筛查老年人是否患有白内障，将有利于老年人及时手术。\n白内障分类算法可以帮助医生快速筛查眼底图像中患者是否患有白内障以及所患白内障的严重程度，从而减轻医生的工作强度，辅助医生进行白内障诊断。同时，白内障分类算法可以进行AI辅助标注，当标注人员标注白内障相关数据集时，可以生成先验标签信息，辅助标注人员标注，从而提高标注效率，减少标注时间和成本。", "feature": "白内障分类算法采用如ConvNextBase等基线模型作为特征提取器，并通过白内障分类数据集进行模型训练。算法模型将基于白内障特性进行建模优化，以进一步提高模型性能。\n白内障分类算法推断阶段只需要输入眼底图像即可获得该眼底图像对应患者是否存在白内障以及白内障的严重程度。", "sceneShort": "辅助白内障数据集标注、辅助白内障筛查诊断", "protoType": "图像分类", "protoInput": "裂隙灯检查图像、患者病历信息", "protoOutput": "白内障类型与严重程度分类", "protoScene": "辅助医生进行白内障分型", "protoFeature": "分析晶状体混浊影像特征并完成白内障分型", "groupNote": null, "id": 5},
+  {"no": "111", "l5": "眼底结构分割算法", "name": "眼底血管分割算法", "code": "ALGO-VS-012", "disease": "眼底血管相关疾病", "version": "v2.2", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像中血管区域的位置信息。", "scene": "眼底血管分割算法可用于提取血管位置信息，辅助血管位置标注和辅助相关疾病诊断。", "feature": "眼底血管分割算法采用DRIVE数据集和STARE数据集等公开数据集作为初始数据集，利用如UNet等模型作为基本网络框架，对UNet模型进行针对性改进，以提高模型对血管的分割性能。\n训练阶段输入的图像首先进行切分，即一张图等分成4个部分，同时对应标签也会进行相应切分，通过切分数据提高数据的利用效率，缓解小样本数据带来的过拟合问题。然后通过改进的UNet模型进行训练并计算损失，并通过反向传播算法更新模型参数。\n推断阶段输入眼底图像便可获取眼底图像的血管位置信息。", "sceneShort": "辅助血管位置标注、辅助相关疾病诊断", "protoType": "病灶分割", "protoInput": "彩色眼底图像", "protoOutput": "眼底血管像素级分割结果", "protoScene": "辅助医生观察血管结构", "protoFeature": "提取眼底血管区域并输出像素级分割结果", "groupNote": null, "id": 6},
+  {"no": "112", "l5": "眼底结构分割算法", "name": "视杯视盘分割算法", "code": "ALGO-CD-013", "disease": "青光眼", "version": "v1.5", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像中视杯视盘区域的位置信息。", "scene": "视杯视盘分割算法可用于提取视杯视盘位置信息，辅助视杯视盘位置标注和辅助相关疾病诊断。", "feature": "视杯视盘分割算法采用如REFUGE数据集和ORIGA数据集等作为初始数据集进行模型训练，利用如DeepLabV3Plus等模型作为基本结构。后续将对网络模型进行针对性改进，以提高模型对于视杯视盘的分割性能。\n视杯视盘分割算法采用二阶段分割策略，即首先利用视盘数据进行模型训练，待获取性能优异的视盘分割模型后，利用它对眼底图像进行分割，获取视盘区域并进行裁剪，最后利用裁剪区域进行视杯模型训练。\n推断阶段输入眼底图像便可获取视杯视盘位置信息。", "sceneShort": "辅助视杯视盘位置标注、辅助相关疾病诊断", "protoType": "病灶分割", "protoInput": "彩色眼底图像", "protoOutput": "视杯与视盘区域分割结果", "protoScene": "辅助医生进行视盘结构分析", "protoFeature": "定位并分割视杯、视盘区域，辅助计算结构特征", "groupNote": null, "id": 7},
+  {"no": "113", "l5": "眼底结构分割算法", "name": "黄斑中心凹定位算法", "code": "ALGO-FP-014", "disease": "黄斑相关疾病", "version": "v1.1", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像中黄斑中心凹的位置信息。", "scene": "生命科学领域中的眼科的很多疾病都是与黄斑区域相关的，黄斑区域的病变往往会对人眼视力带来严重的影响。因此，目前很多眼科研究都将重心放在黄斑区域上。\n通过黄斑中心凹定位算法，可以迅速获取黄斑区域的位置，减少医生仔细观察眼底图像所导致的对眼睛的影响，进一步提高医生的工作效率。同时，该算法也可以应用于AI辅助标注上，提高标注人员定位黄斑区域的效率，减少标注时间和成本。", "feature": "黄斑中心凹定位算法采用双阶段策略。首先利用目前公开的如PALM数据集和REFUGE数据集等进行坐标回归训练，通过模型回归获取黄斑中心凹的位置。但是由于已有数据都是存在黄斑区域的，若出现一些图像没有黄斑区域，会严重影响模型的性能。因此增加一个新的模型，对定位的黄斑区域进行二分类，以区分黄斑中心的定位是否准确。\n黄斑中心凹定位算法训练阶段将利用目前已有的如PALM数据集和REFUGE数据集进行双阶段训练，特别的，第二阶段的训练需要人为构造伪数据，即裁剪黄斑区域和非黄斑区域，并给予相应的标签信息。\n输入一张眼底图像后即可获取眼底图像中黄斑区域的中心坐标和以黄斑区域为中心的512x512大小区域的图像是否是黄斑区域。只有该区域是黄斑区域时，黄斑中心凹坐标才是可信的。", "sceneShort": "辅助黄斑区域定位标注、辅助相关疾病诊断", "protoType": "定位检测", "protoInput": "OCT图像、眼底图像", "protoOutput": "黄斑中心凹位置坐标", "protoScene": "辅助医生进行黄斑区域定位", "protoFeature": "定位OCT或眼底图像中的黄斑中心凹位置", "groupNote": null, "id": 8},
+  {"no": "114", "l5": "眼病/慢病病灶分割算法", "name": "病理性近视病灶分割算法", "code": "ALGO-PM-015", "disease": "病理性近视", "version": "v0.9", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像中病理性近视病灶区域的位置信息。", "scene": "病理性近视病灶分割算法可用于提取相关病灶位置信息，辅助病理性近视病灶位置标注和辅助相关疾病诊断。", "feature": "病理性近视病灶分割主要是针对视网膜萎缩和脱离等病灶的分割。视网膜的萎缩和脱离在形态上比较相近，同时病灶与背景之间的区分度较小，相应公开数据集的数据量较少，从而导致模型的分割效果较差且容易出现假阳性。\n病理性近视病灶分割算法采用如PALM数据集作为初始数据集，利用如UNet等模型作为基本网络框架。后续将对UNet模型进行针对性改进，提高数据利用效率，提高模型分割性能并缓解假阳性。\n以萎缩病灶分割为例，在训练阶段会同时利用有病灶的图像和无病灶的图像，从而提高数据利用效率，缓解假阳性。\n推断阶段输入眼底图像便可获取相关病灶的位置信息。", "sceneShort": "辅助病理性近视病灶位置标注、辅助相关疾病诊断", "protoType": "病灶分割", "protoInput": "彩色眼底图像、OCT图像", "protoOutput": "病理性近视病灶分割结果", "protoScene": "辅助医生进行病灶范围评估", "protoFeature": "识别并分割病理性近视相关病灶区域", "groupNote": null, "id": 9},
+  {"no": "115", "l5": "眼病/慢病病灶分割算法", "name": "糖尿病视网膜病变病灶分割算法", "code": "ALGO-DR-016", "disease": "糖尿病视网膜病变", "version": "v1.8", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像中糖尿病视网膜病变病灶区域的位置信息。", "scene": "糖尿病视网膜病变病灶分割算法可用于提取相关病灶位置信息，辅助糖尿病视网膜病变病灶位置标注和辅助相关疾病诊断。", "feature": "糖尿病视网膜病变病灶主要包含了软渗出、硬渗出和出血点，病灶具有形状多样、分布不固定和前背景区分度较小等问题。因此开发的糖尿病视网膜病变病灶分割算法需要解决以上难题，同时可以用于辅助标注和辅助诊断等方面。\n糖尿病视网膜病变病灶分割算法采用如公开数据集DDR作为初始数据集，并使用如UNext等模型作为基本网络结构，将对UNext模型进行针对性改进，提高模型对于小数据集的利用效率，并解决病灶形状多样、分布不固定且前背景区分度较小等难题。\n以硬渗出病灶分割为例，在训练时候对原始图像进行四等分切分，从而提高数据利用效率和放大观察区域，然后通过改进的UNext模型进行分割，计算损失和更新模型参数。\n推断阶段输入眼底图像便可获取病灶位置信息。", "sceneShort": "辅助糖网病灶位置标注、辅助相关疾病诊断", "protoType": "病灶分割", "protoInput": "彩色眼底图像", "protoOutput": "出血、渗出等病灶分割结果", "protoScene": "辅助医生进行DR病灶评估", "protoFeature": "识别并分割出血、渗出等糖网病灶", "groupNote": null, "id": 10},
+  {"no": "116", "l5": "眼病/慢病病灶分割算法", "name": "罕见病病灶分割算法", "code": "ALGO-RD-017", "disease": "罕见病", "version": "v0.6", "status": "已登记", "isNew": false, "input": "眼底图像。", "output": "眼底图像中罕见病病灶区域的位置信息。", "scene": "罕见病病灶分割算法可用于提取相关病灶位置信息，辅助罕见病病灶位置标注和辅助相关疾病诊断。", "feature": "在眼病/慢病相关疾病诊断中，存在部分疾病比较罕见，如肿瘤和色素变性。这类疾病发生的概率较小，因此相关数据量也较少，这就导致标注罕见病相关病灶的难度较大，同时基层医生容易忽略罕见病，导致患者得不到及时的治疗。开发罕见病病灶分割算法可以通过生成相关病灶区域从而提高标注人员的标注效率，同时可以帮助基层医生发现相关病灶，从而进行更准确的诊断。\n罕见病病灶分割算法将基于深度学习技术，采用例如DeepLabV3Plus等模型作为基本网络框架，同时针对罕见病相关数据集较小的特点对模型进行改进，提高模型的数据利用效率，并能对前后背景进行有效区分，最终提高罕见病病灶分割算法的性能。", "sceneShort": "辅助罕见病病灶位置标注、辅助相关疾病诊断", "protoType": "病灶分割", "protoInput": "眼底图像、OCT图像和病历信息", "protoOutput": "罕见病相关病灶分割结果", "protoScene": "辅助医生进行病灶定位", "protoFeature": "识别并分割罕见病相关影像病灶区域", "groupNote": null, "id": 11},
+  {"no": "117", "l5": "眼病/慢病病灶分割算法", "name": "OCT图像病灶分割算法", "code": "ALGO-OCT-018", "disease": "黄斑水肿", "version": "v2.0", "status": "已登记", "isNew": false, "input": "OCT图像。", "output": "OCT图像中相关病灶区域的位置信息。", "scene": "OCT图像病灶分割算法可用于提取相关病灶位置信息，辅助相关病灶位置标注和辅助相关疾病诊断。", "feature": "在眼病/慢病相关疾病诊断中，有部分病灶无法从眼底图像中观察到，此时会通过观察OCT图像中存在的某些病灶，从而对患者进行诊断。因此OCT图像是一种很宝贵的数据，对OCT图像进行标注也是一类常见的任务。但是一个患者的OCT图像往往有128张或者256张，导致OCT图像的标注成本较大。开发OCT图像病灶分割算法可以提高标注人员的标注效率，同时也可以帮助医生快速获取OCT图像中的病灶，辅助诊断。\nOCT图像病灶分割算法将基于深度学习技术，采用如UNet等模型作为基本网络框架，同时利用目前流行的Transformer作为模型的编码器和解码器，并针对OCT图像独有的特性进行上下文建模，从而提高OCT图像病灶分割算法的性能。", "sceneShort": "辅助OCT病灶位置标注、辅助相关疾病诊断", "protoType": "病灶分割", "protoInput": "OCT图像", "protoOutput": "OCT图像病灶区域分割结果", "protoScene": "辅助医生评估病灶范围", "protoFeature": "识别并分割OCT图像中的病灶区域", "groupNote": null, "id": 12},
+  {"no": "118", "l5": "眼病/慢病疾病治疗效果预测算法", "name": "黄斑水肿药物疗效预测算法", "code": "ALGO-ME-001", "disease": "黄斑水肿", "version": "v1.0", "status": "已登记", "isNew": false, "input": "患者目前的眼底图像、OCT图像和相关病历信息。", "output": "患者注射多轮抗VEGF药物后的黄斑水肿情况。", "scene": "黄斑水肿药物疗效预测算法可以用于辅助医生进行治疗药物筛选。", "feature": "由于黄斑水肿患者进行治疗时选择VEGF治疗药物的种类较多，如雷珠单抗、阿柏西普、康柏西普和地塞米松四，同时同个药物需要多轮使用后才能观察到患者的恢复情况，这就导致医生无法精确判断使用何种药物和注射几轮药物。通过黄斑水肿药物疗效预测算法可以快速获取患者使用不同药物和多轮注射后的黄斑水肿治疗效果，从而帮助医生筛选所需治疗药物，准确治疗。\n黄斑水肿药物疗效预测算法将基于大数据和深度学习技术，利用患者的眼底图像、OCT图像和相关病历信息等进行建模，通过多源数据进行自适应融合，最终获得不同患者利用不同药物和使用不同轮次药物后的黄斑水肿治疗效果。", "sceneShort": "辅助医生进行治疗药物筛选", "protoType": "多模态疗效预测", "protoInput": "患者目前的眼底图像、OCT图像和相关病历信息", "protoOutput": "患者注射多轮抗VEGF药物后的黄斑水肿情况", "protoScene": "辅助医生进行治疗药物筛选", "protoFeature": "融合眼底图像、OCT图像和病历信息，预测不同药物及注射轮次下的治疗效果", "groupNote": null, "id": 13},
+  {"no": "119", "l5": "眼病/慢病疾病治疗效果预测算法", "name": "葡萄膜黑色素瘤敷贴疗效预测算法", "code": "ALGO-UM-019", "disease": "葡萄膜黑色素瘤", "version": "v0.8", "status": "已登记", "isNew": false, "input": "患者目前的临床信息和影像学信息。", "output": "患者敷贴治疗的效果。", "scene": "葡萄膜黑色素瘤敷贴疗效预测算法可以辅助医生快速预测患者的治疗效果，从而帮助医生进行更准确治疗。", "feature": "葡萄膜黑色素瘤敷贴疗效预测算法将基于大数据和深度学习技术，利用患者的临床信息和影像学信息进行图文建模，同时提高模型对于小数据集的利用效率，从而提高模型的预测效果。", "sceneShort": "辅助医生快速预测敷贴治疗效果", "protoType": "多模态疗效预测", "protoInput": "眼底图像、OCT图像和相关病历信息", "protoOutput": "敷贴治疗后的病灶变化及疗效情况", "protoScene": "辅助医生进行敷贴治疗方案评估", "protoFeature": "结合多源数据预测敷贴治疗后的病灶变化及疗效情况", "groupNote": null, "id": 14},
+  {"no": "120", "l5": "图像质量评价算法", "name": "OCT图像质量评价算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "OCT图像。", "output": "OCT图像的质量分数。", "scene": "OCT图像质量评价算法可用于眼科数据标注时候的OCT图像质量把控，使得标注后的数据集具有更高的质量。", "feature": "OCT图像质量评价算法是一种基于深度学习的通过数据训练后能够对给定的任意一张OCT图像进行自动的图像质量评价的算法。该算法训练数据的主要来源为生物医学（眼病/慢病）数据库中自建的OCT图像质量评价数据集。训练数据遵循数据库制定的OCT图像质量评价标准。\nOCT图像质量评价算法区别于上述眼底图像质量评价算法，需有针对性的考虑OCT图像的特殊性，结合OCT图像特定的图像质量评价标准，重点关注OCT图像中的噪点和模糊等退化类型。OCT图像质量评价算法将用于自动的OCT图像质量评价，开发出针对OCT图像特殊的高性能，强泛化能力的算法，促进OCT图像质量评价的自动化标准化。", "sceneShort": "辅助OCT图像标注质控、提升数据集质量", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": null, "id": 15},
+  {"no": "120", "l5": "图像质量评价算法", "name": "眼底图像质量评价算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "眼底图像。", "output": "眼底图像的质量分数。", "scene": "眼底图像质量评价算法可用于眼科数据标注时候的眼底图像质量把控，使得标注后的数据集具有更高的质量。", "feature": "眼底图像质量评价算法是一种基于深度学习的通过数据训练后能够对给定的任意一张眼底图像进行自动的图像质量评价的算法。该算法训练数据的主要来源为生物医学（眼病/慢病）数据库中自建的眼底图像质量评价数据集，辅以公开的外部眼底图像质量评价数据集。训练数据遵循数据库制定的眼底图像质量评价标准。\n算法结构以当前主流深度学习网络框架为基础，融入相关的先验知识，形成全新的高性能的眼底图像质量评价算法。该算法将用于自动的眼底图像质量评价，自动化判断眼底图像质量，解放医生双手，提高眼底图像的质控效率。", "sceneShort": "辅助眼底图像标注质控、提升数据集质量", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": null, "id": 16},
+  {"no": "121", "l5": "图像复原算法", "name": "OCT图像复原算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "眼底图像。", "output": "更高质量的更清晰的OCT图像。", "scene": "OCT图像复原算法可用于提高OCT图像质量，提高数据利用效率，最后应用于数据标注和医生阅图等方面。", "feature": "OCT图像复原是一种基于深度学习的通过数据训练后能够对给定的一张低质量不清晰的OCT图像进行复原和清晰化的算法。该算法训练数据的来源为生物医学（眼病/慢病）数据库中自建的OCT图像复原数据集。\n该算法可实现针对OCT图像不同退化的复原，可实现去模糊、去伪影以及去噪等功能。该算法的性能将实现现有最优。通过OCT图像复原算法，可以实现低质量OCT图像数据的再利用，有利于提高生物医学数据的利用效率，增加生物医学（眼病/慢病）数据库的数据量。OCT图像复原算法同OCT照相机进行结合，可大大提高临床OCT拍摄的质量，提高医院就诊效率。", "sceneShort": "提升OCT图像质量，服务数据标注与医生阅图", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": null, "id": 17},
+  {"no": "121", "l5": "图像复原算法", "name": "眼底图像复原算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "眼底图像。", "output": "更高质量的更清晰的眼底图像。", "scene": "眼底图像复原算法可用于提高眼底图像质量，提高数据利用效率，最后应用于数据标注和医生阅图等方面。", "feature": "眼底图像复原是一种基于深度学习的通过数据训练后能够对给定的一张低质量不清晰的眼底图像进行复原和清晰化的算法。该算法训练数据的来源为生物医学（眼病/慢病）数据库中自建的眼底图像复原数据集。\n该算法可实现针对眼底图像不同退化的复原，可实现去虚焦模糊、去伪影、去周边雾化、过曝复原以及暗光增强等功能。该算法的性能将实现现有最优。通过眼底图像复原算法，可以实现低质量眼底图像数据的再利用，有利于提高生物医学数据的利用效率，增加生物医学（眼病/慢病）数据库的数据量。", "sceneShort": "提升眼底图像质量，服务数据标注与医生阅图", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": null, "id": 18},
+  {"no": "122", "l5": "基于多模态病历的临床决策支撑算法", "name": "医嘱质控算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "医嘱质控的输入信息为多模态病历图。", "output": "关于治疗方案、用药用量的风险评估结果。", "scene": "医嘱质控可以快速发现和预防医疗事故的发生，从而保障患者的安全和健康。", "feature": "基于收集的带诊断结果和治疗方式的大量真实临床病例数据，以及疾病、药物知识图谱，构建算法聚焦关注疾病、药物的禁忌以及病人的主体信息，自动化关联和匹配疾病、药物和病人的情况，从而对潜在风险进行预警。", "sceneShort": "发现并预防医疗事故、保障患者安全", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "使用多模态知识图框架对基于多模态病历的临床决策支撑进行了高级概述。\n在这个研究当中，通过一套系统架构设计来满足从医学病历信息到多模态知识图谱为基础的专家系统，并且在此基础上提供应用满足不同用户角色的需求。上图显示了眼科多模态知识图框架的架构，该框架由以下六个组件组成：\nData：眼科临床数据从医院信息系统的电子病历中提取。每个患者的病历都包含眼科诊断所需的医学图像，包括OCT和眼底图像。临床数据包括部分历史数据和手写病历的手工整理。\nProcessing:每位患者的病历对其中患者的背景信息进行清晰和结构化整理。通过公开的医学影像数据集搭建不同的诊断模型，从而对医学影像进行基于AI的诊断并且生成结果向量。\nKnowledgeGraphInformationFusion:通过特定的方法对结构化的患者信息和医学影像在不同疾病的诊断模型的结果进行融合并且创建以患者病历作为核心的知识图谱。通过这样的方法，将患者病历中的关键信息和基于可插拔的人工智能模块得到的诊断结果向量进行对齐。而这里的人工智能模块是可以迭代更新的。\nAnalysisModels:这个患者的病历信息和医学影像的人工智能分析结果将被抽象为异构网络中的节点和边缘。使用一系列方法，包括metapath2vec、自我监督的患者相似性图学习、聚类分析，来构建整体分析框架。通过该框架，可以构建一系列临床决策支撑的算法模型。\nApplications:通过患者病历信息和医学影像的诊断\\分析结果向量，在自监督框架下构建多模态的医学表示模型，在此基础上可以构建不同的应用。首先，通过自监督学习，实现了不同以患者病历作为核心节点的病历可视化功能。其次，一个新的患者病历的输入，在没有给出诊断结果的时候，该系统就能够在模型空间中根据患者的背景信息和医学影像的AI诊断结果给出与其相似度最大的病历。随着患者信息的丰富，还可以实现辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成。\nUsers:这套架构的初始目标是面向不同的用户提供医学专家系统服务。对于医生来说，提供了一种基于AI的更便捷的病历查询和辅助诊断系统。而对于研究人员，可以在这套系统中发现不同疾病之间的潜在关系，也能够发现同一种疾病中不同患者类型的具体关系。", "id": 19},
+  {"no": "122", "l5": "基于多模态病历的临床决策支撑算法", "name": "多模态病历信息编码算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "多模态病历信息，包括除了医学影像，还会涉及检验检查报告、病历记录、病患对话等数值、文本信息。", "output": "多模态病历知识图谱的向量表示。", "scene": "多模态病历信息编码是相似病例推荐、辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成的底座，它使计算机可以感知医学影像、检验检查报告、病历记录、病患对话等所有医生能获取的信息，从而构建更准确和便捷和可解释的患者病历大数据管理范式。对多模态遍历信息编码的预训练，能够有效提高下游若干个辅助决策支撑算法的性能。", "feature": "绝大多数知识图谱和医疗相关的科研，都是基于病、症、药、靶点，而没有真实的患者信息，更没有相关医学影像；即便是一些有医学影像的场景，大多数工作也仅停留在图像分类、图像分割等任务，缺乏对病人基本信息、主诉症状、身体病史、检验检查等数据的关联和推理。然而，医生在临床诊断时，除了医学影像，还会涉及检验检查报告、病历记录、病患对话等数值、文本信息。此时，运用多模态知识图谱的方法可以让深度学习模型感知到所有医生能获取的信息，从而构建更准确、便捷和可解释的患者病历大数据管理范式。\n多模态病历知识图谱的向量表示方法，在医疗领域有重大的科研和应用价值，能够有效推动精准医疗、队列研究、医学管理、手术用药研究、疾病分型等多个领域的科研探索。\n（1）多模态病历格式\n病例知识图谱与传统的知识图谱差异很大。传统知识图谱大多数是知识/概念及它们间联系的描述，而病例知识图谱并不针对于泛的知识/概念，而是针对具体的事实。\n病历图中包括复用节点和独立节点，复用节点保存的是共性信息（如：全身病史、眼病史），而独立节点则是专属于某个病人的信息（如：某病人的全身病史，里面会包含此病人全身病史的时长、等级等专属信息）。\n每一个病人是独立节点，都会有专属于ta的左右眼，每只眼睛有其专有的病史、主诉、检查、诊断等信息。这些信息均是独立的节点，而大多数此类节点，实际仅关联1-2次。\n其中一部分节点是由深度学习图像处理模型对医学影像进行分类得到，并附上其相关的概率。\n（2）病历节点编码\n在图中，从节点A通过边游走到节点B，被称为路径。metapath2vec通过设计图的元路径(或者说路径游走规则)，进而采样出海量路径，并利用采样的路径挖掘节点与节点的联系，最终以向量的方式表示出来。\n在路径采样上，metapath相比于随机的路径游走，会考虑实体节点的类型，并形成明确的实体类型路径schema（即依靠此去定义每一次游走时的下个实体类型）。\n在向量计算上，metapath2vec采用了word2vec里的skip-gram对路径进行训练，从而形成节点向量。\n1）采样逻辑\n设计了病例图谱的路径序列采样逻辑，表示从左至右不同节点类型间的随机游走。每次将形成一段路径序列，其中，头、尾路径的节点类型一致的，使得一次行走中可以重复多次执行此采样逻辑。\n路径采样逻辑图中，节点位置的上下、连接线的有无\\实虚将影响节点采样的不同实现方式，归纳为以下四种：\n->途径此类型的节点，并作记录\n->途径此类型的节点，仅15%的概率记录\n->15%的概率途径此类型的节点，并作记录\n->回退到上一层节点，仅15%的概率记录\n2）采样伪代码\n循环num_walk（默认100，用以指定每个病历被主要遍历的次数）次；\n遍历所有的病历主节点；\n循环num_deep（默认5，用以指定每个病历的游走深度）次；\n从病历主节点出发，游走性别、年龄、全身病史，每次游走后会回退到病历主节点；\n从病历主节点，游走到眼睛节点；\n从眼睛节点出发，游走到眼部疾病史、主诉症状、医学影像分类结果、检验检查等眼部关联节点，每次游走后会回退到眼睛节点；（注，游走到的每个眼部关联节点，会进一步游走到更细粒度的、共享的节点，随后回退到眼部关联节点，再回退到眼睛节点；后续流程亦遵循此规则）\n从眼睛节点出发，游走到细分类诊断结果、眼部异常项、粗分类诊断结果这三类诊断结果节点之一；\n从诊断结果节点出发，游走到下一个病历主节点（极大概率是其他病历；后续流程亦遵循此规则）；\n从病历主节点出发，游走到眼睛节点；\n从眼睛节点出发，游走到眼部疾病史，随后回退到眼睛节点，再继而回退到病人节点；\n从病人节点出发，游走到全身病史，随后回退到病人节点，再继而进入眼睛节点；\n主诉症状、医学影像分类结果、检验检查等眼部关联节点，每次游走后会回退到眼睛节点；\n从眼睛节点出发，游走到细分类诊断结果、眼部异常项、粗分类诊断结果这三类诊断结果节点之一，再回退到眼睛节点；\n从眼睛节点出发，回退到病人节点；\n从病人节点出从病历主节点出发，游走到性别、年龄，游走后会进入到下一个病历主节点；\n采样完成一条路径，随机丢弃其中10%的节点后，形成一条最终路径。\n以上内容遵循上一节里提到的四种实现方式。\n（3）病例图神经网络编码\n搭建了基于metapath2vec、CVmodels、BERT、GAT的多模态图神经网络模型。其中，CVmodels则是运用一系列已训练好的医学影像模型对病人的医学影像打标签并记作病例图节点，metapath2vec会提前进行训练以获取复用节点和节点类型的向量表。此时，一系列图像处理模型CVmodels对医学影像的预测结果已经转变为节点形式进入到模型中。\n1）输入层\n每个病历图所包含的节点id列表、所有节点的信息。其中，针对节点信息，每个节点会包含节点类型（如：年龄段、眼睛、全身病史、主诉、症状）、文本（如：全身病史节点里的五年糖尿病、眼病史里的做过眼部外科手术）、数值（如：检验检查节点的眼压、矫正视力、年龄，针对CVmodels的预测分类结果，还会存在一个分类概率）。\n2）节点编码层\n对每个节点的信息进行编码、多模态融合，从而形成节点表示。\n->文本模态。运用macbert-base(一种12层transformer编码器结构的预训练语言模型，每一层如下图所示)对节点的文本信息进行编码，并取第一个token的768维向量作为节点的文本向量表征；\n->数值模态。运用3层全连接层，每层全连接层后接sigmoid激活函数，将数值信息转化为768维的数值向量表征；\n->节点类型模态（图像处理的分类结果信息也作为一类节点类型，输入并被模型所感知）。利用metapath2vec得到的768维向量，作为节点类型的向量表征，并乘以图像处理的分类概率（如果非图像处理分类结果，则乘以1，即保持不变）。\n得到这三类模态的向量表征后，通过注意力机制进行多模态信息融合。注意力机制即通过全连接层，将每一类模态映射到1维向量，通过softmax函数，分配权重（合起来为1，如：文本40%，数值15%，节点类型45%；一种权衡各类信息重要性并将其融合的方法），并将三类模态的权重分别乘以其向量表征所得到的结果，加在一起，得到最终每个节点的向量表征，形成节点向量表征table。\n3）图编码层\n利用病历图所包含的节点id列表读取节点向量表征table，从而将每个病历图内部节点向量化。随后利用GAT(一种3层transformer编码器结构的预训练语言模型)，对每一个病历图独立进行编码，并取第一个token作为该病历图的整体向量表征。\n总而言之，模型实际运行中，利用了BERT编码节点的属性文本信息，并通过注意力机制融合复用节点/节点类型向量、节点数值特征向量最终形成节点的多模态语义向量表征table，病例图的各节点将依此节点向量表征table进行向量化，并传入到GAT模型中编码形成最终病例图的向量表示。", "sceneShort": "相似病例推荐、辅助诊断等下游算法的底座", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "使用多模态知识图框架对基于多模态病历的临床决策支撑进行了高级概述。\n在这个研究当中，通过一套系统架构设计来满足从医学病历信息到多模态知识图谱为基础的专家系统，并且在此基础上提供应用满足不同用户角色的需求。上图显示了眼科多模态知识图框架的架构，该框架由以下六个组件组成：\nData：眼科临床数据从医院信息系统的电子病历中提取。每个患者的病历都包含眼科诊断所需的医学图像，包括OCT和眼底图像。临床数据包括部分历史数据和手写病历的手工整理。\nProcessing:每位患者的病历对其中患者的背景信息进行清晰和结构化整理。通过公开的医学影像数据集搭建不同的诊断模型，从而对医学影像进行基于AI的诊断并且生成结果向量。\nKnowledgeGraphInformationFusion:通过特定的方法对结构化的患者信息和医学影像在不同疾病的诊断模型的结果进行融合并且创建以患者病历作为核心的知识图谱。通过这样的方法，将患者病历中的关键信息和基于可插拔的人工智能模块得到的诊断结果向量进行对齐。而这里的人工智能模块是可以迭代更新的。\nAnalysisModels:这个患者的病历信息和医学影像的人工智能分析结果将被抽象为异构网络中的节点和边缘。使用一系列方法，包括metapath2vec、自我监督的患者相似性图学习、聚类分析，来构建整体分析框架。通过该框架，可以构建一系列临床决策支撑的算法模型。\nApplications:通过患者病历信息和医学影像的诊断\\分析结果向量，在自监督框架下构建多模态的医学表示模型，在此基础上可以构建不同的应用。首先，通过自监督学习，实现了不同以患者病历作为核心节点的病历可视化功能。其次，一个新的患者病历的输入，在没有给出诊断结果的时候，该系统就能够在模型空间中根据患者的背景信息和医学影像的AI诊断结果给出与其相似度最大的病历。随着患者信息的丰富，还可以实现辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成。\nUsers:这套架构的初始目标是面向不同的用户提供医学专家系统服务。对于医生来说，提供了一种基于AI的更便捷的病历查询和辅助诊断系统。而对于研究人员，可以在这套系统中发现不同疾病之间的潜在关系，也能够发现同一种疾病中不同患者类型的具体关系。", "id": 20},
+  {"no": "122", "l5": "基于多模态病历的临床决策支撑算法", "name": "报告自动化生成算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "报告自动化生成的输入信息为多模态病历图。", "output": "病人整体情况的文字报告。", "scene": "基于多模态病历知识图谱的报告自动化生成，可以提供一种新的电子病历管理范式，自动化、快速地完成患者报告的撰写。", "feature": "基于大量真实临床病例数据，以及医疗相关的知识图谱，结合专家意见设置对齐、分析的逻辑，利用统计方法挖掘报告模板，自动将多模态电子病历转化为文本报告。", "sceneShort": "自动化生成患者整体情况文字报告", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "使用多模态知识图框架对基于多模态病历的临床决策支撑进行了高级概述。\n在这个研究当中，通过一套系统架构设计来满足从医学病历信息到多模态知识图谱为基础的专家系统，并且在此基础上提供应用满足不同用户角色的需求。上图显示了眼科多模态知识图框架的架构，该框架由以下六个组件组成：\nData：眼科临床数据从医院信息系统的电子病历中提取。每个患者的病历都包含眼科诊断所需的医学图像，包括OCT和眼底图像。临床数据包括部分历史数据和手写病历的手工整理。\nProcessing:每位患者的病历对其中患者的背景信息进行清晰和结构化整理。通过公开的医学影像数据集搭建不同的诊断模型，从而对医学影像进行基于AI的诊断并且生成结果向量。\nKnowledgeGraphInformationFusion:通过特定的方法对结构化的患者信息和医学影像在不同疾病的诊断模型的结果进行融合并且创建以患者病历作为核心的知识图谱。通过这样的方法，将患者病历中的关键信息和基于可插拔的人工智能模块得到的诊断结果向量进行对齐。而这里的人工智能模块是可以迭代更新的。\nAnalysisModels:这个患者的病历信息和医学影像的人工智能分析结果将被抽象为异构网络中的节点和边缘。使用一系列方法，包括metapath2vec、自我监督的患者相似性图学习、聚类分析，来构建整体分析框架。通过该框架，可以构建一系列临床决策支撑的算法模型。\nApplications:通过患者病历信息和医学影像的诊断\\分析结果向量，在自监督框架下构建多模态的医学表示模型，在此基础上可以构建不同的应用。首先，通过自监督学习，实现了不同以患者病历作为核心节点的病历可视化功能。其次，一个新的患者病历的输入，在没有给出诊断结果的时候，该系统就能够在模型空间中根据患者的背景信息和医学影像的AI诊断结果给出与其相似度最大的病历。随着患者信息的丰富，还可以实现辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成。\nUsers:这套架构的初始目标是面向不同的用户提供医学专家系统服务。对于医生来说，提供了一种基于AI的更便捷的病历查询和辅助诊断系统。而对于研究人员，可以在这套系统中发现不同疾病之间的潜在关系，也能够发现同一种疾病中不同患者类型的具体关系。", "id": 21},
+  {"no": "122", "l5": "基于多模态病历的临床决策支撑算法", "name": "治疗方案推荐算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "相似病例推荐的输入信息为多模态病历图。", "output": "推荐的治疗方案。", "scene": "治疗方案推荐可以快速提供医生一种具有高置信度的治疗方案，辅助医生临床决策，提高医院看病效率。", "feature": "基于收集的带诊断结果和治疗方式的大量真实临床病例数据，构建病历图治疗方案数据集，训练多模态图神经网络模型，对图谱中所有的病例进行向量化，并以此和治疗方案进行关联。新的病例图输入到模型后，即可自动通过模型实现治疗方案的推荐。", "sceneShort": "推荐高置信度治疗方案、辅助临床决策", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "使用多模态知识图框架对基于多模态病历的临床决策支撑进行了高级概述。\n在这个研究当中，通过一套系统架构设计来满足从医学病历信息到多模态知识图谱为基础的专家系统，并且在此基础上提供应用满足不同用户角色的需求。上图显示了眼科多模态知识图框架的架构，该框架由以下六个组件组成：\nData：眼科临床数据从医院信息系统的电子病历中提取。每个患者的病历都包含眼科诊断所需的医学图像，包括OCT和眼底图像。临床数据包括部分历史数据和手写病历的手工整理。\nProcessing:每位患者的病历对其中患者的背景信息进行清晰和结构化整理。通过公开的医学影像数据集搭建不同的诊断模型，从而对医学影像进行基于AI的诊断并且生成结果向量。\nKnowledgeGraphInformationFusion:通过特定的方法对结构化的患者信息和医学影像在不同疾病的诊断模型的结果进行融合并且创建以患者病历作为核心的知识图谱。通过这样的方法，将患者病历中的关键信息和基于可插拔的人工智能模块得到的诊断结果向量进行对齐。而这里的人工智能模块是可以迭代更新的。\nAnalysisModels:这个患者的病历信息和医学影像的人工智能分析结果将被抽象为异构网络中的节点和边缘。使用一系列方法，包括metapath2vec、自我监督的患者相似性图学习、聚类分析，来构建整体分析框架。通过该框架，可以构建一系列临床决策支撑的算法模型。\nApplications:通过患者病历信息和医学影像的诊断\\分析结果向量，在自监督框架下构建多模态的医学表示模型，在此基础上可以构建不同的应用。首先，通过自监督学习，实现了不同以患者病历作为核心节点的病历可视化功能。其次，一个新的患者病历的输入，在没有给出诊断结果的时候，该系统就能够在模型空间中根据患者的背景信息和医学影像的AI诊断结果给出与其相似度最大的病历。随着患者信息的丰富，还可以实现辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成。\nUsers:这套架构的初始目标是面向不同的用户提供医学专家系统服务。对于医生来说，提供了一种基于AI的更便捷的病历查询和辅助诊断系统。而对于研究人员，可以在这套系统中发现不同疾病之间的潜在关系，也能够发现同一种疾病中不同患者类型的具体关系。", "id": 22},
+  {"no": "122", "l5": "基于多模态病历的临床决策支撑算法", "name": "相似病例推荐算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "相似病例推荐的输入信息为多模态病历图。", "output": "具有最高相似度Top10个的其他多模态病历图。", "scene": "相似病例推荐可以使医生快速检索到相似的病人，参考、对比、分析从而获得更多信息，作出更精准的临床决策。另外，相似病例推荐能够将病例映射到向量空间，具备更佳的可视化及数据分析价值。", "feature": "基于收集的大量真实临床病例数据，利用对比学习和弱监督信号，构建病历图相似度数据集，训练多模态图神经网络模型，对图谱中所有的病例构建向量表示，并存储到向量检索引擎milvus，形成病例向量库。新的病例图转化为向量表示后，可通过向量检索引擎milvus搜索到相似病例。\n病历图构建伪代码，遍历所有的病历图：\n（1）正样本构建\n随机删除图内节点。复制当前病历图，普通节点15%的概率丢弃，诊断结果节点50%的概率丢弃，相似度设为0.9。\n随机删除图内的边。复制当前病历图，15%的概率删除边。相似度设为1。\n注：主节点、眼睛节点不会被删除。\n（2）低相关负样本构建\n随机采样至多20个id更大的病历图，与当前病历图构建为pair，并遍历：\n1）跳过诊断结果不清晰，不具备比较性的病历图；\n2）通过病历图pair诊断结果的F1值，设置相似度；\n3）70%的概率丢弃病历图pair里的诊断结果。\n（3）高相关负样本构建\n遍历当前病历图的诊断结果；\n采样至多10个存在一致的诊断结果的病历图，构建病历图pair并遍历；\n1）跳过诊断结果不清晰，不具备比较性的病历图；\n2）通过病历图pair诊断结果的F1值，设置相似度；\n3）70%的概率丢弃病历图pair里的诊断结果。\n注：负样本相似度的计算方法为：\n0.4*（病历A、病历B的细分类诊断结果F1）+1.6*（病历A、病历B的粗分类诊断结果F1）-1.", "sceneShort": "辅助医生检索相似病历、支撑临床决策", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "使用多模态知识图框架对基于多模态病历的临床决策支撑进行了高级概述。\n在这个研究当中，通过一套系统架构设计来满足从医学病历信息到多模态知识图谱为基础的专家系统，并且在此基础上提供应用满足不同用户角色的需求。上图显示了眼科多模态知识图框架的架构，该框架由以下六个组件组成：\nData：眼科临床数据从医院信息系统的电子病历中提取。每个患者的病历都包含眼科诊断所需的医学图像，包括OCT和眼底图像。临床数据包括部分历史数据和手写病历的手工整理。\nProcessing:每位患者的病历对其中患者的背景信息进行清晰和结构化整理。通过公开的医学影像数据集搭建不同的诊断模型，从而对医学影像进行基于AI的诊断并且生成结果向量。\nKnowledgeGraphInformationFusion:通过特定的方法对结构化的患者信息和医学影像在不同疾病的诊断模型的结果进行融合并且创建以患者病历作为核心的知识图谱。通过这样的方法，将患者病历中的关键信息和基于可插拔的人工智能模块得到的诊断结果向量进行对齐。而这里的人工智能模块是可以迭代更新的。\nAnalysisModels:这个患者的病历信息和医学影像的人工智能分析结果将被抽象为异构网络中的节点和边缘。使用一系列方法，包括metapath2vec、自我监督的患者相似性图学习、聚类分析，来构建整体分析框架。通过该框架，可以构建一系列临床决策支撑的算法模型。\nApplications:通过患者病历信息和医学影像的诊断\\分析结果向量，在自监督框架下构建多模态的医学表示模型，在此基础上可以构建不同的应用。首先，通过自监督学习，实现了不同以患者病历作为核心节点的病历可视化功能。其次，一个新的患者病历的输入，在没有给出诊断结果的时候，该系统就能够在模型空间中根据患者的背景信息和医学影像的AI诊断结果给出与其相似度最大的病历。随着患者信息的丰富，还可以实现辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成。\nUsers:这套架构的初始目标是面向不同的用户提供医学专家系统服务。对于医生来说，提供了一种基于AI的更便捷的病历查询和辅助诊断系统。而对于研究人员，可以在这套系统中发现不同疾病之间的潜在关系，也能够发现同一种疾病中不同患者类型的具体关系。", "id": 23},
+  {"no": "122", "l5": "基于多模态病历的临床决策支撑算法", "name": "辅助临床诊断算法", "code": null, "disease": "全病种", "version": null, "status": "已登记", "isNew": true, "input": "相似病例推荐的输入信息为多模态病历图。", "output": "各类眼科疾病的诊断概率。", "scene": "辅助临床诊断可以快速判断患者的患病可能性，从而实现疾病早筛以及辅助医生临床决策。", "feature": "基于收集的带诊断结果的大量真实临床病例数据，构建病历图疾病分类数据集，训练多模态图神经网络模型，对图谱中所有的病例进行疾病诊断。新的病例图输入到模型后，即可自动通过模型实现疾病的预测。", "sceneShort": "疾病早筛、辅助医生临床决策", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "使用多模态知识图框架对基于多模态病历的临床决策支撑进行了高级概述。\n在这个研究当中，通过一套系统架构设计来满足从医学病历信息到多模态知识图谱为基础的专家系统，并且在此基础上提供应用满足不同用户角色的需求。上图显示了眼科多模态知识图框架的架构，该框架由以下六个组件组成：\nData：眼科临床数据从医院信息系统的电子病历中提取。每个患者的病历都包含眼科诊断所需的医学图像，包括OCT和眼底图像。临床数据包括部分历史数据和手写病历的手工整理。\nProcessing:每位患者的病历对其中患者的背景信息进行清晰和结构化整理。通过公开的医学影像数据集搭建不同的诊断模型，从而对医学影像进行基于AI的诊断并且生成结果向量。\nKnowledgeGraphInformationFusion:通过特定的方法对结构化的患者信息和医学影像在不同疾病的诊断模型的结果进行融合并且创建以患者病历作为核心的知识图谱。通过这样的方法，将患者病历中的关键信息和基于可插拔的人工智能模块得到的诊断结果向量进行对齐。而这里的人工智能模块是可以迭代更新的。\nAnalysisModels:这个患者的病历信息和医学影像的人工智能分析结果将被抽象为异构网络中的节点和边缘。使用一系列方法，包括metapath2vec、自我监督的患者相似性图学习、聚类分析，来构建整体分析框架。通过该框架，可以构建一系列临床决策支撑的算法模型。\nApplications:通过患者病历信息和医学影像的诊断\\分析结果向量，在自监督框架下构建多模态的医学表示模型，在此基础上可以构建不同的应用。首先，通过自监督学习，实现了不同以患者病历作为核心节点的病历可视化功能。其次，一个新的患者病历的输入，在没有给出诊断结果的时候，该系统就能够在模型空间中根据患者的背景信息和医学影像的AI诊断结果给出与其相似度最大的病历。随着患者信息的丰富，还可以实现辅助临床诊断、治疗方案推荐、医嘱质控、报告自动化生成。\nUsers:这套架构的初始目标是面向不同的用户提供医学专家系统服务。对于医生来说，提供了一种基于AI的更便捷的病历查询和辅助诊断系统。而对于研究人员，可以在这套系统中发现不同疾病之间的潜在关系，也能够发现同一种疾病中不同患者类型的具体关系。", "id": 24},
+  {"no": "123", "l5": "知识图谱问答算法", "name": "关系链接算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "关系链接的输入信息为用户输入问句、实体及实体所有的关联关系。", "output": "问句对实体的查询关系类型。", "scene": "图谱问答系统中的关系链接，用以推断用户关注的是实体的哪一种关系类型。如：JayChou的妈妈是谁？在这里，用户对人物实体“周杰伦”询问的关系类型为“母亲”。", "feature": "基于知识图谱问答数据集，构建关系、实体和问句的二分类数据，判断用户是否在询问实体的某一种关系。基于该数据集，在预训练语言模型MacBERT上进行微调后形成模型并构建为算法服务，提供输入信息即可获取结果。", "sceneShort": "推断用户对实体关注的查询关系类型", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "基于知识图谱的问答系统，简称为KGQA，允许人们输入问题描述文本，系统自动理解所输入的文本，并直接给出答案或者给出按匹配度排序的多个答案。本项目中，搭建意图识别、指称识别、实体召回、实体链指、关系链接、答案生成六大KGQA算法模块，实现高精度的知识图谱问答系统。", "id": 25},
+  {"no": "123", "l5": "知识图谱问答算法", "name": "实体召回算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "实体召回的输入信息为用户输入问句和指称。", "output": "该问句内的指称所对应的候选实体列表。", "scene": "实体召回能够识别出问句中用户所关注的实体，以便后续进行实体链接和关系推理。如：JayChou的妈妈是谁？在这里指称“JayChou”可能指向人物实体“周杰伦”或歌曲实体“周杰伦”。", "feature": "主要基于锚字典的方式进行召回，即将每个指称可能对应的实体都进行列举。", "sceneShort": "召回指称对应的候选实体列表", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "基于知识图谱的问答系统，简称为KGQA，允许人们输入问题描述文本，系统自动理解所输入的文本，并直接给出答案或者给出按匹配度排序的多个答案。本项目中，搭建意图识别、指称识别、实体召回、实体链指、关系链接、答案生成六大KGQA算法模块，实现高精度的知识图谱问答系统。", "id": 26},
+  {"no": "123", "l5": "知识图谱问答算法", "name": "实体链指算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "实体链指的输入信息为用户输入问句和指称-候选实体列表。", "output": "该问句内的指称所对应的具体的实体。", "scene": "实体链指能够关联出问句中用户所关注的指称和知识图谱中的实体，以便后续进行关系推理。如：JayChou的妈妈是谁？在这里指称“JayChou”从人物实体“周杰伦”或歌曲实体“周杰伦”中，明确链指到了人物实体“周杰伦”。", "feature": "主要基于prompt，利用语言模型在Zeroshot条件下判断哪个实体最可能是用户问句所指向的实体；此外，还会辅以知识图谱的一些规则，进一步优化实体链指的精度，比如，该实体出现的次数、该实体相关知识的丰富程度和可靠性。", "sceneShort": "将指称链指到知识图谱中的具体实体", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "基于知识图谱的问答系统，简称为KGQA，允许人们输入问题描述文本，系统自动理解所输入的文本，并直接给出答案或者给出按匹配度排序的多个答案。本项目中，搭建意图识别、指称识别、实体召回、实体链指、关系链接、答案生成六大KGQA算法模块，实现高精度的知识图谱问答系统。", "id": 27},
+  {"no": "123", "l5": "知识图谱问答算法", "name": "意图识别算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "意图识别的输入信息为用户输入问句。", "output": "该问句是否是以图谱实体为核心的问题。", "scene": "图谱问答系统中的意图识别是一个二分类任务，能够约束用户的闲聊、开放性问题不进入到问答系统，从而避免超出数据、技术能力边界的场景发生，提升用户体验。比如：1，JayChou的歌真好听。这个问句不涉及询问意图，不需要进一步推理答案；2，JayChou的妈妈是谁？这个问题在询问实体“周杰伦”的关系“母亲”，应分类到能进入到图谱问答的问句类型。", "feature": "基于开源的闲聊、开放性问题以及知识图谱问答数据集，构建二分类数据，判断是否属于图谱问答。基于该数据集，在预训练语言模型MacBERT上进行微调后形成模型并构建为算法服务，输入文本即可获取结果。", "sceneShort": "约束非图谱问答进入系统、提升问答体验", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "基于知识图谱的问答系统，简称为KGQA，允许人们输入问题描述文本，系统自动理解所输入的文本，并直接给出答案或者给出按匹配度排序的多个答案。本项目中，搭建意图识别、指称识别、实体召回、实体链指、关系链接、答案生成六大KGQA算法模块，实现高精度的知识图谱问答系统。", "id": 28},
+  {"no": "123", "l5": "知识图谱问答算法", "name": "指称识别算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "指称识别的输入信息为用户输入问句。", "output": "该问句内的指称（即对实体的表述）。", "scene": "指称识别能够识别出问句中用户所关注的指称，以便后续进行实体链接和关系推理。如：JayChou的妈妈是谁？里面提到“周杰伦”的指称JayChou。", "feature": "基于知识图谱和同义词典构建指称词典，利用类似AC自动机的方式抽取出问句中所有的指称。基于开源的知识图谱问答数据集KgClue1.0，构建指称识别数据，逐一判断每个指称是否为用户所关注的主体。基于该数据集，在预训练语言模型MacBERT上进行微调后形成模型并构建为算法服务，输入文本即可获取结果。", "sceneShort": "识别问句中的指称，支撑实体链接与关系推理", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "基于知识图谱的问答系统，简称为KGQA，允许人们输入问题描述文本，系统自动理解所输入的文本，并直接给出答案或者给出按匹配度排序的多个答案。本项目中，搭建意图识别、指称识别、实体召回、实体链指、关系链接、答案生成六大KGQA算法模块，实现高精度的知识图谱问答系统。", "id": 29},
+  {"no": "123", "l5": "知识图谱问答算法", "name": "答案生成算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "答案生成的输入信息为询问结果的SPO三元组列表。", "output": "对三元组的自然语言表述。", "scene": "图谱问答系统中的关系链接，用以推断用户关注的是实体的哪一种关系类型。如：JayChou的妈妈是谁？以上步骤识别了用户询问的是“周杰伦”的“母亲”。通过图谱查询，找到结果为“叶惠美”。此时通过答案生成，可以将三元组【周杰伦，母亲，叶惠美】转化为答案，返回给用户：周杰伦的母亲是叶惠美。", "feature": "获取到问结果的SPO三元组列表后，通过规则和模板，进行三元组到自然语言的转化。", "sceneShort": "将查询到的SPO三元组转为自然语言答案", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "基于知识图谱的问答系统，简称为KGQA，允许人们输入问题描述文本，系统自动理解所输入的文本，并直接给出答案或者给出按匹配度排序的多个答案。本项目中，搭建意图识别、指称识别、实体召回、实体链指、关系链接、答案生成六大KGQA算法模块，实现高精度的知识图谱问答系统。", "id": 30},
+  {"no": "124", "l5": "问答库语义匹配问答算法", "name": "句式泛化算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "句式泛化的输入信息为一个独立句子", "output": "若干个与输入句子语义相近、表述不一的其他句子。", "scene": "句式泛化可以帮助业务人员从零到一快速构建问答对，同时也是一种优秀的FAQ问答系统运维工具。", "feature": "基于开源语义匹配数据集（如LCQMC）挖掘语义相近、表述差异较大的句子，并以此训练文本生成模型EVA，通过重复罚数和采样算法形成多样化句式生成功能，最后提供服务。", "sceneShort": "快速构建问答对、支撑FAQ问答库运维", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "传统的搜索引擎不能让用户高效获取准确的关键信息，问答系统（QuestionAnsweringSystem,QAS）是一种让用户以自然语言的形式提问，系统直接返回给用户准确、简洁答案的应用。\n基于常见问答对的问答，是运用最为广泛的智能问答技术。抽象出来是一个信息检索的问题，给定用户的问题，在由{问答：答案}组成的知识库中检索相似的问题，最后将与用户相似问法问题的答案作为结果返回给用户。\n而要搭建FAQ-Bot一种好的方式就是通过Elesticsearch+语义匹配来构建，基于ES可以快速进行“字面”匹配（BM25算法）粗召回若干条和用户问句相关的问答对，而语义匹配模型则可以进一步判断哪一条粗召回问答对和用户问句最相关，它们的语义是否一致，判断是否要获取相应的答案。\n在问答系统中，常见的一个难题是问答库的构建是困难的，需要人工一条条地梳理，因此还开发了句式泛化模型，能够将用户输入的句子泛化出若干条表述不同但语义相近的句子，减轻构建问答库的所需工作量。", "id": 31},
+  {"no": "124", "l5": "问答库语义匹配问答算法", "name": "语义匹配算法", "code": null, "disease": "通用（知识服务）", "version": null, "status": "已登记", "isNew": true, "input": "语义匹配的输入信息为两个独立的句子。", "output": "这两个句子语义相似度得分（从0到1）。", "scene": "FAQ问答系统中的语义匹配，用以推断用户问句和知识库粗召回问句的语义相似度，从而判断知识库问句的答案是否可以作为用户问句的答案。", "feature": "基于开源语义匹配数据集（如LCQMC），在预训练语言模型MacBERT上进行微调后形成模型并构建为算法服务，提供输入信息即可获取结果。", "sceneShort": "判断用户问句与知识库问句的语义相似度", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": "传统的搜索引擎不能让用户高效获取准确的关键信息，问答系统（QuestionAnsweringSystem,QAS）是一种让用户以自然语言的形式提问，系统直接返回给用户准确、简洁答案的应用。\n基于常见问答对的问答，是运用最为广泛的智能问答技术。抽象出来是一个信息检索的问题，给定用户的问题，在由{问答：答案}组成的知识库中检索相似的问题，最后将与用户相似问法问题的答案作为结果返回给用户。\n而要搭建FAQ-Bot一种好的方式就是通过Elesticsearch+语义匹配来构建，基于ES可以快速进行“字面”匹配（BM25算法）粗召回若干条和用户问句相关的问答对，而语义匹配模型则可以进一步判断哪一条粗召回问答对和用户问句最相关，它们的语义是否一致，判断是否要获取相应的答案。\n在问答系统中，常见的一个难题是问答库的构建是困难的，需要人工一条条地梳理，因此还开发了句式泛化模型，能够将用户输入的句子泛化出若干条表述不同但语义相近的句子，减轻构建问答库的所需工作量。", "id": 32},
+  {"no": "125", "l5": "眼病/慢病垂域大模型微调算法", "name": "眼科垂域大模型", "code": null, "disease": "眼科疾病（34种）", "version": null, "status": "已登记", "isNew": true, "input": null, "output": null, "scene": null, "feature": "使用生命医学主题库采集入库的真实临床患者数据，融合多源垂域临床知识和知识图谱，基于开源大模型基座进行垂域大模型的训练，采用多阶段训练策略（监督微调、人类反馈强化学习、指令微调、群体相对策略优化），使其具备病情识别、并发症预测、问诊推理与个性化干预建议功能，支持对34种眼科疾病的风险评估与诊疗辅助，实现从筛查、诊断到随访全流程智能支持。", "sceneShort": "34种眼科疾病风险评估与诊疗辅助", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": null, "id": 33},
+  {"no": "125", "l5": "眼病/慢病垂域大模型微调算法", "name": "糖尿病及其并发症垂域大模型", "code": null, "disease": "糖尿病及其并发症", "version": null, "status": "已登记", "isNew": true, "input": null, "output": null, "scene": null, "feature": "使用生命医学主题库采集入库的真实临床患者数据，融合多源垂域临床知识和知识图谱，基于开源大模型基座进行垂域大模型的训练，采用多阶段训练策略（监督微调、人类反馈强化学习、指令微调、群体相对策略优化），使其具备病情识别、并发症预测、问诊推理与个性化干预建议功能，支持对糖尿病及其并发症视的风险评估与诊疗辅助，实现从筛查、诊断到随访全流程智能支持。", "sceneShort": "糖尿病及并发症风险评估与诊疗辅助", "protoType": null, "protoInput": null, "protoOutput": null, "protoScene": null, "protoFeature": null, "groupNote": null, "id": 34}
+];
+
+const DATASETS = [
+  {"no": "33", "group": "眼病/慢病临床数据库", "name": "基本人口学数据及临床信息"},
+  {"no": "34", "group": "眼病/慢病临床数据库", "name": "常规眼部检查信息"},
+  {"no": "35", "group": "眼病/慢病临床数据库", "name": "全身检查信息"},
+  {"no": "36", "group": "全身慢病数据库", "name": "高血压数据集"},
+  {"no": "37", "group": "全身慢病数据库", "name": "慢性肾病数据集"},
+  {"no": "38", "group": "全身慢病数据库", "name": "糖尿病数据集"},
+  {"no": "39", "group": "全身慢病数据库", "name": "冠心病数据集"},
+  {"no": "40", "group": "全身慢病数据库", "name": "脑出血数据集"},
+  {"no": "41", "group": "全身慢病数据库", "name": "脑卒中数据集"},
+  {"no": "42", "group": "全身慢病数据库", "name": "脑小血管病数据集"},
+  {"no": "43", "group": "眼病/慢病病例数据库", "name": "糖尿病视网膜病变病例数据集"},
+  {"no": "44", "group": "眼病/慢病病例数据库", "name": "青光眼病例数据集"},
+  {"no": "45", "group": "眼病/慢病病例数据库", "name": "老年黄斑变性病例数据集"},
+  {"no": "46", "group": "眼病/慢病病例数据库", "name": "白内障病例数据集"},
+  {"no": "47", "group": "眼病/慢病病例数据库", "name": "病理性近视病例数据集"},
+  {"no": "48", "group": "眼病/慢病病例数据库", "name": "眼病罕见病病例数据集"},
+  {"no": "49", "group": "眼病/慢病医学影像基础数据库", "name": "彩色眼底照相"},
+  {"no": "50", "group": "眼病/慢病医学影像基础数据库", "name": "光学相干断层扫描（OpticalCoherenceTopography,OCT）"},
+  {"no": "51", "group": "眼病/慢病医学影像基础数据库", "name": "眼部生物测量"},
+  {"no": "52", "group": "眼病/慢病医学影像基础数据库", "name": "验光"},
+  {"no": "53", "group": "眼病/慢病医学影像基础数据库", "name": "彩色多普勒超声检测（CDI）"},
+  {"no": "54", "group": "眼病/慢病医学影像基础数据库", "name": "核磁检测（MRI）"},
+  {"no": "55", "group": "视网膜疾病分类数据库", "name": "糖尿病视网膜病变分类数据集"},
+  {"no": "56", "group": "视网膜疾病分类数据库", "name": "青光眼分类数据集"},
+  {"no": "57", "group": "视网膜疾病分类数据库", "name": "老年黄斑变性分类数据集"},
+  {"no": "58", "group": "视网膜疾病分类数据库", "name": "白内障分类数据集"},
+  {"no": "59", "group": "视网膜疾病分类数据库", "name": "病理性近视分类数据集"},
+  {"no": "60", "group": "视网膜疾病分类数据库", "name": "普通近视分类数据集"},
+  {"no": "61", "group": "视网膜疾病分类数据库", "name": "罕见病分类数据集"},
+  {"no": "62", "group": "视网膜疾病病灶分割数据库", "name": "糖尿病视网膜病变病灶分割数据集"},
+  {"no": "63", "group": "视网膜疾病病灶分割数据库", "name": "老年黄斑变性病灶分割数据集"},
+  {"no": "64", "group": "视网膜疾病病灶分割数据库", "name": "病理性近视病灶分割数据集"},
+  {"no": "65", "group": "视网膜疾病病灶分割数据库", "name": "罕见病病灶分割数据集"},
+  {"no": "66", "group": "图像质量评价数据库", "name": "眼底图像质量评价数据集"},
+  {"no": "67", "group": "图像质量评价数据库", "name": "OCT图像质量评价数据集"},
+  {"no": "68", "group": "图像复原数据库", "name": "眼底图像复原数据集"},
+  {"no": "69", "group": "图像复原数据库", "name": "OCT图像复原数据集"},
+  {"no": "70", "group": "眼病/慢病疾病知识图谱", "name": "糖尿病视网膜病变知识图谱"},
+  {"no": "71", "group": "眼病/慢病疾病知识图谱", "name": "青光眼知识图谱"},
+  {"no": "72", "group": "眼病/慢病疾病知识图谱", "name": "老年黄斑变性知识图谱"},
+  {"no": "73", "group": "眼病/慢病疾病知识图谱", "name": "白内障知识图谱"},
+  {"no": "74", "group": "眼病/慢病疾病知识图谱", "name": "病理性近视知识图谱"},
+  {"no": "75", "group": "眼病/慢病疾病知识图谱", "name": "眼病罕见病知识图谱"},
+  {"no": "76", "group": "眼病/慢病疾病知识图谱", "name": "慢病知识图谱"},
+  {"no": "77", "group": "眼病/慢病药物知识图谱", "name": "糖尿病视网膜病变药物知识图谱"},
+  {"no": "78", "group": "眼病/慢病药物知识图谱", "name": "青光眼药物知识图谱"},
+  {"no": "79", "group": "眼病/慢病药物知识图谱", "name": "老年黄斑变性药物知识图谱"},
+  {"no": "80", "group": "眼病/慢病药物知识图谱", "name": "白内障药物知识图谱"},
+  {"no": "81", "group": "眼病/慢病药物知识图谱", "name": "病理性近视药物知识图谱"},
+  {"no": "82", "group": "眼病/慢病药物知识图谱", "name": "眼病罕见病药物知识图谱"},
+  {"no": "83", "group": "眼病/慢病药物知识图谱", "name": "慢病药物知识图谱"},
+  {"no": "84", "group": "眼病/慢病检验检查知识图谱", "name": "糖尿病视网膜病变检验检查知识图谱"},
+  {"no": "85", "group": "眼病/慢病检验检查知识图谱", "name": "青光眼检验检查知识图谱"},
+  {"no": "86", "group": "眼病/慢病检验检查知识图谱", "name": "老年黄斑变性检验检查知识图谱"},
+  {"no": "87", "group": "眼病/慢病检验检查知识图谱", "name": "白内障检验检查知识图谱"},
+  {"no": "88", "group": "眼病/慢病检验检查知识图谱", "name": "病理性近视检验检查知识图谱"},
+  {"no": "89", "group": "眼病/慢病检验检查知识图谱", "name": "眼病罕见病检验检查知识图谱"},
+  {"no": "90", "group": "眼病/慢病检验检查知识图谱", "name": "慢病检验检查知识图谱"},
+  {"no": "91", "group": "眼病/慢病手术操作知识图谱", "name": "糖尿病视网膜病变手术操作知识图谱"},
+  {"no": "92", "group": "眼病/慢病手术操作知识图谱", "name": "青光眼手术操作知识图谱"},
+  {"no": "93", "group": "眼病/慢病手术操作知识图谱", "name": "老年黄斑变性手术操作知识图谱"},
+  {"no": "94", "group": "眼病/慢病手术操作知识图谱", "name": "白内障手术操作知识图谱"},
+  {"no": "95", "group": "眼病/慢病手术操作知识图谱", "name": "病理性近视手术操作知识图谱"},
+  {"no": "96", "group": "眼病/慢病手术操作知识图谱", "name": "眼病罕见病手术操作知识图谱"},
+  {"no": "97", "group": "眼病/慢病手术操作知识图谱", "name": "慢病手术操作知识图谱"},
+  {"no": "98", "group": "眼病/慢病病历知识图谱", "name": "糖尿病视网膜病变病历知识图谱"},
+  {"no": "99", "group": "眼病/慢病病历知识图谱", "name": "青光眼病历知识图谱"},
+  {"no": "100", "group": "眼病/慢病病历知识图谱", "name": "老年黄斑变性病历知识图谱"},
+  {"no": "101", "group": "眼病/慢病病历知识图谱", "name": "白内障病历知识图谱"},
+  {"no": "102", "group": "眼病/慢病病历知识图谱", "name": "病理性近视病历知识图谱"},
+  {"no": "103", "group": "眼病/慢病病历知识图谱", "name": "眼病罕见病病历知识图谱"},
+  {"no": "104", "group": "眼病/慢病病历知识图谱", "name": "慢病病历知识图谱"}
+];
+
+    (() => {
+      "use strict";
+
+      const TYPE_TAG = { "眼病/慢病疾病分类算法":"blue", "眼底结构分割算法":"purple", "眼病/慢病病灶分割算法":"purple",
+                         "眼病/慢病疾病治疗效果预测算法":"purple", "图像质量评价算法":"cyan", "图像复原算法":"cyan",
+                         "基于多模态病历的临床决策支撑算法":"blue", "知识图谱问答算法":"cyan",
+                         "问答库语义匹配问答算法":"cyan", "眼病/慢病垂域大模型微调算法":"purple" };
+      const STATUS_TAG = { "已登记":"green", "研发中":"orange", "待开发":"gray", "维护中":"red" };
+
+      const state = { q:"", type:"", disease:"", status:"", page:1, pageSize:10 };
+      let current = null;
+
+      // 教学视频地址：配置后，详情页「查看教学视频」按钮跳转到该地址。
+      // 若要按算法区分，可在 build/gen_data.py 中为算法记录增加 videoUrl 字段，优先级高于此全局配置。
+      const TUTORIAL_VIDEO_URL = "";
+      // 算法与数据集的绑定关系：仅内存保存，用于原型演示，不落库、刷新即重置
+      const datasetBindings = new Map();
+
+      const $ = (id) => document.getElementById(id);
+      const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
+      const ph = () => '<span class="ph" title="待补充：需算法研发团队或业务负责人确认后补充，不作为已确认定义">待补充</span>';
+
+      const toast = $("toast");
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+      };
+
+      const copyText = async (text, okMessage) => {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const area = document.createElement("textarea");
+            area.value = text;
+            area.setAttribute("readonly", "");
+            area.style.position = "fixed";
+            area.style.top = "-1000px";
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand("copy");
+            area.remove();
+          }
+          showToast(okMessage);
+        } catch (error) {
+          showToast("⚠ 复制失败，请手动选中文本后复制");
+        }
+      };
+
+      /* ================= 弹窗管理（支持叠加） ================= */
+      const overlay = $("modalOverlay");
+      const stack = [];
+      const openModal = (id) => {
+        const el = $(id);
+        if (!el || stack.includes(id)) return;
+        stack.push(id);
+        el.style.zIndex = String(60 + stack.length * 2);
+        el.classList.add("open");
+        overlay.style.zIndex = String(59 + stack.length * 2);
+        overlay.classList.add("open");
+      };
+      const closeModal = (id) => {
+        const index = stack.indexOf(id);
+        if (index >= 0) stack.splice(index, 1);
+        const el = $(id);
+        if (el) el.classList.remove("open");
+        if (!stack.length) {
+          overlay.classList.remove("open");
+        } else {
+          overlay.style.zIndex = String(59 + stack.length * 2);
+        }
+      };
+      const closeTop = () => { if (stack.length) closeModal(stack[stack.length - 1]); };
+
+      overlay.addEventListener("click", closeTop);
+      document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeTop(); });
+      document.querySelectorAll("[data-close]").forEach((button) => {
+        button.addEventListener("click", () => closeModal(button.dataset.close));
+      });
+
+      /* ================= 列表渲染 ================= */
+      const searchIndex = (record) => [record.code, record.name, record.disease, record.input, record.output, record.feature, record.scene, record.sceneShort].filter(Boolean).join(" ").toLowerCase();
+
+      const matchExceptType = (record) => {
+        const q = state.q.trim().toLowerCase();
+        if (q && !searchIndex(record).includes(q)) return false;
+        if (state.disease && record.disease !== state.disease) return false;
+        if (state.status && record.status !== state.status) return false;
+        return true;
+      };
+      const filtered = () => ALGORITHMS.filter((record) => matchExceptType(record) && (!state.type || record.l5 === state.type));
+
+      const renderTabs = () => {
+        const groups = [...new Set(ALGORITHMS.map((record) => record.l5))];
+        const tabs = [{ key:"", label:"全部" }, ...groups.map((group) => ({ key:group, label:group }))];
+        $("typeTabs").innerHTML = tabs.map((tab) => {
+          const count = ALGORITHMS.filter((record) => matchExceptType(record) && (!tab.key || record.l5 === tab.key)).length;
+          return `<button type="button" role="tab" class="type-tab${state.type === tab.key ? " active" : ""}" data-tab="${esc(tab.key)}" aria-selected="${state.type === tab.key}">${esc(tab.label)}<em>${count}</em></button>`;
+        }).join("");
+        $("typeTabs").querySelectorAll(".type-tab").forEach((button) => {
+          button.addEventListener("click", () => { state.type = button.dataset.tab; state.page = 1; render(); });
+        });
+      };
+
+      const renderDiseaseOptions = () => {
+        const select = $("diseaseFilter");
+        const diseases = [...new Set(ALGORITHMS.map((record) => record.disease))];
+        select.innerHTML = '<option value="">全部适用疾病</option>' + diseases.map((disease) => `<option value="${esc(disease)}">${esc(disease)}</option>`).join("");
+        select.value = state.disease;
+      };
+
+      // 状态选项由数据派生；「维护中」为已实现的维护态能力，即使当前无算法处于该状态也保留
+      const renderStatusOptions = () => {
+        const select = $("statusFilter");
+        const values = [...new Set(ALGORITHMS.map((record) => record.status))];
+        if (!values.includes("维护中")) values.push("维护中");
+        select.innerHTML = '<option value="">全部状态</option>' + values.map((value) => `<option value="${esc(value)}">${esc(value)}</option>`).join("");
+        select.value = state.status;
+      };
+
+      // 表格展示优先级：原型原文案优先，需规新增的 20 条回落到需规口径
+      const displayFields = (record) => ({
+        input: record.protoInput || record.input,
+        output: record.protoOutput || record.output,
+        scene: record.protoScene || record.sceneShort,
+        feature: record.protoFeature || record.feature,
+      });
+
+      const rowHtml = (record) => {
+        const shown = displayFields(record);
+        return `
+        <tr>
+          <td class="algorithm-name"><b>${esc(record.name)}</b><small>${record.code ? esc(record.code) : ph()}${record.isNew ? " · 需规新增" : ""}</small></td>
+          <td><span class="tag blue">${esc(record.disease)}</span></td>
+          <td><div class="cell-copy">${shown.input ? esc(shown.input) : ph()}</div></td>
+          <td><div class="cell-copy">${shown.output ? esc(shown.output) : ph()}</div></td>
+          <td><div class="cell-copy clamp" title="${esc(shown.feature)}">${esc(shown.feature)}</div></td>
+          <td><div class="cell-copy short">${esc(shown.scene)}</div></td>
+          <td>${record.version ? esc(record.version) : ph()}</td>
+          <td><span class="tag ${STATUS_TAG[record.status] || "gray"}">${esc(record.status)}</span></td>
+          <td>
+            <div class="row-actions">
+              <button type="button" class="btn-primary row-code-btn" data-id="${record.id}" ${record.status === "维护中" ? 'disabled title="维护中，暂不可下载代码包"' : ""}>代码包下载</button>
+              <button type="button" class="btn row-detail-btn" data-id="${record.id}">查看详情</button>
+            </div>
+          </td>
+        </tr>`;
+      };
+
+      const renderPager = (totalPages, currentPage) => {
+        const pages = [];
+        pages.push(`<button type="button" data-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled" : ""} aria-label="上一页">‹</button>`);
+        for (let page = 1; page <= totalPages; page += 1) {
+          pages.push(`<button type="button" data-page="${page}" class="${page === currentPage ? "active" : ""}" aria-current="${page === currentPage}">${page}</button>`);
+        }
+        pages.push(`<button type="button" data-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled" : ""} aria-label="下一页">›</button>`);
+        $("pageNumbers").innerHTML = pages.join("");
+        $("pageNumbers").querySelectorAll("button[data-page]").forEach((button) => {
+          if (button.disabled) return;
+          button.addEventListener("click", () => { state.page = Number(button.dataset.page); render(); });
+        });
+      };
+
+      const render = () => {
+        renderTabs();
+        if ($("diseaseFilter").options.length <= 1) renderDiseaseOptions();
+
+        const rows = filtered();
+        const total = rows.length;
+        const totalPages = Math.max(1, Math.ceil(total / state.pageSize));
+        if (state.page > totalPages) state.page = totalPages;
+        if (state.page < 1) state.page = 1;
+        const pageRows = rows.slice((state.page - 1) * state.pageSize, state.page * state.pageSize);
+
+        $("algorithmBody").innerHTML = pageRows.map(rowHtml).join("");
+        $("emptyState").classList.toggle("show", total === 0);
+        $("resultCount").textContent = `共 ${total} 条`;
+        $("pagerCount").textContent = String(total);
+        $("jumpInput").value = String(state.page);
+        $("jumpInput").max = String(totalPages);
+
+        renderPager(totalPages, state.page);
+        $("algorithmBody").querySelectorAll(".row-detail-btn").forEach((button) => {
+          button.addEventListener("click", () => openDetail(Number(button.dataset.id)));
+        });
+        $("algorithmBody").querySelectorAll(".row-code-btn").forEach((button) => {
+          button.addEventListener("click", () => { if (selectRecord(Number(button.dataset.id))) openCodeModal(); });
+        });
+      };
+
+      /* ================= 详情弹窗 ================= */
+      const infoItem = (label, value, extraClass) =>
+        `<div class="info-item ${extraClass || ""}"><label>${esc(label)}</label><span>${value ? esc(value) : ph()}</span></div>`;
+
+      const paragraphs = (text) => String(text || "").split(/\n+/).map((line) => line.trim()).filter(Boolean)
+        .map((line) => `<p class="detail-para">${esc(line)}</p>`).join("");
+
+      const cmpText = (text) => String(text || "").split(/\n+/).map((line) => line.trim()).filter(Boolean)
+        .map((line) => `<p class="cmp-p">${esc(line)}</p>`).join("");
+
+      const cmpRow = (label, text) => `
+        <tr>
+          <td class="cmp-label">${esc(label)}</td>
+          <td>${text ? cmpText(text) : ph()}</td>
+        </tr>`;
+
+      // 数据集下拉框：按「眼病/慢病数据库」分组渲染
+      const datasetOptionsHtml = (selected) => {
+        const groups = [...new Set(DATASETS.map((item) => item.group))];
+        const none = `<option value=""${selected ? "" : " selected"}>未绑定（请选择数据集）</option>`;
+        const body = groups.map((group) =>
+          `<optgroup label="${esc(group)}">` +
+          DATASETS.filter((item) => item.group === group)
+            .map((item) => `<option value="${esc(item.name)}"${item.name === selected ? " selected" : ""}>${esc(item.name)}</option>`)
+            .join("") +
+          "</optgroup>").join("");
+        return none + body;
+      };
+
+      const buildApiExample = (record) => [
+        `# ${record.name}（${record.code || "算法编号待补充"}）调用示例`,
+        "# 说明：接口地址、请求方式、鉴权与参数定义均未经确认，以下仅为占位结构，不作为最终接口定义。",
+        "",
+        'curl -X <请求方式待补充> "<接口地址待补充>" \\',
+        '  -H "Content-Type: application/json" \\',
+        '  -H "Authorization: Bearer <鉴权信息待补充>" \\',
+        `  -d '{`,
+        `    "algorithmCode": "${record.code || "<算法编号待补充>"}",`,
+        '    "参数名待补充": "参数值待补充"',
+        "  }'"
+      ].join("\n");
+
+      const selectRecord = (id) => {
+        const record = ALGORITHMS.find((item) => item.id === id);
+        if (!record) return null;
+        current = record;
+        return record;
+      };
+
+      const openDetail = (id) => {
+        const record = selectRecord(id);
+        if (!record) return;
+        const maintenance = record.status === "维护中";
+
+        $("detailModalTitle").textContent = `${record.name} - 算法详情`;
+        $("detailBody").innerHTML = `
+          <div class="detail-eyebrow">${record.code ? "算法编号 " + esc(record.code) : "算法编号待补充"}</div>
+          <h2 class="detail-title">${esc(record.name)}</h2>
+          <div class="detail-meta-row">
+            <span class="tag ${STATUS_TAG[record.status] || "gray"}">${esc(record.status)}</span>
+            <span class="tag gray">版本 ${record.version ? esc(record.version) : "待补充"}</span>
+            <span class="tag blue">${esc(record.disease)}</span>
+            ${record.isNew ? '<span class="tag cyan">需规新增</span>' : ""}
+          </div>
+
+          <div class="m-section">
+            <h4>算法说明</h4>
+            <table class="cmp-table">
+              <thead><tr><th style="width:96px">字段</th><th>内容</th></tr></thead>
+              <tbody>
+                ${cmpRow("算法输入", displayFields(record).input)}
+                ${cmpRow("算法输出", displayFields(record).output)}
+                ${cmpRow("应用场景", displayFields(record).scene)}
+                ${cmpRow("算法功能", displayFields(record).feature)}
+              </tbody>
+            </table>
+          </div>
+          ${record.groupNote ? `<div class="m-section"><h4>功能组背景说明</h4>${paragraphs(record.groupNote)}</div>` : ""}
+
+          <div class="m-section">
+            <h4>基础档案</h4>
+            <div class="info-grid">
+              ${infoItem("算法编号", record.code)}
+              ${infoItem("适用疾病", record.disease)}
+              ${infoItem("当前版本", record.version)}
+              ${infoItem("状态", record.status)}
+              ${infoItem("数据来源", null)}
+              ${infoItem("维护角色", null)}
+              ${infoItem("更新时间", null)}
+            </div>
+          </div>
+
+          <div class="m-section">
+            <h4>数据集绑定</h4>
+            <div class="bind-row">
+              <label for="datasetSelect">绑定数据集</label>
+              <select id="datasetSelect">${datasetOptionsHtml(datasetBindings.get(record.id) || "")}</select>
+              <button type="button" class="btn btn-primary" id="bindBtn">绑定</button>
+              <button type="button" class="btn" id="unbindBtn">解绑</button>
+            </div>
+            <div class="bind-state" id="bindState"></div>
+          </div>
+
+          <div class="m-section">
+            <h4>接口信息</h4>
+            <div class="info-grid" style="margin-top:12px">
+              ${infoItem("接口地址", null)}
+              ${infoItem("请求方式", null)}
+              ${infoItem("数据格式", null)}
+              ${infoItem("鉴权方式", null)}
+              ${infoItem("超时时间", null)}
+              ${infoItem("调用限制", null)}
+            </div>
+          </div>
+
+          <div class="m-section">
+            <h4>代码片段展示<span class="h4-actions"><button type="button" class="btn" id="copyApiBtn">复制代码</button></span></h4>
+            <div class="code-wrap">
+              <div class="code-head"><span>占位结构 · 非最终接口定义</span><span>${esc(record.code || "算法编号待补充")}</span></div>
+              <pre class="code-block" id="apiCode">${esc(buildApiExample(record))}</pre>
+            </div>
+          </div>
+
+          <div class="m-section">
+            <h4>请求参数</h4>
+            <table class="param-table">
+              <thead><tr><th style="width:26%">参数名</th><th style="width:16%">类型</th><th style="width:12%">必填</th><th>说明</th></tr></thead>
+              <tbody><tr><td class="ph-cell" colspan="4">参数定义待补充 —— 需接口清单确认后录入</td></tr></tbody>
+            </table>
+          </div>
+
+          <div class="m-section">
+            <h4>返回参数</h4>
+            <table class="param-table">
+              <thead><tr><th style="width:26%">参数名</th><th style="width:18%">类型</th><th>说明</th></tr></thead>
+              <tbody><tr><td class="ph-cell" colspan="3">返回字段待补充 —— 需接口清单确认后录入</td></tr></tbody>
+            </table>
+          </div>
+
+          ${maintenance ? `<div class="alert warn" style="margin-top:18px"><span>⚠</span><div><b>当前算法服务处于维护窗口。</b>代码包下载入口已临时关闭，仍可查看算法详情，维护窗口时间待补充。</div></div>` : ""}
+        `;
+
+        $("codeBtn").disabled = maintenance;
+        $("codeBtn").title = maintenance ? "维护中，暂不可下载代码包" : "";
+
+        const copyButton = $("copyApiBtn");
+        if (copyButton) copyButton.addEventListener("click", () => copyText(buildApiExample(record), "✓ 已复制代码片段"));
+
+        // 数据集绑定交互
+        const refreshBindState = () => {
+          const bound = datasetBindings.get(record.id) || "";
+          const select = $("datasetSelect");
+          $("bindState").innerHTML = `当前绑定：<b class="${bound ? "bound" : ""}">${bound ? esc(bound) : "未绑定"}</b>`;
+          $("bindBtn").disabled = !select.value || select.value === bound;
+          $("unbindBtn").disabled = !bound;
+        };
+        $("datasetSelect").addEventListener("change", refreshBindState);
+        $("bindBtn").addEventListener("click", () => {
+          const value = $("datasetSelect").value;
+          if (!value) return;
+          datasetBindings.set(record.id, value);
+          refreshBindState();
+          showToast(`✓ 已绑定「${value}」（原型演示，不落库）`);
+        });
+        $("unbindBtn").addEventListener("click", () => {
+          datasetBindings.delete(record.id);
+          $("datasetSelect").value = "";
+          refreshBindState();
+          showToast("✓ 已解绑数据集（原型演示，不落库）");
+        });
+        refreshBindState();
+
+        openModal("detailModal");
+      };
+
+      /* ================= 教学视频 ================= */
+      const openVideoModal = () => {
+        if (!current) return;
+        $("videoModalTitle").textContent = `${current.name} - 教学视频`;
+        $("videoBody").innerHTML = `
+          <div class="video-frame">
+            <div>
+              <div class="play">▶</div>
+              <p>教学视频播放区（占位）</p>
+              <p>视频地址待补充，配置后点击「查看教学视频」将直接跳转播放</p>
+            </div>
+          </div>
+          <div class="info-grid" style="margin-top:16px">
+            ${infoItem("算法名称", current.name)}
+            ${infoItem("视频地址", null, "full")}
+            ${infoItem("视频时长", null)}
+            ${infoItem("更新时间", null)}
+          </div>
+          <div class="alert info" style="margin-top:14px"><span>ⓘ</span><div>教学视频资料尚未提供，此处仅演示入口与播放区的交互位置。配置 <b>TUTORIAL_VIDEO_URL</b>（或按算法配置 videoUrl）后，按钮行为将由本面板改为新标签跳转播放。</div></div>
+        `;
+        openModal("videoModal");
+      };
+
+      $("videoBtn").addEventListener("click", () => {
+        if (!current) return;
+        const url = current.videoUrl || TUTORIAL_VIDEO_URL;
+        if (!url) {
+          openVideoModal();
+          return;
+        }
+        window.open(url, "_blank", "noopener");
+      });
+
+      /* ================= 代码包下载 ================= */
+      const openCodeModal = () => {
+        if (!current) return;
+        $("codeBody").innerHTML = `
+          <div class="file-card">
+            <div class="file-icon">⬇</div>
+            <div>
+              <h4>${esc(current.name)}</h4>
+              <p>${ph()} · 代码包文件</p>
+            </div>
+          </div>
+          <div class="info-grid" style="margin-top:16px">
+            ${infoItem("版本", current.version)}
+            ${infoItem("文件大小", null)}
+            ${infoItem("更新时间", null)}
+            ${infoItem("校验值", null)}
+            ${infoItem("依赖环境", null)}
+          </div>
+          <div class="alert info" style="margin-top:16px"><span>ⓘ</span><div>代码包文件与校验信息尚未纳入台账资料，当前下载入口仅用于原型演示，不会产生真实下载。</div></div>
+          <div class="alert warn" style="margin-top:12px"><span>⚠</span><div>确认下载当前算法代码包？</div></div>
+        `;
+        openModal("codeModal");
+      };
+      $("codeBtn").addEventListener("click", openCodeModal);
+
+      $("codeConfirmBtn").addEventListener("click", () => {
+        closeModal("codeModal");
+        showToast("✓ 已提交代码包下载申请（原型演示，未产生真实下载）");
+      });
+
+      /* ================= 算法测试（前端演示，不发起真实请求） ================= */
+      // 各算法类型的演示返回形态。字段结构待接口清单确认，此处仅用于说明结果位置。
+      const TEST_OUTPUT_SCHEMA = {
+        "图像分类": { label: "演示分类标签", confidence: 0.93 },
+        "病灶分割": { maskCount: 2, lesionAreaRatio: 0.128, maskUrl: "demo://mask/demo-mask-001.png" },
+        "定位检测": { points: [{ name: "演示定位点", x: 512, y: 384 }] },
+        "多模态疗效预测": { predictions: [{ regimen: "演示方案A", rounds: 3, expected: "演示预测结果" }] },
+        "__default": { raw: "演示返回，字段结构待接口清单确认" },
+      };
+
+      const testState = { fileName: "", fileSize: 0, fileType: "", previewUrl: "", hasFile: false, running: false, failMode: false, result: null };
+
+      const resetTestState = () => {
+        if (testState.previewUrl) URL.revokeObjectURL(testState.previewUrl);
+        testState.fileName = ""; testState.fileSize = 0; testState.fileType = "";
+        testState.previewUrl = ""; testState.hasFile = false; testState.running = false;
+        testState.failMode = false; testState.result = null;
+      };
+
+      const formatBytes = (bytes) => {
+        if (!bytes) return "0 B";
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+      };
+
+      const testInputHtml = () => {
+        if (!testState.hasFile) {
+          return `<div class="upload-zone" id="testUploadZone" role="button" tabindex="0">
+              <div><strong>点击选择图片</strong></div>
+              <div class="upload-hint">图片仅在本机浏览器内读取与预览，不会上传服务器、不落库</div>
+            </div>`;
+        }
+        return `<div class="upload-preview">
+            <img src="${testState.previewUrl}" alt="待测图片预览" />
+            <div style="min-width:0">
+              <h4>${esc(testState.fileName)}</h4>
+              <p>${esc(testState.fileType || "类型未知")} · ${formatBytes(testState.fileSize)}</p>
+              <div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="btn" id="testReselectBtn">重新选择</button>
+                <button type="button" class="btn" id="testRemoveBtn">移除图片</button>
+              </div>
+            </div>
+          </div>`;
+      };
+
+      const syncTestRunBtn = () => {
+        const button = $("testRunBtn");
+        if (!button || testState.running) return;
+        button.textContent = "开始测试";
+        button.disabled = !testState.hasFile;
+      };
+
+      const renderTestResult = () => {
+        const area = $("testResultArea");
+        if (!area) return;
+        if (testState.running) {
+          area.innerHTML = `<div class="test-empty">正在调用算法服务…（演示：本地模拟返回，未发起真实请求）</div>`;
+          return;
+        }
+        if (!testState.result) {
+          area.innerHTML = `<div class="test-empty">尚未执行测试。选择图片后点击「开始测试」。</div>`;
+          return;
+        }
+        const { status, latencyMs, text } = testState.result;
+        const statusTag = status === "success"
+          ? '<span class="tag green">调用成功</span>'
+          : '<span class="tag red">调用失败</span>';
+        area.innerHTML = `
+          <div class="test-status">${statusTag}<span class="test-meta">耗时 ${latencyMs} ms · ${esc(testState.fileName)}</span></div>
+          <div class="code-wrap">
+            <div class="code-head"><span>演示返回 · 非真实推理结果</span><span>${esc(current && current.code ? current.code : "算法编号待补充")}</span></div>
+            <pre class="code-block" id="testJson">${esc(text)}</pre>
+          </div>
+          <div class="alert warn" style="margin-top:12px"><span>⚠</span><div>以上 JSON 为<b>演示数据</b>（结果内 <b>"demo": true</b>），仅用于说明"按台账「算法输出」返回"的结构与字段位置，<b>不是真实推理结果，也不能据此判定算法可用性</b>。接口地址／请求方式／鉴权与真实返回结构待接口清单确认后接入。</div></div>`;
+        $("testResultActions").innerHTML = '<button type="button" class="btn" id="testCopyBtn">复制结果</button>';
+        $("testCopyBtn").addEventListener("click", () => copyText(text, "✓ 已复制测试结果 JSON"));
+      };
+
+      const renderTestInput = () => {
+        const area = $("testInputArea");
+        if (!area) return;
+        area.innerHTML = testInputHtml();
+        $("testResultActions").innerHTML = "";
+        const zone = $("testUploadZone");
+        if (zone) {
+          const pick = () => $("testFileInput").click();
+          zone.addEventListener("click", pick);
+          zone.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") { event.preventDefault(); pick(); }
+          });
+        }
+        const reselect = $("testReselectBtn");
+        if (reselect) reselect.addEventListener("click", () => $("testFileInput").click());
+        const remove = $("testRemoveBtn");
+        if (remove) remove.addEventListener("click", () => {
+          if (testState.previewUrl) URL.revokeObjectURL(testState.previewUrl);
+          testState.hasFile = false; testState.fileName = ""; testState.fileSize = 0;
+          testState.fileType = ""; testState.previewUrl = ""; testState.result = null;
+          renderTestInput();
+          renderTestResult();
+        });
+        syncTestRunBtn();
+      };
+
+      const onTestFileChange = (event) => {
+        const file = event.target.files && event.target.files[0];
+        event.target.value = "";
+        if (!file) return;
+        if (!/^image\//.test(file.type)) {
+          showToast("⚠ 请选择图片文件");
+          return;
+        }
+        if (testState.previewUrl) URL.revokeObjectURL(testState.previewUrl);
+        testState.fileName = file.name;
+        testState.fileSize = file.size;
+        testState.fileType = file.type;
+        testState.previewUrl = URL.createObjectURL(file);
+        testState.hasFile = true;
+        testState.result = null;
+        renderTestInput();
+        renderTestResult();
+      };
+
+      const buildTestResult = (record) => {
+        const demoData = TEST_OUTPUT_SCHEMA[record.protoType] || TEST_OUTPUT_SCHEMA.__default;
+        const latencyMs = testState.failMode
+          ? 1500 + Math.floor(Math.random() * 500)
+          : 320 + Math.floor(Math.random() * 420);
+        const base = {
+          demo: true,
+          requestId: `demo-${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`,
+          algorithmCode: record.code || null,
+          algorithmName: record.name,
+          version: record.version || null,
+          input: { fileName: testState.fileName, mimeType: testState.fileType || null, sizeBytes: testState.fileSize },
+          interface: { endpoint: null, method: null, auth: null, note: "接口清单待补充，联调后替换为真实调用" },
+        };
+        if (testState.failMode) {
+          return { ...base, status: "failed", latencyMs, output: null,
+                   error: { code: "SERVICE_UNAVAILABLE", message: "演示异常：算法服务不可用（非真实返回）" } };
+        }
+        return { ...base, status: "success", latencyMs,
+                 output: { description: displayFields(record).output || null, data: demoData } };
+      };
+
+      const runAlgorithmTest = () => {
+        if (!current || !testState.hasFile || testState.running) return;
+        testState.running = true;
+        testState.result = null;
+        const button = $("testRunBtn");
+        button.disabled = true;
+        button.innerHTML = '<span class="test-spinner"></span>测试中…';
+        $("testResultActions").innerHTML = "";
+        renderTestResult();
+        setTimeout(() => {
+          const payload = buildTestResult(current);
+          testState.running = false;
+          testState.result = { status: payload.status, latencyMs: payload.latencyMs, text: JSON.stringify(payload, null, 2) };
+          syncTestRunBtn();
+          renderTestResult();
+        }, testState.failMode ? 1400 : 800);
+      };
+
+      const openTestModal = () => {
+        if (!current) return;
+        resetTestState();
+        $("testModalTitle").textContent = `${current.name} - 算法测试`;
+        $("testBody").innerHTML = `
+          <div class="m-section" style="border-top:0;margin-top:0;padding-top:0">
+            <h4>测试对象</h4>
+            <div class="info-grid">
+              ${infoItem("算法名称", current.name)}
+              ${infoItem("算法编号", current.code)}
+              ${infoItem("当前版本", current.version)}
+              ${infoItem("接口地址", null)}
+              ${infoItem("请求方式", null)}
+              ${infoItem("鉴权方式", null)}
+            </div>
+            <div class="alert info" style="margin-top:14px"><span>ⓘ</span><div>算法的接口清单尚未确认，本次测试为<b>前端交互演示</b>：点击「开始测试」<b>不会发起真实网络请求</b>，返回内容为按台账「算法输出」形态生成的演示 JSON。</div></div>
+          </div>
+
+          <div class="m-section">
+            <h4>测试输入</h4>
+            <div id="testInputArea"></div>
+            <input type="file" id="testFileInput" accept="image/*" hidden />
+          </div>
+
+          <div class="m-section">
+            <h4>测试结果<span class="h4-actions" id="testResultActions"></span></h4>
+            <div class="test-status" style="margin-bottom:12px">
+              <label class="test-fail-toggle"><input type="checkbox" id="testFailToggle" /> 演示接口异常返回</label>
+            </div>
+            <div id="testResultArea"></div>
+          </div>
+        `;
+        renderTestInput();
+        renderTestResult();
+        $("testFileInput").addEventListener("change", onTestFileChange);
+        $("testFailToggle").addEventListener("change", (event) => { testState.failMode = event.target.checked; });
+        openModal("testModal");
+      };
+
+      $("testBtn").addEventListener("click", openTestModal);
+      $("testRunBtn").addEventListener("click", runAlgorithmTest);
+
+      /* ================= 筛选交互 ================= */
+      const input = $("searchInput");
+      const applyFilters = (notify) => {
+        state.q = input.value;
+        state.disease = $("diseaseFilter").value;
+        state.status = $("statusFilter").value;
+        state.page = 1;
+        render();
+        if (notify) showToast(filtered().length ? "✓ 已完成筛选" : "⚠ 暂无符合条件的算法记录");
+      };
+
+      $("searchButton").addEventListener("click", () => applyFilters(true));
+      input.addEventListener("keydown", (event) => { if (event.key === "Enter") applyFilters(true); });
+      $("diseaseFilter").addEventListener("change", () => applyFilters(false));
+      $("statusFilter").addEventListener("change", () => applyFilters(false));
+      $("resetButton").addEventListener("click", () => {
+        input.value = "";
+        state.q = ""; state.disease = ""; state.status = ""; state.type = "";
+        $("diseaseFilter").value = "";
+        $("statusFilter").value = "";
+        state.page = 1;
+        render();
+        showToast("✓ 查询条件已重置");
+      });
+
+      $("pageSize").addEventListener("change", (event) => {
+        state.pageSize = Number(event.target.value) || 10;
+        state.page = 1;
+        render();
+      });
+
+      $("jumpInput").addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        const totalPages = Math.max(1, Math.ceil(filtered().length / state.pageSize));
+        const target = Math.min(Math.max(1, Number(event.target.value) || 1), totalPages);
+        state.page = target;
+        render();
+      });
+
+      /* ================= 初始化 ================= */
+      renderDiseaseOptions();
+      renderStatusOptions();
+      render();
+    })();
+  </script>
+</body>
+</html>

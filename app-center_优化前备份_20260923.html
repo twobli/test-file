@@ -13,20 +13,16 @@
       --soft: #7c8ba1;
       --line: #e4ebf5;
       --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      --radius: 10px;
+      --radius: 8px;
       --font: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-      --topbar-h: 58px;
-      --tabs-h: 50px;
-      --sticky-h: 108px; /* topbar + tabs，滚动定位补偿 */
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
     body { font-size: 14px; line-height: 1.6; }
-    a { color: inherit; }
 
     /* ====== Topbar ====== */
     .portal-topbar {
-      height: var(--topbar-h); display: grid; grid-template-columns: 260px 1fr auto; align-items: center; gap: 18px;
+      height: 58px; display: grid; grid-template-columns: 260px 1fr auto; align-items: center; gap: 18px;
       padding: 0 24px; background: #fff; border-bottom: 1px solid var(--line);
       position: sticky; top: 0; z-index: 100;
     }
@@ -54,83 +50,39 @@
     .btn.small { min-height: 30px; padding: 0 10px; font-size: 12px; border-radius: 8px; }
     .btn:hover { filter: brightness(1.05); }
 
-    /* ====== 模块速览导航（吸顶） ====== */
-    .module-tabs {
-      position: sticky; top: var(--topbar-h); z-index: 90;
-      background: #fff; border-bottom: 1px solid var(--line);
-      box-shadow: 0 2px 8px rgba(15, 42, 88, 0.04);
-    }
-    .module-tabs-inner {
-      max-width: 1320px; margin: 0 auto; padding: 0 24px;
-      height: var(--tabs-h); display: flex; align-items: center; gap: 8px;
-      overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
-    }
-    .module-tabs-inner::-webkit-scrollbar { display: none; }
-    .tab {
-      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px;
-      height: 34px; padding: 0 15px; border-radius: 17px; border: 1px solid transparent;
-      font-size: 13px; font-weight: 700; color: #5d6b82; text-decoration: none;
-      white-space: nowrap; cursor: pointer; transition: .18s ease;
-    }
-    .tab i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 8px; }
-    .tab:hover { background: #f2f6fd; color: #165dff; }
-    .tab.active { background: #eef4ff; border-color: #cfe0ff; color: #165dff; }
-
     /* ====== Page Shell ====== */
-    .page-shell { max-width: 1320px; margin: 0 auto; padding: 28px 24px 0; }
+    .page-shell { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
 
     /* Page Title */
     .page-title {
       font-size: 20px; font-weight: 800; color: #000000;
-      margin: 0 0 20px; line-height: 1.3;
-      display: flex; align-items: baseline; gap: 10px;
+      margin: 0 0 32px; line-height: 1.3;
     }
-    .page-title .count { font-size: 12px; font-weight: 400; color: var(--soft); }
 
     /* Module Section */
-    .module-section { margin-bottom: 34px; scroll-margin-top: var(--sticky-h); }
+    .module-section { margin-bottom: 48px; }
     .module-header {
       display: flex; align-items: center; gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
     .module-icon {
-      width: 32px; height: 32px; border-radius: 9px;
-      display: flex; align-items: center; justify-content: center; flex: 0 0 32px;
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
     }
-    .module-icon svg { width: 18px; height: 18px; }
+    .module-icon svg { width: 20px; height: 20px; }
     .module-title {
-      font-size: 15.5px; font-weight: 800; color: #333333;
+      font-size: 16px; font-weight: 800; color: #333333;
       line-height: 1.3;
-    }
-    .module-header .module-count {
-      margin-left: 2px; font-size: 12px; font-weight: 400; color: var(--soft);
     }
 
     /* Card Grid */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      gap: 24px 16px;
     }
 
-    /* 同排模块：把卡片数少的模块并排放，避免每个模块都单独占一整行造成纵向留白。
-       每个子模块用 --span 控制占几列，取值 = 该模块的卡片数（1 / 2 / 3）。 */
-    .module-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 34px 18px;
-      margin-bottom: 34px;
-    }
-    .module-row > .module-section {
-      margin-bottom: 0; grid-column: span var(--span, 1);
-      display: flex; flex-direction: column;   /* 让同排卡片高度对齐 */
-    }
-    .module-row > .module-section > .card-grid {
-      grid-template-columns: repeat(var(--span, 1), minmax(0, 1fr));
-      flex: 1;
-    }
-
-    /* System Card —— 横向紧凑卡：左侧渐变识别条 + 右侧信息 */
+    /* System Card */
     .sys-card {
       background: #ffffff;
       border-radius: var(--radius);
@@ -139,98 +91,72 @@
       text-decoration: none;
       color: inherit;
       display: flex;
-      flex-direction: row;
-      align-items: stretch;
-      min-height: 124px;
-      border: 1px solid rgba(20, 40, 80, 0.05);
+      flex-direction: column;
       cursor: pointer;
       transition: box-shadow .22s ease, transform .22s ease;
       height: 100%;
     }
     .sys-card:hover {
-      box-shadow: 0 8px 24px rgba(15, 42, 88, 0.13);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
       transform: translateY(-2px);
     }
 
-    /* Cover —— 左侧竖向渐变条 */
+    /* Cover */
     .card-cover {
-      width: 78px; flex: 0 0 78px;
-      padding: 0;
+      height: 110px;
+      padding: 16px;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: flex-start;
     }
     .cover-icon-box {
-      width: 38px; height: 38px; border-radius: 11px;
+      width: 34px; height: 34px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(255, 255, 255, 0.22);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.2);
       flex-shrink: 0;
-      transition: transform .24s ease;
     }
-    .cover-icon-box svg { width: 20px; height: 20px; color: #fff; }
-    .sys-card:hover .cover-icon-box { transform: scale(1.07); }
+    .cover-icon-box svg { width: 18px; height: 18px; color: #fff; }
 
     /* Body */
     .card-body {
-      padding: 14px 17px;
-      display: flex; flex-direction: column; flex: 1; min-width: 0;
+      padding: 16px;
+      display: flex; flex-direction: column; flex: 1;
     }
     .card-body h3 {
-      margin: 0 0 5px; font-size: 14px; font-weight: 800; color: #333333;
+      margin: 0 0 6px; font-size: 14px; font-weight: 800; color: #333333;
       line-height: 1.4;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
     .card-body .desc {
-      margin: 0 0 12px; font-size: 12.5px; color: #999999;
-      line-height: 1.65; flex: 1;
+      margin: 0 0 16px; font-size: 12px; color: #999999;
+      line-height: 1.6; flex: 1;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
     }
     .card-foot {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; margin-top: auto;
+      gap: 12px;
     }
     .card-foot .users {
-      font-size: 12px; color: #999999; white-space: nowrap;
-      display: flex; align-items: center; gap: 5px; min-width: 0;
+      font-size: 12px; color: #999999;
+      display: flex; align-items: center; gap: 4px;
     }
-    .card-foot .users svg { width: 14px; height: 14px; flex: 0 0 14px; }
+    .card-foot .users svg { width: 14px; height: 14px; }
     .enter-btn {
-      min-height: 28px; padding: 0 13px; border: 0; border-radius: 8px;
+      min-height: 30px; padding: 0 14px; border: 0; border-radius: 8px;
       font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
       color: #fff;
       background: linear-gradient(90deg, #165dff, #0f9a83);
-      box-shadow: 0 3px 10px rgba(22, 93, 255, 0.18);
+      box-shadow: 0 4px 12px rgba(22, 93, 255, 0.18);
       white-space: nowrap;
       pointer-events: none;
-      transition: filter .18s ease;
+      transition: filter .16s ease;
     }
-    .sys-card:hover .enter-btn { filter: brightness(1.08); }
 
-    /* 空结果 */
-    .empty-state {
-      display: none; text-align: center; padding: 56px 20px; color: var(--soft); font-size: 13px;
-    }
-    .empty-state.show { display: block; }
 
-    /* 返回顶部 */
-    .back-top {
-      position: fixed; right: 26px; bottom: 26px; z-index: 120;
-      width: 40px; height: 40px; border-radius: 50%; border: 0;
-      background: #fff; color: #165dff; font-size: 17px; font-weight: 800;
-      box-shadow: 0 6px 20px rgba(15, 42, 88, 0.16); cursor: pointer;
-      display: grid; place-items: center;
-      opacity: 0; pointer-events: none; transform: translateY(6px);
-      transition: opacity .22s ease, transform .22s ease, box-shadow .22s ease;
-    }
-    .back-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
-    .back-top:hover { box-shadow: 0 8px 24px rgba(15, 42, 88, 0.24); }
 
     /* Footer */
     .footer {
-      text-align: center; padding: 22px 24px; color: var(--soft); font-size: 12px;
-      border-top: 1px solid var(--line); margin-top: 10px;
+      text-align: center; padding: 32px 24px; color: var(--soft); font-size: 12px;
+      border-top: 1px solid var(--line); margin-top: 24px;
     }
 
     /* Toast */
@@ -245,27 +171,13 @@
     }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-    /* ====== 响应式 ====== */
-    @media (min-width: 1500px) {
-      .card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .module-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
     @media (max-width: 1200px) {
       .card-grid, .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .module-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 760px) {
-      .portal-topbar { grid-template-columns: 1fr; height: auto; padding: 14px 16px; gap: 10px; position: static; }
+      .portal-topbar { grid-template-columns: 1fr; height: auto; padding: 14px 16px; gap: 10px; }
       .portal-user { justify-content: flex-start; }
-      .module-tabs { top: 0; }
-      .module-tabs-inner { padding: 0 16px; }
-      .page-shell { padding: 20px 16px 0; }
       .card-grid, .tools-grid { grid-template-columns: 1fr; }
-      .module-row { grid-template-columns: 1fr; gap: 34px; }
-      .module-row > .module-section { grid-column: auto; }
-      .module-row > .module-section > .card-grid { grid-template-columns: 1fr; }
-      .card-cover { width: 68px; flex-basis: 68px; }
-      .back-top { right: 16px; bottom: 16px; }
     }
   </style>
 </head>
@@ -287,103 +199,83 @@
     </div>
   </header>
 
-  <!-- ====== 模块速览导航（吸顶，点击跳转到对应模块） ====== -->
-  <nav class="module-tabs" id="moduleTabs" aria-label="模块导航">
-    <div class="module-tabs-inner" id="moduleTabsInner"></div>
-  </nav>
-
   <!-- ====== 主体内容 ====== -->
   <section class="page-shell">
 
     <!-- 页面标题 -->
-    <h1 class="page-title">系统与应用中心<span class="count" id="totalCount"></span></h1>
+    <h1 class="page-title">系统与应用中心</h1>
 
     <!-- ======== 模块一：生命医学主题应用 ======== -->
-    <div class="module-section" id="mod1">
+    <div class="module-section">
       <div class="module-header">
         <div class="module-icon" style="background:#E8F5E9;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/><path d="M15 2c0 0-1 3-3 8"/></svg>
         </div>
         <span class="module-title">生命医学主题应用</span>
-        <span class="module-count"></span>
       </div>
 
       <div class="card-grid" id="gridModule1"></div>
     </div>
 
     <!-- ======== 模块二：跨领域数据应用 ======== -->
-    <div class="module-section" id="mod2">
+    <div class="module-section">
       <div class="module-header">
         <div class="module-icon" style="background:#E3F2FD;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2"><circle cx="6" cy="8" r="3"/><circle cx="18" cy="8" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8.2 9.8l2 6.2M15.8 9.8l-2 6.2"/></svg>
         </div>
         <span class="module-title">跨领域数据应用</span>
-        <span class="module-count"></span>
       </div>
 
       <div class="card-grid" id="gridModule2"></div>
     </div>
 
     <!-- ======== 模块三：数据工具开发 ======== -->
-    <div class="module-section" id="mod3">
+    <div class="module-section">
       <div class="module-header">
         <div class="module-icon" style="background:#E8F5E9;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-4"/><path d="M9 15l3-3 3 3"/></svg>
         </div>
         <span class="module-title">数据工具开发</span>
-        <span class="module-count"></span>
       </div>
       <div class="card-grid" id="gridModule3"></div>
     </div>
 
     <!-- ======== 模块四：眼病/慢病数据标准体系 ======== -->
-    <div class="module-section" id="mod4">
+    <div class="module-section">
       <div class="module-header">
         <div class="module-icon" style="background:#FFF3E0;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 3l7 3v5c0 4.5-2.9 8.6-7 10-4.1-1.4-7-5.5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/><path d="M8 17h8"/></svg>
         </div>
         <span class="module-title">眼病/慢病数据标准体系</span>
-        <span class="module-count"></span>
       </div>
       <div class="card-grid" id="gridModule4"></div>
     </div>
 
-    <!-- ======== 模块五 + 模块六：各 1 项，并排显示（--span 跟随卡片数调整） ======== -->
-    <div class="module-row">
-
     <!-- ======== 模块五：眼病/慢病数据入库 ======== -->
-    <div class="module-section" id="mod5" style="--span:1">
+    <div class="module-section">
       <div class="module-header">
         <div class="module-icon" style="background:#E3F2FD;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
         </div>
         <span class="module-title">眼病/慢病数据入库</span>
-        <span class="module-count"></span>
       </div>
       <div class="card-grid" id="gridModule5"></div>
     </div>
 
     <!-- ======== 模块六：眼病/慢病数据应用算法 ======== -->
-    <div class="module-section" id="mod6" style="--span:1">
+    <div class="module-section">
       <div class="module-header">
         <div class="module-icon" style="background:#EDE9FE;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></svg>
         </div>
         <span class="module-title">眼病/慢病数据应用算法</span>
-        <span class="module-count"></span>
       </div>
       <div class="card-grid" id="gridModule6"></div>
     </div>
 
-    </div><!-- /module-row -->
-
-    <div class="empty-state" id="searchEmpty">没有找到匹配的系统或工具，换个关键词试试</div>
-
   </section>
 
   <footer class="footer">&copy; 2026 生命医学主题库 版权所有 | 国科信生命医学智能平台</footer>
-
-  <button class="back-top" id="backTop" type="button" title="返回顶部" aria-label="返回顶部">↑</button>
 
   <script>
     /* ====== Toast ====== */
@@ -410,6 +302,14 @@
       localStorage.removeItem('life_med_user');
       toast('已退出登录');
       setTimeout(function() { window.location.href = 'login.html'; }, 500);
+    });
+
+    /* ====== Search ====== */
+    document.getElementById('portalSearch').addEventListener('input', function(e) {
+      var keyword = e.target.value.trim().toLowerCase();
+      document.querySelectorAll('.sys-card, .tool-entry').forEach(function(el) {
+        el.style.display = keyword && !el.textContent.toLowerCase().includes(keyword) ? 'none' : '';
+      });
     });
 
     /* ====== SVG Icons ====== */
@@ -616,113 +516,6 @@
     document.getElementById('gridModule6').innerHTML = module6.map(function(c) {
       return makeSysCard(c.icon, c.title, c.desc, c.link, c.gradient, c.users);
     }).join('');
-
-    /* ====== 模块速览导航：由 DOM 自动生成，模块增减时无需手改 ====== */
-    (function buildTabs() {
-      var wrap = document.getElementById('moduleTabsInner');
-      var secs = document.querySelectorAll('.module-section');
-      var html = '';
-      for (var i = 0; i < secs.length; i++) {
-        var sec = secs[i];
-        var title = sec.querySelector('.module-title').textContent.trim();
-        var dot = sec.querySelector('.module-icon svg').getAttribute('stroke') || '#165dff';
-        var n = sec.querySelectorAll('.sys-card, .tool-entry').length;
-        html += '<a class="tab" data-target="' + sec.id + '" href="#' + sec.id + '">'
-              + '<i style="background:' + dot + '"></i>' + title
-              + '<span style="opacity:.55;font-weight:400">' + n + '</span></a>';
-      }
-      wrap.innerHTML = html;
-    })();
-
-    /* 卡片总数（页面标题右侧） */
-    var allCards = document.querySelectorAll('.sys-card, .tool-entry');
-    document.getElementById('totalCount').textContent = '共 ' + allCards.length + ' 个系统与工具';
-
-    /* 每个模块标题右侧的卡片数 */
-    document.querySelectorAll('.module-section').forEach(function(sec) {
-      var n = sec.querySelectorAll('.sys-card, .tool-entry').length;
-      var badge = sec.querySelector('.module-count');
-      if (badge) badge.textContent = n + ' 项';
-    });
-
-    /* ====== 模块导航：点击平滑跳转 ====== */
-    var activeOverride = null;   /* 点击导航后临时锁定高亮项（同排模块锚点相同，需人工指定） */
-    document.getElementById('moduleTabsInner').addEventListener('click', function(e) {
-      var tab = e.target.closest('.tab');
-      if (!tab) return;
-      e.preventDefault();
-      var sec = document.getElementById(tab.getAttribute('data-target'));
-      if (!sec) return;
-      activeOverride = tab.getAttribute('data-target');
-      var top = sec.getBoundingClientRect().top + window.pageYOffset - 108;
-      window.scrollTo({ top: top < 0 ? 0 : top, behavior: 'smooth' });
-    });
-    ['wheel', 'touchstart', 'keydown'].forEach(function(ev) {
-      window.addEventListener(ev, function() { activeOverride = null; }, { passive: true });
-    });
-
-    /* ====== 滚动时高亮当前模块 + 返回顶部按钮 ====== */
-    var tabsWrap = document.getElementById('moduleTabsInner');
-    var backTop = document.getElementById('backTop');
-    var ticking = false;
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function() {
-        ticking = false;
-        var y = window.pageYOffset + 130;
-        var cur = null;
-        document.querySelectorAll('.module-section').forEach(function(sec) {
-          /* 同排模块 offsetTop 相同，取靠前的那个，避免高亮在两块之间跳 */
-          if (sec.style.display === 'none' || sec.offsetTop > y) return;
-          if (!cur || sec.offsetTop > cur.offsetTop) cur = sec;
-        });
-        tabsWrap.querySelectorAll('.tab').forEach(function(t) {
-          var on = activeOverride
-            ? t.getAttribute('data-target') === activeOverride
-            : (!!cur && t.getAttribute('data-target') === cur.id);
-          t.classList.toggle('active', on);
-        });
-        backTop.classList.toggle('show', window.pageYOffset > 240);
-      });
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    backTop.addEventListener('click', function() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    /* ====== Search（保持原有过滤逻辑，并同步隐藏无结果的模块与导航项） ====== */
-    document.getElementById('portalSearch').addEventListener('input', function(e) {
-      var keyword = e.target.value.trim().toLowerCase();
-      var totalShown = 0;
-      document.querySelectorAll('.module-section').forEach(function(sec) {
-        var shown = 0;
-        sec.querySelectorAll('.sys-card, .tool-entry').forEach(function(el) {
-          var hit = !keyword || el.textContent.toLowerCase().includes(keyword);
-          el.style.display = hit ? '' : 'none';
-          if (hit) shown++;
-        });
-        sec.style.display = (keyword && shown === 0) ? 'none' : '';
-        var tab = tabsWrap.querySelector('.tab[data-target="' + sec.id + '"]');
-        if (tab) tab.style.display = (keyword && shown === 0) ? 'none' : '';
-        totalShown += shown;
-      });
-      /* 同排模块若全部无结果，整行一起收起，避免留下空行高度 */
-      document.querySelectorAll('.module-row').forEach(function(row) {
-        var anyVisible = Array.prototype.some.call(
-          row.querySelectorAll('.module-section'),
-          function(s) { return s.style.display !== 'none'; }
-        );
-        row.style.display = anyVisible ? '' : 'none';
-      });
-      document.getElementById('searchEmpty').classList.toggle('show', !!keyword && totalShown === 0);
-      document.getElementById('totalCount').textContent = keyword
-        ? '筛选出 ' + totalShown + ' 个结果'
-        : '共 ' + allCards.length + ' 个系统与工具';
-      onScroll();
-    });
   </script>
 </body>
 </html>
