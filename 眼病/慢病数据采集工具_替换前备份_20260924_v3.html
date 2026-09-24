@@ -1111,7 +1111,7 @@
 <div class="mask" id="m-caplog"><div class="modal" style="width:780px;max-width:94vw">
   <div class="modal-h"><span>📜 采集日志</span><span class="x" data-c="closeM" data-a="[&quot;m-caplog&quot;]">×</span></div>
   <div class="modal-b">
-    <div class="note">日志只读、不可修改，用于记录系统接口实时传输与各采集环节的关键结果（采集 / 上传 / 提交质控等采集内容），便于数据追溯与故障定位；患者姓名与病历号按最小必要原则脱敏展示。</div>
+    <div class="note">日志只读、不可修改，用于记录系统接口实时传输与各采集环节的关键操作结果，便于数据追溯与故障定位；患者姓名与病历号按最小必要原则脱敏展示。</div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <span style="font-size:13px;color:var(--text2)">时间范围</span>
       <select class="input" id="cl-range" onchange="capLogRange(this)" style="width:110px;padding:7px 8px;font-size:13px" title="日志时间范围"><option value="day">当天</option><option value="d3">近三天</option><option value="d7">近七天</option></select>
@@ -1372,37 +1372,23 @@ function switchArc(k){arcTab=k;renderArc()}
 let clRange='day';
 function capLogRange(el){clRange=el.value;if(document.getElementById('m-caplog').classList.contains('show'))renderCapLog()}
 function openCapLog(){renderCapLog();openM('m-caplog');logOp('查看采集日志','范围：'+({day:'当天',d3:'近三天',d7:'近七天'})[clRange])}
-/* ---------- 采集日志数据源：仅记录采集内容相关动作（不记录切换角色 / 登录 / 查看类操作） ---------- */
-const CAPLOG=[];
-function capLog(patient,file,action,result){
-  CAPLOG.unshift({t:fullTime(),p:patient||'—',f:file||'—',a:action||'采集',res:result||'成功'});
-  while(CAPLOG.length>200)CAPLOG.pop();
-}
-/* 预置示例（接收日志同源风格，患者已按脱敏规则展示） */
-(function(){
-  const pt=function(min){const d=new Date(Date.now()-min*60000),p=function(n){return String(n).padStart(2,'0')};
-    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())};
-  CAPLOG.unshift(
-    {t:pt(2),p:'张**（YZK-**********）',f:'OCT · 序列 3 / 图像 75',a:'C-STORE 接收',res:'成功'},
-    {t:pt(6),p:'李**（YZK-**********）',f:'眼底图像_03_0924.png · 1 张',a:'本地上传',res:'成功'},
-    {t:pt(11),p:'王**（YZK-**********）',f:'YZK-2026-00130_手写病历图片_01_0924.png · 1 张',a:'手动采集',res:'成功'}
-  );
-})();
 function renderCapLog(){
   const days={day:0,d3:2,d7:6}[clRange]||0;
   const d=new Date();d.setDate(d.getDate()-days);
   const lim=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  const rows=CAPLOG.filter(x=>x.t.slice(0,10)>=lim);
+  const rows=auditLog.filter(x=>x.t.slice(0,10)>=lim);
   const body=document.getElementById('caplog-body');
   const cnt=document.getElementById('caplog-count');
   const rangeTxt={day:'当天',d3:'近三天',d7:'近七天'}[clRange]||'当天';
   if(cnt)cnt.textContent='共 '+rows.length+' 条 · '+rangeTxt;
-  if(!rows.length){body.innerHTML='<div style="color:#8aa4c8">所选时间范围内暂无采集记录</div>';return}
+  if(!rows.length){body.innerHTML='<div style="color:#8aa4c8">所选时间范围内暂无采集操作记录</div>';return}
   body.innerHTML=rows.map(function(x){
-    /* 时间取记录中的时刻部分 */
+    /* 时间取记录中的时刻部分（nowStr 格式 MM-DD HH:MM，含秒则带秒） */
     const tm=(x.t.split(' ')[1])||x.t;
     const st=x.res==='成功'?'ok':'er';
-    return '<div>['+esc(tm)+'] <span class="'+st+'">'+esc(x.a)+' '+esc(x.res)+'</span> 患者 '+esc(x.p)+' · '+esc(x.f)+' · 已自动完成患者关联</div>';
+    const who=(x.o&&x.u&&x.o.indexOf(x.u)>=0)?'':' · '+esc(x.u)+'（'+esc(x.r)+'）';
+    return '<div>['+esc(tm)+'] <span class="'+st+'">'+esc(x.a)+' '+esc(x.res)+'</span> '+esc(x.o)+
+      (x.why?' · '+esc(x.why):'')+who+'</div>';
   }).join('');
   applyPrivacy();
 }
@@ -1490,7 +1476,6 @@ function doImport(){
           impChosen=false;
           const dp=document.querySelector('#m-import .drop');
           if(dp){dp.textContent='选择电子病历文件包（系统导出的 Excel / XML / ZIP）';dp.style.color='';dp.style.borderColor=''}
-          capLog('陈秀英 等 328 人','眼科2026Q2电子病历.zip · 328 条','批量导入电子病历');
           logOp('批量导入电子病历','眼科2026Q2电子病历.zip · 328 条','成功（已进入医生质控）');
           toast('导入完成：328 条已进入医生质控','ok')}
       },400);
@@ -1827,7 +1812,6 @@ function upRunQueue(rows){
   let i=0,total=rows.length,okNames=[];
   (function next(){
     if(i>=total){
-      capLog('本地服务器','共 '+total+' 项数据 → 在线服务器','手动上传');
       logOp('手动上传完成','共 '+total+' 项数据已上传至在线服务器','成功');
       paintUpSel();
       toast('手动上传完成：'+total+' 项数据已上传至在线服务器','ok');
@@ -1994,7 +1978,6 @@ function saveManual(){
   addCapRow2('imaging',['<b>'+mcItem+'</b>',name+' · '+no,'<span class="tag t-gray">手动录入 · 设备采集权限受限</span>','2 图',nowStr(),'<span class="tag t-green">已关联</span>'],1,mcItem,name,'医学影像',no);
   closeM('m-manual');mnImgs=0;
   regPatient(name,no);
-  capLog(name+'（'+no+'）',item+' · 2 图','手动录入检查结果');
   logOp('手动录入检查结果',item+' · '+name+' · '+no,'成功（设备采集权限受限，已关联上传本地服务器）');
   toast('已手动录入患者信息并完成关联：'+curPt.label+'（可点击「患者信息关联」查看数据档案）','ok');
 }
@@ -2298,7 +2281,6 @@ function mcUpload(){
       clearInterval(mcUpTimer);mcUpTimer=null;
       if(tt)tt.textContent='上传完成：'+mcFiles.length+' 个文件已保存至本地服务器，可逐张预览';
       if(btn){btn.disabled=false;btn.textContent=mcSaveLabel()}
-      capLog(mcPt.name+'（'+mcPt.no+'）',mcKindLabel()+' · '+mcFiles.length+' 个文件','本地上传');
       logOp('上传本地图片文件',mcFiles.length+' 个文件 · '+mcKindLabel()+' · '+maskName(mcPt.name)+' / '+maskNo(mcPt.no),'成功（已上传至本地服务器）');
       toast('已上传 '+mcFiles.length+' 个文件（'+mcFiles.reduce(function(a,f){return a+f.mb},0).toFixed(1)+' MB），可点击「预览」查看上传结果','ok');
     }
@@ -2625,7 +2607,6 @@ function saveManualCap(){
   document.querySelectorAll('.cur-pt').forEach(el=>el.textContent=curPt.label);
   closeM('m-manualcap');
   regPatient(name,no);
-  capLog(name+'（'+no+'）',type+'（'+c.page+'）· '+n+' 张','手动采集');
   logOp('手动采集',type+'（'+c.page+'）· '+name+' · '+no,
     mcFrom==='record'?'成功（'+n+' 张待人工录入后提交质控）'
       :(mcFrom==='scanner'?'成功（'+n+' 张已写入采集列表，待提交质控）':'成功（'+n+' 张已进入医生质控）'));
@@ -2704,7 +2685,6 @@ function startBatchCap(){
       curPt={name:name,no:no,meta:'',diag:'',label:name+' · '+no};
       document.querySelectorAll('.cur-pt').forEach(el=>el.textContent=curPt.label);
       regPatient(name,no);
-      capLog(name+'（'+no+'）',type+' · '+cnt+' 张（高拍仪连拍，自动命名）','批量采集');
       logOp('批量采集','高拍仪连拍 · '+type+' · '+name+' · '+no,'成功（'+cnt+' 张已写入采集列表，待提交质控）');
       closeM('m-batch');
       toast('批量采集完成：'+name+' · '+cnt+' 张图片（'+type+'），已按规则自动命名并完成患者信息关联与影像索引（状态：待上传）；在采集列表中点击「提交」进入医生质控','ok');
@@ -2752,7 +2732,6 @@ function submitRecord(el){
   }
   const defType=tid==='img-list-body'?'医学影像':(tid==='cap-list-body'?'高拍仪图片':'病历（手写）');
   submitQC(item,patient,tr.dataset.type||defType,true);
-  capLog(patient,item,'提交质控');
   logOp('提交质控',item+' · '+patient,'成功（已进入医生质控待办）');
   toast('已提交医生质控：'+item,'ok');
 }
@@ -2779,7 +2758,6 @@ function submitQCbar(){
         td[7].innerHTML='<span class="link" '+DC('openArcFor',[patient,rno,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span>';
         submitQC(item,patient,'病历（手写）',true);n++;
       });
-      capLog('多名患者（批量）','病历数据 × '+n+' 条','提交质控');
       logOp('提交质控',n+' 条病历数据','成功（已进入医生质控待办）');
       toast('已提交医生质控：'+n+' 条病历数据','ok');
     }
