@@ -152,8 +152,6 @@
   .cap-item{border:1px solid var(--border);border-radius:6px;padding:8px}
   .cap-item .nm{font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px}
   .switch{position:relative;width:40px;height:22px;background:#bfbfbf;border-radius:12px;cursor:pointer;transition:.2s;flex-shrink:0}
-.ts-f.on{background:var(--primary)!important;color:#fff!important;border-color:var(--primary)!important}
-
   .switch.on{background:var(--primary)}
   .switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s}
   .switch.on i{left:20px}
@@ -216,6 +214,8 @@
   .whoami b{display:block;font-size:13px;color:#fff;font-weight:600}
   /* 脱敏与留痕（角色可见范围的说明文案不再上屏，权限仍由按钮锁定与越权拦截保证） */
   .msk{letter-spacing:.5px;color:var(--text2)}
+  .reveal-btn{font-size:12px;color:var(--primary);cursor:pointer;border:1px dashed var(--primary);border-radius:4px;padding:2px 9px;background:#fff;font-family:inherit}
+  .reveal-btn:hover{background:var(--primary-light)}
   .lock-note{font-size:12.5px;color:var(--text2);background:#fafafa;border:1px solid var(--border);border-radius:6px;padding:9px 12px;line-height:1.75}
   .log-item{border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;line-height:1.8}
   .log-item .lh{display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap}
@@ -310,6 +310,7 @@
   .qz-fields .r:first-child{border-top:none}
   .qz-fields .k{width:78px;flex-shrink:0;color:var(--text3);white-space:nowrap}
   .qz-fields .v{flex:1;min-width:0;color:var(--text)}
+  .qz-ok{flex-shrink:0;align-self:flex-start;margin-top:1px}
   .qz-meta{font-size:11.5px;color:var(--text3);line-height:1.75;margin-top:8px}
   .qz-emr{border:1px solid var(--border);border-radius:8px;overflow:hidden;max-height:262px;overflow-y:auto}
   .qz-emr .er{display:flex;align-items:center;gap:8px;padding:7px 11px;font-size:12.5px;border-top:1px solid var(--border);cursor:pointer;transition:.12s}
@@ -377,13 +378,13 @@
   <!-- ================= 侧边栏 ================= -->
   <aside class="sidebar" data-page-node-id="jNwopcS3PFFLZZFGBpsNQ6">
     <nav class="nav" id="nav" data-page-node-id="6c0BTLa0vghGf5RZpHTsLs">
-      <div class="group" id="grp-collect" data-page-node-id="alQUZERbsk5KHEm7Mu5sy3">数据采集（采集人员）</div>
+      <div class="group" id="grp-collect" data-page-node-id="alQUZERbsk5KHEm7Mu5sy3">数据采集与上传（采集人员）</div>
       <div class="nav-item active" data-view="v-record" data-page-node-id="AF8NDjcH1oGVXBqhvKSDf2"><span class="ico" data-page-node-id="8yfsxwZtUmyuSVmOaioI0H">📝</span>病历数据采集</div>
       <div class="nav-item" data-view="v-imaging" data-page-node-id="GmgTy2rWvoKAMH2AIzhshF"><span class="ico" data-page-node-id="t2X8SQy1fOIqsTUjd1KZ58">🔬</span>医学影像采集</div>
       <div class="nav-item" data-view="v-scanner" data-page-node-id="Lu1Fvsglfqf2v0HYkuhKU4"><span class="ico" data-page-node-id="vppnk8wbPuV0AzbaAJTEV7">📷</span>高拍仪采集</div>
+      <div class="nav-item" data-view="v-upload" data-page-node-id="ge6D0XAVRtBQaTmTCMQZnq"><span class="ico" data-page-node-id="e1Hb1C3wkHPDuZuQOhdLsY">☁️</span>数据上传</div>
       <div class="group" id="grp-qc" data-page-node-id="ZBp8sS209cEpINzxiEMWaB">质控与留痕（质控医生）</div>
       <div class="nav-item" data-view="v-qc" data-page-node-id="HOO7YHjEib2qBgCK8Ko64N"><span class="ico" data-page-node-id="QEAcM00PbiXA5UuylabqXW">✅</span>医生质控<span class="badge" id="qc-badge" data-page-node-id="froOdhuv8GJkWXHJcIjSYF">4</span></div>
-      <div class="nav-item" data-view="v-upload" data-page-node-id="ge6D0XAVRtBQaTmTCMQZnq"><span class="ico" data-page-node-id="e1Hb1C3wkHPDuZuQOhdLsY">☁️</span>数据上传</div>
       <div class="group" id="grp-dev">设备与接口管理（系统管理员）</div>
       <div class="nav-item" data-view="v-device"><span class="ico">⚙️</span>设备管理</div>
     </nav>
@@ -419,7 +420,7 @@
           <!-- Tab1 本地文件上传 + 人工录入 -->
           <div id="tab-hand" data-page-node-id="BcZWFtShu1vtz4FHyz5N9D">
             <div class="toolbar" data-page-node-id="9wEG8Kokusz0XWYp7oeFUs">
-              <span style="font-size:13px;color:var(--text2)" data-page-node-id="nfz2l9BfdMA1Opbn9q9lDf">当前患者：</span><b class="cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（影像数据）" data-page-node-id="87DgqR6rth7G5QNe1bjH6e">张建国 · YZK-2026-00128</b>
+              <span style="font-size:13px;color:var(--text2)" data-page-node-id="nfz2l9BfdMA1Opbn9q9lDf">当前患者：</span><b class="cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（病历图片 / 影像数据 / 检查结果）" data-page-node-id="87DgqR6rth7G5QNe1bjH6e">张建国 · YZK-2026-00128</b>
               <div style="flex:1" data-page-node-id="lgLAT996aQbYjxiUJUPpEk"></div>
               <button class="btn btn-ghost" data-c="openManualCap" data-a="[&quot;record&quot;]">✋ 手动采集</button>
               <button class="btn btn-primary" data-c="doOcr" data-page-node-id="ZuO6vrPKC3kZfFVVrxEydC">🔍 文字识别</button>
@@ -481,11 +482,6 @@
               <div class="dev-card" data-page-node-id="20J0hsqiKlm40JV15erOrt"><div class="top" data-page-node-id="Aht7nV21QuX0Yij2PAzSES"><span class="name" data-page-node-id="1MCNS0Fu0mHEK0dtXCRBsT">LIS 检验接口</span><span class="tag t-orange" data-page-node-id="yDQGTLr01p6PjDIabu9eFh"><span class="dot warn" data-page-node-id="LNQghqjdjreYlpvvbki0Pr"></span>调试中</span></div><div class="meta" data-page-node-id="LKDHdJNanm3ETTMOVvaBcS">按医院实际情况实地调研后对接</div></div>
               <div class="dev-card" data-page-node-id="t5uW25GEGNgn8Fau0I431f"><div class="top" data-page-node-id="axGutI1UO0Np6ydcFjiqUq"><span class="name" data-page-node-id="0up4e5IAGVBnjC73giwXfH">慢病管理平台接口</span><span class="tag t-gray" data-page-node-id="DAW3V5NvtAW5sjFrsJKMbw"><span class="dot off" data-page-node-id="h5NLQsBMeXkR67C0GEJAGJ"></span>未对接</span></div><div class="meta" data-page-node-id="4rDgwGq5wKKN9EACXamuZn">需实地调研后确定对接方案</div></div>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;margin:2px 0 10px">
-              <b style="font-size:13.5px">接口传输记录</b>
-              <span style="flex:1"></span>
-              <button class="btn btn-ghost" data-c="openCapLog">📜 采集日志</button>
-            </div>
             <table data-page-node-id="TwRJv0prGaFfuLNYDSooee">
               <thead data-page-node-id="lkTskOxiDjHqxm8HV9ajFo"><tr data-page-node-id="Xk4Tzt3sYH76ujKQqYKpoT"><th data-page-node-id="BuynRA8Y5LwIvDeNsCG42S">时间</th><th data-page-node-id="JzSlA4Lh7Gr7jFijiHK4cG">患者</th><th data-page-node-id="bTTDayUj2eWfBL0Hp9yfpV">数据类型</th><th data-page-node-id="pjwPyPDeB6aQvbfoIOJd03">结果</th></tr></thead>
               <tbody data-page-node-id="6XglvB80w1dNpHrzcj9hTP">
@@ -501,11 +497,10 @@
           <table>
             <thead><tr><th>采集项</th><th>患者</th><th>采集方式</th><th>数量</th><th>采集时间</th><th>患者信息关联</th><th>质控状态</th><th>操作</th></tr></thead>
             <tbody id="rec-list-body">
-              <tr data-qc="1" data-item="手写病历 3 张 + 录入内容" data-patient="张建国"><td><b>手写病历 + 录入内容</b></td><td>张建国</td><td><span class="tag t-blue">本地文件上传 → 人工录入</span></td><td>3 张</td><td>09-12 09:05</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;张建国&quot;,&quot;YZK-2026-00128&quot;,&quot;男 / 63&quot;,&quot;老年性白内障&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-              <tr data-qc="1" data-item="电子病历 12 条（批量导入）" data-patient="陈秀英 · YZK-2026-00125"><td><b>电子病历</b></td><td>陈秀英 · YZK-2026-00125</td><td><span class="tag t-blue">批量导出 → 批量导入平台</span></td><td>12 条</td><td>09-12 08:30</td><td><span class="tag t-green">自动关联 12</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;陈秀英&quot;,&quot;YZK-2026-00125&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-              <tr data-qc="2"><td><b>电子病历</b></td><td>周某 · YZK-2026-00129</td><td><span class="tag t-green">系统接口实时传输</span></td><td>8 条</td><td>09-12 09:30</td><td><span class="tag t-green">自动关联 8</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;周某&quot;,&quot;YZK-2026-00129&quot;,&quot;&quot;,&quot;&quot;]">档案</span></td></tr>
-              <tr data-qc="2"><td><b>电子病历</b></td><td>吴某 · YZK-2026-00130</td><td><span class="tag t-green">系统接口实时传输</span></td><td>4 条</td><td>09-12 09:28</td><td><span class="tag t-green">自动关联 4</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;吴某&quot;,&quot;YZK-2026-00130&quot;,&quot;&quot;,&quot;&quot;]">档案</span></td></tr>
-              <tr data-qc="3" data-item="手写病历 5 张 + 录入内容（已驳回）" data-patient="刘志强" data-no="YZK-2026-00126"><td><b>手写病历 + 录入内容</b></td><td>刘志强 · YZK-2026-00126</td><td><span class="tag t-blue">本地文件上传 → 人工录入</span></td><td>5 张</td><td>09-12 09:12</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-red">已驳回</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;刘志强&quot;,&quot;YZK-2026-00126&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">修改</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
+              <tr data-qc="1"><td><b>手写病历 + 录入内容</b></td><td>张建国</td><td><span class="tag t-blue">本地文件上传 → 人工录入</span></td><td>3 张</td><td>09-12 09:05</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;张建国&quot;,&quot;YZK-2026-00128&quot;,&quot;男 / 63&quot;,&quot;老年性白内障&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="openQcByItem" data-a="[&quot;手写病历 3 张 + 录入内容&quot;,&quot;张建国&quot;]">质控</span></td></tr>
+              <tr data-qc="1"><td><b>电子病历</b></td><td>陈秀英 · YZK-2026-00125</td><td><span class="tag t-blue">批量导出 → 批量导入平台</span></td><td>12 条</td><td>09-12 08:30</td><td><span class="tag t-green">自动关联 12</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;陈秀英&quot;,&quot;YZK-2026-00125&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="openQcByItem" data-a="[&quot;电子病历 12 条（批量导入）&quot;,&quot;陈秀英&quot;]">质控</span></td></tr>
+              <tr data-qc="2"><td><b>电子病历</b></td><td>周某 · YZK-2026-00129</td><td><span class="tag t-green">系统接口实时传输</span></td><td>8 条</td><td>09-12 09:30</td><td><span class="tag t-green">自动关联 8</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;周某&quot;,&quot;YZK-2026-00129&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span style="color:var(--text3)">—</span></td></tr>
+              <tr data-qc="2"><td><b>电子病历</b></td><td>吴某 · YZK-2026-00130</td><td><span class="tag t-green">系统接口实时传输</span></td><td>4 条</td><td>09-12 09:28</td><td><span class="tag t-green">自动关联 4</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;吴某&quot;,&quot;YZK-2026-00130&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span style="color:var(--text3)">—</span></td></tr>
             </tbody>
           </table>
           <div class="empty" id="rec-list-empty" style="display:none">暂无采集记录</div>
@@ -517,7 +512,7 @@
         <div class="card" data-page-node-id="rEs37j2GfeD4aZs6ion5li">
           <!-- 采集入口工具栏：设备清单与接收日志均在弹窗内查看，页面不再展示设备摘要与日志摘要 -->
           <div class="toolbar" data-page-node-id="TRnyFeIHcR52reJsaWfu9U-x">
-            <b>患者信息关联：</b><span class="tag t-blue cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（影像数据）" style="cursor:pointer">张建国 · YZK-2026-00128</span>
+            <b>患者信息关联：</b><span class="tag t-blue cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（病历图片 / 影像数据 / 检查结果）" style="cursor:pointer">张建国 · YZK-2026-00128</span>
             <div style="flex:1"></div>
             <button class="btn btn-ghost" data-c="openManualCap" data-a="[&quot;imaging&quot;]">✋ 手动采集</button>
             <!-- 设备清单与接收日志入口：与「手动采集」并列，页面摘要条只做状态展示 -->
@@ -531,12 +526,10 @@
           <table>
             <thead><tr><th>影像</th><th>患者</th><th>采集方式（接口）</th><th>图像数</th><th>采集时间</th><th>患者信息关联</th><th>质控状态</th><th>操作</th></tr></thead>
             <tbody id="img-list-body">
-              <tr data-qc="1" data-item="OCT 序列 3 / 图像 75" data-patient="王丽华"><td><b>OCT（黄斑区扫描）</b></td><td>王丽华 · YZK-2026-00127</td><td><span class="tag t-green">DICOM 3.0 接收</span></td><td>75 图</td><td>09-12 09:31</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;王丽华&quot;,&quot;YZK-2026-00127&quot;,&quot;&quot;,&quot;渗出性年龄相关性黄斑变性&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-              
-              <tr data-qc="3" data-item="验光图像序列 2 / 图像 8" data-patient="刘志强" data-no="YZK-2026-00126"><td><b>验光图像（序列 2）</b></td><td>刘志强 · YZK-2026-00126</td><td><span class="tag t-blue">标准 FTP 通讯拉取</span></td><td>8 图</td><td>09-12 09:05</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-red">已驳回</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;刘志强&quot;,&quot;YZK-2026-00126&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">修改</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-              <tr data-qc="2"><td><b>眼底图像（序列 1）</b></td><td>张建国 · YZK-2026-00128</td><td><span class="tag t-green">DICOM 3.0 接收</span></td><td>4 图</td><td>09-12 09:28</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;张建国&quot;,&quot;YZK-2026-00128&quot;,&quot;男 / 63&quot;,&quot;老年性白内障&quot;]">档案</span></td></tr>
-              <tr data-qc="2"><td><b>眼底图像（序列 2）</b></td><td>刘志强 · YZK-2026-00126</td><td><span class="tag t-orange">视频输出接口实时捕获</span></td><td>8 图</td><td>09-12 09:20</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;刘志强&quot;,&quot;YZK-2026-00126&quot;,&quot;&quot;,&quot;原发性青光眼&quot;]">档案</span></td></tr>
-              <tr data-qc="2"><td><b>荧光造影（FFA）</b></td><td>陈秀英 · YZK-2026-00125</td><td><span class="tag t-blue">标准 FTP 通讯拉取</span></td><td>4 图</td><td>09-12 09:10</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;陈秀英&quot;,&quot;YZK-2026-00125&quot;,&quot;&quot;,&quot;&quot;]">档案</span></td></tr>
+              <tr data-qc="1"><td><b>OCT（黄斑区扫描）</b></td><td>王丽华 · YZK-2026-00127</td><td><span class="tag t-green">DICOM 3.0 接收</span></td><td>75 图</td><td>09-12 09:31</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;王丽华&quot;,&quot;YZK-2026-00127&quot;,&quot;&quot;,&quot;渗出性年龄相关性黄斑变性&quot;]">档案</span><span class="link" style="margin-left:10px" data-c="openQcByItem" data-a="[&quot;OCT 序列 3 / 图像 75&quot;,&quot;王丽华&quot;]">质控</span></td></tr>
+              <tr data-qc="2"><td><b>眼底图像（序列 1）</b></td><td>张建国 · YZK-2026-00128</td><td><span class="tag t-green">DICOM 3.0 接收</span></td><td>4 图</td><td>09-12 09:28</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;张建国&quot;,&quot;YZK-2026-00128&quot;,&quot;男 / 63&quot;,&quot;老年性白内障&quot;]">档案</span><span style="color:var(--text3)">—</span></td></tr>
+              <tr data-qc="2"><td><b>眼底图像（序列 2）</b></td><td>刘志强 · YZK-2026-00126</td><td><span class="tag t-orange">视频输出接口实时捕获</span></td><td>8 图</td><td>09-12 09:20</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;刘志强&quot;,&quot;YZK-2026-00126&quot;,&quot;&quot;,&quot;原发性青光眼&quot;]">档案</span><span style="color:var(--text3)">—</span></td></tr>
+              <tr data-qc="2"><td><b>荧光造影（FFA）</b></td><td>陈秀英 · YZK-2026-00125</td><td><span class="tag t-blue">标准 FTP 通讯拉取</span></td><td>4 图</td><td>09-12 09:10</td><td><span class="tag t-green">自动关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="openArcFor" data-a="[&quot;陈秀英&quot;,&quot;YZK-2026-00125&quot;,&quot;&quot;,&quot;&quot;]">档案</span><span style="color:var(--text3)">—</span></td></tr>
             </tbody>
           </table>
           <div class="empty" id="img-list-empty" style="display:none">暂无采集记录</div>
@@ -547,23 +540,22 @@
       <section class="view" id="v-scanner" data-page-node-id="1FzDhCv5H2wr4qrtGZAkcJ">
         <div class="card" data-page-node-id="5LZLJKAEe4NDaL8seTcrD2">
           <div class="toolbar" data-page-node-id="rnk8i9wrhbbQONofOVOfxB">
-            <b data-page-node-id="HkFYwlA7j6DPRUcQEirwzM">患者信息关联：</b><span class="tag t-blue cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（影像数据）" style="cursor:pointer" data-page-node-id="NDXOfpdvFFpHPyIA7dIw2f">张建国 · YZK-2026-00128</span>
+            <b data-page-node-id="HkFYwlA7j6DPRUcQEirwzM">患者信息关联：</b><span class="tag t-blue cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（病历图片 / 影像数据 / 检查结果）" style="cursor:pointer" data-page-node-id="NDXOfpdvFFpHPyIA7dIw2f">张建国 · YZK-2026-00128</span>
             <div style="flex:1" data-page-node-id="BhzeAFcRDM2QWcXZGEuoMc"></div>
-            <button class="btn btn-ghost" data-c="openBatchCap">📄 批量采集</button>
             <button class="btn btn-ghost" id="btn-manual-pick" data-c="openManualCap" data-a="[&quot;scanner&quot;]">🖼️ 选择本地文件并上传</button>
+            <button class="btn btn-success" data-c="uploadCaptured" data-page-node-id="KvXjSAJ1CPfIFf87X4HtQD">🔐 加密上传本地服务器</button>
           </div>
           <div style="margin-top:16px">
-          <div style="display:flex;align-items:center;margin-bottom:10px"><b style="font-size:14px">采集列表（命名管理）</b><div style="flex:1"></div><span style="font-size:12.5px;color:var(--text2)">支持手动采集（本地文件人工上传），提交后进入医生质控环节</span></div>
+          <div style="display:flex;align-items:center;margin-bottom:10px"><b style="font-size:14px">采集列表（命名管理）</b><div style="flex:1"></div><span style="font-size:12.5px;color:var(--text2)">支持手动采集（本地文件人工上传），加密上传本地服务器后进入医生质控环节</span></div>
               <table>
                 <thead><tr><th>图片名称</th><th>资料类型</th><th>患者</th><th>采集方式</th><th>采集时间</th><th>患者信息关联</th><th>质控状态</th><th>操作</th></tr></thead>
                 <tbody id="cap-list-body">
-                <tr data-qc="1" data-item="00128_手写病历_01_0912.png" data-patient="张建国" data-no="YZK-2026-00128"><td><b class="nm">00128_手写病历_01_0912.png</b></td><td><span class="tag t-blue">手写病历图片</span></td><td>张建国</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:50</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-              <tr data-qc="3" data-item="00127_眼底照_06_0912.png" data-patient="王丽华" data-no="YZK-2026-00127"><td><b class="nm">00127_眼底照_06_0912.png</b></td><td><span class="tag t-gray">眼底照相图片</span></td><td>王丽华</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:40</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-red">已驳回</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">档案</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">修改</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-              <tr data-qc="2" data-item="00125_裂隙灯_02_0912.png" data-patient="陈秀英" data-no="YZK-2026-00125"><td><b class="nm">00125_裂隙灯_02_0912.png</b></td><td><span class="tag t-green">裂隙灯检查图片</span></td><td>陈秀英</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:49</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span></td></tr>
-              <tr data-qc="2" data-item="00126_眼压_03_0912.png" data-patient="刘志强" data-no="YZK-2026-00126"><td><b class="nm">00126_眼压_03_0912.png</b></td><td><span class="tag t-purple">眼压检查图片</span></td><td>刘志强</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:48</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span></td></tr>
-              <tr data-qc="2" data-item="00129_视力_04_0912.png" data-patient="周某" data-no="YZK-2026-00129"><td><b class="nm">00129_视力_04_0912.png</b></td><td><span class="tag t-orange">视力检查图片</span></td><td>周某</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:47</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span></td></tr>
-                <tr data-qc="0" data-item="00130_验光_05_0912.png" data-patient="吴某" data-no="YZK-2026-00130"><td><b class="nm">00130_验光_05_0912.png</b></td><td><span class="tag t-gray">验光检查图片</span></td><td>吴某</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:46</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待上传</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" data-c="submitRecord" data-a="[{&quot;__el&quot;:1}]">提交</span></td></tr>
-            </tbody>
+                <tr data-qc="1"><td><b class="nm">00128_手写病历_01_0912.png</b></td><td><span class="tag t-blue">手写病历图片</span></td><td>张建国</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:50</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-orange">待质控</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" data-c="openQcByItem" data-a="[&quot;00128_手写病历_01_0912.png&quot;,&quot;张建国&quot;]">质控</span></td></tr>
+                <tr data-qc="2"><td><b class="nm">00128_裂隙灯_02_0912.png</b></td><td><span class="tag t-green">裂隙灯检查图片</span></td><td>张建国</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:49</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span style="color:var(--text3)">—</span></td></tr>
+                <tr data-qc="2"><td><b class="nm">00128_眼压_03_0912.png</b></td><td><span class="tag t-purple">眼压检查图片</span></td><td>张建国</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:48</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span style="color:var(--text3)">—</span></td></tr>
+                <tr data-qc="2"><td><b class="nm">00128_视力_04_0912.png</b></td><td><span class="tag t-orange">视力检查图片</span></td><td>张建国</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:47</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">已归档</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span style="color:var(--text3)">—</span></td></tr>
+                <tr data-qc="0"><td><b class="nm">00128_验光_05_0912.png</b></td><td><span class="tag t-gray">验光检查图片</span></td><td>张建国</td><td><span class="tag t-purple">手动采集</span></td><td>09-12 08:46</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待上传</span></td><td><span class="link" data-c="viewCapImg" data-a="[{&quot;__el&quot;:1}]">查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span style="color:var(--text3)">—</span></td></tr>
+                </tbody>
               </table>
               <div class="empty" id="cap-empty" style="display:none">暂无采集记录</div>
             </div>
@@ -581,10 +573,10 @@
           <table data-page-node-id="kTyrs48l8ddkfY3q8kcTN5">
             <thead data-page-node-id="S3g9bU1SASNypSqvT1eLzB"><tr data-page-node-id="GppPIJsRm87s4hEXPdGmGp"><th data-page-node-id="MjwC0TXVP2mPQFbi2GHgLI">数据项</th><th data-page-node-id="xjyJwC6T2GKNFUXgJqeHN5">患者</th><th data-page-node-id="VtG7iMKhakHmdvRXvcJVDH">数据类型</th><th>采集人</th><th data-page-node-id="vbO3cWE69OkIh3bkUqQqBJ">提交时间</th><th data-page-node-id="8cBUMfHxSfB4vgqsn5P2GD">操作</th></tr></thead>
             <tbody id="qc-body" data-page-node-id="p3vKhbPhiPQZFhZxUtnQvx">
-              <tr data-page-node-id="oZAlYAL8LWqiGa7DXvdgKp" data-item="OCT 序列 3 / 图像 75" data-patient="王丽华" data-type="医学影像" data-by="李技师"><td data-page-node-id="z6i9SmWjhm8cwj5XEPOuzQ">OCT 序列 3 / 图像 75</td><td data-page-node-id="BP5dRhlAvkjRzyVs1EeOEw">王丽华</td><td data-page-node-id="rkG16nudVEFjsff6iiuk3N">医学影像</td><td>李技师</td><td data-page-node-id="eyIG6ETcV7Aaq0jrZB5NHn">09-12 09:31</td><td data-page-node-id="4qkQlazkK7eq3PtLxfGohR"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="UBT8iA7IQRweMouhLBKx2Z">质控</span></td></tr>
-              <tr data-page-node-id="id0EG09l0cvh0EV3h4VVXX" data-item="手写病历 3 张 + 录入内容" data-patient="张建国" data-type="病历（手写）" data-by="张医生"><td data-page-node-id="lIm7Dnge7jhO7yi0cEcYlq">手写病历 3 张 + 录入内容</td><td data-page-node-id="1ULfoksjiQqhzKEugAZwaV">张建国</td><td data-page-node-id="AATryl34AeaFGu2hGSjyMo">病历（手写）</td><td>张医生</td><td data-page-node-id="3VAF2PqFTOpwVO3YeHNq8i">09-12 09:05</td><td data-page-node-id="cLtWiQ8OSYe0pFSP9Up8ic"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="kLPLURbqi5XgWGT1RBnZ7R">质控</span></td></tr>
-              <tr data-page-node-id="WjpoA8ZuHt6Nqr0b5TgyEH" data-item="00128_手写病历_01_0912.png" data-patient="张建国" data-type="高拍仪图片" data-by="李技师"><td>00128_手写病历_01_0912.png</td><td>张建国</td><td data-page-node-id="ZxbWQr0B5YxAxF3AdS2t9A">高拍仪图片</td><td>李技师</td><td data-page-node-id="Ns9ZXhwtGvdqjjNmnmUBA4">09-12 08:50</td><td data-page-node-id="6hyE1XmzFE6B97zyEIMedk"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="DcPNTIL96hRgLAl4QtIEC3">质控</span></td></tr>
-              <tr data-page-node-id="T3qIHJFuGfC7FaNdWGCoXi" data-item="电子病历 12 条（批量导入）" data-patient="陈秀英" data-type="病历（电子）" data-by="李技师"><td data-page-node-id="MM58gVoyBF9iOAM1G3U7VT">电子病历 12 条（批量导入）</td><td data-page-node-id="snj0gbX2ZS1OSkEOLnQQYw">陈秀英</td><td data-page-node-id="6UB1ZIFDqAD3fKAbPIP19L">病历（电子）</td><td>李技师</td><td data-page-node-id="JDUjNokxwMmyBRO7iABFdV">09-12 08:30</td><td data-page-node-id="Q7OZsld1wq2VNDqCIYs8KN"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="CH4ldrRlcPKDPYHblrTsN1">质控</span></td></tr>
+              <tr data-page-node-id="oZAlYAL8LWqiGa7DXvdgKp" data-by="李技师"><td data-page-node-id="z6i9SmWjhm8cwj5XEPOuzQ">OCT 序列 3 / 图像 75</td><td data-page-node-id="BP5dRhlAvkjRzyVs1EeOEw">王丽华</td><td data-page-node-id="rkG16nudVEFjsff6iiuk3N">医学影像</td><td>李技师</td><td data-page-node-id="eyIG6ETcV7Aaq0jrZB5NHn">09-12 09:31</td><td data-page-node-id="4qkQlazkK7eq3PtLxfGohR"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="UBT8iA7IQRweMouhLBKx2Z">质控</span></td></tr>
+              <tr data-page-node-id="id0EG09l0cvh0EV3h4VVXX" data-by="张医生"><td data-page-node-id="lIm7Dnge7jhO7yi0cEcYlq">手写病历 3 张 + 录入内容</td><td data-page-node-id="1ULfoksjiQqhzKEugAZwaV">张建国</td><td data-page-node-id="AATryl34AeaFGu2hGSjyMo">病历（手写）</td><td>张医生</td><td data-page-node-id="3VAF2PqFTOpwVO3YeHNq8i">09-12 09:05</td><td data-page-node-id="cLtWiQ8OSYe0pFSP9Up8ic"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="kLPLURbqi5XgWGT1RBnZ7R">质控</span></td></tr>
+              <tr data-page-node-id="WjpoA8ZuHt6Nqr0b5TgyEH" data-by="李技师"><td>00128_手写病历_01_0912.png</td><td>张建国</td><td data-page-node-id="ZxbWQr0B5YxAxF3AdS2t9A">高拍仪图片</td><td>李技师</td><td data-page-node-id="Ns9ZXhwtGvdqjjNmnmUBA4">09-12 08:50</td><td data-page-node-id="6hyE1XmzFE6B97zyEIMedk"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="DcPNTIL96hRgLAl4QtIEC3">质控</span></td></tr>
+              <tr data-page-node-id="T3qIHJFuGfC7FaNdWGCoXi" data-by="李技师"><td data-page-node-id="MM58gVoyBF9iOAM1G3U7VT">电子病历 12 条（批量导入）</td><td data-page-node-id="snj0gbX2ZS1OSkEOLnQQYw">陈秀英</td><td data-page-node-id="6UB1ZIFDqAD3fKAbPIP19L">病历（电子）</td><td>李技师</td><td data-page-node-id="JDUjNokxwMmyBRO7iABFdV">09-12 08:30</td><td data-page-node-id="Q7OZsld1wq2VNDqCIYs8KN"><span class="link" data-c="openQc" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="CH4ldrRlcPKDPYHblrTsN1">质控</span></td></tr>
             </tbody>
           </table>
           <div class="empty" id="qc-empty" style="display:none">暂无待质控数据</div>
@@ -613,10 +605,9 @@
             <h3 data-page-node-id="AgbYc6xDNxoAEtz2HVdUS2">⚙️ 上传方式配置</h3>
             <div class="sw-row" data-page-node-id="to6DwxXxcdpZO8rrrQRTrB"><span data-page-node-id="eUelI4OXaM6LfXqKldmJt5">实时自动上传</span><div class="switch on" id="rt-switch" data-c="toggleRealtime" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="z8qPKyHc2eT4UzWRLdyP4r"><i data-page-node-id="HEuadqsn7UFRQ4dyuS2EZq"></i></div></div>
             <div class="sw-row"><span>允许手动上传<span class="sub-tip">不受实时 / 定时策略限制，可人工勾选数据触发</span></span><div class="switch on" id="mu-switch" data-c="toggleManualUpload" data-a="[{&quot;__el&quot;:1}]"><i></i></div></div>
-            <div class="sw-row"><span>定时上传<span class="sub-tip">开启后可按每天 / 每周 / 每个月的定时时刻自动上传</span></span><div class="switch" id="ts-switch" data-c="toggleTimedUpload" data-a="[{&quot;__el&quot;:1}]"><i></i></div></div>
-            <div class="form-row" id="ts-config" style="display:none;margin-top:10px" data-page-node-id="NN4zGfVTifwGiPhI1ol73B"><div class="form-item" data-page-node-id="apacEfFX0OWjZ8VmfqeFS3"><label data-page-node-id="cCsUALNFF4TZ3gnED1sqBv">定时上传时刻<span class="req">*</span></label><div style="display:flex;gap:8px;margin:8px 0" id="ts-freq"><button type="button" class="btn btn-ghost btn-sm ts-f on" data-c="tsFreq" data-a="[&quot;day&quot;,{&quot;__el&quot;:1}]">每天</button><button type="button" class="btn btn-ghost btn-sm ts-f" data-c="tsFreq" data-a="[&quot;week&quot;,{&quot;__el&quot;:1}]">每周</button><button type="button" class="btn btn-ghost btn-sm ts-f" data-c="tsFreq" data-a="[&quot;month&quot;,{&quot;__el&quot;:1}]">每个月</button></div><div id="ts-extra" style="display:none;margin-bottom:8px"><select class="input" id="ts-extra-sel"></select></div><input class="input" id="up-time" value="02:00, 09:00, 18:00" placeholder="HH:MM，多个时刻用英文逗号分隔" data-page-node-id="CQ8eGCSTPe0ZjEJD1YGaFY"><div class="field-fix" id="ts-hint">格式校验：24 小时制 HH:MM，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）</div></div></div>
+            <div class="form-row" style="margin-top:10px" data-page-node-id="NN4zGfVTifwGiPhI1ol73B"><div class="form-item" data-page-node-id="apacEfFX0OWjZ8VmfqeFS3"><label data-page-node-id="cCsUALNFF4TZ3gnED1sqBv">定时上传时刻<span class="req">*</span></label><input class="input" id="up-time" value="02:00, 09:00, 18:00" placeholder="HH:MM，多个时刻用英文逗号分隔" data-page-node-id="CQ8eGCSTPe0ZjEJD1YGaFY"><div class="field-fix">格式校验：24 小时制 HH:MM，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）</div></div></div>
             <button class="btn btn-primary" style="width:100%" data-c="applyUploadCfg" data-page-node-id="RKOiCPPNF0D0HmHGuVe1Wm">保存并应用</button>
-            <div class="lock-note" style="margin-top:12px"><b>合规要求：</b>上传方式为全局配置，仅<b>质控医生</b>可修改；保存前二次确认，变更内容（实时开关状态、定时时刻与手动上传开关）与操作人一并写入操作日志，避免上传策略被静默篡改。手动上传须再次二次确认，上传范围与结果留痕。</div>
+            <div class="lock-note" style="margin-top:12px"><b>合规要求：</b>上传方式为全局配置，仅<b>采集人员</b>可修改；保存前二次确认，变更内容（实时开关状态、定时时刻与手动上传开关）与操作人一并写入操作日志，避免上传策略被静默篡改。手动上传须再次二次确认，上传范围与结果留痕。</div>
           </div>
         </div>
             </section>
@@ -638,7 +629,7 @@
               <button class="btn btn-primary" data-c="openDevEdit" data-a="[&quot;scan&quot;,-1]">＋ 新增设备</button>
             </div>
             <table>
-              <thead><tr><th>设备名称</th><th>型号</th><th>接口方式</th><th>采集参数</th><th>启停状态</th><th>最近校准</th><th style="width:150px">操作</th></tr></thead>
+              <thead><tr><th>设备名称</th><th>型号</th><th>接口方式</th><th>采集参数</th><th>启停状态</th><th>最近校准</th><th style="width:230px">操作</th></tr></thead>
               <tbody id="dm-scan-body"></tbody>
             </table>
             <div class="dm-cfg">
@@ -662,7 +653,7 @@
               <button class="btn btn-primary" data-c="openDevEdit" data-a="[&quot;img&quot;,-1]">＋ 新增设备</button>
             </div>
             <table>
-              <thead><tr><th>设备名称</th><th>检查模态</th><th>接口类型</th><th>连接参数</th><th>启停状态</th><th>最近通讯</th><th style="width:150px">操作</th></tr></thead>
+              <thead><tr><th>设备名称</th><th>检查模态</th><th>接口类型</th><th>连接参数</th><th>启停状态</th><th>最近通讯</th><th style="width:230px">操作</th></tr></thead>
               <tbody id="dm-img-body"></tbody>
             </table>
             <div class="dm-cfg">
@@ -932,17 +923,6 @@
   <div class="modal-f"><button class="btn btn-ghost" data-c="closeM" data-a="[&quot;m-rename&quot;]">取消</button><button class="btn btn-primary" data-c="saveRename">保存</button></div>
 </div></div>
 
-<!-- 编辑采集数据（未归档可编辑，已归档锁定） -->
-<div class="mask" id="m-edit"><div class="modal">
-  <div class="modal-h">编辑采集数据<span class="x" data-c="closeM" data-a="[&quot;m-edit&quot;]">×</span></div>
-  <div class="modal-b">
-    <div class="form-row"><div class="form-item"><label>采集项</label><input class="input" id="ed-item" readonly></div><div class="form-item"><label>患者</label><input class="input" id="ed-patient" readonly></div></div>
-    <div class="form-item" style="margin-bottom:14px"><label>编辑内容<span class="req">*</span></label><textarea class="input" id="ed-content" rows="5" placeholder="请输入修正 / 补充内容（如录入内容更正、患者信息修正说明）"></textarea></div>
-    <div class="note">仅未归档数据（待录入 / 待质控）可编辑，「已归档」数据锁定不可编辑；编辑保存后数据保持当前质控流程，变更内容与操作人记入操作日志。</div>
-  </div>
-  <div class="modal-f"><button class="btn btn-ghost" data-c="closeM" data-a="[&quot;m-edit&quot;]">取消</button><button class="btn btn-primary" data-c="saveRecEdit">保存</button></div>
-</div></div>
-
 <!-- 手动采集（病历 / 影像 / 高拍仪 三类采集统一入口） -->
 <div class="mask" id="m-manualcap"><div class="modal">
   <div class="modal-h"><span id="mc-title">手动采集</span><span class="x" data-c="closeM" data-a="[&quot;m-manualcap&quot;]">×</span></div>
@@ -979,101 +959,46 @@
   <div class="modal-f"><button class="btn btn-ghost" data-c="closeM" data-a="[&quot;m-manualcap&quot;]">取消</button><button class="btn btn-primary" id="mc-save" data-c="saveManualCap">保存并提交质控</button></div>
 </div></div>
 
-<!-- 批量采集（高拍仪连拍） -->
-<div class="mask" id="m-batch"><div class="modal">
-  <div class="modal-h"><span>批量采集（高拍仪连拍）</span><span class="x" data-c="closeM" data-a="[&quot;m-batch&quot;]">×</span></div>
-  <div class="modal-b">
-    <div class="note">批量采集通过高拍仪对同一患者的多页资料连续拍摄：系统按「病历号_资料类型_序号_日期.png」规则自动命名，逐张完成患者信息关联与影像索引并写入采集列表（状态：待上传）；完成后在采集列表中点击「提交」进入医生质控环节。</div>
-    <div class="form-row"><div class="form-item" style="flex-basis:100%"><label>资料类型<span class="req">*</span></label><select class="select" id="bt-type"></select></div></div>
-    <div class="form-row">
-      <div class="form-item"><label>患者姓名<span class="req">*</span></label><input class="input" id="bt-name"></div>
-      <div class="form-item"><label>病历号<span class="req">*</span></label><input class="input" id="bt-no"></div>
-    </div>
-    <div class="form-item"><label>采集图片<span class="req">*</span></label>
-      <div class="up-zone" id="bt-pick" data-c="btPick" data-a="[{&quot;__el&quot;:1}]" title="点击选择本地图片文件（支持多张）">
-        <div class="up-ic">🖼️</div>
-        <div class="up-tt"><span id="bt-pick-t">点击选择本地文件（支持多张）</span>
-          <span class="s">支持一次选择多张 · JPG / PNG / BMP · 单张 ≤ 20 MB · 分辨率建议 ≥ 300 dpi</span></div>
-      </div>
-      <input type="file" id="bt-file" multiple accept="image/*" style="display:none">
-      <div class="up-hint">选择本地文件后点击「开始批量采集」：文件按自动命名规则逐张写入采集列表（状态：待上传），可在采集列表逐张预览。</div>
-    </div>
-    <div class="up-total" id="bt-total" style="display:none">
-      <div class="uth"><span id="bt-total-t">批量采集中…</span><span id="bt-total-p">0%</span></div>
-      <div class="progress up-pb"><i id="bt-bar" style="width:0%"></i></div>
-    </div>
-  </div>
-  <div class="modal-f"><button class="btn btn-ghost" id="bt-cancel" data-c="closeM" data-a="[&quot;m-batch&quot;]">取消</button><button class="btn btn-primary" id="bt-start" data-c="startBatchCap">开始批量采集</button></div>
-</div></div>
-
 <!-- 患者数据档案抽屉 -->
 <div class="drawer wide" id="arc-drawer">
-  <div class="drawer-h"><span id="arc-title">患者数据档案</span><span style="margin-left:12px;cursor:pointer;color:var(--text3);font-size:20px" data-c="closeArc">×</span></div>
+  <div class="drawer-h">患者数据档案<span id="arc-reveal" style="margin-left:auto"></span><span style="margin-left:12px;cursor:pointer;color:var(--text3);font-size:20px" data-c="closeArc">×</span></div>
   <div class="drawer-b">
     <div class="pt-head">
       <div class="nm"><span id="arc-name">—</span><span class="tag t-blue" id="arc-no">—</span></div>
       <div class="meta" id="arc-meta">—</div>
       <div class="meta">诊断信息：<b style="color:var(--text)" id="arc-diag">—</b></div>
-      <div id="arc-edit-form" style="display:none;border-top:1px dashed var(--border);margin-top:10px;padding-top:10px">
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <input class="input" id="ae-name" style="flex:1;min-width:120px" placeholder="患者姓名（必填）">
-          <input class="input" id="ae-no" style="flex:1;min-width:150px" placeholder="病历号（必填）">
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-          <input class="input" id="ae-meta" style="flex:1;min-width:120px" placeholder="性别 / 年龄（如：男 / 63）">
-          <input class="input" id="ae-diag" style="flex:1;min-width:150px" placeholder="诊断信息">
-        </div>
-      </div>
       <div class="stat">
-        <div class="arc-full"><b id="arc-cnt-r">0</b>病历图片</div>
-        <div class="arc-img"><b id="arc-cnt-i">0</b><span id="arc-img-label">影像数据</span></div>
+        <div><b id="arc-cnt-r">0</b>病历图片</div>
+        <div><b id="arc-cnt-i">0</b>影像数据</div>
+        <div><b id="arc-cnt-e">0</b>检查结果</div>
       </div>
     </div>
     <div class="arc-tabs" id="arc-tabs">
-      <div class="at arc-full" data-k="records" data-c="switchArc" data-a="[&quot;records&quot;]">病历图片</div>
-      <div class="at active arc-img" data-k="images" data-c="switchArc" data-a="[&quot;images&quot;]"><span id="arc-tab-img-label">影像数据</span></div>
-    </div>
-    <div id="arc-edit-tools" style="display:none;margin:10px 0">
-      <button class="btn btn-ghost btn-sm" data-c="arcUploadPick">⬆ 上传新图片（可多选）</button>
-      <input type="file" id="arc-file" multiple accept="image/*" style="display:none">
-      <span style="font-size:12px;color:var(--text2);margin-left:8px">上传图片加入该患者档案并进入质控流程；点条目右侧「删除」移除已有图片（留痕）</span>
+      <div class="at active" data-k="records" data-c="switchArc" data-a="[&quot;records&quot;]">病历图片</div>
+      <div class="at" data-k="images" data-c="switchArc" data-a="[&quot;images&quot;]">影像数据</div>
+      <div class="at" data-k="exams" data-c="switchArc" data-a="[&quot;exams&quot;]">检查结果</div>
     </div>
     <div id="arc-body"></div>
-    <div id="arc-rej-box" style="display:none;margin:12px 0;padding:12px 14px;border:1px solid #f5c6c6;background:#fff7f7;border-radius:8px">
-      <div style="font-size:13.5px;font-weight:600;color:var(--danger);margin-bottom:4px">质控驳回信息</div>
-      <div style="display:flex;gap:10px;padding:5px 0;font-size:13px;line-height:1.8"><span style="width:76px;flex-shrink:0;color:var(--text3)">驳回人</span><span id="arc-rej-who" style="flex:1;min-width:0">—</span></div>
-      <div style="display:flex;gap:10px;padding:5px 0;font-size:13px;line-height:1.8;border-top:1px dashed var(--border)"><span style="width:76px;flex-shrink:0;color:var(--text3)">驳回原因</span><span id="arc-rej-reason" style="flex:1;min-width:0">—</span></div>
-      <div style="display:flex;gap:10px;padding:5px 0;font-size:13px;line-height:1.8;border-top:1px dashed var(--border)"><span style="width:76px;flex-shrink:0;color:var(--text3)">驳回时间</span><span id="arc-rej-time" style="flex:1;min-width:0">—</span></div>
-    </div>
-    <div class="arc-foot" id="arc-foot">
+    <div class="arc-foot">
       <span style="font-size:12.5px;color:var(--text2);width:100%">为该患者发起采集（采集时自动完成患者信息关联与影像索引）</span>
-      <button class="btn btn-ghost btn-sm arc-full" data-c="goCapture" data-a="[&quot;v-record&quot;]">📝 病历数据采集</button>
-      <button class="btn btn-ghost btn-sm arc-img" id="arc-btn-img" data-c="goCapture" data-a="[&quot;v-imaging&quot;]">🔬 医学影像采集</button>
+      <button class="btn btn-ghost btn-sm" data-c="goCapture" data-a="[&quot;v-record&quot;]">📝 病历数据采集</button>
+      <button class="btn btn-ghost btn-sm" data-c="goCapture" data-a="[&quot;v-imaging&quot;]">🔬 医学影像采集</button>
+      <button class="btn btn-ghost btn-sm" data-c="goCapture" data-a="[&quot;v-scanner&quot;]">📷 高拍仪采集</button>
     </div>
-    <div id="arc-rej-foot" style="display:none;flex-shrink:0;justify-content:flex-end;align-items:center;gap:12px;padding:14px 22px;border-top:1px solid var(--border);background:#fff;box-shadow:0 -4px 12px rgba(16,42,67,.06)">
-      <span style="font-size:12.5px;color:var(--text3);flex:1">该数据已被质控驳回，请按驳回原因修正后重新提交质控</span>
-      <button class="btn btn-primary" data-c="arcRejEdit" style="padding:10px 34px;font-size:14px;border-radius:6px">修改</button>
-      <button class="btn btn-ghost" data-c="arcRejCancel" style="padding:10px 28px;font-size:14px;border-radius:6px">取消</button>
-    </div>
-  </div>
-  <div id="arc-edit-foot" style="display:none;flex-shrink:0;justify-content:flex-end;align-items:center;gap:12px;padding:14px 22px;border-top:1px solid var(--border);background:#fff;box-shadow:0 -4px 12px rgba(16,42,67,.06)">
-    <span style="font-size:12.5px;color:var(--text3);flex:1">修改患者信息与图片后，点击「保存」统一提交并留痕；「取消」放弃本次修改</span>
-    <button class="btn btn-ghost" data-c="cancelArcEdit" style="padding:10px 28px;font-size:14px;border-radius:6px">取消</button>
-    <button class="btn btn-primary" data-c="saveArcEdit" style="padding:10px 34px;font-size:14px;border-radius:6px">保存</button>
   </div>
 </div>
 
 <!-- 质控抽屉 -->
 <div class="drawer" id="drawer" data-page-node-id="EKvRw5wQLUKECF59nSp7tm">
-  <div class="drawer-h" data-page-node-id="6DaCcqWoLp88TGZ2PUQmGx"><span id="qc-title">医生质控</span><span style="margin-left:12px;cursor:pointer;color:var(--text3);font-size:20px" data-c="closeDrawer" data-page-node-id="gmd8zaaNevnhOpflttEl7f">×</span></div>
+  <div class="drawer-h" data-page-node-id="6DaCcqWoLp88TGZ2PUQmGx"><span id="qc-title">医生质控</span><span id="qc-reveal" style="margin-left:auto"></span><span style="margin-left:12px;cursor:pointer;color:var(--text3);font-size:20px" data-c="closeDrawer" data-page-node-id="gmd8zaaNevnhOpflttEl7f">×</span></div>
   <div class="drawer-b" data-page-node-id="Z4QGxIJyYOrmEWMmD4E9pL">
     <div class="qc-viewer" id="qc-viewer"></div>
     <div style="margin:14px 0" data-page-node-id="SCoHvILDX4f2Gqux6PQUpr"><b style="font-size:13.5px" data-page-node-id="2kdXKRCZ3a6jDbIfVBCDbT">内容核对</b></div>
-    <div class="qc-row" data-page-node-id="OSEPz43BFfNfRy7Py9WuA8"><div data-page-node-id="E67TgnESKjXuIuEXpSlIMa"><b id="qc-l1" data-page-node-id="swgiChK2MeJwKV4XTE7VyM">患者姓名</b><div class="field-fix" id="qc-v1" data-page-node-id="tXW0lnghNJr2IDBA8pWOSY">—</div></div></div>
-    <div class="qc-row" data-page-node-id="UYZvJOdswwhXY7Q9jhZ63K"><div data-page-node-id="1ZBTEHGpA0pS1l8EVSFbgP"><b id="qc-l2" data-page-node-id="c3Cz8bM4mc5qu5REX4WwTt">检查类型</b><div class="field-fix" id="qc-v2" data-page-node-id="p1C7WD26HsA8ARLKT2OpuF">—</div></div></div>
-    <div class="qc-row" data-page-node-id="w7vPNDOwMMPLYmlbH9YYUA"><div data-page-node-id="8sZGQe3fWszVaueMrMEgtF"><b id="qc-l3" data-page-node-id="15rTzKLe1qflMThP7BihoK">诊断</b><div class="field-fix" id="qc-v3" data-page-node-id="6FFnXJX47zgv0QpiAT5Rqz">—</div></div></div>
-    <div class="qc-row" data-page-node-id="dv3VkN8nwugIjmTn4ApSe3"><div data-page-node-id="aJFGgVGzEjy0ZwN30N2XP2"><b id="qc-l4" data-page-node-id="t9eqjcjjiwBUbUsiCDxAFE">图像质量</b><div class="field-fix" id="qc-v4" data-page-node-id="aaBu6fVFQOWVZKFVeqcAXk">—</div></div></div>
-    <div class="qc-row"><div><b>采集人</b><div class="field-fix" id="qc-vby">—</div></div></div>
+    <div class="qc-row" data-page-node-id="OSEPz43BFfNfRy7Py9WuA8"><div data-page-node-id="E67TgnESKjXuIuEXpSlIMa"><b id="qc-l1" data-page-node-id="swgiChK2MeJwKV4XTE7VyM">患者姓名</b><div class="field-fix" id="qc-v1" data-page-node-id="tXW0lnghNJr2IDBA8pWOSY">—</div></div><span class="tag t-green" data-page-node-id="DZr17fiuj7U7l1ZyS4Wutl">一致</span></div>
+    <div class="qc-row" data-page-node-id="UYZvJOdswwhXY7Q9jhZ63K"><div data-page-node-id="1ZBTEHGpA0pS1l8EVSFbgP"><b id="qc-l2" data-page-node-id="c3Cz8bM4mc5qu5REX4WwTt">检查类型</b><div class="field-fix" id="qc-v2" data-page-node-id="p1C7WD26HsA8ARLKT2OpuF">—</div></div><span class="tag t-green" data-page-node-id="LOBYoRf8yugHlO2pVisNnJ">一致</span></div>
+    <div class="qc-row" data-page-node-id="w7vPNDOwMMPLYmlbH9YYUA"><div data-page-node-id="8sZGQe3fWszVaueMrMEgtF"><b id="qc-l3" data-page-node-id="15rTzKLe1qflMThP7BihoK">诊断</b><div class="field-fix" id="qc-v3" data-page-node-id="6FFnXJX47zgv0QpiAT5Rqz">—</div></div><span class="tag t-green" data-page-node-id="jH5onvwFPSGX4b9DzKASeO">一致</span></div>
+    <div class="qc-row" data-page-node-id="dv3VkN8nwugIjmTn4ApSe3"><div data-page-node-id="aJFGgVGzEjy0ZwN30N2XP2"><b id="qc-l4" data-page-node-id="t9eqjcjjiwBUbUsiCDxAFE">图像质量</b><div class="field-fix" id="qc-v4" data-page-node-id="aaBu6fVFQOWVZKFVeqcAXk">—</div></div><span class="tag t-green" data-page-node-id="ayIRiGSOnh8w16S9aYJ2fI">合格</span></div>
+    <div class="qc-row"><div><b>采集人</b><div class="field-fix" id="qc-vby">—</div></div><span class="tag t-gray" id="qc-byrole">留痕可追溯</span></div>
     <div class="lock-note" id="qc-rolelock" style="display:none"></div>
     <div style="margin-top:16px;display:flex;gap:10px" data-page-node-id="UdjAbngCOBbBkB0K8eENlV">
       <button class="btn btn-plain" style="flex:1" id="btn-reject" data-c="rejectQC">✕ 驳回（原因必填）</button>
@@ -1105,36 +1030,6 @@
     <div id="audit-body"></div>
   </div>
 </div>
-
-
-<!-- 采集日志（系统接口实时传输 · 终端式；按当天 / 近三天 / 近七天筛选） -->
-<div class="mask" id="m-caplog"><div class="modal" style="width:780px;max-width:94vw">
-  <div class="modal-h"><span>📜 采集日志</span><span class="x" data-c="closeM" data-a="[&quot;m-caplog&quot;]">×</span></div>
-  <div class="modal-b">
-    <div class="note">日志只读、不可修改，用于记录系统接口实时传输与各采集环节的关键操作结果，便于数据追溯与故障定位；患者姓名与病历号按最小必要原则脱敏展示。</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span style="font-size:13px;color:var(--text2)">时间范围</span>
-      <select class="input" id="cl-range" onchange="capLogRange(this)" style="width:110px;padding:7px 8px;font-size:13px" title="日志时间范围"><option value="day">当天</option><option value="d3">近三天</option><option value="d7">近七天</option></select>
-      <span style="flex:1"></span>
-      <span style="font-size:12px;color:var(--text3)" id="caplog-count"></span>
-    </div>
-    <div class="dicom-log" id="caplog-body" style="min-height:220px;max-height:54vh"></div>
-  </div>
-  <div class="modal-f"><button class="btn btn-primary" data-c="closeM" data-a="[&quot;m-caplog&quot;]">关闭</button></div>
-</div></div>
-
-<!-- 驳回原因查看 -->
-<div class="mask" id="m-reject"><div class="modal" style="width:580px;max-width:94vw">
-  <div class="modal-h"><span>⚠️ 驳回原因</span><span class="x" data-c="closeM" data-a="[&quot;m-reject&quot;]">×</span></div>
-  <div class="modal-b">
-    <div id="rej-body"></div>
-    <div class="lock-note" style="margin-top:12px">驳回原因由质控医生填写并与操作人一并记入操作日志，不可修改、不可删除；请按原因修正后重新提交质控。</div>
-  </div>
-  <div class="modal-f">
-    <button class="btn btn-ghost" data-c="closeM" data-a="[&quot;m-reject&quot;]">关闭</button>
-    <button class="btn btn-primary" data-c="fixAfterReject">前往修正并重新提交</button>
-  </div>
-</div></div>
 
 <!-- 病历图片大图预览（缩放 / 旋转 / 翻页 / 下载） -->
 <div class="mask lb" id="m-preview">
@@ -1172,7 +1067,6 @@
    不再使用内联 onclick：部分预览环境会屏蔽内联事件属性（CSP script-src-attr 'none'
    或 HTML 净化），那样 JS 虽能执行、内联按钮却全部失效。
    参数用 JSON 存于 data-a；需要传元素本身时用 {"__el":1} 占位，派发时替换为当前元素。 */
-let LAST_ROW=null;
 function ENC(vals){
   return JSON.stringify(vals)
     .replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
@@ -1189,7 +1083,6 @@ document.addEventListener('click',function(ev){
   const raw=el.getAttribute('data-a');
   if(raw){try{args=JSON.parse(raw)}catch(e){args=[]}}
   args=args.map(v=>(v&&typeof v==='object'&&v.__el)?el:v);
-  LAST_ROW=(el&&el.closest)?el.closest('tr'):null;
   fn.apply(el,args);
 },false);
 
@@ -1218,32 +1111,8 @@ function toast(msg,type){
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2600);
 }
 document.querySelectorAll('.mask').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
-/* ---------- 抽屉 / 弹窗关闭兜底：ESC 关闭最上层浮层；点击抽屉外部区域关闭 ---------- */
-function topOverlay(){
-  const masks=[...document.querySelectorAll('.mask.show')];
-  if(masks.length)return {el:masks[masks.length-1],close:function(){masks.forEach(function(m){m.classList.remove('show')})}};
-  const ad=document.getElementById('audit-drawer');
-  if(ad&&ad.classList.contains('show'))return {el:ad,close:closeAudit};
-  const arc=document.getElementById('arc-drawer');
-  if(arc&&arc.classList.contains('show'))return {el:arc,close:closeArc};
-  const qc=document.getElementById('drawer');
-  if(qc&&qc.classList.contains('show'))return {el:qc,close:closeDrawer};
-  return null;
-}
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){const o=topOverlay();if(o)o.close()}
-});
-document.addEventListener('click',function(ev){
-  const o=topOverlay();
-  if(!o)return;
-  const t=ev.target;
-  if(!t||!t.closest)return;
-  if(o.el.contains(t))return;                          /* 浮层内部点击不关闭 */
-  if(t.closest('[data-c],.mask'))return;               /* 带 data-c 的按钮 / 遮罩自身交给原有逻辑 */
-  o.close();
-});
 /* ---------- 患者数据档案（已关联的病历图片 / 影像数据 / 检查结果） ---------- */
-let arcTab='images';
+let arcTab='records';
 const arcData={
   'YZK-2026-00128':{
     records:[
@@ -1294,122 +1163,32 @@ const arcNames={records:'病历图片',images:'影像数据',exams:'检查结果
 let curPt={name:'张建国',no:'YZK-2026-00128',meta:'男 / 63',diag:'老年性白内障',label:'张建国 · YZK-2026-00128'};
 function openArc(){
   if(!curPt)return;
-  const full=document.getElementById('v-record').classList.contains('active');
-  const scanner=document.getElementById('v-scanner')&&document.getElementById('v-scanner').classList.contains('active');
-  document.querySelectorAll('#arc-drawer .arc-full').forEach(el=>{el.style.display=full?'':'none'});
-  document.querySelectorAll('#arc-drawer .arc-img').forEach(el=>{el.style.display=full?'none':''});
-  /* 高拍仪页：文案与按钮按页面切换（影像数据 ↔ 高拍仪数据） */
-  arcNames.images=scanner?'高拍仪数据':'影像数据';
-  const il=document.getElementById('arc-img-label');if(il)il.textContent=arcNames.images;
-  const tl=document.getElementById('arc-tab-img-label');if(tl)tl.textContent=arcNames.images;
-  const gb=document.getElementById('arc-btn-img');
-  if(gb){if(scanner){gb.textContent='📷 高拍仪采集';gb.setAttribute('data-a','["v-scanner"]')}
-    else{gb.textContent='🔬 医学影像采集';gb.setAttribute('data-a','["v-imaging"]')}}
-  arcTab=full?'records':'images';
-  const ed=!!arcEdit;
-  const at=document.getElementById('arc-title');if(at)at.textContent=ed?'编辑患者数据档案（患者信息 / 图片可维护）':'患者数据档案';
-  const ef=document.getElementById('arc-edit-form');if(ef)ef.style.display=ed?'':'none';
-  const et=document.getElementById('arc-edit-tools');if(et)et.style.display=ed?'':'none';
-  const ef2=document.getElementById('arc-edit-foot');if(ef2)ef2.style.display=ed?'flex':'none';
-  const ft=document.getElementById('arc-foot');if(ft)ft.style.display=ed?'none':'';
-  /* 已驳回数据：档案内展示驳回人 / 驳回原因 / 驳回时间，底部提供「修改 / 取消」 */
-  const rj=arcRejOf(arcRow);
-  const rbox=document.getElementById('arc-rej-box'),rfoot=document.getElementById('arc-rej-foot');
-  const showRj=!!rj&&!ed;
-  if(rbox)rbox.style.display=showRj?'':'none';
-  if(rfoot)rfoot.style.display=showRj?'flex':'none';
-  if(showRj){if(ft)ft.style.display='none';fillArcRej(rj)}
-  if(ed){
-    document.getElementById('ae-name').value=curPt.name;
-    document.getElementById('ae-no').value=curPt.no;
-    document.getElementById('ae-meta').value=curPt.meta||'';
-    document.getElementById('ae-diag').value=curPt.diag||'';
-  }
+  arcTab='records';
   paintArcHead();
   renderArc();
   document.getElementById('arc-drawer').classList.add('show');
-  if(!ed)logOp('查看患者数据档案',curPt.name+' · '+curPt.no);
+  logOp('查看患者数据档案',curPt.name+' · '+curPt.no);
 }
-function closeArc(){arcEdit=null;arcRow=null;document.getElementById('arc-drawer').classList.remove('show')}
-/* ---------- 已驳回：档案内驳回信息与「修改 / 取消」 ---------- */
-let arcRow=null;                       /* 打开档案时对应的采集列表行 */
-function arcRejOf(tr){
-  if(!tr||!tr.parentElement||tr.dataset.qc!=='3'||tr.dataset.voided==='1')return null;
-  const item=tr.dataset.item||'',patient=tr.dataset.patient||'';
-  let r=REJ[rejKey(item,patient)];
-  /* 数据项文案与列表行不一致时：取该患者最近一条驳回记录 */
-  if(!r&&patient){
-    const cand=[];
-    Object.keys(REJ).forEach(function(k){const v=REJ[k];if(v.patient===patient)cand.push(v)});
-    if(cand.length)r=cand.sort(function(a,b){return (b.seq||0)-(a.seq||0)})[0];
-  }
-  if(!r&&item){
-    const ks=Object.keys(REJ);
-    for(let i=0;i<ks.length;i++){if(REJ[ks[i]].item===item){r=REJ[ks[i]];break}}
-  }
-  return {r:r||null,item:item,patient:patient,no:tr.dataset.no||''};
-}
-function fillArcRej(rj){
-  const r=rj.r;
-  const w=document.getElementById('arc-rej-who'),
-        rs=document.getElementById('arc-rej-reason'),
-        tm=document.getElementById('arc-rej-time');
-  if(w)w.innerHTML=r?('<b style="color:var(--text)">'+esc(r.who)+(r.role?('（'+esc(r.role)+'）'):'')+'</b>')
-                    :'<span style="color:var(--text3)">—</span>';
-  if(rs)rs.innerHTML=r?('<b style="color:var(--danger)">'+esc(r.reason)+'</b>')
-                     :'<span style="color:var(--text3)">质控医生未填写具体原因，请联系质控医生确认后重新处理</span>';
-  if(tm)tm.innerHTML='<span style="color:var(--text)">'+esc(r?r.t:'—')+'</span>';
-}
-/* 档案内「修改」：直接进入可编辑状态（底部按钮切换为「取消 / 保存」） */
-function arcRejEdit(){
-  const tr=arcRow;
-  if(!tr||!tr.parentElement){toast('未定位到该条已驳回数据，请从采集列表重新进入','err');return}
-  editRecord(tr.querySelector('[data-c="editRecord"]')||tr);
-}
-function arcRejCancel(){closeArc()}
+function closeArc(){document.getElementById('arc-drawer').classList.remove('show')}
 function switchArc(k){arcTab=k;renderArc()}
-/* ---------- 采集日志：当天 / 近三天 / 近七天 ---------- */
-let clRange='day';
-function capLogRange(el){clRange=el.value;if(document.getElementById('m-caplog').classList.contains('show'))renderCapLog()}
-function openCapLog(){renderCapLog();openM('m-caplog');logOp('查看采集日志','范围：'+({day:'当天',d3:'近三天',d7:'近七天'})[clRange])}
-function renderCapLog(){
-  const days={day:0,d3:2,d7:6}[clRange]||0;
-  const d=new Date();d.setDate(d.getDate()-days);
-  const lim=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  const rows=auditLog.filter(x=>x.t.slice(0,10)>=lim);
-  const body=document.getElementById('caplog-body');
-  const cnt=document.getElementById('caplog-count');
-  const rangeTxt={day:'当天',d3:'近三天',d7:'近七天'}[clRange]||'当天';
-  if(cnt)cnt.textContent='共 '+rows.length+' 条 · '+rangeTxt;
-  if(!rows.length){body.innerHTML='<div style="color:#8aa4c8">所选时间范围内暂无采集操作记录</div>';return}
-  body.innerHTML=rows.map(function(x){
-    /* 时间取记录中的时刻部分（nowStr 格式 MM-DD HH:MM，含秒则带秒） */
-    const tm=(x.t.split(' ')[1])||x.t;
-    const st=x.res==='成功'?'ok':'er';
-    const who=(x.o&&x.u&&x.o.indexOf(x.u)>=0)?'':' · '+esc(x.u)+'（'+esc(x.r)+'）';
-    return '<div>['+esc(tm)+'] <span class="'+st+'">'+esc(x.a)+' '+esc(x.res)+'</span> '+esc(x.o)+
-      (x.why?' · '+esc(x.why):'')+who+'</div>';
-  }).join('');
-  applyPrivacy();
-}
 function renderArc(){
   const d=arcData[curPt.no]||{records:[],images:[],exams:[]};
+  document.getElementById('arc-cnt-r').textContent=d.records.length;
   document.getElementById('arc-cnt-i').textContent=d.images.length;
-const cr=document.getElementById('arc-cnt-r');if(cr)cr.textContent=d.records.length;
-const ce=document.getElementById('arc-cnt-e');if(ce)ce.textContent=d.exams.length;
+  document.getElementById('arc-cnt-e').textContent=d.exams.length;
   document.querySelectorAll('#arc-tabs .at').forEach(t=>{
     t.textContent=arcNames[t.dataset.k]+'（'+(d[t.dataset.k]||[]).length+'）';
     t.classList.toggle('active',t.dataset.k===arcTab);
   });
   const list=d[arcTab]||[],body=document.getElementById('arc-body');
-  if(!list.length){body.innerHTML='<div class="empty">'+(arcEdit?'该患者暂无'+arcNames[arcTab]+'，可点击上方「上传新图片」添加':'该患者暂无已关联的'+arcNames[arcTab]+'，可点击下方按钮发起采集')+'</div>';return}
+  if(!list.length){body.innerHTML='<div class="empty">该患者暂无已关联的'+arcNames[arcTab]+'，可点击下方按钮发起采集</div>';return}
   body.innerHTML=list.map(function(x,i){
     const can=!!x.v;
     return '<div class="arc-item'+(can?' can':'')+'"'+(can?' '+DC('viewArcItem',[i])+' title="点击查看'+arcNames[arcTab]+'原文（可缩放 / 旋转 / 翻页 / 导出）"':'')+'>'+
       '<div class="ic">'+x.ic+'</div><div class="bd">'+
       '<div class="t1">'+x.tp+'<span class="tag '+x.wayc+'">'+x.way+'</span><span class="tag '+x.stc+'">'+x.st+'</span></div>'+
       '<div class="t2">'+x.ct+'<br><span>采集时间：'+x.t+'　·　'+x.link+'</span></div>'+
-      '</div>'+(arcEdit?'<div class="go" style="color:var(--danger)" '+DC('delArcItem',[i])+'>🗑 删除</div>':(can?'<div class="go">🔍 查看</div>':''))+'</div>';
+      '</div>'+(can?'<div class="go">🔍 查看</div>':'')+'</div>';
   }).join('');
 }
 function goCapture(v){
@@ -1448,6 +1227,41 @@ const CAP_DEVS=[
 function openImgDev(){openM('m-imgdev')}
 /* ---------- 影像：接收日志（只读，全部在弹窗内查看） ---------- */
 function openDlog(){const b=document.getElementById('dicom-log');if(b)b.scrollTop=0;openM('m-dlog')}
+function uploadCaptured(){
+  const tb=document.getElementById('cap-list-body');
+  const rows=[...tb.querySelectorAll('tr')].filter(tr=>tr.dataset.voided!=='1');
+  if(!rows.length){toast('采集列表暂无图像，请先通过「手动采集 → 本地文件人工上传」上传图片','err');return}
+  const pend=rows.filter(tr=>tr.dataset.qc==='0');
+  if(!pend.length){toast('采集列表中暂无「待上传」的图像（均已加密上传或已归档），无需重复上传','err');return}
+  const btn=[...document.querySelectorAll('button')].find(b=>b.textContent.indexOf('加密上传本地服务器')>-1);
+  askConfirm({
+    title:'加密上传本地服务器',
+    desc:'采集完成的图像经自动加密与格式化后上传至本地数据服务器，系统自动完成患者信息关联与影像索引，上传后自动进入医生质控环节。',
+    summary:'待上传：<b>'+pend.length+'</b> 张（列表共 '+rows.length+' 张）<br>上传后状态：待质控（自动进入医生质控环节）　·　操作人：'+curUser.name+'（'+curUser.role+'）',
+    okText:'确认上传',
+    onOk:function(){
+      if(btn){btn.dataset.txt=btn.textContent;btn.disabled=true;btn.textContent='🔐 加密上传中…'}
+      toast('正在自动加密与格式化…');
+      setTimeout(()=>{
+        pend.forEach(tr=>{
+          const nm=tr.querySelector('.nm');const td=tr.querySelectorAll('td');
+          if(!nm)return;
+          const patient=tr.dataset.patient||'';
+          tr.dataset.qc='1';td[6].innerHTML='<span class="tag t-orange">待质控</span>';
+          td[7].innerHTML='<span class="link" '+DC('viewCapImg',[{__el:1}])+'>查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" '+DC('openQcByItem',[nm.textContent.trim(),patient])+'>质控</span>';
+          submitQC(nm.textContent.trim(),patient,'高拍仪图片',true);
+          /* 患者档案中的对应记录同步由「待上传」转为「待质控」 */
+          const rec=(arcData[patient]||{}).records;
+          if(rec)rec.forEach(r=>{if(r.st==='待上传'){r.st='待质控';r.stc='t-orange'}});
+        });
+        if(btn){btn.disabled=false;btn.textContent=btn.dataset.txt||'🔐 加密上传本地服务器'}
+        logOp('加密上传本地服务器',rows.length+' 张高拍仪图片','成功（'+pend.length+' 张转入待质控）');
+        toast('已加密上传至本地数据服务器：'+rows.length+' 张，患者信息关联与影像索引完成，自动进入医生质控环节','ok');
+      },1200);
+    }
+  });
+}
+/* （已删除此处重复定义：第二个 uploadCaptured 仅为提示、覆盖上方真实实现，导致「加密上传」按钮长期空转） */
 /* ---------- 批量导入 ---------- */
 let impChosen=false;
 function pickImportFile(el){
@@ -1567,9 +1381,7 @@ const qcDetail={
   'OCT 序列 3 / 图像 75':{kind:'oct',ic:'🔬',view:'影像查看区',l2:'检查类型',v2:'OCT（黄斑区扫描）',diag:'渗出性年龄相关性黄斑变性',q:'清晰度良好 · 序列完整（3 序列 / 75 图）'},
   '手写病历 3 张 + 录入内容':{kind:'doc',ic:'📄',view:'病历内容查看区',l2:'病历类型',v2:'手写病历（本地文件上传 → 人工录入）',diag:'老年性白内障（双眼）',q:'图像清晰可辨 · 录入内容与病历一致'},
   '00128_手写病历_01_0912.png':{kind:'cap',ic:'📷',view:'高拍仪图像查看区',l2:'图片类型',v2:'手动采集 · 本地文件人工上传',diag:'老年性白内障（双眼）',q:'图像清晰 · 命名规范'},
-  '电子病历 12 条（批量导入）':{kind:'emr',ic:'📥',view:'病历数据查看区',l2:'病历类型',v2:'电子病历（系统批量导出 → 批量导入平台）',diag:'2型糖尿病 · 糖尿病视网膜病变',q:'数据完整 · 患者信息关联正确'},
-'00127_眼底照_06_0912.png':{kind:'cap',ic:'📷',view:'高拍仪图像查看区',l2:'图片类型',v2:'手动采集 · 本地文件人工上传',diag:'渗出性年龄相关性黄斑变性',q:'图像清晰 · 命名规范'},
-  '00130_验光_05_0912.png':{kind:'cap',ic:'📷',view:'高拍仪图像查看区',l2:'图片类型',v2:'手动采集 · 本地文件人工上传',diag:'高度近视眼底改变',q:'图像清晰 · 命名规范'}
+  '电子病历 12 条（批量导入）':{kind:'emr',ic:'📥',view:'病历数据查看区',l2:'病历类型',v2:'电子病历（系统批量导出 → 批量导入平台）',diag:'2型糖尿病 · 糖尿病视网膜病变',q:'数据完整 · 患者信息关联正确'}
 };
 let curQcRow=null;
 function openQc(el){
@@ -1604,6 +1416,10 @@ function paintQc(tr){
   else if(by===curUser.name) msg='采集与质控分离：本条数据由 '+by+' 本人采集，不可自审，请由其他质控医生执行质控。';
   if(msg){lock.style.display='block';lock.textContent='🔒 '+msg;[bp,br].forEach(b=>b.classList.add('disabled-role'))}
   else lock.style.display='none';
+  const rv=document.getElementById('qc-reveal');
+  rv.innerHTML=isRevealed(patient)
+    ?'<span class="lock-note" style="padding:2px 8px">🔓 已临时显示完整信息（已留痕）</span>'
+    :'<button class="reveal-btn" type="button" '+DC('askReveal',[patient])+'>🔓 查看完整患者信息</button>';
   applyPrivacy();
 }
 function passQC(){
@@ -1621,15 +1437,17 @@ function passQC(){
   askConfirm({
     title:'质控通过',
     desc:'通过后该条数据形成结构化归档记录，并从待质控列表移出；采集列表中对应条目状态同步更新为「已归档」。',
-    summary:'数据项：<b>'+item+'</b><br>患者：'+maskName(patient)+'　采集人：'+by+'<br>质控人：'+curUser.name+'（'+curUser.role+'）',
+    summary:'数据项：<b>'+item+'</b><br>患者：'+(isRevealed(patient)?patient:maskName(patient))+'　采集人：'+by+'<br>质控人：'+curUser.name+'（'+curUser.role+'）',
     okText:'确认通过',
     onOk:function(){
       tr.remove();curQcRow=null;
-      capRowsFor(item,patient,1).forEach(r=>{
-        r.dataset.qc='2';const tds=r.querySelectorAll('td');
-        if(tds.length>=8)tds[tds.length-2].innerHTML='<span class="tag t-gray">已归档</span>';
-        setRowEdit(r,false);
-        const opTd=r.querySelector('td:last-child'),sub=opTd&&opTd.querySelector('[data-c="submitRecord"]');if(sub)sub.remove();
+      ['rec-list-body','img-list-body','cap-list-body'].forEach(id=>{
+        [...document.querySelectorAll('#'+id+' tr')].forEach(r=>{
+          if(r.dataset.item===item&&r.dataset.qc==='1'){
+            r.dataset.qc='2';const tds=r.querySelectorAll('td');
+            if(tds.length>=8)tds[tds.length-2].innerHTML='<span class="tag t-gray">已归档</span>';
+          }
+        });
       });
       syncQcBadge();checkQcEmpty();closeDrawer();
       logOp('质控通过',item+' · '+patient,'已通过并形成结构化归档记录');
@@ -1652,106 +1470,23 @@ function rejectQC(){
   askConfirm({
     title:'质控驳回',
     desc:'驳回后该条数据退回采集环节，需由采集人员修正后重新提交质控；驳回原因必填，并与操作人一并记入操作日志。',
-    summary:'数据项：<b>'+item+'</b><br>患者：'+maskName(patient)+'　采集人：'+by,
+    summary:'数据项：<b>'+item+'</b><br>患者：'+(isRevealed(patient)?patient:maskName(patient))+'　采集人：'+by,
     requireReason:true,reasonLabel:'驳回原因',okText:'确认驳回',
     onOk:function(reason){
-      capRowsFor(item,patient,1).forEach(r=>{
-        r.dataset.qc='3';const tds=r.querySelectorAll('td');
-        if(tds.length>=8)tds[tds.length-2].innerHTML='<span class="tag t-red">已驳回</span>';
-        setRowRejected(r);
+      ['rec-list-body','img-list-body','cap-list-body'].forEach(id=>{
+        [...document.querySelectorAll('#'+id+' tr')].forEach(r=>{
+          if(r.dataset.item===item&&r.dataset.qc==='1'){
+            r.dataset.qc='0';const tds=r.querySelectorAll('td');
+            if(tds.length>=8)tds[tds.length-2].innerHTML='<span class="tag t-gray">待录入</span>';
+          }
+        });
       });
       tr.remove();curQcRow=null;
-      REJ[rejKey(item,patient)]={reason:reason,who:curUser.name,role:curUser.role,t:nowStr(),item:item,patient:patient,no:tr.dataset.no||'',seq:++rejSeq};
-      paintReject();
       syncQcBadge();checkQcEmpty();closeDrawer();
       logOp('质控驳回',item+' · '+patient,'已驳回，退回采集环节',reason);
       toast('已驳回：'+item+'（原因已留痕，数据退回采集环节）','err');
     }
   });
-}
-/* ---------- 驳回原因：采集人员可查看 ---------- */
-const REJ={
-  '手写病历 5 张 + 录入内容（已驳回）|刘志强':{
-    reason:'录入内容与扫描件不一致：主诉字段缺失、诊断未填写完整，且第 3 张病历图片文字模糊不可辨；请核对原件后重新录入并补充清晰图像。',
-    who:'李医生',role:'质控医生',t:'09-12 10:42',
-    item:'手写病历 5 张 + 录入内容（已驳回）',patient:'刘志强'},
-  '验光图像序列 2 / 图像 8|刘志强':{
-    reason:'验光单图像缺右眼轴位数据，且图像存在强反光无法核验；请重新拍摄并确认验光结果与录入度数一致。',
-    who:'李医生',role:'质控医生',t:'09-12 10:35',
-    item:'验光图像序列 2 / 图像 8',patient:'刘志强'},
-  '00127_眼底照_06_0912.png|王丽华':{
-    reason:'高拍仪采集图像命名不符合规范（缺少资料类型与日期），且图像偏暗、黄斑区细节不可辨；请按命名规则重新采集。',
-    who:'李医生',role:'质控医生',t:'09-12 10:20',
-    item:'00127_眼底照_06_0912.png',patient:'王丽华'}
-};
-let curReject=null,rejSeq=0;
-function rejKey(item,patient){return (item||'')+'|'+(patient||'')}
-/* 预设驳回记录按声明顺序编号，后续写入的序号更大 → 同一患者多条时取最新一条 */
-Object.keys(REJ).forEach(function(k,i){REJ[k].seq=i+1});
-rejSeq=Object.keys(REJ).length;
-function viewReject(item,patient){
-  let r=REJ[rejKey(item,patient)];
-  if(!r){
-    const ks=Object.keys(REJ);
-    for(let i=0;i<ks.length;i++){
-      const v=REJ[ks[i]];
-      if((item&&v.item===item)||(patient&&v.patient===patient)){r=v;break}
-    }
-  }
-  curReject={item:item||'',patient:patient||''};
-  const box=document.getElementById('rej-body');
-  const row=(k2,v)=>'<div class="r" style="display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--border);font-size:13px;line-height:1.8"><span style="width:76px;flex-shrink:0;color:var(--text3)">'+k2+'</span><span style="flex:1;min-width:0">'+v+'</span></div>';
-  const no=maskName(patient||'—');
-  box.innerHTML=
-    '<div style="font-size:14px;font-weight:600;margin-bottom:6px">'+esc(item||'—')+'</div>'+
-    row('患者',esc(no)+((r&&r.no)?' · '+esc(r.no):''))+
-    row('驳回时间',r?esc(r.t):'—')+
-    row('驳回人',r?(esc(r.who)+'（'+esc(r.role)+'）'):'—')+
-    row('驳回原因',r?('<b style="color:var(--danger)">'+esc(r.reason)+'</b>'):
-      '<span style="color:var(--text3)">质控医生未填写具体原因，请联系质控医生确认后重新处理</span>');
-  openM('m-reject');
-  logOp('查看驳回原因',(item||'—')+' · '+no,r?('原因：'+r.reason):'无原因记录');
-}
-function paintReject(){
-  /* 先统一操作列：已驳回行固定「档案 / 修改 / 提交」 */
-  ['rec-list-body','img-list-body','cap-list-body'].forEach(id=>{
-    [...document.querySelectorAll('#'+id+' tr')].forEach(r=>{if(r.dataset.qc==='3'&&r.dataset.voided!=='1')setRowRejected(r)});
-  });
-  ['rec-list-body','img-list-body','cap-list-body'].forEach(id=>{
-    [...document.querySelectorAll('#'+id+' tr')].forEach(r=>{
-      if(r.dataset.qc!=='3')return;
-      const item=r.dataset.item||'',pt=r.dataset.patient||'';
-      const tds=r.querySelectorAll('td');
-      if(tds.length>=2){
-        const st=tds[tds.length-2];
-        const tag=st&&st.querySelector('.tag.t-red');
-        if(tag&&!tag.dataset.rej){
-          tag.dataset.rej='1';tag.style.cursor='pointer';tag.title='点击查看驳回原因';
-          tag.setAttribute('data-c','viewReject');
-          tag.setAttribute('data-a',JSON.stringify([item,pt]));
-        }
-      }
-      /* 操作列固定「档案 / 修改 / 提交」；驳回原因改由「档案」抽屉内展示，状态标签仍可点击查看 */
-      const op=r.querySelector('td:last-child');
-      if(op){
-        op.querySelectorAll('[data-c="viewReject"]').forEach(function(x){x.remove()});
-        const ed2=op.querySelector('[data-c="editRecord"]');
-        if(ed2)ed2.textContent='修改';
-      }
-    });
-  });
-}
-function fixAfterReject(){
-  const c=curReject;closeM('m-reject');
-  if(!c)return;
-  let target=null;
-  ['rec-list-body','img-list-body','cap-list-body'].forEach(id=>{
-    [...document.querySelectorAll('#'+id+' tr')].forEach(r=>{
-      if(!target&&r.dataset.qc==='3'&&r.dataset.item===c.item)target=r;
-    });
-  });
-  if(!target){toast('未找到对应的已驳回数据','err');return}
-  editRecord(target.querySelector('[data-c="editRecord"]')||target);
 }
 /* ---------- 上传情况：手动上传 ---------- */
 function upRows(){return [].slice.call(document.querySelectorAll('#up-body tr'))}
@@ -1848,61 +1583,25 @@ function upRunRow(tr,done){
 }
 paintUpSel();
 
-/* ---------- 上传方式配置：定时上传开关与频次 ---------- */
-const FREQ_META={
-  day:{label:'每天',extra:null,hint:'每天在以下时刻自动上传。格式校验：24 小时制 HH:MM，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）'},
-  week:{label:'每周',extra:['周一','周二','周三','周四','周五','周六','周日'],hint:'选择星期后，于该星期以下时刻自动上传。格式校验：24 小时制 HH:MM，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）'},
-  month:{label:'每个月',extra:Array.from({length:31},(_,i)=>(i+1)+' 日'),hint:'选择日期后，于每月该日以下时刻自动上传。格式校验：24 小时制 HH:MM，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）'}
-};
-let tsFreqKey='day';
-function tsFreq(k,el){
-  tsFreqKey=k;
-  document.querySelectorAll('#ts-freq .ts-f').forEach(b=>b.classList.toggle('on',b===el));
-  const m=FREQ_META[k],ex=document.getElementById('ts-extra'),sel=document.getElementById('ts-extra-sel');
-  if(m.extra){
-    sel.innerHTML=m.extra.map(x=>'<option>'+x+'</option>').join('');
-    ex.style.display='block';
-  }else ex.style.display='none';
-  document.getElementById('ts-hint').textContent=m.hint;
-}
-function toggleTimedUpload(el){
-  el.classList.toggle('on');
-  const on=el.classList.contains('on');
-  document.getElementById('ts-config').style.display=on?'block':'none';
-  toast('定时上传已'+(on?'开启：可选择每天 / 每周 / 每个月的定时上传时间点':'关闭：不再定时上传，时间点设置已隐藏')+'（点击「保存并应用」后写入操作日志生效）',on?undefined:'err');
-}
-function tsDesc(){
-  const sw=document.getElementById('ts-switch');
-  if(!sw.classList.contains('on'))return null;
-  const m=FREQ_META[tsFreqKey];
-  const t=document.getElementById('up-time').value.trim();
-  if(tsFreqKey==='day')return '每天 '+t;
-  return m.label.slice(0,2)+' '+document.getElementById('ts-extra-sel').value+' '+t;
-}
 /* ---------- 上传方式配置：应用到上传情况 ---------- */
 function applyUploadCfg(){
-  const tsw=document.getElementById('ts-switch').classList.contains('on');
-  let parts=[],t='';
-  if(tsw){
-    const el=document.getElementById('up-time');
-    t=el.value.trim();
-    if(!t){toast('请填写定时上传时刻（必填）','err');el.focus();return}
-    parts=t.split(',').map(x=>x.trim()).filter(Boolean);
-    const bad=parts.find(x=>!/^([01]\d|2[0-3]):[0-5]\d$/.test(x));
-    if(bad){toast('时刻格式不合规："'+bad+'"；请按 24 小时制 HH:MM 填写，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）','err');el.focus();return}
-  }
+  const el=document.getElementById('up-time');
+  const t=el.value.trim();
+  if(!t){toast('请填写定时上传时刻（必填）','err');el.focus();return}
+  const parts=t.split(',').map(x=>x.trim()).filter(Boolean);
+  const bad=parts.find(x=>!/^([01]\d|2[0-3]):[0-5]\d$/.test(x));
+  if(bad){toast('时刻格式不合规："'+bad+'"；请按 24 小时制 HH:MM 填写，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）','err');el.focus();return}
   const rt=document.getElementById('rt-switch').classList.contains('on');
   const mu=document.getElementById('mu-switch').classList.contains('on');
-  const tsDescText=tsw?tsDesc():null;
   askConfirm({
     title:'保存并应用上传方式配置',
     desc:'配置立即应用于「上传情况」中本地数据的上传方式，数据上传至在线服务器后由管理端加工使用；变更内容与操作人记入操作日志，避免上传策略被静默篡改。',
-    summary:'实时自动上传：<b>'+(rt?'已开启':'已关闭')+'</b><br>允许手动上传：<b>'+(mu?'已开启':'已关闭')+'</b><br>定时上传：<b>'+(tsw?tsDescText:'已关闭')+'</b><br>操作人：'+curUser.name+'（'+curUser.role+'）',
+    summary:'实时自动上传：<b>'+(rt?'已开启':'已关闭')+'</b><br>允许手动上传：<b>'+(mu?'已开启':'已关闭')+'</b><br>定时上传时刻：<b>'+parts.join('、')+'</b><br>操作人：'+curUser.name+'（'+curUser.role+'）',
     okText:'确认保存',
     onOk:function(){
-      document.getElementById('up-way2').textContent=tsw?('定时 '+parts[0]):'手动';
-      logOp('保存上传方式配置','实时'+(rt?'开启':'关闭')+' · 手动'+(mu?'开启':'关闭')+' · 定时'+(tsw?('开启（'+tsDescText+'）'):'关闭'),'成功');
-      toast('上传方式已配置：定时上传'+(tsw?('：'+tsDescText):'已关闭')+'；手动上传'+(mu?'已开启':'已关闭'),'ok');
+      document.getElementById('up-way2').textContent='定时 '+parts[0];
+      logOp('保存上传方式配置','实时'+(rt?'开启':'关闭')+' · 手动'+(mu?'开启':'关闭')+' · 定时 '+parts.join('、'),'成功');
+      toast('上传方式已配置：定时 '+parts.join('、')+'；手动上传'+(mu?'已开启':'已关闭'),'ok');
       paintUpSel();
     }
   });
@@ -1991,178 +1690,20 @@ function syncListEmpty(from){
 }
 /* ---------- 采集列表：作废（数据不作物理删除）由文末「合规层」统一定义 ---------- */
 /* ---------- 患者数据档案：按指定患者打开 ---------- */
-/* 患者信息登记表：行内未携带 meta/diag 时回退，保证档案抽屉顶部信息完整 */
-const PT_INFO={
-  'YZK-2026-00125':{meta:'女 / 71',diag:'年龄相关性白内障'},
-  'YZK-2026-00126':{meta:'男 / 58',diag:'原发性青光眼'},
-  'YZK-2026-00127':{meta:'女 / 68',diag:'渗出性年龄相关性黄斑变性'},
-  'YZK-2026-00128':{meta:'男 / 63',diag:'老年性白内障'},
-  'YZK-2026-00129':{meta:'女 / 55',diag:'糖尿病视网膜病变'},
-  'YZK-2026-00130':{meta:'男 / 66',diag:'高度近视眼底改变'}
-};
 function openArcFor(name,no,meta,diag){
-  const info=PT_INFO[no]||{};
-  curPt={name:name,no:no,meta:meta||info.meta||'',diag:diag||info.diag||'',label:name+' · '+no};
-  arcRow=LAST_ROW;                  /* 记录来源行：已驳回时档案内展示驳回信息 */
+  curPt={name:name,no:no,meta:meta||'',diag:diag||'',label:name+' · '+no};
   openArc();
-}
-/* ---------- 采集列表：按质控状态增删「编辑」按钮（已归档 / 已作废移除） ---------- */
-/* 采集列表定位：先按数据项精确匹配，未命中时按患者回退（质控待办与列表行数据项文案可能不同） */
-function capRowsFor(item,patient,state){
-  const ids=['rec-list-body','img-list-body','cap-list-body'];
-  let hit=[];
-  ids.forEach(function(id){
-    [...document.querySelectorAll('#'+id+' tr')].forEach(function(r){
-      if(r.dataset.qc!==String(state))return;
-      if(item&&r.dataset.item===item)hit.push(r);
-    });
-  });
-  if(!hit.length&&patient){
-    ids.forEach(function(id){
-      [...document.querySelectorAll('#'+id+' tr')].forEach(function(r){
-        if(r.dataset.qc!==String(state))return;
-        if(r.dataset.patient===patient)hit.push(r);
-      });
-    });
-  }
-  return hit;
-}
-/* 已驳回行：操作列固定「档案 / 修改 / 提交」——移除重命名 / 作废 / 驳回原因，编辑文案改「修改」 */
-function setRowRejected(tr){
-  if(!(tr&&tr.parentElement))return;
-  const tds=tr.querySelectorAll('td');if(!tds.length)return;
-  const op=tds[tds.length-1];
-  op.querySelectorAll('[data-c="openRename"],[data-c="delCap"],[data-c="viewReject"]').forEach(function(x){x.remove()});
-  const ed=op.querySelector('[data-c="editRecord"]');
-  if(ed){ed.textContent='修改';return}
-  const sub=op.querySelector('[data-c="submitRecord"]');
-  const sp=document.createElement('span');
-  sp.className='link';sp.style.marginLeft='10px';sp.textContent='修改';
-  sp.setAttribute('data-c','editRecord');
-  sp.setAttribute('data-a',JSON.stringify([{__el:1}]));
-  if(sub)op.insertBefore(sp,sub);else op.appendChild(sp);
-}
-function setRowEdit(tr,on){
-  if(!(tr&&tr.parentElement))return;
-  const id=tr.parentElement.id;
-  if(id!=='rec-list-body'&&id!=='img-list-body'&&id!=='cap-list-body')return;
-  const tds=tr.querySelectorAll('td');if(!tds.length)return;
-  const op=tds[tds.length-1],ex=op.querySelector('[data-c="editRecord"]');
-  if(on&&!ex){
-    if(tr.dataset.voided==='1')return;
-    const EDIT='<span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">'+(tr.dataset.qc==='3'?'修改':'编辑')+'</span>';
-    const anchor=(id==='cap-list-body')?op.querySelector('[data-c="delCap"]'):op.querySelector('.link');
-    if(anchor)anchor.insertAdjacentHTML('beforebegin',EDIT);
-  }else if(!on&&ex){ex.remove()}
-}
-/* ---------- 采集列表：编辑采集数据弹窗（未归档可编辑，已归档锁定；编辑留痕） ---------- */
-let curEditInfo=null;
-/* ---------- 编辑采集数据：档案式侧边栏（患者信息可改 + 图片上传 / 删除） ---------- */
-let arcEdit=null;
-function editRecord(el){
-  const tr=el&&el.closest?el.closest('tr'):null;
-  if(!tr)return;
-  if(tr.dataset.qc==='2'||tr.dataset.voided==='1'){toast('已归档或已作废的数据不可编辑','err');return}
-  const tds=tr.querySelectorAll('td');
-  const item=tr.dataset.item||(tr.querySelector('.nm')?tr.querySelector('.nm').textContent.trim():(tds[0]?tds[0].textContent.trim():''));
-  const ci=(tr.dataset.from==='scanner'||(tr.closest&&tr.closest('#cap-list-body')))?2:1;
-  const patient=tr.dataset.patient||(tds[ci]?tds[ci].textContent.trim().split(' · ')[0]:'');
-  const no=tr.dataset.no||PATIENTS[patient]||'';
-  const info=PT_INFO[no]||{};
-  curPt={name:patient,no:no,meta:info.meta||'',diag:info.diag||'',label:patient+' · '+no};
-  arcRow=tr;arcEdit={tr:tr,item:item};
-  openArc();
-  logOp('编辑采集数据',item+' · '+patient,'打开编辑侧边栏（患者信息 / 图片可维护）');
-}
-function cancelArcEdit(){
-  if(!arcEdit){closeArc();return}
-  const it=arcEdit.item||'—';
-  arcEdit=null;openArc();applyPrivacy();
-  logOp('取消编辑',it,'放弃本次修改，未写入变更');
-  toast('已取消编辑，未保存任何修改','err');
-}
-function saveArcEdit(){
-  if(!arcEdit){closeArc();return}
-  const nm=document.getElementById('ae-name').value.trim();
-  const no=document.getElementById('ae-no').value.trim();
-  const meta=document.getElementById('ae-meta').value.trim();
-  const diag=document.getElementById('ae-diag').value.trim();
-  if(!nm||!no){toast('患者姓名与病历号为必填项','err');return}
-  const oldNo=curPt.no,oldLabel=curPt.label;
-  if(!arcData[no])arcData[no]=arcData[oldNo]||{records:[],images:[],exams:[]};
-  if(no!==oldNo&&arcData[oldNo])delete arcData[oldNo];
-  PT_INFO[no]={meta:meta||((PT_INFO[oldNo]||{}).meta||''),diag:diag||((PT_INFO[oldNo]||{}).diag||'')};
-  if(oldNo!==no&&oldNo!=='')delete PT_INFO[oldNo];
-  curPt={name:nm,no:no,meta:meta,diag:diag,label:nm+' · '+no};
-  const tr=arcEdit.tr;
-  if(tr&&tr.parentElement){
-    tr.dataset.patient=nm;tr.dataset.no=no;
-    const ci=(tr.dataset.from==='scanner'||(tr.closest&&tr.closest('#cap-list-body')))?2:1;
-    const tds=tr.querySelectorAll('td');
-    if(tds[ci])tds[ci].textContent=(ci===2)?nm:(nm+' · '+no);
-    regPatient(nm,no);
-  }
-  arcEdit=null;
-  openArc();applyPrivacy();
-  logOp('编辑患者信息',oldLabel+' → '+nm+' · '+no,'姓名 / 病历号 / 诊断变更已留痕，档案数据同步迁移');
-  toast('患者信息已更新：'+nm+' · '+no+'（变更已记入操作日志）','ok');
-}
-function delArcItem(i){
-  if(!arcEdit||!curPt)return;
-  const no=curPt.no,arr=arcData[no]&&arcData[no][arcTab];
-  if(!arr||!arr[i]){toast('该条目不存在或已移除','err');return}
-  const it=arr.splice(i,1)[0];
-  repaintArc();
-  logOp('编辑档案·移除图片',curPt.name+' · '+(it.tp||'')+' · '+(it.t||''),'已从档案移除（操作留痕，不作物理删除）');
-  toast('已从档案移除该图片（操作已记入日志）','ok');
-}
-function arcUploadPick(){document.getElementById('arc-file').click()}
-document.getElementById('arc-file').addEventListener('change',function(){
-  const fs=[...this.files];
-  this.value='';
-  if(!fs.length)return;
-  if(!arcEdit||!curPt||!curPt.no){toast('编辑会话已失效，请重新点击「编辑」','err');return}
-  if(!arcData[curPt.no])arcData[curPt.no]={records:[],images:[],exams:[]};
-  const arr=arcData[curPt.no][arcTab]=arcData[curPt.no][arcTab]||[];
-  fs.forEach(function(f){
-    const svg=capImgSvg(mcKind(f.name),0);
-    arr.unshift({tp:arcTab==='records'?'病历图片':arcNames.images,ic:arcTab==='records'?'📄':'📷',
-      way:'编辑上传 · 本地文件',wayc:'t-purple',ct:esc(f.name)+'（'+(f.size/1048576).toFixed(1)+' MB）',
-      t:nowStr(),link:'编辑侧边栏上传，进入质控流程',st:'待上传',stc:'t-gray',
-      v:{k:'capimg',src:{title:'上传图片预览',logA:'查看上传原图',cur:0,
-        logSuffix:function(){return '患者 '+(curPt?maskName(curPt.name)+' / '+maskNo(curPt.no):'—')},
-        pages:[{label:'原图',name:f.name,meta:(f.size/1048576).toFixed(1)+' MB · 图片 · 300dpi',svg:svg}]}}});
-    logOp('编辑档案·上传图片',f.name+' · '+maskName(curPt.name)+' / '+maskNo(curPt.no),'成功（已加入档案，状态：待上传）');
-  });
-  repaintArc();
-  toast('已上传 '+fs.length+' 张图片至患者档案（状态：待上传，提交后进入质控）','ok');
-});
-function saveRecEdit(){
-  if(!curEditInfo){closeM('m-edit');return}
-  const v=document.getElementById('ed-content').value.trim();
-  if(!v){toast('编辑内容不能为空（必填）','err');return}
-  closeM('m-edit');
-  logOp('编辑采集数据',curEditInfo.item+' · '+curEditInfo.patient,'成功（未归档数据编辑，变更留痕）');
-  toast('编辑已保存：数据保持当前质控流程，变更内容已记入操作日志','ok');
-  curEditInfo=null;
 }
 /* ---------- 采集列表：通用写入（state 0 待录入 / 1 待质控 / 2 已归档） ---------- */
 function addCapRow2(from,cells,state,item,patient,type,no){
   const tb=document.getElementById(capListMap[from][0]);
   if(!tb)return null;
-  const stTxt=state===0?(from==='scanner'?'待上传':(from==='imaging'?'待上传':'待录入')):(state===1?'待质控':(state===3?'已驳回':'已归档'));
-  const stCls=state===1?'t-orange':(state===3?'t-red':'t-gray');
-  const edit=(from==='record'||from==='imaging')&&state!==2?'<span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span>':'';
-  const subBtn='<span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span>';
-  const qc=state===2?'':subBtn;
-  const editCap=state!==2?'<span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span>':'';
-  /* 已驳回：操作列固定为「档案 / 修改 / 提交」，不再提供重命名与作废 */
-  const opRej=from==='scanner'
-    ? '<span class="link" '+DC('viewCapImg',[{__el:1}])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>修改</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span>'
-    : '<span class="link" '+DC('openArcFor',[patient,no,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>修改</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span>';
-  const op=state===3?opRej:(from==='scanner'
-    ? '<span class="link" '+DC('viewCapImg',[{__el:1}])+'>档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span>'+editCap+'<span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span>'+qc
-    : '<span class="link" '+DC('openArcFor',[patient,no,'',''])+'>档案</span>'+edit+qc);
+  const stTxt=state===0?(from==='scanner'?'待上传':(from==='imaging'?'待上传':'待录入')):(state===1?'待质控':'已归档');
+  const stCls=state===1?'t-orange':'t-gray';
+  const qc=state===1?'<span class="link" style="margin-left:10px" '+DC('openQcByItem',[item,patient])+'>质控</span>':'<span style="margin-left:10px;color:var(--text3)">—</span>';
+  const op=from==='scanner'
+    ? '<span class="link" '+DC('viewCapImg',[{__el:1}])+'>查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span>'+qc
+    : '<span class="link" '+DC('openArcFor',[patient,no,'',''])+'>档案</span>'+qc;
   const tr=document.createElement('tr');
   tr.dataset.qc=String(state);tr.dataset.item=item;tr.dataset.patient=patient;tr.dataset.type=type;
   tr.dataset.no=no||'';tr.dataset.from=from;tr.dataset.by=curUser.name;
@@ -2173,12 +1714,9 @@ function addCapRow2(from,cells,state,item,patient,type,no){
   return tr;
 }
 /* ---------- 采集列表 → 医生质控：定位并打开质控抽屉 ---------- */
-function openQcByItem(item,patient,type){
-  const rows=[...document.querySelectorAll('#qc-body tr')];
-  const tr=rows.find(x=>x.dataset.item===item&&x.dataset.patient===patient)
-        ||rows.find(x=>x.dataset.item===item)
-        ||rows.find(x=>x.dataset.patient===patient);
-  if(!tr){toast('该数据尚未进入医生质控待办（请先提交质控）','err');return}
+function openQcByItem(item,patient){
+  const tr=[...document.querySelectorAll('#qc-body tr')].find(x=>x.dataset.item===item&&x.dataset.patient===patient);
+  if(!tr){toast('该数据尚未进入医生质控待办（请先加密上传本地服务器）','err');return}
   openQc(tr.querySelector('.link'));
 }
 /* ---------- 手动采集（三类采集统一入口） ---------- */
@@ -2203,7 +1741,7 @@ function openManualCap(from){
   if(note)note.textContent=isRec
     ?'手动采集通过本地文件人工上传完成：一次可选择多张本机图片文件，保存后自动完成患者信息关联与影像索引；请完成人工录入后点击「✓ 提交质控」。'
     :(from==='scanner'
-      ?'手动采集通过本地文件人工上传完成：一次可选择多张本机图片文件；保存后自动完成患者信息关联与影像索引并写入采集列表（状态：待上传），提交后进入医生质控环节。'
+      ?'手动采集通过本地文件人工上传完成：一次可选择多张本机图片文件；保存后自动完成患者信息关联与影像索引并写入采集列表（状态：待上传），点击「🔐 加密上传本地服务器」完成加密与格式化上传后进入医生质控环节。'
       :'手动采集通过本地文件人工上传完成：一次可选择多张本机图片文件，保存后自动完成患者信息关联与影像索引，并进入医生质控环节。');
   const zt=document.getElementById('mc-pick-t');
   if(zt)zt.textContent='点击选择本地文件（支持多张）';
@@ -2348,36 +1886,10 @@ function capLazySrc(item,tr){
 function viewCapImg(el){
   const tr=el&&el.closest?el.closest('tr'):null;
   if(!tr){return}
-  /* 高拍仪「档案」：以当前行患者为准打开档案抽屉，顶部患者信息与列表行严格一致 */
-  const rtds=tr.querySelectorAll('td');
-  const rPatient=tr.dataset.patient||(rtds[2]?rtds[2].textContent.trim():'');
-  if(!rPatient){toast('该行缺少患者信息，请先完成患者信息关联','err');return}
-  const rNo=tr.dataset.no||PATIENTS[rPatient]||'';
-  const rInfo=PT_INFO[rNo]||{};
-  curPt={name:rPatient,no:rNo,meta:rInfo.meta||'',diag:rInfo.diag||'',label:rPatient+' · '+rNo};
-  const tb=document.getElementById('cap-list-body');
-  const stcMap={'待质控':'t-orange','待上传':'t-orange','待提交质控':'t-orange','已驳回':'t-red','已归档':'t-green','已作废':'t-gray'};
-  const items=[];
-  if(tb)[...tb.querySelectorAll('tr')].forEach(function(r){
-    const rp=r.dataset.patient||(r.children[2]?r.children[2].textContent.trim():'');
-    if(rp!==rPatient)return;/* 档案唯一：仅汇总该患者本人的采集图片 */
-    const nm=r.querySelector('.nm');
-    const item=nm?nm.textContent.trim():(r.children[0]?r.children[0].textContent.trim():'采集图片');
-    const typeT=r.children[1]?r.children[1].textContent.trim():'高拍仪图片';
-    const tds=r.querySelectorAll('td');
-    const stT=tds.length>=7?tds[tds.length-2].textContent.trim():'待上传';
-    const tm=tds.length>=5?tds[tds.length-4].textContent.trim():'';
-    const voided=r.dataset.voided==='1';
-    const it={tp:typeT,ic:'📷',way:'手动采集',wayc:'t-purple',ct:item,t:tm,link:'已关联患者信息',
-      st:voided?'已作废':(stT||'待上传'),stc:stcMap[stT]||'t-orange'};
-    if(!voided)it.v={k:'capimg',src:CAP_FILES[item]||capLazySrc(item,r)};
-    items.push(it);
-  });
-  const arcKey=rNo||('PT-'+rPatient);/* 档案按患者唯一：同一患者始终读写同一份档案 */
-  const d=arcData[arcKey]||(arcData[arcKey]={records:[],images:[],exams:[]});
-  d.images=items;
-  arcRow=tr;                        /* 记录来源行：已驳回时档案内展示驳回信息 */
-  openArc();
+  if(tr.dataset.voided==='1'){toast('该数据已作废，不可查看','err');return}
+  const nm=tr.querySelector('.nm'),item=nm?nm.textContent.trim():'采集图片';
+  const src=CAP_FILES[item]||capLazySrc(item,tr);
+  lbOpenSrc(src,src.cur||0);
 }
 /* ---------- 按资料类型生成上传图片内容（内联 SVG，离线可渲染） ---------- */
 const MC_DEMO_FILES=[{mb:1.8,w:2480,h:3508},{mb:1.6,w:2480,h:3508},{mb:1.4,w:2480,h:3508}];
@@ -2560,12 +2072,12 @@ function saveManualCap(){
   const n=batch.length;
   mcPt={name:name,no:no};
   if(mcFrom==='scanner'){
-    /* 每一张图片写入一条采集记录（状态：待上传），提交质控后转入待质控，便于逐张质控与逐张查看 */
+    /* 每一张图片写入一条采集记录（状态：待上传），点击「加密上传本地服务器」后转入待质控，便于逐张质控与逐张查看 */
     batch.slice().reverse().forEach(function(f){
       const item=f.name;
       const row='<td><b class="nm">'+esc(item)+'</b></td><td><span class="tag '+c.tc+'">'+esc(type)+'</span></td><td>'+esc(name)+'</td>'+
         '<td><span class="tag t-orange">'+way+'</span></td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待上传</span></td>'+
-        '<td><span class="link" '+DC('viewCapImg',[{__el:1}])+'>档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
+        '<td><span class="link" '+DC('viewCapImg',[{__el:1}])+'>查看</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span></td>';
       const tr=document.createElement('tr');
       tr.dataset.qc='0';tr.dataset.item=item;tr.dataset.patient=name;tr.dataset.type=type;
       tr.dataset.no=no;tr.dataset.from=mcFrom;tr.dataset.by=curUser.name;
@@ -2578,7 +2090,7 @@ function saveManualCap(){
     const item=type+'（手动采集）';
     const row='<td><b>'+esc(item)+'</b></td><td>'+esc(name)+' · '+esc(no)+'</td><td><span class="tag t-orange">'+way+'</span></td>'+
       '<td>'+n+' '+c.unit+'</td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待录入</span></td>'+
-      '<td><span class="link" '+DC('openArcFor',[name,no,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
+      '<td><span class="link" '+DC('openArcFor',[name,no,'',''])+'>档案</span><span style="color:var(--text3)">—</span></td>';
     const tr=document.createElement('tr');
     tr.dataset.qc='0';tr.dataset.item=item;tr.dataset.patient=name;tr.dataset.type=c.tp;
     tr.dataset.no=no;tr.dataset.from=mcFrom;tr.dataset.by=curUser.name;
@@ -2587,7 +2099,7 @@ function saveManualCap(){
     const item=type+'（手动采集）';
     const row='<td><b>'+esc(item)+'</b></td><td>'+esc(name)+' · '+esc(no)+'</td><td><span class="tag t-orange">'+way+'</span></td>'+
       '<td>'+n+' '+c.unit+'</td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-orange">待质控</span></td>'+
-      '<td><span class="link" '+DC('openArcFor',[name,no,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
+      '<td><span class="link" '+DC('openArcFor',[name,no,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('openQcByItem',[item,name])+'>质控</span></td>';
     const tr=document.createElement('tr');
     tr.dataset.qc='1';tr.dataset.item=item;tr.dataset.patient=name;tr.dataset.type=c.tp;
     tr.dataset.no=no;tr.dataset.from=mcFrom;tr.dataset.by=curUser.name;
@@ -2609,136 +2121,18 @@ function saveManualCap(){
   regPatient(name,no);
   logOp('手动采集',type+'（'+c.page+'）· '+name+' · '+no,
     mcFrom==='record'?'成功（'+n+' 张待人工录入后提交质控）'
-      :(mcFrom==='scanner'?'成功（'+n+' 张已写入采集列表，待提交质控）':'成功（'+n+' 张已进入医生质控）'));
+      :(mcFrom==='scanner'?'成功（'+n+' 张已写入采集列表，待加密上传）':'成功（'+n+' 张已进入医生质控）'));
   toast(mcFrom==='record'
     ?'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引；请完成人工录入后点击「✓ 提交质控」'
     :(mcFrom==='scanner'
-      ?'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引并写入采集列表（状态：待上传）；在采集列表中点击「提交」进入医生质控'
+      ?'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引并写入采集列表（状态：待上传）；点击「🔐 加密上传本地服务器」完成加密与格式化上传后进入医生质控'
       :'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引并进入医生质控'),'ok');
 }
 
-/* ---------- 批量采集（高拍仪连拍）：自动命名 · 逐张写入采集列表（待上传） ---------- */
-function openBatchCap(){
-  document.getElementById('bt-type').innerHTML=mcCfg.scanner.types.map(t=>'<option>'+t+'</option>').join('');
-  document.getElementById('bt-name').value=curPt?curPt.name:'';
-  document.getElementById('bt-no').value=curPt?curPt.no:'';
-  document.getElementById('bt-total').style.display='none';
-  btFiles=[];
-  const bzt=document.getElementById('bt-pick-t');if(bzt)bzt.textContent='点击选择本地文件（支持多张）';
-  openM('m-batch');
-}
-function btBaseNo(){
-  const no=document.getElementById('bt-no').value.trim();
-  const runs=no.match(/\d+/g)||[''];
-  const four=runs.filter(function(r){return r.length>=4});
-  return four.length?four[four.length-1]:runs[runs.length-1];
-}
-let btFiles=[];
-function btPick(){document.getElementById('bt-file').click()}
-document.getElementById('bt-file').addEventListener('change',function(){
-  const fs=[...this.files];this.value='';
-  if(!fs.length)return;
-  btFiles=fs;
-  const zt=document.getElementById('bt-pick-t');
-  if(zt)zt.textContent='重新选择本地文件（已选 '+fs.length+' 个）';
-  toast('已选择 '+fs.length+' 个本地文件（JPG / PNG / BMP），开始批量采集后将按自动命名规则写入采集列表');
-});
-function startBatchCap(){
-  const type=document.getElementById('bt-type').value;
-  const name=document.getElementById('bt-name').value.trim();
-  const no=document.getElementById('bt-no').value.trim();
-  if(!name||!no){toast('请填写患者姓名与病历号','err');return}
-  const cnt=btFiles.length;
-  if(!cnt){toast('请先在「采集图片」中选择本地图片文件（支持多张）','err');return}
-  const btn=document.getElementById('bt-start');
-  btn.disabled=true;btn.textContent='采集中…';
-  const total=document.getElementById('bt-total'),bar=document.getElementById('bt-bar');
-  total.style.display='block';
-  const d=new Date(),tag=String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-  const base=btBaseNo()||'IMG';
-  const tb=document.getElementById('cap-list-body');
-  const t=nowStr();
-  let i=0;
-  const timer=setInterval(function(){
-    i++;
-    const pct=Math.round(i/cnt*100);
-    bar.style.width=pct+'%';
-    document.getElementById('bt-total-p').textContent=pct+'%';
-    document.getElementById('bt-total-t').textContent='批量采集中… 第 '+i+' / '+cnt+' 张';
-    const item=base+'_'+type+'_'+String(i).padStart(2,'0')+'_'+tag+'.png';
-    const f=btFiles[(i-1)%btFiles.length];
-    const row='<td><b class="nm">'+esc(item)+'</b></td><td><span class="tag t-gray">'+esc(type)+'</span></td><td>'+esc(name)+'</td>'+
-      '<td><span class="tag t-orange">批量采集 · 高拍仪连拍</span></td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待上传</span></td>'+
-      '<td><span class="link" '+DC('viewCapImg',[{__el:1}])+'>档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
-    const tr=document.createElement('tr');
-    tr.dataset.qc='0';tr.dataset.item=item;tr.dataset.patient=name;tr.dataset.type=type;
-    tr.dataset.no=no;tr.dataset.from='scanner';tr.dataset.by=curUser.name;
-    tr.innerHTML=row;tb.prepend(tr);
-    CAP_FILES[item]=uploadSrc({name:name,no:no},[{name:item,mb:f.size/1048576,w:2480,h:3508,svg:capImgSvg(mcKind(type),(i-1)%3)}],0);
-    if(i>=cnt){
-      clearInterval(timer);
-      btn.disabled=false;btn.textContent='开始批量采集';
-      syncListEmpty('scanner');
-      if(!arcData[no])arcData[no]={records:[],images:[],exams:[]};
-      for(let k=0;k<cnt;k++)arcData[no].records.unshift({tp:type,ic:'📷',way:'批量采集 · 高拍仪连拍',wayc:'t-orange',
-        ct:'1 张（图片格式保存）',t:t,link:'已自动完成患者信息关联与影像索引',st:'待上传',stc:'t-gray'});
-      curPt={name:name,no:no,meta:'',diag:'',label:name+' · '+no};
-      document.querySelectorAll('.cur-pt').forEach(el=>el.textContent=curPt.label);
-      regPatient(name,no);
-      logOp('批量采集','高拍仪连拍 · '+type+' · '+name+' · '+no,'成功（'+cnt+' 张已写入采集列表，待提交质控）');
-      closeM('m-batch');
-      toast('批量采集完成：'+name+' · '+cnt+' 张图片（'+type+'），已按规则自动命名并完成患者信息关联与影像索引（状态：待上传）；在采集列表中点击「提交」进入医生质控','ok');
-    }
-  },180);
-}
-
-/* ---------- 采集列表：提交质控（待录入 / 已驳回 → 待质控） ---------- */
-function submitRecord(el){
-  const tr=el&&el.closest?el.closest('tr'):null;
-  if(!tr)return;
-  if(tr.dataset.voided==='1'){toast('该数据已作废，不可提交','err');return}
-  const qc=tr.dataset.qc;
-  const item=tr.dataset.item||(tr.querySelector('.nm')?tr.querySelector('.nm').textContent.trim():tr.children[0].textContent.trim());
-  const patient=tr.dataset.patient||[...tr.children][(tr.closest&&tr.closest('#cap-list-body'))?2:1].textContent.trim().split(' · ')[0];
-  if(qc==='2'){toast('该数据已归档，无需再次提交','err');return}
-  if(qc==='1'){toast('该数据已在医生质控流程中，为您打开质控详情（当前角色只读查看）');openQcByItem(item,patient);return}
-  const tds=tr.querySelectorAll('td');
-  tr.dataset.qc='1';
-  if(tds.length>=8)tds[tds.length-2].innerHTML='<span class="tag t-orange">待质控</span>';
-  const edL=tds.length?tds[tds.length-1].querySelector('[data-c="editRecord"]'):null;
-  if(edL)edL.textContent='编辑';            /* 已转待质控：操作列文案回到「编辑」 */
-  setRowEdit(tr,true);
-  const tid=tr.parentElement?tr.parentElement.id:'';
-  /* 由「已驳回」重新提交时，恢复高拍仪行的「重命名 / 作废」 */
-  if(tid==='cap-list-body'&&tr.dataset.voided!=='1'){
-    const opTd=tds[tds.length-1];
-    const mk=function(fn,txt,color){
-      const sp=document.createElement('span');
-      sp.className='link';sp.style.marginLeft='10px';sp.textContent=txt;
-      if(color){sp.style.color=color;sp.title='合规要求：数据不作物理删除，作废后保留记录并留痕'}
-      sp.setAttribute('data-c',fn);sp.setAttribute('data-a',JSON.stringify([{__el:1}]));
-      return sp;
-    };
-    const ed2=opTd.querySelector('[data-c="editRecord"]');
-    if(!opTd.querySelector('[data-c="openRename"]')){
-      const sp=mk('openRename','重命名');
-      if(ed2)opTd.insertBefore(sp,ed2);else opTd.appendChild(sp);
-    }
-    const sub2=opTd.querySelector('[data-c="submitRecord"]');
-    if(!opTd.querySelector('[data-c="delCap"]')){
-      const sp=mk('delCap','作废','var(--danger)');
-      if(sub2)opTd.insertBefore(sp,sub2);else opTd.appendChild(sp);
-    }
-  }
-  const defType=tid==='img-list-body'?'医学影像':(tid==='cap-list-body'?'高拍仪图片':'病历（手写）');
-  submitQC(item,patient,tr.dataset.type||defType,true);
-  logOp('提交质控',item+' · '+patient,'成功（已进入医生质控待办）');
-  toast('已提交医生质控：'+item,'ok');
-}
 /* ---------- 病历页工具栏：提交质控（提交列表中待录入的病历数据） ---------- */
 function submitQCbar(){
   const tb=document.getElementById('rec-list-body');
-  const pend=[...tb.querySelectorAll('tr')].filter(tr=>(tr.dataset.qc==='0'||tr.dataset.qc==='3')&&tr.dataset.voided!=='1');
+  const pend=[...tb.querySelectorAll('tr')].filter(tr=>tr.dataset.qc==='0'&&tr.dataset.voided!=='1');
   if(!pend.length){toast('当前没有待提交的病历数据（请先通过手动采集上传病历图片并完成人工录入，或使用批量导入 / 系统接口传输）','err');return}
   const no=pend[0].dataset.no||'';
   askConfirm({
@@ -2755,7 +2149,7 @@ function submitQCbar(){
         const rno=tr.dataset.no||no;
         tr.dataset.qc='1';
         td[6].innerHTML='<span class="tag t-orange">待质控</span>';
-        td[7].innerHTML='<span class="link" '+DC('openArcFor',[patient,rno,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span>';
+        td[7].innerHTML='<span class="link" '+DC('openArcFor',[patient,rno,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('openQcByItem',[item,patient])+'>质控</span>';
         submitQC(item,patient,'病历（手写）',true);n++;
       });
       logOp('提交质控',n+' 条病历数据','成功（已进入医生质控待办）');
@@ -2787,26 +2181,26 @@ const USERS={
   doctor:{name:'张医生',initial:'张',role:'质控医生'},
   admin:{name:'王管理',initial:'王',role:'系统管理员'}
 };
-const ROLE_PAGES={collector:['v-record','v-imaging','v-scanner'],doctor:['v-qc','v-upload'],admin:['v-device']};
+const ROLE_PAGES={collector:['v-record','v-imaging','v-scanner','v-upload'],doctor:['v-qc'],admin:['v-device']};
 const ROLE_PERM={
   openManualCap:['collector'],doImport:['collector'],pickImportFile:['collector'],doOcr:['collector'],
   submitQCbar:['collector'],saveManualCap:['collector'],saveManual:['collector'],
-  
+  uploadCaptured:['collector'],
   openImgDev:['collector'],
   openDlog:['collector'],
   pickCapImage:['collector'],mcUpload:['collector'],mcClear:['collector'],mcRemoveFile:['collector'],
-  mcPreviewFile:['collector','doctor'],viewCapImg:['collector','doctor'],viewReject:['collector','doctor'],fixAfterReject:['collector'],
+  mcPreviewFile:['collector','doctor'],viewCapImg:['collector','doctor'],
   ftpPull:['collector'],grabFrame:['collector'],commitVideo:['collector'],toggleDicom:['collector'],
-  openRename:['collector'],saveRename:['collector'],delCap:['collector'],submitRecord:['collector'],openBatchCap:['collector'],startBatchCap:['collector'],btPick:['collector'],
+  openRename:['collector'],saveRename:['collector'],delCap:['collector'],
   openPreview:['collector','doctor'],pickDocPage:['collector'],downloadDoc:['collector','doctor'],addDocPage:['collector'],
   qcPreview:['collector','doctor'],qcPickDoc:['collector','doctor'],
   qcPickSeq:['collector','doctor'],qcPickOct:['collector','doctor'],qcPickEmr:['collector','doctor'],
-  openArc:['collector'],openArcFor:['collector'],goCapture:['collector'],editRecord:['collector'],
+  openArc:['collector'],openArcFor:['collector'],goCapture:['collector'],askReveal:['collector','doctor'],
   viewArcItem:['collector'],
   openQc:['collector','doctor'],openQcByItem:['collector','doctor'],
   passQC:['doctor'],rejectQC:['doctor'],
-  applyUploadCfg:['doctor'],toggleRealtime:['doctor'],toggleManualUpload:['doctor'],toggleTimedUpload:['doctor'],tsFreq:['doctor'],
-  manualUpload:['doctor'],manualUploadOne:['doctor'],toggleUpSel:['doctor'],toggleUpAll:['doctor'],
+  applyUploadCfg:['collector'],toggleRealtime:['collector'],toggleManualUpload:['collector'],
+  manualUpload:['collector'],manualUploadOne:['collector'],toggleUpSel:['collector'],toggleUpAll:['collector'],
   openAudit:['doctor'],
   /* 设备与接口管理：系统级配置，归属系统管理员（采集页不再选择设备，设备清单仅由管理员维护） */
   devmTab:['admin'],toggleSw:['admin'],
@@ -2879,11 +2273,32 @@ function maskNo(no){
   const i=no.indexOf('-'),keep=i>0?i+1:2;
   return no.slice(0,keep)+new Array(Math.max(no.length-keep,3)+1).join('*');
 }
+const revealNames=new Set(),revealNos=new Set();
+function isRevealed(name){return revealNames.has(name)||!!(PATIENTS[name]&&revealNos.has(PATIENTS[name]))}
+function askReveal(name){
+  name=String(name==null?'':name).trim();
+  if(!name){toast('未识别到患者对象','err');return}
+  const no=PATIENTS[name]||'';
+  askConfirm({
+    title:'查看完整患者信息（最小必要）',
+    desc:'患者姓名与病历号默认脱敏展示。确因质控核对或采集身份核对需要查看完整信息时，须经二次确认；本次查看将记入操作日志（操作人 / 角色 / 时间 / 对象）。',
+    summary:'患者：<b>'+maskName(name)+'</b>　病历号：<b>'+(no?maskNo(no):'—')+'</b><br>当前角色：'+curUser.role+'　操作人：'+curUser.name,
+    okText:'确认查看',
+    onOk:function(){
+      revealNames.add(name);if(no)revealNos.add(no);
+      logOp('查看完整患者信息',name+(no?' · '+no:''),'已授权（最小必要·临时解密）');
+      if(document.querySelector('#arc-drawer.show'))repaintArc();
+      if(document.querySelector('#drawer.show'))paintQc(curQcRow);
+      toast('已按最小必要原则临时显示完整患者信息，本次查看已记入操作日志','ok');
+    }
+  });
+}
 function applyPrivacy(){
   const names=Object.keys(PATIENTS).sort((a,b)=>b.length-a.length);
   if(!names.length&&!RECNOS.length)return;
     /* .mask 弹窗在 .content 之外，单独纳入——弹窗内的患者姓名与病历号同样默认脱敏 */
   [...document.querySelectorAll('.content,#drawer,#arc-drawer,#audit-drawer,.mask')].forEach(root=>{
+    const allowReveal=(root.id==='drawer'||root.id==='arc-drawer');
     const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);
     const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
     nodes.forEach(n=>{
@@ -2891,6 +2306,12 @@ function applyPrivacy(){
       if(!t||!t.trim())return;
       const pe=n.parentElement;
       if(pe&&pe.closest('.cur-pt,.no-mask,.role-switch,#whoami,.nm'))return;
+      if(allowReveal){
+        let skip=false;
+        revealNames.forEach(nm=>{if(t.indexOf(nm)>-1)skip=true});
+        revealNos.forEach(no=>{if(t.indexOf(no)>-1)skip=true});
+        if(skip)return;
+      }
       let out=t;
       names.forEach(nm=>{if(out.indexOf(nm)>-1)out=out.split(nm).join(maskName(nm))});
       RECNOS.forEach(no=>{if(out.indexOf(no)>-1)out=out.split(no).join(maskNo(no))});
@@ -2917,7 +2338,7 @@ function switchRole(role){
   document.querySelectorAll('#nav .nav-item').forEach(n=>{
     n.style.display=ROLE_PAGES[role].indexOf(n.dataset.view)>-1?'':'none';
   });
-  ['m-imgdev','m-dlog','m-manualcap','m-batch','m-import','m-manual','m-rename','m-edit','m-video','m-ftp','m-confirm','m-preview','m-devedit','m-apiedit','m-iflog'].forEach(id=>closeM(id));
+  ['m-imgdev','m-dlog','m-manualcap','m-import','m-manual','m-rename','m-video','m-ftp','m-confirm','m-preview','m-devedit','m-apiedit','m-iflog'].forEach(id=>closeM(id));
   closeDrawer();closeArc();closeAudit();
   const cur=document.querySelector('.view.active');
   RAF_SAFE(ROLE_PAGES[role].indexOf(cur?cur.id:'')>-1?cur.id:ROLE_PAGES[role][0]);
@@ -2929,7 +2350,7 @@ function RAF_SAFE(id){RAW_GO(id)}
 /* ---------- 统一权限包装：动作拦截 + 变更后自动重新脱敏 ---------- */
 const POST_PRIVACY=['submitQC','addCapRow2','saveManualCap','saveManual','submitQCbar',
   'doImport','ftpPull','commitVideo','delCap','saveRename','renderArc','switchArc','repaintArc','syncQcBadge','openQcByItem','toggleDicom',
-  'viewArcItem','viewCapImg','viewReject','fixAfterReject','openPreview','saveRecEdit','startBatchCap','submitRecord'];
+  'viewArcItem','viewCapImg','openPreview'];
 function installGuards(){
   Object.keys(ROLE_PERM).concat(POST_PRIVACY).forEach(fn=>{
     if(typeof window[fn]!=='function'||_raw[fn])return;
@@ -2953,7 +2374,7 @@ function delCap(el){
   askConfirm({
     title:'作废采集数据（数据不作物理删除）',
     desc:'为满足医疗数据可追溯要求，采集数据不支持物理删除。作废后该条记录保留并标记「已作废」，不再进入质控环节；作废原因与操作人一并记入操作日志。',
-    summary:'采集图片：<b>'+name+'</b><br>患者：'+(patient?maskName(patient):'—')+'<br>操作人：'+curUser.name+'（'+curUser.role+'）',
+    summary:'采集图片：<b>'+name+'</b><br>患者：'+(patient?(isRevealed(patient)?patient:maskName(patient)):'—')+'<br>操作人：'+curUser.name+'（'+curUser.role+'）',
     requireReason:true,reasonLabel:'作废原因',okText:'确认作废',
     onOk:function(reason){
       const tds=tr.querySelectorAll('td');
@@ -2969,12 +2390,21 @@ function delCap(el){
     }
   });
 }
-/* ---------- 患者数据档案：头部渲染（默认脱敏） ---------- */
+/* ---------- 患者数据档案：头部渲染（脱敏 + 解密入口） ---------- */
 function paintArcHead(){
   if(!curPt)return;
-  document.getElementById('arc-name').textContent=maskName(curPt.name);
-  document.getElementById('arc-no').textContent=maskNo(curPt.no);
-  document.getElementById('arc-meta').textContent=(curPt.meta?curPt.meta+'　|　':'')+'病历号 '+maskNo(curPt.no);
+  const rv=document.getElementById('arc-reveal');
+  if(isRevealed(curPt.name)){
+    document.getElementById('arc-name').textContent=curPt.name;
+    document.getElementById('arc-no').textContent=curPt.no;
+    document.getElementById('arc-meta').textContent=(curPt.meta?curPt.meta+'　|　':'')+'病历号 '+curPt.no;
+    rv.innerHTML='<span class="lock-note" style="padding:2px 8px">🔓 已临时显示完整信息（已留痕）</span>';
+  }else{
+    document.getElementById('arc-name').textContent=maskName(curPt.name);
+    document.getElementById('arc-no').textContent=maskNo(curPt.no);
+    document.getElementById('arc-meta').textContent=(curPt.meta?curPt.meta+'　|　':'')+'病历号 '+maskNo(curPt.no);
+    rv.innerHTML='<button class="reveal-btn" type="button" '+DC('askReveal',[curPt.name])+'>🔓 查看完整患者信息</button>';
+  }
   document.getElementById('arc-diag').textContent=curPt.diag||'—';
 }
 function repaintArc(){paintArcHead();renderArc();applyPrivacy()}
@@ -3269,7 +2699,6 @@ function arcItemSrc(x){
   const keep=function(t){return String(t).replace(/00128/g,short)};
   const pad=function(i){return String(i+1).padStart(2,'0')};
   const suffix=function(){return '患者 '+(curPt?maskName(curPt.name)+' / '+maskNo(curPt.no):'—')};
-  if(v.k==='capimg')return v.src;
   if(v.k==='oct'){
     const pages=[];
     OCT_SEQS.forEach(function(S,sq){
@@ -3336,8 +2765,9 @@ const QC_REC_FIELDS=[
   ['诊断','老年性白内障（双眼）'],
   ['医嘱','建议手术治疗；术前完善眼部检查。']
 ];
-function qzRow(k,v){
-  return '<div class="r"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>';
+function qzRow(k,v,tag){
+  return '<div class="r"><span class="k">'+k+'</span><span class="v">'+v+'</span>'+
+    (tag?'<span class="tag t-green qz-ok">'+tag+'</span>':'')+'</div>';
 }
 
 /* ---------- OCT：3 序列 / 75 图（视网膜断层 B-scan） ---------- */
@@ -3549,7 +2979,7 @@ function qcDocHtml(){
     }).join('')+'</div>'+
     '<div class="qz-cap"><b>系统录入内容</b><span>人工录入 · 与扫描件逐项核对</span></div>'+
     '<div class="qz-fields">'+QC_REC_FIELDS.map(function(f){
-      return qzRow(esc(f[0]),esc(f[1]));
+      return qzRow(esc(f[0]),esc(f[1]),'一致');
     }).join('')+'</div>'+
     '<div class="qz-meta">文字识别结果已人工校对修正　·　录入内容与扫描件的主诉、诊断一致</div>';
 }
@@ -3586,8 +3016,8 @@ function qcOctHtml(){
     '<div class="qz-fields">'+
       qzRow('检查类型',esc('OCT（'+S.short+'扫描）· 视网膜断层'))+
       qzRow('序列 / 图像','3 序列 / 75 图')+
-      qzRow('影像质量','信号强度 8/10 · 分层连续可辨')+
-      qzRow('序列完整性','序列完整，无缺失帧')+
+      qzRow('影像质量','信号强度 8/10 · 分层连续可辨','合格')+
+      qzRow('序列完整性','序列完整，无缺失帧','完整')+
       qzRow('阅片所见',esc(S.note))+
     '</div>'+
     '<div class="qz-meta">缩略图为序列等距抽样（每 '+Math.round(S.n/OCT_IDX.length)+' 帧取 1 帧），原始 '+S.n+' 帧完整保留　·　患者信息与影像索引已随 DICOM 自动关联，未作压缩</div>';
@@ -3611,10 +3041,10 @@ function qcCapHtml(){
     '</div>'+
     '<div class="qz-cap"><b>自动识别与命名</b><span>命名规范校验结果</span></div>'+
     '<div class="qz-fields">'+
-      qzRow('文件命名','00128_手写病历_01_0912.png<br>（患者号_资料类型_序号_日期）')+
-      qzRow('拍摄参数','4000×3000 · 300dpi · 自动裁切与畸变矫正')+
-      qzRow('图像质量','文字边缘锐利，无遮挡、无强反光')+
-      qzRow('关联结果','已自动关联 张建国 · YZK-2026-00128')+
+      qzRow('文件命名','00128_手写病历_01_0912.png<br>（患者号_资料类型_序号_日期）','合格')+
+      qzRow('拍摄参数','4000×3000 · 300dpi · 自动裁切与畸变矫正','合格')+
+      qzRow('图像质量','文字边缘锐利，无遮挡、无强反光','合格')+
+      qzRow('关联结果','已自动关联 张建国 · YZK-2026-00128','一致')+
     '</div>'+
     '<div class="qz-meta">图片按原始格式保存，未作压缩与二次处理</div>';
 }
@@ -3748,12 +3178,16 @@ function devmStTag(on){return '<span class="tag '+(on?'t-green':'t-gray')+'">'+(
 function devmOps(kind,i){
   const d=devmList(kind)[i];
   let h='<span class="link" '+DC('openDevEdit',[kind,i])+'>编辑</span>';
+  h+='<span class="link" style="margin-left:10px" '+DC('testDev',[kind,i])+'>连接测试</span>';
+  if(kind==='scan')h+='<span class="link" style="margin-left:10px" '+DC('calibrateDev',[i])+'>校准</span>';
   h+='<span class="link" style="margin-left:10px;color:'+(d.on?'var(--danger)':'var(--primary)')+'" '+DC('toggleDevOn',[kind,i])+'>'+(d.on?'停用':'启用')+'</span>';
   return h;
 }
 function apiOps(i){
   const a=APIS[i];
   return '<span class="link" '+DC('openApiEdit',[i])+'>配置</span>'+
+    '<span class="link" style="margin-left:10px" '+DC('testApi',[i])+'>连通性测试</span>'+
+    '<span class="link" style="margin-left:10px" '+DC('openIfLog',[i])+'>通讯日志</span>'+
     '<span class="link" style="margin-left:10px;color:'+(a.on?'var(--danger)':'var(--primary)')+'" '+DC('toggleApiOn',[i])+'>'+(a.on?'停用':'启用')+'</span>';
 }
 function devmPaint(){
@@ -4085,10 +3519,9 @@ function saveApiCfg(){
       if(e.key==='r'||e.key==='R'){lbRotate(90);return}
     }
     if(e.key!=='Escape')return;
-    ['m-imgdev','m-dlog','m-confirm','m-manualcap','m-batch','m-import','m-manual','m-rename','m-edit','m-video','m-ftp','m-preview','m-devedit','m-apiedit','m-iflog','m-caplog','m-reject'].forEach(id=>closeM(id));
+    ['m-imgdev','m-dlog','m-confirm','m-manualcap','m-import','m-manual','m-rename','m-video','m-ftp','m-preview','m-devedit','m-apiedit','m-iflog'].forEach(id=>closeM(id));
     closeDrawer();closeArc();closeAudit();
   });
-  paintReject();
   logOp('登录系统',curUser.name+' · '+curUser.role,'成功');
 })();
 </script>
