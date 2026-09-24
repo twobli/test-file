@@ -230,7 +230,7 @@
             <table class="data-table">
               <thead><tr>
                 <th>算法名称</th><th>适用疾病</th>
-                <th>算法输入</th><th>算法输出</th><th>算法功能</th><th>应用场景</th><th>状态</th><th>操作</th>
+                <th>算法输入</th><th>算法输出</th><th>算法功能</th><th>应用场景</th><th>版本</th><th>状态</th><th>操作</th>
               </tr></thead>
               <tbody id="algorithmBody"></tbody>
             </table>
@@ -549,6 +549,7 @@ const DATASETS = [
           <td><div class="cell-copy">${shown.output ? esc(shown.output) : ph()}</div></td>
           <td><div class="cell-copy clamp" title="${esc(shown.feature)}">${esc(shown.feature)}</div></td>
           <td><div class="cell-copy short">${esc(shown.scene)}</div></td>
+          <td>${record.version ? esc(record.version) : ph()}</td>
           <td><span class="tag ${STATUS_TAG[record.status] || "gray"}">${esc(record.status)}</span></td>
           <td>
             <div class="row-actions">
@@ -660,6 +661,7 @@ const DATASETS = [
           <h2 class="detail-title">${esc(record.name)}</h2>
           <div class="detail-meta-row">
             <span class="tag ${STATUS_TAG[record.status] || "gray"}">${esc(record.status)}</span>
+            <span class="tag gray">版本 ${record.version ? esc(record.version) : "待补充"}</span>
             <span class="tag blue">${esc(record.disease)}</span>
             ${record.isNew ? '<span class="tag cyan">需规新增</span>' : ""}
           </div>
@@ -683,7 +685,10 @@ const DATASETS = [
             <div class="info-grid">
               ${infoItem("算法编号", record.code)}
               ${infoItem("适用疾病", record.disease)}
+              ${infoItem("当前版本", record.version)}
               ${infoItem("状态", record.status)}
+              ${infoItem("数据来源", null)}
+              ${infoItem("维护角色", null)}
               ${infoItem("更新时间", null)}
             </div>
           </div>
@@ -816,6 +821,7 @@ const DATASETS = [
             </div>
           </div>
           <div class="info-grid" style="margin-top:16px">
+            ${infoItem("版本", current.version)}
             ${infoItem("文件大小", null)}
             ${infoItem("更新时间", null)}
             ${infoItem("校验值", null)}
@@ -967,6 +973,7 @@ const DATASETS = [
           requestId: `demo-${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`,
           algorithmCode: record.code || null,
           algorithmName: record.name,
+          version: record.version || null,
           input: { fileName: testState.fileName, mimeType: testState.fileType || null, sizeBytes: testState.fileSize },
           interface: { endpoint: null, method: null, auth: null, note: "接口清单待补充，联调后替换为真实调用" },
         };
@@ -1006,6 +1013,7 @@ const DATASETS = [
             <div class="info-grid">
               ${infoItem("算法名称", current.name)}
               ${infoItem("算法编号", current.code)}
+              ${infoItem("当前版本", current.version)}
               ${infoItem("接口地址", null)}
               ${infoItem("请求方式", null)}
               ${infoItem("鉴权方式", null)}
