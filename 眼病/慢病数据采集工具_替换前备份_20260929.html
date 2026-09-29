@@ -61,6 +61,13 @@
   .t-gray{background:#f5f5f5;color:var(--text2)}
   .t-purple{background:#f9f0ff;color:var(--purple)}
   .t-red{background:var(--danger-light);color:#cf1322}
+  /* 上传情况：手动上传 */
+  .up-tools{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:#fafafa;margin-bottom:12px;flex-wrap:wrap}
+  .up-tools .txt{font-size:12.5px;color:var(--text2)}
+  .up-tools .txt .cnt{color:var(--primary-dark);font-weight:600}
+  th.cell-ck,td.cell-ck{width:38px;text-align:center;padding-left:8px;padding-right:0}
+  .up-ck{width:15px;height:15px;cursor:pointer;accent-color:var(--primary);vertical-align:middle}
+  .up-ck:disabled{cursor:not-allowed;opacity:.4}
   td.act-cell{font-size:12.5px}
   .sub-tip{font-size:11.5px;color:var(--text3);margin-left:6px}
   .progress{height:6px;background:#f0f2f5;border-radius:4px;overflow:hidden;min-width:70px}
@@ -90,12 +97,6 @@
   .form-item .input,.form-item .select{width:100%}
   .chk-row{display:flex;gap:18px;flex-wrap:wrap}
   .chk{display:flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer}
-  .chk-off{opacity:.45}
-  .chk-off input[type=checkbox]{appearance:none;-webkit-appearance:none;width:15px;height:15px;border:1.5px solid #d0d3d9;border-radius:3px;background:#f2f3f5;cursor:not-allowed;position:relative}
-  .chk-off input[type=checkbox]::after{content:'';position:absolute;inset:2px 2px 3px;border-left:2px solid #b7bcc4;border-bottom:2px solid #b7bcc4;transform:rotate(-45deg)}
-  #imp-cols .chk{transition:opacity .15s;user-select:none}
-  #imp-cols .chk:hover{opacity:.75}
-  #imp-cols .chk-off:hover{opacity:.65}
 
   #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
   .toast-item{background:#262626;color:#fff;padding:10px 20px;border-radius:8px;font-size:13.5px;box-shadow:0 6px 20px rgba(0,0,0,.2);animation:pop .2s ease}
@@ -118,6 +119,11 @@
   .dev-picked .dp-main{flex:1;min-width:0}
   .dev-picked .dp-nm{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text)}
   .dev-picked .dp-mt{font-size:12px;color:var(--text3);margin-top:5px;line-height:1.6}
+  .cap-strategy{border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .cap-strategy .r{display:flex;gap:10px;padding:8px 12px;font-size:12.5px;line-height:1.75;border-top:1px solid var(--border)}
+  .cap-strategy .r:first-child{border-top:none}
+  .cap-strategy .k{width:78px;flex-shrink:0;color:var(--text3);white-space:nowrap}
+  .cap-strategy .v{flex:1;min-width:0;color:var(--text)}
   /* ---------- P02 医学影像采集：设备分组清单（沿用高拍仪采集的块式清单样式） ---------- */
   .dev-list{display:grid;grid-template-columns:1fr;gap:10px}
   .dev-row{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:8px;padding:11px 14px;background:#fff;transition:.15s}
@@ -175,7 +181,6 @@
   .cur-pt.pt-link{color:var(--primary);cursor:pointer;border-bottom:1px dashed var(--primary)}
   .cur-pt.pt-link:hover{color:var(--primary-dark)}
   .note{background:var(--warn-light);border:1px solid #ffe7ba;border-radius:6px;padding:10px 14px;font-size:12.5px;color:#d48806;margin-bottom:14px;line-height:1.7}
-  .ocr-hl{background:#fff7e6 !important;transition:background .3s}
 
   /* 患者数据档案抽屉 */
   .drawer.wide{width:700px;right:-700px}
@@ -186,22 +191,6 @@
   .pt-head .stat{display:flex;gap:26px;margin-top:10px;padding-top:10px;border-top:1px dashed #bae7ff}
   .pt-head .stat div{font-size:12.5px;color:var(--text2)}
   .pt-head .stat b{display:block;font-size:17px;color:var(--primary);margin-bottom:2px}
-  /* 档案：病历录入内容卡片（位于病历图片列表上方） */
-  #arc-rec-box{margin-top:10px;padding-top:12px}
-  #arc-rec-box .rb-t{font-size:12.5px;font-weight:600;color:var(--text2);margin-bottom:4px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
-  #arc-rec-box .rb-row{display:flex;gap:10px;padding:4px 0;font-size:12.5px;line-height:1.75}
-  #arc-rec-box .rb-k{width:64px;flex-shrink:0;color:var(--text3)}
-  #arc-rec-box .rb-v{flex:1;min-width:0;color:var(--text);word-break:break-all}
-  /* 档案编辑态：病历录入内容逐项可修改 / 可移除 / 可新增 */
-  #arc-rec-box .rb-edit .rb-row{align-items:flex-start}
-  #arc-rec-box .rb-edit .rb-k.rb-in{flex:0 0 76px;width:76px;padding:5px 6px;text-align:center;color:var(--text);font-weight:500}
-  #arc-rec-box .rb-edit .rb-v.rb-in{flex:1;min-width:0;width:100%}
-  #arc-rec-box .rb-in{padding:5px 8px;font-size:12.5px;line-height:1.6;font-family:inherit}
-  #arc-rec-box textarea.rb-in{resize:vertical}
-  #arc-rec-box .rb-del{flex-shrink:0;font-size:12px;white-space:nowrap;align-self:center}
-  #arc-rec-box .rb-add{margin-top:6px;font-size:12.5px}
-  #arc-rec-box .rb-nk{flex:0 0 76px;width:76px;padding:5px 6px;text-align:center}
-  #arc-rec-box .rb-nv{flex:1;min-width:0;width:100%}
   .arc-tabs{display:flex;gap:4px;border-bottom:2px solid var(--border);margin-bottom:14px}
   .arc-tabs .at{padding:9px 14px;cursor:pointer;font-size:13.5px;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:500}
   .arc-tabs .at.active{color:var(--primary);border-color:var(--primary)}
@@ -387,7 +376,6 @@
 
   <!-- ================= 侧边栏 ================= -->
   <aside class="sidebar" data-page-node-id="jNwopcS3PFFLZZFGBpsNQ6">
-    <a class="back-app" href="../app-center.html" title="返回应用中心" style="display:inline-flex;align-items:center;gap:5px;margin:2px 12px 12px;padding:6px 12px;border-radius:8px;background:#eef4ff;color:#1a73e8;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #d6e4ff;flex:0 0 auto;">← 应用中心</a>
     <nav class="nav" id="nav" data-page-node-id="6c0BTLa0vghGf5RZpHTsLs">
       <div class="group" id="grp-collect" data-page-node-id="alQUZERbsk5KHEm7Mu5sy3">数据采集（采集人员）</div>
       <div class="nav-item active" data-view="v-record" data-page-node-id="AF8NDjcH1oGVXBqhvKSDf2"><span class="ico" data-page-node-id="8yfsxwZtUmyuSVmOaioI0H">📝</span>病历数据采集</div>
@@ -405,6 +393,7 @@
   <!-- ================= 主区 ================= -->
   <div class="main" data-page-node-id="Ji8NzXy9KeCVa5gOBucTjX">
     <div class="topbar" data-page-node-id="crQoVGjHkyocO984RcTaeC">
+      <a class="back-app" href="../app-center.html" title="返回应用中心" style="display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;white-space:nowrap;padding:5px 11px;margin-right:6px;border-radius:6px;background:rgba(255,255,255,.18);color:#fff;font-size:13px;font-weight:600;text-decoration:none">← 应用中心</a>
       <div class="crumb" id="crumb" data-page-node-id="oE5r31vhv9pFJ2WIlw00oZ">病历数据采集</div>
       <div class="spacer" data-page-node-id="vyZZzemIbBGVq8iPfG6yW2"></div>
       <div class="role-switch" id="role-switch" title="原型演示：切换角色以核验各角色可见功能与权限边界">
@@ -420,33 +409,95 @@
     <div class="content" data-page-node-id="1zqRd9DtsN1qDr6Nvo9jES">
       <!-- ============ P01 病历数据采集 ============ -->
       <section class="view active" id="v-record" data-page-node-id="hbT8R6LcXM8mYS2EpQtC8T">
-        <!-- 三个采集入口 Tab（本地文件上传+人工录入 / 电子病历批量导入 / 系统接口实时传输）保留展示；点【＋新增】后由此卡片切换为第一步 / 人工录入页 -->
-        <div class="card" id="rec-entry-card" data-page-node-id="hFCA5bLFDnT3BtTpdg566m">
+        <div class="card" data-page-node-id="hFCA5bLFDnT3BtTpdg566m">
           <div class="tabs" id="record-tabs" data-page-node-id="zvwaTPn4M1p04yAlNpmEcc">
             <div class="tab active" data-tab="tab-hand" data-c="switchTab" data-a="[&quot;tab-hand&quot;]" data-page-node-id="DnbxicVaPchx6QAVeiX6gk">✍️ 本地文件上传 + 人工录入（手写病历 / 电子病历截图）</div>
             <div class="tab" data-tab="tab-import" data-c="switchTab" data-a="[&quot;tab-import&quot;]" data-page-node-id="CKk38tHjs1Ey0hJ16fneak">📥 电子病历批量导入</div>
             <div class="tab" data-tab="tab-api" data-c="switchTab" data-a="[&quot;tab-api&quot;]" data-page-node-id="oxBr5qi7R7kKfKIKHL9m8I">🔌 系统接口实时传输</div>
           </div>
-          <!-- Tab2 电子病历批量导入：切换到该 Tab 时显示（仅【采集日志 / 批量导入】按钮，无流程说明与导入记录表） -->
+
+          <!-- Tab1 本地文件上传 + 人工录入 -->
+          <div id="tab-hand" data-page-node-id="BcZWFtShu1vtz4FHyz5N9D">
+            <div class="toolbar" data-page-node-id="9wEG8Kokusz0XWYp7oeFUs">
+              <span style="font-size:13px;color:var(--text2)" data-page-node-id="nfz2l9BfdMA1Opbn9q9lDf">当前患者：</span><b class="cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（影像数据）" data-page-node-id="87DgqR6rth7G5QNe1bjH6e">张建国 · YZK-2026-00128</b>
+              <div style="flex:1" data-page-node-id="lgLAT996aQbYjxiUJUPpEk"></div>
+              <button class="btn btn-ghost" data-c="openManualCap" data-a="[&quot;record&quot;]">✋ 手动采集</button>
+              <button class="btn btn-primary" data-c="doOcr" data-page-node-id="ZuO6vrPKC3kZfFVVrxEydC">🔍 文字识别</button>
+              <button class="btn btn-success" data-c="submitQCbar" data-page-node-id="BHDjJw729KzGadwJWvmAtR">✓ 提交质控</button>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr" data-page-node-id="NupDwi219kwZ2ExKWsU3Y9">
+              <div data-page-node-id="nF7XOLUAmo2qknfwRlI81c">
+                <div class="doc-file" data-page-node-id="pL28gVoN4HTHNuQl350VxQ">
+                  <div class="doc-fbar">
+                    <div class="doc-frow">
+                      <span>🖼️</span>
+                      <span class="fn" id="doc-fn">00128_手写病历_01_20260912.jpg</span>
+                      <span class="sp">
+                        <span class="link" data-c="openPreview">🔍 预览</span>
+                        <span class="link" data-c="downloadDoc">下载原图</span>
+                      </span>
+                    </div>
+                    <div class="fs" id="doc-fs">1.8 MB · JPG · 300dpi · 上传于 09-12 09:05</div>
+                  </div>
+                  <div class="doc-stage" data-c="openPreview" title="点击查看大图（可缩放 / 旋转）">
+                    <div class="paper" id="doc-canvas"></div>
+                    <div class="ov"><span class="mag">🔍</span>点击查看大图 · 支持缩放与旋转</div>
+                    <span class="kind" id="doc-kind">手写病历</span>
+                    <span class="pager" id="doc-pager">1 / 3</span>
+                  </div>
+                </div>
+                <div class="doc-strip" id="doc-strip"></div>
+              </div>
+              <div data-page-node-id="q0j8Dtp02n7l1d8qmZGRKq">
+                <div class="form-row" data-page-node-id="nZfALxRcPAToTNDnj5sMhF"><div class="form-item" data-page-node-id="79Yqz2LAeBb5SMOqEPF66m"><label data-page-node-id="i2Y2sOEeC3AaGa0TcKD9B6">主诉<span class="req" data-page-node-id="kvKuPI9Fieo5edMOLPCEqb">*</span></label><input class="input" id="rec-chief" value="双眼视物模糊 2 年，加重 3 月" data-page-node-id="2dRNh7Ih83uFwnLlrbLTwU"></div></div>
+                <div class="form-row" data-page-node-id="kY0Uzs0dhTLIFSz3gYOrWM"><div class="form-item" data-page-node-id="iK3BXHcisfkNfLExdzL3lB"><label data-page-node-id="nRGjHmUHFQB2AC0Gz4KcvV">现病史<span class="req" data-page-node-id="84K4kDJCTQBnRgtW1rU0Ep">*</span></label><textarea class="input" id="rec-hpi" rows="3">患者 2 年前无明显诱因出现双眼视物模糊，近 3 月加重，无眼痛眼红，无外伤史。</textarea></div></div>
+                <div class="form-row" data-page-node-id="AWi4dTWCJv00EdSyDJAIVQ"><div class="form-item" data-page-node-id="GABhvR2zWlxa3Jlz9i4XqC"><label data-page-node-id="G1EGTe3NHFF2dPyco0QX9A">诊断<span class="req" data-page-node-id="L9Dca9lFHTQJkFf8DCBImB">*</span></label><input class="input" id="rec-dx" value="老年性白内障（双眼）" data-page-node-id="5FPehgHAJA2rdDUvVN2HCT"></div></div>
+                <div class="form-row" data-page-node-id="13t9zvfJn993ap8y3Y8sNO"><div class="form-item" data-page-node-id="L2SHAjeJtTyQhEMGT1W2Sy"><label data-page-node-id="thYh1jDwoxvvbgScJnIxwD">医嘱</label><textarea class="input" rows="2">建议手术治疗；术前完善眼部检查。</textarea></div></div>
+                <div class="note" data-page-node-id="6evbht7bri09jpzbBOUzNs">文字识别结果填入上方录入区后，需人工校对修正。</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab2 电子病历批量导入 -->
           <div id="tab-import" style="display:none" data-page-node-id="vaMUbDZZcnZXTFlT2N8Nfh">
             <div class="toolbar" data-page-node-id="JelajXHL4l5EJC6Y5v7k0k">
+              <span style="font-size:13px;color:var(--text2)" data-page-node-id="5eP984p9zAM053SgJgnv8z">采集流程：系统批量导出 → 批量导入平台 → 医生质控</span>
               <div style="flex:1" data-page-node-id="dDTTSZkBNS8ODjpKO9r8Fw"></div>
-              <button class="btn btn-ghost" data-c="openCapLog">📜 采集日志</button>
               <button class="btn btn-primary" data-c="openM" data-a="[&quot;m-import&quot;]" data-page-node-id="kgonxlluvvPF8PFMD35gu1">📥 批量导入</button>
             </div>
+            <table data-page-node-id="3KxI2PdQSV7VaHh6qsYvTL">
+              <thead data-page-node-id="wHBu2n9EkRMvZCVx6tJBjn"><tr data-page-node-id="eshGE3oepJtLpfkHj8fkCV"><th data-page-node-id="qITi9GeElFtO7WYKqBbfhM">导入文件</th><th data-page-node-id="tqKGbG8bzzo9ymIBbJIC0o">导入条数</th><th data-page-node-id="1Bhs5TCzhkyFoxDh5X4TCn">患者信息关联</th></tr></thead>
+              <tbody data-page-node-id="g81Ah0T6Jhzum8iVvI6coz">
+                <tr data-page-node-id="zUP5vXS37zr8lkbOyBfdy2"><td data-page-node-id="Xo1euDYa9GQv6e0aDrTUFO">眼科2026Q2电子病历.zip</td><td data-page-node-id="4k5yQNc7gFdCQOxy0d03v0">328</td><td data-page-node-id="kwqjrjh3rNKN3Rf1KFKddg"><span class="tag t-blue" data-page-node-id="xjphHv94jlfBcyin3ln1r2">自动关联 328</span></td></tr>
+                <tr data-page-node-id="ISsMN8MuiWhG7QtHHHr0L8"><td data-page-node-id="zS8riV7HUrlHv3vIfKPkLa">慢病科病历导出.xml</td><td data-page-node-id="JODsofmbLvSbpW4cLQwNIs">96</td><td data-page-node-id="bArnRglU8gv4ZuOnjQh7iF"><span class="tag t-blue" data-page-node-id="9Z5w1mAJOHwOl1rAqAeFD2">自动关联 96</span></td></tr>
+              </tbody>
+            </table>
           </div>
-          <!-- Tab3 系统接口实时传输：切换到该 Tab 时显示（仅【HIS采集 / 采集日志】按钮） -->
+
+          <!-- Tab3 系统接口实时传输 -->
           <div id="tab-api" style="display:none" data-page-node-id="dhtwZ6DNpH520zHDCJ9WQK">
-            <div class="toolbar">
-              <div style="flex:1"></div>
-              <button class="btn btn-primary" data-c="hisCollect">🏥 HIS采集</button>
+            <div class="grid grid-3" style="margin-bottom:14px" data-page-node-id="vrHXxtqNyltCbjHezAtK4D">
+              <div class="dev-card" data-page-node-id="xbz4aDFltlenJHfbX2UnwS"><div class="top" data-page-node-id="zeUCa90xjVBihOW6wjtMvL"><span class="name" data-page-node-id="5zRhzeChddbZ8JwiNRYxIz">HIS 系统接口</span><span class="tag t-green" data-page-node-id="EWfrEiRVKG6E0P0F3kwEBt"><span class="dot on" data-page-node-id="LSwJjC9iVHrhxBtnjVWlky"></span>已对接</span></div><div class="meta" data-page-node-id="hOb1uk8E5nRLzUOzW9KkZ6">实时传输中</div></div>
+              <div class="dev-card" data-page-node-id="20J0hsqiKlm40JV15erOrt"><div class="top" data-page-node-id="Aht7nV21QuX0Yij2PAzSES"><span class="name" data-page-node-id="1MCNS0Fu0mHEK0dtXCRBsT">LIS 检验接口</span><span class="tag t-orange" data-page-node-id="yDQGTLr01p6PjDIabu9eFh"><span class="dot warn" data-page-node-id="LNQghqjdjreYlpvvbki0Pr"></span>调试中</span></div><div class="meta" data-page-node-id="LKDHdJNanm3ETTMOVvaBcS">按医院实际情况实地调研后对接</div></div>
+              <div class="dev-card" data-page-node-id="t5uW25GEGNgn8Fau0I431f"><div class="top" data-page-node-id="axGutI1UO0Np6ydcFjiqUq"><span class="name" data-page-node-id="0up4e5IAGVBnjC73giwXfH">慢病管理平台接口</span><span class="tag t-gray" data-page-node-id="DAW3V5NvtAW5sjFrsJKMbw"><span class="dot off" data-page-node-id="h5NLQsBMeXkR67C0GEJAGJ"></span>未对接</span></div><div class="meta" data-page-node-id="4rDgwGq5wKKN9EACXamuZn">需实地调研后确定对接方案</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin:2px 0 10px">
+              <b style="font-size:13.5px">接口传输记录</b>
+              <span style="flex:1"></span>
               <button class="btn btn-ghost" data-c="openCapLog">📜 采集日志</button>
             </div>
+            <table data-page-node-id="TwRJv0prGaFfuLNYDSooee">
+              <thead data-page-node-id="lkTskOxiDjHqxm8HV9ajFo"><tr data-page-node-id="Xk4Tzt3sYH76ujKQqYKpoT"><th data-page-node-id="BuynRA8Y5LwIvDeNsCG42S">时间</th><th data-page-node-id="JzSlA4Lh7Gr7jFijiHK4cG">患者</th><th data-page-node-id="bTTDayUj2eWfBL0Hp9yfpV">数据类型</th><th data-page-node-id="pjwPyPDeB6aQvbfoIOJd03">结果</th></tr></thead>
+              <tbody data-page-node-id="6XglvB80w1dNpHrzcj9hTP">
+                <tr data-page-node-id="bFss3qT3D2JSHoyzhofbYm"><td data-page-node-id="hSjWKbaqWvfFMbcBVi5UyF">09-12 09:30</td><td data-page-node-id="HWHZSF0THYjFOk8ZFvap3L">周某 YZK-2026-00129</td><td data-page-node-id="JCZfvsHWVrqMqEUkH7J5tZ">电子病历</td><td data-page-node-id="Fhrznf68WOsjkWqHCjSpLz"><span class="tag t-green" data-page-node-id="KedXpy6eEztOIR0fazy1Tm">已接收</span></td></tr>
+                <tr data-page-node-id="eabMYXTDu0JaPmNoDwVpxG"><td data-page-node-id="9xiIBhSBfZ8EIs1E6vlYVr">09-12 09:28</td><td data-page-node-id="6hiEviOJ7Y6GZRvS3KoWQg">吴某 YZK-2026-00130</td><td data-page-node-id="jUpLjKuCKpHeGu543kjFQN">检验报告</td><td data-page-node-id="CCBfYvkouvSuunOXPWGATQ"><span class="tag t-green" data-page-node-id="vBalkeFUHdlYXiy0w2aEXc">已接收</span></td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
+      
         <div class="card">
-          <h3 style="display:flex;align-items:center;gap:10px">📋 病历采集列表 <small style="font-weight:400;color:var(--text2)">（手动采集（本地文件人工上传）→ 人工录入 / 批量导出 → 批量导入 / 系统接口实时传输，采集后自动完成患者信息关联）</small><span style="flex:1"></span><button class="btn btn-primary" data-c="startRecEntry" id="rec-add-btn">＋ 新增</button></h3>
-          <div id="rec-add-wrap" style="display:none"></div>
+          <h3>📋 病历采集列表 <small style="font-weight:400;color:var(--text2)">（手动采集（本地文件人工上传）→ 人工录入 / 批量导出 → 批量导入 / 系统接口实时传输，采集后自动完成患者信息关联）</small></h3>
           <table>
             <thead><tr><th>采集项</th><th>患者</th><th>采集方式</th><th>数量</th><th>采集时间</th><th>患者信息关联</th><th>质控状态</th><th>操作</th></tr></thead>
             <tbody id="rec-list-body">
@@ -459,108 +510,6 @@
           </table>
           <div class="empty" id="rec-list-empty" style="display:none">暂无采集记录</div>
         </div>
-
-        <!-- 新增采集 · 第一步：资料类型 + 图片上传（页面形式，非弹窗） -->
-        <div class="card" id="rec-step1" style="display:none">
-          <div style="margin-bottom:16px">
-            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px">
-              <span style="color:var(--primary-dark);font-weight:600">① 上传资料</span>
-              <span style="color:var(--text3)">② 人工录入</span>
-            </div>
-            <div style="height:8px;background:#eef2f7;border-radius:4px;overflow:hidden">
-              <div style="width:50%;height:100%;background:var(--primary);border-radius:4px;transition:width .3s"></div>
-            </div>
-            <div style="font-size:12px;color:var(--text3);margin-top:5px;text-align:right">第 1 步 / 共 2 步 · 50%</div>
-          </div>
-          <h3>🆕 新增采集（病历数据） <small style="font-weight:400;color:var(--text2)">（本地文件人工上传 → 下一步完成人工录入 → 保存后进入质控）</small></h3>
-          <div class="note" style="margin-bottom:14px">通过本地文件人工上传完成：一次可选择多张本机图片文件；上传完成后点击「下一步」进入人工录入。</div>
-          <div class="form-row"><div class="form-item" style="max-width:320px"><label>资料类型<span class="req">*</span></label>
-            <select class="select" id="entry-type"><option>手写病历</option><option>电子病历</option></select>
-          </div></div>
-          <div class="form-row"><div class="form-item" style="max-width:520px"><label>采集方式</label>
-            <input class="input" value="🖼️ 本地文件人工上传（支持多张，图片格式保存）" readonly>
-          </div></div>
-          <div class="form-item" style="max-width:640px"><label>采集图片<span class="req">*</span></label>
-            <div class="up-zone" id="entry-pick" data-c="entryPick" data-a="[{&quot;__el&quot;:1}]" title="点击选择本地图片文件（支持多张）">
-              <div class="up-ic">🖼️</div>
-              <div class="up-tt"><span id="entry-pick-t">点击选择本地文件（支持多张）</span>
-                <span class="s">支持一次选择多张 · JPG / PNG / BMP · 单张 ≤ 20 MB · 分辨率建议 ≥ 300 dpi</span></div>
-            </div>
-            <div class="up-list" id="entry-ups" style="display:none">
-              <div class="uh"><b>已选文件 <span id="entry-cnt">0</span> 个</b><span id="entry-size">—</span><span class="sp"></span><span class="link" data-c="entryClear">全部移除</span></div>
-              <div id="entry-files"></div>
-            </div>
-            <div class="up-total" id="entry-total" style="display:none">
-              <div class="uth"><span id="entry-total-t">正在上传…</span><span id="entry-total-p">0%</span></div>
-              <div class="progress up-pb"><i id="entry-bar" style="width:0%"></i></div>
-            </div>
-            <div class="up-hint">上传完成后点击「下一步」，进入人工录入页完成病历内容录入。</div>
-          </div>
-          <div style="display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);padding-top:14px;margin-top:6px">
-            <button class="btn btn-ghost" data-c="cancelRecEntry">取消</button>
-            <button class="btn btn-primary" data-c="entryNext">下一步</button>
-          </div>
-        </div>
-
-        <!-- 人工录入（新增 → 下一步 后进入）：左图右表单，底部【取消 / 上一步 / 保存】 -->
-        <div class="card" id="rec-entry-form" style="display:none">
-          <div style="margin-bottom:16px">
-            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px">
-              <span style="color:var(--text3)">① 上传资料</span>
-              <span style="color:var(--primary-dark);font-weight:600">② 人工录入</span>
-            </div>
-            <div style="height:8px;background:#eef2f7;border-radius:4px;overflow:hidden">
-              <div style="width:100%;height:100%;background:var(--primary);border-radius:4px;transition:width .3s"></div>
-            </div>
-            <div style="font-size:12px;color:var(--text3);margin-top:5px;text-align:right">第 2 步 / 共 2 步 · 100%</div>
-          </div>
-          <div class="toolbar" style="margin-bottom:12px">
-            <span style="font-size:13px;color:var(--text2)">患者信息：</span><b class="cur-pt pt-link" id="entry-pt">待填写（下方必填项）</b>
-            <span class="tag t-gray" id="entry-meta">待录入</span>
-            <div style="flex:1"></div>
-            <button class="btn btn-ghost" data-c="doOcr">🔍 文字识别</button>
-          </div>
-          <div class="grid" style="grid-template-columns:1fr 1fr">
-            <div>
-                <div class="doc-file">
-                  <div class="doc-fbar">
-                    <div class="doc-frow">
-                      <span>🖼️</span>
-                      <span class="fn" id="entry-fn">—</span>
-                      <span class="sp">
-                        <span class="link" data-c="previewEntryPage">🔍 预览</span>
-                        <span class="link" data-c="entryDownload">下载原图</span>
-                      </span>
-                    </div>
-                    <div class="fs" id="entry-fs">—</div>
-                  </div>
-                  <div class="doc-stage" data-c="previewEntryPage" title="点击查看大图（可缩放 / 旋转）">
-                    <div class="paper" id="entry-canvas"></div>
-                    <div class="ov"><span class="mag">🔍</span>点击查看大图 · 支持缩放与旋转</div>
-                    <span class="kind" id="entry-kind">手写病历</span>
-                    <span class="pager" id="entry-pager">1 / 1</span>
-                  </div>
-                </div>
-              <div class="doc-strip" id="entry-strip"></div>
-            </div>
-            <div>
-              <div class="form-row"><div class="form-item"><label>患者姓名<span class="req">*</span></label><input class="input" id="entry-name" placeholder="请输入患者姓名" oninput="syncEntryPt()"></div></div>
-              <div class="form-row"><div class="form-item"><label>病历号<span class="req">*</span></label><input class="input" id="entry-no" placeholder="请输入病历号（如 YZK-2026-00128）" oninput="syncEntryPt()"></div></div>
-              <div class="form-row"><div class="form-item">
-                <label>自定义<span class="sub-tip">选填 · 字段名后可直接输入内容；留空时点击「文字识别」自动回填，字段新增到【自定义】下方</span></label>
-                <div id="entry-custom-list"></div>
-                <button class="btn btn-ghost btn-sm" data-c="addEntryField" style="margin-top:4px">＋ 添加自定义字段</button>
-                <datalist id="cf-suggest"><option value="主诉"></option><option value="既往史"></option><option value="查体"></option><option value="过敏史"></option><option value="辅助检查"></option></datalist>
-              </div></div>
-              <div class="note">患者姓名、病历号为必填项；自定义字段可选填（可点击「文字识别」自动回填留空字段）。录入完成后点击底部「保存」，数据写入病历采集列表（状态：待质控）。</div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);padding-top:14px;margin-top:6px">
-            <button class="btn btn-ghost" data-c="cancelRecEntry">取消</button>
-            <button class="btn btn-ghost" data-c="entryPrev">← 上一步</button>
-            <button class="btn btn-primary" data-c="saveRecEntry">保存</button>
-          </div>
-        </div>
 </section>
 
       <!-- ============ P02 医学影像采集 ============ -->
@@ -568,6 +517,7 @@
         <div class="card" data-page-node-id="rEs37j2GfeD4aZs6ion5li">
           <!-- 采集入口工具栏：设备清单与接收日志均在弹窗内查看，页面不再展示设备摘要与日志摘要 -->
           <div class="toolbar" data-page-node-id="TRnyFeIHcR52reJsaWfu9U-x">
+            <b>患者信息关联：</b><span class="tag t-blue cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（影像数据）" style="cursor:pointer">张建国 · YZK-2026-00128</span>
             <div style="flex:1"></div>
             <button class="btn btn-ghost" data-c="openManualCap" data-a="[&quot;imaging&quot;]">✋ 手动采集</button>
             <!-- 设备清单与接收日志入口：与「手动采集」并列，页面摘要条只做状态展示 -->
@@ -597,6 +547,7 @@
       <section class="view" id="v-scanner" data-page-node-id="1FzDhCv5H2wr4qrtGZAkcJ">
         <div class="card" data-page-node-id="5LZLJKAEe4NDaL8seTcrD2">
           <div class="toolbar" data-page-node-id="rnk8i9wrhbbQONofOVOfxB">
+            <b data-page-node-id="HkFYwlA7j6DPRUcQEirwzM">患者信息关联：</b><span class="tag t-blue cur-pt pt-link" data-c="openArc" title="查看该患者数据档案（影像数据）" style="cursor:pointer" data-page-node-id="NDXOfpdvFFpHPyIA7dIw2f">张建国 · YZK-2026-00128</span>
             <div style="flex:1" data-page-node-id="BhzeAFcRDM2QWcXZGEuoMc"></div>
             <button class="btn btn-ghost" data-c="openBatchCap">📄 批量采集</button>
             <button class="btn btn-ghost" id="btn-manual-pick" data-c="openManualCap" data-a="[&quot;scanner&quot;]">🖼️ 选择本地文件并上传</button>
@@ -645,20 +596,27 @@
       <section class="view" id="v-upload" data-page-node-id="Dq3Qo14mtwtO2tyzgtdAKJ">
         <div class="grid" style="grid-template-columns:1.5fr 1fr" data-page-node-id="X6cBbmBn5ExMAYJ0GcGgDm">
           <div class="card" data-page-node-id="z6rNOgiLoElmkm0xSKgfWH">
-            <div class="toolbar" data-page-node-id="roSp3IOwjyktseIrMZl1rA"><b style="font-size:14px" data-page-node-id="nNcHUDaELM1OV5JcV5Kzym">上传情况</b><span style="font-size:13px;color:var(--text2)" data-page-node-id="CBHxTXdPM4p8mu31YozHUG">存储在本地服务器的病历及影像数据，按上传方式配置自动上传至在线服务器</span></div>
+            <div class="toolbar" data-page-node-id="roSp3IOwjyktseIrMZl1rA"><b style="font-size:14px" data-page-node-id="nNcHUDaELM1OV5JcV5Kzym">上传情况</b><span style="font-size:13px;color:var(--text2)" data-page-node-id="CBHxTXdPM4p8mu31YozHUG">存储在本地服务器的病历及影像数据，自动上传至在线服务器</span></div>
+            <div class="up-tools">
+              <span class="txt">勾选尚未上传的数据可<b>手动上传</b>至在线服务器；每次手动上传须二次确认，上传范围与操作人记入操作日志</span>
+              <div style="flex:1"></div>
+              <span class="txt" id="up-sel-cnt">已选 <span class="cnt">0</span> 项</span>
+              <button class="btn btn-primary" id="btn-up-sel" data-c="manualUpload" disabled>⬆ 手动上传所选</button>
+            </div>
             <table data-page-node-id="ua8k58CDi6gjf1xBo6ldte">
-              <thead data-page-node-id="hSTyaucicmSsmEMd3FAwi5"><tr><th>数据类型</th><th>数据量</th><th>上传方式</th><th>进度</th><th>状态</th><th style="width:112px">操作</th></tr></thead>
-              <tbody id="up-body" data-page-node-id="sz3Quc8Qye2MByQ9kDenbD"><tr data-up="running"><td>影像（DICOM）</td><td>12 序列</td><td class="way-cell">实时</td><td><div class="progress"><i style="width:64%" id="upbar"></i></div></td><td class="st-cell" id="upstate"><span class="tag t-blue">上传中</span></td><td class="act-cell"><span style="color:var(--text3)">自动上传中</span></td></tr><tr data-up="done"><td>病历（手写+录入）</td><td>18 条</td><td class="way-cell" id="up-way2">定时 09:00</td><td><div class="progress"><i style="width:100%"></i></div></td><td class="st-cell"><span class="tag t-green">已上传</span></td><td class="act-cell"><span style="color:var(--text3)">—</span></td></tr><tr data-up="done"><td>高拍仪图片</td><td>34 张</td><td class="way-cell">实时</td><td><div class="progress"><i style="width:100%"></i></div></td><td class="st-cell"><span class="tag t-green">已上传</span></td><td class="act-cell"><span style="color:var(--text3)">—</span></td></tr><tr data-up="pending"><td>视力检查图片</td><td>6 张</td><td class="way-cell">待触发</td><td><div class="progress"><i style="width:0%"></i></div></td><td class="st-cell"><span class="tag t-orange">待上传</span></td><td class="act-cell"><span style="color:var(--text3)">等待自动上传</span></td></tr><tr data-up="fail"><td>眼底检查图片</td><td>8 张</td><td class="way-cell">定时 09:00</td><td><div class="progress"><i style="width:35%"></i></div></td><td class="st-cell"><span class="tag t-red">上传失败</span></td><td class="act-cell"><span style="color:var(--text3)">等待定时上传后自动重新上传</span></td></tr></tbody>
+              <thead data-page-node-id="hSTyaucicmSsmEMd3FAwi5"><tr><th class="cell-ck"><input type="checkbox" class="up-ck" id="up-all" data-c="toggleUpAll" data-a="[{&quot;__el&quot;:1}]" title="全选可手动上传的数据"></th><th>数据类型</th><th>数据量</th><th>上传方式</th><th>进度</th><th>状态</th><th style="width:112px">操作</th></tr></thead>
+              <tbody id="up-body" data-page-node-id="sz3Quc8Qye2MByQ9kDenbD"><tr data-up="running"><td class="cell-ck"><input type="checkbox" class="up-ck" data-c="toggleUpSel" data-a="[{&quot;__el&quot;:1}]" disabled title="该数据正在自动上传，无需手动上传"></td><td>影像（DICOM）</td><td>12 序列</td><td class="way-cell">实时</td><td><div class="progress"><i style="width:64%" id="upbar"></i></div></td><td class="st-cell" id="upstate"><span class="tag t-blue">上传中</span></td><td class="act-cell"><span style="color:var(--text3)">自动上传中</span></td></tr><tr data-up="done"><td class="cell-ck"><input type="checkbox" class="up-ck" data-c="toggleUpSel" data-a="[{&quot;__el&quot;:1}]" disabled title="该数据已上传"></td><td>病历（手写+录入）</td><td>18 条</td><td class="way-cell" id="up-way2">定时 09:00</td><td><div class="progress"><i style="width:100%"></i></div></td><td class="st-cell"><span class="tag t-green">已上传</span></td><td class="act-cell"><span style="color:var(--text3)">—</span></td></tr><tr data-up="done"><td class="cell-ck"><input type="checkbox" class="up-ck" data-c="toggleUpSel" data-a="[{&quot;__el&quot;:1}]" disabled title="该数据已上传"></td><td>高拍仪图片</td><td>34 张</td><td class="way-cell">实时</td><td><div class="progress"><i style="width:100%"></i></div></td><td class="st-cell"><span class="tag t-green">已上传</span></td><td class="act-cell"><span style="color:var(--text3)">—</span></td></tr><tr data-up="pending"><td class="cell-ck"><input type="checkbox" class="up-ck" data-c="toggleUpSel" data-a="[{&quot;__el&quot;:1}]"></td><td>视力检查图片</td><td>6 张</td><td class="way-cell">待触发</td><td><div class="progress"><i style="width:0%"></i></div></td><td class="st-cell"><span class="tag t-orange">待上传</span></td><td class="act-cell"><span class="link" data-c="manualUploadOne" data-a="[{&quot;__el&quot;:1}]">⬆ 手动上传</span></td></tr></tbody>
             </table>
             <div style="margin-top:12px;font-size:12.5px;color:var(--text2)" data-page-node-id="dBYiBWFoWu8wfihmV0NeOg">已上传数据管理端可对数据进行加工和使用</div>
           </div>
           <div class="card" data-page-node-id="RdCNGPXePgtAD6JKygNU3R">
             <h3 data-page-node-id="AgbYc6xDNxoAEtz2HVdUS2">⚙️ 上传方式配置</h3>
             <div class="sw-row" data-page-node-id="to6DwxXxcdpZO8rrrQRTrB"><span data-page-node-id="eUelI4OXaM6LfXqKldmJt5">实时自动上传</span><div class="switch on" id="rt-switch" data-c="toggleRealtime" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="z8qPKyHc2eT4UzWRLdyP4r"><i data-page-node-id="HEuadqsn7UFRQ4dyuS2EZq"></i></div></div>
+            <div class="sw-row"><span>允许手动上传<span class="sub-tip">不受实时 / 定时策略限制，可人工勾选数据触发</span></span><div class="switch on" id="mu-switch" data-c="toggleManualUpload" data-a="[{&quot;__el&quot;:1}]"><i></i></div></div>
             <div class="sw-row"><span>定时上传<span class="sub-tip">开启后可按每天 / 每周 / 每个月的定时时刻自动上传</span></span><div class="switch" id="ts-switch" data-c="toggleTimedUpload" data-a="[{&quot;__el&quot;:1}]"><i></i></div></div>
             <div class="form-row" id="ts-config" style="display:none;margin-top:10px" data-page-node-id="NN4zGfVTifwGiPhI1ol73B"><div class="form-item" data-page-node-id="apacEfFX0OWjZ8VmfqeFS3"><label data-page-node-id="cCsUALNFF4TZ3gnED1sqBv">定时上传时刻<span class="req">*</span></label><div style="display:flex;gap:8px;margin:8px 0" id="ts-freq"><button type="button" class="btn btn-ghost btn-sm ts-f on" data-c="tsFreq" data-a="[&quot;day&quot;,{&quot;__el&quot;:1}]">每天</button><button type="button" class="btn btn-ghost btn-sm ts-f" data-c="tsFreq" data-a="[&quot;week&quot;,{&quot;__el&quot;:1}]">每周</button><button type="button" class="btn btn-ghost btn-sm ts-f" data-c="tsFreq" data-a="[&quot;month&quot;,{&quot;__el&quot;:1}]">每个月</button></div><div id="ts-extra" style="display:none;margin-bottom:8px"><select class="input" id="ts-extra-sel"></select></div><input class="input" id="up-time" value="02:00, 09:00, 18:00" placeholder="HH:MM，多个时刻用英文逗号分隔" data-page-node-id="CQ8eGCSTPe0ZjEJD1YGaFY"><div class="field-fix" id="ts-hint">格式校验：24 小时制 HH:MM，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）</div></div></div>
             <button class="btn btn-primary" style="width:100%" data-c="applyUploadCfg" data-page-node-id="RKOiCPPNF0D0HmHGuVe1Wm">保存并应用</button>
-            <div class="lock-note" style="margin-top:12px"><b>合规要求：</b>上传方式为全局配置，仅<b>质控医生</b>可修改；保存前二次确认，变更内容（实时开关状态与定时时刻）与操作人一并写入操作日志，避免上传策略被静默篡改。数据均按配置自动上传，不提供人工手动触发入口。</div>
+            <div class="lock-note" style="margin-top:12px"><b>合规要求：</b>上传方式为全局配置，仅<b>质控医生</b>可修改；保存前二次确认，变更内容（实时开关状态、定时时刻与手动上传开关）与操作人一并写入操作日志，避免上传策略被静默篡改。手动上传须再次二次确认，上传范围与结果留痕。</div>
           </div>
         </div>
             </section>
@@ -715,7 +673,7 @@
                 <div class="form-item"><label>影像存储路径<span class="req">*</span></label><input class="input" id="di-path" value="/data/dicom/eye"></div>
               </div>
               <div class="form-row" style="margin-top:12px">
-                <div class="form-item"><label>无 DICOM 接口时的接入方式</label><select class="select" id="di-fallback"><option>转为标准 FTP 通讯拉取</option><option>视频输出接口捕获</option></select></div>
+                <div class="form-item"><label>无 DICOM 接口时的接入方式</label><select class="select" id="di-fallback"><option>转为标准 FTP 通讯拉取</option><option>视频输出接口捕获</option><option>手动录入并关联上传</option></select></div>
               </div>
               <div class="sw-row"><span>不能转换的格式保留原格式存储<span class="sub-tip">不做有损转换，避免影像诊断信息丢失</span></span><div class="switch on" id="di-keep" data-c="toggleSw" data-a="[{&quot;__el&quot;:1}]"><i></i></div></div>
               <button class="btn btn-primary" data-c="saveImgCfg">保存影像接收配置</button>
@@ -759,52 +717,20 @@
 <div class="mask" id="m-import" data-page-node-id="eVc5u34JNwokAKw4bffG4i"><div class="modal" data-page-node-id="c9aOq4EqWBNDimC1VRgZdo">
   <div class="modal-h" data-page-node-id="qJo4ZeIccpgLQmAnrGySbr">电子病历批量导入<span class="x" data-c="closeM" data-a="[&quot;m-import&quot;]" data-page-node-id="OYLzs0I59xfaDKT4Nx0gof">×</span></div>
   <div class="modal-b" data-page-node-id="0llHXwJxEncE11DktxrklD">
-    <div class="note" data-page-node-id="45Wnvf4aDjhyncxfkHc7VL">采集流程：系统批量导出 Excel → 批量导入平台（可勾选导入字段列）→ 医生质控；导入数据按病历号自动完成患者信息关联。</div>
-    <div class="drop" data-c="pickImportFile" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="5XxqtDtsNdinDvHe3TbE9A">选择电子病历文件（仅支持系统导出的 Excel 格式）</div>
-    <div id="imp-preview" style="display:none;margin-top:14px">
-      <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>数据预览</b>　<span style="color:var(--text3)"><span id="imp-fname">眼科2026Q2电子病历.xlsx</span> · <span id="imp-total">328</span> 条 · <span id="imp-cnt"></span></span></div>
-      <div style="border:1px solid #eee;border-radius:6px;overflow:auto;max-height:180px">
-        <table style="border-collapse:collapse;font-size:12.5px;width:100%">
-          <thead><tr id="imp-pv-head" style="background:#fafafa"></tr></thead>
-          <tbody id="imp-pv-body"></tbody>
-        </table>
-      </div>
-      <div style="font-size:12.5px;color:var(--text2);margin:10px 0 6px;display:flex;align-items:center;gap:10px">
-        <span>导入字段列（点击勾选 / 取消，预览同步更新）：</span>
-        <span style="margin-left:auto;display:flex;gap:8px">
-          <span class="link" data-c="impColsAll" title="勾选全部字段列">全选</span>
-          <span class="link" data-c="impColsNone" title="取消全部（至少保留 1 列）">全不选</span>
-          <span class="link" data-c="impColsInvert" title="反选字段列">反选</span>
-        </span>
-      </div>
-      <div class="chk-row" id="imp-cols"></div>
-    </div>
+    <div class="note" data-page-node-id="45Wnvf4aDjhyncxfkHc7VL">采集流程：系统批量导出 → 批量导入平台 → 医生质控；导入数据按病历号自动完成患者信息关联。</div>
+    <div class="drop" data-c="pickImportFile" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="5XxqtDtsNdinDvHe3TbE9A">选择电子病历文件包（系统导出的 Excel / XML / ZIP）</div>
     <div class="progress" style="height:8px;margin-top:16px" data-page-node-id="1bMNH1CtfoNbCOp2TDzKqv"><i id="imp-bar" style="width:0%" data-page-node-id="mRtlpE1CZHbTVvV8wwz0U1"></i></div>
     <div style="font-size:12.5px;color:var(--text2);margin-top:8px" id="imp-txt" data-page-node-id="eyjy3VXr5yTrTDC3FI08oN">待选择文件</div>
   </div>
   <div class="modal-f" data-page-node-id="gqvgiFJnrHf354QXJmhPCJ"><button class="btn btn-plain" data-c="closeM" data-a="[&quot;m-import&quot;]" data-page-node-id="eGH1mXc4NECbaYmjHSqEaM">关闭</button><button class="btn btn-primary" data-c="doImport" data-page-node-id="L4bpEsEYnSmAGx241pOnKB">导入</button></div>
 </div></div>
 
-<!-- 在线表格预览：批量导入电子病历的导出字段与数据（患者档案内查看） -->
-<div class="mask" id="m-imp-table"><div class="modal lg">
-  <div class="modal-h">📊 在线表格预览 · 批量导出电子病历<span class="x" data-c="closeM" data-a="[&quot;m-imp-table&quot;]">×</span></div>
-  <div class="modal-b">
-    <div class="note" style="margin-bottom:10px">仅显示<b>当前患者本人</b>的批量导出记录，其他患者数据不可见。当前患者：<b id="itp-pt">—</b>　·　导出文件：<b>眼科2026Q2电子病历.xlsx</b>　·　共 <b id="itp-cnt">0</b> 条　·　预览字段为批量导入时勾选的字段列（<b id="itp-ncol">0 / 0</b>，可在「批量导入」弹窗中调整后再次查看）</div>
-    <div style="max-height:52vh;overflow:auto;border:1px solid var(--border);border-radius:8px">
-      <table id="itp-table" style="margin:0">
-        <thead><tr id="itp-head" style="background:#fafafa;position:sticky;top:0"></tr></thead>
-        <tbody id="itp-body"></tbody>
-      </table>
-    </div>
-  </div>
-  <div class="modal-f"><button class="btn btn-plain" data-c="closeM" data-a="[&quot;m-imp-table&quot;]">关闭</button></div>
-</div></div>
-
 <!-- 影像设备对接：设备清单与接收动作（全部收敛为弹窗，页面工具栏为唯一入口） -->
 <div class="mask" id="m-imgdev"><div class="modal lg">
   <div class="modal-h">🔬 影像设备对接<span class="x" data-c="closeM" data-a="[&quot;m-imgdev&quot;]">×</span></div>
   <div class="modal-b">
-    <div class="note">影像设备图像输出接口两大类：① DICOM 接口　② 非标准接口（视频接口——标准 / 非标准视频信号；非标准数字接口）。设备操作<b>即时生效且不关闭本弹窗</b>，可连续操作多台设备；DICOM 接收与 FTP 拉取的结果写入采集页「影像采集列表」。</div><div class="cap-blk" id="dv-g1">
+    <div class="note">影像设备图像输出接口两大类：① DICOM 接口　② 非标准接口（视频接口——标准 / 非标准视频信号；非标准数字接口）。设备操作<b>即时生效且不关闭本弹窗</b>，可连续操作多台设备；DICOM 接收与 FTP 拉取的结果写入采集页「影像采集列表」。</div>
+<div class="cap-blk" id="dv-g1">
             <div class="bh"><b>① DICOM 接口设备</b><span>设备端将数字图像直接推送至影像服务器，无需人工转换与人工取景</span></div>
             <div class="dev-list">
               <div class="dev-row" id="dv-fundus">
@@ -850,6 +776,28 @@
               </div>
             </div>
           </div>
+
+          <div class="cap-blk" id="dv-g3">
+            <div class="bh"><b>③ 无数字接口设备</b><span>主机无法开放数字接口，需人工录入检查结果后以图片格式关联上传</span></div>
+            <div class="dev-list">
+              <div class="dev-row" id="dv-vision">
+                <div class="dr-ic">📋</div>
+                <div class="dr-main">
+                  <div class="dr-nm"><span>视力 / 眼压 / 验光仪</span></div>
+                  <div class="dr-mt">手动录入患者信息，检查影像以图片格式保存并关联上传至本地服务器</div>
+                </div>
+                <div class="dr-act"><button class="btn btn-ghost btn-sm" data-c="openM" data-a="[&quot;m-manual&quot;]">手动录入检查结果</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cap-blk" id="dv-g4">
+            <div class="bh"><b>④ 影像接收与存储</b><span>影像转换为标准格式后存入影像服务器系统数据库，实现病人图像数据及诊断信息的一体化存储</span></div>
+            <div class="cap-strategy">
+              <div class="r"><span class="k">接收方式</span><span class="v">DICOM 3.0 推送 / 标准 FTP 通讯拉取 / 视频输出接口捕获三类来源，统一转换为标准格式落库</span></div>
+              <div class="r"><span class="k">患者关联</span><span class="v">检查影像入库后自动完成患者信息关联，与病历信息保持一致</span></div>
+            </div>
+          </div>
   </div>
   <div class="modal-f"><button class="btn btn-ghost" data-c="closeM" data-a="[&quot;m-imgdev&quot;]">关闭</button><button class="btn btn-primary" data-c="closeM" data-a="[&quot;m-imgdev&quot;]">完成</button></div>
 </div></div>
@@ -890,6 +838,24 @@
     <div class="form-item" style="margin-bottom:4px" data-page-node-id="PsAvmZQXmp7C40kxPzS1o8"><label data-page-node-id="aOO8MN1rYCBhFmh0bphjqc">远程目录</label><input class="input" value="/export/daily" data-page-node-id="7t7Bzur4SAvmNsT40TWK6Q"></div>
   </div>
   <div class="modal-f" data-page-node-id="tFSkDWsGW23EJ4UmI3Zq4w"><button class="btn btn-plain" data-c="closeM" data-a="[&quot;m-ftp&quot;]" data-page-node-id="ZCc7aK3SbzxugdFoveTzeE">取消</button><button class="btn btn-primary" data-c="saveFtpCfg" data-page-node-id="IwfvsOx28wSB9vFrOqRyaa">保存并拉取</button></div>
+</div></div>
+
+<!-- 手动录入检查结果 -->
+<div class="mask m2" id="m-manual" data-page-node-id="UYM5WTK0qC4VXrzCD2oCAn"><div class="modal lg" data-page-node-id="E2HE70P0nZO9NIAjOzIUeS">
+  <div class="modal-h" data-page-node-id="whuNzEXp345yCrfxQNwcKl">手动录入检查结果（设备采集权限受限）<span class="x" data-c="closeM" data-a="[&quot;m-manual&quot;]" data-page-node-id="kUIRbqWiHzUicVXOEykpNH">×</span></div>
+  <div class="modal-b" data-page-node-id="kbmbaDOmKka8DDfeNsB6ix">
+    <div class="note" data-page-node-id="PUN7hklqNqeTsi35EnPFHA">设备采集权限受限时：手动录入患者信息，检查影像以图片格式保存并关联上传至本地服务器。</div>
+    <div class="form-row" data-page-node-id="z4HbRz0edoTh6TsNAIMJuP">
+      <div class="form-item" data-page-node-id="KmQcYQHZeIkA0YY9TDzMcF"><label data-page-node-id="mseSKtluxgQ3YsAxgCgn2A">患者姓名<span class="req" data-page-node-id="MpAa0phPHWNG3lyCgfS53c">*</span></label><input class="input" id="mn-name" value="刘志强" data-page-node-id="mO0DTfHoa1lxivEA9QRuMl"></div>
+      <div class="form-item" data-page-node-id="hiaJKIw7oP8zz32v5dIgC8"><label data-page-node-id="X6P3Ss6ocxqEbYoXRbjoyD">病历号<span class="req" data-page-node-id="Fd1Eq6I53evnI5MDO0JynG">*</span></label><input class="input" id="mn-no" value="YZK-2026-00126" data-page-node-id="0R1h2QoRUF2FtRGFQJ56wk"></div>
+      <div class="form-item" data-page-node-id="5GRdrafTl4mrMAsVBFjPs0"><label data-page-node-id="xj8wXm4Ge6APZt5ddd7PO0">检查项目<span class="req" data-page-node-id="tcnDbzgFK1bwFedcAmeMFt">*</span></label><select class="select" id="mn-item" data-page-node-id="9rjOwgO5iKP99EVR35zIDP"><option data-page-node-id="1QDep6LlalLhxcT7HOvCWB">眼压检查</option><option data-page-node-id="VooIElU36lDn5aybwuXifB">视力检查</option><option data-page-node-id="EqbgHxTvNyVDEhQX6qObBX">验光</option><option data-page-node-id="wGRB6aTasFxLClbhTd5X1t">裂隙灯检查</option></select></div>
+    </div>
+    <div class="form-row" data-page-node-id="AdUfRBxKPCMRDJhfFJ0GHX">
+      <div class="form-item" data-page-node-id="XdiyWD7CIKNO6E9lHBtp5A"><label data-page-node-id="FyMBmkhOKiHDCLwBIWqTlq">检查结果</label><textarea class="input" id="mn-res" rows="3">右眼 17.3 mmHg，左眼 18.1 mmHg（NCT）</textarea></div>
+    </div>
+    <div class="form-item" data-page-node-id="cvs9w7dEfBD2SGHWm0hK4H"><label data-page-node-id="mhjSnWh5GzqQlUccsh18jQ">检查影像（图片格式）</label><div class="drop" data-c="pickManualImage" data-a="[{&quot;__el&quot;:1}]" data-page-node-id="Grr4XvSkstwUFcRbdV8uvI">点击上传检查图片</div></div>
+  </div>
+  <div class="modal-f" data-page-node-id="RLigHVsnEyS5ZtH6rGKxoG"><button class="btn btn-plain" data-c="closeM" data-a="[&quot;m-manual&quot;]" data-page-node-id="Ew58kbFPKAhakGtlVmJynS">取消</button><button class="btn btn-primary" data-c="saveManual" data-page-node-id="k0AdAtI7YvTyUY8syGbM8m">保存并关联上传</button></div>
 </div></div>
 
 <!-- 设备配置（高拍仪 / 医学影像设备 共用） -->
@@ -983,7 +949,7 @@
   <div class="modal-b">
     <div class="note" id="mc-note">设备或系统不具备自动获取条件时，可通过手动采集人工上传图片或录入数据；保存后自动完成患者信息关联与影像索引，并进入医生质控环节。</div>
     <div class="form-row">
-      <div class="form-item"><label>采集对象</label><select class="select" id="mc-page"></select><div class="field-fix" id="mc-page-tip">设备清单来自「设备管理」（系统管理员配置），仅显示启用中的设备</div></div>
+      <div class="form-item"><label>采集对象</label><input class="input" id="mc-page" readonly></div>
       <div class="form-item"><label>资料类型<span class="req">*</span></label><select class="select" id="mc-type"></select></div>
     </div>
     <div class="form-row">
@@ -1006,14 +972,6 @@
       <div class="up-total" id="mc-total" style="display:none">
         <div class="uth"><span id="mc-total-t">上传中…</span><span id="mc-total-p">0%</span></div>
         <div class="progress up-pb"><i id="mc-bar" style="width:0%"></i></div>
-      </div>
-      <div class="form-item" id="mc-doc-item" style="margin-top:10px;display:none"><label>采集文档<span class="sub-tip">选填 · Word / TXT</span></label>
-        <div class="up-zone" id="mc-doc-pick" data-c="mcDocPick" data-a="[{&quot;__el&quot;:1}]" title="点击选择本地文档（支持多个）">
-          <div class="up-ic">📄</div>
-          <div class="up-tt"><span id="mc-doc-pick-t">点击选择本地文档（支持多个）</span>
-            <span class="s">支持一次选择多个 · Word（doc / docx）/ TXT · 单个 ≤ 20 MB</span></div>
-        </div>
-        <input type="file" id="mc-doc-file" multiple accept=".doc,.docx,.txt" style="display:none">
       </div>
       <div class="up-hint">上传完成后可逐张预览；保存后可在「采集列表 → 查看」复查本次上传的全部图片内容。</div>
     </div>
@@ -1038,14 +996,6 @@
           <span class="s">支持一次选择多张 · JPG / PNG / BMP · 单张 ≤ 20 MB · 分辨率建议 ≥ 300 dpi</span></div>
       </div>
       <input type="file" id="bt-file" multiple accept="image/*" style="display:none">
-      <div class="form-item" style="margin-top:10px"><label>采集文档<span class="sub-tip">选填 · Word / TXT</span></label>
-        <div class="up-zone" id="bt-doc-pick" data-c="btDocPick" data-a="[{&quot;__el&quot;:1}]" title="点击选择本地文档（支持多个）">
-          <div class="up-ic">📄</div>
-          <div class="up-tt"><span id="bt-doc-pick-t">点击选择本地文档（支持多个）</span>
-            <span class="s">支持一次选择多个 · Word（doc / docx）/ TXT · 单个 ≤ 20 MB</span></div>
-        </div>
-        <input type="file" id="bt-doc-file" multiple accept=".doc,.docx,.txt" style="display:none">
-      </div>
       <div class="up-hint">选择本地文件后点击「开始批量采集」：文件按自动命名规则逐张写入采集列表（状态：待上传），可在采集列表逐张预览。</div>
     </div>
     <div class="up-total" id="bt-total" style="display:none">
@@ -1063,6 +1013,7 @@
     <div class="pt-head">
       <div class="nm"><span id="arc-name">—</span><span class="tag t-blue" id="arc-no">—</span></div>
       <div class="meta" id="arc-meta">—</div>
+      <div class="meta">诊断信息：<b style="color:var(--text)" id="arc-diag">—</b></div>
       <div id="arc-edit-form" style="display:none;border-top:1px dashed var(--border);margin-top:10px;padding-top:10px">
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <input class="input" id="ae-name" style="flex:1;min-width:120px" placeholder="患者姓名（必填）">
@@ -1070,6 +1021,7 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
           <input class="input" id="ae-meta" style="flex:1;min-width:120px" placeholder="性别 / 年龄（如：男 / 63）">
+          <input class="input" id="ae-diag" style="flex:1;min-width:150px" placeholder="诊断信息">
         </div>
       </div>
       <div class="stat">
@@ -1080,12 +1032,6 @@
     <div class="arc-tabs" id="arc-tabs">
       <div class="at arc-full" data-k="records" data-c="switchArc" data-a="[&quot;records&quot;]">病历图片</div>
       <div class="at active arc-img" data-k="images" data-c="switchArc" data-a="[&quot;images&quot;]"><span id="arc-tab-img-label">影像数据</span></div>
-      <div class="at arc-doc" data-k="docs" data-c="switchArc" data-a="[&quot;docs&quot;]">文档</div>
-      <span class="link arc-imp-preview" id="arc-imp-preview" data-c="openImpTable" style="display:none;margin-left:auto;font-size:12.5px;font-weight:400">📊 在线表格预览</span>
-    </div>
-    <div id="arc-rec-box" style="display:none;margin:10px 0;padding:12px 14px;border:1px solid #bae7ff;background:linear-gradient(135deg,#f0f9ff,#e6f7ff);border-radius:8px">
-      <div class="rb-t">病历录入内容<span style="font-weight:400;color:var(--text3)">（同步自「病历数据采集」录入区，随采集数据进入质控）</span><span class="link" id="arc-rec-editbtn" style="margin-left:auto;font-size:12px;font-weight:400" data-c="toggleArcRecEdit">✎ 编辑</span></div>
-      <div id="arc-rec-fields"></div>
     </div>
     <div id="arc-edit-tools" style="display:none;margin:10px 0">
       <button class="btn btn-ghost btn-sm" data-c="arcUploadPick">⬆ 上传新图片（可多选）</button>
@@ -1111,7 +1057,7 @@
     </div>
   </div>
   <div id="arc-edit-foot" style="display:none;flex-shrink:0;justify-content:flex-end;align-items:center;gap:12px;padding:14px 22px;border-top:1px solid var(--border);background:#fff;box-shadow:0 -4px 12px rgba(16,42,67,.06)">
-    <span style="font-size:12.5px;color:var(--text3);flex:1">修改患者信息、病历录入内容与图片后，点击「保存」统一提交并留痕；「取消」放弃本次修改</span>
+    <span style="font-size:12.5px;color:var(--text3);flex:1">修改患者信息与图片后，点击「保存」统一提交并留痕；「取消」放弃本次修改</span>
     <button class="btn btn-ghost" data-c="cancelArcEdit" style="padding:10px 28px;font-size:14px;border-radius:6px">取消</button>
     <button class="btn btn-primary" data-c="saveArcEdit" style="padding:10px 34px;font-size:14px;border-radius:6px">保存</button>
   </div>
@@ -1220,9 +1166,6 @@
 
 <div id="toast" data-page-node-id="j3eD0iN27NazTa4hyhLE24"></div>
 
-<!-- Excel 解析：字段列直接来源于所选 Excel 文件（主 CDN 失败自动切换备用） -->
-<script src="https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script>if(typeof XLSX==='undefined'){document.write('<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"><\/script>')}</script>
 <script>
 /* ---------- 事件委托层 ----------
    所有交互统一走 data-c="函数名" data-a='JSON 参数'，由 document 级委托派发。
@@ -1261,14 +1204,8 @@ function go(id){
 document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>go(n.dataset.view)));
 function switchTab(id){
   const tabs=document.getElementById('record-tabs');
-  if(!tabs)return;
   tabs.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
-  ['tab-hand','tab-import','tab-api'].forEach(t=>{const el=document.getElementById(t);if(el)el.style.display=t===id?'block':'none'});
-  /* 电子病历批量导入 / 系统接口实时传输 Tab：列表标题右侧不显示【＋新增】，其余 Tab 恢复显示 */
-  const addWrap=document.getElementById('rec-add-wrap');
-  if(addWrap)addWrap.style.display=(id==='tab-import'||id==='tab-api')?'none':'';
-  const addBtn=document.getElementById('rec-add-btn');
-  if(addBtn)addBtn.style.display=(id==='tab-import'||id==='tab-api')?'none':'';
+  ['tab-hand','tab-import','tab-api'].forEach(t=>document.getElementById(t).style.display=t===id?'block':'none');
 }
 /* ---------- 弹窗 / 抽屉 / 提示 ---------- */
 function openM(id){document.getElementById(id).classList.add('show')}
@@ -1353,7 +1290,7 @@ const arcData={
     ]
   }
 };
-const arcNames={records:'病历图片',images:'影像数据',exams:'检查结果',docs:'文档'};
+const arcNames={records:'病历图片',images:'影像数据',exams:'检查结果'};
 let curPt={name:'张建国',no:'YZK-2026-00128',meta:'男 / 63',diag:'老年性白内障',label:'张建国 · YZK-2026-00128'};
 function openArc(){
   if(!curPt)return;
@@ -1361,26 +1298,16 @@ function openArc(){
   const scanner=document.getElementById('v-scanner')&&document.getElementById('v-scanner').classList.contains('active');
   document.querySelectorAll('#arc-drawer .arc-full').forEach(el=>{el.style.display=full?'':'none'});
   document.querySelectorAll('#arc-drawer .arc-img').forEach(el=>{el.style.display=full?'none':''});
-  /* 高拍仪页：文案与按钮按页面切换（影像数据 ↔ 高拍仪数据）；「文档」Tab 仅高拍仪页显示 */
+  /* 高拍仪页：文案与按钮按页面切换（影像数据 ↔ 高拍仪数据） */
   arcNames.images=scanner?'高拍仪数据':'影像数据';
-  document.querySelectorAll('#arc-drawer .arc-doc').forEach(el=>{el.style.display=scanner?'':'none'});
-  if(!scanner&&arcTab==='docs')arcTab=scanner?'docs':'images';
-  /* 批量导入来源（采集方式含「批量导出」）：Tab 栏右侧显示「在线表格预览」入口，可查看导出字段与数据 */
-  const impPrev=document.getElementById('arc-imp-preview');
-  if(impPrev){
-    const way=arcRow&&arcRow.querySelector('td .tag')?arcRow.querySelector('td .tag').textContent:'';
-    const isImp=/批量导出/.test(way);
-    impPrev.style.display=isImp?'':'none';
-    if(!isImp)closeM('m-imp-table');
-  }
   const il=document.getElementById('arc-img-label');if(il)il.textContent=arcNames.images;
   const tl=document.getElementById('arc-tab-img-label');if(tl)tl.textContent=arcNames.images;
   const gb=document.getElementById('arc-btn-img');
   if(gb){if(scanner){gb.textContent='📷 高拍仪采集';gb.setAttribute('data-a','["v-scanner"]')}
     else{gb.textContent='🔬 医学影像采集';gb.setAttribute('data-a','["v-imaging"]')}}
-  arcTab=full?'records':'images';   /* 每次打开档案 Tab 复位；「文档」Tab 需在高拍仪档案内手动切换 */
+  arcTab=full?'records':'images';
   const ed=!!arcEdit;
-  const at=document.getElementById('arc-title');if(at)at.textContent=ed?'编辑患者数据档案（患者信息 / 病历录入内容 / 图片可维护）':'患者数据档案';
+  const at=document.getElementById('arc-title');if(at)at.textContent=ed?'编辑患者数据档案（患者信息 / 图片可维护）':'患者数据档案';
   const ef=document.getElementById('arc-edit-form');if(ef)ef.style.display=ed?'':'none';
   const et=document.getElementById('arc-edit-tools');if(et)et.style.display=ed?'':'none';
   const ef2=document.getElementById('arc-edit-foot');if(ef2)ef2.style.display=ed?'flex':'none';
@@ -1396,9 +1323,7 @@ function openArc(){
     document.getElementById('ae-name').value=curPt.name;
     document.getElementById('ae-no').value=curPt.no;
     document.getElementById('ae-meta').value=curPt.meta||'';
-  }else{
-    /* 档案只读查看：病历录入内容的编辑态随之复位 */
-    if(arcRecEditing){arcRecEditing=false;const reb=document.getElementById('arc-rec-editbtn');if(reb)reb.textContent='✎ 编辑'}
+    document.getElementById('ae-diag').value=curPt.diag||'';
   }
   paintArcHead();
   renderArc();
@@ -1537,199 +1462,40 @@ const CAP_DEVS=[
 function openImgDev(){openM('m-imgdev')}
 /* ---------- 影像：接收日志（只读，全部在弹窗内查看） ---------- */
 function openDlog(){const b=document.getElementById('dicom-log');if(b)b.scrollTop=0;openM('m-dlog')}
-/* ---------- 批量导入（仅 Excel；字段列直接来源于所选 Excel 文件，勾选后预览同步） ---------- */
+/* ---------- 批量导入 ---------- */
 let impChosen=false;
-/* 兜底演示数据：仅在未选择文件或 Excel 解析失败时使用 */
-let IMP_COLS=['病历号','患者姓名','性别','年龄','主诉','现病史','诊断','医嘱'];
-let IMP_ROWS=[
-  ['YZK-2026-00128','张建国','男','63','双眼视物模糊 2 年','视物模糊加重 3 月','老年性白内障（双眼）','建议手术'],
-  ['YZK-2026-00129','周某','女','58','右眼胀痛 1 月','眼痛伴头痛','原发性青光眼','药物降眼压'],
-  ['YZK-2026-00130','吴某','男','71','左眼视物变形 2 周','视物变形伴黑影','湿性 AMD（左眼）','抗 VEGF 治疗']
-];
-let impFileName='眼科2026Q2电子病历.xlsx',impTotal=328;
-function renderImpPreview(){
-  const head=document.getElementById('imp-pv-head'),body=document.getElementById('imp-pv-body'),cols=document.getElementById('imp-cols');
-  /* 预览只显示已勾选的字段列（取消勾选的列不出现）；空态提示 */
-  const show=IMP_COLS.filter(c=>IMP_IMPORT.cols.has(c));
-  if(!show.length){
-    head.innerHTML='';body.innerHTML='<tr><td style="padding:18px;text-align:center;color:var(--text3);font-size:12.5px">已取消全部字段列，请至少勾选 1 列后再导入</td></tr>';
-  }else{
-  head.innerHTML=show.map(c=>
-    '<th style="padding:6px 10px;text-align:left;border-bottom:1px solid #eee;white-space:nowrap">'+esc(c)+'</th>').join('');
-  body.innerHTML=IMP_ROWS.map(r=>'<tr>'+show.map(c=>
-    '<td style="padding:6px 10px;border-bottom:1px solid #f5f5f5;white-space:nowrap">'+esc(r[IMP_COLS.indexOf(c)])+'</td>').join('')+'</tr>').join('');
-  }
-  cols.innerHTML=IMP_COLS.map(c=>{
-    const on=IMP_IMPORT.cols.has(c);
-    /* 取消勾选后：复选框与文字整体变灰 */
-    return '<label class="chk'+(on?'':' chk-off')+'"><input type="checkbox" '+(on?'checked':'')+' data-c="toggleImpCol" data-a=\'["'+c+'"]\''+'>'+esc(c)+(on?'':'<span style="color:#bbb">（不导入）</span>')+'</label>';
-  }).join('')+'<span style="font-size:12px;color:var(--text3);align-self:center">已选 '+IMP_IMPORT.cols.size+' / '+IMP_COLS.length+' 列</span>';
-  const cnt=document.getElementById('imp-cnt');
-  if(cnt)cnt.textContent='已选 '+IMP_IMPORT.cols.size+' / '+IMP_COLS.length+' 个字段列';
-  const fn=document.getElementById('imp-fname');if(fn)fn.textContent=impFileName;
-  const tt=document.getElementById('imp-total');if(tt)tt.textContent=impTotal;
-}
-const IMP_IMPORT={cols:new Set(IMP_COLS)};
-function toggleImpCol(el,c){
-  if(IMP_IMPORT.cols.has(c)){
-    if(IMP_IMPORT.cols.size<=1){toast('至少保留 1 个字段列','err');return}
-    IMP_IMPORT.cols.delete(c);
-  }else{IMP_IMPORT.cols.add(c)}
-  renderImpPreview();
-}
-/* 字段列批量操作：全选 / 全不选 / 反选 */
-function impColsAll(){IMP_IMPORT.cols=new Set(IMP_COLS);renderImpPreview()}
-function impColsNone(){
-  if(IMP_COLS.length<=1){toast('至少保留 1 个字段列','err');return}
-  const keep=IMP_IMPORT.cols.size?[...IMP_IMPORT.cols][0]:IMP_COLS[0];
-  IMP_IMPORT.cols=new Set([keep]); /* 保留当前第一项，避免为空 */
-  renderImpPreview();
-}
-function impColsInvert(){
-  const inv=IMP_COLS.filter(c=>!IMP_IMPORT.cols.has(c));
-  if(!inv.length){toast('全部取消前请至少保留 1 个字段列','err');return}
-  IMP_IMPORT.cols=new Set(inv);
-  renderImpPreview();
-}
-/* 解析所选 Excel：表头 = 字段列，数据行 = 预览内容（仅演示前 5 行） */
-function parseImportExcel(file,done){
-  if(typeof XLSX==='undefined'){toast('Excel 解析组件未加载，已使用演示数据','err');done(false);return}
-  const rd=new FileReader();
-  rd.onload=function(e){
-    try{
-      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''}).filter(r=>r.some(c=>String(c).trim()!==''));
-      if(!json.length){impTotal=0;toast('Excel 内容为空，已使用演示数据','err');done(false);return}
-      IMP_COLS=json[0].map(function(c){return String(c).trim()||'未命名字段'});
-      IMP_ROWS=json.slice(1,6).map(function(r){return IMP_COLS.map(function(_,i){return String(r[i]!=null?r[i]:'')})});
-      impTotal=Math.max(0,json.length-1);
-      if(!impTotal)toast('该 Excel 只有表头行、没有数据行，请补充数据后再导入','err');
-      done(true);
-    }catch(err){toast('Excel 解析失败，已使用演示数据','err');done(false)}
-  };
-  rd.onerror=function(){toast('文件读取失败，已使用演示数据','err');done(false)};
-  rd.readAsArrayBuffer(file);
-}
 function pickImportFile(el){
-  const inp=document.createElement('input');inp.type='file';inp.accept='.xlsx,.xls';
-  inp.onchange=function(){
-    const f=inp.files&&inp.files[0];
-    if(f&&!/\.(xlsx|xls)$/i.test(f.name)){toast('仅支持 Excel 格式（.xlsx / .xls），请重新选择','err');return}
-    const finish=function(){
-      impChosen=true;
-      impFileName=f?f.name:impFileName;
-      IMP_IMPORT.cols=new Set(IMP_COLS); /* 字段列重置为 Excel 实际表头，默认全选 */
-      el.textContent='已选择：'+impFileName;
-      el.style.color='var(--primary)';el.style.borderColor='var(--primary)';
-      document.getElementById('imp-txt').textContent='已选择文件，请确认预览内容并勾选字段列，然后点击「导入」';
-      document.getElementById('imp-preview').style.display='block';
-      renderImpPreview();
-    };
-    if(f)parseImportExcel(f,finish);else finish();
-  };
-  inp.click();
+  impChosen=true;
+  el.textContent='已选择：眼科2026Q2电子病历.zip（Excel / XML / ZIP）';
+  el.style.color='var(--primary)';el.style.borderColor='var(--primary)';
+  document.getElementById('imp-txt').textContent='已选择文件，可点击「导入」开始导入';
 }
 function doImport(){
-  if(!impChosen){toast('请先选择电子病历 Excel 文件','err');return}
+  if(!impChosen){toast('请先选择电子病历文件包（系统导出的 Excel / XML / ZIP）','err');return}
   const bar=document.getElementById('imp-bar'),txt=document.getElementById('imp-txt');
   const btn=[...document.querySelectorAll('#m-import .modal-f button')].find(b=>b.textContent.trim()==='导入');
-  const n=IMP_IMPORT.cols.size;
-  if(!n){toast('请至少勾选 1 个字段列','err');return}
-  if(!impTotal){toast('该 Excel 没有数据行（仅表头），请检查文件内容','err');return}
-  const total=impTotal;
-  const colsSel=[...IMP_IMPORT.cols];
   askConfirm({
     title:'导入电子病历',
-    desc:'导入后按病历号自动完成患者信息关联，仅导入勾选的字段列；数据同步写入病历采集列表并进入医生质控环节。',
-    summary:'导入文件：<b>'+esc(impFileName)+'</b><br>导入字段（'+colsSel.length+' 项）：<b>'+colsSel.map(esc).join('、')+'</b><br>预计条数：'+total+' 条　·　操作人：'+curUser.name+'（'+curUser.role+'）',
+    desc:'导入后按病历号自动完成患者信息关联，数据同步写入病历采集列表并进入医生质控环节；导入条数与文件一并记入操作日志。',
+    summary:'导入文件：<b>眼科2026Q2电子病历.zip</b><br>预计条数：328 条　·　操作人：'+curUser.name+'（'+curUser.role+'）',
     okText:'确认导入',
     onOk:function(){
       let p=0;txt.textContent='正在导入…';
       if(btn){btn.disabled=true;btn.textContent='导入中…'}
       const timer=setInterval(()=>{
         p+=25;bar.style.width=p+'%';
-        if(p>=100){clearInterval(timer);txt.textContent='导入完成，已自动完成患者信息关联（'+n+' 个字段列）';
+        if(p>=100){clearInterval(timer);txt.textContent='导入完成，已自动完成患者信息关联';
           if(btn){btn.disabled=false;btn.textContent='导入'}
-          /* 每条病历单独一行列入（示例取 Excel 预览前 5 条） */
-          IMP_ROWS.slice(0,5).forEach(function(r,idx){
-            const g=function(i){return IMP_COLS[i]&&IMP_COLS[i].indexOf('病历号')>-1?r[i]:(r[0]||'')};
-            const no=String((IMP_COLS.indexOf('病历号')>-1?r[IMP_COLS.indexOf('病历号')]:r[0])||('IMP-'+String(idx+1).padStart(5,'0')));
-            const nm=String(IMP_COLS.indexOf('患者姓名')>-1?r[IMP_COLS.indexOf('患者姓名')]:'')||'患者'+(idx+1);
-            const dx=String(IMP_COLS.indexOf('诊断')>-1?r[IMP_COLS.indexOf('诊断')]:'')||'见导入内容';
-            addCapRow2('record',['<b>电子病历（批量导入）</b>',nm+' · '+no,'<span class="tag t-blue">批量导出 → 批量导入平台</span>','1 条',nowStr(),'<span class="tag t-green">自动关联</span>'],1,'电子病历（'+dx+'）',nm,'病历（电子）',no);
-          });
+          addCapRow2('record',['<b>电子病历（批量导入）</b>','陈秀英 等 328 人','<span class="tag t-blue">批量导出 → 批量导入平台</span>','328 条',nowStr(),'<span class="tag t-green">自动关联 328</span>'],1,'电子病历 328 条（批量导入）','陈秀英','病历（电子）','YZK-2026-00125');
           impChosen=false;
           const dp=document.querySelector('#m-import .drop');
-          if(dp){dp.textContent='选择电子病历文件（仅支持系统导出的 Excel 格式）';dp.style.color='';dp.style.borderColor=''}
-          document.getElementById('imp-preview').style.display='none';
-          capLog('批量导入',impFileName+' · 每条病历单独列入','批量导入电子病历');
-          logOp('批量导入电子病历',impFileName+' · 每条病历单独一行列入 · 字段列：'+colsSel.join('、'),'成功（已进入医生质控）');
-          toast('导入完成：已按勾选字段列导入 '+Math.min(5,IMP_ROWS.length)+' 条病历并单独列入采集列表','ok')}
+          if(dp){dp.textContent='选择电子病历文件包（系统导出的 Excel / XML / ZIP）';dp.style.color='';dp.style.borderColor=''}
+          capLog('陈秀英 等 328 人','眼科2026Q2电子病历.zip · 328 条','批量导入电子病历');
+          logOp('批量导入电子病历','眼科2026Q2电子病历.zip · 328 条','成功（已进入医生质控）');
+          toast('导入完成：328 条已进入医生质控','ok')}
       },400);
     }
   });
-}
-/* ---------- HIS 采集（系统接口实时传输 Tab）：从 HIS 接口拉取电子病历并列入采集列表 ---------- */
-function hisCollect(btn){
-  if(btn.disabled)return;
-  const old=btn.textContent;
-  btn.disabled=true;btn.textContent='采集中…';
-  setTimeout(function(){
-    btn.disabled=false;btn.textContent=old;
-    const demo=[
-      {nm:'周某',no:'YZK-2026-00129',dx:'糖尿病视网膜病变'},
-      {nm:'吴某',no:'YZK-2026-00130',dx:'2 型糖尿病'}
-    ];
-    demo.forEach(function(r){
-      addCapRow2('record',['<b>电子病历（HIS 采集）</b>',r.nm+' · '+r.no,'<span class="tag t-green">系统接口实时传输</span>','1 条',nowStr(),'<span class="tag t-green">自动关联</span>'],1,'电子病历（'+r.dx+'）',r.nm,'病历（电子）',r.no);
-    });
-    capLog('HIS 采集','HIS 系统接口 · 实时传输 '+demo.length+' 条','系统接口实时采集电子病历');
-    logOp('HIS 采集电子病历','HIS 系统接口实时传输 · '+demo.length+' 条','成功（已进入医生质控）');
-    toast('HIS 采集完成：'+demo.length+' 条电子病历已列入采集列表','ok');
-  },1200);
-}
-/* ---------- 在线表格预览：批量导出电子病历的字段与数据（患者档案 → 批量导入来源行） ---------- */
-const IMP_TABLE_COLS=['病历号','患者姓名','性别','年龄','主诉','现病史','诊断','医嘱'];
-/* 每位患者在批量导出 Excel 中的本人记录（数据 privacy：仅本人可见，其他患者数据不下发）；EMR_ROWS 声明在文件后部，此处用函数延迟取值避免 TDZ */
-const EMR_ROWS_BY_PT={
-  'YZK-2026-00125':function(){return EMR_ROWS}  /* 演示：12 条批量导出记录均属陈秀英（00125） */
-};
-function openImpTable(){
-  if(!curPt)return;
-  const head=document.getElementById('itp-head'),body=document.getElementById('itp-body');
-  if(!head||!body)return;
-  const pt=document.getElementById('itp-pt');
-  if(pt)pt.textContent=maskName(curPt.name)+' · '+maskNo(curPt.no);
-  /* 字段列 = 批量导入时勾选的字段（IMP_IMPORT.cols）；至少 1 列 */
-  let show=IMP_TABLE_COLS.filter(c=>IMP_IMPORT.cols.has(c));
-  if(!show.length)show=[IMP_TABLE_COLS[0]];
-  /* 数据 = 仅当前患者本人的记录（无匹配时不显示任何其他患者数据） */
-  const rec=EMR_ROWS_BY_PT[curPt.no];
-  const rows=rec?(typeof rec==='function'?rec():rec):[];
-  const meta=String(curPt.meta||'');   /* 如「女 / 71」→ 性别/年龄列 */
-  const mm=meta.match(/^([^\/]+)\s*\/\s*(.+)$/);
-  const sex=mm?mm[1].trim():'',age=mm?mm[2].trim():'';
-  const colVal={};
-  colVal['病历号']=function(){return curPt.no};
-  colVal['患者姓名']=function(){return maskName(curPt.name)};
-  colVal['性别']=function(){return sex};
-  colVal['年龄']=function(){return age};
-  colVal['主诉']=function(r){return r.cc};
-  colVal['现病史']=function(r){return r.hx};
-  colVal['诊断']=function(r){return r.dx};
-  colVal['医嘱']=function(r){return r.pl};
-  head.innerHTML=show.map(function(c){return '<th style="white-space:nowrap;padding:8px 10px;text-align:left">'+esc(c)+'</th>'}).join('');
-  body.innerHTML=rows.map(function(r){
-    return '<tr>'+show.map(function(c){
-      const val=colVal[c]?colVal[c](r):'';
-      return '<td style="padding:8px 10px;border-bottom:1px solid #f0f2f5;'+(c==='病历号'||c==='患者姓名'||c==='性别'||c==='年龄'?'white-space:nowrap;':'')+'">'+esc(String(val||''))+'</td>';
-    }).join('')+'</tr>';
-  }).join('')||( '<tr><td colspan="'+show.length+'" style="padding:18px;text-align:center;color:var(--text3);font-size:12.5px">该患者在本次导出文件中无记录</td></tr>');
-  const ec=document.getElementById('itp-cnt');if(ec)ec.textContent=rows.length;
-  const nc=document.getElementById('itp-ncol');if(nc)nc.textContent=show.length+' / '+IMP_TABLE_COLS.length;
-  openM('m-imp-table');
-  logOp('在线表格预览',curPt.name+' · '+curPt.no+' · 仅本人 '+rows.length+' 条 · 导入时勾选字段 '+show.length+'/'+IMP_TABLE_COLS.length,'成功');
 }
 /* ---------- 上传进度 ---------- */
 let up=64;
@@ -1741,6 +1507,7 @@ function upAutoSettle(){
   const tr=bar.closest('tr');if(!tr)return;
   tr.dataset.up='done';
   const act=tr.querySelector('.act-cell');if(act)act.innerHTML='<span style="color:var(--text3)">—</span>';
+  paintUpSel();
 }
 
 /* ---------- 采集列表命名管理：重命名 ---------- */
@@ -1767,49 +1534,19 @@ function saveRename(){
   logOp('重命名采集图片',old+' → '+v,archived?'成功（该数据已归档，重命名已留痕）':'成功');
   toast('图片名称已更新（采集列表命名管理）'+(archived?'；该数据已归档，本次重命名已记入操作日志':''),'ok');
 }
-/* ---------- 病历文字识别：识别结果自动填入录入区（无需人工校对） ---------- */
-/* 自定义字段：字段名 + 内容输入框；内容可手动填写，留空则点击「文字识别」后自动回填 */
-const CF_SUGGEST=['主诉','既往史','查体','过敏史','辅助检查'];
-function customFieldRow(f){
-  const name=f&&f.name||'',val=f&&f.val||'';
-  return '<div class="cf-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center">'+
-    '<input class="input cf-name" style="flex:0 0 110px" placeholder="字段名（如 主诉）" list="cf-suggest" value="'+esc(name)+'">'+
-    '<textarea class="input cf-val" rows="1" style="flex:1" placeholder="可输入内容；留空则「文字识别」后自动回填">'+esc(val)+'</textarea>'+
-    '<span class="link" style="color:var(--danger);white-space:nowrap" data-c="delCustomField">删除</span></div>';
-}
-function delCustomField(el){
-  const row=el.closest('.cf-row');
-  if(row)row.remove();
-}
-/* 人工录入页：自定义字段（与录入区同结构，独立维护） */
-function addEntryField(){
-  const box=document.getElementById('entry-custom-list');if(!box)return;
-  box.insertAdjacentHTML('beforeend',customFieldRow({name:'',val:''}));
-  const rows=box.querySelectorAll('.cf-row');
-  const last=rows[rows.length-1];if(last)last.querySelector('input').focus();
-}
-/* 模拟识别某字段的返回内容（原型演示用） */
-function cfMockText(nm){
-  const M={'主诉':'双眼视物模糊 2 年，加重 3 月','现病史':'患者 2 年前无明显诱因出现双眼视物模糊，近 3 月加重，无眼痛眼红，无外伤史。',
-    '诊断':'老年性白内障（双眼）','医嘱':'建议手术治疗；术前完善眼部检查。','既往史':'2 型糖尿病 6 年；高血压 3 年，规律服药。',
-    '查体':'视力右 0.3 / 左 0.4，晶状体混浊（C2N2P1）','过敏史':'否认药物及食物过敏史','辅助检查':'眼压右 15 mmHg / 左 16 mmHg'};
-  return M[nm]||(nm+'：经文字识别自动填入的内容（演示）。');
-}
-function hlTemp(el){
-  el.classList.add('ocr-hl');
-  setTimeout(()=>el.classList.remove('ocr-hl'),1800);
-}
+/* ---------- 病历文字识别：识别结果填入录入区，由人工校对 ---------- */
 function doOcr(){
-  /* 文字识别：识别结果回填人工录入页留空的自定义字段（姓名 / 病历号为人工输入，不参与识别回填） */
-  const rows=document.querySelectorAll('#entry-custom-list .cf-row');
-  if(!rows.length){toast('请完善相关字段后再文字识别','err');return}
-  let filled=0;
-  rows.forEach(function(row){
-    const name=row.querySelector('.cf-name'),val=row.querySelector('.cf-val');
-    if(name&&val&&name.value.trim()&&!val.value.trim()){val.value=cfMockText(name.value.trim());hlTemp(val);filled++}
+  const r={
+    'rec-chief':'双眼视物模糊 2 年，加重 3 月',
+    'rec-hpi':'患者 2 年前无明显诱因出现双眼视物模糊，近 3 月加重，无眼痛眼红，无外伤史。',
+    'rec-dx':'老年性白内障（双眼）'
+  };
+  Object.keys(r).forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.value=r[id];el.style.background='#fff7e6';
+    setTimeout(()=>el.style.background='',1800);
   });
-  if(!filled){toast('请完善相关字段后再文字识别','err');return}
-  toast('文字识别完成：识别结果已自动填入留空的自定义字段（'+filled+' 个）','ok');
+  toast('文字识别完成：识别结果已填入录入区，请人工校对修正','ok');
 }
 /* ---------- 提交质控：数据进入医生质控待办 ---------- */
 function nowStr(){const d=new Date(),p=n=>String(n).padStart(2,'0');return p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())}
@@ -2031,13 +1768,101 @@ function fixAfterReject(){
   if(!target){toast('未找到对应的已驳回数据','err');return}
   editRecord(target.querySelector('[data-c="editRecord"]')||target);
 }
-/* ---------- 上传情况：仅自动上传（手动上传入口已移除） ---------- */
-function upAutoSettle(){
-  const bar=document.getElementById('upbar');if(!bar)return;
-  const tr=bar.closest('tr');if(!tr)return;
-  tr.dataset.up='done';
-  const act=tr.querySelector('.act-cell');if(act)act.innerHTML='<span style="color:var(--text3)">—</span>';
+/* ---------- 上传情况：手动上传 ---------- */
+function upRows(){return [].slice.call(document.querySelectorAll('#up-body tr'))}
+function upManualRows(){return upRows().filter(function(tr){return tr.dataset.up==='pending'||tr.dataset.up==='fail'})}
+function upCheckedRows(){return upManualRows().filter(function(tr){var c=tr.querySelector('.up-ck');return c&&c.checked})}
+function upManualOn(){const s=document.getElementById('mu-switch');return !s||s.classList.contains('on')}
+function paintUpSel(){
+  const n=upCheckedRows().length;
+  const cnt=document.getElementById('up-sel-cnt');
+  if(cnt)cnt.innerHTML='已选 <span class="cnt">'+n+'</span> 项';
+  const btn=document.getElementById('btn-up-sel');
+  if(btn){
+    btn.disabled=(n===0)||!upManualOn();
+    btn.title=!upManualOn()?'已关闭「允许手动上传」，请先在右侧「上传方式配置」中开启':'';
+  }
+  const all=document.getElementById('up-all');
+  if(all){const list=upManualRows();all.checked=list.length>0&&list.every(function(tr){const c=tr.querySelector('.up-ck');return c&&c.checked})}
+  document.querySelectorAll('#up-body [data-c="manualUploadOne"]').forEach(function(a){
+    const off=!upManualOn();
+    a.style.opacity=off?'.45':'';a.style.pointerEvents=off?'none':'';
+    a.title=off?'已关闭「允许手动上传」，请先在右侧「上传方式配置」中开启':'';
+  });
 }
+function toggleUpSel(el){
+  if(!hasPerm('toggleUpSel')){el.checked=!el.checked;return}
+  paintUpSel();
+}
+function toggleUpAll(el){
+  if(!hasPerm('toggleUpAll')){el.checked=!el.checked;return}
+  const on=el.checked;
+  upManualRows().forEach(function(tr){const c=tr.querySelector('.up-ck');if(c)c.checked=on});
+  paintUpSel();
+  if(on){const n=upManualRows().length;if(n)toast('已全选 '+n+' 项待上传数据')}
+}
+function manualUpload(){manualUploadRows(upCheckedRows())}
+function manualUploadOne(el){
+  const tr=el.closest('tr');
+  if(!tr){toast('请选择需要手动上传的数据','err');return}
+  manualUploadRows([tr]);
+}
+function manualUploadRows(rows){
+  if(!upManualOn()){toast('已关闭「允许手动上传」，请先在右侧「上传方式配置」中开启','err');return}
+  if(!rows.length){toast('请先勾选需要手动上传的数据','err');return}
+  const names=rows.map(function(tr){return tr.children[1].textContent+'（'+tr.children[2].textContent+'）'});
+  askConfirm({
+    title:'手动上传所选数据',
+    desc:'所选数据将由本地服务器手动上传至在线服务器，上传范围、结果与操作人记入操作日志；上传后数据可直接被在线管理端加工使用。',
+    summary:'上传范围：<b>'+names.join('、')+'</b><br>数据项：<b>'+rows.length+' 项</b><br>操作人：'+curUser.name+'（'+curUser.role+'）',
+    okText:'确认上传',
+    onOk:function(){
+      logOp('手动上传数据',names.join('、')+'（共 '+rows.length+' 项）','执行中');
+      toast('已开始手动上传 '+rows.length+' 项数据','ok');
+      upRunQueue(rows.slice());
+    }
+  });
+}
+function upRunQueue(rows){
+  let i=0,total=rows.length,okNames=[];
+  (function next(){
+    if(i>=total){
+      capLog('本地服务器','共 '+total+' 项数据 → 在线服务器','手动上传');
+      logOp('手动上传完成','共 '+total+' 项数据已上传至在线服务器','成功');
+      paintUpSel();
+      toast('手动上传完成：'+total+' 项数据已上传至在线服务器','ok');
+      return;
+    }
+    const tr=rows[i++];
+    upRunRow(tr,function(){
+      okNames.push(tr.children[1].textContent);
+      setTimeout(next,240);
+    });
+  })();
+}
+function upRunRow(tr,done){
+  const bar=tr.querySelector('.progress i'),st=tr.querySelector('.st-cell'),way=tr.querySelector('.way-cell');
+  const ck=tr.querySelector('.up-ck'),act=tr.querySelector('.act-cell');
+  if(ck)ck.disabled=true;
+  tr.dataset.up='running';
+  if(way)way.textContent='手动';
+  if(st)st.innerHTML='<span class="tag t-blue">上传中</span>';
+  if(act)act.innerHTML='<span style="color:var(--text3)">上传中…</span>';
+  let p=0;
+  const timer=setInterval(function(){
+    p+=10;if(p>100)p=100;
+    if(bar)bar.style.width=p+'%';
+    if(p>=100){
+      clearInterval(timer);
+      if(st)st.innerHTML='<span class="tag t-green">已上传</span>';
+      tr.dataset.up='done';
+      if(ck)ck.checked=false;
+      if(act)act.innerHTML='<span style="color:var(--text3)">—</span>';
+      if(done)done();
+    }
+  },150);
+}
+paintUpSel();
 
 /* ---------- 上传方式配置：定时上传开关与频次 ---------- */
 const FREQ_META={
@@ -2083,50 +1908,32 @@ function applyUploadCfg(){
     if(bad){toast('时刻格式不合规："'+bad+'"；请按 24 小时制 HH:MM 填写，多个时刻用英文逗号分隔（例：02:00, 09:00, 18:00）','err');el.focus();return}
   }
   const rt=document.getElementById('rt-switch').classList.contains('on');
+  const mu=document.getElementById('mu-switch').classList.contains('on');
   const tsDescText=tsw?tsDesc():null;
   askConfirm({
     title:'保存并应用上传方式配置',
     desc:'配置立即应用于「上传情况」中本地数据的上传方式，数据上传至在线服务器后由管理端加工使用；变更内容与操作人记入操作日志，避免上传策略被静默篡改。',
-    summary:'实时自动上传：<b>'+(rt?'已开启':'已关闭')+'</b><br>定时上传：<b>'+(tsw?tsDescText:'已关闭')+'</b><br>操作人：'+curUser.name+'（'+curUser.role+'）',
+    summary:'实时自动上传：<b>'+(rt?'已开启':'已关闭')+'</b><br>允许手动上传：<b>'+(mu?'已开启':'已关闭')+'</b><br>定时上传：<b>'+(tsw?tsDescText:'已关闭')+'</b><br>操作人：'+curUser.name+'（'+curUser.role+'）',
     okText:'确认保存',
     onOk:function(){
-      document.getElementById('up-way2').textContent=tsw?('定时 '+parts[0]):'实时';
-      logOp('保存上传方式配置','实时'+(rt?'开启':'关闭')+' · 定时'+(tsw?('开启（'+tsDescText+'）'):'关闭'),'成功');
-      toast('上传方式已配置：定时上传'+(tsw?('：'+tsDescText):'已关闭'),'ok');
-      /* 上传失败的数据：等待定时上传后自动重新上传 */
-      retryFailedUploads(parts[0]||'09:00');
+      document.getElementById('up-way2').textContent=tsw?('定时 '+parts[0]):'手动';
+      logOp('保存上传方式配置','实时'+(rt?'开启':'关闭')+' · 手动'+(mu?'开启':'关闭')+' · 定时'+(tsw?('开启（'+tsDescText+'）'):'关闭'),'成功');
+      toast('上传方式已配置：定时上传'+(tsw?('：'+tsDescText):'已关闭')+'；手动上传'+(mu?'已开启':'已关闭'),'ok');
+      paintUpSel();
     }
-  });
-}
-/* 上传失败数据随定时上传自动重传：进度从失败处继续，成功后更新状态并留痕 */
-function retryFailedUploads(timeStr){
-  const rows=document.querySelectorAll('#up-body tr[data-up="fail"]');
-  if(!rows.length)return;
-  rows.forEach(function(tr){
-    const way=tr.querySelector('.way-cell'),st=tr.querySelector('.st-cell'),act=tr.querySelector('.act-cell'),bar=tr.querySelector('.progress i');
-    tr.dataset.up='running';
-    if(way)way.textContent='定时 '+timeStr;
-    if(st)st.innerHTML='<span class="tag t-blue">重新上传中</span>';
-    if(act)act.innerHTML='<span style="color:var(--text3)">定时上传触发 · 自动重试</span>';
-    let p=parseInt(bar.style.width)||0;
-    const timer=setInterval(function(){
-      p+=10;if(p>100)p=100;
-      if(bar)bar.style.width=p+'%';
-      if(p>=100){
-        clearInterval(timer);
-        tr.dataset.up='done';
-        if(st)st.innerHTML='<span class="tag t-green">已上传</span>';
-        if(act)act.innerHTML='<span style="color:var(--text3)">—</span>';
-        capLog('本地服务器','眼底检查图片 · 8 张','定时上传自动重试','成功');
-        logOp('上传失败自动重试','眼底检查图片（8 张）· 定时上传 '+timeStr+' 触发','成功（已上传至在线服务器）');
-        toast('上传失败数据已随定时上传重新上传完成','ok');
-      }
-    },300);
   });
 }
 function toggleRealtime(el){
   el.classList.toggle('on');
   toast('实时自动上传已'+(el.classList.contains('on')?'开启':'关闭')+'（点击「保存并应用」后写入操作日志生效）');
+}
+function toggleManualUpload(el){
+  el.classList.toggle('on');
+  const on=el.classList.contains('on');
+  paintUpSel();
+  toast(on?'手动上传已开启：可勾选待上传数据手动上传至在线服务器（点击「保存并应用」后生效）'
+          :'手动上传已关闭：上传情况中的手动上传入口暂不可用（点击「保存并应用」后生效）',
+        on?undefined:'err');
 }
 /* ---------- 质控初始化 ---------- */
 document.querySelectorAll('#qc-body tr').forEach(tr=>{
@@ -2159,6 +1966,37 @@ function grabFrame(){
   const h=document.querySelector('#m-video .viewport .hint');
   if(h)h.textContent='已抓图 '+grabSeq+' 张 · 已转换为标准格式存入影像服务器';
   toast('已抓图 1 张（累计 '+grabSeq+' 张），转换为标准格式后存入影像服务器','ok');
+}
+
+/* ---------- 设备采集权限受限：手动录入患者信息并关联上传 ---------- */
+let mnImgs=0;
+function pickManualImage(el){
+  mnImgs=2;
+  el.textContent='已选择检查图片 2 张（图片格式保存）';
+  el.style.color='var(--primary)';
+}
+function saveManual(){
+  const name=document.getElementById('mn-name').value.trim();
+  const no=document.getElementById('mn-no').value.trim();
+  if(!name||!no){toast('请填写患者姓名与病历号（必填）','err');return}
+  if(!mnImgs){toast('请上传检查影像（设备采集权限受限时以图片格式保存并关联上传）','err');return}
+  const item=document.getElementById('mn-item').value;
+  const res=document.getElementById('mn-res').value.trim()||'—';
+  if(!arcData[no])arcData[no]={records:[],images:[],exams:[]};
+  arcData[no].exams.unshift({
+    tp:item,ic:'🩺',way:'手动录入 · 设备采集权限受限',wayc:'t-gray',
+    ct:res,t:nowStr(),link:'检查影像以图片格式保存并关联上传本地服务器',
+    st:'手动录入',stc:'t-gray'
+  });
+  curPt={name:name,no:no,meta:'',diag:'—',label:name+' · '+no};
+  document.querySelectorAll('.cur-pt').forEach(el=>el.textContent=curPt.label);
+  const mcItem='检查影像（'+item+'）';
+  addCapRow2('imaging',['<b>'+mcItem+'</b>',name+' · '+no,'<span class="tag t-gray">手动录入 · 设备采集权限受限</span>','2 图',nowStr(),'<span class="tag t-green">已关联</span>'],1,mcItem,name,'医学影像',no);
+  closeM('m-manual');mnImgs=0;
+  regPatient(name,no);
+  capLog(name+'（'+no+'）',item+' · 2 图','手动录入检查结果');
+  logOp('手动录入检查结果',item+' · '+name+' · '+no,'成功（设备采集权限受限，已关联上传本地服务器）');
+  toast('已手动录入患者信息并完成关联：'+curPt.label+'（可点击「患者信息关联」查看数据档案）','ok');
 }
 
 /* ---------- 采集列表：空态同步 ---------- */
@@ -2251,13 +2089,11 @@ function editRecord(el){
   curPt={name:patient,no:no,meta:info.meta||'',diag:info.diag||'',label:patient+' · '+no};
   arcRow=tr;arcEdit={tr:tr,item:item};
   openArc();
-  logOp('编辑采集数据',item+' · '+patient,'打开编辑侧边栏（患者信息 / 病历录入内容 / 图片可维护）');
+  logOp('编辑采集数据',item+' · '+patient,'打开编辑侧边栏（患者信息 / 图片可维护）');
 }
 function cancelArcEdit(){
   if(!arcEdit){closeArc();return}
   const it=arcEdit.item||'—';
-  arcRecEditing=false;
-  const reb=document.getElementById('arc-rec-editbtn');if(reb)reb.textContent='✎ 编辑';
   arcEdit=null;openArc();applyPrivacy();
   logOp('取消编辑',it,'放弃本次修改，未写入变更');
   toast('已取消编辑，未保存任何修改','err');
@@ -2267,17 +2103,14 @@ function saveArcEdit(){
   const nm=document.getElementById('ae-name').value.trim();
   const no=document.getElementById('ae-no').value.trim();
   const meta=document.getElementById('ae-meta').value.trim();
+  const diag=document.getElementById('ae-diag').value.trim();
   if(!nm||!no){toast('患者姓名与病历号为必填项','err');return}
   const oldNo=curPt.no,oldLabel=curPt.label;
-  /* 病历录入内容：先收集编辑态表单值（按旧病历号暂存），病历号变更时随迁 */
-  collectArcRecEdit();
-  const recSaved=(PT_REC[oldNo]||[]).map(function(x){return {k:x.k,v:x.v}});
   if(!arcData[no])arcData[no]=arcData[oldNo]||{records:[],images:[],exams:[]};
   if(no!==oldNo&&arcData[oldNo])delete arcData[oldNo];
-  PT_INFO[no]={meta:meta||((PT_INFO[oldNo]||{}).meta||''),diag:(PT_INFO[oldNo]||{}).diag||''};
+  PT_INFO[no]={meta:meta||((PT_INFO[oldNo]||{}).meta||''),diag:diag||((PT_INFO[oldNo]||{}).diag||'')};
   if(oldNo!==no&&oldNo!=='')delete PT_INFO[oldNo];
-  if(recSaved.length)PT_REC[no]=recSaved;else delete PT_REC[no];
-  curPt={name:nm,no:no,meta:meta,diag:curPt.diag||'',label:nm+' · '+no};
+  curPt={name:nm,no:no,meta:meta,diag:diag,label:nm+' · '+no};
   const tr=arcEdit.tr;
   if(tr&&tr.parentElement){
     tr.dataset.patient=nm;tr.dataset.no=no;
@@ -2287,11 +2120,8 @@ function saveArcEdit(){
     regPatient(nm,no);
   }
   arcEdit=null;
-  arcRecEditing=false;
-  const reb=document.getElementById('arc-rec-editbtn');if(reb)reb.textContent='✎ 编辑';
   openArc();applyPrivacy();
-  const recCnt=(PT_REC[no]||[]).length;
-  logOp('编辑患者信息',oldLabel+' → '+nm+' · '+no,'姓名 / 病历号 / 诊断变更已留痕，档案数据同步迁移'+(recCnt?'；病历录入内容已更新（'+recCnt+' 个字段）':''));
+  logOp('编辑患者信息',oldLabel+' → '+nm+' · '+no,'姓名 / 病历号 / 诊断变更已留痕，档案数据同步迁移');
   toast('患者信息已更新：'+nm+' · '+no+'（变更已记入操作日志）','ok');
 }
 function delArcItem(i){
@@ -2375,36 +2205,14 @@ const mcCfg={
   scanner:{title:'手动采集（高拍仪图像）',page:'高拍仪采集',tc:'t-gray',tp:'高拍仪图片',unit:'张',types:['手写病历图片','裂隙灯检查图片','眼压检查图片','视力检查图片','验光检查图片']}
 };
 let mcFrom='record';
-/* 采集对象下拉：选项来自「设备管理」中系统管理员配置的启用设备（按来源页过滤设备类别） */
-function mcDevOptions(){
-  /* scanner → 高拍仪（CAP_DEVS）；imaging → 医学影像设备（IMG_DEVS）；record → 病历无需设备，显示来源页名称 */
-  const devs=(mcFrom==='scanner'?CAP_DEVS:(mcFrom==='imaging'?IMG_DEVS:[]))
-    .filter(function(d){return d.on})
-    .map(function(d){return d.name+'（'+d.model+'）'});
-  if(mcFrom==='record')return [mcCfg.record.page];
-  if(!devs.length)return ['（暂无启用设备，请联系系统管理员在「设备管理」中配置）'];
-  return devs;
-}
-function paintMcPage(){
-  const sel=document.getElementById('mc-page');if(!sel)return;
-  const opts=mcDevOptions();
-  sel.innerHTML=opts.map(function(o){return '<option>'+esc(o)+'</option>'}).join('');
-  const tip=document.getElementById('mc-page-tip');
-  if(tip)tip.textContent=mcFrom==='record'
-    ?'病历数据采集无需选择设备'
-    :'设备清单来自「设备管理」（系统管理员配置），仅显示启用中的设备；当前共 '+opts.length+' 台可选';
-}
 /* 保存按钮文案：病历类需先人工录入，其余场景保存即提交质控 */
-function mcSaveLabel(){return '下一步'}
+function mcSaveLabel(){return mcFrom==='record'?'保存并进入人工录入':(mcFrom==='scanner'?'保存并写入采集列表':'保存并提交质控')}
 function openManualCap(from){
   mcFrom=from;mcResetFiles();
   const c=mcCfg[from];
   const isRec=(from==='record');
-  /* 「采集文档」仅高拍仪来源显示；医学影像 / 病历来源隐藏 */
-  const docItem=document.getElementById('mc-doc-item');
-  if(docItem)docItem.style.display=from==='scanner'?'':'none';
   document.getElementById('mc-title').textContent=c.title;
-  paintMcPage();
+  document.getElementById('mc-page').value=c.page;
   document.getElementById('mc-type').innerHTML=c.types.map(t=>'<option>'+t+'</option>').join('');
   document.getElementById('mc-name').value=curPt?curPt.name:'';
   document.getElementById('mc-no').value=curPt?curPt.no:'';
@@ -2530,12 +2338,11 @@ function mcClear(){
 /* 关闭 / 重新打开弹窗时复位上传状态 */
 function mcResetFiles(){
   if(mcUpTimer){clearInterval(mcUpTimer);mcUpTimer=null}
-  mcFiles=[];mcPt={name:'',no:''};mcDocs=[];
+  mcFiles=[];mcPt={name:'',no:''};
   const tot=document.getElementById('mc-total');if(tot)tot.style.display='none';
   const bar=document.getElementById('mc-bar');if(bar)bar.style.width='0%';
   const tp=document.getElementById('mc-total-p');if(tp)tp.textContent='0%';
   const btn=document.getElementById('mc-save');if(btn){btn.disabled=false;btn.textContent=mcSaveLabel()}
-  const bdt=document.getElementById('mc-doc-pick-t');if(bdt)bdt.textContent='点击选择本地文档（支持多个）';
   mcRenderFiles();
 }
 /* 上传批次 → 预览源（与 P01 / P04 共用同一套大图预览） */
@@ -2584,34 +2391,15 @@ function viewCapImg(el){
     if(!voided)it.v={k:'capimg',src:CAP_FILES[item]||capLazySrc(item,r)};
     items.push(it);
   });
-  /* 文档 Tab：与高拍仪图片一一对应，命名一致（.png → _文档.txt），内容为 OCR 文字识别结果（演示） */
-  const docs=items.filter(function(it){return it.st!=='已作废'}).map(function(it){
-    const base=String(it.ct||'').replace(/\.[a-z0-9]+$/i,'');
-    return {tp:base+'_文档.txt',ic:'📝',way:'文字识别 · 自动生成',wayc:'t-blue',ct:base+'_文档.txt',t:it.t,link:'与采集图片同名关联',st:it.st,stc:it.stc,
-      v:{k:'capdoc',name:base+'_文档.txt',img:it.ct}};
-  });
   const arcKey=rNo||('PT-'+rPatient);/* 档案按患者唯一：同一患者始终读写同一份档案 */
   const d=arcData[arcKey]||(arcData[arcKey]={records:[],images:[],exams:[]});
   d.images=items;
-  d.docs=docs;
   arcRow=tr;                        /* 记录来源行：已驳回时档案内展示驳回信息 */
   openArc();
 }
 /* ---------- 按资料类型生成上传图片内容（内联 SVG，离线可渲染） ---------- */
 const MC_DEMO_FILES=[{mb:1.8,w:2480,h:3508},{mb:1.6,w:2480,h:3508},{mb:1.4,w:2480,h:3508}];
 let mcFiles=[],mcUpTimer=null,mcPt={name:'',no:''};
-let mcDocs=[];
-function mcDocPick(){document.getElementById('mc-doc-file').click()}
-document.getElementById('mc-doc-file').addEventListener('change',function(){
-  const fs=[...this.files];this.value='';
-  if(!fs.length)return;
-  const bad=fs.filter(f=>!/\.docx?$/i.test(f.name)&&!/\.txt$/i.test(f.name));
-  if(bad.length){toast('采集文档仅支持 Word（doc / docx）与 TXT 格式：'+bad.map(f=>f.name).join('、'),'err');return}
-  mcDocs=fs;
-  const zt=document.getElementById('mc-doc-pick-t');
-  if(zt)zt.textContent='重新选择本地文档（已选 '+fs.length+' 个）';
-  toast('已选择 '+fs.length+' 个文档（Word / TXT），保存后将随图片一并写入采集列表');
-});
 const CAP_FILES={};
 function mcKind(type){
   if(/裂隙灯/.test(type))return 'slit';
@@ -2775,277 +2563,6 @@ function capImgSvg(kind,pg){
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+s.vb+'" width="420" height="560">'+s.body+'</svg>';
 }
 
-/* ========== 病历采集新流程：列表【＋新增】→ 第一步页面（资料类型+上传）→ 下一步 → 人工录入页（上一步可返回 / 保存） ========== */
-let ENTRY=null;   /* 当前新增采集会话：{type,files:[{name,mb,meta,svg,label}],page} */
-let entryFiles=[];   /* 第一步：待上传文件清单 */
-let entryUpTimer=null;
-function startRecEntry(){
-  ENTRY=null;entryFiles=[];
-  if(entryUpTimer){clearInterval(entryUpTimer);entryUpTimer=null}
-  entryFiles=[];entryRenderFiles();
-  const tot=document.getElementById('entry-total');if(tot)tot.style.display='none';
-  const bar=document.getElementById('entry-bar');if(bar)bar.style.width='0%';
-  const et=document.getElementById('entry-type');if(et)et.selectedIndex=0;
-  showStep1();
-  logOp('新增采集（病历数据）','打开上传页（第一步）');
-}
-function showStep1(){
-  const cards=document.querySelectorAll('#v-record > .card');
-  cards.forEach(function(cd){if(cd.id!=='rec-step1')cd.style.display='none'});
-  document.getElementById('rec-step1').style.display='';
-  document.getElementById('v-record').scrollIntoView({behavior:'smooth',block:'start'});
-}
-function showEntryForm(){
-  const cards=document.querySelectorAll('#v-record > .card');
-  cards.forEach(function(cd){if(cd.id!=='rec-entry-form')cd.style.display='none'});
-  const form=document.getElementById('rec-entry-form');
-  if(form){
-    form.style.display='';
-    ['entry-name','entry-no'].forEach(function(id){const el=document.getElementById(id);if(el)el.value=''});
-    const cl=document.getElementById('entry-custom-list');if(cl)cl.innerHTML='';
-    renderEntry();
-  }
-  document.getElementById('v-record').scrollIntoView({behavior:'smooth',block:'start'});
-}
-/* 上一步：从人工录入页返回第一步（保留已上传文件与资料类型） */
-function entryPrev(){
-  if(!ENTRY){backToRecList();return}
-  showStep1();
-  logOp('新增采集·上一步',ENTRY.type+' · '+ENTRY.files.length+' 张','返回上传页（已上传文件保留）');
-}
-/* 第一步：选择本地文件（原型演示数据）并模拟上传 */
-function entryPick(){
-  const ty=(document.getElementById('entry-type')||{}).value||'手写病历';
-  const kind=mcKind(ty),d=new Date();
-  const md=String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-  const short=ty.replace('图片','');
-  entryFiles=MC_DEMO_FILES.map(function(s,i){
-    const nm=EntryNoBase()+'_'+short+'_'+String(i+1).padStart(2,'0')+'_'+md+'.png';
-    return {name:nm,mb:s.mb,w:s.w,h:s.h,kind:kind,pg:i,st:'wait',pct:0,svg:capImgSvg(kind,i)};
-  });
-  entryRenderFiles();
-  toast('已选择 '+entryFiles.length+' 个本地文件，开始上传至本地服务器…');
-  entryUpload();
-}
-/* 文件名序号基数（演示固定，真实系统由病历号生成） */
-function EntryNoBase(){return '00128'}
-/* 上传清单渲染 */
-function entryRenderFiles(){
-  const box=document.getElementById('entry-files'),wrap=document.getElementById('entry-ups');
-  if(!box||!wrap)return;
-  const zone=document.getElementById('entry-pick-t');
-  if(!entryFiles.length){
-    wrap.style.display='none';box.innerHTML='';
-    const tt=document.getElementById('entry-total');if(tt)tt.style.display='none';
-    if(zone)zone.textContent='点击选择本地文件（支持多张）';
-    return;
-  }
-  wrap.style.display='';
-  if(zone)zone.textContent='重新选择本地文件（已选 '+entryFiles.length+' 个）';
-  const cnt=document.getElementById('entry-cnt');if(cnt)cnt.textContent=entryFiles.length;
-  const sz=document.getElementById('entry-size');if(sz)sz.textContent=entryFiles.reduce(function(a,f){return a+f.mb},0).toFixed(1)+' MB';
-  box.innerHTML=entryFiles.map(function(f,i){
-    const st=f.st==='done'?'✅ 已上传':(f.st==='up'?'上传中 '+f.pct+'%':'等待上传');
-    const act=f.st==='done'?'<span class="act"><span class="link" '+DC('entryPreviewFile',[i])+'>🔍 预览</span><span class="link" style="margin-left:8px;color:var(--danger)" '+DC('entryRemoveFile',[i])+'>移除</span></span>':'';
-    const pb=f.st==='done'?'':'<div class="progress"><i style="width:'+f.pct+'%"></i></div>';
-    return '<div class="up-item" data-st="'+f.st+'"><div class="th">'+f.svg+'</div>'+
-      '<div><div class="nm">'+esc(f.name)+'</div><div class="mt">'+f.mb.toFixed(1)+' MB · '+f.w+'×'+f.h+' px · 300 dpi</div>'+pb+'</div>'+
-      '<div class="st">'+st+act+'</div></div>';
-  }).join('');
-}
-/* 上传进度（逐张推进 + 总进度），全部完成后开放下一步 */
-function entryUpload(){
-  if(entryUpTimer){clearInterval(entryUpTimer);entryUpTimer=null}
-  if(!entryFiles.length)return;
-  entryFiles.forEach(function(f){f.st='wait';f.pct=0});
-  const tot=document.getElementById('entry-total'),bar=document.getElementById('entry-bar'),
-        tt=document.getElementById('entry-total-t'),tp=document.getElementById('entry-total-p');
-  if(tot)tot.style.display='';
-  if(tt)tt.textContent='正在上传 '+entryFiles.length+' 个文件至本地服务器…';
-  if(tp)tp.textContent='0%';
-  if(bar)bar.style.width='0%';
-  let i=0;
-  entryUpTimer=setInterval(function(){
-    if(i>=entryFiles.length){
-      clearInterval(entryUpTimer);entryUpTimer=null;
-      if(tt)tt.textContent='上传完成：'+entryFiles.length+' 个文件';
-      if(tot)setTimeout(function(){tot.style.display='none'},900);
-      entryRenderFiles();
-      toast('上传完成，可点击「下一步」进入人工录入','ok');
-      return;
-    }
-    const f=entryFiles[i];
-    f.st='up';f.pct=Math.min(100,(f.pct||0)+18+Math.round(Math.random()*26));
-    if(f.pct>=100){f.st='done';f.pct=100;i++}
-    const done=entryFiles.filter(function(x){return x.st==='done'}).length;
-    const pct=Math.round(done/entryFiles.length*100);
-    if(tp)tp.textContent=pct+'%';
-    if(bar)bar.style.width=pct+'%';
-    entryRenderFiles();
-  },240);
-}
-function entryRemoveFile(i){
-  if(!entryFiles[i])return;
-  const nm=entryFiles[i].name;
-  entryFiles.splice(i,1);entryRenderFiles();
-  logOp('移除待上传文件',nm,'成功（仅从本次待上传清单移除，未写入采集列表）');
-  toast('已从待上传清单移除：'+nm);
-  if(!entryFiles.length){
-    const tot=document.getElementById('entry-total');if(tot)tot.style.display='none';
-    const bar=document.getElementById('entry-bar');if(bar)bar.style.width='0%';
-  }
-}
-function entryClear(){
-  if(!entryFiles.length){toast('当前没有待上传的文件','err');return}
-  const n=entryFiles.length;
-  entryFiles=[];entryRenderFiles();
-  const tot=document.getElementById('entry-total');if(tot)tot.style.display='none';
-  const bar=document.getElementById('entry-bar');if(bar)bar.style.width='0%';
-  toast('已清空本次待上传文件（'+n+' 个）');
-}
-function entryPreviewFile(i){
-  const f=entryFiles[i];if(!f)return;
-  lbOpenSrc({title:'本地上传图片预览',logA:'查看本地上传原图',cur:i,
-    logSuffix:function(){return '新增采集（病历数据）'},
-    pages:entryFiles.map(function(x,j){return {label:'上传文件 '+String(j+1).padStart(2,'0'),name:x.name,meta:x.mb.toFixed(1)+' MB · PNG · '+x.w+'×'+x.h+' · 300dpi',svg:x.svg}})},i);
-}
-/* 下一步：校验上传完成后，进入人工录入页（图 4） */
-function entryNext(){
-  const ty=(document.getElementById('entry-type')||{}).value||'手写病历';
-  if(!entryFiles.length){toast('请选择采集图片（本地文件人工上传）','err');return}
-  if(entryFiles.some(function(f){return f.st!=='done'})){toast('文件尚未上传完成，请等待上传进度走完后再进入下一步','err');return}
-  ENTRY={type:ty,page:0,
-    files:entryFiles.map(function(f){return {name:f.name,mb:f.mb,meta:f.mb.toFixed(1)+' MB · PNG · '+f.w+'×'+f.h+' · 300dpi',svg:f.svg,label:f.name}})};
-  showEntryForm();
-  logOp('新增采集·下一步',ty+' · '+ENTRY.files.length+' 张','进入人工录入（第二步）');
-  applyPrivacy();
-}
-function backToRecList(){
-  /* 恢复采集列表卡片与三 Tab 卡片；第一步与人工录入卡片隐藏；Tab 复位到第一个 */
-  const cards=document.querySelectorAll('#v-record > .card');
-  cards.forEach(function(cd){cd.style.display=''});
-  document.getElementById('rec-step1').style.display='none';
-  const form=document.getElementById('rec-entry-form');if(form)form.style.display='none';
-  switchTab('tab-hand');
-}
-/* 取消：放弃本次新增采集，返回采集列表（不写入数据） */
-function cancelRecEntry(){
-  const it=ENTRY?ENTRY.type+' · '+ENTRY.files.length+' 张':(entryFiles.length?entryFiles.length+' 张待上传文件':'未上传文件');
-  const had=!!ENTRY||entryFiles.length>0;
-  ENTRY=null;entryFiles=[];
-  if(entryUpTimer){clearInterval(entryUpTimer);entryUpTimer=null}
-  backToRecList();
-  if(had){logOp('取消新增采集',it,'放弃本次采集（未写入采集列表），返回采集列表');toast('已取消，未保存任何数据','err')}
-}
-/* 人工录入页：渲染（左侧图片区 + 缩略图条） */
-function renderEntry(){
-  if(!ENTRY)return;
-  const p=ENTRY.files[ENTRY.page]||ENTRY.files[0];
-  const cv=document.getElementById('entry-canvas');
-  if(cv)cv.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560" width="420" height="560">'+(p.svg||'')+'</svg>';
-  const fn=document.getElementById('entry-fn');if(fn){fn.textContent=p.name;fn.title=p.name}
-  const fs=document.getElementById('entry-fs');if(fs)fs.textContent=p.meta+' · 刚刚上传';
-  const kd=document.getElementById('entry-kind');
-  if(kd)kd.textContent=(ENTRY.type||'手写病历').replace('（截图）','');
-  const pg=document.getElementById('entry-pager');if(pg)pg.textContent=(ENTRY.page+1)+' / '+ENTRY.files.length;
-  const s=document.getElementById('entry-strip');
-  if(s)s.innerHTML=ENTRY.files.map(function(f,i){
-    return '<div class="doc-th'+(i===ENTRY.page?' on':'')+'" '+DC('pickEntryPage',[i])+' title="'+esc(f.name)+'　'+esc(f.meta)+'">'+
-      '<div class="mini"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560" width="420" height="560">'+f.svg+'</svg></div>'+
-      '<div class="zoom" '+DC('previewEntryPage',[i])+' title="查看大图">🔍</div>'+
-      '<div class="nm">'+esc((ENTRY.type||'病历').replace('（截图）','')+'_'+String(i+1).padStart(2,'0'))+'</div>'+
-    '</div>';
-  }).join('');
-  const pt=document.getElementById('entry-pt');
-  if(pt){
-    const nmEl=document.getElementById('entry-name'),noEl=document.getElementById('entry-no');
-    const nv=nmEl?nmEl.value.trim():'',nov=noEl?noEl.value.trim():'';
-    if(nv||nov){pt.textContent=maskName(nv||'—')+(nov?' · '+maskNo(nov):'')}
-    else{pt.textContent='待填写（下方必填项）'}
-    pt.style.cursor='';pt.removeAttribute('data-c');pt.title='';
-  }
-  const em=document.getElementById('entry-meta');if(em)em.textContent='待录入 · '+ENTRY.type;
-  applyPrivacy();
-}
-function pickEntryPage(i){
-  if(!ENTRY||i==null||i<0||i>=ENTRY.files.length)return;
-  ENTRY.page=i;renderEntry();
-  toast('已切换当前对照页：第 '+(i+1)+' 页 '+ENTRY.files[i].name);
-}
-/* 录入页：姓名 / 病历号输入时同步顶部患者信息显示（脱敏） */
-function syncEntryPt(){
-  if(!ENTRY)return;
-  renderEntry();
-}
-function previewEntryPage(i){
-  if(!ENTRY)return;
-  const cur=(typeof i==='number')?i:ENTRY.page;
-  lbOpenSrc({title:'本地上传图片预览',logA:'查看本地上传原图',cur:cur,
-    logSuffix:function(){return '新增采集 · '+ENTRY.type},
-    apply:function(j){ENTRY.page=j;renderEntry()},
-    pages:ENTRY.files.map(function(f){return {label:f.label,name:f.name,meta:f.meta,svg:f.svg}})},cur);
-}
-/* 录入页原图下载（走通用导出逻辑，来源为当前上传批次） */
-function entryDownload(){
-  if(!ENTRY){toast('录入会话已失效','err');return}
-  const p=ENTRY.files[ENTRY.page]||ENTRY.files[0];if(!p)return;
-  try{
-    const blob=new Blob(['<?xml version="1.0" encoding="UTF-8"?>'+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560" width="420" height="560">'+p.svg+'</svg>'],{type:'image/svg+xml;charset=utf-8'});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download=p.name.replace(/\.[a-z0-9]+$/i,'')+'.svg';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    setTimeout(function(){URL.revokeObjectURL(a.href)},4000);
-  }catch(e){}
-  toast('已导出第 '+(ENTRY.page+1)+' 页原图：'+p.name,'ok');
-  logOp('下载本地上传原图',p.name,'成功');
-}
-/* 保存：患者姓名/病历号（必填）+ 自定义字段（选填）+ 图片写入病历采集列表（状态：待质控） */
-function saveRecEntry(){
-  if(!ENTRY){toast('录入会话已失效，请重新点击「新增」','err');backToRecList();return}
-  const gv=function(id){const el=document.getElementById(id);return el?el.value.trim():''};
-  const name=gv('entry-name'),no=gv('entry-no');
-  if(!name||!no){toast('患者姓名、病历号为必填项，请填写完整后保存','err');return}
-  const type=ENTRY.type;
-  const way='手动采集 · 本地文件人工上传';
-  const t=nowStr();
-  const recFields=[];
-  /* 自定义字段（选填）：填写了字段名与内容的才收集 */
-  document.querySelectorAll('#entry-custom-list .cf-row').forEach(function(row){
-    const k=row.querySelector('.cf-name'),v=row.querySelector('.cf-val');
-    if(k&&v&&k.value.trim()&&v.value.trim())recFields.push({k:k.value.trim(),v:v.value.trim()});
-  });
-  /* 写入采集列表（待质控） */
-  const tb=document.getElementById('rec-list-body');
-  if(tb){
-    const n=ENTRY.files.length;
-    const item=type+'（手动采集）';
-    const row='<td><b>'+esc(type)+'（手动采集）</b></td><td>'+esc(name)+' · '+esc(no)+'</td><td><span class="tag t-orange">'+way+'</span></td>'+
-      '<td>'+n+' 张</td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-orange">待质控</span></td>'+
-      '<td><span class="link" '+DC('openArcFor',[name,no,'',''])+'>档案</span><span class="link" style="margin-left:10px" '+DC('editRecord',[{__el:1}])+'>编辑</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
-    const tr=document.createElement('tr');
-    tr.dataset.qc='1';tr.dataset.item=item;tr.dataset.patient=name;tr.dataset.type='病历（手动）';
-    tr.dataset.no=no;tr.dataset.from='record';tr.dataset.by=curUser.name;
-    tr.innerHTML=row;tb.prepend(tr);
-    syncListEmpty('record');
-    submitQC(item,name,'病历（手动）',true);
-  }
-  /* 图片与录入内容写入患者档案 */
-  if(!arcData[no])arcData[no]={records:[],images:[],exams:[]};
-  ENTRY.files.forEach(function(f){
-    arcData[no].records.unshift({tp:type,ic:'📄',way:way,wayc:'t-orange',ct:'1 张（图片格式保存）',t:t,link:'已自动完成患者信息关联与影像索引',st:'待质控',stc:'t-orange'});
-  });
-  PT_REC[no]=recFields;
-  regPatient(name,no);
-  capLog(name+'（'+no+'）',type+' · '+ENTRY.files.length+' 张','人工录入完成');
-  logOp('人工录入保存',type+'（手动采集）· '+name+' · '+no,'成功（'+ENTRY.files.length+' 张图片 + '+recFields.length+' 个录入字段，已提交医生质控）');
-  ENTRY=null;
-  backToRecList();
-  applyPrivacy();
-  toast('已保存：'+name+' · '+no+'，'+type+'（含人工录入内容）已写入采集列表并提交医生质控','ok');
-}
-function ENTRY_TXT(t){return t||'病历数据'}
-
 function saveManualCap(){
   const c=mcCfg[mcFrom];
   const type=document.getElementById('mc-type').value;
@@ -3073,20 +2590,6 @@ function saveManualCap(){
       tr.innerHTML=row;tb.prepend(tr);
       CAP_FILES[item]=uploadSrc({name:name,no:no},batch,batch.indexOf(f));
     });
-    /* 采集文档（Word / TXT）：与首张图片同名关联（.png → _文档.txt/.docx），写入采集列表（待上传） */
-    const firstBase=(batch[0]?batch[0].name:'采集.png').replace(/\.png$/i,'');
-    mcDocs.slice().reverse().forEach(function(df){
-      const ext=/\.txt$/i.test(df.name)?'txt':'docx';
-      const docName=firstBase+'_文档.'+ext;
-      const drow='<td><b class="nm">'+esc(docName)+'</b></td><td><span class="tag '+c.tc+'">'+esc(type)+'</span></td><td>'+esc(name)+'</td>'+
-        '<td><span class="tag t-orange">手动采集 · 采集文档</span></td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待上传</span></td>'+
-        '<td><span class="link" '+DC('viewCapImg',[{__el:1}])+'>档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
-      const dtr=document.createElement('tr');
-      dtr.dataset.qc='0';dtr.dataset.item=docName;dtr.dataset.patient=name;dtr.dataset.type=type;
-      dtr.dataset.no=no;dtr.dataset.from=mcFrom;dtr.dataset.by=curUser.name;
-      dtr.innerHTML=drow;tb.prepend(dtr);
-      CAP_FILES[docName]=uploadSrc({name:name,no:no},[{name:docName,mb:df.size/1048576||0.02,w:520,h:680,svg:txtSvgPage([docName.replace(/\.[^.]+$/,''),'','患者：'+name+' · 病历号：'+no,'采集方式：手动采集 · 采集文档','','—— 文档正文（演示） ——','患者主诉与病程记录见对应采集图片的','文字识别结果；本文档由手动采集时','一并上传，随图片进入医生质控环节。'])}],0);
-    });
   }else if(mcFrom==='record'){
     /* 病历类（手写病历 / 检查报告 / 处方 / 电子病历）：上传图片后仍需人工录入，
        状态置「待录入」，由工具栏「✓ 提交质控」统一提交，避免提交按钮空转 */
@@ -3110,7 +2613,7 @@ function saveManualCap(){
     submitQC(item,name,c.tp,true);
   }
   syncListEmpty(mcFrom);
-  if(!arcData[no])arcData[no]={records:[],images:[],exams:[],docs:[]};
+  if(!arcData[no])arcData[no]={records:[],images:[],exams:[]};
   batch.forEach(function(f){
     const rec2={tp:type,ic:mcFrom==='scanner'?'📷':(mcFrom==='imaging'?'🔬':'📄'),way:way,wayc:'t-orange',
       ct:'1 '+c.unit+'（图片格式保存）',t:t,link:'已自动完成患者信息关联与影像索引',
@@ -3118,23 +2621,18 @@ function saveManualCap(){
       stc:(mcFrom==='scanner'?'t-gray':'t-orange')};
     if(mcFrom==='imaging')arcData[no].images.unshift(rec2);else arcData[no].records.unshift(rec2);
   });
-  if(mcFrom==='scanner'&&mcDocs.length){
-    arcData[no].docs.unshift({tp:type,ic:'📄',way:'手动采集 · 采集文档',wayc:'t-orange',
-      ct:mcDocs.length+' 份（Word / TXT）',t:t,link:'与采集图片同名关联',st:'待上传',stc:'t-gray'});
-  }
   curPt={name:name,no:no,meta:'',diag:'',label:name+' · '+no};
   document.querySelectorAll('.cur-pt').forEach(el=>el.textContent=curPt.label);
   closeM('m-manualcap');
   regPatient(name,no);
-  const docSuffix=mcDocs.length?' + '+mcDocs.length+' 份文档':'';
-  capLog(name+'（'+no+'）',type+'（'+c.page+'）· '+n+' 张'+docSuffix,'手动采集');
+  capLog(name+'（'+no+'）',type+'（'+c.page+'）· '+n+' 张','手动采集');
   logOp('手动采集',type+'（'+c.page+'）· '+name+' · '+no,
     mcFrom==='record'?'成功（'+n+' 张待人工录入后提交质控）'
-      :(mcFrom==='scanner'?'成功（'+n+' 张图片'+docSuffix+'已写入采集列表，待提交质控）':'成功（'+n+' 张已进入医生质控）'));
+      :(mcFrom==='scanner'?'成功（'+n+' 张已写入采集列表，待提交质控）':'成功（'+n+' 张已进入医生质控）'));
   toast(mcFrom==='record'
     ?'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引；请完成人工录入后点击「✓ 提交质控」'
     :(mcFrom==='scanner'
-      ?'手动采集完成：'+name+' · '+n+' 张图片'+docSuffix+'（'+type+'），已自动完成患者信息关联与影像索引并写入采集列表（状态：待上传）；在采集列表中点击「提交」进入医生质控'
+      ?'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引并写入采集列表（状态：待上传）；在采集列表中点击「提交」进入医生质控'
       :'手动采集完成：'+name+' · '+n+' 张图片（'+type+'），已自动完成患者信息关联与影像索引并进入医生质控'),'ok');
 }
 
@@ -3144,9 +2642,8 @@ function openBatchCap(){
   document.getElementById('bt-name').value=curPt?curPt.name:'';
   document.getElementById('bt-no').value=curPt?curPt.no:'';
   document.getElementById('bt-total').style.display='none';
-  btFiles=[];btDocs=[];
+  btFiles=[];
   const bzt=document.getElementById('bt-pick-t');if(bzt)bzt.textContent='点击选择本地文件（支持多张）';
-  const bdt=document.getElementById('bt-doc-pick-t');if(bdt)bdt.textContent='点击选择本地文档（支持多个）';
   openM('m-batch');
 }
 function btBaseNo(){
@@ -3156,19 +2653,7 @@ function btBaseNo(){
   return four.length?four[four.length-1]:runs[runs.length-1];
 }
 let btFiles=[];
-let btDocs=[];
 function btPick(){document.getElementById('bt-file').click()}
-function btDocPick(){document.getElementById('bt-doc-file').click()}
-document.getElementById('bt-doc-file').addEventListener('change',function(){
-  const fs=[...this.files];this.value='';
-  if(!fs.length)return;
-  const bad=fs.filter(f=>!/\.docx?$/i.test(f.name)&&!/\.txt$/i.test(f.name));
-  if(bad.length){toast('采集文档仅支持 Word（doc / docx）与 TXT 格式：'+bad.map(f=>f.name).join('、'),'err');return}
-  btDocs=fs;
-  const zt=document.getElementById('bt-doc-pick-t');
-  if(zt)zt.textContent='重新选择本地文档（已选 '+fs.length+' 个）';
-  toast('已选择 '+fs.length+' 个文档（Word / TXT），开始批量采集后将随图片一并写入采集列表');
-});
 document.getElementById('bt-file').addEventListener('change',function(){
   const fs=[...this.files];this.value='';
   if(!fs.length)return;
@@ -3211,35 +2696,18 @@ function startBatchCap(){
     CAP_FILES[item]=uploadSrc({name:name,no:no},[{name:item,mb:f.size/1048576,w:2480,h:3508,svg:capImgSvg(mcKind(type),(i-1)%3)}],0);
     if(i>=cnt){
       clearInterval(timer);
-      /* 采集文档（Word / TXT）：与图片同名（.png → _文档.txt / .docx），逐个写入采集列表（待上传） */
-      let di=0;
-      btDocs.forEach(function(df){
-        di++;
-        const ext=/\.txt$/i.test(df.name)?'txt':'docx';
-        const docName=base+'_'+type+'_'+String(i).padStart(2,'0')+'_'+tag+'_文档.'+ext;
-        const drow='<td><b class="nm">'+esc(docName)+'</b></td><td><span class="tag t-gray">'+esc(type)+'</span></td><td>'+esc(name)+'</td>'+
-          '<td><span class="tag t-orange">批量采集 · 采集文档</span></td><td>'+t+'</td><td><span class="tag t-green">已关联</span></td><td><span class="tag t-gray">待上传</span></td>'+
-          '<td><span class="link" '+DC('viewCapImg',[{__el:1}])+'>档案</span><span class="link" style="margin-left:10px" data-c="openRename" data-a="[{&quot;__el&quot;:1}]">重命名</span><span class="link" style="margin-left:10px" data-c="editRecord" data-a="[{&quot;__el&quot;:1}]">编辑</span><span class="link" style="margin-left:10px;color:var(--danger)" data-c="delCap" data-a="[{&quot;__el&quot;:1}]" title="合规要求：数据不作物理删除，作废后保留记录并留痕">作废</span><span class="link" style="margin-left:10px" '+DC('submitRecord',[{__el:1}])+'>提交</span></td>';
-        const dtr=document.createElement('tr');
-        dtr.dataset.qc='0';dtr.dataset.item=docName;dtr.dataset.patient=name;dtr.dataset.type=type;
-        dtr.dataset.no=no;dtr.dataset.from='scanner';dtr.dataset.by=curUser.name;
-        dtr.innerHTML=drow;tb.prepend(dtr);
-        CAP_FILES[docName]=uploadSrc({name:name,no:no},[{name:docName,mb:df.size/1048576||0.02,w:520,h:680,svg:txtSvgPage([docName.replace(/\.[^.]+$/,''),'','患者：'+name+' · 病历号：'+no,'采集方式：批量采集 · 采集文档','','—— 文档正文（演示） ——','患者主诉与病程记录见对应采集图片的','文字识别结果；本文档由高拍仪采集时','一并上传，随图片进入医生质控环节。'])}],0);
-      });
       btn.disabled=false;btn.textContent='开始批量采集';
       syncListEmpty('scanner');
-      if(!arcData[no])arcData[no]={records:[],images:[],exams:[],docs:[]};
+      if(!arcData[no])arcData[no]={records:[],images:[],exams:[]};
       for(let k=0;k<cnt;k++)arcData[no].records.unshift({tp:type,ic:'📷',way:'批量采集 · 高拍仪连拍',wayc:'t-orange',
         ct:'1 张（图片格式保存）',t:t,link:'已自动完成患者信息关联与影像索引',st:'待上传',stc:'t-gray'});
-      if(btDocs.length)arcData[no].docs.unshift({tp:type,ic:'📄',way:'批量采集 · 采集文档',wayc:'t-orange',
-        ct:btDocs.length+' 份（Word / TXT）',t:t,link:'与采集图片同名关联',st:'待上传',stc:'t-gray'});
       curPt={name:name,no:no,meta:'',diag:'',label:name+' · '+no};
       document.querySelectorAll('.cur-pt').forEach(el=>el.textContent=curPt.label);
       regPatient(name,no);
-      capLog(name+'（'+no+'）',type+' · '+cnt+' 张图片'+(btDocs.length?' + '+btDocs.length+' 份文档':'')+'（高拍仪连拍，自动命名）','批量采集');
-      logOp('批量采集','高拍仪连拍 · '+type+' · '+name+' · '+no,'成功（'+cnt+' 张图片'+(btDocs.length?'、'+btDocs.length+' 份文档':'')+'已写入采集列表，待提交质控）');
+      capLog(name+'（'+no+'）',type+' · '+cnt+' 张（高拍仪连拍，自动命名）','批量采集');
+      logOp('批量采集','高拍仪连拍 · '+type+' · '+name+' · '+no,'成功（'+cnt+' 张已写入采集列表，待提交质控）');
       closeM('m-batch');
-      toast('批量采集完成：'+name+' · '+cnt+' 张图片'+(btDocs.length?' + '+btDocs.length+' 份文档':'')+'（'+type+'），已按规则自动命名并完成患者信息关联与影像索引（状态：待上传）；在采集列表中点击「提交」进入医生质控','ok');
+      toast('批量采集完成：'+name+' · '+cnt+' 张图片（'+type+'），已按规则自动命名并完成患者信息关联与影像索引（状态：待上传）；在采集列表中点击「提交」进入医生质控','ok');
     }
   },180);
 }
@@ -3283,7 +2751,6 @@ function submitRecord(el){
     }
   }
   const defType=tid==='img-list-body'?'医学影像':(tid==='cap-list-body'?'高拍仪图片':'病历（手写）');
-  if(curPt&&curPt.no===tr.dataset.no)savePtRec(curPt.no);   /* 行提交时同步录入内容到患者档案 */
   submitQC(item,patient,tr.dataset.type||defType,true);
   capLog(patient,item,'提交质控');
   logOp('提交质控',item+' · '+patient,'成功（已进入医生质控待办）');
@@ -3295,8 +2762,6 @@ function submitQCbar(){
   const pend=[...tb.querySelectorAll('tr')].filter(tr=>(tr.dataset.qc==='0'||tr.dataset.qc==='3')&&tr.dataset.voided!=='1');
   if(!pend.length){toast('当前没有待提交的病历数据（请先通过手动采集上传病历图片并完成人工录入，或使用批量导入 / 系统接口传输）','err');return}
   const no=pend[0].dataset.no||'';
-  if(curPt&&curPt.no)savePtRec(curPt.no);          /* 录入内容随患者存档，档案内同步展示 */
-  else if(no)savePtRec(no);
   askConfirm({
     title:'提交质控',
     desc:'提交后本条病历数据进入医生质控待办，由质控医生核对图像质量与内容有效性；提交后采集人不可自行修改，退回须由质控医生驳回。',
@@ -3346,13 +2811,8 @@ const USERS={
 };
 const ROLE_PAGES={collector:['v-record','v-imaging','v-scanner'],doctor:['v-qc','v-upload'],admin:['v-device']};
 const ROLE_PERM={
-  startRecEntry:['collector'],entryNext:['collector'],entryPrev:['collector'],cancelRecEntry:['collector'],saveRecEntry:['collector'],
-  addEntryField:['collector'],pickEntryPage:['collector'],previewEntryPage:['collector'],entryDownload:['collector'],
-  entryPick:['collector'],entryClear:['collector'],entryRemoveFile:['collector'],entryPreviewFile:['collector'],entryUpload:['collector'],
   openManualCap:['collector'],doImport:['collector'],pickImportFile:['collector'],doOcr:['collector'],
-  openCapLog:['collector'],hisCollect:['collector'],btDocPick:['collector'],mcDocPick:['collector'],
-  toggleImpCol:['collector'],impColsAll:['collector'],impColsNone:['collector'],impColsInvert:['collector'],
-  submitQCbar:['collector'],saveManualCap:['collector'],
+  submitQCbar:['collector'],saveManualCap:['collector'],saveManual:['collector'],
   
   openImgDev:['collector'],
   openDlog:['collector'],
@@ -3360,14 +2820,15 @@ const ROLE_PERM={
   mcPreviewFile:['collector','doctor'],viewCapImg:['collector','doctor'],viewReject:['collector','doctor'],fixAfterReject:['collector'],
   ftpPull:['collector'],grabFrame:['collector'],commitVideo:['collector'],toggleDicom:['collector'],
   openRename:['collector'],saveRename:['collector'],delCap:['collector'],submitRecord:['collector'],openBatchCap:['collector'],startBatchCap:['collector'],btPick:['collector'],
-  openPreview:['collector','doctor'],pickDocPage:['collector'],downloadDoc:['collector','doctor'],
+  openPreview:['collector','doctor'],pickDocPage:['collector'],downloadDoc:['collector','doctor'],addDocPage:['collector'],
   qcPreview:['collector','doctor'],qcPickDoc:['collector','doctor'],
   qcPickSeq:['collector','doctor'],qcPickOct:['collector','doctor'],qcPickEmr:['collector','doctor'],
   openArc:['collector'],openArcFor:['collector'],goCapture:['collector'],editRecord:['collector'],
   viewArcItem:['collector'],
   openQc:['collector','doctor'],openQcByItem:['collector','doctor'],
   passQC:['doctor'],rejectQC:['doctor'],
-  applyUploadCfg:['doctor'],toggleRealtime:['doctor'],toggleTimedUpload:['doctor'],tsFreq:['doctor'],
+  applyUploadCfg:['doctor'],toggleRealtime:['doctor'],toggleManualUpload:['doctor'],toggleTimedUpload:['doctor'],tsFreq:['doctor'],
+  manualUpload:['doctor'],manualUploadOne:['doctor'],toggleUpSel:['doctor'],toggleUpAll:['doctor'],
   openAudit:['doctor'],
   /* 设备与接口管理：系统级配置，归属系统管理员（采集页不再选择设备，设备清单仅由管理员维护） */
   devmTab:['admin'],toggleSw:['admin'],
@@ -3478,7 +2939,7 @@ function switchRole(role){
   document.querySelectorAll('#nav .nav-item').forEach(n=>{
     n.style.display=ROLE_PAGES[role].indexOf(n.dataset.view)>-1?'':'none';
   });
-  ['m-imgdev','m-dlog','m-manualcap','m-batch','m-import','m-rename','m-edit','m-video','m-ftp','m-confirm','m-preview','m-devedit','m-apiedit','m-iflog'].forEach(id=>closeM(id));
+  ['m-imgdev','m-dlog','m-manualcap','m-batch','m-import','m-manual','m-rename','m-edit','m-video','m-ftp','m-confirm','m-preview','m-devedit','m-apiedit','m-iflog'].forEach(id=>closeM(id));
   closeDrawer();closeArc();closeAudit();
   const cur=document.querySelector('.view.active');
   RAF_SAFE(ROLE_PAGES[role].indexOf(cur?cur.id:'')>-1?cur.id:ROLE_PAGES[role][0]);
@@ -3488,7 +2949,7 @@ function switchRole(role){
 }
 function RAF_SAFE(id){RAW_GO(id)}
 /* ---------- 统一权限包装：动作拦截 + 变更后自动重新脱敏 ---------- */
-const POST_PRIVACY=['submitQC','addCapRow2','saveManualCap','submitQCbar',
+const POST_PRIVACY=['submitQC','addCapRow2','saveManualCap','saveManual','submitQCbar',
   'doImport','ftpPull','commitVideo','delCap','saveRename','renderArc','switchArc','repaintArc','syncQcBadge','openQcByItem','toggleDicom',
   'viewArcItem','viewCapImg','viewReject','fixAfterReject','openPreview','saveRecEdit','startBatchCap','submitRecord'];
 function installGuards(){
@@ -3531,156 +2992,13 @@ function delCap(el){
   });
 }
 /* ---------- 患者数据档案：头部渲染（默认脱敏） ---------- */
-/* 病历录入内容存档：按病历号保存「病历数据采集」录入区的填写结果，档案打开时同步展示 */
-const PT_REC={};
-/* 演示预置：已有患者的病历录入内容（自定义字段，与该患者诊断一致），档案无论从「病历数据采集」还是「医学影像采集」打开均可见 */
-Object.assign(PT_REC,{
-  'YZK-2026-00125':[
-    {k:'主诉',v:'双眼视物模糊 1 年，加重伴眼前黑影 2 月'},
-    {k:'既往史',v:'2 型糖尿病 8 年，规律用药，血糖控制一般'},
-    {k:'辅助检查',v:'FFA：双眼视网膜微血管瘤、点片状出血，渗出明显'}
-  ],
-  'YZK-2026-00126':[
-    {k:'主诉',v:'双眼胀痛伴头痛 2 周，视物模糊'},
-    {k:'既往史',v:'原发性青光眼 3 年，定期复查'},
-    {k:'过敏史',v:'否认药物及食物过敏史'},
-    {k:'辅助检查',v:'眼压右 28.6 mmHg / 左 26.1 mmHg；视野：双侧弓形暗点'}
-  ],
-  'YZK-2026-00127':[
-    {k:'主诉',v:'右眼视物变形 3 月，伴中央暗点'},
-    {k:'既往史',v:'高血压 5 年，规律服药，血压控制可'},
-    {k:'查体',v:'视力右 0.25 / 左 0.6；右眼黄斑区渗出伴出血'},
-    {k:'辅助检查',v:'OCT（黄斑区扫描）：右眼黄斑区视网膜神经上皮层脱离，RPE 不规则增厚'}
-  ],
-  'YZK-2026-00128':[
-    {k:'主诉',v:'双眼视物模糊 2 年，加重 3 月'},
-    {k:'查体',v:'视力右 0.3 / 左 0.25，晶状体混浊（C2N2P1）'},
-    {k:'辅助检查',v:'眼底：双眼视盘边界清，视网膜平伏'}
-  ],
-  'YZK-2026-00129':[
-    {k:'主诉',v:'发现血糖升高 5 年，双眼偶有视物模糊 2 月'},
-    {k:'辅助检查',v:'HIS 同步：糖化血红蛋白 7.8%；眼底照相：双眼重度 NPDR'}
-  ],
-  'YZK-2026-00130':[
-    {k:'主诉',v:'多饮多尿 3 年，双眼干涩不适 1 月'},
-    {k:'辅助检查',v:'HIS 同步：空腹血糖 8.2 mmol/L；检验报告已自动关联'}
-  ]
-});
-function collectRecFields(){
-  const out=[];
-  /* 人工录入页字段：仅自定义字段（姓名 / 病历号为患者标识，不作为录入内容存档） */
-  const ef=document.getElementById('rec-entry-form');
-  if(ef&&ef.style.display!=='none'){
-    document.querySelectorAll('#entry-custom-list .cf-row').forEach(function(row){
-      const k=row.querySelector('.cf-name'),v=row.querySelector('.cf-val');
-      if(k&&v&&k.value.trim()&&v.value.trim())out.push({k:k.value.trim(),v:v.value.trim()});
-    });
-  }
-  return out;
-}
-function savePtRec(no){
-  if(!no)return;
-  const f=collectRecFields();
-  if(f.length)PT_REC[no]=f;
-}
-function paintArcRec(){
-  const box=document.getElementById('arc-rec-box'),fd=document.getElementById('arc-rec-fields');
-  if(!box||!fd)return;
-  const list=(curPt&&PT_REC[curPt.no])||[];
-  box.style.display='';
-  const eb=document.getElementById('arc-rec-editbtn');
-  if(eb)eb.style.display=arcEdit?'':'none';   /* 仅编辑会话内提供录入内容编辑入口 */
-  if(arcRecEditing){
-    /* 编辑态：每项字段名+值均可修改，可移除；底部可新增字段 */
-    fd.className='rb-edit';
-    fd.innerHTML=(list.length?list.map(function(x,i){
-      return '<div class="rb-row" data-i="'+i+'">'
-        +'<input class="input rb-in rb-k" data-f="k" value="'+esc(x.k)+'" placeholder="字段名">'
-        +'<textarea class="input rb-in rb-v" data-f="v" rows="'+(x.v&&x.v.length>40?3:2)+'" placeholder="字段内容">'+esc(x.v)+'</textarea>'
-        +'<span class="link rb-del" data-c="delArcRecField" data-a="['+i+']">删除</span></div>';
-    }).join(''):'<div class="rb-row" style="color:var(--text3)">暂无字段，可在下方添加</div>')
-      +'<div class="rb-row" style="gap:10px;padding:4px 0">'
-        +'<input class="input rb-in rb-nk" id="arc-rec-nk" placeholder="新字段名（如 既往史）">'
-        +'<input class="input rb-in rb-nv" id="arc-rec-nv" placeholder="新增字段内容（可与上方字段同名补充，如 辅助检查）">'
-        +'<span class="link rb-del" data-c="addArcRecField">＋ 添加</span></div>';
-  }else if(list.length){
-    fd.className='';
-    fd.innerHTML=list.map(function(x){return '<div class="rb-row"><span class="rb-k">'+esc(x.k)+'</span><span class="rb-v">'+esc(x.v)+'</span></div>'}).join('');
-  }else{
-    fd.className='';
-    fd.innerHTML='<div class="rb-row" style="color:var(--text3)">暂无自定义录入内容（录入时可添加自定义字段，编辑状态下可补充）</div>';
-  }
-}
-/* 档案内编辑「病历录入内容」：进入/退出编辑态（渲染为可修改表单） */
-let arcRecEditing=false;
-function toggleArcRecEdit(){
-  if(!curPt)return;
-  if(!arcEdit){toast('请先在采集列表点击「编辑」进入编辑状态，再修改病历录入内容','err');return}
-  const list=PT_REC[curPt.no]||[];
-  if(!arcRecEditing&&!list.length){
-    /* 无存档时以录入区当前内容初始化，便于直接修改 */
-    const f=collectRecFields();
-    if(f.length)PT_REC[curPt.no]=f;
-  }
-  arcRecEditing=!arcRecEditing;
-  if(!arcRecEditing)collectArcRecEdit();   /* 退出编辑态：暂存已输入内容，最终以「保存」为准 */
-  const eb=document.getElementById('arc-rec-editbtn');
-  if(eb)eb.textContent=arcRecEditing?'✕ 退出编辑':'✎ 编辑';
-  paintArcRec();
-  if(arcRecEditing)logOp('编辑病历录入内容',curPt.name+' · '+curPt.no,'进入编辑态（字段可修改 / 移除 / 新增）');
-}
-/* 编辑态：移除一个字段（先收集已输入内容，再从当前编辑会话移除，保存时统一写回） */
-function delArcRecField(i){
-  if(!curPt)return;
-  collectArcRecEdit();
-  const list=PT_REC[curPt.no]||[];
-  if(!list[i]){toast('该字段不存在','err');return}
-  const rm=list.splice(i,1)[0];
-  if(!list.length)delete PT_REC[curPt.no];
-  paintArcRec();
-  logOp('编辑病历录入内容·移除字段',curPt.name+' · '+curPt.no,'移除字段：'+rm.k+'（保存后生效）');
-}
-/* 编辑态：新增一个字段（先收集已输入内容再追加，避免重渲染丢输入） */
-function addArcRecField(){
-  if(!curPt)return;
-  collectArcRecEdit();
-  const nk=(document.getElementById('arc-rec-nk')||{}).value||'';
-  const nv=(document.getElementById('arc-rec-nv')||{}).value||'';
-  if(!nk.trim()||!nv.trim()){toast('字段名与内容均为必填','err');return}
-  if(!PT_REC[curPt.no])PT_REC[curPt.no]=[];
-  PT_REC[curPt.no].push({k:nk.trim(),v:nv.trim()});
-  paintArcRec();
-  logOp('编辑病历录入内容·新增字段',curPt.name+' · '+curPt.no,'新增字段：'+nk.trim()+'（保存后生效）');
-}
-/* 退出编辑前收集表单值写回 PT_REC（供 saveArcEdit / cancelArcEdit 调用） */
-function collectArcRecEdit(){
-  if(!arcRecEditing||!curPt)return;
-  const fd=document.getElementById('arc-rec-fields');if(!fd)return;
-  const out=[];
-  fd.querySelectorAll('.rb-row[data-i]').forEach(function(row){
-    const k=row.querySelector('[data-f="k"]'),v=row.querySelector('[data-f="v"]');
-    if(k&&v&&k.value.trim()&&v.value.trim())out.push({k:k.value.trim(),v:v.value.trim()});
-  });
-  if(out.length)PT_REC[curPt.no]=out;else delete PT_REC[curPt.no];
-}
 function paintArcHead(){
   if(!curPt)return;
   document.getElementById('arc-name').textContent=maskName(curPt.name);
   document.getElementById('arc-no').textContent=maskNo(curPt.no);
   document.getElementById('arc-meta').textContent=(curPt.meta?curPt.meta+'　|　':'')+'病历号 '+maskNo(curPt.no);
-  /* 「病历录入内容」仅在「病历数据采集」页打开档案时展示；医学影像采集 / 高拍仪采集模块不显示 */
-  const box=document.getElementById('arc-rec-box');
-  const inRecord=document.getElementById('v-record').classList.contains('active');
-  if(box)box.style.display=inRecord?'':'none';
-  if(inRecord)paintArcRec();
+  document.getElementById('arc-diag').textContent=curPt.diag||'—';
 }
-/* 预置演示：张建国（YZK-2026-00128）档案默认带出与录入区一致的病历内容 */
-PT_REC['YZK-2026-00128']=[
-  {k:'主诉',v:'双眼视物模糊 2 年，加重 3 月'},
-  {k:'现病史',v:'患者 2 年前无明显诱因出现双眼视物模糊，近 3 月加重，无眼痛眼红，无外伤史。'},
-  {k:'诊断',v:'老年性白内障（双眼）'},
-  {k:'医嘱',v:'建议手术治疗；术前完善眼部检查。'}
-];
 function repaintArc(){paintArcHead();renderArc();applyPrivacy()}
 /* ---------- 病历图片：上传结果展示、点击预览（P01 方式一） ---------- */
 const DOC_PAGES=[
@@ -3790,18 +3108,46 @@ function docInner(i){
 }
 function docSvg(i){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560" width="420" height="560">'+docInner(i)+'</svg>';}
 /* 主视图（病历图片区）渲染 */
-/* 旧病历图片主视图已随 Tab 面板移除；预览源仍可使用 DOC_PAGES（质控查看区等复用） */
-function renderDoc(){}
+function renderDoc(){
+  const c=document.getElementById('doc-canvas');if(!c)return;
+  const p=DOC_PAGES[docPage]||DOC_PAGES[0];
+  c.innerHTML=docSvg(docPage);
+  const fn=document.getElementById('doc-fn');if(fn){fn.textContent=p.name;fn.title=p.name}
+  const fs=document.getElementById('doc-fs');if(fs)fs.textContent=p.meta+' · 上传于 '+p.t;
+  const kd=document.getElementById('doc-kind');if(kd)kd.textContent=p.label.replace(/_\d+$/,'');
+  const pg=document.getElementById('doc-pager');if(pg)pg.textContent=(docPage+1)+' / '+DOC_PAGES.length;
+  renderDocStrip();
+}
+/* 缩略图条（可切换、可放大、可继续上传） */
+function renderDocStrip(){
+  const s=document.getElementById('doc-strip');if(!s)return;
+  s.innerHTML=DOC_PAGES.map(function(p,i){
+    return '<div class="doc-th'+(i===docPage?' on':'')+'" '+DC('pickDocPage',[i])+' title="'+esc(p.name)+'　'+esc(p.size)+'　上传于 '+esc(p.t)+'">'+
+      '<div class="mini">'+docSvg(i)+'</div>'+
+      '<div class="zoom" '+DC('openPreview',[i])+' title="查看大图">🔍</div>'+
+      '<div class="nm">'+esc(p.label)+'</div>'+
+    '</div>';
+  }).join('')+'<div class="doc-add" '+DC('addDocPage')+' title="继续上传病历图片"><span class="plus">＋</span>继续上传</div>';
+}
 function pickDocPage(i){
   if(i==null||i<0||i>=DOC_PAGES.length)return;
-  docPage=i;
+  docPage=i;renderDoc();
+  toast('已切换当前对照页：第 '+(i+1)+' 页 '+DOC_PAGES[i].name);
+}
+function addDocPage(){
+  const n=DOC_PAGES.length+1;
+  const kinds=['hand','report','rx'];
+  DOC_PAGES.push({k:kinds[(n-1)%3],label:'补充病历_0'+n,name:'00128_补充病历_0'+n+'_20260912.jpg',size:'1.1 MB · JPG',meta:'1.1 MB · JPG · 300dpi',t:nowStr()});
+  docPage=n-1;renderDoc();
+  toast('已上传第 '+n+' 页并完成患者信息关联（图片格式保存）','ok');
+  logOp('继续上传病历图片','第 '+n+' 页 · '+(curPt?maskName(curPt.name)+' / '+maskNo(curPt.no):'—'),'成功');
 }
 /* 大图预览（可缩放 / 旋转 / 翻页 / 导出）
    P01 病历图片与 P04 质控查看区共用：调用方通过「预览源」传入页面集合与回写方式。 */
 function docSource(){
   return {title:'病历图片预览',logA:'查看病历图片原图',cur:docPage,
     logSuffix:function(){return '患者 '+(curPt?maskName(curPt.name)+' / '+maskNo(curPt.no):'—')},
-    apply:function(i){docPage=i},
+    apply:function(i){docPage=i;renderDoc()},
     pages:DOC_PAGES.map(function(p,i){return {label:p.label,name:p.name,meta:p.meta,svg:docSvg(i)}})};
 }
 function openPreview(i){lbOpenSrc(docSource(),typeof i==='number'?i:docPage)}
@@ -3946,12 +3292,6 @@ function arcItemSrc(x){
   const pad=function(i){return String(i+1).padStart(2,'0')};
   const suffix=function(){return '患者 '+(curPt?maskName(curPt.name)+' / '+maskNo(curPt.no):'—')};
   if(v.k==='capimg')return v.src;
-  if(v.k==='capdoc'){
-    /* 高拍仪档案「文档」Tab：同名 txt 文档预览（OCR 识别文字，SVG 文本页渲染） */
-    const lines=capDocLines(v.name,v.img);
-    return {title:'文档预览（文字识别结果）',logA:'查看文档内容',logSuffix:suffix,cur:0,
-      pages:[{label:'文档',name:v.name||'文档.txt',meta:'文本文档 · UTF-8　·　OCR 识别生成',svg:txtSvgPage(lines)}]};
-  }
   if(v.k==='oct'){
     const pages=[];
     OCT_SEQS.forEach(function(S,sq){
@@ -3997,46 +3337,6 @@ function arcItemSrc(x){
       label:(v.lab?(v.lab+'_0'+(i+1)):p.label),
       name:(v.lab?keep('00128_'+v.lab+'_0'+(i+1)+'_20260912.jpg'):keep(p.name)),
       meta:p.meta,svg:docSvg(i)}})};
-}
-/* ---------- 高拍仪档案「文档」Tab：同名 txt 文档（OCR 识别结果演示） ---------- */
-function txtSvgPage(lines){
-  const W=520,H=680;
-  let g='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">';
-  g+='<rect width="'+W+'" height="'+H+'" fill="#ffffff"/>';
-  g+='<rect x="0" y="0" width="'+W+'" height="52" fill="#f5f7fa"/>';
-  g+='<text x="'+(W/2)+'" y="33" font-size="15" font-weight="600" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" fill="#33475b">文字识别结果（OCR）</text>';
-  let y=92;
-  lines.forEach(function(ln){
-    if(y>H-40)return;
-    g+='<text x="42" y="'+y+'" font-size="13" font-family="PingFang SC,Microsoft YaHei,sans-serif" fill="#3a4a5a">'+esc(ln)+'</text>';
-    y+=ln===''?14:26;
-  });
-  g+='</svg>';
-  return g;
-}
-/* 按文档名（与采集图片同名）生成对应识别文字内容（演示数据，与患者/资料类型一致） */
-function capDocLines(docName,imgItem){
-  const pt=curPt||{name:'',no:''};
-  const L=[];
-  L.push('文档来源：'+(imgItem||docName||'采集图片'));
-  L.push('患者姓名：'+(pt.name||'—'));
-  L.push('病历号：'+(pt.no||'—'));
-  L.push('生成方式：高拍仪采集图片 → 文字识别（OCR）自动生成');
-  L.push('');
-  L.push('—— 识别正文 ——');
-  L.push('');
-  const D=(PT_REC&&PT_REC[pt.no])||[];
-  if(D.length){
-    D.forEach(function(x){L.push(x.k+'：'+x.v)});
-  }else{
-    L.push('（暂无结构化识别内容，可重新识别或人工补充）');
-  }
-  L.push('');
-  L.push('—— 识别信息 ——');
-  L.push('识别时间：'+nowStr());
-  L.push('识别准确率：98.2%（演示数据）');
-  L.push('本文档由系统自动生成，与采集图片同名关联，随采集数据进入质控。');
-  return L;
 }
 function viewArcItem(i){
   if(!curPt)return;
@@ -4419,7 +3719,7 @@ function qcCurSrc(){
   }
   if(k==='cap'){
     return {title:'高拍仪原图预览',logA:'查看质控高拍仪原图',logSuffix:suffix,cur:0,
-      pages:[{label:'高拍仪拍摄',name:'00128_手写病历_01_0912.png',
+      pages:[{label:'高拍仪拍摄 · 手动上传',name:'00128_手写病历_01_0912.png',
         meta:'4.6 MB · PNG · 4000×3000 · 300dpi',svg:cameraSvg()}]};
   }
   if(k==='emr'){
@@ -4522,7 +3822,7 @@ function openDevEdit(kind,i){
   devmKind=kind;devmIdx=(typeof i==='number')?i:-1;
   const list=devmList(kind),d=(devmIdx>=0)?list[devmIdx]:null,isScan=kind==='scan';
   document.getElementById('de-title').textContent=(d?'编辑':'新增')+(isScan?'高拍仪设备':'医学影像设备');
-  document.getElementById('de-kind').value=isScan?'高拍仪':'医学影像设备';
+  document.getElementById('de-kind').value=isScan?'高拍仪（影像采集）':'医学影像设备（影像接收）';
   document.getElementById('de-note').textContent=isScan
     ?'高拍仪配置保存后即时生效于设备清单与采集参数口径；停用或未连接的设备不再纳入可用设备清单。'
     :'医学影像设备配置保存后即时生效于「医学影像采集」页的影像来源；无 DICOM 接口的设备请选择「FTP（非标准接口）」或「视频捕获」。';
@@ -4794,6 +4094,7 @@ function saveApiCfg(){
     });
   });
   installGuards();
+  renderDoc();
   devmPaint();
   switchRole('collector');   /* switchRole 内已含 applyPrivacy，首屏弹窗内容照常脱敏 */
   document.addEventListener('keydown',e=>{
@@ -4806,7 +4107,7 @@ function saveApiCfg(){
       if(e.key==='r'||e.key==='R'){lbRotate(90);return}
     }
     if(e.key!=='Escape')return;
-    ['m-imgdev','m-dlog','m-confirm','m-manualcap','m-batch','m-import','m-rename','m-edit','m-video','m-ftp','m-preview','m-devedit','m-apiedit','m-iflog','m-caplog','m-reject'].forEach(id=>closeM(id));
+    ['m-imgdev','m-dlog','m-confirm','m-manualcap','m-batch','m-import','m-manual','m-rename','m-edit','m-video','m-ftp','m-preview','m-devedit','m-apiedit','m-iflog','m-caplog','m-reject'].forEach(id=>closeM(id));
     closeDrawer();closeArc();closeAudit();
   });
   paintReject();

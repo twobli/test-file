@@ -2029,19 +2029,19 @@
     // ===== 智能教学服务：知识点考核管理 =====
     var ASSESSMENT_STORAGE_KEY = 'life_med_knowledge_assessment_questions';
     var defaultTeachingAssessmentQuestions = [
-      { id: 'KA-001', knowledgeKey: '糖尿病视网膜病变', type: '疾病', question: '糖尿病视网膜病变重度非增殖期的分期判断，可参考哪一项标准？', options: ['4-2-1法则', 'APGAR评分', 'TNM分期', 'CHA2DS2-VASc评分'], correctIndex: 0, explanation: '重度非增殖期糖尿病视网膜病变常依据4-2-1法则判断，关注四个象限出血、静脉串珠和IRMA。' },
-      { id: 'KA-002', knowledgeKey: '青光眼', type: '疾病', question: '青光眼性视神经病变阅片时，最需要重点观察哪项结构变化？', options: ['视盘杯盘比增大和盘沿变窄', '角膜上皮点状缺损', '晶状体皮质混浊', '结膜充血范围'], correctIndex: 0, explanation: '视盘杯盘比增大、盘沿变窄和RNFL变薄是青光眼性视神经损害的重要结构线索。' },
-      { id: 'KA-003', knowledgeKey: '年龄相关性黄斑变性', type: '疾病', question: '湿性年龄相关性黄斑变性更典型的影像表现是？', options: ['玻璃膜疣和地图状萎缩', '脉络膜新生血管伴出血、渗出或视网膜下液', '单纯视盘水肿', '周边视网膜裂孔'], correctIndex: 1, explanation: '湿性AMD与CNV活动相关，常见黄斑出血、渗出、视网膜下液或OCT上的囊样改变。' },
-      { id: 'KA-004', knowledgeKey: '视网膜静脉阻塞', type: '疾病', question: '视网膜中央静脉阻塞的典型眼底表现更接近哪一项？', options: ['静脉迂曲扩张并伴弥漫性出血', '仅有视盘杯盘比增大', '仅有黄斑玻璃膜疣', '角膜中央浑浊'], correctIndex: 0, explanation: '中央静脉阻塞常见静脉迂曲扩张、弥漫性视网膜出血，严重时可呈“番茄酱样”眼底。' },
-      { id: 'KA-005', knowledgeKey: '高血压性视网膜病变', type: '疾病', question: '高血压性视网膜病变的血管性阅片线索包括？', options: ['动脉狭窄和动静脉交叉压迫征', '仅有黄斑裂孔', '仅有视网膜裂孔', '仅有玻璃膜疣'], correctIndex: 0, explanation: '高血压性视网膜病变以小动脉狭窄、反光增强、动静脉交叉压迫及出血渗出等为主要线索。' },
-      { id: 'KA-006', knowledgeKey: '孔源性视网膜脱离', type: '疾病', question: '孔源性视网膜脱离形成的直接基础是什么？', options: ['视网膜裂孔使液化玻璃体进入视网膜下腔', '单纯眼压升高', '晶状体核硬化', '角膜内皮细胞减少'], correctIndex: 0, explanation: '孔源性视网膜脱离由视网膜裂孔形成，液化玻璃体经裂孔进入视网膜下腔导致神经上皮层与色素上皮层分离。' },
-      { id: 'KA-007', knowledgeKey: '抗VEGF药物治疗', type: '药品', question: '抗VEGF药物在眼底疾病教学中的主要作用定位是？', options: ['抑制新生血管和血管通透性相关改变', '直接替代所有手术操作', '用于治疗角膜感染', '仅用于降低全身血压'], correctIndex: 0, explanation: '抗VEGF治疗主要针对VEGF相关的新生血管和血管通透性增加，用于部分湿性AMD、糖尿病黄斑水肿等场景。' },
-      { id: 'KA-008', knowledgeKey: '前列腺素类降眼压药', type: '药品', question: '前列腺素类降眼压药的主要教学作用是？', options: ['促进房水外流以降低眼压', '增加玻璃体腔压力', '封闭视网膜裂孔', '改善角膜透明度'], correctIndex: 0, explanation: '前列腺素类药物主要通过促进葡萄膜巩膜途径房水外流降低眼压，用于青光眼降眼压治疗。' },
-      { id: 'KA-009', knowledgeKey: '玻璃体切除术', type: '手术操作', question: '玻璃体切除术的学习重点更接近哪一项？', options: ['处理玻璃体混浊、积血或牵拉等情况', '单纯测量眼压', '进行视野检查', '替代所有药物治疗'], correctIndex: 0, explanation: '玻璃体切除术可用于玻璃体积血、牵拉性病变、部分视网膜脱离等场景，需结合具体病情判断适应证。' },
-      { id: 'KA-010', knowledgeKey: '视网膜激光光凝术', type: '手术操作', question: '视网膜激光光凝术在教学中的常见操作目的是什么？', options: ['封闭裂孔或处理缺血性视网膜病变', '替代OCT检查', '治疗所有角膜疾病', '直接恢复已经丢失的视神经轴突'], correctIndex: 0, explanation: '视网膜激光光凝可用于封闭视网膜裂孔、处理部分缺血性病变并降低新生血管相关风险。' },
-      { id: 'KA-011', knowledgeKey: 'OCT RNFL检查解读', type: '检验检查', question: 'OCT RNFL检查主要用于评估什么？', options: ['视网膜神经纤维层厚度及其变薄情况', '血糖即时值', '角膜曲率', '眼底照片颜色'], correctIndex: 0, explanation: 'OCT RNFL检查用于定量评估视网膜神经纤维层厚度，帮助识别青光眼相关结构损害。' },
-      { id: 'KA-012', knowledgeKey: '眼眶MRI检查', type: '检验检查', question: '眼眶MRI检查的教学定位主要是？', options: ['观察眼眶、视神经等软组织结构并辅助鉴别诊断', '替代所有眼底照相', '直接进行视网膜激光治疗', '测定胆固醇水平'], correctIndex: 0, explanation: '眼眶MRI适合观察眼眶及视神经等软组织结构，可为部分病变的鉴别诊断提供影像依据。' },
-      { id: 'KA-013', knowledgeKey: '眼部彩色多普勒超声', type: '检验检查', question: '眼部彩色多普勒超声可重点提供哪类信息？', options: ['眼部血流速度、阻力指数和血管状态', '视网膜神经纤维层的全部分层图', '药物血药浓度', '视野缺损的主观评分'], correctIndex: 0, explanation: '彩色多普勒超声可用于观察眼部血流动力学信息，为血管性眼底疾病学习提供辅助证据。' }
+      { id: 'KA-001', knowledgeKey: '糖尿病视网膜病变', type: '疾病', question: '糖尿病视网膜病变重度非增殖期的分期判断，可参考哪一项标准？', options: ['4-2-1法则', 'APGAR评分', 'TNM分期', 'CHA2DS2-VASc评分'], correctIndex: 0, explanation: '重度非增殖期糖尿病视网膜病变常依据4-2-1法则判断，关注四个象限出血、静脉串珠和IRMA。', status: '已发布' },
+      { id: 'KA-002', knowledgeKey: '青光眼', type: '疾病', question: '青光眼性视神经病变阅片时，最需要重点观察哪项结构变化？', options: ['视盘杯盘比增大和盘沿变窄', '角膜上皮点状缺损', '晶状体皮质混浊', '结膜充血范围'], correctIndex: 0, explanation: '视盘杯盘比增大、盘沿变窄和RNFL变薄是青光眼性视神经损害的重要结构线索。', status: '已发布' },
+      { id: 'KA-003', knowledgeKey: '年龄相关性黄斑变性', type: '疾病', question: '湿性年龄相关性黄斑变性更典型的影像表现是？', options: ['玻璃膜疣和地图状萎缩', '脉络膜新生血管伴出血、渗出或视网膜下液', '单纯视盘水肿', '周边视网膜裂孔'], correctIndex: 1, explanation: '湿性AMD与CNV活动相关，常见黄斑出血、渗出、视网膜下液或OCT上的囊样改变。', status: '已发布' },
+      { id: 'KA-004', knowledgeKey: '视网膜静脉阻塞', type: '疾病', question: '视网膜中央静脉阻塞的典型眼底表现更接近哪一项？', options: ['静脉迂曲扩张并伴弥漫性出血', '仅有视盘杯盘比增大', '仅有黄斑玻璃膜疣', '角膜中央浑浊'], correctIndex: 0, explanation: '中央静脉阻塞常见静脉迂曲扩张、弥漫性视网膜出血，严重时可呈“番茄酱样”眼底。', status: '已发布' },
+      { id: 'KA-005', knowledgeKey: '高血压性视网膜病变', type: '疾病', question: '高血压性视网膜病变的血管性阅片线索包括？', options: ['动脉狭窄和动静脉交叉压迫征', '仅有黄斑裂孔', '仅有视网膜裂孔', '仅有玻璃膜疣'], correctIndex: 0, explanation: '高血压性视网膜病变以小动脉狭窄、反光增强、动静脉交叉压迫及出血渗出等为主要线索。', status: '已发布' },
+      { id: 'KA-006', knowledgeKey: '孔源性视网膜脱离', type: '疾病', question: '孔源性视网膜脱离形成的直接基础是什么？', options: ['视网膜裂孔使液化玻璃体进入视网膜下腔', '单纯眼压升高', '晶状体核硬化', '角膜内皮细胞减少'], correctIndex: 0, explanation: '孔源性视网膜脱离由视网膜裂孔形成，液化玻璃体经裂孔进入视网膜下腔导致神经上皮层与色素上皮层分离。', status: '已发布' },
+      { id: 'KA-007', knowledgeKey: '抗VEGF药物治疗', type: '药品', question: '抗VEGF药物在眼底疾病教学中的主要作用定位是？', options: ['抑制新生血管和血管通透性相关改变', '直接替代所有手术操作', '用于治疗角膜感染', '仅用于降低全身血压'], correctIndex: 0, explanation: '抗VEGF治疗主要针对VEGF相关的新生血管和血管通透性增加，用于部分湿性AMD、糖尿病黄斑水肿等场景。', status: '已发布' },
+      { id: 'KA-008', knowledgeKey: '前列腺素类降眼压药', type: '药品', question: '前列腺素类降眼压药的主要教学作用是？', options: ['促进房水外流以降低眼压', '增加玻璃体腔压力', '封闭视网膜裂孔', '改善角膜透明度'], correctIndex: 0, explanation: '前列腺素类药物主要通过促进葡萄膜巩膜途径房水外流降低眼压，用于青光眼降眼压治疗。', status: '已发布' },
+      { id: 'KA-009', knowledgeKey: '玻璃体切除术', type: '手术操作', question: '玻璃体切除术的学习重点更接近哪一项？', options: ['处理玻璃体混浊、积血或牵拉等情况', '单纯测量眼压', '进行视野检查', '替代所有药物治疗'], correctIndex: 0, explanation: '玻璃体切除术可用于玻璃体积血、牵拉性病变、部分视网膜脱离等场景，需结合具体病情判断适应证。', status: '已发布' },
+      { id: 'KA-010', knowledgeKey: '视网膜激光光凝术', type: '手术操作', question: '视网膜激光光凝术在教学中的常见操作目的是什么？', options: ['封闭裂孔或处理缺血性视网膜病变', '替代OCT检查', '治疗所有角膜疾病', '直接恢复已经丢失的视神经轴突'], correctIndex: 0, explanation: '视网膜激光光凝可用于封闭视网膜裂孔、处理部分缺血性病变并降低新生血管相关风险。', status: '已发布' },
+      { id: 'KA-011', knowledgeKey: 'OCT RNFL检查解读', type: '检验检查', question: 'OCT RNFL检查主要用于评估什么？', options: ['视网膜神经纤维层厚度及其变薄情况', '血糖即时值', '角膜曲率', '眼底照片颜色'], correctIndex: 0, explanation: 'OCT RNFL检查用于定量评估视网膜神经纤维层厚度，帮助识别青光眼相关结构损害。', status: '已发布' },
+      { id: 'KA-012', knowledgeKey: '眼眶MRI检查', type: '检验检查', question: '眼眶MRI检查的教学定位主要是？', options: ['观察眼眶、视神经等软组织结构并辅助鉴别诊断', '替代所有眼底照相', '直接进行视网膜激光治疗', '测定胆固醇水平'], correctIndex: 0, explanation: '眼眶MRI适合观察眼眶及视神经等软组织结构，可为部分病变的鉴别诊断提供影像依据。', status: '已发布' },
+      { id: 'KA-013', knowledgeKey: '眼部彩色多普勒超声', type: '检验检查', question: '眼部彩色多普勒超声可重点提供哪类信息？', options: ['眼部血流速度、阻力指数和血管状态', '视网膜神经纤维层的全部分层图', '药物血药浓度', '视野缺损的主观评分'], correctIndex: 0, explanation: '彩色多普勒超声可用于观察眼部血流动力学信息，为血管性眼底疾病学习提供辅助证据。', status: '已发布' }
     ];
     var ASSESSMENT_AUDIENCE_OPTIONS = ['张医生（眼底病方向）', '李医生（住院医师）', '王医生（青光眼方向）', '赵医生（眼底病方向）', '陈医生（黄斑病方向）', '周医生（科研组）', '孙医生（规培医师）', '刘医生（高级研修班）', '韩医生（科研课题组）'];
     var ASSESSMENT_AUDIENCE_DEFAULT = ['张医生（眼底病方向）', '李医生（住院医师）'];
@@ -2158,13 +2158,18 @@
       if (!item || !confirm('确定删除该考核题吗？')) return;
       teachingAssessmentQuestions.splice(index, 1); saveTeachingAssessmentQuestions(); renderAssessmentManagement(); showToast('考核题已删除。');
     }
+    function publishAssessmentQuestion(index) {
+      var item = teachingAssessmentQuestions[index];
+      if (!item) return;
+      item.status = '已发布'; saveTeachingAssessmentQuestions(); renderAssessmentManagement(); showToast('考核题已发布，前台刷新后可见。');
+    }
     function openAssessmentAudience(index) {
       var item = teachingAssessmentQuestions[index];
       if (!item) return;
       var body = '<div class="split-form">'
         + '<div class="form-field" style="grid-column:1/-1;"><label>配置人员</label>' + assessmentAudienceSelect(normalizeAssessmentAudience(item.audience), 10, ' data-assessment-audience') + '<p class="form-hint">只配置该考核题的可见人员；保存后，只有已配置的人员登录后才能看到这道考核题。按住 Ctrl 或 Command 可多选。</p></div>'
         + '</div>';
-      openTeachingModal('配置人员 - ' + (getAssessmentTitle(item) || item.id), '只选择该考核题的可见人员，不修改题目内容。', body, '保存配置人员', function() { saveAssessmentAudience(index); });
+      openTeachingModal('配置人员 - ' + (getAssessmentTitle(item) || item.id), '只选择该考核题的可见人员，不修改题目内容与发布状态。', body, '保存配置人员', function() { saveAssessmentAudience(index); });
     }
     function saveAssessmentAudience(index) {
       var body = document.getElementById('drawerBody');

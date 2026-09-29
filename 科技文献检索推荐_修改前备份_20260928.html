@@ -83,19 +83,6 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .filter-bar .search-input { flex: 1 1 380px; min-width: 320px; }
 .filter-bar .filter-select { min-width: 150px; }
 
-/* 检索方式选择（第一步二选一） */
-.mode-select { display: flex; gap: 12px; margin-bottom: 14px; }
-.mode-option { flex: 1; border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 12px 16px; cursor: pointer; transition: var(--transition); background: #fff; }
-.mode-option:hover { border-color: var(--primary); }
-.mode-option:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.mode-option.active { border-color: var(--primary); background: var(--primary-light); box-shadow: inset 0 0 0 1px var(--primary); }
-.mode-name { font-size: 14px; font-weight: 600; color: var(--gray-800); display: flex; align-items: center; gap: 6px; }
-.mode-name::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--gray-400); background: #fff; transition: var(--transition); flex-shrink: 0; }
-.mode-option.active .mode-name { color: var(--primary); }
-.mode-option.active .mode-name::before { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 2px #fff; }
-.mode-option.active .mode-name::after { content: '当前方式'; margin-left: auto; font-size: 11px; font-weight: 600; color: var(--primary); background: #fff; border: 1px solid #c6dafc; border-radius: 10px; padding: 1px 8px; }
-.mode-desc { margin-top: 5px; font-size: 12px; color: var(--gray-600); line-height: 1.6; }
-
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; gap: 6px; white-space: nowrap; }
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-dark); }
@@ -248,22 +235,11 @@ table tbody tr:nth-child(even):hover { background: var(--gray-50); }
         <div class="card">
             <div class="card-header"><span class="card-title">文献检索</span></div>
 
-            <!-- 第一步：选择检索方式（二选一） -->
-            <div class="mode-select">
-                <div class="mode-option active" id="modeKeyword" onclick="switchMode('keyword')" role="tab" aria-selected="true" tabindex="0" onkeydown="if(event.key==='Enter')switchMode('keyword')">
-                    <div class="mode-name">关键词查询</div>
-                    <div class="mode-desc">输入查询语句，系统使用分词工具形成关键词列表进行检索，覆盖期刊论文、学位论文、会议论文、专利等文献，并按相关度排序</div>
-                </div>
-                <div class="mode-option" id="modeSemantic" onclick="switchMode('semantic')" role="tab" aria-selected="false" tabindex="0" onkeydown="if(event.key==='Enter')switchMode('semantic')">
-                    <div class="mode-name">语义向量检索</div>
-                    <div class="mode-desc">采用自然语言处理和机器学习技术，将输入语句转化为语义向量，与文献库中的文献进行匹配，返回相关结果并按相关度排序</div>
-                </div>
-            </div>
-
-            <!-- 第二步：按所选方式进行检索 -->
+            <!-- 搜索栏 -->
             <div class="filter-bar">
-                <input id="searchInput" class="search-input" placeholder="输入关键词（标题、摘要、作者）进行检索" onkeydown="if(event.key==='Enter')doSearch(currentMode)">
-                <button id="searchBtn" class="btn btn-primary" onclick="doSearch(currentMode)" style="padding:7px 20px;font-size:13px;">检索</button>
+                <input id="searchInput" class="search-input" placeholder="输入关键词(标题、摘要、作者)进行检索或者输入文章内容进行语义向量检索" onkeydown="if(event.key==='Enter')doSearch(currentMode)">
+                <button class="btn btn-primary" onclick="doSearch('keyword')" style="padding:7px 20px;font-size:13px;">检索</button>
+                <button class="btn btn-outline" onclick="doSearch('semantic')" style="padding:7px 20px;font-size:13px;">语义向量检索</button>
                 <select id="yearFilter" class="filter-select" onchange="doSearch(currentMode)">
                     <option value="">发表年份：全部</option>
                     <option value="2026">2026年</option>
@@ -531,42 +507,26 @@ function init() {
     doSearch('keyword');
 }
 
-// 第一步：切换检索方式（关键词查询 / 语义向量检索），后续操作跟随所选方式
-function switchMode(mode) {
-    doSearch(mode);
-}
-
 function doSearch(mode) {
     currentMode = mode || currentMode || 'keyword';
 
-    // 检索方式选择联动：高亮所选方式卡片，同步输入框提示与按钮文案
-    var modeKeyword = document.getElementById('modeKeyword');
-    var modeSemantic = document.getElementById('modeSemantic');
-    if (modeKeyword && modeSemantic) {
-        modeKeyword.classList.toggle('active', currentMode === 'keyword');
-        modeSemantic.classList.toggle('active', currentMode === 'semantic');
-        modeKeyword.setAttribute('aria-selected', currentMode === 'keyword');
-        modeSemantic.setAttribute('aria-selected', currentMode === 'semantic');
-    }
-    var searchBtn = document.getElementById('searchBtn');
-    var searchInput = document.getElementById('searchInput');
-    if (searchBtn) searchBtn.textContent = '检索';
-    if (searchInput) searchInput.placeholder = currentMode === 'semantic'
-        ? '输入一句话或一段文献内容，系统将转化为语义向量进行匹配'
-        : '输入关键词（标题、摘要、作者）进行检索';
-
-    // 关键词查询显示分词标签，语义向量检索显示向量说明
+    // 两个独立模块：关键词检索显示分词标签，语义向量检索显示向量说明
     var keywordTags = document.getElementById('keywordTags');
     var semanticNote = document.getElementById('semanticNote');
-    if (keywordTags && semanticNote) {
-        if (currentMode === 'keyword') {
-            keywordTags.style.display = 'flex';
-            semanticNote.style.display = 'none';
-            renderKeywordTags();
-        } else {
-            keywordTags.style.display = 'none';
-            semanticNote.style.display = 'flex';
-        }
+    if (currentMode === 'keyword') {
+        keywordTags.style.display = 'flex';
+        semanticNote.style.display = 'none';
+        renderKeywordTags();
+    } else {
+        keywordTags.style.display = 'none';
+        semanticNote.style.display = 'flex';
+    }
+
+    var keywordBtn = document.querySelector('button[onclick="doSearch(\'keyword\')"]');
+    var semanticBtn = document.querySelector('button[onclick="doSearch(\'semantic\')"]');
+    if (keywordBtn && semanticBtn) {
+        keywordBtn.classList.toggle('active-mode', currentMode === 'keyword');
+        semanticBtn.classList.toggle('active-mode', currentMode === 'semantic');
     }
 
     var keyword = (document.getElementById('searchInput').value || '').trim();
@@ -728,7 +688,7 @@ function renderResults() {
     var pageData = filteredData.slice(start, start + pageSize);
 
     summary.textContent = '共检索到 ' + filteredData.length + ' 条文献';
-    modeLabel.textContent = currentMode === 'semantic' ? '语义向量检索结果' : '关键词查询结果';
+    modeLabel.textContent = currentMode === 'semantic' ? '语义向量检索结果' : '分词检索结果';
 
     if (!filteredData.length) {
         list.innerHTML = '';

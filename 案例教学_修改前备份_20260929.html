@@ -846,7 +846,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
         <!-- 四个Tab导航（位于共享病例树上方） -->
     <div class="tabs" id="mainTabs">
-        <button class="tab-btn active" data-tab="reasoning">病例诊断</button>
+        <button class="tab-btn active" data-tab="reasoning">病例推理实训</button>
         <button class="tab-btn" data-tab="compare">AI诊断对比学习</button>
         <button class="tab-btn" data-tab="evolution">病例推理实训</button>
         <button class="tab-btn" data-tab="discussion">病例讨论与师生互动</button>
@@ -1557,9 +1557,9 @@ function renderStepCards(){
     html += '</div>';
     html += '<div class="step-card-body">';
     html += '<div class="step-card-hint">'+(report ? '以下为本病例生成学习报告前保存的诊断意见。' : '请根据上方病例资料填写诊断意见，提交后系统将生成与 AI 诊断的对比反馈。')+'</div>';
-    html += '<div class="step-guidance">'+(report ? '诊断意见已随学习报告固定，不能再次修改。' : '建议尽量完整作答：不要只写疾病名称，请一并写明诊断结论、诊断依据（病史、体征、影像学表现等）、鉴别诊断及推理过程——填写越充分，系统对比评分越能体现您的真实水平。')+'</div>';
+    html += '<div class="step-guidance">'+(report ? '诊断意见已随学习报告固定，不能再次修改。' : '请填写诊断意见。')+'</div>';
     html += '<div class="diagnosis-form-grid">';
-    html += '<div class="diagnosis-field full"><label>诊断意见'+(report ? '' : ' *')+'</label><textarea id="diagOpinionInput" placeholder="请填写诊断意见，建议包含：① 诊断结论（如“双眼糖尿病视网膜病变（中危期）”）② 诊断依据（结合主诉、病史、视力、眼底表现、OCT/FFA 等检查结果逐条说明）③ 鉴别诊断与排除理由 ④ 下一步诊疗建议。逻辑推理过程越完整，AI 对比评分越准确。"'+readOnlyAttr+'>'+escHtml(opinion.diagnosisText || opinion.diagnosisBasis || '')+'</textarea></div>';
+    html += '<div class="diagnosis-field full"><label>诊断意见'+(report ? '' : ' *')+'</label><textarea id="diagOpinionInput" placeholder="请填写诊断意见"'+readOnlyAttr+'>'+escHtml(opinion.diagnosisText || opinion.diagnosisBasis || '')+'</textarea></div>';
     html += '</div>';
     html += '</div>';
     html += '</div>';

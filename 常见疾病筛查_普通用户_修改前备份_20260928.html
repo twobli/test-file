@@ -262,23 +262,6 @@ input, select, textarea { font: inherit; outline: none; }
   .form-row { flex-direction: column; }
   .task-summary { grid-template-columns: 1fr; }
 }
-/* ===== 疾病风险判定卡片（每病种专属参数范围） ===== */
-.rk-list { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
-.rk-card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:13px 16px; }
-.rk-head { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-.rk-head strong { font-size:14px; color:var(--text); }
-.rk-badge { font-size:12px; font-weight:800; padding:2px 10px; border-radius:999px; }
-.rk-badge.low { color:var(--success); background:#e8ffea; }
-.rk-badge.mid { color:var(--warning); background:#fff4df; }
-.rk-badge.high { color:var(--danger); background:#ffecec; }
-.rk-conf { margin-left:auto; font-size:12px; color:var(--muted); }
-.rk-basis { margin-top:5px; font-size:12px; color:var(--muted); line-height:1.7; }
-.rk-basis b { color:var(--text); font-weight:700; }
-.rk-scale { margin-top:10px; }
-.rk-bar { position:relative; height:8px; border-radius:999px; background:linear-gradient(90deg,#00b42a 0%,#52c41a 28%,#f7c142 34%,#f59a23 58%,#f0654a 66%,#e03e3e 100%); }
-.rk-dot { position:absolute; top:50%; width:14px; height:14px; border-radius:50%; background:#fff; border:3px solid #00b42a; transform:translate(-50%,-50%); box-shadow:0 1px 3px rgba(0,0,0,.25); }
-.rk-ticks { position:relative; height:16px; margin-top:3px; font-size:11px; color:var(--soft); }
-.rk-ticks span { position:absolute; transform:translateX(-50%); }
 </style>
 </head>
 <body>
@@ -324,103 +307,72 @@ input, select, textarea { font: inherit; outline: none; }
   </div>
 
   <div class="card-header"><span class="card-title">常见疾病筛查项</span></div>
-  <div class="rk-list">
-    <div class="rk-card">
-      <div class="rk-head"><strong>高血压病风险</strong><span class="rk-badge mid">47 · 中风险</span><span class="rk-conf">置信度 72%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>收缩压 ≥140 mmHg 或舒张压 ≥90 mmHg、视网膜动脉狭窄征象，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:47%;border-color:var(--warning);" title="当前风险评分 47，落入中风险区间（30–59）"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>糖代谢风险</strong><span class="rk-badge low">14 · 低风险</span><span class="rk-conf">置信度 94%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>空腹血糖 ≥6.1 mmol/L 或糖化血红蛋白 HbA1c ≥6.0%，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:14%;border-color:var(--success);" title="当前风险评分 14，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>认知障碍风险</strong><span class="rk-badge low">11 · 低风险</span><span class="rk-conf">置信度 96%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>MMSE 认知量表 &lt;27 分，或视空间/执行功能测试异常，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:11%;border-color:var(--success);" title="当前风险评分 11，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>贫血风险</strong><span class="rk-badge low">18 · 低风险</span><span class="rk-conf">置信度 91%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>血红蛋白 男 &lt;120 g/L、女 &lt;110 g/L，或睑结膜苍白等眼部征象，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:18%;border-color:var(--success);" title="当前风险评分 18，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>脑肿瘤风险</strong><span class="rk-badge low">8 · 低风险</span><span class="rk-conf">置信度 98%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>眼底视盘水肿（隆起 ≥1D）或影像占位征象检出，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:8%;border-color:var(--success);" title="当前风险评分 8，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>心脑血管风险</strong><span class="rk-badge mid">52 · 中风险</span><span class="rk-conf">置信度 68%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>视网膜动静脉比 AVR &lt;0.85、CRAE/CRVE 血管当量异常，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:52%;border-color:var(--warning);" title="当前风险评分 52，落入中风险区间（30–59）"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>病理性近视风险</strong><span class="rk-badge high">74 · 高风险</span><span class="rk-conf">置信度 89%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>眼轴 ≥26.0 mm、豹纹状眼底伴后巩膜葡萄肿/Fuchs 斑，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:74%;border-color:var(--danger);" title="当前风险评分 74，达到高风险阈值（≥60）"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>眼底肿瘤风险</strong><span class="rk-badge low">9 · 低风险</span><span class="rk-conf">置信度 97%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>眼底占位性病灶、渗出或出血灶检出，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:9%;border-color:var(--success);" title="当前风险评分 9，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>青光眼风险</strong><span class="rk-badge low">16 · 低风险</span><span class="rk-conf">置信度 94%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>眼压 ≥21 mmHg、杯盘比 C/D ≥0.6 或 RNFL 神经纤维层缺损，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:16%;border-color:var(--success);" title="当前风险评分 16，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>中心性浆液性脉络膜视网膜风险</strong><span class="rk-badge low">19 · 低风险</span><span class="rk-conf">置信度 93%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>OCT 检出浆液性神经上皮脱离 ≥120 μm，或渗漏点荧光征象，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:19%;border-color:var(--success);" title="当前风险评分 19，低于低风险阈值 30"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>黄斑视力损伤风险</strong><span class="rk-badge mid">55 · 中风险</span><span class="rk-conf">置信度 76%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>矫正视力 &lt;0.8，或 OCT 中心凹厚度 &lt;250 μm / &gt;350 μm，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:55%;border-color:var(--warning);" title="当前风险评分 55，落入中风险区间（30–59）"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
-    <div class="rk-card">
-      <div class="rk-head"><strong>白内障风险</strong><span class="rk-badge mid">43 · 中风险</span><span class="rk-conf">置信度 71%</span></div>
-      <div class="rk-basis"><b>判定依据（本项参数范围）：</b>晶状体混浊 LOCS III 分级 ≥NC2/C2/P2，或视力下降伴眩光主诉，任一命中即计入风险评分；评分 &lt;30 低风险 · 30–59 中风险 · ≥60 高风险</div>
-      <div class="rk-scale">
-        <div class="rk-bar"><span class="rk-dot" style="left:43%;border-color:var(--warning);" title="当前风险评分 43，落入中风险区间（30–59）"></span></div>
-        <div class="rk-ticks"><span style="left:0;transform:none;">0</span><span style="left:30%;">30</span><span style="left:60%;">60</span><span style="left:100%;transform:translateX(-100%);">100</span></div>
-      </div>
-    </div>
+  <div class="table-wrap" style="margin-bottom:16px;">
+    <table class="data-table">
+      <thead><tr><th>筛查项</th><th>风险等级</th><th>置信度</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>高血压病风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>72%</td>
+        </tr>
+        <tr>
+          <td><strong>糖代谢风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>94%</td>
+        </tr>
+        <tr>
+          <td><strong>认知障碍风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>96%</td>
+        </tr>
+        <tr>
+          <td><strong>贫血风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>91%</td>
+        </tr>
+        <tr>
+          <td><strong>脑肿瘤风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>98%</td>
+        </tr>
+        <tr>
+          <td><strong>心脑血管风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>68%</td>
+        </tr>
+        <tr>
+          <td><strong>病理性近视风险</strong></td>
+          <td><span class="tag danger">高风险</span></td>
+          <td>89%</td>
+        </tr>
+        <tr>
+          <td><strong>眼底肿瘤风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>97%</td>
+        </tr>
+        <tr>
+          <td><strong>青光眼风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>94%</td>
+        </tr>
+        <tr>
+          <td><strong>中心性浆液性脉络膜视网膜风险</strong></td>
+          <td><span class="tag success">低风险</span></td>
+          <td>93%</td>
+        </tr>
+        <tr>
+          <td><strong>黄斑视力损伤风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>76%</td>
+        </tr>
+        <tr>
+          <td><strong>白内障风险</strong></td>
+          <td><span class="tag warning">中风险</span></td>
+          <td>71%</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="alert alert-warning" style="display:flex;align-items:flex-start;gap:10px;">

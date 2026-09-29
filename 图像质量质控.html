@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -304,6 +304,12 @@ input, select, textarea { font: inherit; outline: none; }
   .task-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .qc-image-grid { grid-template-columns: 1fr; }
 }
+
+/* QC result alert action layout */
+.qc-alert { display:flex; flex-direction:column; gap:14px; }
+.qc-alert-copy { line-height:1.7; }
+.qc-alert-actions { display:flex; justify-content:flex-end; align-items:center; }
+
 @media (max-width: 760px) {
   .header { height: auto; flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
   .header .header-nav { margin-left: 0; }
@@ -375,10 +381,8 @@ input, select, textarea { font: inherit; outline: none; }
     </div>
   </div>
 
-  <div class="alert alert-info" id="qcAlert">
-    <strong>质控通过：</strong><span id="qcAlertMsg">AI先确认上传内容为眼底彩照，再判断视盘、黄斑、血管等关键结构可见且图像质量满足筛查要求。</span>
-    <a class="btn primary small" id="screeningEntryBtn" href="常见疾病筛查.html" style="margin-left:12px;">进入疾病筛查</a>
-  </div>
+
+
 
   <div class="card-header"><span class="card-title">质控判定逻辑明细</span></div>
   <div class="table-wrap">
@@ -455,6 +459,12 @@ input, select, textarea { font: inherit; outline: none; }
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="alert alert-info qc-alert" id="qcAlert">
+    <div class="qc-alert-copy"><strong>质控通过：</strong><span id="qcAlertMsg">AI先确认上传内容为眼底彩照，再判断视盘、黄斑、血管等关键结构可见且图像质量满足筛查要求。</span></div>
+    <div class="qc-alert-actions">
+      <a class="btn primary small" id="screeningEntryBtn" href="常见疾病筛查.html">进入疾病筛查</a>
+    </div>
   </div>
 </div>
 </div>
@@ -710,3 +720,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+

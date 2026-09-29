@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>眼病/慢病数据入库（闭环修改版）</title>
+  <title>眼病/慢病数据入库</title>
   <style>
     :root{--blue:#1890ff;--blue-deep:#096dd9;--blue-soft:#e6f7ff;--cyan:#13c2c2;--green:#52c41a;--orange:#faad14;--red:#ff4d4f;--ink:#262626;--text:#595959;--muted:#8c8c8c;--line:#e8e8e8;--bg:#f0f2f5;--panel:#fff;--sidebar:220px;--header:60px}
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.55} button,input,select{font:inherit} button{cursor:pointer}
@@ -67,30 +67,6 @@
     @media(max-width:760px){:root{--sidebar:68px}.brand{font-size:0}.brand:after{content:"生医";font-size:17px}.global-nav{display:none}.topbar{height:54px}.sidebar{padding:15px 8px}.side-title{display:none}.side-item{justify-content:center;padding:0;height:42px}.side-item span:last-child{display:none}.main{padding:16px 12px}.page-heading{display:block}.heading-actions{margin-top:12px}.kpis,.quality-cards{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:14px 12px}.kpi-value strong{font-size:25px}.grid-8-16,.grid-half,.center-layout,.report-layout,.settings-layout{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.upload-grid{grid-template-columns:repeat(2,1fr)}.drawer{width:min(440px,92vw)}.filter-bar .search input{width:100%}.search{flex:1;min-width:180px}.info-strip{display:block}.info-stat{margin:15px 0 0}.data-table{min-width:760px}}
     .side-item[data-page="hospitals"],.side-item[data-page="centers"],#page-hospitals,#page-centers{display:none!important}.hospital-directory{margin-top:18px}.hospital-directory .section-head{height:auto;min-height:53px;padding-top:12px;padding-bottom:12px}.hospital-directory .section-head>div{display:flex;align-items:center;gap:10px}.hospital-directory .directory-note{font-size:12px;color:var(--muted);margin:0 0 12px}.hospital-directory .data-table{min-width:760px}.hospital-directory .ingest-btn{font-size:12px;padding:5px 9px}
   </style>
-<style id="closure-v1-style">
-/* closure-v1 */
-.closure-scope-note{margin:0 0 16px;padding:10px 14px;border:1px solid #cfe2ff;border-radius:6px;background:#f3f8ff;color:#315d89;font-size:12px}
-.closure-card{margin:0 0 18px;background:#fff;border:1px solid #e4eaf1;border-radius:8px;box-shadow:0 1px 2px #00000008;overflow:hidden}
-.closure-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:15px 18px;border-bottom:1px solid #edf0f4}
-.closure-card-head h2,.closure-card-head h3{margin:0;font-size:16px}.closure-card-head p{margin:3px 0 0;color:#7a8795;font-size:12px}
-.closure-card-body{padding:16px 18px}.closure-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.closure-btn{border:1px solid #d8e0e8;background:#fff;color:#34495e;border-radius:4px;padding:7px 12px;cursor:pointer}.closure-btn:hover{border-color:#1677ff;color:#1677ff}.closure-btn.primary{background:#1677ff;border-color:#1677ff;color:#fff}.closure-btn.danger{border-color:#ffb3b3;color:#b42318}.closure-btn[disabled]{cursor:not-allowed;opacity:.45}
-.closure-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#596675;font-size:11px;white-space:nowrap}.closure-badge.blue{background:#e8f3ff;color:#096dd9}.closure-badge.green{background:#edf9e8;color:#237804}.closure-badge.orange{background:#fff5df;color:#ad6800}.closure-badge.red{background:#fff0f0;color:#b42318}
-.closure-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.closure-metric{padding:13px;border:1px solid #edf0f4;border-radius:6px;background:#fbfcfe}.closure-metric label{display:block;color:#788694;font-size:12px}.closure-metric strong{display:block;margin-top:5px;font-size:22px}.closure-metric small{color:#8793a0}
-.closure-table{width:100%;border-collapse:collapse}.closure-table th,.closure-table td{padding:11px 10px;border-bottom:1px solid #edf0f4;text-align:left;font-size:12px}.closure-table th{background:#fafbfd;color:#687788;font-weight:500}.closure-table tr:last-child td{border-bottom:0}
-.closure-step-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.closure-step{position:relative;padding:12px;border:1px solid #e3e9ef;border-radius:6px}.closure-step.active{border-color:#69a9ff;background:#f4f9ff}.closure-step.done{border-color:#b7e3a1;background:#f6fff2}.closure-step b{display:block;margin-bottom:4px}.closure-step span{font-size:12px;color:#778593}
-.closure-alert{padding:10px 12px;border-radius:5px;background:#fff7e6;border:1px solid #ffd591;color:#8d5a00;font-size:12px}.closure-alert.error{background:#fff1f0;border-color:#ffa39e;color:#a61d24}.closure-alert.success{background:#f6ffed;border-color:#b7eb8f;color:#237804}
-.closure-drawer-mask{position:fixed;inset:0;background:#10243d5c;z-index:9998;display:none}.closure-drawer-mask.open{display:block}.closure-drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,92vw);background:#fff;z-index:9999;box-shadow:-8px 0 30px #10243d29;transform:translateX(102%);transition:.2s;display:flex;flex-direction:column}.closure-drawer.open{transform:none}.closure-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:17px 20px;border-bottom:1px solid #e8edf2}.closure-drawer-head h3{margin:0}.closure-drawer-body{padding:20px;overflow:auto;flex:1}.closure-drawer-foot{padding:14px 20px;border-top:1px solid #e8edf2;display:flex;justify-content:flex-end;gap:8px}
-.closure-form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.closure-field{display:flex;flex-direction:column;gap:5px}.closure-field.full{grid-column:1/-1}.closure-field label{font-size:12px;color:#667585}.closure-field input,.closure-field select,.closure-field textarea{border:1px solid #d9e0e7;border-radius:4px;padding:8px 9px}.closure-field textarea{min-height:82px;resize:vertical}
-.closure-context{margin:0 0 16px;padding:12px 15px;border:1px solid #b7d8ff;border-radius:7px;background:#f4f9ff;display:flex;justify-content:space-between;align-items:center;gap:16px}.closure-context b{color:#134f91}.closure-context small{display:block;color:#6e8194;margin-top:3px}
-.closure-result-panel{border-left:4px solid #52c41a}.closure-role{display:flex;align-items:center;gap:7px;color:#fff;font-size:12px}.closure-role select{min-width:126px;padding:6px 8px;background:#fff;color:#26384b;border:0;border-radius:4px}
-.closure-task-tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid #e7ebef}.closure-task-tabs button{border:0;background:transparent;padding:9px 13px;color:#677789;cursor:pointer}.closure-task-tabs button.active{color:#1677ff;border-bottom:2px solid #1677ff;font-weight:600}
-.closure-hidden{display:none!important}
-.side-item[data-page="hospitals"],.side-item[data-page="centers"]{display:flex!important}
-.page#page-hospitals.active,.page#page-centers.active{display:block!important}
-@media(max-width:900px){.closure-grid,.closure-step-row{grid-template-columns:1fr 1fr}.closure-form{grid-template-columns:1fr}.closure-field.full{grid-column:auto}}
-
-</style>
 </head>
 <body>
 <div class="app">
@@ -111,7 +87,7 @@
     </div><div class="side-section" data-toggle="public"><span class="arrow">▾</span><span>公开数据资源采集</span></div><div class="side-group" id="publicGroup">
       <div class="side-item" data-page="public-dashboard"><span class="side-icon">◉</span><span>公开数据总览</span></div>
        <div class="side-item" data-page="datasets"><span class="side-icon">▧</span><span>数据集资源库</span></div>
-        <div class="side-item" data-page="compliance"><span class="side-icon">✓</span><span>数据来源登记与合规审核</span></div>
+        <div class="side-item" data-page="compliance"><span class="side-icon">✓</span><span>数据获取与合规</span></div>
        <div class="side-item" data-page="downloads"><span class="side-icon">⇩</span><span>下载与格式转换</span></div>
       <div class="side-item" data-page="processing"><span class="side-icon">✦</span><span>再加工与价值提取</span></div>
       <div class="side-item" data-page="alignment"><span class="side-icon">⇄</span><span>自采公开对齐融合</span></div>
@@ -130,8 +106,8 @@
           <div class="card section-card"><div class="section-head"><h2>双目标采集进度</h2><span class="sub">两年目标分别 ≥50,000</span></div><div class="section-body"><div class="ring-wrap"><div class="ring"><div class="ring-center"><strong>95.01%</strong><span>综合完成率</span></div></div><div style="width:100%;display:grid;gap:10px"><div><div style="display:flex;justify-content:space-between;font-size:12px"><span>慢病标准数据</span><b>46,380 / 50,000</b></div><div class="progress"><i style="width:92.76%;background:#13c2c2"></i></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px"><span>眼病标准数据</span><b>48,627 / 50,000</b></div><div class="progress"><i style="width:97.25%"></i></div></div></div></div></div></div>
           <div class="card section-card"><div class="section-head"><h2>近 12 个月采集趋势</h2><span class="sub">病例数 / 影像数</span></div><div class="section-body"><div class="chart"><div class="chart-grid"><i></i><i></i><i></i><i></i><i></i></div><div class="bar-area"><div class="bar-col"><i class="bar" style="height:35%"></i><i class="bar alt" style="height:50%"></i></div><div class="bar-col"><i class="bar" style="height:42%"></i><i class="bar alt" style="height:54%"></i></div><div class="bar-col"><i class="bar" style="height:48%"></i><i class="bar alt" style="height:58%"></i></div><div class="bar-col"><i class="bar" style="height:52%"></i><i class="bar alt" style="height:65%"></i></div><div class="bar-col"><i class="bar" style="height:60%"></i><i class="bar alt" style="height:67%"></i></div><div class="bar-col"><i class="bar" style="height:53%"></i><i class="bar alt" style="height:73%"></i></div><div class="bar-col"><i class="bar" style="height:67%"></i><i class="bar alt" style="height:76%"></i></div><div class="bar-col"><i class="bar" style="height:70%"></i><i class="bar alt" style="height:80%"></i></div><div class="bar-col"><i class="bar" style="height:77%"></i><i class="bar alt" style="height:84%"></i></div><div class="bar-col"><i class="bar" style="height:73%"></i><i class="bar alt" style="height:88%"></i></div><div class="bar-col"><i class="bar" style="height:82%"></i><i class="bar alt" style="height:92%"></i></div><div class="bar-col"><i class="bar" style="height:89%"></i><i class="bar alt" style="height:96%"></i></div></div><svg class="line-svg" viewBox="0 0 700 160" preserveAspectRatio="none"><polyline fill="none" stroke="#52c41a" stroke-width="3" points="0,127 62,121 124,110 186,104 248,98 310,86 372,82 434,68 496,59 558,53 620,39 690,31"/><polyline fill="none" stroke="#52c41a44" stroke-width="12" stroke-linecap="round" points="0,127 62,121 124,110 186,104 248,98 310,86 372,82 434,68 496,59 558,53 620,39 690,31"/></svg><div class="axis"><span>2025-09</span><span>2025-11</span><span>2026-01</span><span>2026-03</span><span>2026-05</span><span>2026-08</span></div></div></div></div>
         </div>
-        
-        
+        <div class="grid-half"><div class="card section-card region-card"><div class="section-head"><h2>医院地域分布</h2><button class="mini-action">查看详情 ›</button></div><div class="section-body"><div class="map-box"><div class="map-outline"></div><div class="map-tag north"><b>18</b> 华北</div><div class="map-tag east"><b>14</b> 华东</div><div class="map-tag south"><b>9</b> 华南</div><div class="map-tag west"><b>6</b> 西南</div></div></div></div><div class="card section-card disease-card"><div class="section-head"><h2>疾病覆盖 TOP 10</h2><span class="sub">按病例数</span></div><div class="section-body"><div class="disease-list"><div class="disease-row"><span class="name">糖尿病视网膜病变</span><div class="progress"><i style="width:92%"></i></div><span class="num">12,840</span></div><div class="disease-row"><span class="name">年龄相关性白内障</span><div class="progress"><i style="width:79%"></i></div><span class="num">10,920</span></div><div class="disease-row"><span class="name">青光眼</span><div class="progress"><i style="width:66%"></i></div><span class="num">8,631</span></div><div class="disease-row"><span class="name">病理性近视</span><div class="progress"><i style="width:54%"></i></div><span class="num">6,248</span></div><div class="disease-row"><span class="name">黄斑变性</span><div class="progress"><i style="width:41%"></i></div><span class="num">4,882</span></div></div></div></div></div>
+        <div class="grid-half"><div class="card section-card"><div class="section-head"><h2>今日待处理 <span class="tag red" style="margin-left:7px">12</span></h2><button class="mini-action">全部处理 ›</button></div><div class="section-body"><div class="todo-list"><div class="todo-item"><i class="todo-mark"></i><span class="todo-copy">3 家医院数据未同步</span><span class="tag orange">待同步</span></div><div class="todo-item"><i class="todo-mark blue"></i><span class="todo-copy">12 例病例待质控复核</span><span class="tag blue">待审核</span></div><div class="todo-item"><i class="todo-mark red"></i><span class="todo-copy">2 张影像上传失败需重传</span><span class="tag red">异常</span></div><div class="todo-item"><i class="todo-mark"></i><span class="todo-copy">5 份伦理批件即将到期</span><span class="tag orange">7 天内</span></div></div></div></div><div class="card section-card"><div class="section-head"><h2>最新采集动态</h2><span class="sub">实时更新</span></div><div class="section-body"><div class="activity-list"><div class="activity-item"><span class="activity-time">09:08</span><span class="activity-copy"><b>北京同仁医院</b> 上传 OCT 影像</span><span class="activity-qty">32 张</span></div><div class="activity-item"><span class="activity-time">08:56</span><span class="activity-copy"><b>湘雅二医院</b> 完成病例质控</span><span class="activity-qty">128 例</span></div><div class="activity-item"><span class="activity-time">08:42</span><span class="activity-copy"><b>深圳市眼科医院</b> 接入采集中心</span><span class="activity-qty">1 个</span></div><div class="activity-item"><span class="activity-time">08:30</span><span class="activity-copy"><b>安徽省立医院</b> 同步病历数据</span><span class="activity-qty">246 例</span></div></div></div></div></div>
       </section>
       <section class="page" id="page-hospitals"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>眼病/慢病专家系统</span><b>›</b><span>医院管理</span></div><div class="page-heading"><div><h1>医院管理</h1><p>维护合作医院、合规状态与采集中心信息</p></div><button class="btn btn-primary" data-open-modal>＋ 新增医院</button></div><div class="filter-bar"><div class="search"><span>⌕</span><input placeholder="搜索医院名称" /></div><select><option>全部区域</option><option>华北</option><option>华东</option><option>华南</option></select><select><option>全部等级</option><option>三甲</option><option>三乙</option><option>二甲</option></select><select><option>全部状态</option><option>已接入</option><option>待接入</option><option>暂停</option></select><button class="btn btn-primary">查询</button><button class="btn">重置</button><span class="filter-spacer"></span></div><div class="card table-wrap"><table class="data-table"><thead><tr><th>□</th><th>序号</th><th>医院名称</th><th>所属区域</th><th>等级</th><th>采集中心数</th><th>累计病例</th><th>累计影像</th><th>数据合规状态</th><th>接入时间</th><th>操作</th></tr></thead><tbody><tr><td>□</td><td>01</td><td><b>北京同仁医院</b></td><td>华北</td><td>三甲</td><td>5</td><td>8,420</td><td>56,280</td><td><span class="tag green">✓ 合规</span></td><td>2024-06-18</td><td><button class="link-btn detail-btn">查看</button></td></tr><tr><td>□</td><td>02</td><td><b>中南大学湘雅二医院</b></td><td>华中</td><td>三甲</td><td>4</td><td>6,810</td><td>42,125</td><td><span class="tag green">✓ 合规</span></td><td>2024-07-02</td><td><button class="link-btn detail-btn">查看</button></td></tr><tr><td>□</td><td>03</td><td><b>深圳市第二人民医院</b></td><td>华南</td><td>三甲</td><td>3</td><td>5,620</td><td>38,640</td><td><span class="tag orange">! 待补充</span></td><td>2024-08-11</td><td><button class="link-btn detail-btn">查看</button></td></tr><tr><td>□</td><td>04</td><td><b>安徽医科大学二附院</b></td><td>华东</td><td>三甲</td><td>3</td><td>4,982</td><td>31,508</td><td><span class="tag green">✓ 合规</span></td><td>2024-09-23</td><td><button class="link-btn detail-btn">查看</button></td></tr><tr><td>□</td><td>05</td><td><b>清华大学玉泉医院</b></td><td>华北</td><td>三乙</td><td>2</td><td>3,248</td><td>24,290</td><td><span class="tag red">× 缺失</span></td><td>2025-01-08</td><td><button class="link-btn detail-btn">查看</button></td></tr></tbody></table><div class="pager"><span>共 52 家</span><span>每页 10 条</span><div class="page-no"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>4</button><button>›</button></div></div></div></section>
       <section class="page" id="page-centers"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>采集中心部署</span></div><div class="page-heading"><div><h1>采集中心部署</h1><p>管理医院科室采集中心、设备连接与同步状态</p></div><button class="btn btn-primary">＋ 新增采集中心</button></div><div class="center-layout"><div class="card tree"><div class="tree-group">华北区域</div><div class="tree-item selected">北京同仁医院</div><div class="tree-item indent">眼科中心（一）</div><div class="tree-item indent">眼科中心（二）</div><div class="tree-item indent">内分泌科</div><div class="tree-item">中南大学湘雅二医院</div><div class="tree-group">华南区域</div><div class="tree-item">深圳市第二人民医院</div><div class="tree-item">深圳市眼科医院</div><div class="tree-group">华东区域</div><div class="tree-item">安徽医科大学二附院</div><div class="tree-item">清华大学玉泉医院</div><div class="tree-item">普仁医院</div><div class="tree-item">安徽省立医院</div></div><div class="card section-card"><div class="info-strip"><div><h2>北京同仁医院 · 眼科中心（一）</h2><p>眼病数据采集中心 <span class="tag green" style="margin-left:7px">● 运行中</span></p></div><div class="info-stat"><div><strong>18</strong><span>覆盖疾病</span></div><div><strong>5</strong><span>接入设备</span></div><div><strong>08:30</strong><span>最近同步</span></div></div></div><div class="section-body"><div class="detail-grid"><div class="detail-item"><label>所属科室</label><b>眼科</b></div><div class="detail-item"><label>负责人</label><b>王晓宁 医师</b></div><div class="detail-item"><label>联系电话</label><b>010-5826 3188</b></div><div class="detail-item"><label>医院端传输专员</label><b>李敏 · 数据工程师</b></div><div class="detail-item"><label>部署日期</label><b>2024-06-18</b></div></div><h3 style="font-size:14px;margin:24px 0 0">设备清单</h3><div class="table-wrap device-table"><table class="data-table"><thead><tr><th>设备类型</th><th>设备名称</th><th>型号</th><th>连接状态</th><th>最后心跳</th></tr></thead><tbody><tr><td>眼底照相机</td><td>海德堡眼底相机</td><td>TRC-50DX</td><td><span class="tag green">● 在线</span></td><td>08:29:56</td></tr><tr><td>OCT</td><td>海德堡 Spectralis</td><td>OCT-2</td><td><span class="tag green">● 在线</span></td><td>08:30:02</td></tr><tr><td>生物测量仪</td><td>IOLMaster 700</td><td>ZEISS-700</td><td><span class="tag green">● 在线</span></td><td>08:29:48</td></tr><tr><td>影像提取系统</td><td>多模态影像网关</td><td>IMG-GW-V3</td><td><span class="tag green">● 在线</span></td><td>08:30:01</td></tr><tr><td>服务器</td><td>中心数据服务器</td><td>DC-2024</td><td><span class="tag green">● 在线</span></td><td>08:30:04</td></tr></tbody></table></div><div class="card" style="margin-top:18px;padding:15px;background:#fafafa"><div style="display:flex;justify-content:space-between"><b>部署服务器</b><span class="tag blue">实时传输</span></div><div class="detail-grid"><div class="detail-item"><label>服务器 IP</label><b>192.168.18.24:8080</b></div><div class="detail-item"><label>存储容量</label><b>2TB / 已使用 1.2TB</b></div></div></div><div style="display:flex;gap:9px;margin-top:18px"><button class="btn btn-primary">查看实时数据</button><button class="btn" id="addDeviceBtn">＋ 添加设备</button><button class="btn">编辑</button></div></div></div></div></section>
@@ -141,8 +117,8 @@
       <section class="page" id="page-quality"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>数据质量控制</span></div><div class="page-heading"><div><h1>数据质量控制</h1><p>对已采集数据进行完整性、合规性与影像质量审查</p></div></div><div class="quality-cards"><div class="card quality-card"><span class="q-label">待审核病例</span><strong>1,248</strong><span class="q-note">例</span><div class="status-bar"><div class="progress"><i style="width:38%;background:#faad14"></i></div></div></div><div class="card quality-card"><span class="q-label">已通过</span><strong>45,820</strong><span class="q-note">例</span><div class="status-bar"><div class="progress"><i style="width:91%;background:#52c41a"></i></div></div></div><div class="card quality-card"><span class="q-label">退回修改</span><strong>1,510</strong><span class="q-note">例</span><div class="status-bar"><div class="progress"><i style="width:24%;background:#ff4d4f"></i></div></div></div><div class="card quality-card"><span class="q-label">退回率</span><strong>3.18%</strong><span class="q-note">阈值 5%</span><div class="status-bar"><div class="progress"><i style="width:64%;background:#1890ff"></i></div></div></div></div><div class="card table-wrap"><table class="data-table"><thead><tr><th>□</th><th>病例 ID</th><th>医院</th><th>疾病</th><th>影像数</th><th>完整度</th><th>合规校验</th><th>提交时间</th><th>操作</th></tr></thead><tbody><tr><td>□</td><td>TRH-2026-008421</td><td>北京同仁医院</td><td>糖尿病视网膜病变</td><td>6</td><td><span style="color:#389e0d">92%</span></td><td><span class="tag green">✓ 自动通过</span></td><td>08-28 08:41</td><td><button class="btn" style="padding:5px 10px">审核</button></td></tr><tr><td>□</td><td>XYE-2026-003188</td><td>湘雅二医院</td><td>青光眼</td><td>3</td><td><span style="color:#d48806">76%</span></td><td><span class="tag orange">! 待人工</span></td><td>08-28 08:36</td><td><button class="btn" style="padding:5px 10px">审核</button></td></tr><tr><td>□</td><td>SZE-2026-001920</td><td>深圳市眼科医院</td><td>白内障</td><td>2</td><td><span style="color:#cf1322">54%</span></td><td><span class="tag red">× 自动失败</span></td><td>08-28 08:20</td><td><button class="btn" style="padding:5px 10px">审核</button></td></tr></tbody></table><div class="pager"><span>共 1,248 条</span><div class="page-no"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div></div></section>
       <section class="page" id="page-public-dashboard"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>眼病/慢病数据入库</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>公开数据总览</span></div><div class="page-heading"><div><h1>公开数据总览</h1><p>53 个公开眼科数据集的资源规模、合规状态与处理进度</p></div><div class="heading-actions"><select><option>全部时间</option><option>近30天</option><option>近12个月</option></select><button class="btn" id="publicRefresh">↻ 刷新</button></div></div><div class="kpis public-kpis"><div class="card kpi"><div class="kpi-head"><span>数据集总数</span><span class="kpi-icon">▧</span></div><div class="kpi-value"><strong>53</strong><em>个</em></div><div class="trend">目标达成 100%</div></div><div class="card kpi"><div class="kpi-head"><span>总数据容量</span><span class="kpi-icon">◫</span></div><div class="kpi-value"><strong>260</strong><em>GB</em></div><div class="trend">Fundus 128G</div></div><div class="card kpi"><div class="kpi-head"><span>影像模态</span><span class="kpi-icon">◉</span></div><div class="kpi-value"><strong>3</strong><em>种</em></div><div class="trend">Fundus · OCT · FFA/OCTA</div></div><div class="card kpi"><div class="kpi-head"><span>覆盖疾病</span><span class="kpi-icon">◈</span></div><div class="kpi-value"><strong>5</strong><em>类</em></div><div class="trend">DR · AMD · 青光眼等</div></div><div class="card kpi"><div class="kpi-head"><span>任务类型</span><span class="kpi-icon">✦</span></div><div class="kpi-value"><strong>22</strong><em>类</em></div><div class="trend">分类 · 分割 · 检测</div></div><div class="card kpi"><div class="kpi-head"><span>合规率</span><span class="kpi-icon">✓</span></div><div class="kpi-value"><strong>100%</strong></div><div class="trend">53 / 53 核查通过</div></div></div><div class="triple-grid"><div class="card section-card"><div class="section-head"><h2>模态分布</h2><span class="sub">按容量</span></div><div class="section-body"><div class="ring-wrap"><div class="ring" style="width:150px;height:150px;background:conic-gradient(#1890ff 0 49%,#722ed1 49% 82%,#13c2c2 82% 100%)"><div class="ring-center"><strong>260GB</strong><span>总容量</span></div></div><div class="legend"><span><i class="dot" style="background:#1890ff"></i>Fundus 128G</span><span><i class="dot" style="background:#722ed1"></i>OCT 86G</span><span><i class="dot" style="background:#13c2c2"></i>FFA/OCTA 46G</span></div></div></div></div><div class="card section-card"><div class="section-head"><h2>疾病数据集分布</h2><span class="sub">53 个</span></div><div class="section-body"><div class="disease-list"><div class="disease-row"><span>糖网病 DR</span><div class="progress"><i style="width:92%"></i></div><span class="num">21</span></div><div class="disease-row"><span>青光眼</span><div class="progress"><i style="width:67%"></i></div><span class="num">14</span></div><div class="disease-row"><span>黄斑变性 AMD</span><div class="progress"><i style="width:52%"></i></div><span class="num">9</span></div><div class="disease-row"><span>白内障</span><div class="progress"><i style="width:36%"></i></div><span class="num">6</span></div><div class="disease-row"><span>其他</span><div class="progress"><i style="width:24%"></i></div><span class="num">3</span></div></div></div></div><div class="card section-card"><div class="section-head"><h2>数据来源</h2><span class="sub">国际 / 国内</span></div><div class="section-body"><div class="ring-wrap"><div class="ring" style="width:150px;height:150px;background:conic-gradient(#13c2c2 0 68%,#91d5ff 68% 100%)"><div class="ring-center"><strong>68%</strong><span>国际来源</span></div></div><div class="legend"><span><i class="dot" style="background:#13c2c2"></i>国际 36 个</span><span><i class="dot" style="background:#91d5ff"></i>国内 17 个</span></div></div></div></div></div><div class="card section-card" style="margin-bottom:18px"><div class="section-head"><h2>公开数据处理流水线</h2><span class="sub">四阶段标准化处理</span></div><div class="section-body"><div class="pipeline"><div class="pipe-step" data-page-jump="compliance"><div class="pipe-no">1</div><h3>数据获取与产权确认</h3><p>53 / 53 已完成</p><div class="progress"><i style="width:100%;background:#52c41a"></i></div></div><div class="pipe-step" data-page-jump="downloads"><div class="pipe-no">2</div><h3>下载与格式转换</h3><p>53 / 53 已完成</p><div class="progress"><i style="width:100%;background:#52c41a"></i></div></div><div class="pipe-step" data-page-jump="processing"><div class="pipe-no">3</div><h3>再加工与价值提取</h3><p>38 / 53 · 72%</p><div class="progress"><i style="width:72%"></i></div></div><div class="pipe-step" data-page-jump="alignment"><div class="pipe-no">4</div><h3>与自采数据对齐融合</h3><p>15 / 53 · 28%</p><div class="progress"><i style="width:28%;background:#faad14"></i></div></div></div></div></div><div class="grid-half"><div class="card section-card"><div class="section-head"><h2>22 类任务类型</h2><button class="mini-action">查看全部 ›</button></div><div class="section-body"><div class="tag-cloud"><span class="task-tag">图像分类 18</span><span class="task-tag">病灶分割 13</span><span class="task-tag">目标检测 11</span><span class="task-tag">疾病分级 16</span><span class="task-tag">血管分割 8</span><span class="task-tag">视盘定位 7</span><span class="task-tag">多模态配准 5</span><span class="task-tag">生成增强 4</span><span class="task-tag">图像回归 6</span><span class="task-tag">病灶定位 9</span><span class="task-tag">关键点检测 5</span><span class="task-tag">图像配准 6</span><span class="task-tag">图像生成 4</span><span class="task-tag">图像去噪 3</span><span class="task-tag">超分辨率 3</span><span class="task-tag">域适应 5</span><span class="task-tag">异常检测 7</span><span class="task-tag">疾病预测 8</span><span class="task-tag">风险分层 6</span><span class="task-tag">视觉问答 2</span><span class="task-tag">报告生成 3</span><span class="task-tag">多标签识别 10</span></div></div></div><div class="card section-card"><div class="section-head"><h2>最新处理动态</h2><span class="sub">实时更新</span></div><div class="section-body"><div class="activity-list"><div class="activity-item"><span class="activity-time">09:16</span><span class="activity-copy"><b>IDRiD</b> 标签映射 v3 完成</span><span class="tag green">完成</span></div><div class="activity-item"><span class="activity-time">08:52</span><span class="activity-copy"><b>EyePACS</b> 自动标注任务启动</span><span class="tag blue">进行中</span></div><div class="activity-item"><span class="activity-time">08:31</span><span class="activity-copy"><b>REFUGE</b> 与自采编码对齐</span><span class="tag orange">28%</span></div></div></div></div></div></section>
       <section class="page" id="page-datasets"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>数据集资源库</span></div><div class="page-heading"><div><h1>数据集资源库</h1><p>53 个公开眼科数据集的统一检索与处理入口</p></div></div><div class="filter-bar"><div class="search"><span>⌕</span><input placeholder="搜索数据集名称或机构" /></div><select><option>全部模态</option><option>Fundus</option><option>OCT</option><option>FFA/OCTA</option></select><select><option>全部疾病</option><option>DR</option><option>AMD</option><option>青光眼</option></select><select><option>全部任务</option><option>图像分类</option><option>病灶分割</option></select><select><option>全部状态</option><option>已对齐</option><option>已清洗</option></select><button class="btn btn-primary">查询</button><button class="btn">重置</button></div><div class="card table-wrap"><table class="data-table"><thead><tr><th>□</th><th>数据集名称</th><th>模态</th><th>疾病</th><th>任务类型</th><th>样本量 / 容量</th><th>标注情况</th><th>许可协议</th><th>处理状态</th><th>操作</th></tr></thead><tbody><tr><td>□</td><td><b>EyePACS</b><br><small style="color:#8c8c8c">Kaggle / EyePACS</small></td><td><span class="tag blue">Fundus</span></td><td>DR</td><td>图像分类 · 分级</td><td>88,702 / 68GB</td><td><span class="tag green">全标注</span></td><td>CC BY-NC</td><td><div class="mini-flow"><i class="done"></i><i class="done"></i><i class="doing"></i><i></i></div></td><td><button class="link-btn dataset-detail">详情</button><button class="link-btn">清洗</button></td></tr><tr><td>□</td><td><b>IDRiD</b><br><small style="color:#8c8c8c">Indian Diabetic Retinopathy</small></td><td><span class="tag blue">Fundus</span></td><td>DR</td><td>病灶分割 · 分级</td><td>516 / 2.8GB</td><td><span class="tag green">全标注</span></td><td>CC BY 4.0</td><td><div class="mini-flow"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i></div></td><td><button class="link-btn dataset-detail">详情</button><button class="link-btn">对齐</button></td></tr><tr><td>□</td><td><b>REFUGE</b><br><small style="color:#8c8c8c">MICCAI Challenge</small></td><td><span class="tag blue">Fundus</span></td><td>青光眼</td><td>图像分类 · 病灶分割</td><td>1,200 / 5.4GB</td><td><span class="tag blue">部分标注</span></td><td>学术共享</td><td><div class="mini-flow"><i class="done"></i><i class="done"></i><i class="done"></i><i class="doing"></i></div></td><td><button class="link-btn dataset-detail">详情</button><button class="link-btn">对齐</button></td></tr><tr><td>□</td><td><b>OCT2017</b><br><small style="color:#8c8c8c">UCSD</small></td><td><span class="tag" style="background:#f9f0ff;color:#722ed1">OCT</span></td><td>AMD</td><td>图像分类</td><td>84,495 / 32GB</td><td><span class="tag green">全标注</span></td><td>CC BY-NC-SA</td><td><div class="mini-flow"><i class="done"></i><i class="done"></i><i class="doing"></i><i></i></div></td><td><button class="link-btn dataset-detail">详情</button><button class="link-btn">清洗</button></td></tr></tbody></table><div class="pager"><span>共 53 条</span><select style="padding:5px;min-width:80px"><option>10 条/页</option><option>20 条/页</option></select><div class="page-no"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div></div></section>
-      <section class="page" id="page-compliance"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>数据来源登记与合规审核</span></div><div class="page-heading"><div><h1>数据来源登记与合规审核</h1><p>管理公开数据来源、产权确认与许可协议核查</p></div><button class="btn btn-primary" id="newSource">＋ 登记新数据集来源</button></div><div class="quality-cards"><div class="card quality-card"><span class="q-label">已核查</span><strong>53</strong><span class="q-note">全部数据集</span></div><div class="card quality-card"><span class="q-label">核查通过</span><strong style="color:#52c41a">53</strong><span class="q-note">合规率 100%</span></div><div class="card quality-card"><span class="q-label">待补充材料</span><strong>0</strong><span class="q-note">无需处理</span></div><div class="card quality-card"><span class="q-label">不通过</span><strong>0</strong><span class="q-note">风险阻断</span></div></div><div class="center-layout" style="grid-template-columns:1fr 280px"><div class="card table-wrap"><table class="data-table"><thead><tr><th>数据集</th><th>官方来源</th><th>许可协议</th><th>再分发</th><th>商业使用</th><th>核查状态</th><th>核查人</th><th>日期</th><th>操作</th></tr></thead><tbody><tr><td>IDRiD</td><td>IEEE Dataport</td><td>CC BY 4.0</td><td style="color:#52c41a">✓ 允许</td><td style="color:#52c41a">✓ 允许</td><td><span class="tag green">✓ 已通过</span></td><td>周敏</td><td>2026-07-18</td><td><button class="link-btn">查看</button></td></tr><tr><td>EyePACS</td><td>Kaggle</td><td>CC BY-NC</td><td style="color:#52c41a">✓ 允许</td><td style="color:#ff4d4f">⊘ 禁止</td><td><span class="tag green">✓ 已通过</span></td><td>陈立</td><td>2026-07-12</td><td><button class="link-btn">查看</button></td></tr><tr><td>REFUGE</td><td>MICCAI</td><td>学术共享</td><td style="color:#ff4d4f">⊘ 限制</td><td style="color:#ff4d4f">⊘ 禁止</td><td><span class="tag green">✓ 已通过</span></td><td>周敏</td><td>2026-06-28</td><td><button class="link-btn">查看</button></td></tr></tbody></table></div><div><div class="card license-card"><h3>CC BY 4.0</h3><p style="color:#52c41a">✓ 允许修改与再分发</p><p>要求署名原作者</p></div><div class="card license-card"><h3>CC BY-NC</h3><p style="color:#52c41a">✓ 学术用途使用</p><p style="color:#ff4d4f">⊘ 禁止商业使用</p></div><div class="card license-card"><h3>学术共享协议</h3><p style="color:#52c41a">✓ 科研与教学</p><p style="color:#ff4d4f">⊘ 不得二次分发</p></div></div></div></section>
-      <section class="page" id="page-downloads"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>下载与格式转换</span></div><div class="page-heading"><div><h1>下载与格式转换</h1><p>管理下载任务、完整性校验与统一格式输出</p></div><div class="heading-actions"><button class="btn">全部校验</button><button class="btn">＋ 新增转换规则</button></div></div><div class="card section-card" style="margin-bottom:18px"><div class="section-head"><h2>下载任务中心</h2><span class="tag blue">3 个任务进行中</span></div><div><div class="download-row"><b>EyePACS</b><div class="progress"><i style="width:78%"></i></div><span>78% · 53GB</span><span>42.6 MB/s</span><span class="tag blue">下载中</span></div><div class="download-row"><b>OCT2017</b><div class="progress"><i style="width:100%;background:#52c41a"></i></div><span>100% · 32GB</span><span>SHA256 ✓</span><span class="tag green">已完成</span></div><div class="download-row"><b>DRIVE</b><div class="progress"><i style="width:41%;background:#faad14"></i></div><span>41% · 1.2GB</span><span>18.2 MB/s</span><span class="tag orange">下载中</span></div></div></div><div class="card section-card"><div class="section-head"><h2>格式转换流水线</h2><button class="mini-action">统一输出规范 ›</button></div><div class="section-body"><div class="flow-banner" style="margin-bottom:18px"><span class="flow-node">源数据</span><span class="flow-arrow">→</span><span class="flow-node">完整性校验</span><span class="flow-arrow">→</span><span class="flow-node">格式转换</span><span class="flow-arrow">→</span><span class="flow-node" style="border-color:#52c41a;color:#389e0d">标准化输出</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>规则名称</th><th>源格式</th><th>目标格式</th><th>进度</th><th>转出数量</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>Fundus 标准转换 v2</td><td>JPEG / TIFF</td><td>PNG + JSON</td><td><div class="progress" style="width:150px"><i style="width:82%"></i></div></td><td>72,806</td><td><span class="tag blue">执行中</span></td><td><button class="link-btn">暂停</button></td></tr><tr><td>OCT 无损转换</td><td>DICOM / MAT</td><td>NPY</td><td><div class="progress" style="width:150px"><i style="width:100%;background:#52c41a"></i></div></td><td>84,495</td><td><span class="tag green">已完成</span></td><td><button class="link-btn">重跑</button></td></tr></tbody></table></div></div></div></section>
+      <section class="page" id="page-compliance"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>数据获取与合规</span></div><div class="page-heading"><div><h1>数据获取与合规</h1><p>管理公开数据来源、产权确认与许可协议核查</p></div><button class="btn btn-primary" id="newSource">＋ 登记新数据集来源</button></div><div class="quality-cards"><div class="card quality-card"><span class="q-label">已核查</span><strong>53</strong><span class="q-note">全部数据集</span></div><div class="card quality-card"><span class="q-label">核查通过</span><strong style="color:#52c41a">53</strong><span class="q-note">合规率 100%</span></div><div class="card quality-card"><span class="q-label">待补充材料</span><strong>0</strong><span class="q-note">无需处理</span></div><div class="card quality-card"><span class="q-label">不通过</span><strong>0</strong><span class="q-note">风险阻断</span></div></div><div class="center-layout" style="grid-template-columns:1fr 280px"><div class="card table-wrap"><table class="data-table"><thead><tr><th>数据集</th><th>官方来源</th><th>许可协议</th><th>再分发</th><th>商业使用</th><th>核查状态</th><th>核查人</th><th>日期</th><th>操作</th></tr></thead><tbody><tr><td>IDRiD</td><td>IEEE Dataport</td><td>CC BY 4.0</td><td style="color:#52c41a">✓ 允许</td><td style="color:#52c41a">✓ 允许</td><td><span class="tag green">✓ 已通过</span></td><td>周敏</td><td>2026-07-18</td><td><button class="link-btn">查看</button></td></tr><tr><td>EyePACS</td><td>Kaggle</td><td>CC BY-NC</td><td style="color:#52c41a">✓ 允许</td><td style="color:#ff4d4f">⊘ 禁止</td><td><span class="tag green">✓ 已通过</span></td><td>陈立</td><td>2026-07-12</td><td><button class="link-btn">查看</button></td></tr><tr><td>REFUGE</td><td>MICCAI</td><td>学术共享</td><td style="color:#ff4d4f">⊘ 限制</td><td style="color:#ff4d4f">⊘ 禁止</td><td><span class="tag green">✓ 已通过</span></td><td>周敏</td><td>2026-06-28</td><td><button class="link-btn">查看</button></td></tr></tbody></table></div><div><div class="card license-card"><h3>CC BY 4.0</h3><p style="color:#52c41a">✓ 允许修改与再分发</p><p>要求署名原作者</p></div><div class="card license-card"><h3>CC BY-NC</h3><p style="color:#52c41a">✓ 学术用途使用</p><p style="color:#ff4d4f">⊘ 禁止商业使用</p></div><div class="card license-card"><h3>学术共享协议</h3><p style="color:#52c41a">✓ 科研与教学</p><p style="color:#ff4d4f">⊘ 不得二次分发</p></div></div></div></section>
+      <section class="page" id="page-downloads"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>下载与格式转换</span></div><div class="page-heading"><div><h1>下载与格式转换</h1><p>管理下载任务、完整性校验与统一格式输出</p></div><div class="heading-actions"><button class="btn btn-primary" data-action="创建下载任务">＋ 新增下载任务</button><button class="btn">全部校验</button><button class="btn">＋ 新增转换规则</button></div></div><div class="card section-card" style="margin-bottom:18px"><div class="section-head"><h2>下载任务中心</h2><span class="tag blue">3 个任务进行中</span></div><div><div class="download-row"><b>EyePACS</b><div class="progress"><i style="width:78%"></i></div><span>78% · 53GB</span><span>42.6 MB/s</span><span class="tag blue">下载中</span></div><div class="download-row"><b>OCT2017</b><div class="progress"><i style="width:100%;background:#52c41a"></i></div><span>100% · 32GB</span><span>SHA256 ✓</span><span class="tag green">已完成</span></div><div class="download-row"><b>DRIVE</b><div class="progress"><i style="width:41%;background:#faad14"></i></div><span>41% · 1.2GB</span><span>18.2 MB/s</span><span class="tag orange">下载中</span></div></div></div><div class="card section-card"><div class="section-head"><h2>格式转换流水线</h2><button class="mini-action">统一输出规范 ›</button></div><div class="section-body"><div class="flow-banner" style="margin-bottom:18px"><span class="flow-node">源数据</span><span class="flow-arrow">→</span><span class="flow-node">完整性校验</span><span class="flow-arrow">→</span><span class="flow-node">格式转换</span><span class="flow-arrow">→</span><span class="flow-node" style="border-color:#52c41a;color:#389e0d">标准化输出</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>规则名称</th><th>源格式</th><th>目标格式</th><th>进度</th><th>转出数量</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>Fundus 标准转换 v2</td><td>JPEG / TIFF</td><td>PNG + JSON</td><td><div class="progress" style="width:150px"><i style="width:82%"></i></div></td><td>72,806</td><td><span class="tag blue">执行中</span></td><td><button class="link-btn">暂停</button></td></tr><tr><td>OCT 无损转换</td><td>DICOM / MAT</td><td>NPY</td><td><div class="progress" style="width:150px"><i style="width:100%;background:#52c41a"></i></div></td><td>84,495</td><td><span class="tag green">已完成</span></td><td><button class="link-btn">重跑</button></td></tr></tbody></table></div></div></div></section>
       <section class="page" id="page-processing"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>再加工与价值提取</span></div><div class="page-heading"><div><h1>再加工与价值提取</h1><p>完成数据清洗、标签标准化、自动标注补全与价值分析</p></div><div class="heading-actions"></div></div><div class="card section-card"><div class="section-body"><div class="tabs"><button class="tab active">数据清洗</button><button class="tab">标签映射</button><button class="tab">自动标注补全</button><button class="tab">价值提取分析</button></div><div class="quality-cards"><div class="card quality-card"><span class="q-label">待清洗</span><strong>15</strong><span class="q-note">个数据集</span></div><div class="card quality-card"><span class="q-label">清洗中</span><strong style="color:#1890ff">8</strong><span class="q-note">实时任务</span></div><div class="card quality-card"><span class="q-label">已完成</span><strong style="color:#52c41a">30</strong><span class="q-note">质量达标</span></div><div class="card quality-card"><span class="q-label">坏图剔除</span><strong>1,204</strong><span class="q-note">张</span></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th>数据集</th><th>清洗项</th><th>清洗前 / 后</th><th>质量评分</th><th>进度</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td><b>EyePACS</b></td><td><span class="tag blue">坏图剔除</span> <span class="tag blue">标签去重</span></td><td>88,702 / 87,936</td><td style="color:#faad14">★★★★☆ 4.2</td><td><div class="progress" style="width:140px"><i style="width:72%"></i></div></td><td><span class="tag blue">进行中</span></td><td><button class="link-btn">详情</button></td></tr><tr><td><b>IDRiD</b></td><td><span class="tag green">分辨率统一</span></td><td>516 / 516</td><td style="color:#52c41a">★★★★★ 4.8</td><td><div class="progress" style="width:140px"><i style="width:100%;background:#52c41a"></i></div></td><td><span class="tag green">已完成</span></td><td><button class="link-btn">报告</button></td></tr><tr><td><b>REFUGE</b></td><td><span class="tag blue">重复检测</span> <span class="tag blue">伪影过滤</span></td><td>1,200 / 1,182</td><td style="color:#faad14">★★★★☆ 4.4</td><td><div class="progress" style="width:140px"><i style="width:86%"></i></div></td><td><span class="tag blue">进行中</span></td><td><button class="link-btn">详情</button></td></tr></tbody></table></div></div></div></section>
       <section class="page" id="page-alignment"><div class="breadcrumb"><span>应用中心</span><b>›</b><span>公开数据资源采集</span><b>›</b><span>自采公开对齐融合</span></div><div class="page-heading"><div><h1>自采公开对齐融合</h1><p>统一编码、模态命名、任务标签与跨源病例索引</p></div></div><div class="flow-banner"><span class="flow-node">公开数据 53 个</span><span class="flow-node">自采数据 48,627 例</span><span class="flow-arrow">→</span><span class="flow-node">统一编码</span><span class="flow-arrow">→</span><span class="flow-node">统一模态</span><span class="flow-arrow">→</span><span class="flow-node">统一标签</span><span class="flow-arrow">→</span><span class="flow-node" style="border-color:#52c41a;color:#389e0d">多模态资源库</span></div><div class="mapping-cards"><div class="card mapping-card"><span class="tag green">映射完成</span><h3>编码体系映射</h3><strong>42 / 42</strong><div class="progress"><i style="width:100%;background:#52c41a"></i></div></div><div class="card mapping-card"><span class="tag green">映射完成</span><h3>模态命名映射</h3><strong>8 / 8</strong><div class="progress"><i style="width:100%;background:#52c41a"></i></div></div><div class="card mapping-card"><span class="tag orange">冲突 3</span><h3>任务标签映射</h3><strong>19 / 22</strong><div class="progress"><i style="width:86%;background:#faad14"></i></div></div></div><div class="card section-card"><div class="section-head"><h2>跨源统一病例索引</h2><div><button class="btn" style="padding:6px 10px">重复检测</button> <button class="btn" style="padding:6px 10px">冲突合并</button></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th>统一 ID</th><th>数据来源</th><th>原始 ID</th><th>模态</th><th>疾病</th><th>对齐状态</th><th>操作</th></tr></thead><tbody><tr><td><b>DS-PUB-IDRID-000123</b></td><td><span class="tag blue">公开</span></td><td>IDRiD_123</td><td>Fundus</td><td>DR</td><td><span class="tag green">已对齐</span></td><td><button class="link-btn">复制 ID</button></td></tr><tr><td><b>DS-SELF-HOSZ-004532</b></td><td><span class="tag green">自采</span></td><td>SZE-2026-004532</td><td>OCT · Fundus</td><td>青光眼</td><td><span class="tag green">已对齐</span></td><td><button class="link-btn">复制 ID</button></td></tr><tr style="background:#fffbe6"><td><b>DS-PUB-REFUGE-000088</b></td><td><span class="tag blue">公开</span></td><td>REFUGE_088</td><td>Fundus</td><td>青光眼</td><td><span class="tag orange">疑似重复</span></td><td><button class="link-btn">处理冲突</button></td></tr></tbody></table></div></div></section>
     </main>
@@ -339,7 +315,7 @@
   document.querySelectorAll('#page-quality tbody tr').forEach(row=>{row.dataset.qcStatus='pending';const b=row.querySelector('button');b.onclick=()=>{activeQcRow=row;openAction('病例质控审核')}});
   document.querySelectorAll('#page-images .image-card').forEach(card=>{if(!card.dataset.imageStatus)card.dataset.imageStatus='approved';card.dataset.modality=card.querySelector('.thumb')?.textContent.trim();card.dataset.case=card.dataset.case||'TRH-2026-008421'});document.querySelector('#page-images .upload-grid').addEventListener('click',e=>{const card=e.target.closest('.image-card');if(card)showImageDrawer(card)});
   document.querySelector('#page-centers .tree').addEventListener('click',e=>{const item=e.target.closest('.tree-item');if(!item)return;item.closest('.tree').querySelectorAll('.tree-item').forEach(x=>x.classList.remove('selected'));item.classList.add('selected');showToast(`已切换采集中心：${item.childNodes[0].textContent.trim()}`)});
-  const realFundusCards=[{eye:'OD',src:'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22720%22%20height%3D%22720%22%20viewBox%3D%220%200%20720%20720%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ed7b55%22%2F%3E%3Cstop%20offset%3D%22.58%22%20stop-color%3D%22%239f372a%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2336151b%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22720%22%20height%3D%22720%22%20fill%3D%22%23111827%22%2F%3E%3Ccircle%20cx%3D%22360%22%20cy%3D%22360%22%20r%3D%22318%22%20fill%3D%22url(%23g)%22%2F%3E%3Ccircle%20cx%3D%22360%22%20cy%3D%22360%22%20r%3D%2270%22%20fill%3D%22%236d171d%22%20opacity%3D%22.55%22%2F%3E%3Ctext%20x%3D%22360%22%20y%3D%22650%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2228%22%20fill%3D%22%23fff%22%3EOD%20%E7%9C%BC%E5%BA%95%E5%BD%B1%E5%83%8F%E6%BC%94%E7%A4%BA%E5%8D%A0%E4%BD%8D%E5%9B%BE%3C%2Ftext%3E%3C%2Fsvg%3E',file:'anonymous_2025-07-28-18-40-17-232_OD.jpg'},{eye:'OS',src:'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22720%22%20height%3D%22720%22%20viewBox%3D%220%200%20720%20720%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ed7b55%22%2F%3E%3Cstop%20offset%3D%22.58%22%20stop-color%3D%22%239f372a%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2336151b%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22720%22%20height%3D%22720%22%20fill%3D%22%23111827%22%2F%3E%3Ccircle%20cx%3D%22360%22%20cy%3D%22360%22%20r%3D%22318%22%20fill%3D%22url(%23g)%22%2F%3E%3Ccircle%20cx%3D%22360%22%20cy%3D%22360%22%20r%3D%2270%22%20fill%3D%22%236d171d%22%20opacity%3D%22.55%22%2F%3E%3Ctext%20x%3D%22360%22%20y%3D%22650%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2228%22%20fill%3D%22%23fff%22%3EOS%20%E7%9C%BC%E5%BA%95%E5%BD%B1%E5%83%8F%E6%BC%94%E7%A4%BA%E5%8D%A0%E4%BD%8D%E5%9B%BE%3C%2Ftext%3E%3C%2Fsvg%3E',file:'anonymous_2025-07-28-18-39-48-549_OS.jpg'}];
+  const realFundusCards=[{eye:'OD',src:'assets/fundus-od.jpg',file:'anonymous_2025-07-28-18-40-17-232_OD.jpg'},{eye:'OS',src:'assets/fundus-os.jpg',file:'anonymous_2025-07-28-18-39-48-549_OS.jpg'}];
   document.querySelectorAll('#page-images .image-card').forEach(card=>{const title=card.querySelector('b')?.textContent||'';const real=realFundusCards.find(x=>title.includes(`· ${x.eye}`));if(real){card.dataset.imageSrc=real.src;card.dataset.eye=real.eye;card.dataset.file=real.file;const thumb=card.querySelector('.thumb');if(thumb){thumb.classList.add('fundus-preview');thumb.innerHTML=`<img src="${real.src}" alt="${real.eye==='OD'?'右眼':'左眼'}眼底彩色照相 ${real.eye}">`}const meta=card.querySelector('.image-meta');if(meta&&!meta.querySelector('.image-file'))meta.insertAdjacentHTML('beforeend',`<span class="image-file">${real.file}</span>`)}});
   showImageDrawer=function(card){
     activeImageCard=card;
@@ -541,7 +517,7 @@
 <script>
 (() => {
   // 自采病例/影像页面仅保留资源分布展示；具体录入和对象存储交由数据录入工具处理。
-  const targetFile='眼病慢病数据录入工具.html';
+  const targetFile='数据录入工具(3).html';
   const jump=page=>{window.location.href=`${targetFile}#${page}`};
   const makeCard=(title,sub,body)=>{const card=document.createElement('div');card.className='card section-card';card.innerHTML=`<div class="section-head"><div><h2>${title}</h2><span class="sub">${sub}</span></div></div><div class="section-body">${body}</div>`;return card};
   const casePage=document.getElementById('page-cases');
@@ -567,370 +543,6 @@
   const qualityNav=document.querySelector('.side-item[data-page="quality"]');if(qualityNav)qualityNav.style.display='none';
   const qualityPage=document.getElementById('page-quality');if(qualityPage)qualityPage.style.display='none';
 })();
-</script>
-<script id="closure-v1">
-/* closure-v1 */
-(() => {
-  const ENTRY_FILE = '眼病慢病数据录入工具.html';
-  const STORAGE_KEY = 'eye-ingestion-closure-v1';
-  const DEMO_SOURCE_URL = 'https://official.example/dataset';
-  const defaultState = {
-    role: 'data-admin',
-    sourceState: 'needs-supplement',
-    approvedDownloadState: 'none',
-    processingStage: 'label-review',
-    alignmentRemaining: 2,
-    alignmentCreated: false,
-    resultSuccess: 120,
-    resultFailed: 3,
-  };
-  let state;
-  try { state = { ...defaultState, ...JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}') }; }
-  catch { state = { ...defaultState }; }
-  if (state.approvedDownloadCreated && state.approvedDownloadState === 'none') state.approvedDownloadState = 'pending';
-  const save = () => sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  const one = (selector, root = document) => root.querySelector(selector);
-  const all = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-  const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-  const badge = (text, tone = '') => `<span class="closure-badge ${tone}">${safe(text)}</span>`;
-  const page = key => one(`#page-${key}`);
-  const closureGoPage = key => {
-    all('.side-item').forEach(item => item.classList.toggle('active', item.dataset.page === key));
-    all('.page').forEach(item => item.classList.toggle('active', item.id === `page-${key}`));
-    page(key)?.style.removeProperty('display');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-  const toast = message => {
-    const target = one('#toast');
-    if (!target) return;
-    target.textContent = message;
-    target.classList.toggle('warn', /失败|阻断|不可|请先/.test(message));
-    target.classList.add('show');
-    setTimeout(() => target.classList.remove('show'), 2400);
-  };
-
-  function ensureDrawer() {
-    if (one('#closureDrawer')) return;
-    document.body.insertAdjacentHTML('beforeend', `
-      <div class="closure-drawer-mask" id="closureMask"></div>
-      <aside class="closure-drawer" id="closureDrawer">
-        <div class="closure-drawer-head"><h3>流程处理</h3><button class="closure-btn" data-close>关闭</button></div>
-        <div class="closure-drawer-body"></div>
-        <div class="closure-drawer-foot"></div>
-      </aside>`);
-    one('#closureMask').onclick = closeDrawer;
-    one('#closureDrawer [data-close]').onclick = closeDrawer;
-  }
-  function openDrawer(title, body, actions = []) {
-    ensureDrawer();
-    one('#closureDrawer h3').textContent = title;
-    one('#closureDrawer .closure-drawer-body').innerHTML = body;
-    const foot = one('#closureDrawer .closure-drawer-foot');
-    foot.innerHTML = '';
-    actions.forEach(action => {
-      const button = document.createElement('button');
-      button.className = `closure-btn ${action.primary ? 'primary' : ''}`;
-      button.textContent = action.label;
-      button.onclick = action.onClick;
-      foot.appendChild(button);
-    });
-    one('#closureMask').classList.add('open');
-    one('#closureDrawer').classList.add('open');
-  }
-  function closeDrawer() {
-    one('#closureMask')?.classList.remove('open');
-    one('#closureDrawer')?.classList.remove('open');
-  }
-
-  function entryUrl(hash, context = {}) {
-    const url = new URL(ENTRY_FILE, location.href);
-    const current = new URL(location.href);
-    current.search = '';
-    current.hash = '';
-    url.searchParams.set('return', current.href);
-    Object.entries(context).forEach(([key, value]) => value && url.searchParams.set(key, value));
-    url.hash = hash;
-    return url.href;
-  }
-  function goEntry(hash, context) { location.href = entryUrl(hash, context); }
-
-  function installRoleSelector() {
-    const host = one('.top-actions');
-    if (!host || one('#data-role-select')) return;
-    host.insertAdjacentHTML('afterbegin', `
-      <label class="closure-role">演示角色
-        <select id="data-role-select">
-          <option value="data-admin">数据管理员</option>
-          <option value="compliance">合规审核人</option>
-          <option value="processor">数据处理人员</option>
-        </select>
-      </label>`);
-    const select = one('#data-role-select');
-    select.value = state.role;
-    select.onchange = () => { state.role = select.value; save(); renderAll(); };
-  }
-
-  function installSelfCollectedFlow() {
-    all('.side-item[data-page="hospitals"],.side-item[data-page="centers"]').forEach(item => item.style.removeProperty('display'));
-    const casesButton = one('#page-cases .page-heading button');
-    if (casesButton) casesButton.onclick = () => goEntry('cases', { resource: 'case' });
-    const uploadButton = one('#page-images .page-heading [data-action="上传影像"]');
-    if (uploadButton) uploadButton.onclick = () => goEntry('storage', { resource: 'image' });
-
-    const directory = one('#page-dashboard .hospital-directory');
-    if (directory) {
-      const viewAll = one('.mini-action', directory);
-      if (viewAll) viewAll.onclick = () => closureGoPage('hospitals');
-      all('tbody tr', directory).forEach(row => {
-        const cells = row.cells;
-        const hospital = cells[0]?.textContent.trim();
-        const compliant = cells[3]?.textContent.includes('合规');
-        const button = one('.ingest-btn', row);
-        if (!button) return;
-        button.textContent = compliant ? '发起入库' : '查看准入要求';
-        button.classList.toggle('btn-primary', compliant);
-        button.onclick = () => compliant ? openHospitalEntry(hospital) : openHospitalRequirement(hospital);
-      });
-    }
-    const todos = all('#page-dashboard .todo-item');
-    if (todos[0]) todos[0].onclick = () => closureGoPage('centers');
-    if (todos[1]) todos[1].onclick = () => goEntry('review', { resource: 'review' });
-    if (todos[2]) todos[2].onclick = () => goEntry('storage', { resource: 'image' });
-    if (todos[3]) todos[3].onclick = () => closureGoPage('hospitals');
-    const allTodo = one('#page-dashboard .todo-list')?.closest('.section-card')?.querySelector('.mini-action');
-    if (allTodo) allTodo.onclick = () => goEntry('review', { resource: 'review' });
-    installResultPanel();
-    reconcileImageStatistics();
-  }
-  function openHospitalEntry(hospital) {
-    openDrawer('选择入库类型', `
-      <div class="closure-alert success">当前医院：<b>${safe(hospital)}</b>。系统会把医院与采集中心上下文带入统一数据录入工具。</div>
-      <div class="closure-grid" style="grid-template-columns:1fr 1fr;margin-top:16px">
-        <button class="closure-btn" id="closureCaseEntry" style="padding:22px">新建病例<br><small>人口学、临床、检查及影像关联</small></button>
-        <button class="closure-btn" id="closureImageEntry" style="padding:22px">上传影像<br><small>对象存储、完整性校验及病历关联</small></button>
-      </div>`, []);
-    one('#closureCaseEntry').onclick = () => goEntry('cases', { hospital, center: `${hospital}采集中心`, resource: 'case' });
-    one('#closureImageEntry').onclick = () => goEntry('storage', { hospital, center: `${hospital}采集中心`, resource: 'image' });
-  }
-  function openHospitalRequirement(hospital) {
-    openDrawer('医院准入要求', `
-      <div class="closure-alert">${safe(hospital)}当前为“待补充”，暂不能发起数据入库。</div>
-      <table class="closure-table" style="margin-top:15px"><tbody>
-        <tr><td>伦理委员会批件</td><td>${badge('待补充','orange')}</td></tr>
-        <tr><td>数据使用协议</td><td>${badge('已提交','green')}</td></tr>
-        <tr><td>医院端传输责任人</td><td>${badge('待确认','orange')}</td></tr>
-      </tbody></table>`, [{ label: '前往医院管理', primary: true, onClick: () => { closeDrawer(); closureGoPage('hospitals'); } }]);
-  }
-  function installResultPanel() {
-    const dashboard = page('dashboard');
-    if (!dashboard || one('#ingestion-result-panel')) return;
-    const params = new URLSearchParams(location.search);
-    const hasResult = params.get('status') === 'success';
-    const result = params.get('result') || '最近一次入库结果';
-    const hospital = params.get('hospital') || '北京同仁医院';
-    const panel = document.createElement('div');
-    panel.id = 'ingestion-result-panel';
-    panel.className = 'closure-card closure-result-panel';
-    panel.innerHTML = `<div class="closure-card-head"><div><h2>${hasResult ? '入库结果已回传' : '最近入库结果'}</h2><p>统一录入工具的处理结果在此回显，可继续查看来源记录与审核状态</p></div>${badge(hasResult ? '处理成功' : '演示数据', hasResult ? 'green' : 'blue')}</div>
-      <div class="closure-card-body"><div class="closure-grid">
-        <div class="closure-metric"><label>结果</label><strong style="font-size:16px">${safe(result)}</strong></div>
-        <div class="closure-metric"><label>来源医院</label><strong style="font-size:16px">${safe(hospital)}</strong></div>
-        <div class="closure-metric"><label>原始记录</label><strong style="font-size:16px">已形成</strong></div>
-        <div class="closure-metric"><label>正式数据状态</label><strong style="font-size:16px">待/已通过专家审核</strong></div>
-      </div></div>`;
-    const first = one('.kpis', dashboard);
-    first?.after(panel);
-  }
-  function reconcileImageStatistics() {
-    const metrics = all('#page-images .closure-card .closure-metric');
-    void metrics;
-    const kpis = all('#page-images .kpi');
-    if (kpis.length >= 4) {
-      const set = (index, label, value, note) => {
-        one('.kpi-head span', kpis[index]).textContent = label;
-        one('.kpi-value strong', kpis[index]).textContent = value;
-        one('.trend', kpis[index]).textContent = note;
-      };
-      set(1, '彩色眼底照相', '118,640', 'CFP');
-      set(2, 'OCT', '86,420', '断层影像');
-      set(3, 'OCTA/FFA及其他', '107,480', 'OCTA / FFA / 超声 / MRI / 测量');
-    }
-    const heading = one('#page-images .page-heading p');
-    if (heading) heading.textContent = '按资源口径展示影像分布；分类明细合计 312,540 张';
-  }
-
-  function renderSourceCard() {
-    const host = page('compliance');
-    if (!host) return;
-    let card = one('#closure-source-flow');
-    if (!card) {
-      card = document.createElement('div');
-      card.id = 'closure-source-flow';
-      card.className = 'closure-card';
-      one('.page-heading', host)?.after(card);
-    }
-    const stateText = { 'needs-supplement':'待补充', 'pending-review':'待审批', approved:'已通过', blocked:'已阻断' }[state.sourceState];
-    const tone = { 'needs-supplement':'orange', 'pending-review':'blue', approved:'green', blocked:'red' }[state.sourceState];
-    let actions = '<button class="closure-btn" data-source-detail>查看核查记录</button>';
-    if (state.sourceState === 'needs-supplement') actions += '<button class="closure-btn primary" data-source-resubmit>补充并重提</button>';
-    if (state.sourceState === 'pending-review' && state.role === 'compliance') actions += '<button class="closure-btn primary" data-source-review>执行审批</button>';
-    if (state.sourceState === 'approved' && state.approvedDownloadState === 'none') actions += '<button class="closure-btn primary" data-source-download>生成下载任务</button>';
-    if (state.sourceState === 'approved' && state.approvedDownloadState !== 'none') actions += '<button class="closure-btn primary" data-view-download>查看下载任务</button>';
-    card.innerHTML = `<div class="closure-card-head"><div><h2>公开来源申请闭环</h2><p>退回后由登记人补充原申请；审批历史与许可限制持续可追溯</p></div>${badge(stateText,tone)}</div>
-      <div class="closure-card-body"><table class="closure-table"><thead><tr><th>数据集</th><th>来源</th><th>许可</th><th>退回原因</th><th>当前责任人</th><th>操作</th></tr></thead><tbody><tr data-source-state="${state.sourceState}"><td><b>NEW-EYE-DEMO</b></td><td>官方研究平台</td><td>学术共享协议</td><td>需补充再分发限制原文</td><td>${state.sourceState === 'needs-supplement' ? '来源登记人' : state.sourceState === 'pending-review' ? '合规审核人' : '—'}</td><td><div class="closure-actions">${actions}</div></td></tr></tbody></table></div>`;
-    one('[data-source-detail]', card).onclick = () => openDrawer('来源核查记录', `<table class="closure-table"><tbody><tr><td>来源地址</td><td>${DEMO_SOURCE_URL}</td></tr><tr><td>许可材料</td><td>license.pdf · 已保留原文</td></tr><tr><td>最近意见</td><td>请补充再分发限制原文及使用范围</td></tr><tr><td>历史版本</td><td>v1 已退回 · v2 ${safe(stateText)}</td></tr></tbody></table>`);
-    one('[data-source-resubmit]', card)?.addEventListener('click', () => openDrawer('补充并重提', `<div class="closure-form"><div class="closure-field full"><label>再分发限制原文 *</label><textarea id="closureTerms">仅限经批准的科研项目使用，不得向未授权第三方再分发。</textarea></div><div class="closure-field full"><label>补充材料 *</label><input value="license-supplement-v2.pdf"></div><div class="closure-field full"><label>整改说明 *</label><textarea id="closureFixNote">已补充限制条款原文，并明确授权使用范围。</textarea></div></div>`, [{ label:'重新提交审批', primary:true, onClick:() => { state.sourceState='pending-review'; save(); closeDrawer(); renderSourceCard(); toast('来源材料已补充并重新提交审批'); } }]));
-    one('[data-source-review]', card)?.addEventListener('click', () => openDrawer('公开来源审批', `<div class="closure-field"><label>审批结论</label><select id="closureSourceDecision"><option value="pass">通过并开放下载</option><option value="return">退回补充</option><option value="reject">驳回并阻断</option></select></div><div class="closure-field" style="margin-top:12px"><label>审批意见</label><textarea id="closureSourceOpinion">权利来源清晰，按登记限制使用。</textarea></div>`, [{ label:'提交结论', primary:true, onClick:() => { const decision=one('#closureSourceDecision').value; state.sourceState=decision==='pass'?'approved':decision==='reject'?'blocked':'needs-supplement'; save(); closeDrawer(); renderSourceCard(); toast('审批结论已记录并同步后续准入'); } }]));
-    one('[data-source-download]', card)?.addEventListener('click', () => openDrawer('从登记地址生成下载任务', `<div class="closure-alert success">该来源已通过合规审批，下载地址由来源登记记录自动带入。任务生成后为“待下载”，需要在下载页手动开始。</div><div class="closure-form" style="margin-top:14px"><div class="closure-field"><label>数据集</label><input value="NEW-EYE-DEMO" readonly></div><div class="closure-field"><label>合规状态</label><input value="已通过" readonly></div><div class="closure-field full"><label>官方来源地址</label><input value="${DEMO_SOURCE_URL}" readonly></div><div class="closure-field full"><label>目标存储目录</label><input value="/dataset/source/new-eye-demo/" readonly></div></div>`, [{ label:'生成并进入下载任务', primary:true, onClick:createApprovedDownloadTask }]));
-    one('[data-view-download]', card)?.addEventListener('click', () => closureGoPage('downloads'));
-  }
-
-  function createApprovedDownloadTask() {
-    state.approvedDownloadState = 'pending';
-    save();
-    closeDrawer();
-    renderSourceCard();
-    renderApprovedDownloadTask();
-    closureGoPage('downloads');
-    toast('已使用来源登记地址生成下载任务');
-  }
-
-  function renderApprovedDownloadTask() {
-    const host = page('downloads');
-    if (!host) return;
-    one('[data-action="创建下载任务"]', host)?.remove();
-    let note = one('#closure-download-origin-note', host);
-    if (!note) {
-      note = document.createElement('div');
-      note.id = 'closure-download-origin-note';
-      note.className = 'closure-scope-note';
-      one('.page-heading', host)?.after(note);
-    }
-    note.textContent = '下载任务只能由已审批的来源记录生成；官方地址由来源登记自动带入，下载页不支持手工新增或修改地址。';
-    one('.closure-approved-download', host)?.remove();
-    if (state.approvedDownloadState === 'none') return;
-    const taskHost = one('.download-row', host)?.parentElement;
-    const downloading = state.approvedDownloadState === 'downloading';
-    taskHost?.insertAdjacentHTML('afterbegin', `<div class="download-row closure-approved-download" data-state="${downloading?'downloading':'pending'}"><b>NEW-EYE-DEMO</b><div class="progress"><i style="width:${downloading?'8':'0'}%"></i></div><span>${downloading?'8% · 下载中':'待下载'}</span><span title="${DEMO_SOURCE_URL}">登记地址</span><span>${downloading?badge('下载中','blue'):`${badge('待下载','orange')} <button class="link-btn" data-start-approved-download>开始下载</button>`}</span></div>`);
-    one('[data-start-approved-download]', host)?.addEventListener('click',()=>{state.approvedDownloadState='downloading';save();renderApprovedDownloadTask();toast('下载任务已开始');});
-  }
-
-  function renderProcessingFlow() {
-    const host = page('processing');
-    if (!host) return;
-    all(':scope > .section-card', host).forEach(card => card.classList.add('closure-hidden'));
-    let card = one('#closure-processing-flow');
-    if (!card) {
-      card = document.createElement('div'); card.id='closure-processing-flow'; card.className='closure-card'; one('.page-heading',host)?.after(card);
-    }
-    const ready = state.processingStage === 'alignment-ready';
-    const steps = [
-      ['数据清洗','已完成','done'],
-      ['标签标准化',ready?'已完成':'3 项待复核',ready?'done':'active'],
-      ['自动标注补全','本数据集不适用','done'],
-      ['价值分析','分析结果已生成','done'],
-    ];
-    card.innerHTML = `<div class="closure-card-head"><div><h2>再加工任务 · NEW-EYE-DEMO</h2><p>各步骤独立留痕；只有阻断性标签冲突处理完成后才能进入对齐</p></div>${badge(ready?'待对齐':'待标签复核',ready?'green':'orange')}</div><div class="closure-card-body">
-      <div class="closure-step-row">${steps.map(([name,result,cls])=>`<div class="closure-step ${cls}"><b>${name}</b><span>${result}</span></div>`).join('')}</div>
-      <div class="closure-alert ${ready?'success':''}" style="margin-top:14px">${ready?'必要加工步骤已完成，可创建对齐任务。':'当前仍有 3 项标签映射待人工复核，对齐入口保持阻断。'}</div>
-      <div class="closure-actions" style="margin-top:14px"><button class="closure-btn" data-try-align>尝试创建对齐</button>${ready?'':'<button class="closure-btn primary" data-complete-label>完成标签复核</button>'}${ready?'<button class="closure-btn primary" data-create-align>创建对齐任务</button>':''}</div>
-      <table class="closure-table" style="margin-top:16px"><thead><tr><th>源标签</th><th>标准标签</th><th>匹配方式</th><th>状态</th></tr></thead><tbody><tr><td>Diabetic Retinopathy</td><td>DR</td><td>自动</td><td>${badge('已通过','green')}</td></tr><tr><td>exudates</td><td>硬性渗出</td><td>人工</td><td>${badge(ready?'已复核':'待复核',ready?'green':'orange')}</td></tr><tr><td>lesion</td><td>病灶分割</td><td>人工</td><td>${badge(ready?'已复核':'待复核',ready?'green':'orange')}</td></tr></tbody></table>
-    </div>`;
-    one('[data-try-align]',card).onclick=()=> ready ? toast('当前数据集已满足对齐准入条件') : toast('不可创建对齐：请先完成阻断性标签复核');
-    one('[data-complete-label]',card)?.addEventListener('click',()=>{state.processingStage='alignment-ready';save();renderProcessingFlow();updateDatasetStates();toast('标签复核完成，已开放对齐任务');});
-    one('[data-create-align]',card)?.addEventListener('click',()=>{state.alignmentCreated=true;save();renderAlignmentFlow();closureGoPage('alignment');toast('对齐任务已创建，冲突项进入人工处理');});
-  }
-
-  function renderAlignmentFlow() {
-    const host = page('alignment');
-    if (!host) return;
-    all(':scope > .flow-banner,:scope > .mapping-cards,:scope > .card',host).forEach(item=>item.classList.add('closure-hidden'));
-    let wrapper=one('#closure-alignment-flow');
-    if(!wrapper){wrapper=document.createElement('div');wrapper.id='closure-alignment-flow';one('.page-heading',host)?.after(wrapper);}
-    const created=state.alignmentCreated;
-    const remaining=state.alignmentRemaining;
-    const finished=created&&remaining===0;
-    wrapper.innerHTML=`<div class="closure-card"><div class="closure-card-head"><div><h2>数据集对齐任务</h2><p>任务批次与病例统一索引分开管理</p></div>${badge(!created?'尚未创建':finished?'已融合':'冲突待处理',!created?'':'green')}</div><div class="closure-card-body">
-      <table class="closure-table alignment-task-table"><thead><tr><th>任务编号</th><th>数据集</th><th>映射版本</th><th>剩余冲突</th><th>状态</th><th>操作</th></tr></thead><tbody>${created?`<tr data-task-id="ALIGN-DEMO-001"><td><b>ALIGN-DEMO-001</b></td><td>NEW-EYE-DEMO</td><td>统一映射 v3</td><td data-conflicts>${remaining}</td><td>${badge(finished?'已融合':'冲突待处理',finished?'green':'orange')}</td><td>${finished?'<button class="closure-btn" data-view-align-result>查看结果</button>':'<button class="closure-btn primary" data-resolve-conflict>处理当前冲突</button>'}</td></tr>`:'<tr><td colspan="6">请先在“再加工与价值提取”完成标签复核并创建对齐任务。</td></tr>'}</tbody></table></div></div>
-      <div class="closure-card"><div class="closure-card-head"><div><h2>跨源统一病例索引</h2><p>仅展示记录级索引，不承载数据集任务状态</p></div></div><div class="closure-card-body"><table class="closure-table unified-index-table"><thead><tr><th>统一 ID</th><th>数据来源</th><th>原始 ID</th><th>模态</th><th>疾病</th><th>对齐状态</th></tr></thead><tbody><tr><td><b>DS-PUB-IDRID-000123</b></td><td>公开</td><td>IDRiD_123</td><td>Fundus</td><td>DR</td><td>${badge('已对齐','green')}</td></tr>${finished?'<tr><td><b>DS-PUB-NEWDEMO-000001</b></td><td>公开</td><td>NEW-DEMO-0001</td><td>Fundus</td><td>DR</td><td>'+badge('已对齐','green')+'</td></tr>':''}</tbody></table></div></div>`;
-    one('[data-resolve-conflict]',wrapper)?.addEventListener('click',openConflictResolver);
-    one('[data-view-align-result]',wrapper)?.addEventListener('click',()=>openDrawer('融合结果',`<div class="closure-alert success">对齐任务已完成，所有阻断冲突已处理。</div><div class="closure-grid" style="margin-top:14px"><div class="closure-metric"><label>新增统一索引</label><strong>1</strong></div><div class="closure-metric"><label>处理冲突</label><strong>2</strong></div><div class="closure-metric"><label>失败项</label><strong>0</strong></div><div class="closure-metric"><label>输出版本</label><strong style="font-size:16px">v3.1</strong></div></div>`));
-  }
-  function openConflictResolver(){
-    openDrawer('处理当前映射冲突',`<div class="closure-form"><div class="closure-field"><label>冲突对象</label><input value="lesion → 病灶分割" readonly></div><div class="closure-field"><label>冲突类型</label><select><option>任务标签映射</option><option>疾病编码映射</option><option>疑似重复病例</option></select></div><div class="closure-field"><label>处理结论 *</label><select id="closureConflictDecision"><option>采用统一标准映射</option><option>保留源标签并标记例外</option><option>转交数据负责人复核</option></select></div><div class="closure-field full"><label>处理依据 *</label><textarea id="closureConflictNote">依据统一映射 v3 的任务标签定义处理。</textarea></div></div>`,[{label:'确认当前冲突',primary:true,onClick:()=>{if(!one('#closureConflictNote').value.trim()){toast('请填写处理依据');return;}state.alignmentRemaining=Math.max(0,state.alignmentRemaining-1);save();closeDrawer();renderAlignmentFlow();toast(state.alignmentRemaining===0?'当前任务冲突已全部处理，生成统一索引':'当前冲突已处理，仍有未解决项');}}]);
-  }
-
-  function renderFailureResult() {
-    const host=page('downloads');if(!host)return;
-    let card=one('#closure-partial-result');if(!card){card=document.createElement('div');card.id='closure-partial-result';card.className='closure-card';one('.page-heading',host)?.after(card);}
-    const complete=state.resultFailed===0;
-    card.innerHTML=`<div class="closure-card-head"><div><h2>批次结果 · DL-20260927-003</h2><p>部分成功时保留成功记录，只重试失败项</p></div>${badge(complete?'已完成':'部分失败',complete?'green':'orange')}</div><div class="closure-card-body"><div class="closure-grid"><div class="closure-metric"><label>处理范围</label><strong>123</strong></div><div class="closure-metric"><label>成功</label><strong>${state.resultSuccess}</strong></div><div class="closure-metric"><label>失败</label><strong>${state.resultFailed}</strong></div><div class="closure-metric"><label>输出版本</label><strong style="font-size:16px">download-v2</strong></div></div>${complete?'<div class="closure-alert success" style="margin-top:14px">失败项已重试成功，原成功记录没有重复计数。</div>':'<table class="closure-table" style="margin-top:14px"><thead><tr><th>失败对象</th><th>原因</th><th>恢复方式</th></tr></thead><tbody><tr><td>file-0087.zip 等 3 项</td><td>源站连接中断</td><td>仅重试失败项</td></tr></tbody></table><div class="closure-actions" style="margin-top:12px"><button class="closure-btn primary retry-failed-only">仅重试 3 个失败项</button></div>'}</div>`;
-    one('.retry-failed-only',card)?.addEventListener('click',()=>{state.resultSuccess+=state.resultFailed;state.resultFailed=0;save();renderFailureResult();toast('失败项重试成功，已成功记录未重复处理');});
-  }
-
-  function updateDatasetStates() {
-    const rows=all('#page-datasets tbody tr');
-    const states=['cleaning','fused','label-review','converted','converted'];
-    rows.forEach((row,index)=>{
-      const standardState=states[index]||'converted';
-      row.dataset.standardState=standardState;
-      row.setAttribute('data-standard-state',standardState);
-      const flow=one('.mini-flow',row);
-      if(flow)flow.setAttribute('aria-label',standardState);
-    });
-    const demo=rows.find(row=>row.textContent.includes('NEW-EYE-DEMO'));
-    if(demo)demo.dataset.standardState=state.processingStage;
-  }
-  function installDatasetFiltering() {
-    updateDatasetStates();
-    const host=page('datasets');if(!host)return;
-    const bar=one('.filter-bar',host);const buttons=all('button',bar);const selects=all('select',bar);
-    if(selects[3]){
-      selects[3].innerHTML='<option value="">全部状态</option><option value="converted">待清洗</option><option value="cleaning">清洗中</option><option value="label-review">待标签复核</option><option value="alignment-ready">待对齐</option><option value="fused">已融合</option>';
-    }
-    if(buttons[0])buttons[0].onclick=()=>{
-      const query=one('input',bar)?.value.trim()||'';const [modality,disease,task,status]=selects.map(select=>select.value);
-      all('tbody tr',host).forEach(row=>{const text=row.textContent;const visible=(!query||text.includes(query))&&(!modality||text.includes(modality))&&(!disease||text.includes(disease))&&(!task||text.includes(task))&&(!status||row.dataset.standardState===status);row.style.display=visible?'':'none';});
-      toast('已按规范状态和精确任务筛选');
-    };
-    if(buttons[1])buttons[1].onclick=()=>{one('input',bar).value='';selects.forEach(select=>select.selectedIndex=0);all('tbody tr',host).forEach(row=>row.style.display='');};
-    all('#page-public-dashboard .task-tag').forEach(tag=>tag.onclick=()=>{
-      const exact=tag.textContent.replace(/\s*\d+\s*$/,'').trim();closureGoPage('datasets');
-      const taskSelect=all('select',bar)[2];if(!Array.from(taskSelect.options).some(option=>option.value===exact))taskSelect.add(new Option(exact,exact));taskSelect.value=exact;buttons[0]?.click();
-    });
-  }
-
-  function addScopeNotes() {
-    const dashboard=page('dashboard');
-    if(dashboard&&!one('.closure-scope-note',dashboard))one('.page-heading',dashboard)?.after(Object.assign(document.createElement('div'),{className:'closure-scope-note',textContent:'统计时点：2026-09-27（原型演示）。眼病与慢病按资源库分别计数；跨库患者去重、有效病例及有效供数医院口径待业务确认。'}));
-    const publicDashboard=page('public-dashboard');
-    if(publicDashboard&&!one('.closure-scope-note',publicDashboard))one('.page-heading',publicDashboard)?.after(Object.assign(document.createElement('div'),{className:'closure-scope-note',textContent:'53 个为已登记历史存量；下方下载页的进行中记录为当前新增/重跑批次。获取、加工、融合按独立阶段统计。第五类疾病表示其他已登记疾病，不作为单一固定医学类别。'}));
-    const pipelineSteps=all('#page-public-dashboard .pipe-step p');
-    if(pipelineSteps[1])pipelineSteps[1].textContent='历史存量 53 / 53 · 当前新增批次另计';
-  }
-
-  function renderAll(){
-    installRoleSelector();
-    installSelfCollectedFlow();
-    renderSourceCard();
-    renderApprovedDownloadTask();
-    renderProcessingFlow();
-    renderAlignmentFlow();
-    renderFailureResult();
-    installDatasetFiltering();
-    addScopeNotes();
-  }
-  const params = new URLSearchParams(location.search);
-  if (params.get('demo') === 'fused') {
-    state.processingStage = 'alignment-ready';
-    state.alignmentCreated = true;
-    state.alignmentRemaining = 0;
-  }
-  renderAll();
-  const initialPage = params.get('page');
-  if (initialPage && page(initialPage)) closureGoPage(initialPage);
-})();
-
 </script>
 </body>
 </html>

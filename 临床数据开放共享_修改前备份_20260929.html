@@ -59,7 +59,6 @@ a{text-decoration:none;color:inherit}
 .dist-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--primary)}
 .dist-item strong{display:block;color:var(--primary-dark);font-size:34px;line-height:1;font-weight:900;margin-bottom:12px}
 .dist-item span{display:block;color:var(--gray-900);font-size:18px;font-weight:900}
-.dist-item .dist-intro{display:block;margin-top:8px;color:var(--gray-600);font-size:12.5px;line-height:1.65;font-weight:400}
 .dist-item.dist-action{width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;transition:var(--transition)}
 .dist-item.dist-action:hover{transform:translateY(-1px);border-color:var(--primary);box-shadow:0 10px 24px rgba(26,115,232,.14)}
 .dist-item.dist-action.active{border-color:var(--primary);background:linear-gradient(135deg,#fff 0%,#edf5ff 48%,#dfeeff 100%);box-shadow:0 0 0 2px rgba(26,115,232,.12),0 10px 24px rgba(26,115,232,.15)}
@@ -202,9 +201,9 @@ var sourceDefinitions = {
     scale:'7.4万条原始记录',
     tag:'tag-orange',
     distribution:[
-      {label:'临床试验数据集',value:2,intro:'来自多中心干预性临床试验与药物疗效随访，覆盖用药、血糖、眼压等关键指标，适用于疗效评价与真实世界研究。'},
-      {label:'病历数据集',value:3,intro:'汇总结构化病历与随访记录，覆盖主诉、诊断、检查与治疗方案全流程，适用于诊疗路径分析与病程追踪。'},
-      {label:'影像数据集',value:2,intro:'多中心医院真实采集的眼底与OCT影像，已完成脱敏与质量标注，适用于筛查模型训练与影像质控研究。'}
+      {label:'临床试验数据集',value:2},
+      {label:'病历数据集',value:3},
+      {label:'影像数据集',value:2}
     ],
     subtypes:[
       {name:'临床试验数据',count:2,tip:'干预试验、药物疗效随访'},
@@ -235,7 +234,6 @@ var sourceDefinitions = {
       {
         modality:'眼底图像数据集',
         count:6,
-        intro:'以彩色眼底照相为主的公开标注数据，覆盖糖网分级、病灶分割等经典任务，收录 DDR、IDRID、Messidor 等知名数据集。',
         categories:[
           {name:'糖尿病视网膜病变分级',datasets:[
             {datasetId:8,code:'PUB-FUNDUS-202607-0001',subtype:'DDR数据集',scale:'13673张图像的糖尿病视网膜病变五分类标注数据'},
@@ -259,7 +257,6 @@ var sourceDefinitions = {
       {
         modality:'OCT数据集',
         count:3,
-        intro:'提供视网膜断层结构影像与积液等病灶标注，含 RETOUCH、DUKE 等多来源三维OCT数据，适用于病灶分割与算法对比。',
         categories:[
           {name:'视网膜积液病变分割',datasets:[
             {datasetId:13,code:'PUB-OCT-202607-0001',subtype:'RETOUCH数据集',scale:'IRF、SRF、PED三类病灶，总计79组三维OCT数据，6936张二维OCT图像'},
@@ -277,7 +274,6 @@ var sourceDefinitions = {
       {
         modality:'OCTA数据集',
         count:2,
-        intro:'基于OCT血管成像呈现视网膜微循环，含血管树与黄斑中心凹无血管区标注，来源于 OCTA-500 系列，适用于微循环定量分析。',
         categories:[
           {name:'视网膜血管分割',datasets:[
             {datasetId:16,code:'PUB-OCTA-202607-0001',subtype:'OCTA-500视网膜血管分割数据集',scale:'含500张三维OCTA数据'}
@@ -348,7 +344,7 @@ function renderPanel(){
   } else {
     html += '<div class="distribution-grid">';
     def.distribution.forEach(function(item){
-      html += '<div class="dist-item"><strong>' + item.value + '</strong><span>' + escapeHtml(item.label) + '</span>' + (item.intro ? '<em class="dist-intro">' + escapeHtml(item.intro) + '</em>' : '') + '</div>';
+      html += '<div class="dist-item"><strong>' + item.value + '</strong><span>' + escapeHtml(item.label) + '</span></div>';
     });
     html += '</div>';
     html += '<div class="list-block"><div class="list-title-row"><h3>' + escapeHtml(def.title) + '列表</h3><span>' + escapeHtml(def.scale) + '</span></div>';
@@ -371,7 +367,7 @@ function renderPublicBrowser(def){
   var html = '<div class="distribution-grid">';
   modalities.forEach(function(item,index){
     html += '<button type="button" class="dist-item dist-action' + (index === publicBrowseState.modalityIndex ? ' active' : '') + '" onclick="switchPublicModality(' + index + ')">';
-    html += '<strong>' + item.count + '</strong><span>' + escapeHtml(item.modality) + '</span>' + (item.intro ? '<em class="dist-intro">' + escapeHtml(item.intro) + '</em>' : '');
+    html += '<strong>' + item.count + '</strong><span>' + escapeHtml(item.modality) + '</span>';
     html += '</button>';
   });
   html += '</div>';

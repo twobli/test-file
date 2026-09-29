@@ -1615,7 +1615,7 @@
             <div class="panel-head"><div><h2 class="panel-title">考核管理</h2></div></div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>绑定知识点</th><th>题目标题</th><th>题干</th><th>操作</th></tr></thead>
+                <thead><tr><th>绑定知识点</th><th>题目标题</th><th>题干</th><th>发布状态</th><th>操作</th></tr></thead>
                 <tbody id="teachingAssessmentRows"></tbody>
               </table>
             </div>
@@ -1745,7 +1745,7 @@
       practice: ['技能实践管理', '进入三个独立子后台：虚拟临床技能实训、经典病例诊断实训、读片与病例大赛系统。'],
       contest: ['读片/病例大赛管理', '管理比赛有效期、固定答题时长、报名、进度保存、剩余时间，以及完成、退赛、缺考三种结果。'],
       exams: ['考试中心管理', '先选阶段测评或综合考核，再定单课程/模块/全周期，随后逐题创建题目并绑定知识点、难度和分数。'],
-      knowledge: ['智能教学服务管理', '统一管理阅片影像、系统编号、题目与答案解析、知识点关联、错题高亮和知识点推荐，覆盖智能教学服务完整业务链路。'],
+      knowledge: ['智能教学服务管理', '统一管理阅片影像、系统编号、题目与答案解析、知识点关联、错题高亮、知识点推荐和前台发布状态，覆盖智能教学服务完整业务链路。'],
       literature: ['科技文献检索管理', ''],
     };
 
@@ -2029,19 +2029,19 @@
     // ===== 智能教学服务：知识点考核管理 =====
     var ASSESSMENT_STORAGE_KEY = 'life_med_knowledge_assessment_questions';
     var defaultTeachingAssessmentQuestions = [
-      { id: 'KA-001', knowledgeKey: '糖尿病视网膜病变', type: '疾病', question: '糖尿病视网膜病变重度非增殖期的分期判断，可参考哪一项标准？', options: ['4-2-1法则', 'APGAR评分', 'TNM分期', 'CHA2DS2-VASc评分'], correctIndex: 0, explanation: '重度非增殖期糖尿病视网膜病变常依据4-2-1法则判断，关注四个象限出血、静脉串珠和IRMA。' },
-      { id: 'KA-002', knowledgeKey: '青光眼', type: '疾病', question: '青光眼性视神经病变阅片时，最需要重点观察哪项结构变化？', options: ['视盘杯盘比增大和盘沿变窄', '角膜上皮点状缺损', '晶状体皮质混浊', '结膜充血范围'], correctIndex: 0, explanation: '视盘杯盘比增大、盘沿变窄和RNFL变薄是青光眼性视神经损害的重要结构线索。' },
-      { id: 'KA-003', knowledgeKey: '年龄相关性黄斑变性', type: '疾病', question: '湿性年龄相关性黄斑变性更典型的影像表现是？', options: ['玻璃膜疣和地图状萎缩', '脉络膜新生血管伴出血、渗出或视网膜下液', '单纯视盘水肿', '周边视网膜裂孔'], correctIndex: 1, explanation: '湿性AMD与CNV活动相关，常见黄斑出血、渗出、视网膜下液或OCT上的囊样改变。' },
-      { id: 'KA-004', knowledgeKey: '视网膜静脉阻塞', type: '疾病', question: '视网膜中央静脉阻塞的典型眼底表现更接近哪一项？', options: ['静脉迂曲扩张并伴弥漫性出血', '仅有视盘杯盘比增大', '仅有黄斑玻璃膜疣', '角膜中央浑浊'], correctIndex: 0, explanation: '中央静脉阻塞常见静脉迂曲扩张、弥漫性视网膜出血，严重时可呈“番茄酱样”眼底。' },
-      { id: 'KA-005', knowledgeKey: '高血压性视网膜病变', type: '疾病', question: '高血压性视网膜病变的血管性阅片线索包括？', options: ['动脉狭窄和动静脉交叉压迫征', '仅有黄斑裂孔', '仅有视网膜裂孔', '仅有玻璃膜疣'], correctIndex: 0, explanation: '高血压性视网膜病变以小动脉狭窄、反光增强、动静脉交叉压迫及出血渗出等为主要线索。' },
-      { id: 'KA-006', knowledgeKey: '孔源性视网膜脱离', type: '疾病', question: '孔源性视网膜脱离形成的直接基础是什么？', options: ['视网膜裂孔使液化玻璃体进入视网膜下腔', '单纯眼压升高', '晶状体核硬化', '角膜内皮细胞减少'], correctIndex: 0, explanation: '孔源性视网膜脱离由视网膜裂孔形成，液化玻璃体经裂孔进入视网膜下腔导致神经上皮层与色素上皮层分离。' },
-      { id: 'KA-007', knowledgeKey: '抗VEGF药物治疗', type: '药品', question: '抗VEGF药物在眼底疾病教学中的主要作用定位是？', options: ['抑制新生血管和血管通透性相关改变', '直接替代所有手术操作', '用于治疗角膜感染', '仅用于降低全身血压'], correctIndex: 0, explanation: '抗VEGF治疗主要针对VEGF相关的新生血管和血管通透性增加，用于部分湿性AMD、糖尿病黄斑水肿等场景。' },
-      { id: 'KA-008', knowledgeKey: '前列腺素类降眼压药', type: '药品', question: '前列腺素类降眼压药的主要教学作用是？', options: ['促进房水外流以降低眼压', '增加玻璃体腔压力', '封闭视网膜裂孔', '改善角膜透明度'], correctIndex: 0, explanation: '前列腺素类药物主要通过促进葡萄膜巩膜途径房水外流降低眼压，用于青光眼降眼压治疗。' },
-      { id: 'KA-009', knowledgeKey: '玻璃体切除术', type: '手术操作', question: '玻璃体切除术的学习重点更接近哪一项？', options: ['处理玻璃体混浊、积血或牵拉等情况', '单纯测量眼压', '进行视野检查', '替代所有药物治疗'], correctIndex: 0, explanation: '玻璃体切除术可用于玻璃体积血、牵拉性病变、部分视网膜脱离等场景，需结合具体病情判断适应证。' },
-      { id: 'KA-010', knowledgeKey: '视网膜激光光凝术', type: '手术操作', question: '视网膜激光光凝术在教学中的常见操作目的是什么？', options: ['封闭裂孔或处理缺血性视网膜病变', '替代OCT检查', '治疗所有角膜疾病', '直接恢复已经丢失的视神经轴突'], correctIndex: 0, explanation: '视网膜激光光凝可用于封闭视网膜裂孔、处理部分缺血性病变并降低新生血管相关风险。' },
-      { id: 'KA-011', knowledgeKey: 'OCT RNFL检查解读', type: '检验检查', question: 'OCT RNFL检查主要用于评估什么？', options: ['视网膜神经纤维层厚度及其变薄情况', '血糖即时值', '角膜曲率', '眼底照片颜色'], correctIndex: 0, explanation: 'OCT RNFL检查用于定量评估视网膜神经纤维层厚度，帮助识别青光眼相关结构损害。' },
-      { id: 'KA-012', knowledgeKey: '眼眶MRI检查', type: '检验检查', question: '眼眶MRI检查的教学定位主要是？', options: ['观察眼眶、视神经等软组织结构并辅助鉴别诊断', '替代所有眼底照相', '直接进行视网膜激光治疗', '测定胆固醇水平'], correctIndex: 0, explanation: '眼眶MRI适合观察眼眶及视神经等软组织结构，可为部分病变的鉴别诊断提供影像依据。' },
-      { id: 'KA-013', knowledgeKey: '眼部彩色多普勒超声', type: '检验检查', question: '眼部彩色多普勒超声可重点提供哪类信息？', options: ['眼部血流速度、阻力指数和血管状态', '视网膜神经纤维层的全部分层图', '药物血药浓度', '视野缺损的主观评分'], correctIndex: 0, explanation: '彩色多普勒超声可用于观察眼部血流动力学信息，为血管性眼底疾病学习提供辅助证据。' }
+      { id: 'KA-001', knowledgeKey: '糖尿病视网膜病变', type: '疾病', question: '糖尿病视网膜病变重度非增殖期的分期判断，可参考哪一项标准？', options: ['4-2-1法则', 'APGAR评分', 'TNM分期', 'CHA2DS2-VASc评分'], correctIndex: 0, explanation: '重度非增殖期糖尿病视网膜病变常依据4-2-1法则判断，关注四个象限出血、静脉串珠和IRMA。', status: '已发布' },
+      { id: 'KA-002', knowledgeKey: '青光眼', type: '疾病', question: '青光眼性视神经病变阅片时，最需要重点观察哪项结构变化？', options: ['视盘杯盘比增大和盘沿变窄', '角膜上皮点状缺损', '晶状体皮质混浊', '结膜充血范围'], correctIndex: 0, explanation: '视盘杯盘比增大、盘沿变窄和RNFL变薄是青光眼性视神经损害的重要结构线索。', status: '已发布' },
+      { id: 'KA-003', knowledgeKey: '年龄相关性黄斑变性', type: '疾病', question: '湿性年龄相关性黄斑变性更典型的影像表现是？', options: ['玻璃膜疣和地图状萎缩', '脉络膜新生血管伴出血、渗出或视网膜下液', '单纯视盘水肿', '周边视网膜裂孔'], correctIndex: 1, explanation: '湿性AMD与CNV活动相关，常见黄斑出血、渗出、视网膜下液或OCT上的囊样改变。', status: '已发布' },
+      { id: 'KA-004', knowledgeKey: '视网膜静脉阻塞', type: '疾病', question: '视网膜中央静脉阻塞的典型眼底表现更接近哪一项？', options: ['静脉迂曲扩张并伴弥漫性出血', '仅有视盘杯盘比增大', '仅有黄斑玻璃膜疣', '角膜中央浑浊'], correctIndex: 0, explanation: '中央静脉阻塞常见静脉迂曲扩张、弥漫性视网膜出血，严重时可呈“番茄酱样”眼底。', status: '已发布' },
+      { id: 'KA-005', knowledgeKey: '高血压性视网膜病变', type: '疾病', question: '高血压性视网膜病变的血管性阅片线索包括？', options: ['动脉狭窄和动静脉交叉压迫征', '仅有黄斑裂孔', '仅有视网膜裂孔', '仅有玻璃膜疣'], correctIndex: 0, explanation: '高血压性视网膜病变以小动脉狭窄、反光增强、动静脉交叉压迫及出血渗出等为主要线索。', status: '已发布' },
+      { id: 'KA-006', knowledgeKey: '孔源性视网膜脱离', type: '疾病', question: '孔源性视网膜脱离形成的直接基础是什么？', options: ['视网膜裂孔使液化玻璃体进入视网膜下腔', '单纯眼压升高', '晶状体核硬化', '角膜内皮细胞减少'], correctIndex: 0, explanation: '孔源性视网膜脱离由视网膜裂孔形成，液化玻璃体经裂孔进入视网膜下腔导致神经上皮层与色素上皮层分离。', status: '已发布' },
+      { id: 'KA-007', knowledgeKey: '抗VEGF药物治疗', type: '药品', question: '抗VEGF药物在眼底疾病教学中的主要作用定位是？', options: ['抑制新生血管和血管通透性相关改变', '直接替代所有手术操作', '用于治疗角膜感染', '仅用于降低全身血压'], correctIndex: 0, explanation: '抗VEGF治疗主要针对VEGF相关的新生血管和血管通透性增加，用于部分湿性AMD、糖尿病黄斑水肿等场景。', status: '已发布' },
+      { id: 'KA-008', knowledgeKey: '前列腺素类降眼压药', type: '药品', question: '前列腺素类降眼压药的主要教学作用是？', options: ['促进房水外流以降低眼压', '增加玻璃体腔压力', '封闭视网膜裂孔', '改善角膜透明度'], correctIndex: 0, explanation: '前列腺素类药物主要通过促进葡萄膜巩膜途径房水外流降低眼压，用于青光眼降眼压治疗。', status: '已发布' },
+      { id: 'KA-009', knowledgeKey: '玻璃体切除术', type: '手术操作', question: '玻璃体切除术的学习重点更接近哪一项？', options: ['处理玻璃体混浊、积血或牵拉等情况', '单纯测量眼压', '进行视野检查', '替代所有药物治疗'], correctIndex: 0, explanation: '玻璃体切除术可用于玻璃体积血、牵拉性病变、部分视网膜脱离等场景，需结合具体病情判断适应证。', status: '已发布' },
+      { id: 'KA-010', knowledgeKey: '视网膜激光光凝术', type: '手术操作', question: '视网膜激光光凝术在教学中的常见操作目的是什么？', options: ['封闭裂孔或处理缺血性视网膜病变', '替代OCT检查', '治疗所有角膜疾病', '直接恢复已经丢失的视神经轴突'], correctIndex: 0, explanation: '视网膜激光光凝可用于封闭视网膜裂孔、处理部分缺血性病变并降低新生血管相关风险。', status: '已发布' },
+      { id: 'KA-011', knowledgeKey: 'OCT RNFL检查解读', type: '检验检查', question: 'OCT RNFL检查主要用于评估什么？', options: ['视网膜神经纤维层厚度及其变薄情况', '血糖即时值', '角膜曲率', '眼底照片颜色'], correctIndex: 0, explanation: 'OCT RNFL检查用于定量评估视网膜神经纤维层厚度，帮助识别青光眼相关结构损害。', status: '已发布' },
+      { id: 'KA-012', knowledgeKey: '眼眶MRI检查', type: '检验检查', question: '眼眶MRI检查的教学定位主要是？', options: ['观察眼眶、视神经等软组织结构并辅助鉴别诊断', '替代所有眼底照相', '直接进行视网膜激光治疗', '测定胆固醇水平'], correctIndex: 0, explanation: '眼眶MRI适合观察眼眶及视神经等软组织结构，可为部分病变的鉴别诊断提供影像依据。', status: '已发布' },
+      { id: 'KA-013', knowledgeKey: '眼部彩色多普勒超声', type: '检验检查', question: '眼部彩色多普勒超声可重点提供哪类信息？', options: ['眼部血流速度、阻力指数和血管状态', '视网膜神经纤维层的全部分层图', '药物血药浓度', '视野缺损的主观评分'], correctIndex: 0, explanation: '彩色多普勒超声可用于观察眼部血流动力学信息，为血管性眼底疾病学习提供辅助证据。', status: '已发布' }
     ];
     var ASSESSMENT_AUDIENCE_OPTIONS = ['张医生（眼底病方向）', '李医生（住院医师）', '王医生（青光眼方向）', '赵医生（眼底病方向）', '陈医生（黄斑病方向）', '周医生（科研组）', '孙医生（规培医师）', '刘医生（高级研修班）', '韩医生（科研课题组）'];
     var ASSESSMENT_AUDIENCE_DEFAULT = ['张医生（眼底病方向）', '李医生（住院医师）'];
@@ -2077,7 +2077,7 @@
       while (options.length < 4) options.push('');
       var correctIndex = Number(item.correctIndex);
       if (!isFinite(correctIndex) || correctIndex < 0 || correctIndex > 3) correctIndex = 0;
-      return { id: String(item.id || nextAssessmentId()), knowledgeKey: String(item.knowledgeKey || ''), title: getAssessmentTitle(item), type: String(item.type || '疾病'), question: String(item.question || ''), options: options, correctIndex: correctIndex, explanation: String(item.explanation || ''), audience: normalizeAssessmentAudience(item.audience) };
+      return { id: String(item.id || nextAssessmentId()), knowledgeKey: String(item.knowledgeKey || ''), title: getAssessmentTitle(item), type: String(item.type || '疾病'), question: String(item.question || ''), options: options, correctIndex: correctIndex, explanation: String(item.explanation || ''), status: item.status === '已发布' ? '已发布' : '草稿', audience: normalizeAssessmentAudience(item.audience) };
     }
     function loadTeachingAssessmentQuestions() {
       try {
@@ -2104,9 +2104,10 @@
           + '<td>' + escapeHtml(item.knowledgeKey) + '</td>'
           + '<td style="min-width:220px;"><strong>' + escapeHtml(getAssessmentTitle(item)) + '</strong></td>'
           + '<td style="min-width:300px;">' + escapeHtml(item.question) + '</td>'
-          + '<td><div class="table-actions"><button class="btn small" onclick="openAssessmentEditor(' + index + ')">编辑</button><button class="btn small" onclick="deleteAssessmentQuestion(' + index + ')">删除</button><button class="btn small" onclick="openAssessmentAudience(' + index + ')">配置人员</button></div></td>'
+          + '<td><span class="status ' + (item.status === '已发布' ? 'ok' : 'wait') + '">' + escapeHtml(item.status) + '</span></td>'
+          + '<td><div class="table-actions"><button class="btn small" onclick="openAssessmentEditor(' + index + ')">编辑</button><button class="btn small" onclick="deleteAssessmentQuestion(' + index + ')">删除</button><button class="btn small" onclick="publishAssessmentQuestion(' + index + ')">发布</button><button class="btn small" onclick="openAssessmentAudience(' + index + ')">配置人员</button></div></td>'
           + '</tr>';
-      }).join('') || '<tr><td colspan="4" class="muted">暂无考核题，请点击“新增考核题”。</td></tr>';
+      }).join('') || '<tr><td colspan="5" class="muted">暂无考核题，请点击“新增考核题”。</td></tr>';
     }
     function assessmentKnowledgeOptions(selected) {
       var names = knowledgePoints.map(function(item) { return item.name; });
@@ -2131,8 +2132,8 @@
     }
     function openAssessmentEditor(index) {
       var isNew = index < 0;
-      var item = isNew ? { id: nextAssessmentId(), knowledgeKey: '', title: '', type: '疾病', question: '', options: ['', '', '', ''], correctIndex: 0, explanation: '' } : normalizeAssessmentQuestion(teachingAssessmentQuestions[index]);
-      openTeachingModal(isNew ? '新增考核题（保存后直接上架）' : '编辑考核题', '维护与前台知识点考核一一对应的单选题内容；新增题目保存后直接上架。', assessmentEditorBody(item), '保存', function() { saveAssessmentQuestion(index, item.id); });
+      var item = isNew ? { id: nextAssessmentId(), knowledgeKey: '', title: '', type: '疾病', question: '', options: ['', '', '', ''], correctIndex: 0, explanation: '', status: '草稿' } : normalizeAssessmentQuestion(teachingAssessmentQuestions[index]);
+      openTeachingModal(isNew ? '新增考核题' : '编辑考核题', '维护与前台知识点考核一一对应的单选题内容。', assessmentEditorBody(item), '保存', function() { saveAssessmentQuestion(index, item.id); });
     }
     function saveAssessmentQuestion(index, originalId) {
       var body = document.getElementById('drawerBody');
@@ -2147,16 +2148,22 @@
         options: Array.prototype.map.call(body.querySelectorAll('[data-assessment-option]'), function(input) { return input.value.trim(); }),
         correctIndex: Number(body.querySelector('[data-assessment-correct]').value),
         explanation: body.querySelector('[data-assessment-explanation]').value.trim(),
+        status: existing && existing.status || '草稿',
         audience: audienceSelect ? Array.prototype.map.call(audienceSelect.selectedOptions, function(option) { return option.value; }) : (existing && existing.audience)
       });
       if (!item.knowledgeKey || !item.title || !item.question || item.options.some(function(option) { return !option; }) || !item.explanation) { showToast('请完整填写绑定知识点、题目标题、题干、四个选项和题目解析。'); return; }
       if (index < 0) teachingAssessmentQuestions.push(item); else teachingAssessmentQuestions[index] = item;
-      saveTeachingAssessmentQuestions(); closeDrawer(); renderAssessmentManagement(); showToast('考核题已保存并直接上架，前台刷新后即可显示。');
+      saveTeachingAssessmentQuestions(); closeDrawer(); renderAssessmentManagement(); showToast('考核题已保存，前台将在刷新后同步已发布题目。');
     }
     function deleteAssessmentQuestion(index) {
       var item = teachingAssessmentQuestions[index];
       if (!item || !confirm('确定删除该考核题吗？')) return;
       teachingAssessmentQuestions.splice(index, 1); saveTeachingAssessmentQuestions(); renderAssessmentManagement(); showToast('考核题已删除。');
+    }
+    function publishAssessmentQuestion(index) {
+      var item = teachingAssessmentQuestions[index];
+      if (!item) return;
+      item.status = '已发布'; saveTeachingAssessmentQuestions(); renderAssessmentManagement(); showToast('考核题已发布，前台刷新后可见。');
     }
     function openAssessmentAudience(index) {
       var item = teachingAssessmentQuestions[index];
@@ -2164,7 +2171,7 @@
       var body = '<div class="split-form">'
         + '<div class="form-field" style="grid-column:1/-1;"><label>配置人员</label>' + assessmentAudienceSelect(normalizeAssessmentAudience(item.audience), 10, ' data-assessment-audience') + '<p class="form-hint">只配置该考核题的可见人员；保存后，只有已配置的人员登录后才能看到这道考核题。按住 Ctrl 或 Command 可多选。</p></div>'
         + '</div>';
-      openTeachingModal('配置人员 - ' + (getAssessmentTitle(item) || item.id), '只选择该考核题的可见人员，不修改题目内容。', body, '保存配置人员', function() { saveAssessmentAudience(index); });
+      openTeachingModal('配置人员 - ' + (getAssessmentTitle(item) || item.id), '只选择该考核题的可见人员，不修改题目内容与发布状态。', body, '保存配置人员', function() { saveAssessmentAudience(index); });
     }
     function saveAssessmentAudience(index) {
       var body = document.getElementById('drawerBody');

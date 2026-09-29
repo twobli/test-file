@@ -324,18 +324,12 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 .learning-module-card .module-desc { color: var(--gray-600); font-size: 12px; line-height: 1.55; }
 .module-view-note { background: #f5f9ff; border: 1px solid #d9e7ff; color: #315b91; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; line-height: 1.7; }
 .module-view-note strong { color: #1a56db; }
-  .recommend-note { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  .recommend-note > div { flex: 1; }
-  .recommend-note .btn { flex-shrink: 0; white-space: nowrap; }
-  .recommend-time { display: block; margin-top: 5px; color: var(--gray-500); font-size: 11px; font-weight: 400; }
 .knowledge-status-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-100); }
 .knowledge-status-line .knowledge-status-text { color: var(--gray-600); font-size: 13px; }
 .assessment-filterbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 16px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 16px; }
 .assessment-filterbar label { color: var(--gray-600); font-size: 13px; }
 .assessment-filterbar select { min-width: 150px; border: 1px solid var(--gray-300); border-radius: 6px; padding: 7px 10px; color: var(--gray-700); background: #fff; font-family: inherit; font-size: 13px; }
 .assessment-filterbar select:focus { outline: none; border-color: var(--primary); }
-.assessment-list .list-header .status-filter { font-size: 12px; color: var(--gray-700); border: 1px solid var(--gray-300); border-radius: 6px; padding: 3px 4px; background: #fff; font-family: inherit; cursor: pointer; }
-.assessment-list .list-header .status-filter:focus { outline: none; border-color: var(--primary); }
 .assessment-layout { display: flex; gap: 16px; align-items: flex-start; }
 .assessment-list { width: 280px; flex-shrink: 0; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .assessment-list .list-header { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); display: flex; justify-content: space-between; align-items: center; }
@@ -429,11 +423,11 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
         </div>
         <div class="learning-module-card" id="module-nav-assessment" role="button" tabindex="0" onclick="showAssessment()" onkeydown="if(event.key==='Enter')showAssessment()">
             <div class="module-icon">考</div>
-            <div><div class="module-title">知识点考核</div><div class="module-desc">围绕知识点开展单选题考核</div></div>
+            <div><div class="module-title">知识点考核</div><div class="module-desc">围绕知识点开展单选题考核，学习完成与否均可进入</div></div>
         </div>
         <div class="learning-module-card active" id="module-nav-exam" role="button" tabindex="0" onclick="showExamList()" onkeydown="if(event.key==='Enter')showExamList()">
             <div class="module-icon">阅</div>
-            <div><div class="module-title">阅片练习</div><div class="module-desc">帮助医学教育工作者和医学生提高诊断能力和技能水平</div></div>
+            <div><div class="module-title">阅片练习</div><div class="module-desc">保留现有影像展示、答题、解锁与结果分析流程</div></div>
         </div>
         <div class="learning-module-card" id="module-nav-recommend" role="button" tabindex="0" onclick="showRecommendations()" onkeydown="if(event.key==='Enter')showRecommendations()">
             <div class="module-icon">荐</div>
@@ -528,9 +522,15 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
     <!-- ==================== 视图四：知识点考核 ==================== -->
     <div class="view-panel" id="view-assessment">
+        <div class="assessment-filterbar">
+            <label for="assessmentTypeFilter">知识点类型</label>
+            <select id="assessmentTypeFilter" onchange="setAssessmentType(this.value)">
+                <option value="全部">全部</option><option value="疾病">疾病</option><option value="药品">药品</option><option value="手术操作">手术操作</option><option value="检验检查">检验检查</option>
+            </select>
+        </div>
         <div class="assessment-layout">
             <div class="assessment-list">
-                <div class="list-header"><span class="list-title">考核题目</span><div style="display:flex;align-items:center;gap:8px;"><select id="assessmentStatusFilter" class="status-filter" onchange="setAssessmentStatus(this.value)" title="按做题状态筛选"><option value="全部">做题状态：全部</option><option value="已完成">已完成</option><option value="未完成">未完成</option></select><span class="list-count" id="assessment-count">0</span></div></div>
+                <div class="list-header"><span class="list-title">考核题目</span><span class="list-count" id="assessment-count">0</span></div>
                 <div class="assessment-list-items" id="assessment-list-items"></div>
             </div>
             <div class="assessment-main" id="assessment-content"></div>
@@ -539,7 +539,7 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Arial', sans-ser
 
     <!-- ==================== 视图五：学习推荐 ==================== -->
     <div class="view-panel" id="view-recommend">
-        <div class="module-view-note recommend-note"><div><strong>平台将根据用户的学习情况，推送相关的医学知识点，帮助用户深入学习和掌握医学知识。</strong><br>推荐仅根据用户自上次更新以来新增的知识点考核错题或阅片错题生成；没有新增错误时不新增推荐。</div><button class="btn btn-primary" id="updateRecommendationBtn" onclick="updateLearningRecommendations()">更新学习推荐</button></div>
+        <div class="module-view-note"><strong>平台将根据用户的学习情况，推送相关的医学知识点，帮助用户深入学习和掌握医学知识。</strong><br>推荐会综合参考知识点考核结果、阅片练习错误情况及当前内容关联度，并随着答题表现动态更新。</div>
         <div class="recommend-grid" id="recommend-content"></div>
     </div>
 
@@ -1270,7 +1270,7 @@ let knowledgeAssessmentQuestions = defaultKnowledgeAssessmentQuestions.slice();
 try {
     const storedAssessmentQuestions = JSON.parse(localStorage.getItem('life_med_knowledge_assessment_questions') || 'null');
     if (Array.isArray(storedAssessmentQuestions)) {
-        knowledgeAssessmentQuestions = storedAssessmentQuestions.filter(function(item) { return !!item; }).map(function(item) { var explicitTitle = String(item.title || '').trim(); var mappedTitle = assessmentTitleMap[item.knowledgeKey]; item.title = (explicitTitle && explicitTitle !== item.question ? explicitTitle : mappedTitle || explicitTitle || item.question); return item; });
+        knowledgeAssessmentQuestions = storedAssessmentQuestions.filter(function(item) { return item && (item.status === undefined || item.status === '已发布'); }).map(function(item) { item.title = item.title || assessmentTitleMap[item.knowledgeKey] || item.question; return item; });
     }
 } catch(e) {}
 
@@ -1286,93 +1286,6 @@ let assessmentTypeFilter = '全部';
 let currentAssessmentIndex = 0;
 let knowledgeAssessmentAnswers = {}; // { assessmentId: selectedIndex }
 let knowledgeAssessmentResults = {}; // { assessmentId: true/false }
-const EXAM_ANSWERS_STORAGE_KEY = 'life_med_exam_answers';
-const ASSESSMENT_ANSWERS_STORAGE_KEY = 'life_med_knowledge_assessment_answers';
-const ASSESSMENT_RESULTS_STORAGE_KEY = 'life_med_knowledge_assessment_results';
-const RECOMMENDATION_META_STORAGE_KEY = 'life_med_learning_recommendation_meta';
-let recommendationMeta = { updatedAt: '', snapshot: { assessmentWrongIds: [], examWrongIds: [] }, newAssessmentWrongIds: [], newExamWrongIds: [], topicTimes: {} };
-try {
-    var savedExamAnswers = JSON.parse(localStorage.getItem(EXAM_ANSWERS_STORAGE_KEY) || '{}');
-    var savedAssessmentAnswers = JSON.parse(localStorage.getItem(ASSESSMENT_ANSWERS_STORAGE_KEY) || '{}');
-    var savedAssessmentResults = JSON.parse(localStorage.getItem(ASSESSMENT_RESULTS_STORAGE_KEY) || '{}');
-    if (savedExamAnswers && typeof savedExamAnswers === 'object') userAnswers = savedExamAnswers;
-    if (savedAssessmentAnswers && typeof savedAssessmentAnswers === 'object') knowledgeAssessmentAnswers = savedAssessmentAnswers;
-    if (savedAssessmentResults && typeof savedAssessmentResults === 'object') knowledgeAssessmentResults = savedAssessmentResults;
-    var savedRecommendationMeta = JSON.parse(localStorage.getItem(RECOMMENDATION_META_STORAGE_KEY) || 'null');
-    if (savedRecommendationMeta && typeof savedRecommendationMeta === 'object') recommendationMeta = Object.assign(recommendationMeta, savedRecommendationMeta);
-    if (!recommendationMeta.topicTimes || typeof recommendationMeta.topicTimes !== 'object') recommendationMeta.topicTimes = {};
-} catch (e) {}
-function saveExamProgress() {
-    try { localStorage.setItem(EXAM_ANSWERS_STORAGE_KEY, JSON.stringify(userAnswers)); } catch (e) {}
-}
-function saveAssessmentProgress() {
-    try {
-        localStorage.setItem(ASSESSMENT_ANSWERS_STORAGE_KEY, JSON.stringify(knowledgeAssessmentAnswers));
-        localStorage.setItem(ASSESSMENT_RESULTS_STORAGE_KEY, JSON.stringify(knowledgeAssessmentResults));
-    } catch (e) {}
-}
-function saveRecommendationMeta() {
-    try { localStorage.setItem(RECOMMENDATION_META_STORAGE_KEY, JSON.stringify(recommendationMeta)); } catch (e) {}
-}
-function formatRecommendationTime(date) {
-    var d = date || new Date();
-    var pad = function(value) { return String(value).padStart(2, '0'); };
-    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
-}
-function getRecommendationTimeText(topic) {
-    var topicTimes = recommendationMeta.topicTimes || {};
-    return topicTimes[topic] || '';
-}
-function getRecommendationSnapshot() {
-    var snapshot = recommendationMeta.snapshot || {};
-    return {
-        assessmentWrongIds: Array.isArray(snapshot.assessmentWrongIds) ? snapshot.assessmentWrongIds : [],
-        examWrongIds: Array.isArray(snapshot.examWrongIds) ? snapshot.examWrongIds : []
-    };
-}
-function collectRecommendationErrorSnapshot() {
-    return {
-        assessmentWrongIds: knowledgeAssessmentQuestions.filter(function(q) { return knowledgeAssessmentResults[q.id] === false; }).map(function(q) { return q.id; }),
-        examWrongIds: examQuestions.filter(function(q) { return q.id in userAnswers && userAnswers[q.id] !== q.correctIndex; }).map(function(q) { return q.id; })
-    };
-}
-function updateLearningRecommendations() {
-    var previous = getRecommendationSnapshot();
-    var current = collectRecommendationErrorSnapshot();
-    var newAssessmentWrongIds = current.assessmentWrongIds.filter(function(id) { return previous.assessmentWrongIds.indexOf(id) < 0; });
-    var newExamWrongIds = current.examWrongIds.filter(function(id) { return previous.examWrongIds.indexOf(id) < 0; });
-    var hasNewErrors = newAssessmentWrongIds.length > 0 || newExamWrongIds.length > 0;
-    var topicTimes = Object.assign({}, recommendationMeta.topicTimes || {});
-    var now = hasNewErrors ? formatRecommendationTime() : (recommendationMeta.updatedAt || '');
-    var allTopics = [];
-    knowledgeCategories.forEach(function(category) {
-        category.topics.forEach(function(topic) {
-            if (structuredKnowledgeData[topic] && allTopics.indexOf(topic) < 0) allTopics.push(topic);
-        });
-    });
-    allTopics.forEach(function(topic) {
-        var data = structuredKnowledgeData[topic];
-        var hasNewAssessment = newAssessmentWrongIds.some(function(id) {
-            return knowledgeAssessmentQuestions.some(function(q) { return q.id === id && q.knowledgeKey === topic; });
-        });
-        var hasNewExam = newExamWrongIds.some(function(id) { return getKnowledgeQuestionCodes(data, topic).indexOf(id) >= 0; });
-        if (hasNewAssessment || hasNewExam) topicTimes[topic] = now;
-    });
-    recommendationMeta = {
-        updatedAt: hasNewErrors ? now : (recommendationMeta.updatedAt || ''),
-        snapshot: current,
-        newAssessmentWrongIds: newAssessmentWrongIds,
-        newExamWrongIds: newExamWrongIds,
-        topicTimes: topicTimes
-    };
-    saveRecommendationMeta();
-    renderRecommendations();
-    var button = document.getElementById('updateRecommendationBtn');
-    if (button) {
-        button.textContent = hasNewErrors ? '已更新学习推荐' : '暂无新增错误';
-        setTimeout(function() { if (button) button.textContent = '更新学习推荐'; }, 1500);
-    }
-}
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', function() {
@@ -1595,7 +1508,6 @@ function submitAnswer() {
         return;
     }
     userAnswers[q.id] = draftAnswers[q.id];
-    saveExamProgress();
     renderAnswerPanel(currentQIndex);
     renderFilmList();
     updateStats();
@@ -1771,27 +1683,14 @@ function getKnowledgeSearchText(category, topic, data) {
     var sections = (data.sections || []).map(function(section) { return section.title + ' ' + section.content; }).join(' ');
     return [category.name, category.type, topic, data.type, data.title, data.subtitle, data.definition, data.risk, data.diagnosis, sections].join(' ').replace(/<[^>]+>/g, '').toLowerCase();
 }
-function getKnowledgeQuestionCodes(data, topic) {
+function getKnowledgeQuestionCodes(data) {
     var text = [data.source || ''].concat((data.related || []).map(function(item) { return item.value || ''; })).join(' ');
     var matches = text.match(/LM-RP-\d{8}-\d{4}/g) || [];
-    var explicitCodes = matches.filter(function(code, index) { return matches.indexOf(code) === index && !!getQuestionByCode(code); }).map(function(code) { return getQuestionByCode(code).id; });
-    var topicAliases = {
-        '糖尿病视网膜病变': ['糖尿病视网膜病变', '轻度非增殖性DR', '重度非增殖性DR', '增殖期糖尿病视网膜病变'],
-        '青光眼': ['青光眼', '原发性开角型青光眼'],
-        '年龄相关性黄斑变性': ['年龄相关性黄斑变性', 'AMD', '干性AMD', '湿性AMD'],
-        '视网膜静脉阻塞': ['视网膜静脉阻塞', '视网膜中央静脉阻塞', '分支视网膜静脉阻塞'],
-        '高血压性视网膜病变': ['高血压性视网膜病变'],
-        '孔源性视网膜脱离': ['孔源性视网膜脱离']
-    };
-    var aliases = topicAliases[topic] || [topic];
-    var boundCodes = examQuestions.filter(function(q) {
-        var diagnosis = String(q.diagnosis || '').trim();
-        return diagnosis && aliases.some(function(alias) { return diagnosis === alias || diagnosis.indexOf(alias) >= 0 || alias.indexOf(diagnosis) >= 0; });
-    }).map(function(q) { return q.id; });
-    return explicitCodes.concat(boundCodes).filter(function(code, index, list) { return list.indexOf(code) === index; });
+    return matches.filter(function(code, index) { return matches.indexOf(code) === index && !!getQuestionByCode(code); });
 }
 function getQuestionByCode(code) { return examQuestions.find(function(q) { return q.no === code; }); }
 function isQuestionWrong(code) { var q = getQuestionByCode(code); return !!(q && q.id in userAnswers && userAnswers[q.id] !== q.correctIndex); }
+function isKnowledgeRecommended(data) { return getKnowledgeQuestionCodes(data).some(isQuestionWrong); }
 
 
 function setKnowledgeType(type) {
@@ -1819,7 +1718,8 @@ function renderKnowledgeTree(keyword) {
             var data = structuredKnowledgeData[topic]; if (!data) return;
             var searchText = getKnowledgeSearchText(category, topic, data); if (ft && searchText.indexOf(ft) < 0) return;
             var activeCls = topic === currentKnowledgeTopic ? ' active' : ''; var hitCls = ft ? ' search-hit' : '';
-            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + highlightKeyword(topic, keyword) + '<div class="muted" style="font-size:11px;margin-top:3px;">' + data.type + '</div></div>';
+            var recommendTag = isKnowledgeRecommended(data) ? '<span class="status-tag status-pending" style="margin-left:6px;">推荐学习</span>' : '';
+            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + highlightKeyword(topic, keyword) + '<div class="muted" style="font-size:11px;margin-top:3px;">' + data.type + recommendTag + '</div></div>';
         });
         if (topicHtml) html += '<div class="ks-category">' + category.name + '</div>' + topicHtml;
     });
@@ -1845,83 +1745,51 @@ function renderKnowledgeContent(topic) {
     (data.sections || []).filter(isPureKnowledgeSection).forEach(function(section) { contentSections.push(section); });
     var sectionHtml = contentSections.map(function(section) { return '<div class="km-section"><h3>' + section.title + '</h3>' + section.content + '</div>'; }).join('');
     var qaHtml = (data.qaItems || []).map(function(item) { return '<div class="qa-card"><div class="qa-q"><span>问</span><span>' + item.q + '</span></div><div class="qa-a"><span>答</span><span>' + item.a + '</span></div>' + (item.ref ? '<div class="qa-ref">' + item.ref + '</div>' : '') + '</div>'; }).join('');
-    container.innerHTML = '<div class="km-title-row"><div class="km-title">' + data.title + '</div><span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span></div><div class="km-subtitle">' + data.subtitle + '</div>' + sectionHtml + (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '');
+    var recommendationTag = isKnowledgeRecommended(data) ? '<span class="status-tag status-pending">推荐学习</span>' : '';
+    container.innerHTML = '<div class="km-title-row"><div class="km-title">' + data.title + '</div><span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span></div><div class="km-subtitle">' + data.subtitle + '</div>' + (recommendationTag ? '<div class="km-meta">' + recommendationTag + '</div>' : '') + sectionHtml + (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '');
 }
 
 // ===== 知识点考核 =====
-let assessmentStatusFilter = '全部';
-function isAssessmentCompleted(q) { return knowledgeAssessmentResults[q.id] !== undefined; }
 function getFilteredAssessmentQuestions() {
-    return knowledgeAssessmentQuestions.filter(function(q) {
-        if (assessmentTypeFilter !== '全部' && q.type !== assessmentTypeFilter) return false;
-        if (assessmentStatusFilter === '已完成' && !isAssessmentCompleted(q)) return false;
-        if (assessmentStatusFilter === '未完成' && isAssessmentCompleted(q)) return false;
-        return true;
-    });
+    return knowledgeAssessmentQuestions.filter(function(q) { return assessmentTypeFilter === '全部' || q.type === assessmentTypeFilter; });
 }
-function setAssessmentStatus(status) { assessmentStatusFilter = status || '全部'; currentAssessmentIndex = 0; renderAssessment(); }
 function setAssessmentType(type) { assessmentTypeFilter = type || '全部'; currentAssessmentIndex = 0; renderAssessment(); }
 function selectAssessmentQuestion(index) { currentAssessmentIndex = index; renderAssessment(); }
-function selectAssessmentOption(optionIndex) { var questions = getFilteredAssessmentQuestions(); var q = questions[currentAssessmentIndex]; if (!q) return; if (knowledgeAssessmentResults[q.id] !== undefined) return; knowledgeAssessmentAnswers[q.id] = optionIndex; delete knowledgeAssessmentResults[q.id]; saveAssessmentProgress(); renderAssessment(); }
-function submitAssessmentAnswer() { var questions = getFilteredAssessmentQuestions(); var q = questions[currentAssessmentIndex]; if (!q) return; if (knowledgeAssessmentAnswers[q.id] === undefined) { alert('请先选择一个答案'); return; } knowledgeAssessmentResults[q.id] = knowledgeAssessmentAnswers[q.id] === q.correctIndex; saveAssessmentProgress(); renderAssessment(); renderRecommendations(); }
+function selectAssessmentOption(optionIndex) { var questions = getFilteredAssessmentQuestions(); var q = questions[currentAssessmentIndex]; if (!q) return; knowledgeAssessmentAnswers[q.id] = optionIndex; delete knowledgeAssessmentResults[q.id]; renderAssessment(); }
+function submitAssessmentAnswer() { var questions = getFilteredAssessmentQuestions(); var q = questions[currentAssessmentIndex]; if (!q) return; if (knowledgeAssessmentAnswers[q.id] === undefined) { alert('请先选择一个答案'); return; } knowledgeAssessmentResults[q.id] = knowledgeAssessmentAnswers[q.id] === q.correctIndex; renderAssessment(); renderRecommendations(); }
 function moveAssessment(delta) { var questions = getFilteredAssessmentQuestions(); if (!questions.length) return; currentAssessmentIndex = Math.max(0, Math.min(questions.length - 1, currentAssessmentIndex + delta)); renderAssessment(); }
 function renderAssessment() {
     var listContainer = document.getElementById('assessment-list-items'); var content = document.getElementById('assessment-content'); if (!listContainer || !content) return;
     var questions = getFilteredAssessmentQuestions(); var countEl = document.getElementById('assessment-count'); if (countEl) countEl.textContent = questions.length;
-    if (!questions.length) { listContainer.innerHTML = '<div class="assessment-empty">当前筛选条件下暂无考核题</div>'; content.innerHTML = '<div class="assessment-empty">请调整做题状态筛选</div>'; return; }
+    if (!questions.length) { listContainer.innerHTML = '<div class="assessment-empty">当前筛选条件下暂无考核题</div>'; content.innerHTML = '<div class="assessment-empty">请选择其他知识点类型</div>'; return; }
     if (currentAssessmentIndex >= questions.length) currentAssessmentIndex = questions.length - 1;
-    listContainer.innerHTML = questions.map(function(q, i) { var result = knowledgeAssessmentResults[q.id]; var state = result === true ? '<span class="status-tag status-completed">正确</span>' : (result === false ? '<span class="status-tag status-error">错误</span>' : (assessmentStatusFilter === '全部' ? '<span class="status-tag status-draft">未完成</span>' : '')); return '<div class="assessment-list-item' + (i === currentAssessmentIndex ? ' active' : '') + '" onclick="selectAssessmentQuestion(' + i + ')"><span class="assessment-no">' + (i + 1) + '</span><div class="assessment-list-info"><div class="assessment-list-title">' + (q.title || assessmentTitleMap[q.knowledgeKey] || q.question) + '</div><div class="assessment-list-meta">' + state + '</div></div></div>'; }).join('');
-    var q = questions[currentAssessmentIndex]; var selected = knowledgeAssessmentAnswers[q.id]; var result = knowledgeAssessmentResults[q.id]; var resultHtml = result === undefined ? '' : '<div class="assessment-result ' + (result ? 'correct' : 'incorrect') + '" style="margin-top:18px;margin-bottom:0;"><strong>' + (result ? '回答正确' : '回答错误') + '</strong>　' + q.explanation + '</div>';
+    listContainer.innerHTML = questions.map(function(q, i) { var result = knowledgeAssessmentResults[q.id]; var state = result === true ? '<span class="status-tag status-completed">正确</span>' : (result === false ? '<span class="status-tag status-error">错误</span>' : ''); return '<div class="assessment-list-item' + (i === currentAssessmentIndex ? ' active' : '') + '" onclick="selectAssessmentQuestion(' + i + ')"><span class="assessment-no">' + (i + 1) + '</span><div class="assessment-list-info"><div class="assessment-list-title">' + (q.title || assessmentTitleMap[q.knowledgeKey] || q.question) + '</div><div class="assessment-list-meta">' + q.knowledgeKey + ' ' + state + '</div></div></div>'; }).join('');
+    var q = questions[currentAssessmentIndex]; var selected = knowledgeAssessmentAnswers[q.id]; var result = knowledgeAssessmentResults[q.id]; var resultHtml = result === undefined ? '' : '<div class="assessment-result ' + (result ? 'correct' : 'incorrect') + '"><strong>' + (result ? '回答正确' : '回答错误') + '</strong>　' + q.explanation + '</div>';
     var optionsHtml = q.options.map(function(option, i) { var cls = selected === i ? ' selected' : ''; if (result !== undefined && i === q.correctIndex) cls += ' correct'; if (result === false && selected === i && i !== q.correctIndex) cls += ' incorrect'; return '<div class="assessment-option' + cls + '" onclick="selectAssessmentOption(' + i + ')"><span class="option-letter">' + String.fromCharCode(65 + i) + '</span><span class="option-text">' + option + '</span></div>'; }).join('');
-    content.innerHTML = '<div class="assessment-question-head"><div><h2>' + q.question + '</h2><span class="assessment-knowledge-tag">单选题</span></div><span class="assessment-question-no">第 ' + (currentAssessmentIndex + 1) + ' / ' + questions.length + ' 题</span></div><div style="margin-top:18px;"><div class="assessment-options">' + optionsHtml + '</div>' + resultHtml + '</div><div class="assessment-actions"><button class="btn btn-outline" onclick="moveAssessment(-1)" ' + (currentAssessmentIndex === 0 ? 'disabled' : '') + '>← 上一题</button><div class="actions-right"><button class="btn btn-primary" onclick="submitAssessmentAnswer()" ' + (result !== undefined ? 'disabled' : '') + ' title="' + (result !== undefined ? '已提交答案' : '提交本题答案') + '">提交答案</button><button class="btn btn-outline" onclick="moveAssessment(1)" ' + (currentAssessmentIndex === questions.length - 1 ? 'disabled' : '') + '>下一题 →</button></div></div>';
+    content.innerHTML = '<div class="assessment-question-head"><div><h2>' + q.question + '</h2><span class="assessment-knowledge-tag">知识点：' + q.knowledgeKey + ' · 单选题</span></div><span class="assessment-question-no">第 ' + (currentAssessmentIndex + 1) + ' / ' + questions.length + ' 题</span></div><div style="margin-top:18px;">' + resultHtml + '<div class="assessment-options">' + optionsHtml + '</div></div><div class="assessment-actions"><button class="btn btn-outline" onclick="moveAssessment(-1)" ' + (currentAssessmentIndex === 0 ? 'disabled' : '') + '>← 上一题</button><div class="actions-right"><button class="btn btn-primary" onclick="submitAssessmentAnswer()">提交答案</button><button class="btn btn-outline" onclick="moveAssessment(1)" ' + (currentAssessmentIndex === questions.length - 1 ? 'disabled' : '') + '>下一题 →</button></div></div>';
 }
 
 // ===== 学习推荐 =====
-function isAssessmentWrongForTopic(topic, snapshot) {
-    var state = snapshot || getRecommendationSnapshot();
-    return knowledgeAssessmentQuestions.some(function(q) { return q.knowledgeKey === topic && state.assessmentWrongIds.indexOf(q.id) >= 0; });
-}
-function isExamWrongForTopic(topic, data, snapshot) {
-    var state = snapshot || getRecommendationSnapshot();
-    return getKnowledgeQuestionCodes(data, topic).some(function(id) { return state.examWrongIds.indexOf(id) >= 0; });
-}
-function getRecommendationReason(topic, data, snapshot) {
-    if (isAssessmentWrongForTopic(topic, snapshot)) return '你在该知识点考核中存在错题，建议回到知识点学习重新梳理重点。';
-    if (isExamWrongForTopic(topic, data, snapshot)) return '你在相关阅片练习中出现错误，建议补充该知识点后再进行影像判读。';
-    return '';
+function isAssessmentWrongForTopic(topic) { return knowledgeAssessmentQuestions.some(function(q) { return q.knowledgeKey === topic && knowledgeAssessmentResults[q.id] === false; }); }
+function isAssessmentAnsweredForTopic(topic) { return knowledgeAssessmentQuestions.some(function(q) { return q.knowledgeKey === topic && knowledgeAssessmentResults[q.id] !== undefined; }); }
+function getRecommendationReason(topic, data) {
+    if (isAssessmentWrongForTopic(topic)) return '你在该知识点考核中存在错题，建议回到知识点学习重新梳理重点。';
+    if (getKnowledgeQuestionCodes(data).some(isQuestionWrong)) return '你在相关阅片练习中出现错误，建议补充该知识点后再进行影像判读。';
+    if (isAssessmentAnsweredForTopic(topic)) return '你已完成该知识点考核，可继续学习同类或进阶知识点。';
+    return '该知识点与当前生命医学学习内容相关，建议作为下一步学习内容。';
 }
 function getRecommendationTopics() {
-    var snapshot = getRecommendationSnapshot();
     var topics = []; knowledgeCategories.forEach(function(category) { category.topics.forEach(function(topic) { if (structuredKnowledgeData[topic] && topics.indexOf(topic) < 0) topics.push(topic); }); });
-    return topics.map(function(topic, index) {
-        var data = structuredKnowledgeData[topic];
-        var assessmentWrong = isAssessmentWrongForTopic(topic, snapshot);
-        var examWrong = isExamWrongForTopic(topic, data, snapshot);
-        var score = (assessmentWrong ? 100 : 0) + (examWrong ? 80 : 0);
-        return { topic: topic, data: data, score: score, order: index };
-    }).filter(function(item) { return item.score > 0; }).sort(function(a, b) { return b.score - a.score || a.order - b.order; });
+    return topics.map(function(topic, index) { var data = structuredKnowledgeData[topic]; var score = 0; if (isAssessmentWrongForTopic(topic)) score += 100; if (getKnowledgeQuestionCodes(data).some(isQuestionWrong)) score += 80; return { topic: topic, data: data, score: score, order: index }; }).sort(function(a, b) { return b.score - a.score || a.order - b.order; });
 }
 function renderRecommendations() {
     var container = document.getElementById('recommend-content'); if (!container) return;
     var topics = getRecommendationTopics();
-    if (topics.length && recommendationMeta.updatedAt) {
-        var topicTimes = Object.assign({}, recommendationMeta.topicTimes || {});
-        var migrated = false;
-        topics.forEach(function(item) {
-            if (!topicTimes[item.topic]) { topicTimes[item.topic] = recommendationMeta.updatedAt; migrated = true; }
-        });
-        if (migrated) { recommendationMeta.topicTimes = topicTimes; saveRecommendationMeta(); }
-    }
-    if (!topics.length) { container.innerHTML = '<div class="recommend-empty">暂无学习推荐。完成考核或阅片练习后，如出现错误题目，请点击“更新学习推荐”。</div>'; return; }
-    var snapshot = getRecommendationSnapshot();
+    if (!topics.length) { container.innerHTML = '<div class="recommend-empty">暂无推荐内容</div>'; return; }
     container.innerHTML = topics.slice(0, 8).map(function(item) {
         var data = item.data;
-        var urgent = isAssessmentWrongForTopic(item.topic, snapshot) || isExamWrongForTopic(item.topic, data, snapshot);
-        var isNew = (recommendationMeta.newAssessmentWrongIds || []).some(function(id) { return knowledgeAssessmentQuestions.some(function(q) { return q.id === id && q.knowledgeKey === item.topic; }); }) || (recommendationMeta.newExamWrongIds || []).some(function(id) { return getKnowledgeQuestionCodes(data, item.topic).indexOf(id) >= 0; });
-        var recommendationLabel = isNew ? '新增推荐' : '待强化';
-        var recommendationTime = getRecommendationTimeText(item.topic);
-        var recommendationTimeHtml = recommendationTime ? '<span class="recommend-time">推荐时间：' + recommendationTime + '</span>' : '';
-        return '<div class="recommend-card" style="border-left-color:' + (urgent ? 'var(--warning)' : '#8b5cf6') + '"><div class="recommend-card-head"><div class="recommend-title">' + data.title + '</div><div><span class="status-tag ' + (urgent ? 'status-pending' : 'status-draft') + '">' + recommendationLabel + '</span>' + recommendationTimeHtml + '</div></div><div class="recommend-meta"><span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span><span class="status-tag status-draft">知识点：' + item.topic + '</span></div>' + (function() { var reason = getRecommendationReason(item.topic, data, snapshot); return reason ? '<div class="recommend-reason">' + reason + '</div>' : ''; })() + '<div class="recommend-footer"><span class="recommend-source">推荐依据：知识点考核、阅片表现</span><button class="btn btn-primary" data-recommend-topic="' + item.topic + '">去学习</button></div></div>';
+        var urgent = isAssessmentWrongForTopic(item.topic) || getKnowledgeQuestionCodes(data).some(isQuestionWrong);
+        return '<div class="recommend-card" style="border-left-color:' + (urgent ? 'var(--warning)' : '#8b5cf6') + '"><div class="recommend-card-head"><div class="recommend-title">' + data.title + '</div><span class="status-tag ' + (urgent ? 'status-pending' : 'status-draft') + '">' + (urgent ? '待强化' : '推荐学习') + '</span></div><div class="recommend-meta"><span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span><span class="status-tag status-draft">知识点：' + item.topic + '</span></div><div class="recommend-reason">' + getRecommendationReason(item.topic, data) + '</div><div class="recommend-footer"><span class="recommend-source">推荐依据：知识点考核、阅片表现和内容关联度</span><button class="btn btn-primary" data-recommend-topic="' + item.topic + '">开始学习</button></div></div>';
     }).join('');
     container.querySelectorAll('[data-recommend-topic]').forEach(function(button) { button.addEventListener('click', function() { showKnowledge(button.getAttribute('data-recommend-topic')); }); });
 }

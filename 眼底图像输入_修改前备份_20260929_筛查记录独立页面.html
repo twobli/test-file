@@ -462,16 +462,6 @@ input, select, textarea { font: inherit; outline: none; }
 }
 .toast-close-btn:hover { color: #666; }
 
-
-/* Upload actions */
-.upload-action-row { margin-top:14px; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-.upload-action-row .upload-flow-hint { color:var(--soft); font-size:12px; }
-.upload-action-buttons { display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap; margin-left:auto; }
-@media (max-width: 760px) {
-  .upload-action-row { align-items:flex-start; flex-direction:column; }
-  .upload-action-buttons { width:100%; margin-left:0; justify-content:flex-start; }
-}
-
 @media (max-width: 1024px) {
   .sidebar { width: 60px; }
   .sidebar .menu-item span { display: none; }
@@ -506,13 +496,11 @@ input, select, textarea { font: inherit; outline: none; }
 <div class="sidebar" id="sidebar">
 <div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（医生用户）</div>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=doctor">眼底图像输入</a>
-<a class="menu-item" data-flow-role="doctor" data-flow-page="筛查记录.html" href="筛查记录.html?role=doctor">筛查记录</a>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=doctor">图像质量质控</a>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="多任务联合筛查.html" href="多任务联合筛查.html?role=doctor">多任务联合筛查</a>
 <a class="menu-item" data-flow-role="doctor" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=doctor">输出筛查报告</a></div>
 <div class="menu-group"><div class="menu-group-title">AI眼底疾病筛查（普通用户）</div>
 <a class="menu-item" data-flow-role="normal" data-flow-page="眼底图像输入.html" href="眼底图像输入.html?role=normal">眼底图像输入</a>
-<a class="menu-item" data-flow-role="normal" data-flow-page="筛查记录.html" href="筛查记录.html?role=normal">筛查记录</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="图像质量质控.html" href="图像质量质控.html?role=normal">图像质量质控</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="常见疾病筛查.html" href="常见疾病筛查_普通用户.html?role=normal">常见疾病筛查</a>
 <a class="menu-item" data-flow-role="normal" data-flow-page="输出筛查报告.html" href="输出筛查报告.html?role=normal">输出筛查报告</a></div></div><div class="main-content">
@@ -591,16 +579,33 @@ input, select, textarea { font: inherit; outline: none; }
 
   <div id="up" style="margin-top:14px;display:none;"></div>
 
-  <div class="upload-action-row">
-    <span id="uploadFlowHint" class="upload-flow-hint">提交后进入质控流程。</span>
-    <div class="upload-action-buttons">
-      <button class="btn primary lg" onclick="startProc()">开始处理</button>
-      <button class="btn secondary" onclick="resetUp()">重置</button>
-      <button class="btn secondary" onclick="location.href='筛查记录.html' + roleQuery()">查看过往筛查记录</button>
-    </div>
+  <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+    <button class="btn primary lg" onclick="startProc()">开始处理</button>
+    <button class="btn secondary" onclick="resetUp()">重置</button>
+    <span id="uploadFlowHint" style="color:var(--soft);font-size:12px;">提交后进入质控流程。</span>
   </div>
 </div>
 
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">筛查记录</span>
+    <button class="btn primary small" onclick="location.href='眼底图像输入.html' + roleQuery()">刷新</button>
+  </div>
+  <div class="stats">
+    <div class="stat stat-active" onclick="switchTab('全部', this)"><span>总记录</span><strong id="statTotal">4</strong></div>
+    <div class="stat" onclick="switchTab('质控通过', this)"><span>质控通过</span><strong id="statQcPass">3</strong></div>
+    <div class="stat" onclick="switchTab('质控不合格', this)"><span>质控拦截</span><strong id="statQcFail">1</strong></div>
+    <div class="stat" onclick="switchTab('分析失败', this)"><span>分析失败</span><strong id="statAnalysisFail">1</strong></div>
+  </div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>筛查任务</th><th>患者</th><th>上传时间</th><th>质控</th><th>状态</th><th>操作</th></tr>
+      </thead>
+      <tbody id="recordsTableBody"></tbody>
+    </table>
+  </div>
+</div>
 </div>
 <script>
 function navigateTo(url) { window.location.href = url; }
@@ -632,30 +637,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 /* ====== 筛查任务与记录 ====== */
 var FUNDUS_TASK_KEY = 'fundus_screening_task';
-var SCREENING_RECORDS_KEY = 'fundus_screening_records';
 var uploadMode = 'single';
 var selectedSlot = 'bulk';
 var currentTask = null;
 var uploadFiles = { single: null, first: null, second: null };
 var currentTab = '全部';
 
-var defaultScreeningRecords = [
+var screeningRecords = [
   { taskName: '眼底彩照_001.jpg', taskSub: 'FS-260626-001 · 市中心门诊', patientName: '李明', patientId: 'OPD-202606-001', uploadTime: '2026-06-26 14:30', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-001' },
   { taskName: '眼底彩照_004.jpg', taskSub: 'FS-260626-004 · 社区筛查', patientName: '赵强', patientId: 'OPD-202606-003', uploadTime: '2026-06-26 10:05', qcStatus: '质控不合格', analysisStatus: '等待重传', taskId: 'FS-260626-004' },
   { taskName: '眼底彩照_002.jpg', taskSub: 'FS-260626-002 · 院内复查', patientName: '王磊', patientId: 'OPD-202606-002', uploadTime: '2026-06-26 14:35', qcStatus: '质控通过', analysisStatus: '分析失败', taskId: 'FS-260626-002' },
   { taskName: '双眼_眼底彩照_003.jpg', taskSub: 'FS-260626-003 · 眼科专科门诊', patientName: '陈华', patientId: 'OPD-202606-004', uploadTime: '2026-06-26 09:12', qcStatus: '质控通过', analysisStatus: '已出报告', taskId: 'FS-260626-003' }
 ];
-function loadScreeningRecords() {
-  try {
-    var saved = JSON.parse(localStorage.getItem(SCREENING_RECORDS_KEY));
-    if (Array.isArray(saved)) return saved;
-  } catch (e) {}
-  return defaultScreeningRecords.map(function(rec) { return Object.assign({}, rec); });
-}
-function saveScreeningRecords() {
-  try { localStorage.setItem(SCREENING_RECORDS_KEY, JSON.stringify(screeningRecords)); } catch (e) {}
-}
-var screeningRecords = loadScreeningRecords();
 
 function initScreeningInputPage() {
   renderInputSteps();
@@ -665,6 +658,8 @@ function initScreeningInputPage() {
   renderUploadSlots();
   refreshUploadReview();
   mergeCurrentTaskRecord();
+  updateStats();
+  renderTable();
 }
 
 function getCurrentUser() {
@@ -809,7 +804,6 @@ function clearScreeningTask() {
   uploadFiles = { single: null, first: null, second: null };
   if (clearedTaskId) {
     screeningRecords = screeningRecords.filter(function(rec) { return rec.taskId !== clearedTaskId; });
-    saveScreeningRecords();
   }
   document.getElementById('taskPatientName').value = '';
   document.getElementById('taskPatientAge').value = '';
@@ -1156,7 +1150,7 @@ function mergeCurrentTaskRecord() {
     if (!currentTask || screeningRecords[i].taskId !== currentTask.taskId) next.push(screeningRecords[i]);
   }
   screeningRecords = next;
-  if (!currentTask) { saveScreeningRecords(); return; }
+  if (!currentTask) return;
   var images = collectImageMetas();
   var imageCount = images.length;
   if (!imageCount) return;
@@ -1173,7 +1167,6 @@ function mergeCurrentTaskRecord() {
     analysisStatus: currentTask.analysisStatus && currentTask.analysisStatus !== '待上传' ? currentTask.analysisStatus : '待提交',
     taskId: currentTask.taskId
   });
-  saveScreeningRecords();
 }
 
 function validateBeforeSubmit() {
@@ -1209,7 +1202,6 @@ function switchTab(tab, el) {
 }
 
 function updateStats() {
-  if (!document.getElementById('statTotal')) return;
   var visibleRecords = getVisibleScreeningRecords();
   var total = visibleRecords.length;
   var qcPass = 0, qcFail = 0, analysisFail = 0;
@@ -1267,8 +1259,6 @@ function getActionBtn(rec) {
 }
 
 function renderTable() {
-  var tbody = document.getElementById('recordsTableBody');
-  if (!tbody) return;
   var filtered = [];
   var visibleRecords = getVisibleScreeningRecords();
   for (var i = 0; i < visibleRecords.length; i++) {
@@ -1295,7 +1285,7 @@ function renderTable() {
     html += '<td>' + getActionBtn(d) + '</td>';
     html += '</tr>';
   }
-  tbody.innerHTML = html;
+  document.getElementById('recordsTableBody').innerHTML = html;
 }
 
 function openImagePreview(file) {

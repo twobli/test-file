@@ -1792,6 +1792,10 @@ function getKnowledgeQuestionCodes(data, topic) {
 }
 function getQuestionByCode(code) { return examQuestions.find(function(q) { return q.no === code; }); }
 function isQuestionWrong(code) { var q = getQuestionByCode(code); return !!(q && q.id in userAnswers && userAnswers[q.id] !== q.correctIndex); }
+function isKnowledgeRecommended(topic, data) {
+    var snapshot = getRecommendationSnapshot();
+    return isAssessmentWrongForTopic(topic, snapshot) || isExamWrongForTopic(topic, data, snapshot);
+}
 
 
 function setKnowledgeType(type) {
@@ -1819,7 +1823,8 @@ function renderKnowledgeTree(keyword) {
             var data = structuredKnowledgeData[topic]; if (!data) return;
             var searchText = getKnowledgeSearchText(category, topic, data); if (ft && searchText.indexOf(ft) < 0) return;
             var activeCls = topic === currentKnowledgeTopic ? ' active' : ''; var hitCls = ft ? ' search-hit' : '';
-            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + highlightKeyword(topic, keyword) + '<div class="muted" style="font-size:11px;margin-top:3px;">' + data.type + '</div></div>';
+            var recommendTag = isKnowledgeRecommended(topic, data) ? '<span class="status-tag status-pending" style="margin-left:6px;">推荐学习</span>' : '';
+            topicHtml += '<div class="ks-topic' + activeCls + hitCls + '" onclick="selectKnowledgeTopic(\'' + topic + '\')" data-topic="' + topic + '">' + highlightKeyword(topic, keyword) + '<div class="muted" style="font-size:11px;margin-top:3px;">' + data.type + recommendTag + '</div></div>';
         });
         if (topicHtml) html += '<div class="ks-category">' + category.name + '</div>' + topicHtml;
     });
@@ -1845,7 +1850,8 @@ function renderKnowledgeContent(topic) {
     (data.sections || []).filter(isPureKnowledgeSection).forEach(function(section) { contentSections.push(section); });
     var sectionHtml = contentSections.map(function(section) { return '<div class="km-section"><h3>' + section.title + '</h3>' + section.content + '</div>'; }).join('');
     var qaHtml = (data.qaItems || []).map(function(item) { return '<div class="qa-card"><div class="qa-q"><span>问</span><span>' + item.q + '</span></div><div class="qa-a"><span>答</span><span>' + item.a + '</span></div>' + (item.ref ? '<div class="qa-ref">' + item.ref + '</div>' : '') + '</div>'; }).join('');
-    container.innerHTML = '<div class="km-title-row"><div class="km-title">' + data.title + '</div><span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span></div><div class="km-subtitle">' + data.subtitle + '</div>' + sectionHtml + (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '');
+    var recommendationTag = isKnowledgeRecommended(topic, data) ? '<span class="status-tag status-pending">推荐学习</span>' : '';
+    container.innerHTML = '<div class="km-title-row"><div class="km-title">' + data.title + '</div><span class="status-tag ' + getKnowledgeTypeClass(data.type) + '">类型：' + data.type + '</span></div><div class="km-subtitle">' + data.subtitle + '</div>' + (recommendationTag ? '<div class="km-meta">' + recommendationTag + '</div>' : '') + sectionHtml + (qaHtml ? '<div class="km-section"><h3>常见问题</h3>' + qaHtml + '</div>' : '');
 }
 
 // ===== 知识点考核 =====
