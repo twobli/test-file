@@ -74,11 +74,34 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 .breadcrumb span.sep { color:var(--gray-400); }
 .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
 .page-title { font-size:20px; font-weight:700; color:var(--gray-900); }
-.case-selector { display:flex; align-items:center; gap:10px; }
-.case-selector label { font-size:13px; color:var(--gray-600); font-weight:500; }
-.case-current { min-width:220px; padding:7px 12px; border:1px solid var(--gray-200); border-radius:6px; background:#fff; color:var(--gray-800); font-size:13px; font-weight:600; }
-.case-refresh-btn { display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 14px; border:1px solid var(--primary); border-radius:6px; background:var(--primary); color:#fff; font-size:13px; font-family:inherit; font-weight:600; cursor:pointer; transition:var(--transition); }
-.case-refresh-btn:hover { background:var(--primary-dark); border-color:var(--primary-dark); box-shadow:var(--shadow-md); }
+/* Case List + Two-Column Layout */
+.workspace-grid { display:grid; grid-template-columns:240px minmax(0,1fr); gap:16px; align-items:start; }
+.case-list-panel { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:sticky; top:76px; }
+.case-list-header { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:14px 16px; border-bottom:1px solid var(--gray-100); }
+.case-list-title { font-size:15px; font-weight:600; color:var(--gray-800); }
+.case-list-count { color:var(--gray-500); font-size:11px; white-space:nowrap; }
+.case-list { max-height:calc(100vh - 170px); overflow-y:auto; padding:8px; }
+.case-list::-webkit-scrollbar { width:4px; }
+.case-list::-webkit-scrollbar-track { background:transparent; }
+.case-list::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:2px; }
+.case-list-item { display:block; width:100%; padding:10px 11px; border:1px solid transparent; border-radius:6px; background:#fff; color:var(--gray-700); text-align:left; cursor:pointer; font-family:inherit; transition:var(--transition); }
+.case-list-item + .case-list-item { margin-top:4px; }
+.case-list-item:hover { background:var(--gray-50); border-color:var(--gray-200); }
+.case-list-item.active { background:var(--primary-light); border-color:#bfdbfe; color:var(--primary-dark); }
+.case-list-item .case-list-name { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:13px; font-weight:600; }
+.case-list-item .case-list-meta { display:block; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--gray-500); font-size:11px; }
+.case-list-item .case-list-status { display:flex; align-items:center; gap:6px; margin-top:4px; color:var(--gray-500); font-size:11px; }
+.case-list-item.active .case-list-meta,
+.case-list-item.active .case-list-status { color:var(--primary); }
+.case-status-dot { width:7px; height:7px; border-radius:50%; background:var(--gray-300); flex:0 0 auto; }
+.case-status-dot.done { background:var(--success); }
+.case-list-item.active .case-status-dot { box-shadow:0 0 0 2px rgba(59,130,246,0.14); }
+.case-pagination { display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 10px 12px; border-top:1px solid var(--gray-100); }
+.case-pagination[hidden] { display:none; }
+.case-page-btn { min-width:28px; height:28px; padding:0 8px; border:1px solid var(--gray-200); border-radius:5px; background:#fff; color:var(--gray-600); font:inherit; font-size:12px; cursor:pointer; }
+.case-page-btn:hover:not(:disabled) { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+.case-page-btn:disabled { cursor:not-allowed; opacity:0.45; }
+.case-page-indicator { color:var(--gray-500); font-size:11px; min-width:52px; text-align:center; }
 
 /* Two-Column Layout */
 .content-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -268,6 +291,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
 
 /* Responsive */
 @media (max-width:1200px) {
+    .workspace-grid { grid-template-columns:210px minmax(0,1fr); }
     .content-grid { grid-template-columns:1fr; }
     .patient-info-grid { grid-template-columns:repeat(3,1fr); }
 }
@@ -277,6 +301,9 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     .sidebar .menu-group-title { display:none; }
     .main-content { margin-left:60px; }
     .submenu .menu-item { padding-left:10px; }
+    .workspace-grid { grid-template-columns:1fr; }
+    .case-list-panel { position:static; }
+    .case-list { max-height:240px; }
     .patient-info-grid { grid-template-columns:repeat(2,1fr); }
 }
 </style>
@@ -328,12 +355,23 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
     </div>
     <div class="page-header">
         <h1 class="page-title">虚拟临床技能实训</h1>
-        <div class="case-selector">
-            <button class="case-refresh-btn" onclick="refreshCase()">刷新病例</button>
-        </div>
     </div>
 
-    <div class="content-grid">
+    <div class="workspace-grid">
+        <aside class="case-list-panel" aria-label="病例列表">
+            <div class="case-list-header">
+                <span class="case-list-title">病例列表</span>
+                <span class="case-list-count" id="caseListCount"></span>
+            </div>
+            <div class="case-list" id="caseList"></div>
+            <div class="case-pagination" id="casePagination" hidden>
+                <button type="button" class="case-page-btn" id="casePrevPage" onclick="changeCasePage(-1)" aria-label="上一页">上一页</button>
+                <span class="case-page-indicator" id="casePageIndicator"></span>
+                <button type="button" class="case-page-btn" id="caseNextPage" onclick="changeCasePage(1)" aria-label="下一页">下一页</button>
+            </div>
+        </aside>
+
+        <div class="content-grid">
         <!-- Left Column -->
         <div class="left-col">
             <!-- Card 1: 虚拟病人信息 -->
@@ -412,6 +450,7 @@ body { font-family: 'Inter','PingFang SC','Microsoft YaHei','Arial',sans-serif; 
                     <div class="score-result" id="scoreResult" style="display:none;"></div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </div>
@@ -649,6 +688,10 @@ var selectedDiagnosis = null;
 var selectedRiskLevel = null;
 var selectedNextActions = [];
 var diagnosisSubmitted = false;
+var diagnosisRecords = {};
+var casePage = 1;
+var casesPerPage = 5;
+var diagnosisRecordsStorageKey = 'virtual_clinical_diagnosis_records';
 var caseDisplayNames = [
     '病例一：2型糖尿病 - 中度NPDR',
     '病例二：1型糖尿病 - 轻度NPDR',
@@ -657,6 +700,22 @@ var caseDisplayNames = [
     '病例五：体检筛查 - 无DR'
 ];
 var imagingInterpretation = { notes:'' };
+
+// Extend the mock dataset so the list and pagination can be exercised locally.
+var generatedCaseNames = ['小陈','小赵','小孙','小周','小吴','小郑','小冯','小何','小许','小吕','小施','小潘','小沈'];
+for (var generatedIndex = cases.length; generatedIndex < 18; generatedIndex++) {
+    var templateCase = JSON.parse(JSON.stringify(cases[generatedIndex % 5]));
+    templateCase.id = 'OP-2025-' + String(9000 + generatedIndex).slice(-4);
+    templateCase.name = generatedCaseNames[generatedIndex - 5] || ('患者' + (generatedIndex + 1));
+    templateCase.age = 30 + ((generatedIndex * 7) % 38);
+    templateCase.history = generatedIndex % 2 === 0
+        ? '2型糖尿病' + (5 + generatedIndex % 9) + '年，定期接受眼底筛查。'
+        : '有高血压病史，近期因视物变化接受眼科检查。';
+    templateCase.chiefComplaint = generatedIndex % 3 === 0
+        ? '近期开车或阅读时视物模糊，偶有视物变形。'
+        : '年度眼底检查，近期自觉视力较前有所变化。';
+    cases.push(templateCase);
+}
 
 // ===== Load Case =====
 function loadCase(index) {
@@ -674,17 +733,50 @@ function loadCase(index) {
     resetImageInterpretation();
     resetDiagnosis();
     resetScore();
+    restoreDiagnosisRecord();
 }
 
 function updateCaseIndicator() {
-    var label = document.getElementById('caseCurrentLabel');
-    if (label) label.textContent = caseDisplayNames[currentCaseIndex] || ('病例' + (currentCaseIndex + 1));
+    var list = document.getElementById('caseList');
+    var count = document.getElementById('caseListCount');
+    if (count) count.textContent = cases.length + ' 个病例';
+    if (!list) return;
+
+    var totalPages = Math.max(1, Math.ceil(cases.length / casesPerPage));
+    if (casePage > totalPages) casePage = totalPages;
+    var start = (casePage - 1) * casesPerPage;
+    var pageCases = cases.slice(start, start + casesPerPage);
+
+    list.innerHTML = pageCases.map(function(c, pageIndex) {
+        var index = start + pageIndex;
+        var completed = !!diagnosisRecords[index];
+        return '<button type="button" class="case-list-item'+(index === currentCaseIndex ? ' active':'')+'" onclick="selectCase('+index+')" aria-current="'+(index === currentCaseIndex ? 'true':'false')+'">'
+            + '<span class="case-list-name">病例 '+String(index + 1).padStart(3, '0')+'</span>'
+            + '<span class="case-list-meta">'+escapeHtml(c.id)+' · '+escapeHtml(c.name)+'</span>'
+            + '<span class="case-list-status"><i class="case-status-dot'+(completed ? ' done':'')+'"></i>'+(completed ? '已完成诊断':'未完成诊断')+'</span>'
+            + '</button>';
+    }).join('');
+
+    var pagination = document.getElementById('casePagination');
+    var pageIndicator = document.getElementById('casePageIndicator');
+    var prevButton = document.getElementById('casePrevPage');
+    var nextButton = document.getElementById('caseNextPage');
+    if (pagination) pagination.hidden = totalPages <= 1;
+    if (pageIndicator) pageIndicator.textContent = casePage + ' / ' + totalPages;
+    if (prevButton) prevButton.disabled = casePage <= 1;
+    if (nextButton) nextButton.disabled = casePage >= totalPages;
 }
 
-function refreshCase() {
-    var nextIndex = (currentCaseIndex + 1) % cases.length;
-    localStorage.setItem('virtual_clinical_case_index', String(nextIndex));
-    window.location.reload();
+function selectCase(index) {
+    localStorage.setItem('virtual_clinical_case_index', String(index));
+    casePage = Math.floor(index / casesPerPage) + 1;
+    loadCase(index);
+}
+
+function changeCasePage(delta) {
+    var totalPages = Math.max(1, Math.ceil(cases.length / casesPerPage));
+    casePage = Math.min(totalPages, Math.max(1, casePage + delta));
+    updateCaseIndicator();
 }
 
 function getInitialDialogue(c) {
@@ -1031,7 +1123,15 @@ function doSubmitDiagnosis() {
     closeConfirm();
     diagnosisSubmitted = true;
     var c = cases[currentCaseIndex];
+    var diagnosisNotes = document.getElementById('diagNotes').value.trim();
+    diagnosisRecords[currentCaseIndex] = {
+        caseId: c.id,
+        notes: diagnosisNotes,
+        submittedAt: new Date().toISOString()
+    };
+    saveDiagnosisRecords();
     renderDiagnosisJudgement(c);
+    updateCaseIndicator();
 }
 
 function renderDiagnosisJudgement(c) {
@@ -1061,6 +1161,21 @@ function renderDiagnosisJudgement(c) {
     if (btn) btn.style.display = 'none';
     var ph = document.getElementById('scorePlaceholder');
     if (ph) ph.style.display = 'none';
+}
+
+function saveDiagnosisRecords() {
+    try {
+        localStorage.setItem(diagnosisRecordsStorageKey, JSON.stringify(diagnosisRecords));
+    } catch (e) {}
+}
+
+function restoreDiagnosisRecord() {
+    var record = diagnosisRecords[currentCaseIndex];
+    if (!record || !record.notes) return;
+    var notesEl = document.getElementById('diagNotes');
+    if (notesEl) notesEl.value = record.notes;
+    diagnosisSubmitted = true;
+    renderDiagnosisJudgement(cases[currentCaseIndex]);
 }
 
 function getExpectedRiskLevel(correctDiagnosis) {
@@ -1166,6 +1281,8 @@ function resetScore() {
 }
 
 function retryDiagnosis() {
+    delete diagnosisRecords[currentCaseIndex];
+    saveDiagnosisRecords();
     diagnosisSubmitted = false;
     selectedDiagnosis = null;
     selectedRiskLevel = null;
@@ -1173,6 +1290,7 @@ function retryDiagnosis() {
     resetDiagnosis();
     resetScore();
     resetImageInterpretation();
+    updateCaseIndicator();
 }
 
 function getDiagLabel(value) {
@@ -1200,7 +1318,13 @@ document.addEventListener('DOMContentLoaded', function(){
         var user = JSON.parse(localStorage.getItem('life_med_user'));
         if (user && user.name) document.getElementById('headerUserName').textContent = user.name;
     } catch(e) {}
+    try {
+        diagnosisRecords = JSON.parse(localStorage.getItem(diagnosisRecordsStorageKey) || '{}') || {};
+    } catch(e) {
+        diagnosisRecords = {};
+    }
     var savedCaseIndex = parseInt(localStorage.getItem('virtual_clinical_case_index') || '0', 10);
+    casePage = Math.floor(savedCaseIndex / casesPerPage) + 1;
     loadCase(savedCaseIndex);
 });
 </script>
