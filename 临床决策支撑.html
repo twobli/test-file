@@ -632,6 +632,24 @@
       overflow: hidden;
     }
 
+    [data-reference-status]:empty { display: none; }
+
+    .workflow-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      padding: 10px 14px;
+      background: #f0f6ff;
+      border-bottom: 1px solid var(--line);
+    }
+    .workflow-toolbar p { margin: 0; color: #314766; font-size: 14px; }
+    .command-btn:disabled { opacity: .55; cursor: default; }
+    .workflow-status { display: block; font-size: 12px; margin-bottom: 3px; }
+    .workflow-actions [hidden] { display: none; }
+    .workflow-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
     .command-bar {
       display: grid;
       grid-template-columns: repeat(5, minmax(110px, 1fr));
@@ -1839,7 +1857,7 @@
 
       <section class="panel chat-panel">
 
-        <div class="command-bar" aria-label="临床 AI 核心功能">
+        <div class="command-bar" aria-label="临床决策流程">
           <button class="command-btn" data-type="diagnosis">
             辅助临床诊断
             <small>疾病可能性与证据</small>
@@ -1862,11 +1880,18 @@
           </button>
         </div>
 
+        <div class="workflow-toolbar">
+          <p id="workflowHint" role="status"></p>
+          <div class="workflow-actions">
+            <button class="btn primary" id="workflowNext" type="button"></button>
+          </div>
+        </div>
+
         <div class="chat-stream" id="chatStream">
           <article class="msg">
             <div class="who">AI</div>
             <div class="bubble">
-              您好，我是临床决策支撑 AI Copilot。当前已载入一份糖尿病眼底病变相关病例，我可以根据主诉、慢病史、眼病史、影像、体格检查和检验结果，协助完成辅助诊断、相似病历推荐、治疗方案推荐、报告自动生成和医嘱合理性质控。您可以直接输入问题，也可以在需要补充证据时点击“添加资料”上传病历、检验报告或影像文件。
+              您好，我是临床决策支撑 AI Copilot。我可以根据主诉、慢病史、眼病史、影像、体格检查和检验结果，协助完成辅助诊断、相似病历推荐、治疗方案推荐、报告自动生成和医嘱合理性质控。您可以直接输入问题，也可以在需要补充证据时点击“添加资料”上传病历、检验报告或影像文件。
             </div>
           </article>
         </div>
@@ -1970,7 +1995,6 @@
         dx: '糖尿病视网膜病变（增殖期疑诊，87%）；糖尿病性黄斑水肿（65%）。',
         similar: '未选择相似病历。',
         tx: '建议完善 FFA 与黄斑区 OCT 定量复查；可评估微循环改善治疗、抗 VEGF 治疗及慢病协同管理。',
-        qc: '待进入医嘱合理性质控：需核验患者病史、诊断、检查结果、历史用药和当前拟开医嘱后再生成结论。'
       }
     };
 
@@ -2276,7 +2300,6 @@
       setText('#reportSimilar', state.report.similar);
       setText('#reportDx', state.report.dx);
       setText('#reportTx', state.report.tx);
-      setText('#reportQc', state.report.qc);
       updateContextSignals();
     }
 
@@ -2323,27 +2346,6 @@
       quality: '医嘱合理性质控'
     };
 
-    const diagnosisTextPlans = [
-      {
-        no: 1,
-        title: '糖尿病视网膜病变（增殖期疑诊）优先',
-        body: '依据长期 2 型糖尿病史、HbA1c 8.9%、眼底散在出血点及硬性渗出，当前应优先考虑糖尿病视网膜病变进展。建议补充 FFA 明确无灌注区、新生血管及渗漏范围。',
-        report: '糖尿病视网膜病变（增殖期疑诊）优先；依据糖尿病 15 年、HbA1c 8.9%、眼底出血点、硬性渗出及 OCT 黄斑水肿表现。建议补充 FFA 明确无灌注区、新生血管及渗漏范围。'
-      },
-      {
-        no: 2,
-        title: '非增殖期糖尿病视网膜病变合并黄斑水肿',
-        body: '若暂未取得新生血管或明显无灌注区证据，可先按非增殖期糖尿病视网膜病变合并糖尿病性黄斑水肿处理。OCT 中心凹厚度 312 μm 和层间囊样水肿可解释视物模糊。',
-        report: '考虑非增殖期糖尿病视网膜病变合并糖尿病性黄斑水肿；依据视物模糊、眼底微血管瘤/出血渗出及 OCT 中心凹增厚、层间囊样水肿。需进一步补充 FFA 后确认分期。'
-      },
-      {
-        no: 3,
-        title: '眼底血管性疾病鉴别诊断路径',
-        body: '视物模糊、眼底出血及黄斑水肿还需与高血压性视网膜病变、视网膜静脉阻塞等眼底血管性疾病鉴别。建议结合血压控制、眼底血管造影和既往眼病史进一步排查。',
-        report: '需鉴别高血压性视网膜病变及视网膜静脉阻塞等眼底血管性疾病；建议结合血压控制情况、FFA/OCT 结果和既往眼病史进一步判断。'
-      }
-    ];
-
     const treatmentTextPlans = [
       {
         no: 1,
@@ -2383,10 +2385,148 @@
       }
     ];
 
+    const workflowSteps = Object.keys(commandMeta);
+    const workflowResults = new Map();
+    let workflowIndex = -1;
+    let workflowBusy = false;
+    let diagnosisSelected = false;
+    const diagnosisHistory = [];
+    let downloadableDraft = '';
+
+    function refreshWorkflow() {
+      const type = workflowSteps[workflowIndex];
+      const done = type === 'quality' && state.qualityQc.completed;
+      const needsPlan = (type === 'diagnosis' && !diagnosisSelected) ||
+        (type === 'treatment' && !state.treatmentConfirmed);
+      const hints = {
+        diagnosis: diagnosisSelected ? '诊断方案已记录，可以继续检索相似病历。' : '可继续补充病史，或采用本轮评估后进入相似病历推荐。',
+        similar: '可选一条主参考病历，也可以直接继续。',
+        treatment: state.treatmentConfirmed ? '治疗方案已记录，可以生成报告。' : '请选择一项治疗方案，供报告和医嘱质控使用。',
+        report: '报告草稿已生成，可下载留存，也可直接进入医嘱质控。',
+        quality: done ? '已根据拟开医嘱生成质控结果。可补充完整的实际医嘱并发送，重新质控。' : '正在核验已选治疗方案中的拟开医嘱。'
+      };
+      $('#workflowHint').textContent = workflowBusy ? '正在处理，请稍候…' :
+        type ? `第 ${workflowIndex + 1} / 5 步 · ${hints[type]}` : '请在下方输入病史并发送，系统会自动开始辅助临床诊断。';
+      const next = $('#workflowNext');
+      next.hidden = type === 'quality' || workflowIndex < 0;
+      next.disabled = workflowBusy || needsPlan;
+      next.textContent = next.hidden ? '' : `下一步 · ${commandMeta[workflowSteps[workflowIndex + 1]]}`;
+      $$('.command-btn').forEach((button, index) => {
+        const status = button.querySelector('.workflow-status');
+        status.textContent = `0${index + 1} · ${index < workflowIndex || (done && index === workflowIndex) ? '已完成' : index === workflowIndex ? '进行中' : '待开始'}`;
+        button.disabled = workflowBusy || index > Math.max(0, workflowIndex);
+        if (index === workflowIndex) button.setAttribute('aria-current', 'step');
+        else button.removeAttribute('aria-current');
+      });
+    }
+
     function runCommand(type) {
+      if (workflowBusy) return;
+      const previous = workflowResults.get(type);
+      if (previous) {
+        previous.scrollIntoView({ block: 'start' });
+        return;
+      }
+      if (workflowIndex === -1 && type === 'diagnosis') $('#chatInput').focus();
+      else toast('请按上方流程操作，使用“下一步”继续');
+    }
+
+    function advanceWorkflow() {
+      if ($('#workflowNext').disabled || $('#workflowNext').hidden) return;
+      const type = workflowSteps[++workflowIndex];
+      state.pendingTextPlan = null;
+      state.pendingReportDraft = null;
       activateCommand(type);
-      appendMessage('user', `执行 ${commandMeta[type]}`);
-      showThinking(() => appendMessage('ai', renderCommand(type)));
+      updateQualityInputState();
+      workflowBusy = true;
+      refreshWorkflow();
+      showThinking(() => {
+        const result = appendMessage('ai', renderCommand(type));
+        workflowResults.set(type, result);
+        result.scrollIntoView({ block: 'start' });
+        workflowBusy = false;
+        refreshWorkflow();
+      });
+    }
+
+    function chooseWorkflowPlan(type, number) {
+      if (workflowBusy || workflowSteps[workflowIndex] !== type) return;
+      if (!state.pendingTextPlan) {
+        toast('本步方案已确认，可继续下一步');
+        return;
+      }
+      const result = applyPendingTextPlan(`方案${number}`);
+      if (result) appendMessage('ai', result);
+      refreshWorkflow();
+    }
+
+    // A DOCX is a ZIP package. Store these small XML parts without compression.
+    function createWordReport(text) {
+      const encoder = new TextEncoder();
+      const paragraphs = text.split(/\r?\n/).map((line, index) => {
+        const content = escapeHtml(line.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, ''));
+        const emphasis = index === 0 || /^[一二三四五六七八九十]+、/.test(line) ? '<w:rPr><w:b/></w:rPr>' : '';
+        return `<w:p><w:r>${emphasis}<w:t xml:space="preserve">${content}</w:t></w:r></w:p>`;
+      }).join('');
+      const files = {
+        '[Content_Types].xml': '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+        '_rels/.rels': '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+        'word/document.xml': `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paragraphs}</w:body></w:document>`
+      };
+      const entries = [];
+      const directory = [];
+      let offset = 0;
+      for (const [path, xml] of Object.entries(files)) {
+        const name = encoder.encode(path);
+        const data = encoder.encode(xml);
+        let crc = -1;
+        for (const byte of data) {
+          crc ^= byte;
+          for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+        }
+        const local = new DataView(new ArrayBuffer(30));
+        local.setUint32(0, 0x04034b50, true);
+        local.setUint16(4, 20, true);
+        local.setUint16(12, 33, true);
+        local.setUint32(14, ~crc, true);
+        local.setUint32(18, data.length, true);
+        local.setUint32(22, data.length, true);
+        local.setUint16(26, name.length, true);
+
+        const central = new DataView(new ArrayBuffer(46));
+        central.setUint32(0, 0x02014b50, true);
+        central.setUint16(4, 20, true);
+        new Uint8Array(central.buffer).set(new Uint8Array(local.buffer, 4, 26), 6);
+        central.setUint32(42, offset, true);
+        entries.push(local.buffer, name, data);
+        directory.push(central.buffer, name);
+        offset += local.byteLength + name.length + data.length;
+      }
+      const end = new DataView(new ArrayBuffer(22));
+      end.setUint32(0, 0x06054b50, true);
+      end.setUint16(8, directory.length / 2, true);
+      end.setUint16(10, directory.length / 2, true);
+      end.setUint32(12, directory.reduce((size, part) => size + part.byteLength, 0), true);
+      end.setUint32(16, offset, true);
+      return new Blob([...entries, ...directory, end.buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      });
+    }
+
+    function downloadWorkflowDraft() {
+      downloadWordReport(downloadableDraft, '临床决策支撑报告草稿.docx');
+    }
+
+    function downloadWordReport(text, filename) {
+      const blob = createWordReport(text);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
     function parsePlanSelection(text) {
@@ -2407,9 +2547,10 @@
 
       if (state.pendingTextPlan.target === 'dx') {
         state.report.dx = plan.report;
+        diagnosisSelected = true;
       } else if (state.pendingTextPlan.target === 'tx') {
         state.report.tx = plan.report;
-        state.report.qc = plan.qc;
+        state.qualityQc.planNotes = plan.qc;
         state.treatmentConfirmed = true;
         if (plan.selection) {
           state.selectedTreatment = {
@@ -2423,6 +2564,7 @@
       showTab('report');
         const label = state.pendingTextPlan.label;
         state.pendingTextPlan = null;
+        if (label === '辅助临床诊断') return '<strong>本轮评估已记录</strong><br />可以进入相似病历推荐，也可以继续补充病史。';
         toast(`方案${selectedNo}已写入报告`);
         return `
           <strong>方案已写入报告</strong><br />
@@ -2454,12 +2596,7 @@
         state.report.dx,
         '',
         '五、治疗建议',
-        state.report.tx,
-        '',
-        '六、医嘱合理性质控',
-        state.report.qc,
-        '',
-        ''
+        state.report.tx
       ];
       return lines.join('\n');
     }
@@ -2534,24 +2671,11 @@
         : '已核验医生选择的检查/检验与用药医嘱，当前未发现明确禁忌；仍需医生完成最终确认。';
     }
 
-    function qualityIntakePromptHtml() {
-      return `
-        医嘱合理性质控需要以下信息：<br />
-        请上传图片或输入文字：<br />
-        患者病史、诊断、检查结果、历史用药情况、当前拟开医嘱。<br /><br />
-        我会综合判断：<br />
-        用药医嘱是否合理；<br />
-        检查医嘱是否合理；<br />
-        检验医嘱是否合理；<br />
-        是否存在禁忌、重复、适应症不足或证据缺口。<br /><br />
-        请先上传资料，或直接在输入框补充文字。`;
-    }
-
     function updateQualityInputState() {
       const input = $('#chatInput');
       const uploadButton = $('#uploadToggleBtn');
       const collecting = state.qualityQc.active && !state.qualityQc.completed;
-      if (input) input.placeholder = collecting ? qualityChatPlaceholder : defaultChatPlaceholder;
+      if (input) input.placeholder = workflowSteps[workflowIndex] === 'quality' ? '输入完整的实际拟开医嘱，发送后重新质控' : workflowIndex <= 0 ? '输入症状、持续时间、既往病史或检查结果' : defaultChatPlaceholder;
       if (uploadButton) uploadButton.classList.toggle('quality-needed', collecting);
       updateUploadActionState();
     }
@@ -2616,6 +2740,7 @@
         `理由：${labPass ? 'HbA1c、血糖、肾功能等检验可支撑慢病协同、造影安全和用药风险评估。' : '需明确 HbA1c、肾功能、血脂或其他治疗前安全性指标。'}`,
         '',
         '五、风险提示',
+        ...(state.qualityQc.planNotes ? [`- 所选方案核验要点：${state.qualityQc.planNotes}`] : []),
         ...riskNotes.map(item => `- ${item}`),
         '',
         '六、需补充信息',
@@ -2637,16 +2762,6 @@
         </div>`;
     }
 
-    function startQualityCollection() {
-      state.qualityQc.active = true;
-      state.qualityQc.completed = false;
-      state.pendingTextPlan = null;
-      state.pendingReportDraft = null;
-      updateQualityInputState();
-      updateQcPanel();
-      return qualityIntakePromptHtml();
-    }
-
     function finishQualityQc(sourceText) {
       if (sourceText) {
         state.qualityQc.textEntries.push(sourceText);
@@ -2657,10 +2772,11 @@
       state.qualityQc.completed = true;
       updateQualityInputState();
       const qcText = buildQualityQcText();
-      state.report.qc = '已完成资料收集后的医嘱合理性质控；详见对话结论和本报告质控摘要。';
-      updateReport();
       updateQcPanel();
-      return `<pre class="qc-text-output">${escapeHtml(qcText)}</pre>`;
+      return `<pre class="qc-text-output">${escapeHtml(qcText)}</pre>
+        <div class="card-actions" style="justify-content: flex-end">
+          <button class="btn" type="button" onclick="downloadWordReport(this.parentElement.previousElementSibling.textContent, '医嘱合理性质控结果.docx')">下载质控结果（Word）</button>
+        </div>`;
     }
 
     function updateTreatmentSelection() {
@@ -2712,29 +2828,41 @@
       }
       state.treatmentConfirmed = true;
       state.report.tx = `${selectedTreatmentSummary()}。医生已确认方案，AI 推断逻辑和前置条件保留在当前对话中。`;
-      state.report.qc = treatmentQcSummary();
+      state.qualityQc.planNotes = treatmentQcSummary();
       updateReport();
       toast('已确认治疗方案并同步到报告');
     }
 
     function renderCommand(type) {
       if (type === 'diagnosis') {
+        const history = diagnosisHistory.join('；');
+        const topics = [
+          ['症状与受累部位', /视|眼|痛|模糊|不适|症状/],
+          ['起病时间与变化', /小时|天|周|月|年|突然|加重|缓解/],
+          ['既往疾病与用药', /糖尿病|高血压|病史|用药|服用|过敏/],
+          ['客观检查结果', /OCT|FFA|HbA1c|眼底检查|检验结果|检查显示/i]
+        ];
+        const recorded = topics.filter(([, pattern]) => pattern.test(history)).map(([label]) => label);
+        const missing = topics.filter(([, pattern]) => !pattern.test(history)).map(([label]) => label);
+        const assessment = /糖尿病/.test(history) && /视物|视力|眼底|黄斑|视网膜/.test(history)
+          ? '原型演示方向：结合糖尿病病史和视功能或眼底线索，可进一步核实是否存在糖尿病相关眼底病变。具体病因及分期待医生结合检查确认。'
+          : '现有描述可作为问诊线索，具体病因待结合病史和检查进一步评估。';
+        const followup = missing.length ? `建议补充：${missing.join('、')}。` : '请核对检查的具体结果、时间和左右眼，必要时补充更正。';
         state.pendingTextPlan = {
-          type: 'diagnosis',
-          label: '辅助临床诊断',
           target: 'dx',
-          plans: diagnosisTextPlans
+          label: '辅助临床诊断',
+          plans: [{ no: 1, title: '本轮诊断评估', report: `患者提供的病史：${history}。 ${assessment} ${followup}` }]
         };
         return `
-          <strong>辅助临床诊断方案</strong><br />
-          我已根据主诉、慢病史、眼病史、医学影像、体格检查和检验结果生成 3 个文字诊断方案。
-          <div class="text-plan-list">
-            ${diagnosisTextPlans.map(plan => `
-              <div class="text-plan">
-                <strong>方案${plan.no}：${escapeHtml(plan.title)}</strong>
-                ${escapeHtml(plan.body)}
-              </div>
-            `).join('')}
+          <strong>${diagnosisHistory.length === 1 ? '初步诊断评估' : `诊断评估更新 · 第 ${diagnosisHistory.length} 轮`}</strong>
+          <div class="result-card">
+            <p><strong>累计病史</strong> ${escapeHtml(history)}</p>
+            <p><strong>已识别线索</strong> ${recorded.join('、') || '待补充具体症状和病史'}</p>
+            <p>${assessment}</p>
+            <p>${followup}</p>
+            <div class="card-actions">
+              <button type="button" class="btn mini-btn" onclick="chooseWorkflowPlan('diagnosis', 1)">采用本轮评估</button>
+            </div>
           </div>`;
       }
 
@@ -2779,6 +2907,7 @@
               <div class="text-plan">
                 <strong>方案${plan.no}：${escapeHtml(plan.title)}</strong>
                 ${escapeHtml(plan.body)}
+                <div class="card-actions"><button type="button" class="btn mini-btn" onclick="chooseWorkflowPlan('${type}', ${plan.no})">采用方案${plan.no}</button></div>
               </div>
             `).join('')}
           </div>`;
@@ -2787,54 +2916,15 @@
       if (type === 'report') {
         const draft = reportDraft();
         state.pendingReportDraft = draft;
+        downloadableDraft = draft;
         return `
-          <div class="report-draft-text">${escapeHtml(draft)}</div>`;
+          <div class="report-draft-text">${escapeHtml(draft)}</div>
+          <div class="card-actions" style="justify-content: flex-end">
+            <button class="btn" type="button" onclick="downloadWorkflowDraft()">下载报告（Word）</button>
+          </div>`;
       }
 
-      if (type === 'quality') {
-        return startQualityCollection();
-      }
-
-      state.report.qc = treatmentQcSummary();
-      updateReport();
-      showTab('report');
-      const selectedChecks = selectedTreatmentItems('checks');
-      const selectedMedications = selectedTreatmentItems('medications');
-      const hasTreatmentSelection = selectedChecks.length || selectedMedications.length;
-      const selectedCheckText = selectedChecks.length
-        ? selectedChecks.map(item => escapeHtml(item.title)).join('、')
-        : '尚未选择检查/检验医嘱。请先在“治疗方案推荐”中选择包含检查检验建议的方案。';
-      const selectedMedicationText = selectedMedications.length
-        ? selectedMedications.map(item => escapeHtml(item.title)).join('、')
-        : '尚未选择用药医嘱。请先在“治疗方案推荐”中选择含用药建议的方案，例如方案2。';
-      const qcLeadText = hasTreatmentSelection
-        ? escapeHtml([
-            selectedChecks.length ? `检查/检验：${selectedChecks.map(item => item.title).join('、')}` : '',
-            selectedMedications.length ? `用药：${selectedMedications.map(item => item.title).join('、')}` : ''
-          ].filter(Boolean).join('；'))
-        : '尚未选择治疗方案。请先点击“治疗方案推荐”，AI 会输出 3 个文字方案。';
-      return `
-        <strong>医嘱合理性质控结论</strong>
-        <div class="result-card" style="border-left:4px solid ${hasTreatmentSelection ? 'var(--blue)' : 'var(--amber)'}">
-          <div class="result-title"><span>当前质控对象</span><span class="tag ${hasTreatmentSelection ? 'blue' : 'amber'}">${hasTreatmentSelection ? '已选择' : '待选择'}</span></div>
-          <p>${qcLeadText}</p>
-          <p>${hasTreatmentSelection ? escapeHtml(state.report.qc) : '质控暂不生成正式结论。'}</p>
-        </div>
-        <div class="result-card" style="border-left:4px solid ${selectedChecks.length ? 'var(--green)' : 'var(--amber)'}">
-          <div class="result-title"><span>检查/检验医嘱</span><span class="tag ${selectedChecks.length ? 'green' : 'amber'}">${selectedChecks.length ? '已选择' : '待选择'}</span></div>
-          <ul class="kv">
-            <li>${selectedCheckText}</li>
-            <li>系统将核验适应症、近期重复检查、造影风险和检验指标完整性。</li>
-          </ul>
-        </div>
-        <div class="result-card" style="border-left:4px solid ${selectedMedications.length ? 'var(--green)' : 'var(--amber)'}">
-          <div class="result-title"><span>用药医嘱</span><span class="tag ${selectedMedications.length ? 'green' : 'amber'}">${selectedMedications.length ? '已选择' : '待选择'}</span></div>
-          <ul class="kv">
-            <li>${selectedMedicationText}</li>
-            <li>${selectedMedications.length ? '系统将核验说明书、过敏史、肝肾功能和重复用药。' : '选择后，本处会显示具体药品，并提供对应说明书与用药质控依据。'}</li>
-          </ul>
-          ${selectedMedications.length ? '<div class="card-actions"><button class="btn mini-btn" onclick="openKnowledge(\'drug\')">查看所选药品说明书</button></div>' : ''}
-        </div>`;
+      if (type === 'quality') return finishQualityQc();
     }
 
     function answerQuestion(text) {
@@ -2904,14 +2994,34 @@
     function sendChat() {
       const input = $('#chatInput');
       const text = input.value.trim();
-      if (!text) return;
+      if (!text || workflowBusy) return;
+      const diagnosing = workflowIndex <= 0;
+      if (diagnosing) {
+        workflowIndex = 0;
+        activateCommand('diagnosis');
+        diagnosisHistory.push(text);
+        diagnosisSelected = false;
+        const oldResult = workflowResults.get('diagnosis');
+        if (oldResult) oldResult.querySelector('button').disabled = true;
+      }
+      workflowBusy = true;
+      refreshWorkflow();
       appendMessage('user', text);
       input.value = '';
       showThinking(() => {
+        if (diagnosing) {
+          workflowResults.set('diagnosis', appendMessage('ai', renderCommand('diagnosis')));
+          workflowBusy = false;
+          refreshWorkflow();
+          return;
+        }
         const planResult = applyPendingTextPlan(text);
         const reportResult = applyPendingReportDraft(text);
-        const qualityResult = !planResult && !reportResult && state.qualityQc.active ? finishQualityQc(text) : null;
-        appendMessage('ai', planResult || reportResult || qualityResult || answerQuestion(text));
+        const qualityResult = workflowSteps[workflowIndex] === 'quality' ? finishQualityQc(text) : null;
+        const result = appendMessage('ai', planResult || reportResult || qualityResult || answerQuestion(text));
+        if (qualityResult) workflowResults.set('quality', result);
+        workflowBusy = false;
+        refreshWorkflow();
       });
     }
 
@@ -3096,6 +3206,10 @@
     }
 
     function selectSimilarCase(id) {
+      if (workflowSteps[workflowIndex] !== 'similar' || workflowBusy) {
+        toast('相似病历参考已进入下一步，可回看推荐结果');
+        return;
+      }
       const item = similarCases.find(caseItem => caseItem.id === id);
       if (!item) return;
 
@@ -3119,6 +3233,12 @@
         } else if (!selected && oldBadge) {
           oldBadge.remove();
         }
+      });
+
+      $$('[data-reference-status]').forEach(status => {
+        const selected = status.dataset.referenceStatus === id;
+        status.textContent = selected ? '✓ 已选为参考病历' : '';
+        status.previousElementSibling.disabled = selected;
       });
 
       toast(`已选择 ${item.id} 作为主参考病历`);
@@ -3441,10 +3561,19 @@
         appendMessage('ai', `
           <pre class="qc-text-output">${escapeHtml(caseDetailText(item))}</pre>
           <div class="card-actions">
-            <button class="btn primary" onclick="selectSimilarCase('${item.id}')">选为参考病历</button>
+            <button class="btn primary" type="button" onclick="selectSimilarCase('${item.id}')" ${state.selectedSimilarCase?.id === item.id ? 'disabled' : ''}>选为参考病历</button>
+            <span class="select-badge" role="status" data-reference-status="${item.id}">${state.selectedSimilarCase?.id === item.id ? '✓ 已选为参考病历' : ''}</span>
           </div>`);
       });
     }
+
+    $('#workflowNext').addEventListener('click', advanceWorkflow);
+    $$('.command-btn').forEach(button => {
+      const status = document.createElement('span');
+      status.className = 'workflow-status';
+      button.prepend(status);
+    });
+    refreshWorkflow();
 
     $$('.command-btn').forEach(btn => {
       btn.addEventListener('click', () => runCommand(btn.dataset.type));

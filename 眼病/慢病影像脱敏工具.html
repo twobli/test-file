@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>眼病/慢病影像脱敏工具</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>眼病/慢病影像脱敏工具（独立模块 · Excel需规对齐）</title>
 <style>
 :root{--blue:#1890ff;--deep:#096dd9;--soft:#e6f7ff;--green:#52c41a;--orange:#faad14;--red:#ff4d4f;--ink:#262626;--text:#595959;--muted:#8c8c8c;--line:#e8e8e8;--bg:#f0f2f5;--side:220px;--head:60px}
 *{box-sizing:border-box}
@@ -131,9 +131,10 @@ select,.input{padding:9px 12px;border:1px solid #d9d9d9;border-radius:4px;backgr
 @media(max-width:1100px){.summary{grid-template-columns:1fr 1fr}.compare{grid-template-columns:1fr}}
 @media(max-width:760px){:root{--side:64px}.product{display:none}.brand{font-size:0}.brand:after{content:"眼病慢病脱敏";font-size:17px}.side span:not(.nav-icon){display:none}.side .nav,.side .side-title,.side .side-label{justify-content:center;padding-left:0;padding-right:0}.main{padding:16px 12px}.heading{display:block}.actions{margin-top:12px}.form-grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.workflow{padding:12px 10px}.workflow-step{gap:6px}.workflow-step .step-desc{display:none}.workflow-step:after{margin:0 7px}.workflow-step .step-title{font-size:12px}}
 </style>
+<link rel="stylesheet" href="link-assets/link.css">
 </head>
-<body>
-<header class="top"><button class="hamb" id="hamb">☰</button><div class="brand" onclick="location.href='../app-center.html'" style="cursor:pointer" title="返回应用中心">眼病/慢病影像脱敏工具</div><div class="product">离线单机部署 · 北京同仁医院前处理服务器 · 多中心项目节点 TRH-01（全项目共 50 个节点）</div><div class="user"><div class="avatar">操</div><span>操作员</span><button class="logout" id="logout">退出</button></div></header>
+<body data-module="desens">
+<header class="top"><button class="hamb" id="hamb">☰</button><div class="brand">眼病/慢病影像脱敏工具</div><div class="product">离线单机部署 · 北京同仁医院前处理服务器 · 多中心项目节点 TRH-01（全项目共 50 个节点）</div><div class="user"><div class="avatar">操</div><span>操作员</span><button class="logout" id="logout">退出</button></div></header>
 <div class="shell">
 <aside class="side" id="side">
   <div class="side-title"><span>眼病/慢病影像脱敏工具</span></div>
@@ -144,7 +145,7 @@ select,.input{padding:9px 12px;border:1px solid #d9d9d9;border-radius:4px;backgr
 </aside>
 <main class="main">
   <div class="workflow" aria-label="脱敏流程">
-    <div class="workflow-step active" data-step="extract"><span class="num">1</span><span class="step-copy"><span class="step-title">数据抽取</span><span class="step-desc">读取本机固定路径下的原始影像</span></span></div>
+    <div class="workflow-step active" data-step="extract"><span class="num">1</span><span class="step-copy"><span class="step-title">数据抽取</span><span class="step-desc">读取录入工具本机目录中的原始影像</span></span></div>
     <div class="workflow-step" data-step="scan"><span class="num">2</span><span class="step-copy"><span class="step-title">数据扫描</span><span class="step-desc">统计影像分辨率/类型，匹配已有规则</span></span></div>
     <div class="workflow-step" data-step="change"><span class="num">3</span><span class="step-copy"><span class="step-title">脱敏变化</span><span class="step-desc">标注坐标并一键批量脱敏</span></span></div>
   </div>
@@ -152,7 +153,7 @@ select,.input{padding:9px 12px;border:1px solid #d9d9d9;border-radius:4px;backgr
   <section class="page active" id="page-extract">
     <div class="list-view" id="extractList">
       <div class="crumb"><span>眼病/慢病影像脱敏工具</span><b>›</b><span>数据抽取</span></div>
-      <div class="heading"><div><h1>数据抽取</h1><p>本模块负责读取工作人员已拷贝至本机固定路径下的原始影像数据，供后续脱敏处理使用（本工具离线部署，不联网、不跨机构传输）。「多中心分布式采集」通过在采集范围内的各医院分别独立部署本工具实现：各节点仅处理本机构数据，节点之间不联网、不共享数据。</p></div><div class="actions"><button class="btn primary" id="newExtractBtn">＋ 读取新数据</button></div></div>
+      <div class="heading"><div><h1>数据抽取</h1><p>本模块负责读取录入工具同一批本机原始影像数据，供后续脱敏处理使用。数据仍在本机固定路径内处理，不联网、不跨机构传输；页面中的接收路径与录入工具本机影像数据目录保持同一数据口径。「多中心分布式采集」通过在采集范围内的各医院分别独立部署本工具实现：各节点仅处理本机构数据，节点之间不联网、不共享数据。</p></div><div class="actions"><button class="btn primary" id="newExtractBtn">＋ 读取新数据</button></div></div>
       <div class="sub" style="margin:-8px 0 10px">部署信息（部署时配置，只读）</div>
       <div class="summary" style="margin-bottom:18px">
         <div class="card stat"><label>所属项目</label><strong style="font-size:15px;line-height:1.35">生命医学主题库 · 眼病慢病多中心影像采集</strong></div>
@@ -160,11 +161,12 @@ select,.input{padding:9px 12px;border:1px solid #d9d9d9;border-radius:4px;backgr
         <div class="card stat"><label>节点标识</label><strong style="font-size:16px">TRH-01</strong></div>
         <div class="card stat"><label>全项目节点总数</label><strong style="font-size:16px">50（各自独立部署）</strong></div>
       </div>
+      <div class="alert" style="margin:-4px 0 18px">批次口径说明：本工具通过“本机数据批次号”和录入工具保持同一批数据口径。录入工具负责本机接收、整理和记录影像对象；脱敏工具按同一批次号对应的本机模态目录读取文件并完成脱敏处理，全程不联网、不跨机构传输。</div>
       <div class="card"><div class="card-body">
         <div class="filter"><div class="search"><span>⌕</span><input id="extractQuery" placeholder="批次编号 / 数据模态"></div>
           <select id="extractStatus"><option value="">全部状态</option><option>读取中</option><option>完成</option><option>失败</option></select>
           <button class="btn primary" id="filterExtractBtn">查询</button><button class="btn" id="resetExtractBtn">重置</button></div>
-        <div class="table-wrap"><table class="table" id="extractTable"><thead><tr><th>批次编号</th><th>数据模态</th><th>接收路径（固定）</th><th>文件数</th><th>读取时间</th><th>状态</th><th>操作</th></tr></thead><tbody></tbody></table></div>
+        <div class="table-wrap"><table class="table" id="extractTable"><thead><tr><th>批次编号</th><th>数据模态</th><th>本机数据批次号</th><th>接收路径（固定）</th><th>文件数</th><th>读取时间</th><th>状态</th><th>操作</th></tr></thead><tbody></tbody></table></div>
         <div class="pager"><span id="extractCountLabel">共 0 条</span><span>每页 10 条</span></div>
       </div></div>
     </div>
@@ -180,6 +182,7 @@ select,.input{padding:9px 12px;border:1px solid #d9d9d9;border-radius:4px;backgr
       <div class="card"><div class="card-head"><h2>批次信息</h2></div><div class="card-body">
         <div class="form-grid">
           <div class="field"><label>数据模态</label><input id="fExtModality" readonly></div>
+          <div class="field"><label>本机数据批次号</label><input id="fExtBatchNo" readonly></div>
           <div class="field"><label>接收路径（部署时配置，固定不变）</label><input id="fExtPath" readonly></div>
           <div class="field"><label>文件数</label><input id="fExtCount" readonly></div>
           <div class="field"><label>读取时间</label><input id="fExtTime" readonly></div>
@@ -269,7 +272,7 @@ select,.input{padding:9px 12px;border:1px solid #d9d9d9;border-radius:4px;backgr
     <div class="field"><label><span class="required">*</span> 数据模态</label><select id="modalModality"><option value="">请选择</option><option>眼底彩照</option><option>OCT</option><option>OCTA</option><option>眼前节照相</option></select></div>
     <div class="field"><label>固定接收路径</label><input id="modalPathPreview" readonly value="请先选择数据模态"></div>
   </div>
-  <div class="alert" style="margin-top:16px">请先将病历系统 / 影像设备导出的未脱敏原始数据，人工拷贝至上方固定路径下，再点击"开始读取"。读取完成后将自动触发影像类型统计扫描。</div>
+  <div class="alert" style="margin-top:16px">请先在录入工具完成同批次原始影像的本机接收/整理，再确认该模态数据已放入上方固定路径。脱敏工具只读取本机目录，不从网络拉取数据；读取完成后将自动触发影像类型统计扫描。</div>
 </div><div class="modal-foot"><button class="btn" id="cancelExtractModal">取消</button><button class="btn primary" id="confirmExtractBtn">开始读取</button></div></div></div>
 
 <div class="modal" id="annotModal"><div class="modal-box"><div class="modal-head"><h3 id="annotTitle">标注水印位置</h3><button class="close" id="annotClose">×</button></div><div class="modal-body">
@@ -310,10 +313,10 @@ function go(id){
   $$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
   const order=['extract','scan','change'],current=order.indexOf(id);
   $$('.workflow-step').forEach((s,i)=>{s.classList.toggle('active',s.dataset.step===id);s.classList.toggle('done',i<current)});
-  showList(id);window.scrollTo({top:0,behavior:'smooth'});
+  showList(id);window.scrollTo({top:0,behavior:'auto'});
 }
 function showList(id){$('#'+id+'List').classList.remove('hidden');$('#'+id+'Detail').classList.remove('active')}
-function showDetail(id){$('#'+id+'List').classList.add('hidden');$('#'+id+'Detail').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function showDetail(id){$('#'+id+'List').classList.add('hidden');$('#'+id+'Detail').classList.add('active');window.scrollTo({top:0,behavior:'auto'})}
 $$('.workflow-step').forEach(n=>n.onclick=()=>go(n.dataset.step));
 $$('[data-page]').forEach(n=>n.onclick=()=>go(n.dataset.page));
 $$('[data-back]').forEach(b=>b.onclick=()=>showList(b.dataset.back));
@@ -321,7 +324,9 @@ $('#hamb').onclick=()=>$('#side').classList.toggle('compact');
 $('#logout').onclick=()=>toast('当前为原型演示，本机工具无需联网登录','error');
 
 /* ---------- 数据模型 ---------- */
-const pathFor=m=>({'眼底彩照':'/data/incoming/cfp/','OCT':'/data/incoming/oct/','OCTA':'/data/incoming/octa/','眼前节照相':'/data/incoming/asf/'}[m]);
+const pathFor=m=>({'眼底彩照':'/data/entry-tool/incoming/cfp/','OCT':'/data/entry-tool/incoming/oct/','OCTA':'/data/entry-tool/incoming/octa/','眼前节照相':'/data/entry-tool/incoming/asf/'}[m]);
+const sourceText='录入工具本机影像数据目录';
+const batchFor=m=>({'眼底彩照':'LCB-20260901-041','OCT':'LCB-20260902-052','OCTA':'LCB-20260903-063','眼前节照相':'LCB-20260904-074'}[m]);
 const modalityColor=m=>({'眼底彩照':'#d4622a','OCT':'#2f54eb','OCTA':'#0e7d80','眼前节照相':'#722ed1'}[m]||'#595959');
 
 let typeLibrary={
@@ -334,9 +339,9 @@ let typeLibrary={
 };
 
 let extractBatches=[
-  {id:'EXT-20260901-041',modality:'眼底彩照',path:pathFor('眼底彩照'),count:5280,time:'2026-09-01 09:10',status:'完成',duration:'24 分钟'},
-  {id:'EXT-20260902-052',modality:'OCT',path:pathFor('OCT'),count:2140,time:'2026-09-02 08:40',status:'完成',duration:'9 分钟'},
-  {id:'EXT-20260903-063',modality:'OCTA',path:pathFor('OCTA'),count:null,time:'2026-09-03 07:55',status:'失败',duration:'—'}
+  {id:'EXT-20260901-041',modality:'眼底彩照',source:sourceText,batchNo:batchFor('眼底彩照'),path:pathFor('眼底彩照'),count:5280,time:'2026-09-01 09:10',status:'完成',duration:'24 分钟'},
+  {id:'EXT-20260902-052',modality:'OCT',source:sourceText,batchNo:batchFor('OCT'),path:pathFor('OCT'),count:2140,time:'2026-09-02 08:40',status:'完成',duration:'9 分钟'},
+  {id:'EXT-20260903-063',modality:'OCTA',source:sourceText,batchNo:batchFor('OCTA'),path:pathFor('OCTA'),count:null,time:'2026-09-03 07:55',status:'失败',duration:'—'}
 ];
 let scanBatches=[
   {id:'SCAN-20260901-018',extId:'EXT-20260901-041',modality:'眼底彩照',count:5280,startTime:'2026-09-01 09:12',status:'完成',types:[
@@ -395,9 +400,9 @@ function taskDisplayStatus(task){
 function renderExtractTable(){
   $('#extractTable tbody').innerHTML=extractBatches.map(b=>{
     let acts='<button class="link" data-act="view-extract" data-id="'+b.id+'">查看</button>';
-    if(b.status==='完成')acts+='<button class="link" data-act="goto-scan" data-id="'+b.id+'">查看扫描结果</button>';
+    if(b.status==='完成')acts+='<button class="link" data-act="goto-scan" data-id="'+b.id+'">查看关联扫描任务</button>';
     else if(b.status==='失败')acts+='<button class="link" data-act="retry-extract" data-id="'+b.id+'">重新读取</button>';
-    return '<tr><td><b>'+b.id+'</b></td><td>'+b.modality+'</td><td>'+b.path+'</td><td>'+fmtNum(b.count)+'</td><td>'+b.time+'</td><td><span class="tag '+extractStatusCls[b.status]+'">'+b.status+'</span></td><td>'+acts+'</td></tr>';
+    return '<tr><td><b>'+b.id+'</b></td><td>'+b.modality+'</td><td>'+(b.batchNo||batchFor(b.modality))+'</td><td>'+b.path+'</td><td>'+fmtNum(b.count)+'</td><td>'+b.time+'</td><td><span class="tag '+extractStatusCls[b.status]+'">'+b.status+'</span></td><td>'+acts+'</td></tr>';
   }).join('');
   $('#extractCountLabel').textContent='共 '+extractBatches.length+' 条';
 }
@@ -406,7 +411,7 @@ function renderScanTable(){
     const pending=s.status==='完成'?s.types.filter(t=>!typeLibrary[t.key]).length:'—';
     const typeTotal=s.status==='完成'?s.types.length:'—';
     let acts='';
-    if(s.status==='完成')acts='<button class="link" data-act="view-scan" data-id="'+s.id+'">查看统计结果</button>';
+    if(s.status==='完成')acts='<button class="link" data-act="view-scan" data-id="'+s.id+'">查看扫描统计</button>';
     else if(s.status==='失败')acts='<button class="link" data-act="rescan" data-id="'+s.id+'">重新扫描</button>';
     else acts='<button class="link" data-act="view-scan" data-id="'+s.id+'">查看进度</button>';
     return '<tr><td><b>'+s.id+'</b></td><td>'+s.extId+'</td><td>'+s.modality+'</td><td>'+fmtNum(s.count)+'</td><td>'+typeTotal+'</td><td>'+pending+'</td><td>'+s.startTime+'</td><td><span class="tag '+scanStatusCls[s.status]+'">'+s.status+'</span></td><td>'+acts+'</td></tr>';
@@ -433,8 +438,8 @@ function renderExtractDetail(id){
   $('#extractStatModality').textContent=b.modality;
   $('#extractStatDuration').textContent=b.status==='完成'?(b.duration||'—'):'—';
   $('#extractStatResult').textContent=b.status==='完成'?'成功':b.status==='失败'?'失败':'读取中';
-  $('#fExtModality').value=b.modality;$('#fExtPath').value=b.path;$('#fExtCount').value=fmtNum(b.count);$('#fExtTime').value=b.time;
-  $('#extractDetailAlert').textContent=b.status==='完成'?'数据已读取至本机工作目录，并已自动触发影像类型统计扫描。':b.status==='失败'?'读取固定路径失败或路径下未发现有效文件，可返回列表重新读取。':'正在读取固定接收路径下的原始影像数据。';
+  $('#fExtModality').value=b.modality;$('#fExtBatchNo').value=b.batchNo||batchFor(b.modality);$('#fExtPath').value=b.path;$('#fExtCount').value=fmtNum(b.count);$('#fExtTime').value=b.time;
+  $('#extractDetailAlert').textContent=b.status==='完成'?'数据已按本机数据批次号从录入工具本机影像数据目录读取至脱敏工具本机工作目录，并已自动触发影像类型统计扫描。':b.status==='失败'?'读取固定路径失败或路径下未发现有效文件，可返回列表重新读取。':'正在读取录入工具本机影像数据目录下的原始影像数据。';
   showDetail('extract');
 }
 function renderScanDetail(id){
@@ -500,8 +505,8 @@ function renderChangeDetail(id){
     $('#compareBody').innerHTML=buildCompareHtml(scan);
     $('#compareSub').textContent=scan.id+' · 已应用规则库中的标注/裁边设置';
     $$('#exportSchemeChips .chip').forEach(c=>c.classList.toggle('on',c.dataset.scheme===task.exportScheme));
-    $('#exportFormat').value=task.exportFormat||'PNG';
-    $('#exportPath').value=task.exportPath||'尚未生成';
+    if($('#exportFormat'))$('#exportFormat').value=task.exportFormat||'PNG';
+    if($('#exportPath'))$('#exportPath').value=task.exportPath||'尚未生成';
   }
   showDetail('change');
 }
@@ -706,7 +711,7 @@ document.body.addEventListener('click',e=>{
 $('#addLibRuleBtn').onclick=openLibraryNew;
 function openLibraryView(fromPage){
   libReturnPage=fromPage;$('#'+fromPage+'List').classList.add('hidden');$('#'+fromPage+'Detail').classList.remove('active');
-  $('#ruleLibraryView').style.display='block';renderLibraryTable();window.scrollTo({top:0,behavior:'smooth'});
+  $('#ruleLibraryView').style.display='block';renderLibraryTable();window.scrollTo({top:0,behavior:'auto'});
 }
 $('#ruleLibBack').onclick=()=>{$('#ruleLibraryView').style.display='none';showList(libReturnPage);};
 $('#openLibFromScan').onclick=()=>openLibraryView('scan');
@@ -728,4 +733,7 @@ $('#resetChangeBtn').onclick=()=>{$('#changeQuery').value='';$('#changeStatus').
 /* ---------- 初始渲染 ---------- */
 renderExtractTable();renderScanTable();renderChangeTable();
 </script>
+<script src="link-assets/link-model.js"></script>
+<script src="link-assets/link-runtime.js"></script>
+<script src="link-assets/desens.js"></script>
 </body></html>

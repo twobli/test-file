@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>眼病/慢病数据入库（闭环修改版）</title>
+  <title>眼病/慢病数据入库（独立模块 · Excel需规对齐）</title>
   <style>
     :root{--blue:#1890ff;--blue-deep:#096dd9;--blue-soft:#e6f7ff;--cyan:#13c2c2;--green:#52c41a;--orange:#faad14;--red:#ff4d4f;--ink:#262626;--text:#595959;--muted:#8c8c8c;--line:#e8e8e8;--bg:#f0f2f5;--panel:#fff;--sidebar:220px;--header:60px}
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.55} button,input,select{font:inherit} button{cursor:pointer}
@@ -91,8 +91,9 @@
 @media(max-width:900px){.closure-grid,.closure-step-row{grid-template-columns:1fr 1fr}.closure-form{grid-template-columns:1fr}.closure-field.full{grid-column:auto}}
 
 </style>
+<link rel="stylesheet" href="link-assets/link.css">
 </head>
-<body>
+<body data-module="collection">
 <div class="app">
   <header class="topbar">
     <button class="hamburger" id="hamburger">☰</button>
@@ -152,7 +153,7 @@
 <div class="toast" id="toast">✓ 操作成功</div>
 <script>
   const sideItems=document.querySelectorAll('.side-item'), pages=document.querySelectorAll('.page');
-  sideItems.forEach(item=>item.addEventListener('click',()=>{sideItems.forEach(i=>i.classList.remove('active'));item.classList.add('active');pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+item.dataset.page));window.scrollTo({top:0,behavior:'smooth'});}));
+  sideItems.forEach(item=>item.addEventListener('click',()=>{sideItems.forEach(i=>i.classList.remove('active'));item.classList.add('active');pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+item.dataset.page));window.scrollTo({top:0,behavior:'auto'});}));
   const modal=document.getElementById('modal'); const openModal=()=>modal.classList.add('open'); document.querySelectorAll('[data-open-modal]').forEach(b=>b.addEventListener('click',openModal)); document.getElementById('closeModal').onclick=()=>modal.classList.remove('open'); document.getElementById('cancelModal').onclick=()=>modal.classList.remove('open');
   const toast=document.getElementById('toast'); const showToast=(msg='✓ 操作成功')=>{toast.textContent=msg;toast.classList.toggle('warn',/⚠|阻断|不可|失败/.test(msg));toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}; document.getElementById('refreshBtn').onclick=()=>showToast('✓ 数据已刷新');
   document.getElementById('saveHospitalDraft').onclick=()=>{const name=modal.querySelector('input[placeholder="请输入医院全称"]'),region=modal.querySelector('select'),centers=centerRows(modal.querySelector('[data-center-editor]'));if(!name.value){showToast('⚠ 至少填写医院全称后才能保存草稿');name.focus();return}document.querySelector('#page-hospitals tbody').insertAdjacentHTML('afterbegin',`<tr data-compliance="draft" data-centers="${centers.join('|')}"><td>□</td><td>草稿</td><td><b>${name.value.replace(/[<>]/g,'')}</b></td><td>${region.selectedIndex?region.value:'待选择'}</td><td>待核定</td><td>${centers.length}</td><td>0</td><td>0</td><td>尚未提交</td><td><button class="link-btn detail-btn">查看</button></td></tr>`);modal.classList.remove('open');showToast('✓ 医院接入草稿已保存，可继续补充信息后提交接入')};
@@ -459,7 +460,7 @@
   const caseListCard=document.createElement('div');caseListCard.className='card section-card';caseListCard.id='caseListCard';
   caseListCard.innerHTML='<div class="section-body"><div class="filter-bar"><div class="search"><span>⌕</span><input id="caseSearch" placeholder="病历编号 / 患者姓名（脱敏）"></div><select id="caseHospitalFilter"><option value="">全部医院</option><option>北京同仁医院</option><option>中南大学湘雅二医院</option><option>深圳市眼科医院</option></select><select id="caseDiseaseFilter"><option value="">全部疾病</option><option>糖尿病视网膜病变</option><option>青光眼</option><option>白内障</option><option>高血压病</option></select><button class="btn btn-primary" id="caseFilterBtn">查询</button><button class="btn" id="caseResetBtn">重置</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>病例 ID</th><th>患者（脱敏）</th><th>医院</th><th>主诊断</th><th>就诊日期</th><th>影像数</th><th>合规状态</th><th>质控状态</th><th>操作</th></tr></thead><tbody><tr data-case-id="TRH-2026-008421"><td><b>TRH-2026-008421</b></td><td>*小明 · 男 · 42岁</td><td>北京同仁医院</td><td>糖尿病视网膜病变</td><td>2026-08-28</td><td>6</td><td><span class="tag green">已签署</span></td><td><span class="tag orange">待审核</span></td><td><button class="link-btn case-view">查看</button><button class="link-btn case-edit">修改</button></td></tr><tr data-case-id="XY2-2026-006810"><td><b>XY2-2026-006810</b></td><td>*李女士 · 女 · 56岁</td><td>中南大学湘雅二医院</td><td>高血压病</td><td>2026-08-27</td><td>4</td><td><span class="tag green">已签署</span></td><td><span class="tag green">已通过</span></td><td><button class="link-btn case-view">查看</button><button class="link-btn case-edit">修改</button></td></tr><tr data-case-id="SZE-2026-001920"><td><b>SZE-2026-001920</b></td><td>*王先生 · 男 · 61岁</td><td>深圳市眼科医院</td><td>青光眼</td><td>2026-08-26</td><td>2</td><td><span class="tag orange">待补材料</span></td><td><span class="tag red">退回修改</span></td><td><button class="link-btn case-view">查看</button><button class="link-btn case-edit">修改</button></td></tr></tbody></table></div><div class="pager"><span>共 3 条</span><span>每页 10 条</span><div class="page-no"><button>‹</button><button class="active">1</button><button>›</button></div></div></div>';
   caseEditorCard.parentElement.insertBefore(caseListCard,caseEditorCard);caseEditorCard.style.display='none';
-  const showCaseEditor=(id,mode='edit')=>{activeCaseListRow=caseListCard.querySelector(`tr[data-case-id="${id}"]`);if(mode==='view'){openAction('查看病历详情');return}caseEditorCard.style.display='block';caseListCard.style.display='none';casePage.querySelector('.page-heading h1').textContent='编辑病历';casePage.querySelector('.page-heading p').textContent='修改病历字段并保存后重新提交质控';caseTabs.querySelector('.tab.active')?.click();const idInput=caseFormPanel.querySelector('input[readonly]');if(idInput)idInput.value=id;window.scrollTo({top:0,behavior:'smooth'})};window.openCaseEditor=showCaseEditor;
+  const showCaseEditor=(id,mode='edit')=>{activeCaseListRow=caseListCard.querySelector(`tr[data-case-id="${id}"]`);if(mode==='view'){openAction('查看病历详情');return}caseEditorCard.style.display='block';caseListCard.style.display='none';casePage.querySelector('.page-heading h1').textContent='编辑病历';casePage.querySelector('.page-heading p').textContent='修改病历字段并保存后重新提交质控';caseTabs.querySelector('.tab.active')?.click();const idInput=caseFormPanel.querySelector('input[readonly]');if(idInput)idInput.value=id;window.scrollTo({top:0,behavior:'auto'})};window.openCaseEditor=showCaseEditor;
   const showCaseList=()=>{caseEditorCard.style.display='none';caseListCard.style.display='block';casePage.querySelector('.page-heading h1').textContent='病历数据采集';casePage.querySelector('.page-heading p').textContent='管理患者人口学、临床信息与合规授权原始记录'};
   casePage.querySelector('.page-heading button').onclick=()=>openAction('新建病历');
   caseListCard.addEventListener('click',event=>{const row=event.target.closest('tr');if(!row)return;if(event.target.closest('.case-view'))showCaseEditor(row.dataset.caseId,'view');if(event.target.closest('.case-edit'))showCaseEditor(row.dataset.caseId,'edit')});
@@ -478,7 +479,7 @@
   document.querySelectorAll('.side-item[data-page="hospitals"]').forEach(item=>item.style.setProperty('display','none','important'));
   if(dashboard&&!dashboard.querySelector('.hospital-directory')){
     const box=document.createElement('div'); box.className='card section-card hospital-directory';
-    box.innerHTML='<div class="section-head"><div><h2>医院清单与生命医学数据入库</h2><span class="tag blue">共 52 家</span></div><button class="mini-action">查看全部清单 ›</button></div><div class="section-body"><div class="table-wrap"><table class="data-table"><thead><tr><th>医院名称</th><th>区域</th><th>等级</th><th>病例 / 影像</th><th>生命医学数据类型</th><th>操作</th></tr></thead><tbody>'+[['北京同仁医院','华北','三甲','合规','8,420 / 56,280','眼底影像、OCT、病历'],['中南大学湘雅二医院','华中','三甲','合规','6,810 / 42,125','眼底影像、慢病病历'],['深圳市第二人民医院','华南','三甲','待补充','5,620 / 38,640','超声、检验、病历'],['安徽医科大学二附院','华东','三甲','合规','4,982 / 31,508','眼底影像、OCTA、病历']].map(r=>'<tr data-compliance="'+(r[3]==='合规'?'approved':'pending')+'"><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[4]+'</td><td>'+r[5]+'</td><td><button class="btn '+(r[3]==='合规'?'btn-primary':'')+' ingest-btn" data-hospital="'+r[0]+'">'+(r[3]==='合规'?'＋ 入库':'查看要求')+'</button></td></tr>').join('')+'</tbody></table></div></div>';
+    box.innerHTML='<div class="section-head"><div><h2>医院清单与生命医学数据入库</h2><span class="tag blue">共 52 家</span></div><button class="mini-action">查看全部清单 ›</button></div><div class="section-body"><div class="table-wrap"><table class="data-table"><thead><tr><th>医院名称</th><th>区域</th><th>等级</th><th>病例 / 影像</th><th>操作</th></tr></thead><tbody>'+[['北京同仁医院','华北','三甲','合规','8,420 / 56,280'],['中南大学湘雅二医院','华中','三甲','合规','6,810 / 42,125'],['深圳市第二人民医院','华南','三甲','待补充','5,620 / 38,640'],['安徽医科大学二附院','华东','三甲','合规','4,982 / 31,508']].map(r=>'<tr data-compliance="'+(r[3]==='合规'?'approved':'pending')+'"><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[4]+'</td><td><button class="btn '+(r[3]==='合规'?'btn-primary':'')+' ingest-btn" data-hospital="'+r[0]+'">'+(r[3]==='合规'?'＋ 入库':'查看要求')+'</button></td></tr>').join('')+'</tbody></table></div></div>';
     dashboard.appendChild(box); box.querySelectorAll('.ingest-btn').forEach(b=>b.onclick=()=>openAction('上传影像'));
   }
 })();
@@ -895,5 +896,8 @@
 })();
 
 </script>
+<script src="link-assets/link-model.js"></script>
+<script src="link-assets/link-runtime.js"></script>
+<script src="link-assets/collection.js"></script>
 </body>
 </html>
